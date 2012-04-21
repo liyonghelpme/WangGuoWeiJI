@@ -2,8 +2,11 @@
 
 import global.Timer;
 import global.Director;
+import views.Dark;
 import global.MyNode;
 import global.Controller;
+import global.TouchManager;
+import util.Util;
 import global.Global;
 
 
