@@ -1,5 +1,17 @@
 const DARK_PRI = -1;
 
+function getWorldPos(n, points)
+{
+    var newPos = dict();
+    var item = points.items();
+    for(var i = 0; i < len(item); i++)
+    {
+        var pos = item[i][1];
+        var np = n.node2world(pos[0], pos[1]);
+        newPos.update([[item[0], np]]);
+    }
+    return newPos;
+}
 function distance2(p1, p2)
 {
     var difx = p1[0]-p2[0];

@@ -14,9 +14,10 @@ class Timer
         timers = new Array();
         slowUpdate = [];
         interval = i;
-        clock = c_addtimer(1000, addAction, null, 0, -1);
-        var cus = customaction(MAX_INT, start, update);
-        getscene().addaction(cus);
+        //clock = c_addtimer(1000, addAction, null, 0, -1);
+        //var cus = customaction(MAX_INT, start, update);
+        c_addtimer(i, update, null, 0, -1);
+        //getscene().addaction(cus);
     }
     function start()
     {
