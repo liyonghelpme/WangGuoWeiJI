@@ -7,17 +7,17 @@ class Choice extends MyNode
     var choose;
 
     const TabNum = 50;
-    const Height = 90;
+    const Height = 80;
     const BackHei = 377; 
     const Extra = 5;
-    const InitOff = 188;
+    const InitOff = 190;
 
     function Choice(b)
     {
         back = b;
         bg = node().pos(26, 77).size(204, 377).clipping(1);
         init();
-        flowTab = node();
+        flowTab = node().pos(0, InitOff-Height*2);
         bg.add(flowTab);
 
         var shadow = sprite("shadow.png", ARGB_8888);
@@ -50,17 +50,23 @@ class Choice extends MyNode
         var curPos = flowTab.pos();
         var selected = (curPos[1]-InitOff)/Height;
         selected = max(min(0, selected), -TabNum);
-        setTabs(selected);
+        setTabs(-selected);
     }
     function setTabs(sel)
     {
-        if(len(tabArray) > 0)
+        trace("sel", sel);
+        for(var i = 0; i < len(tabArray); i++)
         {
-            var start = tabArray[0][1];
-            var end = sel-start;
-            if(len(tabArray) > end)
+            if(tabArray[i][1] == sel)
             {
-                tabArray[end][0].texture("goodGreen.png");
+                tabArray[i][0].texture("goodGreen.png");
+            }
+            else
+            {
+                if(tabArray[i][1]%2 == 0)
+                    tabArray[i][0].texture("goodWhite.png");
+                else
+                    tabArray[i][0].texture("goodYellow.png");
             }
         }
             
@@ -91,7 +97,12 @@ class Choice extends MyNode
             if(i == selected)
                 t = sprite("goodGreen.png").pos(0, i*Height).anchor(0, 50);
             else
-                t = sprite("goodWhite.png").pos(0, i*Height).anchor(0, 50);
+            {
+                if(i%2 == 0)
+                    t = sprite("goodWhite.png").pos(0, i*Height).anchor(0, 50);
+                else
+                    t = sprite("goodYellow.png").pos(0, i*Height).anchor(0, 50);
+            }
             tabArray.append([t, i]);
             flowTab.add(t);
         }

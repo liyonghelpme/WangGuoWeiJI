@@ -1,4 +1,22 @@
 const DARK_PRI = -1;
+const GREEN = m_color(
+67, 0, 0, 0,
+0, 87, 0, 0,
+0, 0, 24, 0,
+0, 0, 0, 100
+);
+const YELLOW = m_color(
+89, 0, 0, 0,
+0, 80, 0, 0,
+0, 0, 59, 0,
+0, 0, 0, 100
+);
+const WHITE = m_color(
+100, 0, 0, 0,
+0, 100, 0, 0,
+0, 0, 100, 0,
+0, 0, 0, 100
+);
 
 function getWorldPos(n, points)
 {

@@ -10,8 +10,8 @@ class Store extends MyNode
         bg = sprite("goodBack.png");
         init();
         tabs = new Choice(this);
-        addChild(tabs);
-        choose = sprite("goodsChoice.png").pos(6, 253).anchor(0, 50);
+        addChildZ(tabs, -1);
+        choose = sprite("goodsChoice.png").pos(134, 266).anchor(50, 50);
         bg.add(choose, 1, 1);
 
     }
