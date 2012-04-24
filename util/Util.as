@@ -20,13 +20,17 @@ const WHITE = m_color(
 
 function getWorldPos(n, points)
 {
+    //trace("points", points);
     var newPos = dict();
     var item = points.items();
     for(var i = 0; i < len(item); i++)
     {
-        var pos = item[i][1];
-        var np = n.node2world(pos[0], pos[1]);
-        newPos.update([[item[0], np]]);
+        if(item[i][0] != -1)
+        {
+            var pos = item[i][1];
+            var np = n.node2world(pos[0], pos[1]);
+            newPos.update([[item[0], np]]);
+        }
     }
     return newPos;
 }

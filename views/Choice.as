@@ -49,7 +49,7 @@ class Choice extends MyNode
 
         var curPos = flowTab.pos();
         var selected = (curPos[1]-InitOff)/Height;
-        selected = max(min(0, selected), -TabNum);
+        selected = max(min(0, selected), -(TabNum-1));
         setTabs(-selected);
     }
     function setTabs(sel)
@@ -75,8 +75,7 @@ class Choice extends MyNode
     {
         var curPos = flowTab.pos();
         var k = (curPos[1]-InitOff)/Height;
-        k = min(0, k);
-        k = max(-TabNum, k);
+        k = max(min(0, k), -(TabNum-1));
         flowTab.pos(curPos[0], InitOff+Height*k);
         getTabs();
     }
