@@ -20,7 +20,7 @@ class StandardTouchHandler
     function tMove(n, e, p, x, y, points)
     {
         var newPos = getWorldPos(n, points);
-        touchMove(newPos); 
+        touchMoved(newPos); 
     }
     function tEnded(n, e, p, x, y, points)
     {
@@ -79,7 +79,7 @@ class StandardTouchHandler
         bg.scale(oldScale[0]+sca, oldScale[1]+sca);
         return sca;
     }
-    function touchMove(points)
+    function touchMoved(points)
     {
         //trace("move", points);
         var oldPos = lastPos;

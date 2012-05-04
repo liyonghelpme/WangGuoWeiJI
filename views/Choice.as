@@ -1,20 +1,21 @@
 class Choice extends MyNode
 {
-    var back; 
+    var store; 
     var flowTab;
     var lastPoints;
     var tabArray;
     var choose;
 
-    const TabNum = 50;
-    const Height = 80;
+    var TabNum = 0;
+    const Height = 85;
     const BackHei = 377; 
     const Extra = 5;
     const InitOff = 190;
 
-    function Choice(b)
+    function Choice(s)
     {
-        back = b;
+        store = s;
+        TabNum = len(store.allGoods);
         bg = node().pos(26, 77).size(204, 377).clipping(1);
         init();
         flowTab = node().pos(0, InitOff-Height*2);
@@ -23,12 +24,15 @@ class Choice extends MyNode
         var shadow = sprite("shadow.png", ARGB_8888);
         bg.add(shadow, 2, 2);
 
-        bg.setevent(EVENT_TOUCH, touchBegan);
-        bg.setevent(EVENT_MOVE, touchMove);
-        bg.setevent(EVENT_UNTOUCH, touchEnded);
-        tabArray = [];
+        initTabs();
         getTabs();
+
+        bg.setevent(EVENT_TOUCH, touchBegan);
+        bg.setevent(EVENT_MOVE, touchMoved);
+        bg.setevent(EVENT_UNTOUCH, touchEnded);
+
     }
+
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);    
@@ -39,7 +43,7 @@ class Choice extends MyNode
         var oldPos = flowTab.pos();
         flowTab.pos(oldPos[0], oldPos[1]+dify); 
     }
-    function touchMove(n, e, p, x, y, points)
+    function touchMoved(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);    
         var oldPos = lastPoints;
@@ -80,6 +84,18 @@ class Choice extends MyNode
         getTabs();
     }
 
+    function initTabs()
+    {
+        tabArray = [];
+        var t;
+        for(var i = 0; i < TabNum; i++)
+        {
+            t = sprite("goodWhite.png").pos(0, i*Height).anchor(0, 50);
+            t.addsprite(store.pics[i]).pos(46, 45).anchor(50, 50);
+            tabArray.append([t, i]); 
+            flowTab.add(t);
+        }
+    }
     function checkIn(start, end)
     {
         var i;
@@ -87,10 +103,14 @@ class Choice extends MyNode
         var t;
         var curPos = flowTab.pos();
         var selected = -(curPos[1]-InitOff)/Height;
+        /*
         for(i = 0; i < len(tabArray); i++)
         {
             tabArray[i][0].removefromparent();
         }
+        */
+        setTabs(selected);
+        /*
         for(i = start; i < end; i++)
         {
             if(i == selected)
@@ -105,6 +125,8 @@ class Choice extends MyNode
             tabArray.append([t, i]);
             flowTab.add(t);
         }
+        */
+        store.setTab(selected);
     }
     function getTabs()
     {

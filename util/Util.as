@@ -18,6 +18,10 @@ const WHITE = m_color(
 0, 0, 0, 100
 );
 
+function getStr(key)
+{
+    return strings.get(key);
+}
 function getWorldPos(n, points)
 {
     //trace("points", points);

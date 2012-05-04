@@ -4,6 +4,7 @@
 import views.CastlePage;
 import views.Store;
 import views.Choice;
+import views.Goods;
 
 import global.Timer;
 import global.Director;
@@ -14,6 +15,7 @@ import global.Controller;
 import global.TouchManager;
 import util.Util;
 import global.Global;
+import data.String;
 
 
 global.director = new Director();
