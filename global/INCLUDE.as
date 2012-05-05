@@ -12,23 +12,32 @@ import model.ButtonDelegate;
 import views.Store;
 import views.Choice;
 
+import views.CastlePage;
+import views.Store;
+import views.Choice;
+import views.Goods;
+
 import global.Timer;
 import core.SceneController;
 import core.BaseDataController;
 import model.ButtonModel;
 import global.Director;
 import views.Dark;
+
+
 import global.MyNode;
 import global.Controller;
 import global.TouchManager;
 import util.Util;
 import global.Global;
 
+import data.String;
 
 global.director = new Director();
 global.touchManager = new TouchManager();
 global.timer = new Timer(1000);
 global.controller = new Controller();
+
 global.scene = new SceneController();
 global.scene.init(new SceneMaker());
 global.data = new BaseDataController();
