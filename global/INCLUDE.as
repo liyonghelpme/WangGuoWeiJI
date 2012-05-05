@@ -2,6 +2,8 @@
 
 
 import views.CastlePage;
+import views.FallGoods;
+import views.FallObj;
 import views.Store;
 import views.Choice;
 import views.Goods;
@@ -16,6 +18,7 @@ import global.TouchManager;
 import util.Util;
 import global.Global;
 import data.String;
+import data.Static;
 
 
 global.director = new Director();

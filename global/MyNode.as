@@ -33,7 +33,7 @@ class MyNode
                 }
             }
     }
-    /*
+    //[x, y]
     function setPos(p)
     {
         bg.pos(p);
@@ -43,7 +43,6 @@ class MyNode
     {
         return bg.pos();
     }
-    */
     function exitScene()
     {
         ins = 0;

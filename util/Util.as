@@ -84,3 +84,12 @@ function Sign(v)
     return 0;
 }
 
+function Sum(arr, k)
+{
+    var s = 0;
+    for(var i = 0; i < k; i++)
+    {
+        s += arr[i];   
+    }
+    return s;
+}
