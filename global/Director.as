@@ -32,29 +32,7 @@ class Director
         trace("quit game save record");
         if(kc == KEYCODE_BACK)
         {
-<<<<<<< HEAD
             quitgame();
-=======
-            var map = global.map;
-            if(map != null)
-            {
-                var db = c_opendb(0, "lastMap");
-                var monsters = map.monsters;
-                var mon = [];
-                var i;
-                for(i = 0; i < len(monsters); i++)
-                {
-                    mon.append([monsters[i].kind, monsters[i].bg.pos(), monsters[i].health, monsters[i].curPoint, monsters[i].pid]);
-                }
-                var tow = [];
-                var towers = map.towers;
-                for(i = 0; i < len(towers); i++)
-                {
-                    tow.append([towers[i].kind, towers[i]]);
-                }
-                db.put("lastMap", dict([map.data.get("id"), map.totalHealth, map.curWave, mon, tow]));
-            }
->>>>>>> master
         }
     }
     function pushView(view, dark, autoPop)
