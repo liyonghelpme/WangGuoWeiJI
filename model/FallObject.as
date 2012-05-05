@@ -7,7 +7,7 @@ class FallObject extends MyNode
     function FallObject(m,k){
         map = m;
         kind = k;
-        bg = sprite("apple.png").anchor(50,50).size(50,50);
+        bg = sprite("goods"+str(k)+".png").anchor(50,50).size(50,50);
         x = rand(m.size()[0]-100)+50;
         y = rand(m.size()[1]-400)+200;
         global.touchManager.addTargeted(new ButtonDelegate(bg,1,0,this,0),y,1);
@@ -25,12 +25,6 @@ class FallObject extends MyNode
         var coor = bg.pos();
         var coor2= map.node2world(coor[0],coor[1]);
         bg.removefromparent();
-        /*if(wh[1]*10 > wh[0]*6){
-            scene.size(wh[0]*wh[1]/1700,wh[1]);
-        }
-        else{
-            scene.size(wh[0],wh[1]*wh[0]/2400);
-        }*/
         kind = -1;
         getscene().add(bg.pos(0,0),100);
         var dis = sqrt(distance(coor2, [256,460]));
