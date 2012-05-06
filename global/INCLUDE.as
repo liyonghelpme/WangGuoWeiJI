@@ -10,6 +10,7 @@ import views.Choice;
 import views.Goods;
 
 import views.MenuLayer;
+import views.Button;
 
 
 import global.Timer;
