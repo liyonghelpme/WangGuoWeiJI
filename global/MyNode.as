@@ -56,8 +56,7 @@ class MyNode
     function addChildZ(child, z)
     {
         trace(child, z, ins);
-        if(ins == 1)
-            child.enterScene();
+        child.enterScene();
         bg.add(child.bg, z);
     }
     function removeChild(child)

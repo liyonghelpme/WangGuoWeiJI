@@ -33,12 +33,12 @@ class Store extends MyNode
         choose = sprite("goodsChoice.png").pos(134, 266).anchor(50, 50);
         bg.add(choose, 1, 1);
 
-        bg.addsprite("close.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
     }
     function closeDialog(n, e, p, x, y, points)
     {
-        
+        global.director.popView(); 
     }
 
     function setTab(i)

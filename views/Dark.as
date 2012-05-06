@@ -9,23 +9,26 @@ class Dark extends MyNode
     }
     override function enterScene()
     {
-        super.enterScene();
-        global.touchManager.addHead(this, DARK_PRI, 1);
+        //super.enterScene();
+        bg.setevent(EVENT_TOUCH, touchBegan);
+        bg.setevent(EVENT_MOVE, touchMoved);
+        bg.setevent(EVENT_UNTOUCH, touchEnded);
+        //global.touchManager.addHead(this, DARK_PRI, 1);
     }
     override function exitScene()
     {
-        global.touchManager.removeTouch(this);
-        super.exitScene();
+        //global.touchManager.removeTouch(this);
+        //super.exitScene();
     }
-    function touchBegan(x, y)
+    function touchBegan(n, e, p, x, y, points)
     {
-        return checkIn(bg, [x, y])
+        return 1;
     }
-    function touchMove(x, y)
+    function touchMoved(n, e, p, x, y, points)
     {
         
     }
-    function touchEnded(x, y)
+    function touchEnded(n, e, p, x, y, points)
     {
         if(autoPop == 1)
             global.director.popView();

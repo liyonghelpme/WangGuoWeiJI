@@ -57,6 +57,13 @@ class CastlePage extends MyNode
         touchDelegate.bg = bg;
         touchDelegate.enterScene();
         global.timer.addTimer(this);
+
+
+    }
+    override function enterScene()
+    {
+        //trace("castal Enter Scene");
+        //global.director.pushPage(new MenuLayer(), 1);
     }
     function remove(c)
     {

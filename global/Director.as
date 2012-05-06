@@ -30,6 +30,7 @@ class Director
     function quitGame(n, e, p, kc)
     {
         trace("quit game save record");
+        /*
         if(kc == KEYCODE_BACK)
         {
             var map = global.map;
@@ -52,6 +53,7 @@ class Director
                 db.put("lastMap", dict([map.data.get("id"), map.totalHealth, map.curWave, mon, tow]));
             }
         }
+        */
     }
     function pushView(view, dark, autoPop)
     {
@@ -80,6 +82,28 @@ class Director
         curScene.addChildZ(view, z);
         stack.append(view);
         trace("push Page", len(stack));
+    }
+    function replaceScene(view)
+    {
+        curScene.removeSelf();
+        curScene = new Scene();
+        stack = []
+
+        getscene().add(curScene.bg);
+        getscene().setevent(EVENT_KEYUP, quitGame);
+        curScene.enterScene();
+
+        pushPage(view, 0);
+    }
+    function pushScene(view)
+    {
+        sceneStack.append(curScene);
+        replaceScene(view);
+    }
+    function popScene()
+    {
+        var oldS = sceneStack.pop();
+        replaceScene(oldS);
     }
     function popView()
     {
