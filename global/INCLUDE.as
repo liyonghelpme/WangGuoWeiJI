@@ -9,6 +9,9 @@ import views.Store;
 import views.Choice;
 import views.Goods;
 
+import views.MenuLayer;
+
+
 import global.Timer;
 import global.Director;
 import views.Dark;
