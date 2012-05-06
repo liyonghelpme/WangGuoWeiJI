@@ -33,7 +33,7 @@ function getWorldPos(n, points)
         {
             var pos = item[i][1];
             var np = n.node2world(pos[0], pos[1]);
-            newPos.update([[item[0], np]]);
+            newPos.update(item[i][0], np);
         }
     }
     return newPos;

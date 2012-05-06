@@ -2,6 +2,7 @@
 
 
 import views.CastlePage;
+import views.BuildLand;
 import views.FallGoods;
 import views.FallObj;
 import views.Store;
@@ -16,6 +17,7 @@ import global.MyNode;
 import global.Controller;
 import global.TouchManager;
 import util.Util;
+import global.User;
 import global.Global;
 import data.String;
 import data.Static;
@@ -25,5 +27,6 @@ global.director = new Director();
 global.touchManager = new TouchManager();
 global.timer = new Timer(1000);
 global.controller = new Controller();
+global.user = new User();
 
 

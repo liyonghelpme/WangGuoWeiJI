@@ -4,6 +4,9 @@ class StandardTouchHandler
     var bg;
     var lastPos;
 
+    var scaMax = 150;
+    var scaMin = 50;
+
     function enterScene()
     {
         //super.enterScene();
@@ -36,7 +39,7 @@ class StandardTouchHandler
     */
     function touchBegan(points)
     {
-        //trace("began", points);
+        trace("began", points);
         lastPos = points;
         return 1;
     }
@@ -61,7 +64,7 @@ class StandardTouchHandler
     {
         var oldScale = bg.scale();
 
-        if(oldScale[0]+sca >= 200 || oldScale[0]+sca <= 50)
+        if(oldScale[0]+sca >= scaMax || oldScale[0]+sca <= scaMin)
             return;
 
         bg.scale(oldScale[0]+sca, oldScale[1]+sca);
@@ -81,14 +84,14 @@ class StandardTouchHandler
     }
     function touchMoved(points)
     {
-        //trace("move", points);
+        trace("move", len(points));
         var oldPos = lastPos;
         lastPos = points;
         var difx;
         var dify;
-        if(len(points) >= 3)//-1 0 1
+        if(len(points) >= 2)//-1 0 1
         {
-            if(len(oldPos) < 3)
+            if(len(oldPos) < 2)
                 return;
             var oldDis = distance(oldPos[0], oldPos[1]); 
             var newDis = distance(points[0], points[1]);
@@ -104,7 +107,7 @@ class StandardTouchHandler
             MoveBack(move[0], move[1]);
 
         }
-        else if(len(points) >= 2)
+        else if(len(points) >= 1)
         {
             var leftFinger = 0;
             if(points[0] == null)
@@ -116,7 +119,7 @@ class StandardTouchHandler
     }
     function touchEnded(points)
     {
-        //trace("ended", points);
+        trace("ended", points);
     }
     
 }
