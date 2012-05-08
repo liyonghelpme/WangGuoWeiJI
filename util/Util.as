@@ -113,3 +113,5 @@ function getBuildCost(id)
     return cost;
 }
 function getZone()
+{
+}

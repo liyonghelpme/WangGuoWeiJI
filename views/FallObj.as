@@ -7,7 +7,7 @@ class FallObj extends MyNode
         map = m;
         kind = k;
         bg = node().size(100, 100).anchor(50, 50);
-        obj = bg.addsprite("goods"+str(k)+".png").anchor(50,50).size(20,20).pos(50, 50);
+        obj = bg.addsprite("goods"+str(k)+".png").anchor(50,50).size(30,30).pos(50, 50);
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);

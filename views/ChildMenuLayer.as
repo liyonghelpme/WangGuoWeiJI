@@ -28,7 +28,7 @@ class ChildMenuLayer extends MyNode
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
-            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(64,55+92*i);
+            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(64,65+92*i);
             new Button(button, model[1], null);
         }
     }

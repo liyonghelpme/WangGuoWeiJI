@@ -91,7 +91,7 @@ class Director
         stack = []
 
         getscene().add(curScene.bg);
-        getscene().setevent(EVENT_KEYUP, quitGame);
+        //getscene().setevent(EVENT_KEYUP, quitGame);
         curScene.enterScene();
 
         //pushPage(view, 0);

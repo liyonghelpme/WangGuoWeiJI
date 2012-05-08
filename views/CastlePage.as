@@ -25,6 +25,21 @@ class Water extends MyNode
 {
     function Water()
     {
+        bg = node();
+        var wll = bg.addsprite().pos(510+130, 214+123);
+        wll.addaction(repeat(animate(2000,
+            "wll0.png", "wll1.png","wll2.png","wll3.png","wll4.png","wll5.png","wll6.png")));
+
+        var wrr = bg.addsprite().pos(1635+269, 213+130);
+        wrr.addaction(repeat(animate(2000,
+            "wrr0.png", "wrr1.png", "wrr2.png", "wrr3.png", "wrr4.png", "wrr5.png", "wrr6.png")));
+
+        var falls = bg.addsprite().pos(2902+12, 770+18);
+        falls.addaction(repeat(animate(2000,
+            "pp0.png", "pp1.png", "pp2.png", "pp3.png", "pp4.png", "pp5.png", "pp6.png" 
+        )));
+
+        /*
         bg = node().pos(1823, 247);
         var up = bg.addsprite("up0.png").pos(102, 109); 
         bg.addaction(repeat(animate(2000, "up0.png", "up1.png", "up2.png", "up3.png", "up4.png", "up5.png", "up6.png")));
@@ -52,18 +67,20 @@ class Water extends MyNode
         end.addaction(
             repeat(animate(2000, 
             "end0.png", "end1.png", "end2.png","end3.png","end4.png","end5.png","end6.png")));
+        */
     }
 }
 class Sky extends MyNode
 {
     function Sky()
     {
-        bg = sprite("sky.png").size(3000, 330);
-        /*
+        //bg = sprite("sky.png").size(3000, 330);
+        
+        bg = node();
         bg.addsprite("sky0.png").pos(0, 0);
         bg.addsprite("sky1.png").pos(1000, 0);
         bg.addsprite("sky2.png").pos(2000, 0);
-        */
+        
     }
 }
 class CastlePage extends MyNode
@@ -75,10 +92,11 @@ class CastlePage extends MyNode
 
     var fallGoods;
     var scene;
+
     function CastlePage(s)
     {
         scene = s;
-        bg = node().size(3000, 880);
+        bg = node().size(3000, 920);
         init();
 
         var sky = new Sky();
@@ -99,6 +117,9 @@ class CastlePage extends MyNode
 
 
         addChild(new Water());
+
+
+
         fallGoods = new FallGoods(this);
         addChild(fallGoods);
 
@@ -106,7 +127,11 @@ class CastlePage extends MyNode
         
         touchDelegate = new StandardTouchHandler(this);
         touchDelegate.bg = bg;
-        touchDelegate.enterScene();
+        //touchDelegate.enterScene();
+        bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
+        bg.setevent(EVENT_MOVE, touchMoved);
+        bg.setevent(EVENT_UNTOUCH, touchEnded);
+
         global.timer.addTimer(this);
 
     }
@@ -114,9 +139,18 @@ class CastlePage extends MyNode
     {
            
     }
-    function touchBegan()
+    function touchBegan(n, e, p, x, y, points)
     {
         scene.clearHideTime();
+        touchDelegate.tBegan(n, e, p, x, y, points);
+    }
+    function touchMoved(n, e, p, x, y, points)
+    {
+        touchDelegate.tMoved(n, e, p, x, y, points);
+    }
+    function touchEnded(n, e, p, x, y, points)
+    {
+        touchDelegate.tEnded(n, e, p, x, y, points);
     }
     override function enterScene()
     {

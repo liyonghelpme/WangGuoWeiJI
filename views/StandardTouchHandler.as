@@ -16,17 +16,16 @@ class StandardTouchHandler
     {
         //super.enterScene();
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, tBegan);
-        bg.setevent(EVENT_MOVE, tMove);
+        bg.setevent(EVENT_MOVE, tMoved);
         bg.setevent(EVENT_UNTOUCH, tEnded);
         //global.touchManager.addStandard(this);
     }
     function tBegan(n, e, p, x, y, points)
     {
         var newPos = getWorldPos(n, points);
-        view.touchBegan();
         touchBegan(newPos);
     }
-    function tMove(n, e, p, x, y, points)
+    function tMoved(n, e, p, x, y, points)
     {
         var newPos = getWorldPos(n, points);
         touchMoved(newPos); 

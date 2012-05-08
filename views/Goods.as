@@ -16,7 +16,7 @@ class Goods extends MyNode
         store = s;
         bg = node().pos(258, 129);
         cl = bg.addnode().size(500, 330).clipping(1);
-        title = bg.addlabel("", null, 20).pos(offX/2+offX, 103-129).anchor(50, 50).color(0, 0, 0);
+        title = bg.addsprite().pos(offX/2+offX, 103-129).anchor(50, 50).color(0, 0, 0);
         init();
         goodNum = [];
         flowNode = cl.addnode();
@@ -27,7 +27,8 @@ class Goods extends MyNode
     function setTab(g)
     {
         trace(getStr(store.words[g]));
-        title.text(getStr(store.words[g]));
+        //title.text(getStr(store.words[g]));
+        title.texture(store.titles[g]);
         var posX = 0;
         var posY = -offY;
 

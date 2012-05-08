@@ -36,8 +36,8 @@ class MenuLayer extends MyNode
     var goldText;
     function initData()
     {
-        silverText = bg.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(0, 0, 0);
-        goldText = bg.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(0, 0, 0)
+        silverText = bg.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(100, 100, 100);
+        goldText = bg.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(100, 100, 100)
     }
     var building = 0;
     function beginBuild()
