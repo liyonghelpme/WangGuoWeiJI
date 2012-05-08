@@ -47,6 +47,7 @@ class Goods extends MyNode
                 posX += offX;
             }
             var panel = sprite("goodPanel.png").pos(posX, posY);
+            panel.put([g, i]);
             flowNode.add(panel, 0, i);
         }
         var rows = (len(goodNum)+2)/3;
@@ -69,8 +70,10 @@ class Goods extends MyNode
         var oldPos = flowNode.pos();
         flowNode.pos(oldPos[0], oldPos[1]+dify);
     }
+    var moveYet = 0;
     function touchMoved(n, e, p, x, y, points)
     {
+        moveYet = 1;
         var newPos = n.node2world(x, y);
         var oldPoints = lastPoints;
         lastPoints = newPos;
@@ -79,6 +82,14 @@ class Goods extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
+        var newPos = n.node2world(x, y);
+        var child = checkInChild(n, newPos);
+        if(child != null)
+        {
+            store.buy(child.get());            
+        }
+
+        moveYet = 0;
         var oldPos = flowNode.pos();
         oldPos[1] = min(0, max(minPos, oldPos[1]));
         flowNode.pos(oldPos[0], oldPos[1]);

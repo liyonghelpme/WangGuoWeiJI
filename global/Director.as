@@ -86,14 +86,15 @@ class Director
     function replaceScene(view)
     {
         curScene.removeSelf();
-        curScene = new Scene();
+        //curScene = new Scene();
+        curScene = view;
         stack = []
 
         getscene().add(curScene.bg);
         getscene().setevent(EVENT_KEYUP, quitGame);
         curScene.enterScene();
 
-        pushPage(view, 0);
+        //pushPage(view, 0);
     }
     function pushScene(view)
     {

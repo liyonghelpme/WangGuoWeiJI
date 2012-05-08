@@ -10,12 +10,16 @@ class MenuLayer extends MyNode
     var menubutton;
     
     var menus;
+    var scene;
 
-    function MenuLayer() {
+    function MenuLayer(s) {
+        scene = s;
         trace("pushMenuLayer");
         menus =new Array(null,null);
         bg = sprite("menu_back.png").scale(100,100).size(800,111).anchor(0,100).pos(0,480).rotate(0);
         init();
+
+        initData();
 
         taskbutton = bg.addsprite("task.png").scale(100,100).size(93,87).anchor(0,0).pos(11,22).rotate(0);
         expfiller = bg.addsprite("exp_filler.png").scale(100,100).size(100,8).anchor(0,0).pos(147,51).rotate(0);
@@ -26,6 +30,76 @@ class MenuLayer extends MyNode
         rechargebutton = bg.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0);
         menubutton = bg.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
+
+    }
+    var silverText;
+    var goldText;
+    function initData()
+    {
+        silverText = bg.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(0, 0, 0);
+        goldText = bg.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(0, 0, 0)
+    }
+    var building = 0;
+    function beginBuild()
+    {
+        building = 1; 
+        bg.visible(0);
+        for(var i = 0; i < len(menus); i++)
+        {
+            if(menus[i] != null)
+            {
+                menus[i].bg.visible(0);
+            }
+        }
+    }
+    override function enterScene()
+    {
+        global.user.addListener(this);
+        //global.controller.addHide(this);
+    }
+    override function exitScene()
+    {
+        //global.controller.removeHide(this);
+        global.user.removeListener(this);
+    }
+    function updateValue(res)
+    {
+        silverText.text(str(res.get("silver")));
+        goldText.text(str(res.get("gold")));
+    }
+    var visLock = 0;
+    function showMenu()
+    {
+        //if(visLock == 0)
+        //{
+        //    visLock = 1;
+        //build building
+        if(building)
+            return;
+        bg.addaction(fadein(1000));
+        for(var i = 0; i < len(menus); i++)
+        {
+            if(menus[i] != null)
+            {
+                menus[i].showMenu();
+            }
+        }
+        //}
+    }
+    function hideMenu()
+    {
+        //if(visLock == 0)
+        //{
+        //    visLock = 1;
+        if(building)
+            return;
+        bg.addaction(fadeout(1000));
+        for(var i = 0; i < len(menus); i++)
+        {
+            if(menus[i] != null)
+                menus[i].hideMenu();
+        }
+        //}
     }
     
     
@@ -37,7 +111,7 @@ class MenuLayer extends MyNode
         if(menus[index] != null){
             removeChild(menus[index]);
         }
-        menus[index] = new ChildMenuLayer(index,funcs);
+        menus[index] = new ChildMenuLayer(index,funcs, scene);
         addChildZ(menus[index],-1);
     }
     

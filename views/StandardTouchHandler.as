@@ -6,6 +6,11 @@ class StandardTouchHandler
 
     var scaMax = 150;
     var scaMin = 50;
+    var view;
+    function StandardTouchHandler(v)
+    {
+        view = v;
+    }
 
     function enterScene()
     {
@@ -18,6 +23,7 @@ class StandardTouchHandler
     function tBegan(n, e, p, x, y, points)
     {
         var newPos = getWorldPos(n, points);
+        view.touchBegan();
         touchBegan(newPos);
     }
     function tMove(n, e, p, x, y, points)

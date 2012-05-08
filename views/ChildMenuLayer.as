@@ -1,6 +1,7 @@
 class ChildMenuLayer extends MyNode
 {
     var functions;
+    var scene;
     var buts = dict([
     ["map", ["menu_button_map.png", onMap]],
     ["friend", ["menu_button_friend.png", onFriend]],
@@ -12,7 +13,8 @@ class ChildMenuLayer extends MyNode
     ["store", ["menu_button_store.png", onStore]],
     ]);
 
-    function ChildMenuLayer(index, funcs){
+    function ChildMenuLayer(index, funcs, s){
+        scene = s;
         functions = funcs;
         bg=sprite("dark.png").scale(100,100).size(128,480);
         if(index == 0){
@@ -26,9 +28,17 @@ class ChildMenuLayer extends MyNode
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
-            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(64,46+92*i);
+            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(64,55+92*i);
             new Button(button, model[1], null);
         }
+    }
+    function showMenu()
+    {
+        bg.addaction(fadein(1000));
+    }
+    function hideMenu()
+    {
+        bg.addaction(fadeout(1000));
     }
     function onClicked(param)
     {
@@ -59,6 +69,6 @@ class ChildMenuLayer extends MyNode
     }
     function onStore()
     {
-        global.director.pushView(new Store(), 1, 0);
+        global.director.pushView(new Store(scene), 1, 0);
     }
 }

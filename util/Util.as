@@ -93,3 +93,23 @@ function Sum(arr, k)
     }
     return s;
 }
+//pos:World coord
+function checkInChild(bg, pos)
+{
+    var sub = bg.subnodes();
+    if(sub == null)
+        return null;
+    for(var i = 0; i < len(sub); i++)
+    {
+        var inIt = checkIn(sub[i], pos);
+        if(inIt)
+            return sub[i];
+    }
+    return null; 
+}
+function getBuildCost(id)
+{
+    var cost = dict([["silver", buildingData[1]], ["crystal", buildingData[2]], ["gold", buildingData[3]]]);
+    return cost;
+}
+function getZone()
