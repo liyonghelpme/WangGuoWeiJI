@@ -30,10 +30,30 @@ class Director
     function quitGame(n, e, p, kc)
     {
         trace("quit game save record");
+        /*
         if(kc == KEYCODE_BACK)
         {
-            quitgame();
+            var map = global.map;
+            if(map != null)
+            {
+                var db = c_opendb(0, "lastMap");
+                var monsters = map.monsters;
+                var mon = [];
+                var i;
+                for(i = 0; i < len(monsters); i++)
+                {
+                    mon.append([monsters[i].kind, monsters[i].bg.pos(), monsters[i].health, monsters[i].curPoint, monsters[i].pid]);
+                }
+                var tow = [];
+                var towers = map.towers;
+                for(i = 0; i < len(towers); i++)
+                {
+                    tow.append([towers[i].kind, towers[i]]);
+                }
+                db.put("lastMap", dict([map.data.get("id"), map.totalHealth, map.curWave, mon, tow]));
+            }
         }
+        */
     }
     function pushView(view, dark, autoPop)
     {
@@ -59,26 +79,36 @@ class Director
     }
     function pushPage(view, z)
     {
-        if(view == null)
-            return;
         curScene.addChildZ(view, z);
         stack.append(view);
         trace("push Page", len(stack));
+    }
+    function replaceScene(view)
+    {
+        curScene.removeSelf();
+        curScene = new Scene();
+        stack = []
+
+        getscene().add(curScene.bg);
+        getscene().setevent(EVENT_KEYUP, quitGame);
+        curScene.enterScene();
+
+        pushPage(view, 0);
+    }
+    function pushScene(view)
+    {
+        sceneStack.append(curScene);
+        replaceScene(view);
+    }
+    function popScene()
+    {
+        var oldS = sceneStack.pop();
+        replaceScene(oldS);
     }
     function popView()
     {
         var v = stack.pop();
         curScene.removeChild(v);
         trace("director pop", len(stack));
-    }
-    
-    function changePage(view, z)
-    {
-        if(view == null)
-            return;
-        var v = stack.pop(0);
-        curScene.removeChild(v);
-        curScene.addChildZ(view, z);
-        stack.insert(0,view);
     }
 }
