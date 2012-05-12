@@ -21,7 +21,7 @@ class MapScene extends MyNode
     
     function gotoIsland(param){
         var sl = len(contextStack);
-        if((sl==0 && param!=0) || (sl==1 && contextStack[1]!=param)){
+        if((sl==0 && param!=0) || (sl==1 && contextStack[0]!=param)){
             removeChild(flyLayer);
             if(param == 0){
                 flyLayer = new FlyLayer();

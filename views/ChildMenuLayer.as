@@ -48,11 +48,6 @@ class ChildMenuLayer extends MyNode
     function onMap()
     {
         global.director.pushScene(new MapScene());    
-/*
-=======
-        global.director.pushScene(new MapLayer());    
->>>>>>> liyong
-*/
     }
     function onFriend()
     {
