@@ -22,7 +22,6 @@ class MapLayer extends MyNode
             //global.touchManager.addTargeted(new ButtonDelegate(island[i],1,0,bg.parent().get(),i),7-i,1);
             new Button(island[i], onClicked, i);
         }
-        */
         for(;i<=5;i++){
             island[i].color(40,40,40,100);
             var size=island[i].size();

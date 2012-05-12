@@ -36,14 +36,6 @@ function getWorldPos(n, points)
         {
             var pos = item[i][1];
             var np = n.node2world(pos[0], pos[1]);
-<<<<<<< HEAD
-/*
-<<<<<<< HEAD
-            newPos.update([[item[0], np]]);
-=======
-*/
-=======
->>>>>>> liyong
             newPos.update(item[i][0], np);
         }
     }

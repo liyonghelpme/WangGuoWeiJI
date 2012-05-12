@@ -4,7 +4,8 @@ import views.CastlePage;
 import views.BuildLand;
 import views.FallGoods;
 import views.FallObj;
-<<<<<<< HEAD
+
+
 import views.Store;
 import views.Choice;
 import views.Goods;
@@ -18,20 +19,6 @@ import views.MapLayer;
 import views.FlyLayer;
 import views.LevelSelectLayer;
 
-
-import views.CastlePage;
-=======
->>>>>>> liyong
-import views.Store;
-import views.Choice;
-import views.Goods;
-
-import views.MenuLayer;
-import views.ChildMenuLayer;
-import views.Button;
-
-import views.MapScene;
-import views.MapLayer;
 
 import views.Building;
 import views.BuildMenu;
