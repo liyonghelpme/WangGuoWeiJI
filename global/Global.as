@@ -5,8 +5,6 @@ class Global
     var director;
     var controller;
     var user;
-    var scene;
-    var data;
     function Global()
     {
     }

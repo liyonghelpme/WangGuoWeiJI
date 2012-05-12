@@ -33,7 +33,12 @@ function getWorldPos(n, points)
         {
             var pos = item[i][1];
             var np = n.node2world(pos[0], pos[1]);
+/*
+<<<<<<< HEAD
             newPos.update([[item[0], np]]);
+=======
+*/
+            newPos.update(item[i][0], np);
         }
     }
     return newPos;
@@ -84,3 +89,12 @@ function Sign(v)
     return 0;
 }
 
+function Sum(arr, k)
+{
+    var s = 0;
+    for(var i = 0; i < k; i++)
+    {
+        s += arr[i];   
+    }
+    return s;
+}

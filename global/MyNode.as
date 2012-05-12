@@ -33,7 +33,7 @@ class MyNode
                 }
             }
     }
-    /*
+    //[x, y]
     function setPos(p)
     {
         bg.pos(p);
@@ -43,7 +43,6 @@ class MyNode
     {
         return bg.pos();
     }
-    */
     function exitScene()
     {
         ins = 0;
@@ -57,8 +56,7 @@ class MyNode
     function addChildZ(child, z)
     {
         trace(child, z, ins);
-        if(ins == 1)
-            child.enterScene();
+        child.enterScene();
         bg.add(child.bg, z);
     }
     function removeChild(child)
@@ -75,8 +73,6 @@ class MyNode
         {
             if(childs[i].get() != null)
                 childs[i].get().exitScene();
-            else
-                childs[i].removefromparent();
         }
     }
 }
