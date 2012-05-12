@@ -7,17 +7,23 @@ class Timer
     var gstop;
 
     var slowUpdate;
+
+    var myTimer;
     function Timer(i)
     {
-        trace("init timer");
+        trace("init timer", i);
         gstop = 0;
         timers = new Array();
         slowUpdate = [];
         interval = i;
         //clock = c_addtimer(1000, addAction, null, 0, -1);
         //var cus = customaction(MAX_INT, start, update);
-        c_addtimer(i, update, null, 0, -1);
+        myTimer = c_addtimer(i, update, null, 0, -1);
         //getscene().addaction(cus);
+    }
+    function stop()
+    {
+        myTimer.stop();
     }
     function start()
     {
@@ -73,6 +79,7 @@ class Timer
     }
     function addTimer(obj)
     {
+        trace("timerNum", len(timers));
         timers.append([obj, 0]);
     }
     function removeTimer(obj)

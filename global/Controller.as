@@ -1,6 +1,7 @@
 class Controller
 {
-    function collectObjects(obj)
+    function Controller()
     {
+        //global.timer.addTimer(this);
     }
 }

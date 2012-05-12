@@ -6,12 +6,17 @@ class StandardTouchHandler
 
     var scaMax = 150;
     var scaMin = 50;
+    //var view;
+    function StandardTouchHandler()
+    {
+        //view = v;
+    }
 
     function enterScene()
     {
         //super.enterScene();
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, tBegan);
-        bg.setevent(EVENT_MOVE, tMove);
+        bg.setevent(EVENT_MOVE, tMoved);
         bg.setevent(EVENT_UNTOUCH, tEnded);
         //global.touchManager.addStandard(this);
     }
@@ -20,7 +25,7 @@ class StandardTouchHandler
         var newPos = getWorldPos(n, points);
         touchBegan(newPos);
     }
-    function tMove(n, e, p, x, y, points)
+    function tMoved(n, e, p, x, y, points)
     {
         var newPos = getWorldPos(n, points);
         touchMoved(newPos); 

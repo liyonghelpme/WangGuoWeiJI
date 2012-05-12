@@ -33,6 +33,11 @@ class Director
         /*
         if(kc == KEYCODE_BACK)
         {
+            quitgame();
+        }
+        /*
+        if(kc == KEYCODE_BACK)
+        {
             var map = global.map;
             if(map != null)
             {
@@ -71,6 +76,7 @@ class Director
         }
         else
         {
+            trace("begin add");
             curScene.addChild(view); 
             trace("add view");
             stack.append(view);
@@ -86,6 +92,8 @@ class Director
     function replaceScene(view)
     {
         curScene.removeSelf();
+/*
+<<<<<<< HEAD
         curScene = new Scene();
         stack = []
 
@@ -94,6 +102,17 @@ class Director
         curScene.enterScene();
 
         pushPage(view, 0);
+=======
+*/
+        //curScene = new Scene();
+        curScene = view;
+        stack = []
+
+        getscene().add(curScene.bg);
+        //getscene().setevent(EVENT_KEYUP, quitGame);
+        curScene.enterScene();
+
+        //pushPage(view, 0);
     }
     function pushScene(view)
     {
