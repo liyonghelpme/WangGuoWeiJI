@@ -6,10 +6,10 @@ class StandardTouchHandler
 
     var scaMax = 150;
     var scaMin = 50;
-    var view;
-    function StandardTouchHandler(v)
+    //var view;
+    function StandardTouchHandler()
     {
-        view = v;
+        //view = v;
     }
 
     function enterScene()
@@ -44,7 +44,7 @@ class StandardTouchHandler
     */
     function touchBegan(points)
     {
-        trace("began", points);
+        //trace("began", points);
         lastPos = points;
         return 1;
     }
@@ -89,7 +89,7 @@ class StandardTouchHandler
     }
     function touchMoved(points)
     {
-        trace("move", len(points));
+        //trace("move", len(points));
         var oldPos = lastPos;
         lastPos = points;
         var difx;
@@ -124,7 +124,7 @@ class StandardTouchHandler
     }
     function touchEnded(points)
     {
-        trace("ended", points);
+        //trace("ended", points);
     }
     
 }

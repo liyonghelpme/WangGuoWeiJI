@@ -9,13 +9,13 @@ class Store extends MyNode
     //kind id
     //0 building
     var allGoods = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
+        [[1, 0]],
+        [[1, 0]],
+        [[2, 0]],
+        [[3, 0]],
         [[0, 0], [0, 1]],
-        [0, 0, 0, 0],
-        [0, 0, 0],
+        [[4, 0]],
+        [[5, 0]],
     ];
 
     var pics = [
@@ -79,6 +79,7 @@ class Store extends MyNode
     //allGoods item tab item
     function buy(gi)
     {
+        trace("store buy", gi);
         var item = allGoods[gi[0]][gi[1]]; 
         var kind = item[0];
         var id = item[1];
@@ -86,8 +87,11 @@ class Store extends MyNode
         {
             var cost = getBuildCost(id);
             var buyable = global.user.checkCost(cost);
+            trace("buy Cost", cost, buyable);
             if(buyable.get("ok") == 0)
+            {
                 return;
+            }
             global.director.popView();
             scene.build(id);
         }

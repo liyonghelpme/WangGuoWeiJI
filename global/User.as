@@ -50,4 +50,14 @@ class User
         }
         return buyable;
     }
+    function doCost(cost)
+    {
+        var its = cost.items();
+        for(var i = 0; i < len(its); i++)
+        {
+            var key = its[i][0];
+            var value = its[i][1];
+            changeValue(key, -value);
+        }
+    }
 }

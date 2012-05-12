@@ -22,15 +22,33 @@ class CastleScene extends MyNode
         ml = new MenuLayer(this);
         addChild(mc);
         addChild(ml);
-
     }
     override function enterScene()
     {
+        super.enterScene();
         global.timer.addTimer(this);
     }
     override function exitScene()
     {
-        global.timer.exitScene();
+        global.timer.removeTimer(this);
+        super.exitScene();
+    }
+    function finishBuild()
+    {
+        var id = building.get("id");
+        var cost = getBuildCost(id);
+        global.user.doCost(cost);
+        ml.finishBuild();
+        mc.finishBuild();
+        global.director.popView();
+        building = null;
+    }
+    function cancelBuild()
+    {
+        ml.finishBuild();
+        mc.cancelBuild();
+        global.director.popView(); 
+        building = null;
     }
     function clearHideTime()
     {
@@ -54,9 +72,13 @@ class CastleScene extends MyNode
             }
         }
     }
+    var building = null;
     function build(id)
     {
+        building = getBuild(id);
+        building.update("state", 0);
         ml.beginBuild();   
-        mc.beginBuild(id);
+        mc.beginBuild(building);
+        global.director.pushView(new BuildMenu(this, building));
     }
 }

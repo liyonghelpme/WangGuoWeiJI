@@ -1,6 +1,5 @@
 //注意这些文件是倒序编译的，所以其排序和依赖关系相反
 
-
 import views.CastlePage;
 import views.BuildLand;
 import views.FallGoods;
@@ -16,6 +15,15 @@ import views.Button;
 import views.MapScene;
 import views.MapLayer;
 
+import views.Building;
+import views.BuildMenu;
+
+import views.PlantChoose;
+
+/*
+import views.Map;
+import views.MoveObject;
+*/
 
 import global.Timer;
 import global.Director;

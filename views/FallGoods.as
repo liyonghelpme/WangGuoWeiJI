@@ -3,7 +3,7 @@ class FallGoods extends MyNode
     var allFalls;
     var map;
     var lastFallTime = 0;
-    var Zone = [[138, 492, 699, 252], [798, 474, 327, 330], [1890, 459, 327, 330], [2199, 459, 681, 246]];
+    var Zone = [[60, 492, 774, 468], [831, 483, 294, 537], [1920, 510, 357, 480], [2292, 483, 576, 429]];
     function FallGoods(m)
     {
         bg = node();
@@ -21,11 +21,13 @@ class FallGoods extends MyNode
             {
                 getNewFall();       
             }
+            /*
             else
             {
                 var f = allFalls.pop(0);
                 f.removeSelf();
             }
+            */
             lastFallTime = 0;
         }
     }

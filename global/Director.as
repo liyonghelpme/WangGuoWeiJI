@@ -30,6 +30,10 @@ class Director
     function quitGame(n, e, p, kc)
     {
         trace("quit game save record");
+        if(kc == KEYCODE_BACK)
+        {
+            quitgame();
+        }
         /*
         if(kc == KEYCODE_BACK)
         {
@@ -71,6 +75,7 @@ class Director
         }
         else
         {
+            trace("begin add");
             curScene.addChild(view); 
             trace("add view");
             stack.append(view);

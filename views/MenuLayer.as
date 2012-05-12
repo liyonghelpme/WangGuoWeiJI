@@ -25,8 +25,8 @@ class MenuLayer extends MyNode
         expfiller = bg.addsprite("exp_filler.png").scale(100,100).size(100,8).anchor(0,0).pos(147,51).rotate(0);
         expback = bg.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
         collectionbutton = bg.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
-        Un5 = bg.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
-        Un6 = bg.addsprite("gold.png").scale(100,100).size(33,32).anchor(50,50).pos(549,93).rotate(0);
+        //Un5 = bg.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
+        //Un6 = bg.addsprite("gold.png").scale(100,100).size(33,32).anchor(50,50).pos(549,93).rotate(0);
         rechargebutton = bg.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0);
         menubutton = bg.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
@@ -49,6 +49,18 @@ class MenuLayer extends MyNode
             if(menus[i] != null)
             {
                 menus[i].bg.visible(0);
+            }
+        }
+    }
+    function finishBuild()
+    {
+        building = 0;
+        bg.visible(1);
+        for(var i = 0; i < len(menus); i++)
+        {
+            if(menus[i] != null)
+            {
+                menus[i].bg.visible(1);
             }
         }
     }

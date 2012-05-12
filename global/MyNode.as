@@ -21,6 +21,7 @@ class MyNode
 
     function enterScene()
     {
+        trace("enterScene", this);
         ins = 1;
         var sub = bg.subnodes();
         if(sub != null)
@@ -55,8 +56,9 @@ class MyNode
     }
     function addChildZ(child, z)
     {
-        trace(child, z, ins);
-        child.enterScene();
+        trace("addChild", child, z, ins);
+        if(ins == 1)
+            child.enterScene();
         bg.add(child.bg, z);
     }
     function removeChild(child)
