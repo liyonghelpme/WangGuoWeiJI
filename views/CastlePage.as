@@ -75,21 +75,22 @@ class Sky extends MyNode
         //bg = sprite("sky.png").size(3000, 330);
         
         bg = node();
-        bg.addsprite("sky0.png").pos(0, 0);
-        bg.addsprite("sky1.png").pos(1000, 0);
-        bg.addsprite("sky2.png").pos(2000, 0);
+        bg.addsprite("sky0.png", ARGB_8888).pos(0, 0);
+        bg.addsprite("sky1.png", ARGB_8888).pos(1000, 0);
+        bg.addsprite("sky2.png", ARGB_8888).pos(2000, 0);
         
     }
 }
 class BuildLayer extends MyNode
 {
     var map;
-    var buildings = [];
+    var buildings = null;
     function BuildLayer(m)
     {
         map = m;
         bg = node();
         init();
+        buildings = global.user.allBuildings;
     }
     override function addChild(chd)
     {
@@ -181,7 +182,7 @@ class CastlePage extends MyNode
     function beginBuild(building)
     {
         inBuilding = 1;
-        curBuild = new Building(this, building);
+        curBuild = new Building(buildLayer, building);
         buildLayer.addChild(curBuild);
         moveToPoint(2526, 626);
     }

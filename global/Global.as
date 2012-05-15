@@ -5,6 +5,7 @@ class Global
     var director;
     var controller;
     var user;
+    var myAction;
     function Global()
     {
     }

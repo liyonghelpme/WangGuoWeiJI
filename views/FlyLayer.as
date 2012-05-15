@@ -1,7 +1,9 @@
 class FlyLayer extends MyNode
 {
     var labelPos = [[302,237],[91,117],[123,410],[616,328],[667,109],[222,25]];
-    function FlyLayer(){
+    var scene;
+    function FlyLayer(s){
+        scene = s;
         bg = node();
         init();
         var jz=bg.addsprite("map_label_big.png").size(150,45).anchor(0,0).pos(615,27).rotate(0);

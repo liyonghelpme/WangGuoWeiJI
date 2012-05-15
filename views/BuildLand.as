@@ -4,7 +4,7 @@ class BuildLand extends MyNode
     function BuildLand(m)
     {
         map = m;
-        bg = sprite("land1.png").pos(1000, 1120).anchor(0, 100);
+        bg = sprite("land1.png", ARGB_8888).pos(1000, 1120).anchor(0, 100);
         init();
 
     }
@@ -15,7 +15,7 @@ class FarmLand extends MyNode
     function FarmLand(m)
     {
         map = m;
-        bg = sprite("land2.png").pos(2000, 1120).anchor(0, 100);
+        bg = sprite("land2.png", ARGB_8888).pos(2000, 1120).anchor(0, 100);
         init();
 
         
@@ -27,7 +27,7 @@ class TrainLand extends MyNode
     function TrainLand(m)
     {
         map = m;
-        bg = sprite("land0.png").pos(0, 1120).anchor(0, 100);
+        bg = sprite("land0.png", ARGB_8888).pos(0, 1120).anchor(0, 100);
         init();
 
     }

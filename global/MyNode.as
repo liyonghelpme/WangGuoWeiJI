@@ -77,4 +77,9 @@ class MyNode
                 childs[i].get().exitScene();
         }
     }
+    function addCus(act)
+    {
+        act.bg = bg;
+        bg.addaction(act.cus);
+    }
 }
