@@ -4,7 +4,7 @@ import global.INCLUDE;
 //global.director.pushView(new CastlePage(), 0, 0);
 //global.director.pushView(new MenuLayer(), 0, 0);
 //global.director.replaceScene(new CastleScene());
-global.director.replaceScene(new MapScene());
+global.director.pushScene(new MapScene());
 //global.director.pushView(new CastlePage(), 0, 0);
 //global.director.pushView(new MenuLayer(), 0, 0);
 //global.director.replaceScene(new CastleScene());

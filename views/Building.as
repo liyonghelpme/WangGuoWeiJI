@@ -53,6 +53,24 @@ class Building extends MyNode
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
+    function setColPos()
+    {
+        var other = checkCollision(this, global.user.allBuildings);
+        if(other != null)
+        {
+            setColor(NotBigZone);
+            var ret = checkPosSame(other.pos(), getPos());
+            if(ret == 1)
+            {
+                var temp = getPos();
+                temp[0] += sizeX;
+                setPos(temp);
+            }
+
+        }
+        else
+            setColor(InZone);
+    }
     function setState(s)
     {
         state = s;
@@ -65,7 +83,9 @@ class Building extends MyNode
             bottom = sprite().pos((sx+sy)/2*sizeX, (sx+sy)/2*sizeY).anchor(50, 50).size((sizeX-3)*2*sx, (sizeY-3)*2*sy).color(100, 100, 100, 100);
             bg.add(bottom, -1);
             //half transparent + color
-            setColor(InZone);
+            //setColor(InZone);
+            setColPos();
+
         }
         else if(state == Free)
         {
@@ -180,12 +200,15 @@ class Building extends MyNode
             var difx = lastPoints[0] - oldPos[0];
             var dify = lastPoints[1] - oldPos[1];
             moveBack(difx, dify);
+            setColPos();
+            /*
             var other = checkCollision(this, global.user.allBuildings);
             trace("collision", other);
             if(other != null)
                 setColor(NotBigZone);
             else
                 setColor(InZone);
+            */
         }
     }
     function touchEnded(n, e, p, x, y, points)

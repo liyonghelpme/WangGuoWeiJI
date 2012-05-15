@@ -42,7 +42,9 @@ class MapLayer extends MyNode
     {
         trace("mapOnclick", param);
         if(param == 0)
+        {
             global.director.popScene();
+        }
         else{
             inSmall = 1;
             scene.gotoIsland(param);
