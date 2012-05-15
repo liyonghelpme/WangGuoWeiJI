@@ -63,7 +63,9 @@ class LevelSelectLayer extends MyNode
         //var isPos = island.pos();
         trace("select Level", param, curDif);
         //var newPos;
-        for(i=0;i < 6 && i <= curDif[1] && param <= curDif[0]; i++){
+        for(i=0;i < 6 && index <= curDif[0]; i++){
+            if(index == curDif[0] && i > curDif[1])
+                break;
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
             trace("flagPos", flagPos[index][i]);
             var b=islandLayer.addsprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
@@ -77,11 +79,13 @@ class LevelSelectLayer extends MyNode
     
     function onSmall(param)
     {
+        trace("onSmall", param);
         scene.onSmall(param);   
     }
     function onDiff(param)
     {
-        scene.onDif(param);
+        trace("on Dif", param);
+        scene.onDiff(param);
     }
     override function exitScene()
     {
@@ -99,7 +103,7 @@ class LevelSelectLayer extends MyNode
     //全部岛屿 -> 某个岛屿小关 ->选择难度 -> 查看难度->进入游戏
     function goBack(){
         var sl = len(scene.contextStack);
-        trace("goBack", sl);
+        trace("goBack", sl, scene.contextStack);
         if(sl == 1){//返回主页面
             scene.gotoIsland(0);
         }
@@ -127,7 +131,7 @@ class LevelSelectLayer extends MyNode
             var b=levelNode.addsprite("map_level_normal.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
             //临时数据
 
-            var starNum = getStar(index, param);
+            var starNum = getStar(index, param, i);
 
             //var level = getMaxLevel(index, param, i)
             //starNum = starNum[level];
@@ -172,7 +176,7 @@ class LevelSelectLayer extends MyNode
                 var b=levelNode.addsprite("map_level_normal.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
                 //临时数据
 
-                var starNum = getStar(index, param);
+                var starNum = getStar(index, param, i);
 
                 //var level = getMaxLevel(index, param, i)
                 //starNum = starNum[level];

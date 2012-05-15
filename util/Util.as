@@ -368,7 +368,7 @@ function getCurEnableDif()
     for(i = 0; i < len(star); i++)
     {
         for(j = 0; j < len(star[i]); j++)
-            if(star[i][PassDifficult] == 0)
+            if(star[i][j][PassDifficult] == 0)
             {
                 find = 1;
                 break;
@@ -380,8 +380,8 @@ function getCurEnableDif()
     //enable small = j
     return [i+1, j];
 }
-function getStar(big, small)
+function getStar(big, small, dif)
 {
     var star = global.user.getValue("starNum");
-    return star[big-1][small]; 
+    return star[big-1][small][dif]; 
 }

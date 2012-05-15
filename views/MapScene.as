@@ -145,6 +145,7 @@ class MapScene extends MyNode
     }
     function onDiff(param)
     {
+        trace("scene onDiff", param, contextStack);
         var sl = len(contextStack);
         if(sl==2){
             //flyLayer.selectLevel(param);
