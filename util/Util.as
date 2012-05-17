@@ -18,6 +18,13 @@ const Free = 1;
 const Working = 2;
 const ShowMenuing = 4;
 
+//植物的生长状态
+const SOW = 0;
+const SEED = 1;
+const MEDIUM = 2;
+const MATURE = 3;
+const ROT = 4;
+
 const ISLAND_LAYER = 1; 
 const CLOUD_LAYER = 2; 
 const FLY_LAYER = 3;
@@ -194,6 +201,7 @@ function getPlant(id)
 }
 function getWorkTime(t)
 {
+    trace("workTime", t);
     var sec = t % 60;
     t = t / 60;
     var min = t % 60;
@@ -287,16 +295,22 @@ function checkCol(a, b)
     //return abs(difx) < (size0[0]+size1[0]-4) && abs(dify) < (size0[1]+size1[1]-4);
     //return aBound[0] < bBound[2] && aBound[2] > bBound[0] && aBound[1] < bBound[3] && aBound[3] > bBound[1]; 
 }
-function normalizePos(p)
+function normalizePos(p, sx, sy)
 {
     var x = p[0];
     var y = p[1];
+    x -= (sx+sy)*sizeX/2;
+    y -= (sx+sy)*sizeY;
+
     x -= FullZone[0];
     y -= FullZone[1];
     var q = x/sizeX;
     x = q*sizeX;
     q = y/sizeY;
     y = q*sizeY;
+
+    x += (sx+sy)*sizeX/2;
+    y += (sx+sy)*sizeY;
     return [x+FullZone[0], y+FullZone[1]];
 }
 
@@ -435,4 +449,11 @@ function getFallThing(kind)
     var v = fallThings[kind];
     trace("getFallThing", v);
     return dict([["silver", v[1]], ["crystal", v[2]], ["gold", v[3]]]);
+}
+/*
+building id-->function id -> function array
+*/
+function getBuildFunc(id)
+{
+    return buildFunc.get(id);   
 }

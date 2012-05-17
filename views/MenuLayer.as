@@ -12,23 +12,25 @@ class MenuLayer extends MyNode
     var menus;
     var scene;
 
+    var banner;
     function MenuLayer(s) {
         scene = s;
         trace("pushMenuLayer");
         menus =new Array(null,null);
-        bg = sprite("menu_back.png").scale(100,100).size(800,111).anchor(0,100).pos(0,480).rotate(0);
+        bg = node();
+        banner = bg.addsprite("menu_back.png").scale(100,100).size(800,111).anchor(0,100).pos(0,480).rotate(0);
         init();
 
         initData();
 
-        taskbutton = bg.addsprite("task.png").scale(100,100).size(93,87).anchor(0,0).pos(11,22).rotate(0);
-        expfiller = bg.addsprite("exp_filler.png").scale(100,100).size(100,8).anchor(0,0).pos(147,51).rotate(0);
-        expback = bg.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
-        collectionbutton = bg.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
-        //Un5 = bg.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
-        //Un6 = bg.addsprite("gold.png").scale(100,100).size(33,32).anchor(50,50).pos(549,93).rotate(0);
-        rechargebutton = bg.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0);
-        menubutton = bg.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
+        taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(0,0).pos(11,22).rotate(0);
+        expfiller = banner.addsprite("exp_filler.png").scale(100,100).size(100,8).anchor(0,0).pos(147,51).rotate(0);
+        expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
+        collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
+        //Un5 = banner.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
+        //Un6 = banner.addsprite("gold.png").scale(100,100).size(33,32).anchor(50,50).pos(549,93).rotate(0);
+        rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0);
+        menubutton = banner.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
 
     }
@@ -36,14 +38,15 @@ class MenuLayer extends MyNode
     var goldText;
     function initData()
     {
-        silverText = bg.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(100, 100, 100);
-        goldText = bg.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(100, 100, 100)
+        silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(100, 100, 100);
+        goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(100, 100, 100)
     }
     var building = 0;
     function beginBuild()
     {
         building = 1; 
         bg.visible(0);
+        /*
         for(var i = 0; i < len(menus); i++)
         {
             if(menus[i] != null)
@@ -51,11 +54,13 @@ class MenuLayer extends MyNode
                 menus[i].bg.visible(0);
             }
         }
+        */
     }
     function finishBuild()
     {
         building = 0;
         bg.visible(1);
+        /*
         for(var i = 0; i < len(menus); i++)
         {
             if(menus[i] != null)
@@ -63,6 +68,7 @@ class MenuLayer extends MyNode
                 menus[i].bg.visible(1);
             }
         }
+        */
     }
     override function enterScene()
     {
@@ -89,6 +95,7 @@ class MenuLayer extends MyNode
         if(building)
             return;
         bg.addaction(fadein(1000));
+        /*
         for(var i = 0; i < len(menus); i++)
         {
             if(menus[i] != null)
@@ -96,6 +103,7 @@ class MenuLayer extends MyNode
                 menus[i].showMenu();
             }
         }
+        */
         //}
     }
     function hideMenu()
@@ -106,11 +114,13 @@ class MenuLayer extends MyNode
         if(building)
             return;
         bg.addaction(fadeout(1000));
+        /*
         for(var i = 0; i < len(menus); i++)
         {
             if(menus[i] != null)
                 menus[i].hideMenu();
         }
+        */
         //}
     }
     

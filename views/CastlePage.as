@@ -199,6 +199,16 @@ class BuildLayer extends MyNode
         }
         return null;
     }
+    /*
+    function showGlobalMenu(build)
+    {
+        map.showGlobalMenu(build); 
+    }
+    function selfCloseGlobalMenu()
+    {
+        map.selfCloseGlobalMenu();
+    }
+    */
 }
 class CastlePage extends MyNode
 {
@@ -286,6 +296,17 @@ class CastlePage extends MyNode
         curPos[1] = min(max(minY, curPos[1]), maxY);
         bg.pos(curPos);
     }
+    /*
+    var showMenu = 0;
+    var curShow = null;
+    function showGlobalMenu(build)
+    {
+        showMenu = 1;   
+        curShow = build;
+        scene.showGlobalMenu(build);
+    }
+    */
+
     function finishBuild()
     {
         inBuilding = 0; 
@@ -298,10 +319,29 @@ class CastlePage extends MyNode
         buildLayer.removeChild(curBuild);
         curBuild = null;
     }
+    /*
+    function selfCloseGlobalMenu()
+    {
+        showMenu = 0;
+        touchBuild = null;
+        scene.closeGlobalMenu();
+    }
+    */
     var touchBuild = null;
     function touchBegan(n, e, p, x, y, points)
     {
         scene.clearHideTime();
+        scene.closeGlobalMenu(this);
+        /*
+        if(showMenu == 1)
+        {
+            showMenu = 0;
+            curShow.closeGlobalMenu();
+            curShow = null;
+            //global.director.popView();//remove BuildMenu Now
+            scene.closeGlobalMenu();
+        }
+        */
         touchDelegate.tBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)

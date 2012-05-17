@@ -177,8 +177,8 @@ class CastleScene extends MyNode
 {
     var hideTime = 0;
     var inHide = 0;
-    var mc;
-    var ml;
+    var mc = null;
+    var ml = null;
     function CastleScene()
     {
         bg = node();
@@ -250,4 +250,48 @@ class CastleScene extends MyNode
         mc.beginBuild(building);
         global.director.pushView(new BuildMenu(this, building));
     }
+    function showPlantView(build, callback)
+    {
+        callback();
+    }
+    function showGlobalMenu(build, callback)
+    {
+        if(curMenuBuild == null)
+        {
+            curMenuBuild = build;
+            ml.beginBuild();
+            callback();
+        }
+    }
+    /*
+    两种方式 关闭全局菜单 来自于 建筑物自己 来自于 经营页面其它元素
+    第一个参数表示来源
+    */
+    var curMenuBuild = null;
+    function closeGlobalMenu(build)
+    {
+        if(curMenuBuild != null)
+        {
+            if(build == curMenuBuild)//自己关闭
+            {
+            }
+            else//其它人关闭
+            {
+            }
+            curMenuBuild.closeGlobalMenu();
+            curMenuBuild = null;
+            ml.finishBuild();
+            //global.director.popView();
+        }
+    }
+    /*
+    function showGlobalMenu(build)
+    {
+        ml.beginBuild();
+    }
+    function closeGlobalMenu()
+    {
+        ml.finishBuild(); 
+    }
+    */
 }

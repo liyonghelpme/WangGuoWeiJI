@@ -30,29 +30,37 @@ class Plant extends MyNode
     */
     function getLeftTime()
     {
+        trace("leftTime", data.get("time"), passTime);
         return (data.get("time")*1000-passTime)/1000;
     }
+    var acced = 0;
     function finish()
     {
-        passTime = (data.get("time")+1)*1000;
+        acced = 1;
+        passTime = data.get("time")*1000;
+        trace("farm Finish", passTime, acced);
         setState();
+    }
+    function getState()
+    {
+        return curState;
     }
     function setState()
     {
         var needTime = data.get("time")*1000;
         var newState = passTime*4/needTime;
-        newState = min(3, max(0, newState));
+        newState = min(MATURE, max(SOW, newState));
 
-        if((newState == 3) && (passTime >= 2*needTime))
+        if((newState == MATURE) && (passTime >= 2*needTime) && acced == 0)
         {
-            newState = 4; 
+            newState = ROT; 
         }
         trace("pass Time", passTime, needTime, newState, curState);
 
         if(newState != curState)
         {
             curState = newState;
-            building.changeState(curState);
+            //building.changeState(curState);
             bg.texture("p"+str(curState)+".png", UPDATE_SIZE);
 
             //var par = bg.parent();

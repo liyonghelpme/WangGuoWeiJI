@@ -30,22 +30,29 @@ class Building extends MyNode
     var lastPoints;
     var planting = null;
 
+    var sx;
+    var sy;
     //first check in full
     
 
     var bottom = null;
+    /*
+    锚点 50 100
+    左上角坐标  (sx+sy)/2*sizeX  (sx+sy)*sizeY
+    要保证左上角和sizeX sizeY 网格
+    */
     function Building(m, d)
     {
         map = m;
         data = d;
         var id = data.get("id");
-        var sy = data.get("sy");
-        var sx = data.get("sx");
+        sy = data.get("sy");
+        sx = data.get("sx");
 
         //bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(2526, 618+sizeY*sy/2+sizeY/2*sy%2).anchor(50, 100);
-        bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(2526, 618+(sx+sy)/2*sizeY).anchor(0, 0);
+        bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(2526, 618+(sx+sy)/2*sizeY).anchor(50, 100);
         init();
-        var npos = normalizePos(bg.pos());
+        var npos = normalizePos(bg.pos(), sx, sy);
         setPos(npos);
         //bg.pos(npos);
         //map.updateMap(this);
@@ -70,7 +77,7 @@ class Building extends MyNode
         if(other != null)
         {
             setColor(NotBigZone);
-            var ret = checkPosSame(other.pos(), getPos());
+            var ret = checkPosSame(other.getPos(), getPos());
             if(ret == 1)
             {
                 var temp = getPos();
@@ -222,6 +229,19 @@ class Building extends MyNode
             */
         }
     }
+    function showPlantView()
+    {
+        global.director.pushView(new PlantChoose(this), 1, 0);
+    }
+    function showGlobalMenu()
+    {
+        //state = ShowMenuing;
+        var funcs = getBuildFunc(data.get("funcs"));
+        trace("getFunc", funcs);
+        //map.showGlobalMenu(this);
+        global.director.pushView(new BuildWorkMenu(this, funcs[0], funcs[1]), 0, 0);
+    }
+    var showMenuYet = 0;
     function touchEnded(n, e, p, x, y, points)
     {
         if(state == Moving)
@@ -234,36 +254,62 @@ class Building extends MyNode
             else
                 setColor(InZone);
             */
-            var npos = normalizePos(bg.pos());
+            var npos = normalizePos(bg.pos(), sx, sy);
             bg.pos(npos);
         }
         else if(state == Free)
         {
-            global.director.pushView(new PlantChoose(this), 1, 0);
+            global.director.curScene.showPlantView(this, showPlantView);
+            //global.director.pushView(new PlantChoose(this), 1, 0);
         }
         else if(state == Working)
         {
+            if(planting.getState() >= MATURE && showMenuYet == 0)
+            {
+                harvestPlant();
+            }
+            else if(showMenuYet == 0)
+            {
+                showMenuYet = 1;
+                global.director.curScene.showGlobalMenu(this, showGlobalMenu);
+            }
+            /*
             state = ShowMenuing;
-            var funcs = data.get("funcs");
+            var funcs = getBuildFunc(data.get("funcs"));
+            trace("getFunc", funcs);
+            map.showGlobalMenu(this);
             global.director.pushView(new BuildWorkMenu(this, funcs[0], funcs[1]), 0, 0);
-
+            */
         }
+        /*
         else if(state == 3)
         {
             harvestPlant();
         }
-        else if(state == 4)
+        else if(state == ShowMenuing)
         {
         }
+        */
     }
+    /*
+    来自上层的点击信息，关闭打开的全局菜单
+    */
+    function closeGlobalMenu()
+    {
+        //state = Working;
+        showMenuYet = 0;
+        global.director.popView();
+    }
+    /*
     function changeState(s)
     {
-        if(s == 3 || s == 4)
-            state = 3;
+        //if(s == MATURE || s == ROT)
+        //    state = 3;
     }
+    */
     function beginPlant(id)
     {
-        state = 2;
+        state = Working;
         trace("planting", id);
         var plant = getPlant(id);
         plant.update("passTime", 0);
@@ -273,7 +319,7 @@ class Building extends MyNode
     //var sil;
     function harvestPlant()
     {
-        state = 1;
+        state = Free;
         planting.removeSelf();
 
         /*
@@ -295,7 +341,7 @@ class Building extends MyNode
     }
     function getLeftTime()
     {
-        trace("getWorkTime");
+        trace("getWorkTime", state, planting);
         if(state == Working && planting != null)
         {
             return planting.getLeftTime(); 
@@ -313,19 +359,31 @@ class Building extends MyNode
     }
     function doAcc()
     {
+        trace("doAcc state", state);
         if(state == Working)
         {
             planting.finish(); 
+            global.director.curScene.closeGlobalMenu();
             //global.director.popView();
         }
     }
+    /*
+    //自己关闭全局菜单
+    function selfCloseGlobalMenu()
+    {
+        map.selfCloseGlobalMenu();
+        global.director.popView();
+    }
+    */
     function doSell()
     {
         //var add = getBuildCost(data.get("id"));
         //flyObject(bg, add, pickMe);
         global.director.curScene.addChild(new FlyObject(bg, getBuildCost(data.get("id")), sellOver));
         map.removeChild(this); 
-        global.director.popView();
+        //selfCloseGlobalMenu();
+        global.director.curScene.closeGlobalMenu();
+        //global.director.popView();
     }
     function sellOver()
     {
