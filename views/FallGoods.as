@@ -85,9 +85,11 @@ class FallGoods extends MyNode
     function pickObj(obj)
     {
         allFalls.remove(obj);
+        /*
         global.user.changeValue("silver", fallThings[obj.kind][1]);
         global.user.changeValue("crystal", fallThings[obj.kind][2]);
         global.user.changeValue("gold", fallThings[obj.kind][3]);
+        */
     }
     override function exitScene()
     {

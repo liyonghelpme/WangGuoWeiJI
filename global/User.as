@@ -10,6 +10,7 @@ class User
     function User()
     {
         resource = dict([["silver", 10000], ["gold", 10000], ["crystal", 10000], 
+        ["level", 10],
         ["starNum", 
             [
             [
@@ -99,6 +100,16 @@ class User
             }
         }
         return buyable;
+    }
+    function doAdd(add)
+    {
+        var its = add.items();
+        for(var i = 0; i < len(its); i++)
+        {
+            var key = its[i][0];
+            var value = its[i][1];
+            changeValue(key, value);
+        }
     }
     function doCost(cost)
     {

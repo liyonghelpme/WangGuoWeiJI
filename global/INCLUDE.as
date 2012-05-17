@@ -24,10 +24,13 @@ import views.LevelSelectLayer;
 //采用组合的方式 将farm相关的行为 实现在farm中
 import views.Building;
 import views.BuildMenu;
+import views.BuildWorkMenu;
 
 import views.Farm;
 
 import views.PlantChoose;
+
+import views.FlyObject;
 
 /*
 import views.Map;

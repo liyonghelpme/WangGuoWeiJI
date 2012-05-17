@@ -28,7 +28,7 @@ class Building extends MyNode
 
     var state;
     var lastPoints;
-    var planting;
+    var planting = null;
 
     //first check in full
     
@@ -43,15 +43,26 @@ class Building extends MyNode
         var sx = data.get("sx");
 
         //bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(2526, 618+sizeY*sy/2+sizeY/2*sy%2).anchor(50, 100);
-        bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(2526, 618+(sx+sy)/2*sizeY).anchor(50, 100);
+        bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(2526, 618+(sx+sy)/2*sizeY).anchor(0, 0);
         init();
         var npos = normalizePos(bg.pos());
-        bg.pos(npos);
+        setPos(npos);
+        //bg.pos(npos);
+        //map.updateMap(this);
+
         //state = data.get("state");
         setState(data.get("state"));
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+    //remove OldPosition map 
+    //set NewPosition map
+    override function setPos(p)
+    {
+        //map.removeMap(this);
+        bg.pos(p);
+        //map.setMap(this);
     }
     function setColPos()
     {
@@ -213,7 +224,7 @@ class Building extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        if(state == 0)
+        if(state == Moving)
         {
             /*
             var other = map.checkCollision(this);
@@ -226,16 +237,23 @@ class Building extends MyNode
             var npos = normalizePos(bg.pos());
             bg.pos(npos);
         }
-        if(state == 1)
+        else if(state == Free)
         {
             global.director.pushView(new PlantChoose(this), 1, 0);
         }
-        else if(state == 2)
+        else if(state == Working)
         {
+            state = ShowMenuing;
+            var funcs = data.get("funcs");
+            global.director.pushView(new BuildWorkMenu(this, funcs[0], funcs[1]), 0, 0);
+
         }
         else if(state == 3)
         {
             harvestPlant();
+        }
+        else if(state == 4)
+        {
         }
     }
     function changeState(s)
@@ -252,11 +270,13 @@ class Building extends MyNode
         planting = new Plant(this, plant);
         addChild(planting);
     }
-    var sil;
+    //var sil;
     function harvestPlant()
     {
         state = 1;
         planting.removeSelf();
+
+        /*
         var bsize = bg.size();
         var coor2 = bg.node2world(bsize[0]/2, bsize[1]/2);
 
@@ -268,13 +288,56 @@ class Building extends MyNode
                     coor2[0]+100, coor2[1]-100, 
                     coor2[0]+100, coor2[1]+100, 
                     256, 460)),callfunc(pickMe)));
-        //planting = null;
+        */
+        global.director.curScene.addChild(new FlyObject(bg, dict([["silver", planting.data.get("silver")]]), harvestOver));
+        //flyObject(bg, dict([["silver", planting.data.get("silver")]]), harvestOver);
+        planting = null;
     }
+    function getLeftTime()
+    {
+        trace("getWorkTime");
+        if(state == Working && planting != null)
+        {
+            return planting.getLeftTime(); 
+        }
+        return 0;
+    }
+    //view Value
+    function harvestOver()
+    {
+        //global.user.changeValue("silver", planting.data.get("silver"));
+        //sil.removefromparent();
+        //sil = null;
+        //planting = null;
+        //global.user.doAdd(getBuildCost(data.get("id")));
+    }
+    function doAcc()
+    {
+        if(state == Working)
+        {
+            planting.finish(); 
+            //global.director.popView();
+        }
+    }
+    function doSell()
+    {
+        //var add = getBuildCost(data.get("id"));
+        //flyObject(bg, add, pickMe);
+        global.director.curScene.addChild(new FlyObject(bg, getBuildCost(data.get("id")), sellOver));
+        map.removeChild(this); 
+        global.director.popView();
+    }
+    function sellOver()
+    {
+    }
+    /*
     function pickMe()
     {
-        global.user.changeValue("silver", planting.data.get("silver"));
-        sil.removefromparent();
-        sil = null;
-        planting = null;
+        global.user.doAdd(getBuildCost(data.get("id")));
+    }
+    */
+    function doPhoto()
+    {
+        global.director.getPid(); 
     }
 }

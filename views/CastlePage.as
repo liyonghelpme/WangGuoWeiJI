@@ -85,6 +85,7 @@ class BuildLayer extends MyNode
 {
     var map;
     var buildings = null;
+    var occMap = dict();
     function BuildLayer(m)
     {
         map = m;
@@ -98,6 +99,82 @@ class BuildLayer extends MyNode
         buildings.append(chd);
     }
         
+    function removeMap(b)
+    {
+        var sx = b.data.get("sx");
+        var sy = b.data.get("sy");
+        var p = b.getPos();
+        
+        var initX = p[0]/sizeX+sx;
+        var initY = p[1]/sizeY+1;
+        for(var i = 0; i < sx; i++)
+        {
+            var curX = initX+i;
+            var curY = initY+i;
+            for(var j = 0; j < sy; j++)
+            {
+                var v = occMap.get(curX*1000+curY, null);
+                if(v == null)
+                    continue;
+                else
+                {
+                    v.remove(b);
+                    if(len(v) == 0)
+                    {
+                        occMap.pop(curX*1000+curY);
+                    }
+                }
+                curX -= 1;
+                curY += 1;
+            }
+        }
+    }
+
+    function checkCollision(b)
+    {
+        var sx = b.data.get("sx");
+        var sy = b.data.get("sy");
+        var p = b.getPos();
+
+        var initX = p[0]/sizeX+sx;
+        var initY = p[1]/sizeY+1;
+        for(var i = 0; i < sx; i++)
+        {
+            var curX = initX+i;
+            var curY = initY+i;
+            for(var j = 0; j < sy; j++)
+            {
+                var v = occMap.get(curX*1000+curY, []);
+                if(len(v) != 0)
+                    return 1;
+                curX -= 1;
+                curY += 1;
+            }
+        }
+        return 0;
+    }
+    function updateMap(b)
+    {
+        var sx = b.data.get("sx");
+        var sy = b.data.get("sy");
+        var p = b.getPos();
+        
+        var initX = p[0]/sizeX+sx;
+        var initY = p[1]/sizeY+1;
+        for(var i = 0; i < sx; i++)
+        {
+            var curX = initX+i;
+            var curY = initY+i;
+            for(var j = 0; j < sy; j++)
+            {
+                var v = occMap.get(curX*1000+curY, []);
+                v.append(b);
+                occMap.update(curX*1000+curY, v);
+                curX -= 1;
+                curY += 1;
+            }
+        }
+    }
     override function removeChild(chd)
     {
         super.removeChild(chd);
@@ -137,9 +214,10 @@ class CastlePage extends MyNode
     function CastlePage(s)
     {
         scene = s;
-        bg = node().size(MapWidth, MapHeight);
+        //场景居中， 没有缩放
+        bg = node().size(MapWidth, MapHeight).pos(global.director.disSize[0]/2-MapWidth/2, global.director.disSize[1]/2-MapHeight/2);
         init();
-
+        
         var sky = new Sky();
         addChildZ(sky, -2);
 

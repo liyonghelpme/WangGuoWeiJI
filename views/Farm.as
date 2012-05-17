@@ -28,6 +28,15 @@ class Plant extends MyNode
         bg.pos((sx+sy)/2*sizeX, (sx+sy)/2*sizeY);
     }
     */
+    function getLeftTime()
+    {
+        return (data.get("time")*1000-passTime)/1000;
+    }
+    function finish()
+    {
+        passTime = (data.get("time")+1)*1000;
+        setState();
+    }
     function setState()
     {
         var needTime = data.get("time")*1000;
@@ -76,4 +85,5 @@ class Plant extends MyNode
 
 class Farm extends MyNode
 {
+    
 }

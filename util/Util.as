@@ -1,6 +1,6 @@
 const DARK_PRI = -1;
-const sizeX = 135/4;
-const sizeY = 65/4;
+const sizeX = 32;
+const sizeY = 16;
 var SX = sizeX-10;
 var SY = sizeY-10;
 //var XDir = sizeX*10;
@@ -15,6 +15,8 @@ const NotSmallZone = 2;
 
 const Moving = 0;
 const Free = 1;
+const Working = 2;
+const ShowMenuing = 4;
 
 const ISLAND_LAYER = 1; 
 const CLOUD_LAYER = 2; 
@@ -165,7 +167,8 @@ function getBuild(id)
         ["sx", build[5]], 
         ["sy", build[6]], 
         ["name", build[7]],
-        ["hasAni", build[8]]
+        ["hasAni", build[8]],
+        ["funcs", build[9]],
         ]);
     return ret;
 }
@@ -188,6 +191,15 @@ function getPlant(id)
     ["name", plant[5]],
    ]);
    return p;
+}
+function getWorkTime(t)
+{
+    var sec = t % 60;
+    t = t / 60;
+    var min = t % 60;
+    var hour = t / 60;
+    var res = str(hour)+":"+str(min)+":"+str(sec);
+    return res;
 }
 function getTimeStr(t)
 {
@@ -388,4 +400,39 @@ function getStar(big, small, dif)
 function checkPosSame(p1, p2)
 {
     return p1[0]==p2[0] && p1[1]==p2[1];
+}
+
+/*
+假定消耗的物品非0 飞向的是经营页面的菜单栏位置
+*/
+/*
+function flyObject(bg, cost, callback)
+{
+    var TarPos = dict([["silver", [297, 460]], ["crystal", [253, 460]], ["gold", [550, 460]]]);
+    var bsize = bg.size();
+    var coor2 = bg.node2world(bsize[0]/2, bsize[1]/2);
+
+    var item = cost.items();
+    for(var i = 0; i < len(item); i++)
+    {
+        var k = item[i][0];
+        var v = item[i][1];
+        var obj = getscene().addsprite(str(k)+".png");
+        var tar = TarPos.get(k);
+        var dis = sqrt(distance(coor2, tar));
+        obj.addaction(sequence(sinein(bezierby(
+                    500+dis*25,
+                    coor2[0], coor2[1], 
+                    coor2[0]+100, coor2[1]-100, 
+                    coor2[0]+100, coor2[1]+100, 
+                    tar[0], tar[1])),callfunc(callback)));
+        
+    }
+}
+*/
+function getFallThing(kind)
+{
+    var v = fallThings[kind];
+    trace("getFallThing", v);
+    return dict([["silver", v[1]], ["crystal", v[2]], ["gold", v[3]]]);
 }

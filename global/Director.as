@@ -92,18 +92,6 @@ class Director
     function replaceScene(view)
     {
         curScene.removeSelf();
-/*
-<<<<<<< HEAD
-        curScene = new Scene();
-        stack = []
-
-        getscene().add(curScene.bg);
-        getscene().setevent(EVENT_KEYUP, quitGame);
-        curScene.enterScene();
-
-        pushPage(view, 0);
-=======
-*/
         //curScene = new Scene();
         curScene = view;
         stack = []
@@ -113,6 +101,18 @@ class Director
         curScene.enterScene();
 
         //pushPage(view, 0);
+    }
+    function getPid()
+    {
+        curScene.bitmap(shotScreen, 1);
+    }
+    function shotScreen(n, b, p)
+    {
+        ppy_upload(dict([["photo", b.bitmap2bytes("png")]]), shotOver, null);
+    }
+    function shotOver(rid, rc, con, para)
+    {
+        trace("shotOver", rid, rc, con, para);
     }
     function pushScene(view)
     {
