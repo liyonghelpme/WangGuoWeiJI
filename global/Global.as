@@ -6,6 +6,7 @@ class Global
     var controller;
     var user;
     var myAction;
+    var staticScene = null;
     function Global()
     {
     }

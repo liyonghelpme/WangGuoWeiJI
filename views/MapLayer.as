@@ -2,7 +2,8 @@ class MapLayer extends MyNode
 {
     var scene;
     var island;
-    var lockPos = [[0,0],[0,0],[244,151],[272,173],[400,167],[235,235]];
+    //var lockPos = [[0,0],[0,0],[244,151],[272,173],[400,167],[235,235]];
+    var LockPos = [[0, 0], [189, 164], [232, 141], [269, 166], [336, 146], [232, 180]];
     function MapLayer(s){
         scene = s;
         bg = node().size(1600,960).scale(50,50).anchor(50,50).pos(400,240);
@@ -28,7 +29,8 @@ class MapLayer extends MyNode
         for(;i<=5;i++){
             island[i].color(40,40,40,100);
             var size=island[i].size();
-            island[i].addsprite("map_island_lock.png").anchor(50,50).pos(size[0]/2,size[1]/2).scale(200);
+            var lock = sprite("map_island_lock.png").anchor(50,50).pos(LockPos[i][0], LockPos[i][1]).scale(200);
+            island[i].add(lock, LOCK_Z);
             //global.touchManager.addTargeted(new ButtonDelegate(island[i],1,0,bg.parent().get(),i),7-i,1);
             new Button(island[i], onClicked, i);
         }

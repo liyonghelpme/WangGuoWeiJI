@@ -23,7 +23,7 @@ class LevelSelectLayer extends MyNode
     var flagPos = [
     [],//Level 0 is village
     [[303, 81], [179, 87], [139, 155],[239, 155], [220, 199], [147, 252]],
-    [[164, 49], [122, 113], [151, 176], [236, 176], [314, 161], [399, 87]],
+    [[164, 49], [122, 113], [151, 176], [236, 173], [314, 161], [399, 87]],
     [[85, 132], [138, 191], [213, 245], [305, 241], [407, 202], [393, 120]],
     [[146, 92], [247, 108], [317, 125], [416, 132], [461, 209], [401, 266]],
     [[359, 235], [296, 233], [286, 186], [348, 137], [276, 104], [177, 89]],
@@ -49,7 +49,7 @@ class LevelSelectLayer extends MyNode
         levelNode = null;
         init();
         var jz=bg.addsprite("map_label_big.png").size(150,45).anchor(0,0).pos(615,27).rotate(0);
-        jz.addlabel(getStr("mapIsland"+str(index)),null,33).anchor(50,50).pos(75,22).color(0,0,0,100);
+        jz.addlabel(getStr("mapIsland"+str(index), null),null,33).anchor(50,50).pos(75,22).color(0,0,0,100);
         var back=bg.addsprite("map_back.png").pos(50,360);
         new Button(back, goBack, 0);
         var i;
@@ -68,12 +68,14 @@ class LevelSelectLayer extends MyNode
                 break;
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
             trace("flagPos", flagPos[index][i]);
-            var b=islandLayer.addsprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
+            var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
+            islandLayer.add(b, FLAG_Z);
             new Button(b, onSmall, i);
         }
         for(;i<6;i++){
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
-            islandLayer.addsprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
+            var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
+            islandLayer.add(b2, FLAG_Z);
         }
     }
     

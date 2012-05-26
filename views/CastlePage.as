@@ -5,7 +5,7 @@ class Cloud extends MyNode
     {
         map = m;
         var y = rand(300);
-        bg = sprite("cloud"+str(k)+".png").pos(-700, y);
+        bg = sprite("cloud"+str(k)+".png", ARGB_8888).pos(-700, y);
         init();
         if(k == 2 || k == 5)
             bg.addaction(sequence(
@@ -72,12 +72,10 @@ class Sky extends MyNode
 {
     function Sky()
     {
-        //bg = sprite("sky.png").size(3000, 330);
-        
         bg = node();
-        bg.addsprite("sky0.png", ARGB_8888).pos(0, 0);
-        bg.addsprite("sky1.png", ARGB_8888).pos(1000, 0);
-        bg.addsprite("sky2.png", ARGB_8888).pos(2000, 0);
+        bg.addsprite("sky0.png", RGB_565).pos(0, 0);
+        bg.addsprite("sky1.png", RGB_565).pos(1000, 0);
+        bg.addsprite("sky2.png", RGB_565).pos(2000, 0);
         
     }
 }
@@ -91,12 +89,103 @@ class BuildLayer extends MyNode
         map = m;
         bg = node();
         init();
-        buildings = global.user.allBuildings;
+        buildings = global.user.buildings;
+        initBuilding();
+        //global.user.initBuilding(this);
     }
-    override function addChild(chd)
+    /*
+    addChild 会隐藏调用addChildZ
+    增加建筑需要注册map
+    删除建筑时清理map
+    初始化建筑物数据的时候, 构造这些数据对象
+
+    应该把view和数据分离 addChildZ只是处理view 部分  
+    而数据部分由user自身处理
+    */
+    function addBuilding(chd, z)
     {
-        super.addChild(chd);
-        buildings.append(chd);
+        addChildZ(chd, z);
+        global.user.addBuilding(chd);
+    }
+    function removeBuilding(chd)
+    {
+        removeChild(chd);
+        global.user.removeBuilding(chd);
+    }
+    function addSoldier(sol)
+    {
+        addChildZ(sol, MAX_BUILD_ZORD);
+        /*
+        设置zord
+        */
+        sol.setPos(sol.getPos());
+        global.user.addSoldier(sol);
+    }
+    function removeSoldier(sol)
+    {
+        removeChild(sol);
+        global.user.removeSoldier(sol);
+    }
+    /*
+    建筑物已经在allBuildings 和map中存在
+    重新由数据加入到页面中
+    但是建筑物的map属性需要重新设置
+    */
+    function addPureBuild(chd)
+    {
+        super.addChildZ(chd, MAX_BUILD_ZORD);
+        //调整Zord
+        chd.setPos(chd.getPos());
+        //chd.setMap(this);
+    }
+    override function exitScene()
+    {
+        global.user.clearAllBuilding();
+        super.exitScene();
+    }
+
+    /*
+    用于从上面的数据开始构造用户的建筑物
+    这个需要在 上面的数组构造好之后进行 通常在用户下载完数据之后
+    初始化 建筑图层的时候 将会 根据数据初始化相应的 allBuildings 建筑物实体  
+
+    由数据变成实体
+
+    数据保存在本地 每次重新进入可以重新从本地加载到数据
+
+    新建和初始化建筑
+    */
+
+    function initBuilding()
+    {
+        trace("initBuilding", len(buildings));
+        var item = buildings.items();
+        for(var i = 0; i < len(item); i++)
+        {
+            var bid = item[i][0];
+            var bdata = item[i][1];
+
+            var data = getData(BUILD, bdata.get("id"));
+            data.update("state", bdata.get("state"));
+            data.update("dir", bdata.get("dir"));
+            var build = new Building(this, data);
+            build.setBid(bid);
+
+            /*
+            初始化数组和map
+            保证数据唯一性
+            */
+            //默认z值
+            addChildZ(build, MAX_BUILD_ZORD);
+            //调整Z值
+            build.setPos([bdata.get("px"), bdata.get("py")]);
+            //设置数据 需要根据坐标设置冲突
+            global.user.addBuilding(build);
+
+
+
+        }
+
     }
         
     function removeMap(b)
@@ -130,85 +219,19 @@ class BuildLayer extends MyNode
         }
     }
 
-    function checkCollision(b)
-    {
-        var sx = b.data.get("sx");
-        var sy = b.data.get("sy");
-        var p = b.getPos();
 
-        var initX = p[0]/sizeX+sx;
-        var initY = p[1]/sizeY+1;
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var v = occMap.get(curX*1000+curY, []);
-                if(len(v) != 0)
-                    return 1;
-                curX -= 1;
-                curY += 1;
-            }
-        }
-        return 0;
-    }
-    function updateMap(b)
-    {
-        var sx = b.data.get("sx");
-        var sy = b.data.get("sy");
-        var p = b.getPos();
-        
-        var initX = p[0]/sizeX+sx;
-        var initY = p[1]/sizeY+1;
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var v = occMap.get(curX*1000+curY, []);
-                v.append(b);
-                occMap.update(curX*1000+curY, v);
-                curX -= 1;
-                curY += 1;
-            }
-        }
-    }
-    override function removeChild(chd)
-    {
-        super.removeChild(chd);
-        buildings.remove(chd);
-    }
     function touchBegan(n, e, p, x, y, points)
     {
+        map.touchBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)
     {
+        map.touchMoved(n, e, p, x, y, points);
     }
     function touchEnded(n, e, p, x, y, points)
     {
+        map.touchEnded(n, e, p, x, y, points);
     }
-    function checkInBuild(n, e, p, x, y, points)
-    {
-        var curPos = n.node2world(x, y);
-        for(var i = 0; i < len(buildings); i++)
-        {
-            if(checkIn(buildings[i].bg, curPos))
-                return buildings[i];
-        }
-        return null;
-    }
-    /*
-    function showGlobalMenu(build)
-    {
-        map.showGlobalMenu(build); 
-    }
-    function selfCloseGlobalMenu()
-    {
-        map.selfCloseGlobalMenu();
-    }
-    */
 }
 class CastlePage extends MyNode
 {
@@ -263,16 +286,29 @@ class CastlePage extends MyNode
         bg.setevent(EVENT_UNTOUCH, touchEnded);
 
         //global.timer.addTimer(this);
+        //initBuilding();
 
     }
+
     var inBuilding = 0;
     var curBuild = null;
+    /*
+    初始建造时建筑的zord 为最大， 
+    保证可以控制
+    */
     function beginBuild(building)
     {
         inBuilding = 1;
         curBuild = new Building(buildLayer, building);
-        buildLayer.addChild(curBuild);
-        moveToPoint(2526, 626);
+        buildLayer.addBuilding(curBuild, MAX_BUILD_ZORD);
+        //buildLayer.addChildZ(curBuild, MAX_BUILD_ZORD);
+        var kind = building.get("kind");
+        moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+        return curBuild;
+    }
+    function buySoldier(id)
+    {
+        buildLayer.addSoldier(new BusiSoldier(buildLayer, getData(SOLDIER, id)));
     }
     function moveToPoint(tarX, tarY)
     {
@@ -316,8 +352,14 @@ class CastlePage extends MyNode
     function cancelBuild()
     {
         inBuilding = 0;
-        buildLayer.removeChild(curBuild);
+        //buildLayer.removeChild(curBuild);
+        //global.user.removeBuild()
+        buildLayer.removeBuilding(curBuild);
         curBuild = null;
+    }
+    function onSwitch()
+    {
+        curBuild.onSwitch();
     }
     /*
     function selfCloseGlobalMenu()

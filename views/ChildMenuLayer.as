@@ -19,25 +19,36 @@ class ChildMenuLayer extends MyNode
     ["sell", ["menu_button_sell.png", onSell]],
     ]);
 
-    function ChildMenuLayer(index, funcs, s){
+    function ChildMenuLayer(index, funcs, s, otherFunc){
         scene = s;
         functions = funcs;
-        bg=sprite("dark.png").scale(100,100).size(128,480);
+        var height = len(functions)*90;
+        var h2 = len(otherFunc)*90;
+        var mH = max(height, h2);
+        var offset = 200-mH/2;
+        bg=sprite("dark.png").scale(100,100).size(128,height);
         if(index == 0){
-            bg.anchor(0, 0).pos(0, 0);
+            bg.anchor(0, 0).pos(0, offset);
         }
         else{
-            bg.anchor(100, 0).pos(800, 0);
+            bg.anchor(100, 0).pos(800, offset);
         }
         init();
         
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
-            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(64, 65+92*i);
+            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(64, 45+90*i);
             new Button(button, model[1], null);
         }
     }
+    /*
+    function touchMenu(callback)
+    {
+        //removeSelf();
+        callback();
+    }
+    */
 
     function onPhoto()
     {
@@ -72,6 +83,7 @@ class ChildMenuLayer extends MyNode
     }
     function onMap()
     {
+        scene.ml.cancelAllMenu();
         global.director.pushScene(new MapScene());    
     }
     function onFriend()
@@ -82,6 +94,7 @@ class ChildMenuLayer extends MyNode
     }
     function onPlan()
     {
+        scene.doPlan(); 
     }
     function onRank()
     {
@@ -94,6 +107,7 @@ class ChildMenuLayer extends MyNode
     }
     function onStore()
     {
+        scene.ml.cancelAllMenu();
         global.director.pushView(new Store(scene), 1, 0);
     }
 }

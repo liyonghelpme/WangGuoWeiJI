@@ -31,15 +31,19 @@ class FallGoods extends MyNode
             lastFallTime = 0;
         }
     }
+    /*
+    可以在模块初始化的时候生成所有概率分布值
+    */
     function getNewFall()
     {
-        var rv = rand(100);
+
         var possible = [];
         var i;
         for(i = 0; i < len(fallThings); i++)
         {
             possible.append(fallThings[i][4]);
         }
+        var rv = rand(Sum(possible, len(possible)));
 
         var kind = len(fallThings)-1;
         for(i = 1; i <= len(fallThings); i++)

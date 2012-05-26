@@ -13,6 +13,10 @@ class MenuLayer extends MyNode
     var scene;
 
     var banner;
+    var MainMenuFunc = dict([
+    [0,["map","rank","plan","setting"]],
+    [1,["role","store","friend","mail"]],
+    ]);
     function MenuLayer(s) {
         scene = s;
         trace("pushMenuLayer");
@@ -24,7 +28,7 @@ class MenuLayer extends MyNode
         initData();
 
         taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(0,0).pos(11,22).rotate(0);
-        expfiller = banner.addsprite("exp_filler.png").scale(100,100).size(100,8).anchor(0,0).pos(147,51).rotate(0);
+        expfiller = banner.addsprite("exp_filler.png").scale(100,100).size(108,11).anchor(0,0).pos(142,50).rotate(0);
         expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
         collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
         //Un5 = banner.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
@@ -33,19 +37,28 @@ class MenuLayer extends MyNode
         menubutton = banner.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
 
+
     }
     var silverText;
     var goldText;
+    /*
+    初始化文本数据之后注册 用户数据的监听器
+    */
     function initData()
     {
         silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(100, 100, 100);
         goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(100, 100, 100)
+
     }
     var building = 0;
+    /*
+    通用的隐藏菜单的接口
+    */
     function beginBuild()
     {
-        building = 1; 
-        bg.visible(0);
+        //building = 1; 
+        //bg.visible(0);
+        removeSelf();
         /*
         for(var i = 0; i < len(menus); i++)
         {
@@ -56,10 +69,14 @@ class MenuLayer extends MyNode
         }
         */
     }
+    /*
+    通用的显示菜单的接口
+    */
     function finishBuild()
     {
-        building = 0;
-        bg.visible(1);
+        scene.addChild(this);
+        //building = 0;
+        //bg.visible(1);
         /*
         for(var i = 0; i < len(menus); i++)
         {
@@ -70,18 +87,28 @@ class MenuLayer extends MyNode
         }
         */
     }
+    /*
+    进入场景之后 需要更新显示的用户数据
+    防止没有 事件导致无法更新
+    */
     override function enterScene()
     {
+        super.enterScene();
+        trace("menuLayer enterScene");
         global.user.addListener(this);
-        //global.controller.addHide(this);
+        updateValue(global.user.resource);
     }
     override function exitScene()
     {
-        //global.controller.removeHide(this);
         global.user.removeListener(this);
+        super.exitScene();
     }
+    /*
+    用户更新数据的显示接口
+    */
     function updateValue(res)
     {
+        trace("update Value");
         silverText.text(str(res.get("silver")));
         goldText.text(str(res.get("gold")));
     }
@@ -92,8 +119,8 @@ class MenuLayer extends MyNode
         //{
         //    visLock = 1;
         //build building
-        if(building)
-            return;
+        //if(building)
+        //    return;
         bg.addaction(fadein(1000));
         /*
         for(var i = 0; i < len(menus); i++)
@@ -111,7 +138,9 @@ class MenuLayer extends MyNode
         //if(visLock == 0)
         //{
         //    visLock = 1;
-        if(building)
+        //if(building)
+        //    return;
+        if(ins == 0)
             return;
         bg.addaction(fadeout(1000));
         /*
@@ -125,6 +154,9 @@ class MenuLayer extends MyNode
     }
     
     
+    /*
+    需要确保两个子菜单的位置相同高度， 所以需要传递另一个菜单的高度
+    */
     function draw_func(index, funcs){
         //unsupported param
         if(index>=2||index<0||len(funcs) <= 0 || len(funcs)>4){
@@ -133,10 +165,15 @@ class MenuLayer extends MyNode
         if(menus[index] != null){
             removeChild(menus[index]);
         }
-        menus[index] = new ChildMenuLayer(index,funcs, scene);
+        menus[index] = new ChildMenuLayer(index,funcs, scene, MainMenuFunc.get(1-index));
         addChildZ(menus[index],-1);
     }
     
+    function cancelAllMenu()
+    {
+        cancel_func(0);
+        cancel_func(1);
+    }
     function cancel_func(index){
         if(menus[index]!=null){
             removeChild(menus[index]);

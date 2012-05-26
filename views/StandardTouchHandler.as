@@ -64,6 +64,17 @@ class StandardTouchHandler
             dify = 0;
         bg.pos(oldPos[0]+difx, oldPos[1]+dify);
     }
+    /*
+    需要移动来调整位置 再进行缩放
+    */
+    function fastScale(sca)
+    {
+        var oldScale = bg.scale();
+        if(oldScale[0]+sca >= scaMax || oldScale[0]+sca <= scaMin)
+            return 0;
+        bg.scale(oldScale[0]+sca, oldScale[1]+sca);
+        return sca;
+    }
     function ScaleBack(sca)
     {
         var oldScale = bg.scale();
@@ -103,12 +114,24 @@ class StandardTouchHandler
             difx = oldPos[1][0]-oldPos[0][0];
             dify = oldPos[1][1]-oldPos[0][1];
             var midOld = [oldPos[0][0]+difx/2, oldPos[0][1]+dify/2];
+
             var oldInBg = bg.world2node(midOld[0], midOld[1]);
-            sca = ScaleBack(sca);
+            var oldScale = bg.scale();
+            /*
+            计算缩放之后需要移动的量
+            可能会有无意义的移动
+            */
+            //bg.scale(oldScale[0]+sca, oldScale[1]+sca);
+            sca = fastScale(sca);
             var newInBg = bg.node2world(oldInBg[0], oldInBg[1]);
             var move = [midOld[0]-newInBg[0], midOld[1]-newInBg[1]];
             MoveBack(move[0], move[1]);
-
+            /*
+            恢复之前的缩放值
+            计算合理的缩放值
+            */
+            bg.scale(oldScale[0], oldScale[1]);
+            sca = ScaleBack(sca);
         }
         else if(len(points) >= 1)
         {

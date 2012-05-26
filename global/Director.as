@@ -24,13 +24,12 @@ class Director
         curScene = new Scene();
 
         getscene().add(curScene.bg);
-        getscene().setevent(EVENT_KEYUP, quitGame);
+        getscene().setevent(EVENT_KEYUP|EVENT_KEYDOWN, quitGame);
         curScene.enterScene();
     }
     function quitGame(n, e, p, kc)
     {
-        trace("quit game save record");
-        /*
+        trace("KeyEVENT", n, e, p, kc);
         if(kc == KEYCODE_BACK)
         {
             quitgame();

@@ -1,65 +1,27 @@
-const DARK_PRI = -1;
-const sizeX = 32;
-const sizeY = 16;
-var SX = sizeX-10;
-var SY = sizeY-10;
-//var XDir = sizeX*10;
-//var YDir = sizeY*10;
-const AddX = 15;
-const AddY = 7;
-const MapWidth = 3000;
-const MapHeight = 1120;
-const NotBigZone = 0;
-const InZone = 1;
-const NotSmallZone = 2;
 
-const Moving = 0;
-const Free = 1;
-const Working = 2;
-const ShowMenuing = 4;
-
-//植物的生长状态
-const SOW = 0;
-const SEED = 1;
-const MEDIUM = 2;
-const MATURE = 3;
-const ROT = 4;
-
-const ISLAND_LAYER = 1; 
-const CLOUD_LAYER = 2; 
-const FLY_LAYER = 3;
-
-const GREEN = m_color(
-67, 0, 0, 0,
-0, 87, 0, 0,
-0, 0, 24, 0,
-0, 0, 0, 100
-);
-const YELLOW = m_color(
-89, 0, 0, 0,
-0, 80, 0, 0,
-0, 0, 59, 0,
-0, 0, 0, 100
-);
-const WHITE = m_color(
-100, 0, 0, 0,
-0, 100, 0, 0,
-0, 0, 100, 0,
-0, 0, 0, 100
-);
-
-const FullZone = [2205, 486, 723, 363];
-//then check in which zone
-const FarmZone = [
-[2193, 432, 735, 393],
-[2298, 801, 531, 177],
-[2082, 729, 138, 96],
-[2118, 450, 87, 69],
-];
-
-function getStr(key)
+function replaceStr(s, rep)
 {
-    return strings.get(key);
+    for(var i = 0; i < len(rep); i += 2)
+    {
+        s = s.replace(rep[i], rep[i+1])
+    }
+    return s;
+}
+/*
+调试方法， 注释掉全局函数 就能找到所有的调用位置
+*/
+function getStr(key, rep)
+{
+    var s = strings.get(key);
+    trace("getStr", key, rep, s);
+    if(type(rep) == type([]))
+    {
+        for(var i = 0; i < len(rep); i += 2)
+        {
+            s = s.replace(rep[i], rep[i+1])
+        }
+    }
+    return s;
 }
 function getWorldPos(n, points)
 {
@@ -148,6 +110,10 @@ function checkInChild(bg, pos)
     }
     return null; 
 }
+/*
+直接返回所有的条目， 即便是0 
+这里只返回非0条目的目的是为了商店显示价格的时候， 只显示非0条目
+*/
 function getBuildCost(id)
 {
     var build = buildingData.get(id);
@@ -161,23 +127,75 @@ function getBuildCost(id)
     //var cost = dict([["silver", build[1]], ["crystal", build[2]], ["gold", build[3]]]);
     return cost;
 }
-function getBuild(id)
+function getCost(kind, id)
 {
-    trace("getBuild", id);
+    trace("getCost", kind, id);
+    var build = getData(kind, id);
+    var cost = dict();
+    for(var i = 0; i < len(costKey); i++)
+    {
+        var v = build.get(costKey[i], 0);
+        if(v > 0)
+            cost.update(costKey[i], v);
+    }
+    return cost;
+}
+/*
+如果key中包含有gain 则需要替换掉gain
+*/
+function getGain(kind, id)
+{
+    trace("getGain", kind, id);
+    var build = getData(kind, id);
+    var gain = dict();
+    for(var i = 0; i < len(addKey); i++)
+    {
+        var v = build.get(addKey[i], 0);
+        if(v > 0)
+        {
+            var newKey = addKey[i].replace("gain", "");
+            gain.update(newKey, v);
+        }
+    }
+    return gain;
+}
+
+function getBuildGain(id)
+{
     var build = buildingData.get(id);
-    var ret = dict([
-        ["id", build[0]], 
-        ["silver", build[1]], 
-        ["crystal", build[2]], 
-        ["gold", build[3]], 
-        ["kind", build[4]], 
-        ["sx", build[5]], 
-        ["sy", build[6]], 
-        ["name", build[7]],
-        ["hasAni", build[8]],
-        ["funcs", build[9]],
-        ]);
+    var gain = dict([["people", build[12]]]);
+    return gain;
+}
+/*
+两种思路：
+每个建筑持有这样一个dict对象 并向里面添加新的属性 可以统一管理静态和动态属性
+建筑需要的时候，根据自身的id 来构建这样一个对象 节约空间
+    
+所有物品的名字都通过字符串函数得到
+*/
+function getData(kind, id)
+{
+    var k = Keys[kind];
+    var datas = CostData[kind].get(id);
+    var ret = dict();
+    trace("getData", kind, id, k, datas);
+    for(var i = 0; i < len(k); i++)
+    {
+        if(k[i] == "name")
+            ret.update(k[i], getStr(datas[i], null));
+        else
+            ret.update(k[i], datas[i]);
+    }
     return ret;
+}
+
+function storeScalePic(pic)
+{
+    pic.prepare();
+    var buildSize = pic.size();
+    var bl = min(127*100/buildSize[0], 101*100/buildSize[1]);
+    bl = min(120, max(40, bl));
+    pic.scale(bl);
 }
 function getAni(id)
 {
@@ -186,10 +204,12 @@ function getAni(id)
 function getZone()
 {
 }
+/*
 function getPlant(id)
 {
    var plant = plantData[id]; 
    var p = dict([
+    ["id", id],
     ["level", plant[0]],
     ["time", plant[1]],
     ["silver", plant[2]],
@@ -199,6 +219,8 @@ function getPlant(id)
    ]);
    return p;
 }
+*/
+
 function getWorkTime(t)
 {
     trace("workTime", t);
@@ -225,14 +247,20 @@ function getTimeStr(t)
     return res;
 }
 
-function checkInZone(zone, position)
+function checkInZone(position)
 {
-    var difx = position[0] - zone[0];
-    var dify = position[1] - zone[1];
-    return difx >= 0 && difx < zone[2] && dify > 0 && dify < zone[3]; 
+    for(var i = 0; i < len(FullZone); i++)
+    {
+        var zone = FullZone[i];
+        var difx = position[0] - zone[0];
+        var dify = position[1] - zone[1];
+        if(difx >= 0 && difx < zone[2] && dify > 0 && dify < zone[3])
+            return 1;
+    }
+    return 0;
 }
 
-
+/*
 function getBoundary(dia)
 {
     var x0 = dia[2]-(dia[0]+dia[1])/2*sizeX;
@@ -268,14 +296,20 @@ function getABound(a)
     aBound = [t1, t2, t11, t22];
     return aBound;
 }
+*/
 //[sx sy px py] [sx sy px py]
+/*
+冲突检测的精度问题， 
+除非采用离散化方法， 否则冲突检测存在精度问题
+根据建筑物结构， 当前位置是标准化的（50， 100）
+所以可以直接计算相应格子
+*/
+/*
 function checkCol(a, b)
 {
     //a = [a[0], a[1], 0, 0];
-    /*
-    b = [b[0], b[1], b[2]-a[2], b[3]-a[3]]
-    a = [a[0], a[1], 0, 0];
-    */
+    //b = [b[0], b[1], b[2]-a[2], b[3]-a[3]]
+    //a = [a[0], a[1], 0, 0];
 
     //var aBound = getABound(a);
     //var bBound = getABound(b);
@@ -284,10 +318,8 @@ function checkCol(a, b)
     var dify = a[3]-b[3];
     var cx = difx/sizeX;
     var cy = dify/sizeY;
-    /*
-    var size0 = [(a[0])/2*sizeX, (a[0])/2*sizeY];
-    var size1 = [(b[0])/2*sizeX, (b[0])/2*sizeY];
-    */
+    //var size0 = [(a[0])/2*sizeX, (a[0])/2*sizeY];
+    //var size1 = [(b[0])/2*sizeX, (b[0])/2*sizeY];
     var total = a[0]+b[0];
 
     return (abs(cx)+abs(cy)) < total;
@@ -295,6 +327,56 @@ function checkCol(a, b)
     //return abs(difx) < (size0[0]+size1[0]-4) && abs(dify) < (size0[1]+size1[1]-4);
     //return aBound[0] < bBound[2] && aBound[2] > bBound[0] && aBound[1] < bBound[3] && aBound[3] > bBound[1]; 
 }
+*/
+/*
+返回菱形拼图的左上角第一块的中心的编号
+自动调整x y值 使其奇偶性相同
+*/
+function getBuildMap(build)
+{
+    var sx = build.sx;
+    var sy = build.sy;
+    var p = build.getPos();
+    var px = p[0];
+    var py = p[1];
+
+    return getPosMap(sx, sy, px, py);
+
+}
+/*
+根据位置 大小 计算map图 
+*/
+function getPosMap(sx, sy, px, py)
+{
+    px -= (sx+sy)*sizeX/2;
+    py -= (sx+sy)*sizeY;
+
+    px /= sizeX;
+    py /= sizeY;
+    return [sx, sy, px+sx, py+1];
+}
+/*
+根据map计算建筑物的位置
+*/
+function setBuildMap(map)
+{
+    var sx = map[0];
+    var sy = map[1];
+    var px = map[2];
+    var py = map[3];
+
+    px -= sx;
+    py -= 1;
+    px *= sizeX;
+    py *= sizeY;
+    px += (sx+sy)*sizeX/2;
+    py += (sx+sy)*sizeY;
+    return [px, py];
+}
+/*
+使用绝对坐标进行规整化
+标准化使用的单位大于冲突计算的单位，可以避免精度损失的问题
+*/
 function normalizePos(p, sx, sy)
 {
     var x = p[0];
@@ -302,18 +384,23 @@ function normalizePos(p, sx, sy)
     x -= (sx+sy)*sizeX/2;
     y -= (sx+sy)*sizeY;
 
-    x -= FullZone[0];
-    y -= FullZone[1];
-    var q = x/sizeX;
-    x = q*sizeX;
-    q = y/sizeY;
-    y = q*sizeY;
+    //x -= FullZone[0];
+    //y -= FullZone[1];
+    var q1 = x/sizeX;
+    var q2 = y/sizeY;
+    if(((q1+sx)%2) != ((q2+1)%2))//q1+sx q2+1 要求建筑物最上方的菱形对齐 
+    {
+        q2++;
+    }
+    x = q1*sizeX;
+    y = q2*sizeY;
 
     x += (sx+sy)*sizeX/2;
     y += (sx+sy)*sizeY;
-    return [x+FullZone[0], y+FullZone[1]];
+    return [x, y];
+    //return [x+FullZone[0], y+FullZone[1]];
 }
-
+/*
 function checkCollision(build, buildings)
 {
     var sx1 = build.data.get("sx");
@@ -321,6 +408,8 @@ function checkCollision(build, buildings)
     var bSize = build.getPos();
     var px1 = bSize[0];
     var py1 = bSize[1];
+
+
 
     for(var i = 0; i < len(buildings); i++)
     {
@@ -337,6 +426,7 @@ function checkCollision(build, buildings)
     }
     return null;
 }
+*/
 //0 1 2 3 4 5
 //0村庄 所以初始化用户数据大关=1 0 0
 //1 2 3 4 5
@@ -385,6 +475,9 @@ function getSmallEnable(big, small)
     return 0;
 }
 */
+/*
+计算大地图当前开启的大关 小关
+*/
 function getCurEnableDif()
 {
     var star = global.user.getValue("starNum");
@@ -406,15 +499,20 @@ function getCurEnableDif()
     //enable small = j
     return [i+1, j];
 }
+/*
+得到某个小关卡 难度的得分
+*/
 function getStar(big, small, dif)
 {
     var star = global.user.getValue("starNum");
     return star[big-1][small][dif]; 
 }
+/*
 function checkPosSame(p1, p2)
 {
     return p1[0]==p2[0] && p1[1]==p2[1];
 }
+*/
 
 /*
 假定消耗的物品非0 飞向的是经营页面的菜单栏位置
@@ -457,3 +555,18 @@ function getBuildFunc(id)
 {
     return buildFunc.get(id);   
 }
+function getZord(curPos)
+{
+    return curPos[1];
+}
+
+function checkPlaning()
+{
+    //trace("curScene", type(global.director.curScene), type(CastleScene));
+    if(global.staticScene == null)
+        return 0;
+    if(global.director.curScene == global.staticScene)
+        return global.director.curScene.Planing;
+    return 0;
+}
+
