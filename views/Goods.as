@@ -40,14 +40,25 @@ class Goods extends MyNode
         对于在字符串数组中不存在的字符串， 直接返回替换结果
         需要确保不存在
         */
-        var buildPic = panel.addsprite(replaceStr(KindsPre[buildData[0]], ["[ID]", str(buildData[1])])).pos(83, 110).anchor(50, 50);
-        storeScalePic(buildPic);
+        var buildPicName = replaceStr(KindsPre[buildData[0]], ["[ID]", str(buildData[1])]);
+        var buildPic = panel.addsprite(buildPicName).pos(83, 110).anchor(50, 50);
+        //storeScalePic(buildPic);
+
+        buildPic.prepare();
+        var bSize = buildPic.size();
+        var bl = min(120*100/bSize[0], 100*100/bSize[1]);
+        bl = min(120, max(40, bl));
+        buildPic.scale(bl);
 
         var canBuy = 1;
         if(global.user.getValue("level") < needLevel)
         {
+            buildPic.texture(buildPicName, BLACK);
             panel.addsprite("storeNotLev.png");
-            panel.addlabel(getStr("levelNot", ["[LEVEL]", str(needLevel)]), null, 20).pos(84, 99).anchor(50, 50).color(100, 100, 100);
+            var words = colorWords(getStr("levelNot", ["[LEVEL]", str(needLevel)]));
+            panel.addlabel(words[0], null, 20).pos(110-20*words[2], 99).anchor(0, 50).color(100, 100, 100);
+            panel.addlabel(words[1], null, 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
+            //panel.addlabel(getStr("levelNot", ["[LEVEL]", str(needLevel)]), null, 20).pos(84, 99).anchor(50, 50).color(100, 100, 100);
             canBuy = 0;
         }
         //物品属性
@@ -84,6 +95,16 @@ class Goods extends MyNode
                 var labelGain = gain.items();
                 if(len(labelGain) > 0)
                 {
+                    /*
+                    图片向上移动用于显示增加
+                    */
+                    buildPic.pos(83, 100);
+                    buildPic.prepare();
+                    bSize = buildPic.size();
+                    bl = min(120*100/bSize[0], 90*100/bSize[1]);
+                    bl = min(120, max(40, bl));
+                    buildPic.scale(bl);
+
                     var k = getStr(labelGain[0][0], null);
                     var v = labelGain[0][1];
                     k = k + "+"+ str(v)

@@ -7,6 +7,7 @@ class Global
     var user;
     var myAction;
     var staticScene = null;
+    var map = null;
     function Global()
     {
     }

@@ -33,11 +33,20 @@ class MenuLayer extends MyNode
         collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
         //Un5 = banner.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
         //Un6 = banner.addsprite("gold.png").scale(100,100).size(33,32).anchor(50,50).pos(549,93).rotate(0);
-        rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0);
+        rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0).setevent(EVENT_TOUCH, openCharge);
         menubutton = banner.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
 
 
+    }
+    /*
+    显示商店充值页面
+    */
+    function openCharge()
+    {
+        var st = new Store(scene);
+        st.changeTab(1);
+        global.director.pushView(st);
     }
     var silverText;
     var goldText;

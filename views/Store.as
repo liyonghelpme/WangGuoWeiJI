@@ -1,12 +1,4 @@
-class SucBanner extends MyNode
-{
-    function SucBanner()
-    {
-        bg = sprite("storeBlack.png").pos(506, 231).anchor(50, 50);
-        bg.addlabel(getStr("buySuc", null), null, 25).pos(154, 25).anchor(50, 50).color(100, 100, 100);
-        bg.addaction(sequence(delaytime(1000), callfunc(removeSelf)));
-    }
-}
+
 class Store extends MyNode
 {
     var stores;
@@ -29,7 +21,7 @@ class Store extends MyNode
         [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5]],
         [[4, 0], [4, 1], [4, 2]],
         [[5, 0], [5, 1], [5, 2]],
-        [[0, 0], [0, 1], [0, 10], [0, 12], [0, 200], [0, 202], [0, 204], [0, 206]],
+        [[0, 0], [0, 1], [0, 10], [0, 12]],
         [[0, 100], [0, 102], [0, 104], [0, 106], [0, 108], [0, 110], [0, 112], [0, 114], [0, 116], [0, 118], [0, 120], [0, 122], [0, 124], [0, 126], [0, 128], [0, 130], [0, 132], [0, 134], [0, 136], [0, 138], [0, 140], [0, 142], [0, 144]],
         [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18], [1, 19], [1, 20], [1, 21]],
         [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 10], [2, 11], [2, 12], [2, 13], [2, 14], [2, 20], [2, 21], [2, 22], [2, 23], [2, 24], [2, 30], [2, 31], [2, 32], [2, 33], [2, 34]],
@@ -68,6 +60,7 @@ class Store extends MyNode
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         initData();
 
+        changeTab(0);
     }
     function initData()
     {
@@ -162,5 +155,11 @@ class Store extends MyNode
         }
         else
             trace("商店 当前选择越界", i);
+    }
+    function changeTab(i)
+    {
+        trace("store changeTab", i);
+        tabs.changeTab(i);        
+        //setTab(i);
     }
 }

@@ -25,6 +25,7 @@ class User
     {
         resource = dict([["silver", 10000], ["gold", 10000], ["crystal", 10000], 
         ["level", 10], ["people", 0], ["papaya", 1000],
+        /*
         ["starNum", 
             [
             [
@@ -67,8 +68,53 @@ class User
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
             ],
-            ]
-            ]]);
+            ]]
+        */
+
+        ["starNum", 
+            [
+            [
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            ],
+            [
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            ],
+            [
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            ],
+            [
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            ],
+            [
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            ],
+            ]]
+            ]);
         blockBuilding = new MyNode();
         updateList = [];
         allBuildings = [];
@@ -228,14 +274,21 @@ class User
     遍历所有的网格
     生成Key的方式 是有X*系数+y的方式 保证系数>y
     */
+    /*
+    建筑和士兵 都有 sx sy 属性 都可以得到 位置
+    */
     function updateMap(build)
     {
-        var map = getBuildMap(build);
+        var p = build.getPos();
+        return updatePosMap([build.sx, build.sy, p[0], p[1], build]);
+    }
+    function updatePosMap(sizePos)
+    {
+        var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
         var sx = map[0];
         var sy = map[1];
         var initX = map[2];
         var initY = map[3];
-
         for(var i = 0; i < sx; i++)
         {
             var curX = initX+i;
@@ -244,17 +297,19 @@ class User
             {
                 var key = curX*10000+curY;
                 var v = mapDict.get(key, []);
-                v.append(build);
+                v.append(sizePos[4]);
                 mapDict.update(key, v);
 
                 curX -= 1;
                 curY += 1;
             }
         }
-        trace("updateMap", map, len(mapDict), mapDict);
+        trace("updateMap", map, len(mapDict));//, mapDict);
     }
     /*
     只在清楚状态的时候 清理建筑物状态
+    包括建筑和士兵
+    士兵不需要设置 底部颜色
     */
     function clearMap(build)
     {
@@ -263,7 +318,7 @@ class User
         var sy = map[1];
         var initX = map[2];
         var initY = map[3];
-        trace("clearMap", map, mapDict);
+        trace("clearMap", map);//, mapDict);
         for(var i = 0; i < sx; i++)
         {
             var curX = initX+i;
@@ -295,7 +350,33 @@ class User
     /*
     检测冲突， 值返回还有几个对象，每次移动的时候把自己从中清除即可
     i++ i--
+    建筑物 士兵 sx sy pos
     */
+    function checkPosCollision(mx, my, ps)
+    {
+        var inZ = checkInZone(ps);
+        /*
+        限制上下边界
+        */
+        if(inZ == 0)
+            return inZ;
+        var key = mx*10000+my;
+        /*
+        限制不与其它建筑冲突
+        */
+        var v = mapDict.get(key, []);
+        if(len(v) > 0)
+            return v[0];
+        /*
+        检测不与静态河流冲突
+        */
+        if(obstacleBlock.get(key, null) != null)
+        {
+            trace("colWithRiver", key);
+            return blockBuilding;
+        }
+        return null;
+    }
     function checkCollision(build)
     {
         var map = getBuildMap(build);
@@ -303,7 +384,7 @@ class User
         var sy = map[1];
         var initX = map[2];
         var initY = map[3];
-        trace("checkCol", map, mapDict);
+        trace("checkCol", map);//, mapDict);
         for(var i = 0; i < sx; i++)
         {
             var curX = initX+i;

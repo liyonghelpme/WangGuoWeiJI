@@ -75,6 +75,14 @@ class Choice extends MyNode
         }
             
     }
+    //0 1 2 3
+    function changeTab(sel)
+    {
+        trace("changeTab", sel);
+        var curPos = flowTab.pos();
+        flowTab.pos(curPos[0], InitOff+Height*-sel);
+        getTabs();
+    }
     function touchEnded(n, e, p, x, y, points)
     {
         var curPos = flowTab.pos();
@@ -103,29 +111,8 @@ class Choice extends MyNode
         var t;
         var curPos = flowTab.pos();
         var selected = -(curPos[1]-InitOff)/Height;
-        /*
-        for(i = 0; i < len(tabArray); i++)
-        {
-            tabArray[i][0].removefromparent();
-        }
-        */
+        trace("choice", start, end, selected);
         setTabs(selected);
-        /*
-        for(i = start; i < end; i++)
-        {
-            if(i == selected)
-                t = sprite("goodGreen.png").pos(0, i*Height).anchor(0, 50);
-            else
-            {
-                if(i%2 == 0)
-                    t = sprite("goodWhite.png").pos(0, i*Height).anchor(0, 50);
-                else
-                    t = sprite("goodYellow.png").pos(0, i*Height).anchor(0, 50);
-            }
-            tabArray.append([t, i]);
-            flowTab.add(t);
-        }
-        */
         store.setTab(selected);
     }
     function getTabs()

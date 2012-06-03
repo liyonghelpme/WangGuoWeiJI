@@ -8,29 +8,36 @@ import global.User;
 //经营页面
 import views.CastlePage;
 import views.BuildLand;
+
 import views.FallGoods;
 import views.FallObj;
-
 
 //菜单
 import views.MenuLayer;
 import views.ChildMenuLayer;
-import views.Button;
+
 
 //商店
 import views.Store;
 import views.Choice;
 import views.Goods;
 
+import views.RoleName;
+
+
 //人物对话框
-//import views.SoldierStore;
-//import views.BusiSoldier;
+import views.SoldierStore;
+import views.BusiSoldier;
+
+//成功提示
+import views.SucBanner;
+
+
+
 
 //大地图
-import views.MapScene;
-import views.MapLayer;
-import views.FlyLayer;
-import views.LevelSelectLayer;
+
+import views.CastleScene;
 
 
 //建筑物
@@ -41,19 +48,31 @@ import views.BuildWorkMenu;
 
 import views.Farm;
 import views.PlantChoose;
-
-import views.FlyObject;
 import views.House;
 
-/*
+//经营页面场景飞行的银币
+import views.FlyObject;
+
+import views.MapScene;
+import views.MapLayer;
+import views.FlyLayer;
+import views.LevelSelectLayer;
+
 //闯关地图
 import views.Map;
+import views.Soldier;
 import views.MoveObject;
-*/
+
+import views.Button;
+
+import global.Director;
+import global.Controller;
+
+import views.QuitBanner;
 
 
 import global.Timer;
-import global.Director;
+
 import views.Dark;
 
 
@@ -61,7 +80,7 @@ import views.StandardTouchHandler;
 
 import global.MyAnimate;
 import global.MyNode;
-import global.Controller;
+
 import global.TouchManager;
 import util.Util;
 

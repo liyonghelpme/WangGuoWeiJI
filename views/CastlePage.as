@@ -83,7 +83,7 @@ class BuildLayer extends MyNode
 {
     var map;
     var buildings = null;
-    var occMap = dict();
+    var solTimer = null;
     function BuildLayer(m)
     {
         map = m;
@@ -91,7 +91,17 @@ class BuildLayer extends MyNode
         init();
         buildings = global.user.buildings;
         initBuilding();
-        //global.user.initBuilding(this);
+    }
+    override function enterScene()
+    {
+        solTimer = new Timer(100);
+        super.enterScene();
+    }
+    override function exitScene()
+    {
+        super.exitScene();
+        solTimer.stop();
+        solTimer = null;
     }
     /*
     addChild 会隐藏调用addChildZ
@@ -101,6 +111,9 @@ class BuildLayer extends MyNode
 
     应该把view和数据分离 addChildZ只是处理view 部分  
     而数据部分由user自身处理
+    */
+    /*
+    设置zord
     */
     function addBuilding(chd, z)
     {
@@ -112,12 +125,10 @@ class BuildLayer extends MyNode
         removeChild(chd);
         global.user.removeBuilding(chd);
     }
+
     function addSoldier(sol)
     {
         addChildZ(sol, MAX_BUILD_ZORD);
-        /*
-        设置zord
-        */
         sol.setPos(sol.getPos());
         global.user.addSoldier(sol);
     }
@@ -126,11 +137,13 @@ class BuildLayer extends MyNode
         removeChild(sol);
         global.user.removeSoldier(sol);
     }
+
     /*
     建筑物已经在allBuildings 和map中存在
     重新由数据加入到页面中
     但是建筑物的map属性需要重新设置
     */
+    /*
     function addPureBuild(chd)
     {
         super.addChildZ(chd, MAX_BUILD_ZORD);
@@ -143,6 +156,7 @@ class BuildLayer extends MyNode
         global.user.clearAllBuilding();
         super.exitScene();
     }
+    */
 
     /*
     用于从上面的数据开始构造用户的建筑物
@@ -156,6 +170,10 @@ class BuildLayer extends MyNode
     新建和初始化建筑
     */
 
+    /*
+    初始化数组和map
+    保证数据唯一性
+    */
     function initBuilding()
     {
         trace("initBuilding", len(buildings));
@@ -171,10 +189,7 @@ class BuildLayer extends MyNode
             var build = new Building(this, data);
             build.setBid(bid);
 
-            /*
-            初始化数组和map
-            保证数据唯一性
-            */
+
             //默认z值
             addChildZ(build, MAX_BUILD_ZORD);
             //调整Z值
@@ -185,40 +200,8 @@ class BuildLayer extends MyNode
 
 
         }
-
     }
         
-    function removeMap(b)
-    {
-        var sx = b.data.get("sx");
-        var sy = b.data.get("sy");
-        var p = b.getPos();
-        
-        var initX = p[0]/sizeX+sx;
-        var initY = p[1]/sizeY+1;
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var v = occMap.get(curX*1000+curY, null);
-                if(v == null)
-                    continue;
-                else
-                {
-                    v.remove(b);
-                    if(len(v) == 0)
-                    {
-                        occMap.pop(curX*1000+curY);
-                    }
-                }
-                curX -= 1;
-                curY += 1;
-            }
-        }
-    }
-
 
     function touchBegan(n, e, p, x, y, points)
     {
@@ -256,8 +239,8 @@ class CastlePage extends MyNode
 
 
         bg.addsprite("flow0.png").pos(0, 48);
-        bg.addsprite("flow2.png").pos(1650, 45);
-        bg.addsprite("flow1.png").pos(2352, 13);
+        bg.addsprite("flow2.png").pos(1650, 45).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
+        bg.addsprite("flow1.png").pos(2352, 13).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
 
 
         farm = new FarmLand(this);
@@ -308,7 +291,9 @@ class CastlePage extends MyNode
     }
     function buySoldier(id)
     {
-        buildLayer.addSoldier(new BusiSoldier(buildLayer, getData(SOLDIER, id)));
+        var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id));
+        buildLayer.addSoldier(newSol);
+        return newSol;
     }
     function moveToPoint(tarX, tarY)
     {

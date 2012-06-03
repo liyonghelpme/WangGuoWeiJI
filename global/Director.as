@@ -14,6 +14,7 @@ class Director
     var disSize;
     var Display;
     var stack;
+    var quitState = 0;
     function Director()
     {
         trace("init director");
@@ -24,41 +25,43 @@ class Director
         curScene = new Scene();
 
         getscene().add(curScene.bg);
-        getscene().setevent(EVENT_KEYUP|EVENT_KEYDOWN, quitGame);
+        curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
+        curScene.bg.focus(1);
+        //getscene().setevent(EVENT_KEYUP|EVENT_KEYDOWN, quitGame);
         curScene.enterScene();
     }
+
+    function clearQuitState()
+    {
+        quitState = 0;
+    }
+
     function quitGame(n, e, p, kc)
     {
         trace("KeyEVENT", n, e, p, kc);
-        if(kc == KEYCODE_BACK)
+        if(global.map != null)
         {
-            quitgame();
+            global.director.popScene();
+            return;
         }
-        /*
-        if(kc == KEYCODE_BACK)
+        if(quitState == 0)
         {
-            var map = global.map;
-            if(map != null)
+            if(kc == KEYCODE_BACK)
             {
-                var db = c_opendb(0, "lastMap");
-                var monsters = map.monsters;
-                var mon = [];
-                var i;
-                for(i = 0; i < len(monsters); i++)
-                {
-                    mon.append([monsters[i].kind, monsters[i].bg.pos(), monsters[i].health, monsters[i].curPoint, monsters[i].pid]);
-                }
-                var tow = [];
-                var towers = map.towers;
-                for(i = 0; i < len(towers); i++)
-                {
-                    tow.append([towers[i].kind, towers[i]]);
-                }
-                db.put("lastMap", dict([map.data.get("id"), map.totalHealth, map.curWave, mon, tow]));
+                quitState = 1;
+                global.director.pushView(new QuitBanner());
             }
         }
-        */
+        else if(quitState == 1)
+        {
+            if(kc == KEYCODE_BACK)
+            {
+                trace("quitGame now");
+                quitgame();
+            }
+        }
     }
+
     function pushView(view, dark, autoPop)
     {
         if(dark == 1)
@@ -96,7 +99,8 @@ class Director
         stack = []
 
         getscene().add(curScene.bg);
-        //getscene().setevent(EVENT_KEYUP, quitGame);
+        curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
+        curScene.bg.focus(1);
         curScene.enterScene();
 
         //pushPage(view, 0);

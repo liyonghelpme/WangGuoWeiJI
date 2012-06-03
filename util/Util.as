@@ -189,6 +189,7 @@ function getData(kind, id)
     return ret;
 }
 
+
 function storeScalePic(pic)
 {
     pic.prepare();
@@ -204,22 +205,6 @@ function getAni(id)
 function getZone()
 {
 }
-/*
-function getPlant(id)
-{
-   var plant = plantData[id]; 
-   var p = dict([
-    ["id", id],
-    ["level", plant[0]],
-    ["time", plant[1]],
-    ["silver", plant[2]],
-    ["gain", plant[3]],
-    ["exp", plant[4]],
-    ["name", plant[5]],
-   ]);
-   return p;
-}
-*/
 
 function getWorkTime(t)
 {
@@ -569,4 +554,46 @@ function checkPlaning()
         return global.director.curScene.Planing;
     return 0;
 }
+/*
+访问是否存在临时的动画数组，如果不存在则拼接一个并存储在全局范围中，下次调用可以重用
+*/
+function getMoveAnimate(id)
+{
+    var ani = moveAnimate.get(id, null);
+    if(ani != null)
+        return ani;
+    var data = getData(SOLDIER, id);
+    var num = data.get("moveNum");
+    var pics = [];
+    for(var i = 0; i < num; i++)
+    {
+        pics.append("ss"+str(id)+"m"+str(i)+".png"); 
+    }
+    ani = [pics, 2000];
+    moveAnimate.update(id, ani);
+    return ani;
+}
+function getAttAnimate(id)
+{
+    var ani = attAnimate.get(id);
+    if(ani != null)
+        return ani;
+    var data = getData(SOLDIER, id);
+    var num = data.get("attNum");
+    var pics = [];
+    for(var i = 0; i < num; i++)
+    {
+        pics.append("ss"+str(id)+"a"+str(i)+".png"); 
+    }
+    ani = [pics, 1000];
+    attAnimate.update(id, ani);
+    return ani;
+}
 
+function colorWords(str)
+{
+    var end = str.split("]");
+    var begin = end[0].split("[");
+    var lenBegin = len(begin[0])/3;
+    return [begin[0], begin[1], lenBegin];
+}

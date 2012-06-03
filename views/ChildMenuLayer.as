@@ -84,7 +84,8 @@ class ChildMenuLayer extends MyNode
     function onMap()
     {
         scene.ml.cancelAllMenu();
-        global.director.pushScene(new MapScene());    
+        //global.director.pushScene(new MapScene());    
+        scene.onMap();
     }
     function onFriend()
     {
@@ -101,6 +102,7 @@ class ChildMenuLayer extends MyNode
     }
     function onRole()
     {
+        scene.onRole();
     }
     function onSetting()
     {
@@ -108,6 +110,7 @@ class ChildMenuLayer extends MyNode
     function onStore()
     {
         scene.ml.cancelAllMenu();
-        global.director.pushView(new Store(scene), 1, 0);
+        scene.onStore();
+        //global.director.pushView(new Store(scene), 1, 0);
     }
 }

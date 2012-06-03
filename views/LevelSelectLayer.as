@@ -1,20 +1,17 @@
-/*
+const FLAG_WIDTH = 50;
+const FLAG_HEIGHT = 50;
+const FLAG_SX = 20;
+const FLAG_SY = 30;
+
 class Flag extends MyNode
 {
-    var layer;
-    function Flag(l, p, pic, param)
+    function Flag(p)
     {
-        layer = l;
-        bg = node().size(100, 100).pos(p).anchor(50, 50);       
-        bg.addsprite(pic).anchor(50, 50).size(20, 30).pos(50, 50);
-        new Button(bg, onClicked, param);
-    }
-    function onClicked(param)
-    {
-        
+        bg = node().size(FLAG_WIDTH, FLAG_HEIGHT).pos(p[0]-(FLAG_WIDTH-FLAG_SX)/2, p[1]-(FLAG_HEIGHT-FLAG_SY)/2);
+        init();
+        bg.addsprite("map_flag_complete.png").size(FLAG_SX, FLAG_SY).anchor(50, 50).pos(FLAG_WIDTH/2, FLAG_HEIGHT/2);
     }
 }
-*/
 class LevelSelectLayer extends MyNode
 {
     var index;
@@ -38,6 +35,7 @@ class LevelSelectLayer extends MyNode
     /*
     显示岛屿上的小关卡node
     点击选择难度的时候显示 新的浮动node 这个可以交给MapLayer 来控制
+    index param diff
     */
     function LevelSelectLayer(param, s){
         scene = s;
@@ -68,9 +66,10 @@ class LevelSelectLayer extends MyNode
                 break;
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
             trace("flagPos", flagPos[index][i]);
-            var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
-            islandLayer.add(b, FLAG_Z);
-            new Button(b, onSmall, i);
+            //var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
+            var b = new Flag(flagPos[index][i]);
+            islandLayer.add(b.bg, FLAG_Z);
+            new Button(b.bg, onSmall, i);
         }
         for(;i<6;i++){
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
@@ -156,57 +155,16 @@ class LevelSelectLayer extends MyNode
             levelNode.addsprite("map_level_lock.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
         }
         levelNode.addsprite("map_level_info.png").anchor(50,50).pos(1200,240);
-        levelNode.addsprite("map_level_attack.png").anchor(100,0).pos(1550,360);
+        levelNode.addsprite("map_level_attack.png").anchor(100,0).pos(1550,360).setevent(EVENT_TOUCH, attackNow);
         bg.add(levelNode,0);
+    }
+    function attackNow()
+    {
+        trace("map index", index);
+        global.director.pushScene(new Map(index-1, [[0, 0], [1, 1], [0, 2], [1, 3], [0, 10], [1, 11], [0, 12], [1, 13], [0, 20], [1, 21], [0, 22], [1, 23], [0, 30], [1, 31], [0, 32], [1, 33], [0, 40], [1, 41], [0, 42], [1, 43], [0, 50], [1, 51], [0, 52], [1, 53], [0, 60], [1, 61], [0, 62], [1, 63], [0, 70], [1, 71], [0, 72], [1, 73], [0, 80], [1, 81], [0, 82], [1, 83], [0, 90], [1, 91], [0, 92], [1, 93]]), 0, 0);
     }
     function selectDiff(param)
     {
         levelNode.addaction(sineout(moveto(1000,-800,0)));
     }
-    /*
-    function selectLevel(param){
-        //index big
-        //param small
-        //difficult
-        if(param <6){
-            darkNode = sprite("dark.png").size(801,481);
-            bg.add(darkNode,-1);
-            levelNode = node();
-            
-            var first = 0;
-            for(var i=0; i < 10 ; i++){
-                var b=levelNode.addsprite("map_level_normal.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
-                //临时数据
-
-                var starNum = getStar(index, param, i);
-
-                //var level = getMaxLevel(index, param, i)
-                //starNum = starNum[level];
-
-                //if(maxLevel-index*60+60-param*10==i)
-                //    starNum=0;
-                    
-                var j;
-                for(j=0;j < starNum;j++){
-                    b.addsprite("map_level_star1.png").anchor(50,0).pos(13+j*31,64);
-                }
-                for(;j<3;j++){
-                    b.addsprite("map_level_star0.png").anchor(50,0).pos(13+j*31,64);
-                }
-                new Button(b, onDiff, i);
-                if(starNum == 0)
-                    break;
-            }
-            for(;i<10;i++){
-                levelNode.addsprite("map_level_lock.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
-            }
-            levelNode.addsprite("map_level_info.png").anchor(50,50).pos(1200,240);
-            levelNode.addsprite("map_level_attack.png").anchor(100,0).pos(1550,360);
-            bg.add(levelNode,0);
-        }
-        else if(param>=10){
-            levelNode.addaction(sineout(moveto(1000,-800,0)));
-        }
-    }
-    */
 }

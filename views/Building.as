@@ -351,12 +351,12 @@ class Building extends MyNode
             return;
         if(inZ != InZone)
         {
-            bg.color(100, 100, 100, 80)
+            bg.color(3, 93, 81, 30)
             bottom.texture("red2.png");
         }
         else
         {
-            bg.color(100, 100, 100, 80);
+            bg.color(93, 4, 1, 30);
             bottom.texture("green2.png");
         }
     }

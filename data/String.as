@@ -22,15 +22,16 @@ var strings = dict([
 ["defense", "防御力"],
 ["health", "生命值"],
 
-["levelNot", "需要等级[LEVEL]"],
+//替换等级 着色等级
+["levelNot", "需要等级[[LEVEL]]"],
 ["buySuc", "购买成功"],
 
 ["silver", "银币"],
 ["gold", "金币"],
 ["crystal", "水晶"],
-
-
-
+["rand", "随机"],
+["ok", "确定"],
+["quitNow", "再次点击退出游戏"],
 
 
 [ "building0" , "普通农田" ],
@@ -128,12 +129,60 @@ var strings = dict([
 [ "silver0" , "10000 银币" ],
 [ "silver1" , "100000 银币" ],
 [ "silver2" , "500000 银币" ],
+[ "soldier0" , "剑士" ],
+[ "soldier1" , "剑士" ],
+[ "soldier2" , "剑士" ],
+[ "soldier3" , "剑士" ],
+[ "soldier10" , "吸血鬼" ],
+[ "soldier11" , "吸血鬼" ],
+[ "soldier12" , "吸血鬼" ],
+[ "soldier13" , "吸血鬼" ],
+[ "soldier20" , "弓箭手" ],
+[ "soldier21" , "弓箭手" ],
+[ "soldier22" , "弓箭手" ],
+[ "soldier23" , "弓箭手" ],
+[ "soldier30" , "骑士" ],
+[ "soldier31" , "骑士" ],
+[ "soldier32" , "骑士" ],
+[ "soldier33" , "骑士" ],
+[ "soldier40" , "精灵" ],
+[ "soldier41" , "精灵" ],
+[ "soldier42" , "精灵" ],
+[ "soldier43" , "精灵" ],
+[ "soldier50" , "泰坦" ],
+[ "soldier51" , "泰坦" ],
+[ "soldier52" , "泰坦" ],
+[ "soldier53" , "泰坦" ],
+[ "soldier60" , "火系魔法师" ],
+[ "soldier61" , "火系魔法师" ],
+[ "soldier62" , "火系魔法师" ],
+[ "soldier63" , "火系魔法师" ],
+[ "soldier70" , "龙战士" ],
+[ "soldier71" , "龙战士" ],
+[ "soldier110" , "人鱼" ],
+[ "soldier100" , "人狼" ],
+[ "soldier80" , "矮人" ],
+[ "soldier81" , "矮人" ],
+[ "soldier82" , "矮人" ],
+[ "soldier83" , "矮人" ],
+[ "soldier90" , "天使" ],
+[ "soldier91" , "天使" ],
+[ "soldier92" , "天使" ],
+[ "soldier93" , "天使" ],
+[ "soldier72" , "龙战士" ],
+[ "soldier73" , "龙战士" ],
+[ "soldier120" , "哥布林" ],
+[ "soldier130" , "恶魔" ],
+[ "soldier140" , "木乃伊" ],
+[ "soldier150" , "树人" ],
+[ "soldier160" , "石头" ],
+[ "soldier170" , "邪灵法师" ],
+[ "soldier180" , "雪人" ],
+[ "soldier190" , "骷髅战士" ],
 
 
-["soldier0", "剑士"],
-["soldier10", "吸血鬼"],
-["soldier20", "弓箭手"],
-["soldier30", "精灵"],
-["soldier40", "骑士"],
+
+
+
 ]);
 
