@@ -92,8 +92,8 @@ class Store extends MyNode
     //allGoods item tab item
     function buy(gi)
     {
-        trace("store buy", gi);
         var item = allGoods[gi[0]][gi[1]]; 
+        trace("store buy", gi, item);
         var kind = item[0];
         var id = item[1];
         var cost;
@@ -105,6 +105,7 @@ class Store extends MyNode
         trace("buy Cost", cost, buyable);
         if(buyable.get("ok") == 0)
         {
+            addChildZ(new ResourceBanner(buyable, 506, 231), 1);
             return;
         }
         //0 building

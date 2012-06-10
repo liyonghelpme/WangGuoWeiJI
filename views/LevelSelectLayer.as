@@ -31,6 +31,7 @@ class LevelSelectLayer extends MyNode
     var levelNode;
     var scene;
     var islandLayer;
+    var island;
     
     /*
     显示岛屿上的小关卡node
@@ -56,7 +57,7 @@ class LevelSelectLayer extends MyNode
         //maxLevel/10 解锁的关卡 - island (1-5) 
         var curDif = getCurEnableDif();
 
-        var island = scene.getIsland(param);
+        island = scene.getIsland(param);
         islandLayer = island.addnode();
         //var isPos = island.pos();
         trace("select Level", param, curDif);
@@ -87,6 +88,16 @@ class LevelSelectLayer extends MyNode
     {
         trace("on Dif", param);
         scene.onDiff(param);
+    }
+    /*
+    如果切换场景的话 就会关闭掉选择页面 但是岛屿上的旗帜没有回来
+    如果关闭这个view 就需要彻底删除islander 
+    */
+    override function enterScene()
+    {
+        super.enterScene();
+        islandLayer.removefromparent();
+        island.add(islandLayer);
     }
     override function exitScene()
     {
@@ -161,7 +172,10 @@ class LevelSelectLayer extends MyNode
     function attackNow()
     {
         trace("map index", index);
-        global.director.pushScene(new Map(index-1, [[0, 0], [1, 1], [0, 2], [1, 3], [0, 10], [1, 11], [0, 12], [1, 13], [0, 20], [1, 21], [0, 22], [1, 23], [0, 30], [1, 31], [0, 32], [1, 33], [0, 40], [1, 41], [0, 42], [1, 43], [0, 50], [1, 51], [0, 52], [1, 53], [0, 60], [1, 61], [0, 62], [1, 63], [0, 70], [1, 71], [0, 72], [1, 73], [0, 80], [1, 81], [0, 82], [1, 83], [0, 90], [1, 91], [0, 92], [1, 93]]), 0, 0);
+        global.director.pushScene(new BattleScene(index-1, 
+[[0, 0], [1, 10], [0, 20], [1, 30], [0, 40], [1, 50], [0, 60], [1, 70], [0, 80], [1, 90], [0, 100], [1, 110], [0, 120], [1, 130], [0, 140], [1, 150], [0, 160], [1, 170], [0, 180], [1, 190]]
+
+        ));
     }
     function selectDiff(param)
     {

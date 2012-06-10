@@ -67,6 +67,9 @@ class MapCloud extends MyNode
 所以 maxLevel 没有意义
 
 */
+/*
+back 键退出场景 进入场景之后应该主动接受back事件否则就不处理
+*/
 class MapScene extends MyNode
 {
     //var maxLevel;
@@ -90,6 +93,27 @@ class MapScene extends MyNode
         
         contextStack=[];
     }
+    var noOpTime = 0;
+    function update(diff)
+    {
+        if(len(contextStack) == 0)//在主界面 没有选择地图
+            noOpTime += diff;
+        if(noOpTime >= 10000)
+        {
+            noOpTime = 0;
+            islandLayer.showArrow();
+        }
+    }
+    override function enterScene()
+    {
+        super.enterScene(); 
+        global.timer.addTimer(this);
+    }
+    override function exitScene()
+    {
+        global.timer.removeTimer(this);
+        super.exitScene();
+    }
     
     function getIsland(big)
     {
@@ -105,8 +129,10 @@ class MapScene extends MyNode
     */
     function gotoIsland(param){
         trace("scene goto island", param, contextStack);
+        islandLayer.removeArrow();
+        noOpTime = 0;
+
         var sl = len(contextStack);
-        //|| (sl==1 && contextStack[0]!=param)
         if( (sl==0 && param!=0) || (sl==1 && contextStack[0]!=param) ){
             removeChild(flyLayer);
             //从难度选择页面返回
@@ -153,21 +179,6 @@ class MapScene extends MyNode
             contextStack.append(param);
         }
     }
-    /*
-    function selectLevel(param){
-        trace("scene selectLevel", param);
-        var sl = len(contextStack);
-        //已经进入
-        if(sl==1 && param<6){
-            flyLayer.selectLevel(param);
-            contextStack.append(param);
-        }
-        else if(sl==2 && param>=10){
-            flyLayer.selectLevel(param);
-            contextStack.append(param-10);
-        }
-    }
-    */
     
     function refreshFly(){
         addChildZ(flyLayer, FLY_LAYER);

@@ -75,6 +75,15 @@ class StandardTouchHandler
         bg.scale(oldScale[0]+sca, oldScale[1]+sca);
         return sca;
     }
+    function scaleToMax()
+    {   
+        bg.scale(scaMax, scaMax); 
+    }
+    function scaleToOld(oldSca, oldPos)
+    {
+        bg.pos(oldPos);
+        bg.scale(oldSca);
+    }
     function ScaleBack(sca)
     {
         var oldScale = bg.scale();

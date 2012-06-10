@@ -16,6 +16,19 @@ var strings = dict([
 ["mapIsland4","奇迹洞穴"],
 ["mapIsland5","奇迹雪山"],
 
+["chooseBuild", "点击建筑物进行拖拽"],
+["dragBuild", "拖拽建筑物进行移动"],
+
+["addFriend", "添加好友"],
+["sendGift", "赠送礼物"],
+["get", "得到"],
+
+["sellTitle", "确定卖出?"],
+["sellContent", "确认卖出[NAME]?"],
+
+["accTitle", "加速"],
+["accContent", "加速[NAME]需要消耗[NUM]个金币，确定加速?"],
+
 ["people", "人口"],
 ["cityDefense", "城堡防御力"],
 ["attack", "攻击力"],
@@ -29,10 +42,18 @@ var strings = dict([
 ["silver", "银币"],
 ["gold", "金币"],
 ["crystal", "水晶"],
+["papaya", "木瓜币"],
 ["rand", "随机"],
 ["ok", "确定"],
+["cancel", "取消"],
+["resLack", "缺少[NAME][NUM]"],
+["glory", "荣誉等级"],
+
 ["quitNow", "再次点击退出游戏"],
 
+["working", "生产中"],
+["peopleCapacity", "人口上限+[NUM]"],
+["viliDefense", "村庄防御力[NUM]"],
 
 [ "building0" , "普通农田" ],
 [ "building1" , "魔法农田" ],

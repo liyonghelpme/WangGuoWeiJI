@@ -35,11 +35,38 @@ class MapLayer extends MyNode
             new Button(island[i], onClicked, i);
         }
     }
+    /*
+    跳跃动画：
+        上升缩放  下降 放大 产生瞬间的 膨胀影子
+    */
+    var arrow = null;
+    function showArrow()
+    {
+        if(arrow != null)
+            return;
+        island[0].prepare();
+        var bsize = island[0].size();
+        var bpos = island[0].pos();
+        arrow = bg.addsprite("mapArrow.png").pos(bpos[0]+bsize[0]/2+14, bpos[1]-10).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20)));
+    }
+    function removeArrow()
+    {
+        if(arrow != null)
+        {
+            arrow.removefromparent();
+            arrow = null;
+        }
+    }
     function getIsland(big)
     {
         return island[big]; 
     }
     var inSmall = 0;
+    /*
+    点击岛屿
+    0 回到村庄
+    其它 进入其它岛屿
+    */
     function onClicked(param)
     {
         trace("mapOnclick", param);

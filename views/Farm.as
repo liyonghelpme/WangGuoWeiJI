@@ -9,11 +9,13 @@ class Plant extends MyNode
     var curState;
     var data;
     var passTime;
+    var id;
 
     function Plant(b, d)
     {
         building = b;
         data = d;
+        id = data.get("id");
         var sx = building.data.get("sx");
         var sy = building.data.get("sy");
         
@@ -25,6 +27,7 @@ class Plant extends MyNode
         passTime = data.get("passTime"); 
         curState = 0;
     }
+
     /*
     function setPosition()
     {
@@ -39,6 +42,10 @@ class Plant extends MyNode
         trace("leftTime", data.get("time"), passTime);
         return (data.get("time")*1000-passTime)/1000;
     }
+    function getStartTime()
+    {
+        return time()-passTime;
+    }
     var acced = 0;
     function finish()
     {
@@ -46,6 +53,12 @@ class Plant extends MyNode
         passTime = data.get("time")*1000;
         trace("farm Finish", passTime, acced);
         setState();
+    }
+    function getAccCost()
+    {
+        //LeftTime s
+        var leftTime = (data.get("time")*1000-passTime)/1000;
+        return leftTime; 
     }
     function getState()
     {
@@ -75,12 +88,6 @@ class Plant extends MyNode
             else
                 bg.texture("p"+str(data.get("id"))+"_"+str(curState)+".png", UPDATE_SIZE);
 
-            //var par = bg.parent();
-            //bg.removefromparent();
-            //bg = sprite("p"+str(curState)+".png").anchor(50, 50);
-            //setPosition();
-            //bg.init();
-            //par.add(bg);
         }
 
     }
@@ -103,9 +110,8 @@ class Plant extends MyNode
     }
 }
 
-class Farm extends MyNode
+class Farm extends FuncBuild
 {
-    var baseBuild;
     var planting = null;
     function Farm(b)
     {
@@ -115,11 +121,18 @@ class Farm extends MyNode
     空闲状态下点击的功能函数
     显示种植页面
     */
-    function whenFree()
+    override function whenFree()
     {
         global.director.pushView(new PlantChoose(baseBuild), 1, 0);
+        return 1;
     }
-    function whenBusy()
+    override function getObjectId()
+    {
+        if(planting != null)
+            return planting.id;
+        return -1;
+    }
+    override function whenBusy()
     {
         if(planting.getState() >= MATURE)
         {
@@ -128,17 +141,43 @@ class Farm extends MyNode
         }
         return 0;
     }
+    override function initWorking(data)
+    {
+        trace("planting", data);
+        if(data == null)
+            return;
+        if(baseBuild.state != Working)
+            return;
+        var id = data.get("objectId"); 
+        var plant = getData(PLANT, id);//getPlant(id);
+        var now = time();
+        var start = data.get("objectTime");
+        plant.update("passTime", now-start);
+        planting = new Plant(baseBuild, plant);
+        baseBuild.addChild(planting);
+    }
+    override function getAccCost()
+    {
+        if(planting != null)
+        {
+            return planting.getAccCost();
+        }
+        return 0;
+    }
     /*
     农作物选择的回调函数
     */
     function beginPlant(id)
     {
-        baseBuild.state = Working;
+        //baseBuild.state = Working;
+        baseBuild.setState(Working);
         trace("planting", id);
         var plant = getData(PLANT, id);//getPlant(id);
         plant.update("passTime", 0);
         planting = new Plant(baseBuild, plant);
         baseBuild.addChild(planting);
+        //建筑状态也需要改变
+        global.user.updateBuilding(baseBuild);
     }
     function harvestPlant()
     {
@@ -153,6 +192,7 @@ class Farm extends MyNode
             global.director.curScene.addChild(new FlyObject(baseBuild.bg, dict([["silver", planting.data.get("silver")]]), harvestOver));
         //flyObject(bg, dict([["silver", planting.data.get("silver")]]), harvestOver);
         planting = null;
+        global.user.updateBuilding(baseBuild);
     }
     function harvestOver()
     {
@@ -162,7 +202,7 @@ class Farm extends MyNode
         //planting = null;
         //global.user.doAdd(getBuildCost(data.get("id")));
     }
-    function getLeftTime()
+    override function getLeftTime()
     {
         if(baseBuild.state == Working && planting != null)
         {
@@ -170,8 +210,15 @@ class Farm extends MyNode
         }
         return 0;
     }
-    function doAcc()
+    override function getStartTime()
+    {
+        if(planting != null)
+            return planting.getStartTime();
+        return 0;
+    }
+    override function doAcc()
     {
         planting.finish();
+        global.user.updateBuilding(baseBuild);
     }
 }

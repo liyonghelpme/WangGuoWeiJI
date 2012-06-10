@@ -43,6 +43,7 @@ class BuildAnimate extends MyNode
                 deg = -360;
             bg.addaction(sequence(stop(), repeat(rotateby(ani[2], deg)))); 
         }
+        global.user.updateBuilding(this);
     }
     override function enterScene()
     {
@@ -68,12 +69,14 @@ class Building extends MyNode
 
     var state;
     var lastPoints;
-    //var planting = null;
 
     var id;
     var sx;
     var sy;
+    //建造初始化位置
     var kind;
+    //建筑物功能
+    var funcs;
     var dir;
     //缓存冲突标记
     var oldPos;
@@ -93,7 +96,7 @@ class Building extends MyNode
     所有建筑都有方向属性， 只是农田不能改变方向而已
     */
     var aniNode = null;
-    function Building(m, d)
+    function Building(m, d, privateData)
     {
         map = m;
         data = d;
@@ -101,26 +104,44 @@ class Building extends MyNode
         sy = data.get("sy");
         sx = data.get("sx");
         kind = data.get("kind");
-        dir = data.get("dir", 0);
+        funcs = data.get("funcs");
+
+        if(funcs == FARM_BUILD)
+            funcBuild = new Farm(this);
+        else if(funcs == HOUSE_BUILD)
+            funcBuild = new House(this);
+        else if(funcs == DECOR_BUILD)
+            funcBuild = new Decor(this);
+        else 
+            funcBuild = new Castle(this);
 
         trace("init building", data);
-        //bg = sprite("build"+str(id)+".png", ALPHA_TOUCH).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
-        bg = sprite("build"+str(id+dir)+".png", ARGB_8888).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
+        bg = sprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
         init();
+        if(privateData != null)//初始化数据建筑
+        {
+            dir = privateData.get("dir", 0);
+            setState(privateData.get("state", Moving));
+        }
+        else//新建建筑
+        {
+            dir = 0;
+            setState(Moving);
+        }
+        setDir(dir);
 
-        setState(data.get("state"));
+
+
+
 
         var npos = normalizePos(bg.pos(), sx, sy);
         setPos(npos);
-        if(kind == 0)
-            funcBuild = new Farm(this);
-        else if(kind == 1)
-            funcBuild = new House(this);
-        else if(kind == 2)
-            funcBuild = new Decor(this);
         setColPos();
 
-
+        /*
+        初始化农作物 工作状态
+        */
+        funcBuild.initWorking(privateData);
         /*
         初始化动画
         */
@@ -135,6 +156,14 @@ class Building extends MyNode
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
 
+    }
+    function getObjectId()
+    {
+        return funcBuild.getObjectId();
+    }
+    function getStartTime()
+    {
+        return funcBuild.getStartTime();
     }
     function setBid(b)
     {
@@ -156,6 +185,14 @@ class Building extends MyNode
         super.exitScene();
     }
     */
+    function setDir(d)
+    {
+        dir = d;
+        if(dir == 0)
+            bg.scale(100, 100);
+        else 
+            bg.scale(-100, 100);
+    }
     function onSwitch()
     {
         if(data.get("changeDir") == 0)
@@ -186,13 +223,16 @@ class Building extends MyNode
     每次设置新的坐标前 清楚旧的坐标map 构建新的坐标map
     可以在移动开始的时候 清楚坐标映射 Moving 状态 和 Planing 状态
     在放下的时候 重新映射
+
+    
+    设置位置 检测冲突 设置zord
     */
     override function setPos(p)
     {
         trace("setPos", p);
         var curPos = p;
         var zOrd = curPos[1];
-        if(state == Moving)
+        if(state == Moving || (checkPlaning() && global.director.curScene.curBuild == this))
             zOrd = MAX_BUILD_ZORD;
         trace("setZord", zOrd);
         bg.pos(p);
@@ -208,12 +248,15 @@ class Building extends MyNode
     不在大区域中， 则显示后色底色
     根据建筑当前所在位置的状态设定建筑的颜色
     */
+    var colNow = 0;
     function setColPos()
     {
+        colNow = 0;
         var z = buildCheckInZone();
         if(z == NotBigZone)
         {
             setColor(NotBigZone);
+            colNow = 1;
         }
         else
         {
@@ -222,6 +265,7 @@ class Building extends MyNode
             {
                 //global.user.setCol(this);
                 setColor(NotBigZone);
+                colNow = 1;
             }
             else
             {
@@ -256,25 +300,15 @@ class Building extends MyNode
             var bSize = bg.size();
 
             trace("back Size", bSize, (sx+sy)/2*sizeY);
-            bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*sizeY).anchor(50, 50).size((sx+sy)*sizeX+40, (sx+sy)*sizeY+20).color(100, 100, 100, 100);
+            /*
+            如果方块的大小恰好和建筑物的底座一样大小 那么要求建筑物底座必须要一定大小
+            +40 +20
+            */
+            bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*sizeY).anchor(50, 50).size((sx+sy)*sizeX+20, (sx+sy)*sizeY+10).color(100, 100, 100, 100);
             bg.add(bottom, -1);
             //half transparent + color
-            /*
-            bottom的属性需要在设置了位置之后设置
-            */
-            //setColPos();
+        }
 
-        }
-        else if(state == Free)
-        {
-            trace("has ani", data);
-            /*
-            if(data.get("hasAni") == 1 )
-            {
-                addChild(new BuildAnimate(this));
-            }
-            */
-        }
     }
 
     function buildCheckInZone()
@@ -295,6 +329,7 @@ class Building extends MyNode
         setState(Free);
         finishBottom();
         setZord();
+        global.user.updateBuilding(this);
     }
     /*
     建造结束 或者 规划结束需要清理 底层图标
@@ -319,27 +354,33 @@ class Building extends MyNode
         //accDifY = 0;
         accMove = 0;
         lastPoints = n.node2world(x, y);         
+        
         map.touchBegan(n, e, p, x, y, points); 
+
+        if(checkPlaning())
+        {
+            var setSuc = global.director.curScene.setBuilding(this);
+            if(setSuc == 0)
+                return;
+            if(bottom == null)
+            {
+                setState(state);
+            }
+        }
 
         if(state == Moving || checkPlaning())
         {
             global.user.clearMap(this);
         }
 
-        if(checkPlaning())
-        {
-            global.director.curScene.setBuilding(this);
-            if(bottom == null)
-            {
-                setState(state);
-            }
-        }
+
     }
     function finishPlan()
     {
         if(bottom != null)
         {
             finishBottom();
+            setZord();
             //bottom.removefromparent();
             //bottom = null;
         }
@@ -351,12 +392,12 @@ class Building extends MyNode
             return;
         if(inZ != InZone)
         {
-            bg.color(3, 93, 81, 30)
+            //bg.color(93, 4, 1, 30);//red
             bottom.texture("red2.png");
         }
         else
         {
-            bg.color(93, 4, 1, 30);
+            //bg.color(3, 93, 81, 30);//green
             bottom.texture("green2.png");
         }
     }
@@ -378,102 +419,7 @@ class Building extends MyNode
 
         //var curPos = bg.pos();
         setPos(newPos);
-        /*
-        var z = buildCheckInZone();
-        trace("checkInZone", z);
-        if(z == NotBigZone)
-        {
-            //setCol(NotBigZone);
-            var dx = newPos[0] - FullZone[kind][0];
-            var dy = newPos[1] - FullZone[kind][1];
-            var fail = 0;
-            if(dx < 0 || dx > FullZone[kind][2] || dy < 0 || dy > FullZone[3])
-                fail = 1;
-            if(fail == 0)
-                setPos(curPos);
-        }
-        */
     }
-    /*
-    function moveBack(difx, dify)
-    {
-        accDifX += difx;
-        accDifY += dify;
-        var bMap = getBuildMap(this);
-        var curPos = bg.pos();
-        if(abs(accDifX) >= sizeX || abs(accDifY) >= sizeY)
-        {
-            if(abs(accDifX) >= sizeX && abs(accDifY) >= sizeY)
-            {
-                bMap[2] += Sign(accDifX);
-                bMap[3] += Sign(accDifY);
-            }
-            else if(abs(accDifX) >= sizeX)
-            {
-                bMap[2] += 2*Sign(accDifX);
-            }
-            else if(abs(accDifY) >= sizeY)
-            {
-                bMap[3] += 2*Sign(accDifY);
-
-            }
-            //accDifX = 0;
-            //accDifY = 0;
-            var nPos = setBuildMap(bMap);
-            setPos(nPos);
-
-            var z = buildCheckInZone();
-
-            //set offset
-            var newPos = bg.pos();
-            if(z == NotBigZone)
-            {
-                var dx = newPos[0] - FullZone[kind][0];
-                var dy = newPos[1] - FullZone[kind][1];
-                var fail = 0;
-                if(dx < 0 && difx < 0)
-                    fail = 1;
-                    //difx = 0;
-                if(dx > 0 && difx > 0)
-                    fail = 1;
-                    //difx = 0;
-                if(dy < 0 && dify < 0)
-                    fail = 1;
-                    //dify = 0;
-                if(dy > 0 && dify > 0)
-                    fail = 1;
-                    //dify = 0;
-                if(fail == 0)
-                    setPos(curPos);
-            }
-        }
-        else
-        {
-            return;
-        }
-
-
-
-        setPos([curPos[0]+difx, curPos[1]+dify]);
-        var z = buildCheckInZone();
-
-        //set offset
-        if(z == NotBigZone)
-        {
-            var dx = curPos[0]+difx - FullZone[kind][0];
-            var dy = curPos[1]+dify - FullZone[kind][1];
-            if(dx < 0 && difx < 0)
-                difx = 0;
-            if(dx > 0 && difx > 0)
-                difx = 0;
-            if(dy < 0 && dify < 0)
-                dify = 0;
-            if(dy > 0 && dify > 0)
-                dify = 0;
-            setPos([curPos[0]+difx, curPos[1]+dify]);
-        }
-    }
-    */
     /*
     规范化当前的手指位置， 测试位置是否合法
 
@@ -482,17 +428,17 @@ class Building extends MyNode
     */
     function touchMoved(n, e, p, x, y, points)
     {
+
         var oldPos = lastPoints;
         lastPoints = n.node2world(x, y);
         var difx = lastPoints[0] - oldPos[0];
         var dify = lastPoints[1] - oldPos[1];
         if(state == Moving || checkPlaning())
         {
+            if(global.director.curScene.curBuild != this)
+                return;
             var parPos = bg.parent().world2node(lastPoints[0], lastPoints[1]);
             var newPos = normalizePos(parPos, sx, sy)
-            /*
-            */
-            //moveBack(difx, dify);
             moveBack(newPos);
             setColPos();
             if(len(points) >= 3)//-1 0 1
@@ -509,37 +455,64 @@ class Building extends MyNode
 
     function showGlobalMenu()
     {
-        var funcs = getBuildFunc(data.get("funcs"));
-        trace("getFunc", funcs);
-        global.director.pushView(new BuildWorkMenu(this, funcs[0], funcs[1]), 0, 0);
+        showMenuYet = 1;
+        var func = getBuildFunc(funcs);
+        trace("getFunc", func, funcs);
+        global.director.pushView(new BuildWorkMenu(this, func[0], func[1]), 0, 0);
     }
     var showMenuYet = 0;
     /*
     如果用户手指移动 一定的范围 表示没有意图打开建筑物对话框
+    当前移动建筑不是 自身不能处理
+
     */
     function touchEnded(n, e, p, x, y, points)
     {
+
+        var ret;
+        trace("building State", state, accMove, kind, funcs);
         if((state == Moving) || checkPlaning())
         {
-            var npos = normalizePos(bg.pos(), sx, sy);
-            setPos(npos);
+            if(global.director.curScene.curBuild != this)
+                return;
+            if(colNow == 0 && state != Moving)//无冲突规划状态 清除zord 和 底座
+            {
+                setZord();
+                //finishBottom();
+            }
+                
+            //var npos = normalizePos(bg.pos(), sx, sy);
+            //setPos(npos);
+            //colNow = setColPos();
             global.user.updateMap(this);
         }
         /*
         如果移动过多则不打开建筑物菜单
+        建筑物私有对象如果没有处理改功能， 那就采用统一的弹出功能菜单的方案
+        例如 城堡 民居 装饰物
         */
         else if(state == Free && accMove < 20)
         {
-            funcBuild.whenFree();
+            ret = funcBuild.whenFree();
+            if(ret == 0)
+            {
+                if(showMenuYet == 0)
+                {
+                    global.director.curScene.showGlobalMenu(this, showGlobalMenu);
+                }
+            }
         }
+        /*
+        工作中的农田显示
+        */
         else if(state == Working)
         {
             if(showMenuYet == 0)
             {
-                var ret = funcBuild.whenBusy();
+                ret = funcBuild.whenBusy();
                 if(ret == 0)
                 {
-                    showMenuYet = 1;
+                    //showMenuYet = 1;
                     global.director.curScene.showGlobalMenu(this, showGlobalMenu);
                 }
             }
@@ -549,11 +522,12 @@ class Building extends MyNode
     }
     /*
     来自上层的点击信息，关闭打开的全局菜单
+    应该由场景的 来关闭view
     */
     function closeGlobalMenu()
     {
         showMenuYet = 0;
-        global.director.popView();
+        //global.director.popView();
     }
 
 
@@ -567,30 +541,45 @@ class Building extends MyNode
     //view Value
     /*
     建筑物加速
+    只提供功能 但是不会操作 view
     */
     function doAcc()
     {
         trace("doAcc state", state);
         if(state == Working)
         {
-            //planting.finish(); 
+            global.director.pushView(new AccDialog(this));
+            //funcBuild.doAcc();
+        }
+    }
+    function getAccCost()
+    {
+        return funcBuild.getAccCost();
+    }
+    function sureToAcc()
+    {
+        trace("doAcc state", state);
+        if(state == Working)
+        {
             funcBuild.doAcc();
-            global.director.curScene.closeGlobalMenu();
-            //global.director.popView();
         }
     }
     /*
     当buildLayer 加入 和清楚建筑物的时候， 相应的处理建筑物的状态
+    通过 点击子菜单的 sell按钮来卖出 子菜单 直接 调用 建筑物的卖出函数 子菜单 再关闭自己
+    通过 点击规划菜单的按钮来卖出
+
+    建筑的函数 只提供功能， 但是 不会 去操作view
     */
     function doSell()
     {
-        //var add = getBuildCost(data.get("id"));
-        //flyObject(bg, add, pickMe);
+        global.director.pushView(new SellDialog(this));
+    }
+    function sureToSell()
+    {
         global.director.curScene.addChild(new FlyObject(bg, getBuildCost(data.get("id")), sellOver));
         map.removeChild(this); 
-        //selfCloseGlobalMenu();
-        global.director.curScene.closeGlobalMenu();
-        //global.director.popView();
+        global.user.sellBuild(this);
     }
     function sellOver()
     {

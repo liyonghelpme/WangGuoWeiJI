@@ -245,6 +245,13 @@ function checkInZone(position)
     return 0;
 }
 
+function checkInTrain(p)
+{   
+    var difx = p[0] - TrainZone[0];
+    var dify = p[1] - TrainZone[1];
+    return difx > 0 && difx < TrainZone[2] && dify > 0 && dify < TrainZone[3]; 
+}
+
 /*
 function getBoundary(dia)
 {
@@ -540,6 +547,12 @@ function getBuildFunc(id)
 {
     return buildFunc.get(id);   
 }
+/*
+function getSoldierFunc(id)
+{
+    return soldierFunc;   
+}
+*/
 function getZord(curPos)
 {
     return curPos[1];
@@ -596,4 +609,62 @@ function colorWords(str)
     var begin = end[0].split("[");
     var lenBegin = len(begin[0])/3;
     return [begin[0], begin[1], lenBegin];
+}
+
+function getMagicAnimate(id)
+{
+    var ani = magicAnimate.get(id);
+    return ani;
+}
+function getMapAnimate(id)
+{
+    var ani = mapAllAnimate.get(id);
+    var res = [];
+    for(var i = 0; i < len(ani); i++)
+    {
+        res.append(mapAnimate.get(ani[i]));
+    }
+    return res;
+}
+
+/*
+获得某个士兵地图格子映射
+如果
+*/
+function getSolMap(p)
+{
+    var ix = p[0]-MAP_INITX-MAP_OFFX/2;
+    var xk = ix/MAP_OFFX;
+    var iy = p[1]-MAP_INITY-MAP_OFFY;
+    var yk = iy/MAP_OFFY;
+
+    return [xk, yk];
+}
+/*
+根据某个坐标计算网格对齐坐标
+返回士兵需要的对齐坐标
+限制坐标的范围
+*/
+function normalizeSoldierPos(p)
+{
+    var ix = p[0]-MAP_INITX;
+    var k = ix/MAP_OFFX;
+    k = min(MAP_WIDTH, max(0, k));
+    ix = k*MAP_OFFX + MAP_INITX+MAP_OFFX/2;
+
+    var iy = p[1]-MAP_INITY;
+    k = iy/MAP_OFFY;
+    k = min(MAP_HEIGHT, max(0, k));
+    iy = k*MAP_OFFY + MAP_INITY+MAP_OFFY;
+    return [ix, iy];
+}
+/*
+由格子计算士兵的坐标
+*/
+//0-12 0-4
+function getSolPos(mx, my)
+{
+    mx = mx*MAP_OFFX+MAP_OFFX/2+MAP_INITX;
+    my = my*MAP_OFFY+MAP_OFFY+MAP_INITY;
+    return [mx, my];
 }

@@ -6,7 +6,16 @@ class Scene extends MyNode
         bg = node();
         init();
     }
+    function quitScene()
+    {
+
+    }
 }
+/*
+确保当前最高的对话框 自己关闭自己 
+1: 当前已经弹出对话框则不再弹出对话框
+2: 对话框关闭时传入自己作为参数用于在堆栈中寻找
+*/
 class Director
 {
     var curScene;
@@ -25,9 +34,8 @@ class Director
         curScene = new Scene();
 
         getscene().add(curScene.bg);
-        curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
-        curScene.bg.focus(1);
-        //getscene().setevent(EVENT_KEYUP|EVENT_KEYDOWN, quitGame);
+        //curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
+        //curScene.bg.focus(1);
         curScene.enterScene();
     }
 
@@ -39,11 +47,14 @@ class Director
     function quitGame(n, e, p, kc)
     {
         trace("KeyEVENT", n, e, p, kc);
+        /*
+        退出战斗页面
         if(global.map != null)
         {
             global.director.popScene();
             return;
         }
+        */
         if(quitState == 0)
         {
             if(kc == KEYCODE_BACK)
@@ -99,8 +110,8 @@ class Director
         stack = []
 
         getscene().add(curScene.bg);
-        curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
-        curScene.bg.focus(1);
+        //curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
+        //curScene.bg.focus(1);
         curScene.enterScene();
 
         //pushPage(view, 0);

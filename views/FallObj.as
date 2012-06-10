@@ -3,14 +3,30 @@ class FallObj extends MyNode
     var map;
     var kind;
     var obj;
-    function FallObj(m,k){
+    var sx = 1;
+    var sy = 1;
+    var curMap = null;
+    function FallObj(m,k, rx, ry){
         map = m;
         kind = k;
-        bg = node().size(100, 100).anchor(50, 50);
+        curMap = [rx, ry];
+        bg = node().size(100, 100).anchor(50, 100);
+        init();
         obj = bg.addsprite("goods"+str(k)+".png").anchor(50,50).size(30,30).pos(50, 50);
+
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.user.updateRxRyMap(curMap[0], curMap[1], this);
+    }
+    override function exitScene()
+    {
+        global.user.removeRxRyMap(curMap[0], curMap[1], this);
+        super.exitScene();
     }
     var tarPos;
     override function setPos(p)

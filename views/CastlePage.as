@@ -82,19 +82,20 @@ class Sky extends MyNode
 class BuildLayer extends MyNode
 {
     var map;
-    var buildings = null;
+    //var buildings = null;
     var solTimer = null;
     function BuildLayer(m)
     {
         map = m;
         bg = node();
         init();
-        buildings = global.user.buildings;
+        //buildings = global.user.buildings;
         initBuilding();
+        initSoldiers();
     }
     override function enterScene()
     {
-        solTimer = new Timer(100);
+        solTimer = new Timer(200);
         super.enterScene();
     }
     override function exitScene()
@@ -174,19 +175,22 @@ class BuildLayer extends MyNode
     初始化数组和map
     保证数据唯一性
     */
+    /*
+    buildings ----> allBuildings
+    */
     function initBuilding()
     {
-        trace("initBuilding", len(buildings));
-        var item = buildings.items();
+        trace("initBuilding", len(global.user.buildings));
+        var item = global.user.buildings.items();
         for(var i = 0; i < len(item); i++)
         {
             var bid = item[i][0];
             var bdata = item[i][1];
 
             var data = getData(BUILD, bdata.get("id"));
-            data.update("state", bdata.get("state"));
-            data.update("dir", bdata.get("dir"));
-            var build = new Building(this, data);
+            //data.update("state", bdata.get("state"));
+            //data.update("dir", bdata.get("dir"));
+            var build = new Building(this, data, bdata);
             build.setBid(bid);
 
 
@@ -194,11 +198,35 @@ class BuildLayer extends MyNode
             addChildZ(build, MAX_BUILD_ZORD);
             //调整Z值
             build.setPos([bdata.get("px"), bdata.get("py")]);
-            //设置数据 需要根据坐标设置冲突
+            //设置MAP数据 需要根据坐标设置冲突
             global.user.addBuilding(build);
-
-
-
+        }
+    }
+    /*
+    从user的 soldiers 数据 到 士兵状态转化
+    user 的allSoldiers 关联 士兵的view 实体 这个可以和数据绑定在一起
+    方案如下：
+        soldiers -------士兵私有数据
+        士兵的私有数据 ----- 士兵实体 
+        这样耦合性太高  
+    */
+    /*
+    从数据实体到 view 实体
+    soldiers ----> allSoldiers
+    */
+    function initSoldiers()
+    {
+        //id name
+        var item = global.user.soldiers.items(); 
+        for(var i = 0; i < len(item); i++)
+        {
+            var sid = item[i][0];
+            var sdata = item[i][1];
+            var data = getData(SOLDIER, sdata.get("id"));
+            var soldier = new BusiSoldier(this, data, sdata);
+            soldier.setSid(sid);
+            addChildZ(soldier, MAX_BUILD_ZORD);
+            global.user.addSoldier(soldier);
         }
     }
         
@@ -242,6 +270,8 @@ class CastlePage extends MyNode
         bg.addsprite("flow2.png").pos(1650, 45).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
         bg.addsprite("flow1.png").pos(2352, 13).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
 
+        bg.addsprite("mapInIcon.png").pos(1473, 309).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20))).setevent(EVENT_TOUCH, onMap);
+
 
         farm = new FarmLand(this);
         addChild(farm);
@@ -256,7 +286,7 @@ class CastlePage extends MyNode
         buildLayer = new BuildLayer(this);
         addChild(buildLayer);
 
-        fallGoods = new FallGoods(this);
+        fallGoods = new FallGoods(this, buildLayer);
         addChild(fallGoods);
 
         
@@ -272,6 +302,11 @@ class CastlePage extends MyNode
         //initBuilding();
 
     }
+    function onMap()
+    {
+        global.director.pushScene(new MapScene());
+    }
+
 
     var inBuilding = 0;
     var curBuild = null;
@@ -282,7 +317,9 @@ class CastlePage extends MyNode
     function beginBuild(building)
     {
         inBuilding = 1;
-        curBuild = new Building(buildLayer, building);
+        curBuild = new Building(buildLayer, building, null);
+        curBuild.setBid(global.user.getNewBid());
+
         buildLayer.addBuilding(curBuild, MAX_BUILD_ZORD);
         //buildLayer.addChildZ(curBuild, MAX_BUILD_ZORD);
         var kind = building.get("kind");
@@ -291,9 +328,36 @@ class CastlePage extends MyNode
     }
     function buySoldier(id)
     {
-        var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id));
+        var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id), null);
+        newSol.setSid(global.user.getNewSid());
         buildLayer.addSoldier(newSol);
+        global.user.updateSoldiers(newSol);
         return newSol;
+    }
+    /*
+    先缩放再移动 保留旧的缩放比例
+    */
+    var oldScale = null;
+    var oldPos = null;
+    function moveToBuild(build)
+    {
+        oldScale = bg.scale();
+        touchDelegate.scaleToMax();
+
+        oldPos = bg.pos();
+        var bSize = build.bg.size();
+        var bPos = build.getPos();
+        bPos[1] -= bSize[1]/2;
+        moveToPoint(bPos[0], bPos[1]);
+    }
+    function closeGlobalMenu()
+    {
+        if(oldScale != null)
+        {
+            touchDelegate.scaleToOld(oldScale, oldPos);
+            oldScale = null;
+            oldPos = null;
+        }
     }
     function moveToPoint(tarX, tarY)
     {
@@ -317,16 +381,6 @@ class CastlePage extends MyNode
         curPos[1] = min(max(minY, curPos[1]), maxY);
         bg.pos(curPos);
     }
-    /*
-    var showMenu = 0;
-    var curShow = null;
-    function showGlobalMenu(build)
-    {
-        showMenu = 1;   
-        curShow = build;
-        scene.showGlobalMenu(build);
-    }
-    */
 
     function finishBuild()
     {
@@ -346,29 +400,11 @@ class CastlePage extends MyNode
     {
         curBuild.onSwitch();
     }
-    /*
-    function selfCloseGlobalMenu()
-    {
-        showMenu = 0;
-        touchBuild = null;
-        scene.closeGlobalMenu();
-    }
-    */
     var touchBuild = null;
     function touchBegan(n, e, p, x, y, points)
     {
         scene.clearHideTime();
         scene.closeGlobalMenu(this);
-        /*
-        if(showMenu == 1)
-        {
-            showMenu = 0;
-            curShow.closeGlobalMenu();
-            curShow = null;
-            //global.director.popView();//remove BuildMenu Now
-            scene.closeGlobalMenu();
-        }
-        */
         touchDelegate.tBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)

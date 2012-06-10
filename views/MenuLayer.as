@@ -17,22 +17,23 @@ class MenuLayer extends MyNode
     [0,["map","rank","plan","setting"]],
     [1,["role","store","friend","mail"]],
     ]);
+    /*
+    不要设定图片的size属性否则图片会被缩放
+    */
     function MenuLayer(s) {
         scene = s;
         trace("pushMenuLayer");
         menus =new Array(null,null);
         bg = node();
-        banner = bg.addsprite("menu_back.png").scale(100,100).size(800,111).anchor(0,100).pos(0,480).rotate(0);
+        banner = bg.addsprite("menu_back.png").scale(100,100).anchor(0,100).pos(0,480).rotate(0);
         init();
 
         initData();
 
         taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(0,0).pos(11,22).rotate(0);
-        expfiller = banner.addsprite("exp_filler.png").scale(100,100).size(108,11).anchor(0,0).pos(142,50).rotate(0);
+        expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0);
         expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
         collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
-        //Un5 = banner.addsprite("silver.png").scale(100,100).size(29,28).anchor(50,50).pos(299,93).rotate(0);
-        //Un6 = banner.addsprite("gold.png").scale(100,100).size(33,32).anchor(50,50).pos(549,93).rotate(0);
         rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0).setevent(EVENT_TOUCH, openCharge);
         menubutton = banner.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
@@ -50,13 +51,15 @@ class MenuLayer extends MyNode
     }
     var silverText;
     var goldText;
+    var gloryText;
     /*
     初始化文本数据之后注册 用户数据的监听器
     */
     function initData()
     {
-        silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(337, 92).color(100, 100, 100);
-        goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(592, 92).color(100, 100, 100)
+        silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(336, 99).color(100, 100, 100);
+        goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(591, 99).color(100, 100, 100)
+        gloryText = banner.addlabel(getStr("glory", null), null, 18).anchor(50, 50).pos(167, 99).color(100, 100, 100);
 
     }
     var building = 0;
