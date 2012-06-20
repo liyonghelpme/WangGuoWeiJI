@@ -8,6 +8,7 @@ class Global
     var myAction;
     var staticScene = null;
     var map = null;
+    var msgCenter;
     function Global()
     {
     }

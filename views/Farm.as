@@ -11,7 +11,7 @@ class Plant extends MyNode
     var passTime;
     var id;
 
-    function Plant(b, d)
+    function Plant(b, d, privateData)
     {
         building = b;
         data = d;
@@ -24,7 +24,10 @@ class Plant extends MyNode
         bg = sprite("p0.png").anchor(50, 100).pos((sx+sy)/2*sizeX, (sx+sy)*sizeY);
         //bg = sprite("p0.png");
         init();
-        passTime = data.get("passTime"); 
+        if(privateData != null)
+            passTime = privateData.get("passTime"); 
+        else 
+            passTime = 0;
         curState = 0;
     }
 
@@ -87,7 +90,10 @@ class Plant extends MyNode
                 bg.texture("p"+str(curState)+".png", UPDATE_SIZE);
             else
                 bg.texture("p"+str(data.get("id"))+"_"+str(curState)+".png", UPDATE_SIZE);
-
+            if(curState == MATURE || curState == ROT)
+            {
+                building.funcBuild.setFlowBanner();
+            }
         }
 
     }
@@ -137,9 +143,24 @@ class Farm extends FuncBuild
         if(planting.getState() >= MATURE)
         {
             harvestPlant();
+            flowBanner.removefromparent();
+            flowBanner = null;
             return 1;
         }
         return 0;
+    }
+    var flowBanner = null;
+    function setFlowBanner()
+    {
+        if(flowBanner == null)
+        {
+            flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(64, -11).anchor(50, 100);
+            var pl = flowBanner.addsprite("Wplant"+str(planting.id)+".png").anchor(50, 50).pos(43, 30);
+            var bsize = pl.prepare().size();
+            var sca = min(63*100/bsize[0], 42*100/bsize[1]);
+            pl.scale(sca);
+            flowBanner.addaction(repeat(scaleto(500, 150, 150), scaleto(500, 100, 100)));
+        }
     }
     override function initWorking(data)
     {
@@ -152,8 +173,9 @@ class Farm extends FuncBuild
         var plant = getData(PLANT, id);//getPlant(id);
         var now = time();
         var start = data.get("objectTime");
-        plant.update("passTime", now-start);
-        planting = new Plant(baseBuild, plant);
+        //plant.update("passTime", now-start);
+        var privateData = dict([["passTime", now-start]]);
+        planting = new Plant(baseBuild, plant, privateData);
         baseBuild.addChild(planting);
     }
     override function getAccCost()
@@ -173,8 +195,7 @@ class Farm extends FuncBuild
         baseBuild.setState(Working);
         trace("planting", id);
         var plant = getData(PLANT, id);//getPlant(id);
-        plant.update("passTime", 0);
-        planting = new Plant(baseBuild, plant);
+        planting = new Plant(baseBuild, plant, null);
         baseBuild.addChild(planting);
         //建筑状态也需要改变
         global.user.updateBuilding(baseBuild);
@@ -186,10 +207,10 @@ class Farm extends FuncBuild
 
         if(planting.getState() == ROT)
         {
-            global.director.curScene.addChild(new FlyObject(baseBuild.bg, dict([["silver", planting.data.get("silver")/2]]), harvestOver));
+            global.director.curScene.addChild(new FlyObject(baseBuild.bg, getGain(PLANT, planting.id), harvestOver));
         }
         else
-            global.director.curScene.addChild(new FlyObject(baseBuild.bg, dict([["silver", planting.data.get("silver")]]), harvestOver));
+            global.director.curScene.addChild(new FlyObject(baseBuild.bg, getGain(PLANT, planting.id), harvestOver));
         //flyObject(bg, dict([["silver", planting.data.get("silver")]]), harvestOver);
         planting = null;
         global.user.updateBuilding(baseBuild);

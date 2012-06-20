@@ -32,15 +32,96 @@ class User
     再初始化用户的建筑数据
     */
 
+
+    var drugs;
+    var equips;
+    var soldierEquip;
+    var sequipId;
+    var tasks;
+
+    var taskListener = [];
+    function getCurFinTaskNum()
+    {
+        var res = 0;
+        var it = tasks.items();
+        for(var i = 0; i < len(tasks); i++)
+        {
+            if(it[i][1][1] == 0)
+            {
+                var d = getData(TASK, it[i][0]);
+                if(it[i][1][0] >= d.get("need"))
+                    res += 1;
+            }
+        }
+        return res;
+    }
+    function addTaskListener(obj)
+    {
+        for(var i = 0; i < len(taskListener); i++)
+        {
+            if(taskListener[i][0] == obj)
+            {
+                taskListener[i][1] = 0;
+                return;
+            }
+        }
+        taskListener.append([obj, 0]);
+    }
+    function removeTaskListener(obj)
+    {
+        for(var i = 0; i < len(taskListener); i++)
+        {
+            if(taskListener[i][0] == obj)
+                taskListener[i][1] = 1;
+        }
+    }
+    /*
+    可以做一个1000ms的timer 定时清理已经退出的对象
+    */
+    //addTaskNum or just FinishIt
+    function updateTask(id, num, fin)
+    {
+        var val = tasks.get(id, [0, 0]);
+        //任务已经完成没有必要继续  
+        if(val[1] == 1)
+            return;
+        var need = getData(TASK, id).get("need");
+        //任务的数量已经满足 则没有必要增加
+        if(val[0] >= need && num != 0)
+            return;
+        val[0] += num;
+        val[1] = fin;
+        tasks.update(id, val);
+        db.put("tasks", tasks);
+        for(var i = 0; i < len(taskListener);)
+        {
+            if(taskListener[i][1] == 1)
+            {
+                taskListener.pop(i);
+            }
+            else
+            {
+                taskListener[i][0].updateTaskState();
+                i++;
+            }
+        }
+    }
+
     function initData()
     {
-        var keys = ["silver", "gold", "crystal", "level", "people", "papaya", "starNum"];
-        var value = db.get("silver", "gold", "crystal", "level", "people", "papaya", "starNum");
+        var keys = ["silver", "gold", "crystal", "level", "people", "papaya", "starNum", "loginDays"];
+        var value = db.get("silver", "gold", "crystal", "level", "people", "papaya", "starNum", "loginDays");
         resource = dict();
+        trace("visitDb", value);
         for(var i = 0; i < len(keys); i++)
         {
-            resource.update(keys[i], value[i]);
+            if(value[i] != null)
+                resource.update(keys[i], value[i]);
+            else
+                resource.update(keys[i], 0);
         }
+        //resource.update("loginDays", 10);
+        db.put("loginDays", resource.get("loginDays")+1);
         //bid kind px py state direction workId workStartTime
         //var bkeys = ["id", "px", "py", "state", "dir", "objectId", "objectTime"];
         //var build = db.get("buildings");
@@ -53,25 +134,35 @@ class User
                 maxBid = it[i][0];
         }
         maxBid++;
+        trace("initBuilding", maxBid);
 
 
-        it = drugData.items();
+        /*
+        drugs id num
+        equps id num
+        */
+
+        drugs = db.get("drugs");
+        if(drugs == null)
+            drugs = dict();
+
+        equips = db.get("equips");
+        if(equips == null)
+            equips = dict();
+
+        soldierEquip = db.get("soldierEquip");
+        if(soldierEquip == null)
+            soldierEquip = dict();
+
+        it = soldierEquip.items();
+        sequipId = -1;
         for(i = 0; i < len(it); i++)
         {
-            var name = replaceStr(GoodsPre[DRUG], ["[ID]", it[i][0]]);
-            var drugNum = db.get(name);
-            if(drugNum != null)
-                resource.update(name, drugNum);
+            if(it[i][0] > sequipId)
+                sequipId = it[i][0];
         }
-
-        it = equipData.items();
-        for(i = 0; i < len(it); i++)
-        {
-            name = replaceStr(GoodsPre[EQUIP], ["[ID]", it[i][0]]);
-            var equipNum = db.get(name);
-            if(equipNum != null)
-                resource.update(name, equipNum);
-        }
+        sequipId++;
+        trace("maxSoldier EquipId", sequipId);
 
         soldiers = db.get("soldiers");
         maxSid = -1;
@@ -84,8 +175,43 @@ class User
         maxSid++;
         trace("maxBid maxSid", maxBid, maxSid);
 
+        //[id [finNum, getRewardYet]]
+        tasks = db.get("tasks");
+        if(tasks == null)
+            tasks = dict();
+
     }
+    function getTaskFinData(id)
+    {
+        return tasks.get(id, [0, 0]);
+    }
+    var soldierListener = [];
+    function addSoldierListener(obj)
+    {
+        for(var i = 0; i < len(soldierListener); i++)
+        {
+            if(soldierListener[i][0] == obj)
+            {
+                soldierListener[i][1] = 0;
+                return;
+            }
+        }
+        soldierListener.append([obj, 0]);
+    }
+        
+    function removeSoldierListener(obj)
+    {
+        for(var i = 0; i < len(soldierListener); i++)
+        {
+            if(soldierListener[i][0] == obj)
+            {
+                soldierListener[i][1] = 1;
+            }
+        }
+    }
+
     //士兵数据实体
+    //updateSoldiers 修改士兵本地数据
     var soldiers;
     function User()
     {
@@ -99,6 +225,7 @@ class User
             trace("first login");
             db.put(str(uid), 1),
             db.put("silver", 1000, "gold", 1000, "crystal", 1000, "level", 10, "people", 0, "papaya", 1000);
+            db.put("loginDays", 1);
             db.put("starNum", [
             [
             [3,3,3,3,3, 0, 0, 0, 0, 0],
@@ -166,6 +293,13 @@ class User
 
             ]));
             db.put("soldiers", dict([[0, dict([["id", 0], ["name", "liyong"]])]]));
+
+            //id--->num-->num = -1 soldierId id 
+            db.put("drugs", dict([[0, 1]]));
+            db.put("equips", dict([[0, 1]]));
+            
+            //eid [kind sid]
+            db.put("soldierEquip", dict([[0, [0, 0]]]))
         }
         initData();
         blockBuilding = new MyNode();
@@ -182,6 +316,25 @@ class User
     再将每个建筑加入到图层中
     当经营页面 退出的时候 可以释放这些数据
     */
+    function getDrugs()
+    {
+        return drugs;
+    }
+    //oid, number
+    function getUseThing(kind, tid)
+    {
+        if(kind == EQUIP)
+            return soldierEquip.get(tid);
+        return [0, 0];
+    }
+    function getThingNum(kind, id)
+    {
+        if(kind == DRUG)
+            return drugs.get(id, 0);
+        else if(kind == EQUIP)
+            return equips.get(id, 0);
+        return 0;
+    }
     function checkInitBuildingYet()
     {
         trace("checkInitBuilding", len(allBuildings), len(buildings));
@@ -233,10 +386,37 @@ class User
     GoodsPre 和 KindsPre 是相互映射的 主要是 药品和装备
     */
 
+    /*
+     数据修改过程：
+     修改内存结构
+     修改数据库
+     通知所有注册的监听器
+    */
     function buySomething(kind, id, cost)
     {
         doCost(cost);
-        changeValue(replaceStr(GoodsPre[kind], ["[ID]", id]), 1);
+        var value;
+        trace("buy Something", kind, id);
+        if(kind == DRUG)
+        {
+            value = drugs.get(id, 0);
+            value += 1;
+            drugs.update(id, value);
+            db.put("drugs", drugs);
+        }
+        else if(kind == EQUIP)
+        {
+            value = equips.get(id, 0);
+            value += 1;
+            equips.update(id, value);
+            db.put("equips", equips);
+        }
+
+
+        //通知所有监听器修改数据
+        setValue(NOTIFY, 1);
+
+        //changeValue(replaceStr(GoodsPre[kind], ["[ID]", str(id)]), 1);
     }
 
     function addSoldier(sol)
@@ -260,19 +440,33 @@ class User
         allSoldiers.remove(sol);
         clearSolMap(sol);
     }
+    function removeAllSoldiers()
+    {
+        for(var i = 0; i < len(allSoldiers); i++)
+        {
+            var sol = allSoldiers[u];
+            clearSolMap(sol);
+            sol.removeSelf();
+        }
+        allSoldiers = [];
+    }
+    /*
     function buyEquip(id, cost)
     {
         doCost(cost);
         changeValue("equip"+str(id), 1);
     }
+    */
     /*
     药品储存， 一次性使用 在某个对象身上 drug+id
     */
+    /*
     function buyDrug(id, cost)
     {
         doCost(cost);
         changeValue("drug"+str(id), 1);
     }
+    */
     /*
     规划开始 和 规划取消 函数
     */
@@ -377,9 +571,17 @@ class User
     {
         resource.update(key, value);
         updateDB(key, value);
-        for(var i = 0; i < len(updateList); i++)
+        for(var i = 0; i < len(updateList); )
         {
-            updateList[i].updateValue(resource);
+            if(updateList[i][1] == 1)
+            {
+                updateList.pop(i);
+            }
+            else
+            {
+                updateList[i][0].updateValue(resource);
+                i++;
+            }
         }
     }
     function getNewSid()
@@ -404,8 +606,85 @@ class User
     //ID name
     function updateSoldiers(soldier)
     {
-        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName]]));
+        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["attack", soldier.attack], ["defense", soldier.defense], ["health", soldier.health], ["healthBoundary", soldier.healthBoundary], ["exp", soldier.exp], ["dead", soldier.dead]]));
         updateSoldierDB(null);
+        for(var i = 0; i < len(soldierListener);)
+        {
+            if(soldierListener[i][1] == 1)
+            {
+                soldierListener.pop(i);
+            }
+            else
+            {
+                soldierListener[i][0].updateSoldier(soldier);
+                i++;
+            }
+        }
+    }
+    /*
+    如果该士兵显示出来则更新状态
+    否则只是更新士兵数据 
+    */
+    function doTransfer(sid)
+    {
+        for(var i = 0; i < len(allSoldiers); i++)
+        {
+            if(allSoldiers[i].sid == sid)
+            {
+                allSoldiers[i].doTransfer();
+                return;
+            }
+        }
+    }
+    /*
+    修正数据， 显示士兵的view
+    */
+    function doRelive(sid)
+    {
+        var sol = soldiers.get(sid); 
+        trace("relive soldier", sol);
+        if(sol.get("dead") == 1)
+        {
+            sol.update("dead", 0);
+            soldiers.update(sid, sol);
+            updateSoldierDB(null);
+            global.msgCenter.sendMsg(RELIVE_SOL, [sid, sol]);
+        }
+    }
+    function unloadThing(tid)
+    {
+        trace("unloadThing", tid);
+        var useData = soldierEquip.pop(tid);
+        var num = equips.get(useData[0], 0);
+        equips.update(useData[0], num+1);
+        db.put("soldierEquip", soldierEquip);
+        db.put("equips", equips);
+    }
+    function useThing(kind, tid, soldier)
+    {
+        trace("useThing", kind, tid, soldier.id);
+        var num;
+        if(kind == DRUG)
+        {
+            num = drugs.get(tid);
+            drugs.update(tid, num-1);
+            db.put("drugs", drugs);
+        }
+        else if(kind == EQUIP)
+        {
+            num = equips.get(tid);
+            equips.update(tid, num-1);
+            db.put("equips", equips);
+            soldierEquip.update(sequipId++, [tid, soldier.sid]);
+            db.put("soldierEquip", soldierEquip);
+            trace("equips", equips, soldierEquip, sequipId);
+        }
+    }
+
+    function getSoldierData(sid)
+    {
+        trace("getSoldierData", sid, soldiers);
+        return soldiers.get(sid);
     }
     function sellSoldier(soldier)
     {
@@ -419,17 +698,43 @@ class User
         v += add;
         setValue(key, v);
     }
+    //获取任何物品首先获得 相应类别 再 获取 对应id的值
+    function getHerb(id)
+    {
+        return getValue("herb"+str(id));   
+    }
     function getValue(key)
     {
         return resource.get(key, 0);
     }
+    /*
+    所有异步的数据 需要同步的处理 因为 可能删除操作 在 更新的时候进行 可能导致部分不能被更新
+    */
     function addListener(obj)
     {
-        updateList.append(obj); 
+        for(var i = 0; i < len(updateList); i++)
+        {
+            if(updateList[i][0] == obj)
+            {
+                updateList[i][1] = 0;
+                return;
+            }
+        }
+        updateList.append([obj, 0]); 
     }
+    /*
+    需要确保对象被合理的删除 
+    遍历所有的监听对象 全部删除
+    */
     function removeListener(obj)
     {
-        updateList.remove(obj);
+        for(var i = 0; i < len(updateList); i++)
+        {
+            if(updateList[i][0] == obj)
+            {
+                updateList[i][1] = 1;
+            }
+        }
     }
     /*
     参数：建筑
@@ -668,6 +973,8 @@ class User
         {
             var key = its[i][0];
             var value = its[i][1];
+            if(key == "free")
+                continue;
             var cur = resource.get(key, 0);
             if(cur < value)
             {
@@ -694,6 +1001,8 @@ class User
         {
             var key = its[i][0];
             var value = its[i][1];
+            if(key == "free")
+                continue;
             changeValue(key, -value);
         }
     }

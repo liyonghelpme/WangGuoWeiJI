@@ -36,38 +36,56 @@ class ChildMenuLayer extends MyNode
     ]);
     function onTrain()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.doTrain();
     }
     function onDrug()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
     }
     /*
     鼓舞士兵
     */
     function onInspire()
     {
-        scene.inspireMe();   
         global.director.curScene.closeGlobalMenu(this);
+        scene.inspireMe();   
     }
+    /*
+    关闭城堡全局菜单
+    */
     function onTip()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new TipDialog(), 1, 0);
     }
     function onEquip()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new DrugDialog(scene, EQUIP), 1, 0);
     }
     function onGather()
     {
     }
     function onRelive()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new SoldierDialog(1), 1, 0);
     }
     function onTransfer()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new SoldierDialog(2), 1, 0);
     }
     function onStory()
     {
+
     }
     function onSoldier()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new SoldierDialog(0), 1, 0);
     }
     function onCollection()
     {
@@ -75,6 +93,12 @@ class ChildMenuLayer extends MyNode
     const OFFY = 100;
     const MIDY = 200;
     const DARK_WIDTH = 128;
+    /*
+    scene 可能是：
+       主菜单 场景
+       建筑物 菜单
+       士兵菜单
+    */
     function ChildMenuLayer(index, funcs, s, otherFunc){
         scene = s;
         functions = funcs;
@@ -143,6 +167,8 @@ class ChildMenuLayer extends MyNode
     }
     function onMakeDrug()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new MakeDrugDialog(), 1, 0);
     }
     /*
     关闭建筑的全局 控制view
@@ -193,7 +219,8 @@ class ChildMenuLayer extends MyNode
     function onRank()
     {
         scene.ml.cancelAllMenu();
-        global.director.pushView(new GloryDialog());
+        global.director.pushView(new RankDialog(), 1, 0);
+        //global.director.pushView(new GloryDialog());
     }
     function onRole()
     {
@@ -203,6 +230,7 @@ class ChildMenuLayer extends MyNode
     function onSetting()
     {
         scene.ml.cancelAllMenu();
+        global.director.pushView(new SettingDialog());
     }
     function onStore()
     {

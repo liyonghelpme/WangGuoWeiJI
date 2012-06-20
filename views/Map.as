@@ -129,9 +129,10 @@ class Map extends MyNode
         for(var i = 0; i < len(it); i++)
         {
             var col = it[i];
-            if(col == sol || col == tar || col.state == MAP_SOL_DEAD)
+            if(col == sol || col == tar || col.state == MAP_SOL_DEAD || col.state == MAP_SOL_DEFENSE)
                 continue;
             var dist = (col.getPos()[0]-myPos[0])*dir;
+            trace("colDist", dist);
             if(dist >= 0 && dist < (col.getVolumn()+sol.getVolumn()))
                 return col;
         }

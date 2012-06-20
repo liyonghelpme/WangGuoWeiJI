@@ -91,15 +91,41 @@ class BuildLayer extends MyNode
         init();
         //buildings = global.user.buildings;
         initBuilding();
-        initSoldiers();
+        //initSoldiers();
     }
+    /*
+    避免在receivMsg 的时候 删除代理
+    可能存在这样一种情况 虽然 对象退出了场景 导致这个消息没有被接受到
+    但是再次进入场景的时候 需要重新获得消息
+    或者进入场景的时候根据数据重新根据数据 构建view
+
+    进入场景 
+    */
     override function enterScene()
     {
         solTimer = new Timer(200);
         super.enterScene();
+        initSoldiers();
+        global.msgCenter.registerCallBack(RELIVE_SOL, this);
+    }
+    /*
+    注册消息类型------> MSG_ID------>对象 ------>参数[]
+    */
+    function receivMsg(msg)
+    {
+        if(msg[0] == RELIVE_SOL)
+        {
+            var sdata = msg[1];
+            var soldier = new BusiSoldier(this, data, sdata[1]);
+            soldier.setSid(sdata[0]);
+            addChildZ(soldier, MAX_BUILD_ZORD);
+            global.user.addSoldier(soldier);
+        }
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(RELIVE_SOL, this);
+        removeSoldiers();
         super.exitScene();
         solTimer.stop();
         solTimer = null;
@@ -223,11 +249,17 @@ class BuildLayer extends MyNode
             var sid = item[i][0];
             var sdata = item[i][1];
             var data = getData(SOLDIER, sdata.get("id"));
+            if(sdata.get("dead", 0) == 1)//死亡士兵不显示
+                continue;
             var soldier = new BusiSoldier(this, data, sdata);
             soldier.setSid(sid);
             addChildZ(soldier, MAX_BUILD_ZORD);
             global.user.addSoldier(soldier);
         }
+    }
+    function removeSoldiers()
+    {
+        global.user.removeAllSoldiers();
     }
         
 
@@ -254,6 +286,8 @@ class CastlePage extends MyNode
     var fallGoods;
     var scene;
     var buildLayer;
+
+    var dialogController;
 
     function CastlePage(s)
     {
@@ -292,6 +326,11 @@ class CastlePage extends MyNode
         
         touchDelegate = new StandardTouchHandler();
         touchDelegate.bg = bg;
+
+        dialogController = new DialogController();
+        addChild(dialogController);
+        dialogController.addCmd(dict([["cmd", "login"]]));
+        dialogController.addCmd(dict([["cmd", "rate"]]));
 
         //touchDelegate.enterScene();
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

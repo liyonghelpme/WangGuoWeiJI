@@ -82,15 +82,17 @@ class Timer
         trace("timerNum", len(timers));
         timers.append([obj, 0]);
     }
+    /*
+    遍历所有删除所有的注册
+    */
     function removeTimer(obj)
     {
         //trace("timerNum", len(timers));
         for(var i = 0; i < len(timers); i++)
         {
-            if(timers[i][0] == obj && timers[i][1] == 0)
+            if(timers[i][0] == obj)
             {
                 timers[i][1] = 1;
-                break;
             }
         }
     }

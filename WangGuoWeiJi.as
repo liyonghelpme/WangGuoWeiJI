@@ -7,8 +7,12 @@ import global.INCLUDE;
 
 global.director.replaceScene(new CastleScene());
 
-global.director.pushView(new Loading(), 1, 0);//DarkNode
-
+//global.director.pushView(new Loading(), 1, 0);//DarkNode
+//global.director.pushView(new FriendMenu(), 1, 0);
+//global.director.pushView(new RankDialog(), 1, 0);
+//global.director.pushView(new LoginDialog(), 1, 0);
+//global.director.pushView(new SettingDialog(), 1, 0);
+//global.director.pushView(new VisitDialog(), 1, 0);
 /*
         var func1 = ;
         var func2 = ["train", "gather"];

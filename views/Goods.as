@@ -69,18 +69,25 @@ class Goods extends MyNode
             trace("buildCost", cost);
             if(len(picCost) > 0)
             {
-                var picName = picCost[0][0]+".png";
-                var valNum = picCost[0][1];
-                var buyable = global.user.checkCost(cost);
                 var c = [100, 100, 100];
-                if(buyable.get("ok") == 0)
-                    c = [100, 0, 0];
-                /*
-                消耗图片采用 消耗资源的名字
-                消耗数值 
-                */
-                var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50);  
-                var cNum = panel.addlabel(str(valNum), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+                if(picCost[0][0] == "free")//免费物品只显示免费
+                {
+                    panel.addlabel(getStr("free", null), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+                }
+                else
+                {
+                    var picName = picCost[0][0]+".png";
+                    var valNum = picCost[0][1];
+                    var buyable = global.user.checkCost(cost);
+                    if(buyable.get("ok") == 0)
+                        c = [100, 0, 0];
+                    /*
+                    消耗图片采用 消耗资源的名字
+                    消耗数值 
+                    */
+                    var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50);  
+                    var cNum = panel.addlabel(str(valNum), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+                }
             }
 
 
@@ -181,7 +188,7 @@ class Goods extends MyNode
     function setTab(g)
     {
         selTab = g;
-        trace(getStr(store.words[g], null));
+        //trace(getStr(store.words[g], null));
         title.texture(store.titles[g]);
 
         goodNum = store.allGoods[selTab]; 

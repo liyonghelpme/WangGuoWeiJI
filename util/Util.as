@@ -3,6 +3,11 @@ function replaceStr(s, rep)
 {
     for(var i = 0; i < len(rep); i += 2)
     {
+        if(type(rep[i+1]) != type(""))
+        {
+            trace("error type", rep[i+1]);
+            continue;
+        }
         s = s.replace(rep[i], rep[i+1])
     }
     return s;
@@ -13,12 +18,21 @@ function replaceStr(s, rep)
 function getStr(key, rep)
 {
     var s = strings.get(key);
+    if(type(s) == type([]))
+    {
+        s = s[LANGUAGE];
+    }
     trace("getStr", key, rep, s);
     if(type(rep) == type([]))
     {
         for(var i = 0; i < len(rep); i += 2)
         {
-            s = s.replace(rep[i], rep[i+1])
+            if(type(rep[i+1]) != type(""))
+            {
+                trace("error type", rep[i+1]);
+                continue;
+            }
+            s = s.replace(rep[i], rep[i+1]);
         }
     }
     return s;
@@ -173,19 +187,28 @@ function getBuildGain(id)
     
 所有物品的名字都通过字符串函数得到
 */
+//KIND*100000+id = key --->data
+var dataPool = dict();
 function getData(kind, id)
 {
-    var k = Keys[kind];
-    var datas = CostData[kind].get(id);
-    var ret = dict();
-    trace("getData", kind, id, k, datas);
-    for(var i = 0; i < len(k); i++)
+    var key = kind*100000+id;
+    var ret = dataPool.get(key, null);
+    if(ret == null)
     {
-        if(k[i] == "name")
-            ret.update(k[i], getStr(datas[i], null));
-        else
-            ret.update(k[i], datas[i]);
+        var k = Keys[kind];
+        var datas = CostData[kind].get(id);
+        ret = dict();
+
+        for(var i = 0; i < len(k); i++)
+        {
+            if(k[i] == "name")
+                ret.update(k[i], getStr(datas[i], null));
+            else
+                ret.update(k[i], datas[i]);
+        }
+        dataPool.update(key, ret);
     }
+    trace("getData", kind, id, key, ret);
     return ret;
 }
 
@@ -605,9 +628,11 @@ function getAttAnimate(id)
 
 function colorWords(str)
 {
+    trace("colorWords", str);
     var end = str.split("]");
     var begin = end[0].split("[");
     var lenBegin = len(begin[0])/3;
+    trace("color", begin, lenBegin);
     return [begin[0], begin[1], lenBegin];
 }
 
@@ -667,4 +692,44 @@ function getSolPos(mx, my)
     mx = mx*MAP_OFFX+MAP_OFFX/2+MAP_INITX;
     my = my*MAP_OFFY+MAP_OFFY+MAP_INITY;
     return [mx, my];
+}
+/*
+计算到某个等级需要的所有经验
+*/
+function getExp(level)
+{
+    return 50;
+}
+/*
+返回未完成的任务
+返回已经完成但是没有领取奖励的
+res [id, curNum]
+
+升级更新任务列表
+完成任务更新数据
+*/
+function getCurLevelAllTask(level)
+{
+    var res;
+    var it = taskData.keys(); 
+    var fin = [];
+    var notFin = [];
+    for(var i = 0; i < len(it); i++)
+    {
+        var ta = getData(TASK, it[i]);
+        if(ta.get("level") <= level)
+        {
+            var d = global.user.getTaskFinData(it[i]);
+            if(d[1] == 0)
+            {
+                if(d[0] >= ta.get("need"))
+                    fin.append([it[i], d[0]]);
+                else
+                    notFin.append([it[i], d[0]]);
+            }
+        }
+    }
+    res = fin + notFin;
+    trace("curLevelAllTask", level, res);
+    return res;
 }

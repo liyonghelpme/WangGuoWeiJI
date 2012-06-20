@@ -8,18 +8,28 @@ class BuildAnimate extends MyNode
     {
         build = b;
         var ani = getAni(build.data.get("id"));
+        var aniKind = ani[3];
         trace("building animate", ani);
-        bg = sprite(ani[0][0], ARGB_8888).pos(ani[1][0], ani[1][1]).anchor(ani[4][0], ani[4][1]);
+        if(aniKind != BUILD_ANI_ANI)
+        {
+            bg = sprite(ani[0][0], ARGB_8888).pos(ani[1][0], ani[1][1]).anchor(ani[4][0], ani[4][1]);
+        }
+        else
+            bg = node();
         init();
         cus = null;
-        var aniKind = ani[3];
-        if(aniKind == 0)
+
+        if(aniKind == BUILD_ANI_OBJ)
         {
             cus = new MyAnimate(ani[2], ani[0], bg);
         }
-        else
+        else if(aniKind == BUILD_ANI_ROT)
         {
             bg.addaction(repeat(rotateby(ani[2], 360)));
+        }
+        else if(aniKind == BUILD_ANI_ANI)
+        {
+            cus = new MyAnimate(ani[2], ani[0], build.bg);
         }
             
     }

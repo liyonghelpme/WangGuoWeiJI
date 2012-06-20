@@ -3,12 +3,32 @@
 //构造初始化的建筑物分布时，需要初始化一个河流相关的冲突图
 import global.User;
 
+import views.FriendScene;
+import views.FriendMenu;
+import views.VisitDialog;
+
+import views.RankDialog;
+import views.LoginDialog;
+import views.SettingDialog;
+import views.TaskDialog;
+import views.TipDialog;
+import views.MakeDrugDialog;
+import views.ScoreDialog;
+
+import views.SoldierDialog;
+import views.AllSoldier;
+import views.DeadSoldier;
+import views.TransferSoldier;
+import views.DrugDialog;
+
 //经营页面
 import views.CastlePage;
 import views.BuildLand;
 
 import views.FallGoods;
 import views.FallObj;
+
+import views.DialogController;
 
 //菜单
 import views.MenuLayer;
@@ -26,6 +46,7 @@ import views.RoleName;
 //人物对话框
 import views.SoldierStore;
 import views.BusiSoldier;
+import views.TrainBanner;
 
 //成功提示
 import views.SucBanner;
@@ -34,6 +55,8 @@ import views.ResourceBanner;
 
 import views.SoldierMenu;
 import views.ChildMenuLayer;
+
+
 
 
 //大地图
@@ -47,6 +70,8 @@ import views.BuildWorkMenu;
 import views.SellDialog;
 import views.AccDialog;
 import views.FriendDialog;
+
+
 
 import views.GloryDialog;
 
@@ -77,6 +102,7 @@ import views.Loading;
 
 //菜单使用的按钮对象
 import views.Button;
+import global.MessageCenter;
 
 
 import global.Director;
@@ -96,6 +122,7 @@ import data.Static;
 
 import data.String;
 
+global.msgCenter = new MessageCenter();
 global.director = new Director();
 global.touchManager = new TouchManager();
 global.timer = new Timer(1000);

@@ -1,6 +1,8 @@
 class MenuLayer extends MyNode
 {
     var taskbutton;
+    var taskFin;
+    var finNum;
     var expfiller;
     var expback;
     var collectionbutton;
@@ -23,22 +25,33 @@ class MenuLayer extends MyNode
     function MenuLayer(s) {
         scene = s;
         trace("pushMenuLayer");
-        menus =new Array(null,null);
+        menus = new Array(null,null);
         bg = node();
         banner = bg.addsprite("menu_back.png").scale(100,100).anchor(0,100).pos(0,480).rotate(0);
         init();
 
         initData();
 
-        taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(0,0).pos(11,22).rotate(0);
+        taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(50,50).pos(61, 78).rotate(0).setevent(EVENT_TOUCH, onTask);
+        taskFin = taskbutton.addsprite("taskFin.png").pos(75, 19).anchor(50, 50).visible(0);
+        finNum = taskFin.addlabel("", null, 15).pos(17, 17).anchor(50, 50).color(0, 0, 0);
+
         expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0);
         expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
-        collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(0,0).pos(230,74).rotate(0);
-        rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,93).rotate(0).setevent(EVENT_TOUCH, openCharge);
+        collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(50,50).pos(253, 100).rotate(0).setevent(EVENT_TOUCH, openGlory);
+        rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,98).rotate(0).setevent(EVENT_TOUCH, openCharge);
         menubutton = banner.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
         new Button(menubutton, onClicked, 0);
 
 
+    }
+    function onTask()
+    {
+        global.director.pushView(new TaskDialog(), 1, 0);
+    }
+    function openGlory()
+    {
+        global.director.pushView(new GloryDialog());
     }
     /*
     显示商店充值页面
@@ -108,11 +121,23 @@ class MenuLayer extends MyNode
         super.enterScene();
         trace("menuLayer enterScene");
         global.user.addListener(this);
+        global.user.addTaskListener(this);
         updateValue(global.user.resource);
+        updateTaskState();
+    }
+    function updateTaskState()
+    {
+        var num = global.user.getCurFinTaskNum();
+        finNum.text(str(num));
+        if(num == 0)
+            taskFin.visible(0);
+        else
+            taskFin.visible(1);
     }
     override function exitScene()
     {
         global.user.removeListener(this);
+        global.user.removeTaskListener(this);
         super.exitScene();
     }
     /*
