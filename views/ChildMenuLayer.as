@@ -205,11 +205,12 @@ class ChildMenuLayer extends MyNode
     function onFriend()
     {
         scene.ml.cancelAllMenu();
-        global.director.pushView(new FriendDialog());
+        global.director.pushView(new FriendDialog(), 1, 0);
     }
     function onMail()
     {
         scene.ml.cancelAllMenu();
+        global.director.pushView(new MailDialog(), 1, 0);
     }
     function onPlan()
     {

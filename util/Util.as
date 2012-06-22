@@ -654,7 +654,8 @@ function getMapAnimate(id)
 
 /*
 获得某个士兵地图格子映射
-如果
+x 1 - 11     1-5  7-11
+y 0 - 4  
 */
 function getSolMap(p)
 {
@@ -662,6 +663,18 @@ function getSolMap(p)
     var xk = ix/MAP_OFFX;
     var iy = p[1]-MAP_INITY-MAP_OFFY;
     var yk = iy/MAP_OFFY;
+
+    return [xk, yk];
+}
+function getPosSolMap(p)
+{
+    var ix = p[0]-MAP_INITX;
+    var k = ix/MAP_OFFX;
+    var xk = min(MAP_WIDTH, max(0, k));
+
+    var iy = p[1]-MAP_INITY;
+    k = iy/MAP_OFFY;
+    var yk = min(MAP_HEIGHT, max(0, k));
 
     return [xk, yk];
 }

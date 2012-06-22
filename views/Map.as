@@ -35,7 +35,9 @@ class Map extends MyNode
         scene = sc;
         kind = k;
         bg = sprite("map"+str(k)+".jpg");
-        grid = bg.addsprite("mapGrid.png").pos(MAP_INITX, MAP_INITY).color(100, 100, 100, 50);
+        grid = bg.addnode("mapGrid.png").pos(MAP_INITX, MAP_INITY).size(5*MAP_OFFY, 6*MAP_OFFX).clipping(1);
+        grid.addsprite("mapGrid.png").color(100, 100, 100, 50);
+
         bg.prepare();
         init();
         var bSize = bg.size();
@@ -76,34 +78,53 @@ class Map extends MyNode
     我方放置 rx ry 0 0 ry+1
     0-12 0-4
     */
+    /*
     var myRx = 0;//++
     var myRy = 0;
     var eneRx = 12;//--
     var eneRy = 0;
+    */
+    function getKey(xk, yk)
+    {
+        return xk*10000+yk;
+    }
     function getInitPos(soldier)
     {
+        var yk;
+        var xk;
+        var key;
+        var val;
         if(soldier.color == 0)
         {
-            var p = getSolPos(myRx, myRy);
-            myRy++;
-            if(myRy == 5)
+            for(yk = 0; yk < 5; yk++)
             {
-                myRx++;
-                myRy = 0;
+                for(xk = 1; xk < 6; xk++)
+                {
+                    key = getKey(xk, yk);
+                    val = mapDict.get(key, []);
+                    if(len(val) == 0)
+                    {
+                        return getSolPos(xk, yk);
+                    }
+                }
             }
-            return p;
         }
         else
         {
-            p = getSolPos(eneRx, eneRy);
-            eneRy++;
-            if(eneRy == 5)
+            for(yk = 0; yk < 5; yk++)
             {
-                eneRx--;
-                eneRy = 0;
+                for(xk = 7; xk < 12; xk++)
+                {
+                    key = getKey(xk, yk);
+                    val = mapDict.get(key, []);
+                    if(len(val) == 0)
+                    {
+                        return getSolPos(xk, yk);
+                    }
+                }
             }
-            return p;
         }
+        return [-1, -1];
     }
     /*
     首先根据当前格子和方向 得到所有可能的冲突
@@ -250,20 +271,35 @@ class Map extends MyNode
             addChild(so);
             so.setPos(getInitPos(so)); 
             setMap(so);
-
-            //var soMap = getSolMap(so);
-            //trace("soldier", s[i], soMap);
-            /*
-            var myrow = soldiers.get(soMap[1], []);
-            soldiers.update(soMap[1], myrow);
-            myrow.append(so);
-            */
-
-
         }
         //trace("soldiers", soldiers);
         trace("allSoldiers", len(soldiers));
     }
+    /*
+    用户点击 下方block 则在地图上生成一个士兵
+    士兵位置第一个合理空位
+    士兵头顶有一个close icon 取消士兵
+    */
+    function addSoldier(sid)
+    {
+        var sdata = global.user.getSoldierData(sid);
+        var so = new Soldier(this, [0, sdata.get("id")]);
+        addChild(so);
+        so.setPos(getInitPos(so));
+        setMap(so);
+        return so;
+    }
+    function removeSoldier(so)
+    {
+        clearMap(so); 
+        so.removeSelf();
+    }
+    function clearSoldier(so)
+    {
+        removeSoldier(so);
+        scene.clearSoldier(so);
+    }
+    var defenses = [];
     function initDefense()
     {
         var defense = mapInfo.get(kind);
@@ -276,6 +312,7 @@ class Map extends MyNode
             row = soldiers.get(i);
             row.append(d);
         }
+        defenses.append(d);
 
         d = new MapDefense(this, 1, defense[1]);
         addChildZ(d, 0);
@@ -284,8 +321,13 @@ class Map extends MyNode
             row = soldiers.get(i);
             row.append(d);
         }
-
+        defenses.append(d);
     }
+    function getDefense(id)
+    {
+        return defenses[id];
+    }
+
     function update(diff)
     {
     }

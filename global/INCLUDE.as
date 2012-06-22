@@ -54,7 +54,12 @@ import views.ResourceBanner;
 
 
 import views.SoldierMenu;
+import views.DetailDialog;
 import views.ChildMenuLayer;
+import views.MailDialog;
+import views.GiftView;
+
+import views.BreakDialog;
 
 
 
@@ -93,11 +98,15 @@ import views.BattleScene;
 //闯关地图
 import views.Map;
 import views.Soldier;
+import views.Arrow;
+import views.Magic;
 import views.MoveObject;
+import views.MapPause;
 
 import views.MapDefense;
 
 import views.Loading;
+import views.LevupDialog;
 
 
 //菜单使用的按钮对象

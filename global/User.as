@@ -320,7 +320,7 @@ class User
     {
         return drugs;
     }
-    //oid, number
+    //kindId ownerid
     function getUseThing(kind, tid)
     {
         if(kind == EQUIP)
@@ -392,6 +392,7 @@ class User
      修改数据库
      通知所有注册的监听器
     */
+
     function buySomething(kind, id, cost)
     {
         doCost(cost);
@@ -444,7 +445,7 @@ class User
     {
         for(var i = 0; i < len(allSoldiers); i++)
         {
-            var sol = allSoldiers[u];
+            var sol = allSoldiers[i];
             clearSolMap(sol);
             sol.removeSelf();
         }

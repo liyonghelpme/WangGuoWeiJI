@@ -106,18 +106,20 @@ class BuildLayer extends MyNode
         solTimer = new Timer(200);
         super.enterScene();
         initSoldiers();
-        global.msgCenter.registerCallBack(RELIVE_SOL, this);
+        global.msgCenter.registerCallback(RELIVE_SOL, this);
     }
     /*
     注册消息类型------> MSG_ID------>对象 ------>参数[]
     */
-    function receivMsg(msg)
+    function receiveMsg(msg)
     {
+        trace("receiveMsg", msg);
         if(msg[0] == RELIVE_SOL)
         {
             var sdata = msg[1];
-            var soldier = new BusiSoldier(this, data, sdata[1]);
-            soldier.setSid(sdata[0]);
+            var data = getData(SOLDIER, sdata[1].get("id"));
+            var soldier = new BusiSoldier(this, data, sdata[1], sdata[0]);
+            //soldier.setSid(sdata[0]);
             addChildZ(soldier, MAX_BUILD_ZORD);
             global.user.addSoldier(soldier);
         }
@@ -251,8 +253,8 @@ class BuildLayer extends MyNode
             var data = getData(SOLDIER, sdata.get("id"));
             if(sdata.get("dead", 0) == 1)//死亡士兵不显示
                 continue;
-            var soldier = new BusiSoldier(this, data, sdata);
-            soldier.setSid(sid);
+            var soldier = new BusiSoldier(this, data, sdata, sid);
+            //soldier.setSid(sid);
             addChildZ(soldier, MAX_BUILD_ZORD);
             global.user.addSoldier(soldier);
         }
@@ -331,6 +333,9 @@ class CastlePage extends MyNode
         addChild(dialogController);
         dialogController.addCmd(dict([["cmd", "login"]]));
         dialogController.addCmd(dict([["cmd", "rate"]]));
+        dialogController.addCmd(dict([["cmd", "levup"]]));
+        dialogController.addCmd(dict([["cmd", "victory"]]));
+        dialogController.addCmd(dict([["cmd", "fail"]]));
 
         //touchDelegate.enterScene();
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -367,8 +372,8 @@ class CastlePage extends MyNode
     }
     function buySoldier(id)
     {
-        var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id), null);
-        newSol.setSid(global.user.getNewSid());
+        var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id), null, global.user.getNewSid());
+        //newSol.setSid(global.user.getNewSid());
         buildLayer.addSoldier(newSol);
         global.user.updateSoldiers(newSol);
         return newSol;

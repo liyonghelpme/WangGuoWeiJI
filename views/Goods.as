@@ -85,7 +85,7 @@ class Goods extends MyNode
                     消耗图片采用 消耗资源的名字
                     消耗数值 
                     */
-                    var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50);  
+                    var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50).size(30, 30);  
                     var cNum = panel.addlabel(str(valNum), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
             }
