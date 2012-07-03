@@ -12,14 +12,14 @@ class LoginDialog extends MyNode
     [CRYSTAL, "crystalBig.png"],
     ]);
     const POS = [[97, 229], [233, 229], [369, 229]];
-    const WORDS = [[108, 174], [241, 174], [375, 174]];
+    const WORDS = [[108, 174], [241, 174], [375, 174], [504, 174]];
     const REWARD = [[97, 263], [233, 263], [369, 263]];
     function LoginDialog()
     {
         bg = sprite("dialogLoginBack.png").size(global.director.disSize[0], global.director.disSize[1]);
         init();
         var dia = bg.addsprite("dialogLogin.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);  
-        dia.addsprite("close2.png").pos(580, 31).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        dia.addsprite("roleNameClose.png").pos(580, 31).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         var but0 = dia.addsprite("roleNameBut1.png").pos(61, 354).size(209, 61).setevent(EVENT_TOUCH, closeDialog);
         but0.addlabel(getStr("nextTime", null), null, 25).pos(104, 30).anchor(50, 50);
         but0 = dia.addsprite("roleNameBut0.png").pos(323, 354).size(209, 61).setevent(EVENT_TOUCH, shareGift);
@@ -40,6 +40,9 @@ class LoginDialog extends MyNode
             loginDays %= len(reward);
             now += 1;
         }
+        dia.addlabel(str(now), null, 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);        
+        dia.addsprite("loginQuestionMark.png").pos(495, 203).anchor(50, 0);
+
 
     }
     function closeDialog()

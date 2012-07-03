@@ -221,7 +221,6 @@ class ChildMenuLayer extends MyNode
     {
         scene.ml.cancelAllMenu();
         global.director.pushView(new RankDialog(), 1, 0);
-        //global.director.pushView(new GloryDialog());
     }
     function onRole()
     {
@@ -231,7 +230,7 @@ class ChildMenuLayer extends MyNode
     function onSetting()
     {
         scene.ml.cancelAllMenu();
-        global.director.pushView(new SettingDialog());
+        global.director.pushView(new SettingDialog(), 1, 0);
     }
     function onStore()
     {

@@ -1,5 +1,6 @@
 class BusiSoldier extends MyNode
 {
+    var isBuilding = 0;
     /*
     和建筑物应该在同一个图层上面 这样有正常的遮挡关系
     */
@@ -29,36 +30,118 @@ class BusiSoldier extends MyNode
 
     var attack;
     var defense;
+    var attSpeed;
+    var attRange;
+    
     var exp;
     var dead;
     var level;
     const showSize = 50;
 
+    var recoverSpeed;
+    //当前只有士兵才有特征色
+    //var featureColor;
+    //var featureMov;
+
+
     /*
     需要在行走的时候开始动画
     updateMap 是view相关数据是由动作生成的
+    战斗页面生命值不能回复 只有在经营页面生命值才回复
+    用户在游戏中 才回复 还是 上次回复的时间计算生命值回复时间
+    战斗中不会计算生命值回复
+
+    生命值上限 由 基础职业+等级增加+装备
+
+    等级分成两种：
+    职业等级
+    普通等级
+
+    攻击速度1500 慢 1000 中等 500 快
     */
     function initData(privateData)
     {
         if(privateData == null)
             privateData = dict();
-        health = privateData.get("health", 0); 
-        healthBoundary = privateData.get("healthBoundary", 0); 
-        attack = privateData.get("attack", 0); 
-        defense = privateData.get("defense", 0); 
+
+        level = privateData.get("level", 0);
+        setHealthBoundary();
+        //healthBoundary = data.get("health")+level*data.get("addHealth");
+        health = privateData.get("health", healthBoundary);//新购买的士兵生命值满 
+        
+        //healthBoundary = privateData.get("healthBoundary", 0); 
+
+
+        //attack = privateData.get("attack", 0); 
+        //defense = privateData.get("defense", 0); 
         exp = privateData.get("exp", 0);
         dead = privateData.get("dead", 0);
-        level = privateData.get("level", 0);
+        
+        initAttackAndDefense();
+        recoverSpeed = data.get("recoverSpeed")*1000;
+
+        attSpeed = data.get("attSpeed");
+        attRange = data.get("range");
     }
+    var recoverTime = 0;
+    function initAttackAndDefense()
+    {
+        attack = data.get("attack")+level*data.get("addAttack");
+        defense = data.get("defense")+level*data.get("addDefense");
+        
+        var equips = global.user.getSoldierEquip(sid);
+        for(var i = 0; i < len(equips); i++)
+        {
+            var e = getData(EQUIP, equips[i]);
+            attack += e.get("attack");
+            defense += e.get("defense");
+        }
+    }
+
+    //攻击药水 防御药水 在闯关的1个回合中暂时提升士兵能力
+    function useDrug(tid)
+    {
+        var dd = getData(DRUG, tid);    
+        health += dd.get("health");
+        health = min(healthBoundary, health);
+        //exp += dd.get("exp");
+        changeExp(dd.get("exp"));
+        global.user.updateSoldiers(this);
+    }
+    //参数  -1 表示去掉某件装备
+    //其它表示 装备某个类型的装备
+    function useEquip(tid)
+    {
+        initAttackAndDefense();
+        global.user.updateSoldiers(this);
+    }
+    /*
+    计算士兵的转职需要等级 但是怪兽不能转职100-190
+    士兵0-90 可以转职 0 1 2 3
+    */
+    function getTransferLevel()
+    {
+        var proLevel = id%10;
+        if(proLevel < 3 && id < 100)
+        {
+            return (proLevel+1)*5;
+        }
+        return 0;
+    }
+
     function updateStaticData(d)
     {
         data = d;
         id = data.get("id");
-        load_sprite_sheet("soldierm"+str(id)+".plist");
-        bg.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png");
+        var colStr = "red";
+        load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
+        changeDirNode.texture("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png");
         if(movAni != null)
+        {
             movAni.stop();
-        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
+            //featureMov.stop();
+        }
+        movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
 
     }
     //杀死该士兵后
@@ -69,35 +152,48 @@ class BusiSoldier extends MyNode
         global.user.updateSoldiers(this);//更新死亡状态
         map.removeChild(this); 
     }
+    //闯关页面士兵死亡  经营页面 在进入场景的时候会根据数据重新生成士兵
+
     function doTrain()
     {
-        killMonster();
+        //killMonster();
     }
+    var changeDirNode;
+    /*
+    所有和bg 相关的 需要改变方向的需要修改成changeDirNode
+    改变纹理的movAni
+    改变方向的setDir
+    改变位置的shift不变
+    添加子节点不变
+    */
     function BusiSoldier(m, d, privateData, s)
     {
         sid = s;
         data = d;
         map = m;
         id = data.get("id");
-        load_sprite_sheet("soldierm"+str(id)+".plist");
-        bg = sprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").pos(465, 720).anchor(50, 100).scale(showSize, showSize);
+        var colStr = "red";
+        load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
+
+        bg = node().scale(showSize);
         init();
-        bg.prepare();
-        var bSize = bg.size();
-        shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
-        bg.add(shadow, -1);
+        changeDirNode = bg.sprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+
+        var bSize = changeDirNode.prepare().size();
+        bg.size(bSize).anchor(50, 100).pos(465, 720);
+        changeDirNode.pos(bSize[0]/2, bSize[1]);
+
+        shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
+
+        changeDirNode.add(shadow, -1);
         initData(privateData);
 
 
         var nPos = normalizePos(bg.pos(), sx, sy);
         setPos(nPos);
         curMap = global.user.updateMap(this);
-        //mobj = new MoveObject();
-        //mobj.speed = 5;
-        //var ani = getMoveAnimate(id);
-        //cus = new MyAnimate(ani[1], ani[0], bg);
 
-        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
+        movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
         if(privateData != null)
             myName = privateData.get("name", "");
@@ -115,7 +211,7 @@ class BusiSoldier extends MyNode
     }
     function doSell()
     {
-        global.director.pushView(new SellDialog(this));
+        global.director.pushView(new SellDialog(this), 1, 0);
     }
     function sureToSell()
     {
@@ -134,10 +230,45 @@ class BusiSoldier extends MyNode
         inspireTime = 0;
         inspirePic.removefromparent();
         inspirePic = null;
-        exp += 100;
+        //exp += 100;
+        changeExp(10);
         global.user.updateSoldiers(this);
         var nPos = bg.node2world(0, -10);
         global.director.curScene.addChild(new TrainBanner(nPos, 100));
+    }
+    /*
+    被其它内部函数调用 更新士兵数据库 由其它函数进行
+    士兵的bg 应该和changeDirNode 区分开来
+    */
+    function setHealthBoundary()
+    {
+        healthBoundary = data.get("health")+level*data.get("addHealth");
+    }
+    function changeExp(add)
+    {
+        exp += add;
+        var ne = getLevelNeedExp(data.get("expId"), level);
+        if(exp >= ne)
+        {
+            for(; 1; )
+            {
+                var ne = getLevelNeedExp(data.get("expId"), level);
+                if(exp >= ne)
+                {
+                    exp -= ne;
+                    level += 1;
+                }
+                else 
+                    break;
+            }
+            setHealthBoundary();
+            health = healthBoundary;
+        }
+
+        var temp = bg.addnode();
+        temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
+        temp.addlabel("+"+str(add), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
 
     /*
@@ -147,13 +278,11 @@ class BusiSoldier extends MyNode
     */
     function doTransfer()
     {
-        var needExp = data.get("needExp");
-        var level = id%10;
-        if(exp >= needExp && level < 3)
+        var proLevel = id%10;
+        if(proLevel < 3 && (proLevel+1)*5 <= level && id < 100)//每5级可以转职一次
         {
         //改变形象bg  改变数据 id 
             id += 1;
-            exp = 0;
             var d = getData(SOLDIER, id);
             updateStaticData(d);
             global.user.updateSoldiers(this);
@@ -218,22 +347,14 @@ class BusiSoldier extends MyNode
         //trace("curMap", map, curPos);
         map = [map[2], map[3]];
         var allPos = [
-            [map[0]+0, map[1]+-4],
-            [map[0]+-1, map[1]+-3],
-            [map[0]+-2, map[1]+-2],
-            [map[0]+-3, map[1]+-1],
-            [map[0]+-4, map[1]+0],
-            [map[0]+-3, map[1]+1],
-            [map[0]+-2, map[1]+2],
-            [map[0]+-1, map[1]+3],
-            [map[0]+0, map[1]+4],
-            [map[0]+1, map[1]+3],
-            [map[0]+2, map[1]+2],
-            [map[0]+3, map[1]+1],
-            [map[0]+4, map[1]+0],
-            [map[0]+3, map[1]+-1],
-            [map[0]+2, map[1]+-2],
-            [map[0]+1, map[1]+-3],
+            [map[0]+0, map[1]+-2],
+            [map[0]+-1, map[1]+-1],
+            [map[0]+-2, map[1]+0],
+            [map[0]+-1, map[1]+1],
+            [map[0]+0, map[1]+2],
+            [map[0]+1, map[1]+1],
+            [map[0]+2, map[1]+0],
+            [map[0]+1, map[1]+-1],
         ];
         var start = rand(len(allPos));
         var moveable = 0;
@@ -268,9 +389,9 @@ class BusiSoldier extends MyNode
     {
         var difx = tar[0] - bg.pos()[0];
         if(difx < 0)
-            bg.scale(showSize, showSize);
+            changeDirNode.scale(showSize, showSize);
         else
-            bg.scale(-showSize, showSize);
+            changeDirNode.scale(-showSize, showSize);
     }
     function showInspire()
     {
@@ -283,8 +404,32 @@ class BusiSoldier extends MyNode
     var inspireTime = 0;
     //士兵当前占用的map映射格子 
     var curMap = null;
+    function doMove()
+    {
+        shiftAni.stop();
+        var oldPos = bg.pos();
+        setPos(oldPos);
+        var dist = distance(bg.pos(), tar);
+        if(oldPos[0] == tar[0] && oldPos[1] == tar[1])
+        {
+            movAni.stop();
+            //featureMov.stop();
+            state = SOL_FREE;
+            return;
+        }
+        var t = dist*100/speed;
+        shiftAni = moveto(t, tar[0], tar[1]);
+        bg.addaction(shiftAni);
+    }
     function update(diff)
     {
+        recoverTime += diff;
+        if(recoverTime >= recoverSpeed)
+        {
+            health += 1;
+            health = min(health, healthBoundary);
+            recoverTime = 0;
+        }
         if(inspire == 0)
         {
             inspireTime += diff;
@@ -294,6 +439,10 @@ class BusiSoldier extends MyNode
                 showInspire();
             }
         }
+
+        if(showMenuYet == 1)//显示全局菜单停止移动
+            return;
+
         if(state == SOL_FREE)
         {
             tar = getTar();
@@ -303,30 +452,15 @@ class BusiSoldier extends MyNode
                 state = SOL_MOVE; 
                 global.user.clearMap(this);
                 curMap = global.user.updatePosMap([sx, sy, tar[0], tar[1], this]);
-                //cus.enterScene();
-                bg.addaction(movAni);
+                changeDirNode.addaction(movAni);
+                //featureColor.addaction(featureMov);
                 setDir();
+                doMove();
             }
         }
         else if(state == SOL_MOVE)
         {
-            shiftAni.stop();
-            //var all = mobj.moveToTar(bg.pos(), tar, diff);
-            var oldPos = bg.pos();
-            //setPos([oldPos[0]+all[0], oldPos[1]+all[1]]);
-            setPos(oldPos);
-            var dist = distance(bg.pos(), tar);
-            if(oldPos[0] == tar[0] && oldPos[1] == tar[1])
-            {
-                movAni.stop();
-                state = SOL_FREE;
-                return;
-            }
-            var t = dist*100/speed;
-            //trace("moveTime", t);
-            shiftAni = moveto(t, tar[0], tar[1]);
-            bg.addaction(shiftAni);
-            //state= SOL_WAIT;
+            doMove();
         }
         //休息一段时间
         else if(state == SOL_WAIT)
@@ -342,12 +476,6 @@ class BusiSoldier extends MyNode
     override function exitScene()
     {
         map.solTimer.removeTimer(this);
-        /*
-        if(cus != null)
-        {
-            cus.exitScene();
-        }
-        */
         super.exitScene();
     }
     override function setPos(p)

@@ -47,6 +47,7 @@ import views.RoleName;
 import views.SoldierStore;
 import views.BusiSoldier;
 import views.TrainBanner;
+import views.ProfessionIntroDialog;
 
 //成功提示
 import views.SucBanner;
@@ -76,6 +77,9 @@ import views.SellDialog;
 import views.AccDialog;
 import views.FriendDialog;
 
+import views.FlowScene;
+import views.FlowMenu;
+
 
 
 import views.GloryDialog;
@@ -98,6 +102,9 @@ import views.BattleScene;
 //闯关地图
 import views.Map;
 import views.Soldier;
+import views.CloseSoldier;
+import views.CloseAttackEffect;
+
 import views.Arrow;
 import views.Magic;
 import views.MoveObject;
@@ -114,6 +121,7 @@ import views.Button;
 import global.MessageCenter;
 
 
+import global.SensorController;
 import global.Director;
 import global.Controller;
 import views.QuitBanner;
@@ -126,8 +134,10 @@ import global.TouchManager;
 import util.Util;
 
 import global.Global;
-import data.String;
+//import data.String;
+import data.constant;
 import data.Static;
+
 
 import data.String;
 
@@ -140,6 +150,7 @@ global.myAction = new MyAction();
 
 //global.staticScene = new CastleScene();
 global.user = new User();
+global.sensorController = new SensorController();
 
 
 

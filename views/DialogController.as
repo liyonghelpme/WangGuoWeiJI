@@ -32,10 +32,12 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "levup")
                     global.director.pushView(new LevupDialog(), 1, 0);
+                /*
                 else if(curCmd.get("cmd") == "victory")
                     global.director.pushView(new BreakDialog(1, 2, dict()), 1, 0);
                 else if(curCmd.get("cmd") == "fail")
                     global.director.pushView(new BreakDialog(0, 0, dict()), 1, 0);
+                */
             }
         }
     }

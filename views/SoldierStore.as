@@ -181,7 +181,7 @@ class SoldierStore extends MyNode
                 if(buyable.get("ok") == 0)
                 {
                     c = [100, 0, 0];
-                    canBuy = 0;
+                    //canBuy = 0;
                 }
                 /*
                 消耗图片采用 消耗资源的名字
@@ -192,7 +192,9 @@ class SoldierStore extends MyNode
 
             }
                 
-
+            /*
+            canBuy 只表示等级是否足够
+            */
             panel.addlabel(data.get("name"), null, 20).pos(71, 25).anchor(50, 50).color(0, 0, 0);
             panel.put([id, canBuy]);
         }
@@ -229,22 +231,56 @@ class SoldierStore extends MyNode
             if(child != null)
             {
                 var idCan = child.get(); 
-                var cost = getCost(SOLDIER, idCan[0]);
-                var buyable = global.user.checkCost(cost);
+                if(idCan[1] == 1)//等级足够显示职业介绍
+                {
+                    global.director.pushView(new ProfessionIntroDialog(this, idCan[0]), 1, 0);
+                }
+                //等级不足不做响应
+
+                //var cost = getCost(SOLDIER, idCan[0]);
+                //var buyable = global.user.checkCost(cost);
+                /*
+                资源和等级 满足条件
+                soldierId  canBuy
+                */
+                /*
                 if(buyable.get("ok") == 0)
                 {
                     var resB = new ResourceBanner(buyable, 412, 255);
                     addChildZ(resB, 1);
                 }
-                if(idCan[1] == 1)
+                else if(idCan[1] == 1)
                 {
                     scene.buySoldier(idCan[0]);
                     var sucB = new SucBanner();
                     sucB.setPos([412, 255]);
                     addChildZ(sucB, 1);
                 }
+                */
             }
         }
+        var curPos = flowNode.pos();
+        var cols = -len(data)*OFFX+WIDTH;
+        curPos[0] = max(cols, min(0, curPos[0]));
+        flowNode.pos(curPos);
+        updateTab();
+    }
+    function buySoldier(id)
+    {
+        var cost = getCost(SOLDIER, id);
+        var buyable = global.user.checkCost(cost);
+        if(buyable.get("ok") == 0)
+        {
+            var resB = new ResourceBanner(buyable, 412, 255);
+            addChildZ(resB, 1);
+            return;
+        }
+
+        scene.buySoldier(id);
+        var sucB = new SucBanner();
+        sucB.setPos([412, 255]);
+        addChildZ(sucB, 1);
+
         var curPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;
         curPos[0] = max(cols, min(0, curPos[0]));

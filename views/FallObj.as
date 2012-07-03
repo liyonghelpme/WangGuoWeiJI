@@ -6,11 +6,15 @@ class FallObj extends MyNode
     var sx = 1;
     var sy = 1;
     var curMap = null;
+    /*
+    背后的大bg 的anchor 决定了内部奖励物品图片的位置
+    进行zord的计算进行比较
+    */
     function FallObj(m,k, rx, ry){
         map = m;
         kind = k;
         curMap = [rx, ry];
-        bg = node().size(100, 100).anchor(50, 100);
+        bg = node().size(100, 100).anchor(50, 80).scale(60);
         init();
         obj = bg.addsprite("goods"+str(k)+".png").anchor(50,50).size(30,30).pos(50, 50);
         var shadow = sprite("roleShadow.png").anchor(50, 50).pos(15, 30).size(39, 19);

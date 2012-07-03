@@ -27,6 +27,8 @@ class MapBanner extends MyNode
             }
         }
     }
+    var leftArr;
+    var rightArr;
     function MapBanner(sc)
     {
         scene = sc;
@@ -39,12 +41,16 @@ class MapBanner extends MyNode
         cl = bg.addnode().pos(103, 451).size(CLIP_WIDTH, CLIP_HEIGHT).clipping(1).anchor(0, 100);
         flowNode = cl.addnode().pos(0, CLIP_HEIGHT);
 
-        bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(57, 411).scale(-100, 100).setevent(EVENT_TOUCH, onMove, -1);
-        bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(754, 411).setevent(EVENT_TOUCH, onMove, 1);
+        leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(57, 411).scale(-100, 100).setevent(EVENT_TOUCH, onMove, 1);
+        rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(754, 411).setevent(EVENT_TOUCH, onMove, -1);
 
+        /*
         cl.setevent(EVENT_TOUCH, touchBegan);
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
+        */
+        //updateTab();
+        onMove(null, null, 0, null, null, null);
     }
     var lastPoints;
     var accMove;
@@ -79,6 +85,14 @@ class MapBanner extends MyNode
     function touchEnded(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
+        var sid = p;
+        controlSoldier = scene.map.addSoldier(sid);
+        //士兵没有位置放置所以失败
+        if(controlSoldier == null)
+            return;
+
+        data.remove(sid);
+        /*
         if(accMove < 10)
         {
             var child = checkInChild(flowNode, lastPoints);
@@ -89,15 +103,17 @@ class MapBanner extends MyNode
                 data.remove(sid);
             }
         }
+        */
         var curPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;
-        curPos[0] = max(cols, min(0, curPos[0]));
+        curPos[0] = min(0, max(cols, curPos[0]));
         flowNode.pos(curPos);
         updateTab();
     }
     function clearSoldier(so)
     {
         var sid = so.sid;
+        trace("soldier clear", sid);
         data.append(sid);
         updateTab();
     }
@@ -108,6 +124,7 @@ class MapBanner extends MyNode
         var lowCol = -oldPos[0]/OFFX;
         var upCol = (-oldPos[0]+WIDTH+OFFX-1)/OFFX;
         var total = len(data);
+        trace("getRange", data);
         return [max(0, lowCol-1), min(upCol+1, total)];
 
     }
@@ -120,24 +137,32 @@ class MapBanner extends MyNode
         var rg = getRange();
         for(var i = rg[0]; i < rg[1]; i++)
         {
-            var panel = flowNode.addsprite("mapMenuBlock.png").pos(i*OFFX, 0).anchor(0, 100);
+            var panel = flowNode.addsprite("mapMenuBlock.png").pos(i*OFFX, 0).anchor(0, 100).setevent(EVENT_TOUCH, touchEnded, data[i]);
             var sdata = global.user.getSoldierData(data[i]);
-            panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(40, 76).anchor(50, 100);
-            panel.addlabel(sdata.get("name"), null, 25).pos(61, 20).color(0, 0, 0);
+            trace("soldierData", sdata, data[i], i);
+            panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(40, 76).anchor(50, 100).scale(-100, 100);
+            panel.addlabel(sdata.get("name"), null, 18).pos(61, 40).color(0, 0, 0);
             panel.put(data[i]);
         }
     }
+    //-1 0 1
     function onMove(n, e, p, x, y, points)
     {
         var oldPos = flowNode.pos();
-        if(p == 1)
-            oldPos[0] += ITEM_NUM*OFFX;
-        else
-            oldPos[0] -= ITEM_NUM*OFFX;
+        oldPos[0] += p*ITEM_NUM*OFFX;
 
         var total = len(data);
-        oldPos[0] = max(-total*OFFX+WIDTH, min(0, oldPos[0])); 
+        oldPos[0] = min(0, max(-total*OFFX+WIDTH, oldPos[0])); 
         flowNode.pos(oldPos);
+        if(oldPos[0] >= 0)
+            leftArr.texture("mapMenuArr.png", GRAY);    
+        else
+            leftArr.texture("mapMenuArr.png");    
+
+        if(oldPos[0] <= (-total*OFFX+WIDTH))
+            rightArr.texture("mapMenuArr.png", GRAY);    
+        else   
+            rightArr.texture("mapMenuArr.png");    
         updateTab();
     }
     function onOk()
@@ -146,6 +171,7 @@ class MapBanner extends MyNode
     }
     function onCancel()
     {
+        global.director.popScene();
     }
 }
 /*
@@ -172,11 +198,12 @@ class BattleScene extends MyNode
     */
 
     var pausePage;
-    function BattleScene(k, s)
+    //big small soldierData
+    function BattleScene(k, sm, s)
     {
         bg = node();
         init();
-        map = new Map(k, s, this);
+        map = new Map(k, sm, s, this);
         addChild(map);
         banner = new MapBanner(this);
         addChild(banner);
@@ -184,10 +211,20 @@ class BattleScene extends MyNode
     function finishArrage()
     {
         banner.removeSelf();
+        banner = null;
         map.finishArrage();
         pausePage = new MapPause(this);
         addChild(pausePage);
     }
+    function stopGame()
+    {
+        map.stopGame();
+    }
+    function continueGame()
+    {
+        map.continueGame();
+    }
+
     function clearSoldier(so)
     {
         banner.clearSoldier(so);

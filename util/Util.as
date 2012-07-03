@@ -191,6 +191,7 @@ function getBuildGain(id)
 var dataPool = dict();
 function getData(kind, id)
 {
+    trace("getData", kind, id);
     var key = kind*100000+id;
     var ret = dataPool.get(key, null);
     if(ret == null)
@@ -203,6 +204,10 @@ function getData(kind, id)
         {
             if(k[i] == "name")
                 ret.update(k[i], getStr(datas[i], null));
+            else if(k[i] == "title" || k[i] == "des")//任务的描述字符串 配方的描述字符串 药材矿石的描述字符串
+            {
+                ret.update(k[i], getStr(datas[i], null));
+            }
             else
                 ret.update(k[i], datas[i]);
         }
@@ -459,37 +464,8 @@ function getBSD(level)
     return [big+1, small, difficult];
 }
 */
-const PassDifficult = 4;
+const PassDifficult = 0;
 //1-5
-/*
-function getBigEnable(big)
-{
-    var star = global.user.getValue("starNum");
-    big -= 1;
-    if(big == 0)
-        return 1;
-    big -= 1;
-    var starPos = big*6*10+5*10+PassDifficult;
-    if(star[starPos] != 0)
-        return 1;
-    return 0;
-}
-function getSmallEnable(big, small)
-{
-    var be = getBigEnable(big);
-    if(be == 0)
-        return 0;
-    var star = global.user.getValue("starNum");
-    big -= 1;
-    if(small == 0)
-        return 1;
-    small -= 1
-    var starPos = big*6*10+small*10+PassDifficult;
-    if(star[starPos] != 0)
-        return 1;
-    return 0;
-}
-*/
 /*
 计算大地图当前开启的大关 小关
 */
@@ -570,12 +546,6 @@ function getBuildFunc(id)
 {
     return buildFunc.get(id);   
 }
-/*
-function getSoldierFunc(id)
-{
-    return soldierFunc;   
-}
-*/
 function getZord(curPos)
 {
     return curPos[1];
@@ -652,29 +622,47 @@ function getMapAnimate(id)
     return res;
 }
 
+
 /*
-获得某个士兵地图格子映射
+获得某个士兵地图格子映射 50 100 2*2
 x 1 - 11     1-5  7-11
 y 0 - 4  
+返回左上角的格子编号
 */
-function getSolMap(p)
+function getSolMap(p, sx, sy)
 {
-    var ix = p[0]-MAP_INITX-MAP_OFFX/2;
+    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
     var xk = ix/MAP_OFFX;
-    var iy = p[1]-MAP_INITY-MAP_OFFY;
+    var iy = p[1]-MAP_INITY-MAP_OFFY*sy;
     var yk = iy/MAP_OFFY;
 
     return [xk, yk];
 }
-function getPosSolMap(p)
-{
-    var ix = p[0]-MAP_INITX;
-    var k = ix/MAP_OFFX;
-    var xk = min(MAP_WIDTH, max(0, k));
+/*
+根据手指的位置计算相应的 网格编号
+一个大型士兵有2*2个网格 得到的是 左下角的网格
+位置是 anchor 50 100 位置
 
-    var iy = p[1]-MAP_INITY;
-    k = iy/MAP_OFFY;
-    var yk = min(MAP_HEIGHT, max(0, k));
+放置士兵的时候
+士兵移动的时候
+士兵的zord
+
+限制当前网格的位置 左上角 右下角 超出边界则消失
+
+返回左上角网格的编号
+
+手指点击士兵网格的中心
+
+*/
+function getPosSolMap(p, sx, sy)
+{
+    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
+    var xk = ix/MAP_OFFX;
+    //var xk = min(MAP_WIDTH-sx, max(0, k));
+
+    var iy = p[1]-MAP_INITY-MAP_OFFY/2*sy;
+    var yk = iy/MAP_OFFY;
+    //var yk = min(MAP_HEIGHT-sy, max(0, k));
 
     return [xk, yk];
 }
@@ -683,7 +671,8 @@ function getPosSolMap(p)
 返回士兵需要的对齐坐标
 限制坐标的范围
 */
-function normalizeSoldierPos(p)
+/*
+function normalizeSoldierPos(p, sx, sy)
 {
     var ix = p[0]-MAP_INITX;
     var k = ix/MAP_OFFX;
@@ -696,16 +685,19 @@ function normalizeSoldierPos(p)
     iy = k*MAP_OFFY + MAP_INITY+MAP_OFFY;
     return [ix, iy];
 }
+*/
+
 /*
 由格子计算士兵的坐标
 */
 //0-12 0-4
-function getSolPos(mx, my)
+function getSolPos(mx, my, sx, sy)
 {
-    mx = mx*MAP_OFFX+MAP_OFFX/2+MAP_INITX;
-    my = my*MAP_OFFY+MAP_OFFY+MAP_INITY;
+    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
+    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY;
     return [mx, my];
 }
+
 /*
 计算到某个等级需要的所有经验
 */
@@ -745,4 +737,41 @@ function getCurLevelAllTask(level)
     res = fin + notFin;
     trace("curLevelAllTask", level, res);
     return res;
+}
+function getSca(n, box)
+{
+    var nSize = n.prepare().size();
+    var sca = min(box[0]*100/nSize[0], box[1]*100/nSize[1]);
+    sca = max(min(150, sca), 50);
+    return sca;
+}
+function removeTempNode(n)
+{
+    n.removefromparent();
+}
+//0  近战--->远程
+//1 远程---> 魔法师
+//2 魔法师--->克制近战
+var soldierKindCoff = dict([
+[1, 120],
+[1002, 120],
+[2000, 120],
+]);
+//attacker defenser
+function getSoldierKindCoff(attKind, defKind)
+{
+    var key = attKind*1000+defKind;
+    return soldierKindCoff.get(key, 100);
+}
+function getRandomMapReward(big, small)
+{
+    var reward = smallMapInfoData.get(big*1000+small);
+    trace("small reward", reward);
+    return [reward[0][0], reward[1][0]];
+}
+function getLevelNeedExp(expId, level)
+{
+    var needExp = soldierLevelExp.get(expId);
+    var ne = needExp[min(len(needExp)-1, level)];
+    return ne;
 }

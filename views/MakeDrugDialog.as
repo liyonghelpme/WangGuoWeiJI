@@ -184,7 +184,7 @@ class Herb extends MyNode
             if(num == 0)
                 co = [99, 42, 47];
             panel.addlabel(str(num), null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
-            panel.addlabel("desc", null, 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
+            panel.addlabel(data.get("des"), null, 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
             trace("initHerb", num);
         }
     }

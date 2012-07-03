@@ -30,9 +30,43 @@ class CastleScene extends MyNode
         global.staticScene = this;
         bg.setevent(EVENT_KEYDOWN, quitGame);
         bg.focus(1);
+        //c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
+        global.sensorController.addCallback(this);
     }
+    var realDisappear = 0;
+    var inSen = 0;
+    function senBegan(acc)
+    {
+    }
+    function senDone(acc)
+    {
+        if(inSen == 0)
+        {
+            if(acc > 20000)
+            {
+                if(realDisappear == 0 && inHide == 0)
+                {
+                    realDisappear = 1;
+                    ml.hideMenu(0);
+                }
+                else if(realDisappear == 1)
+                {
+                    realDisappear = 0;
+                    ml.showMenu(0);
+                }
+                inSen = 1;
+            }
+        }
+    }
+    function senEnded(acc)
+    {
+        inSen = 0;
+    }
+
     override function exitScene()
     {
+        global.sensorController.removeCallback(this);
+        //c_sensor(SENSOR_ACCELEROMETER);
         bg.setevent(EVENT_KEYDOWN, null);
         global.staticScene = null;
         global.timer.removeTimer(this);
@@ -45,7 +79,7 @@ class CastleScene extends MyNode
         Planing = 1;
         global.user.buildKeepPos();
         planView = new BuildMenu(this, null);
-        global.director.pushView(planView);
+        global.director.pushView(planView, 1, 0);
     }
     function finishPlan()
     {
@@ -55,6 +89,14 @@ class CastleScene extends MyNode
             return;
         global.user.finishPlan();
         closePlan();
+    }
+    function disableMenu()
+    {
+        ml.beginBuild();
+    }
+    function enableMenu()
+    {
+        ml.finishBuild();
     }
     function onSell()
     {
@@ -149,22 +191,23 @@ class CastleScene extends MyNode
     function clearHideTime()
     {
         hideTime = 0;
-        if(inHide == 1)
+        if(inHide == 1 && realDisappear == 0)//not disappear
         {
             inHide = 0;
-            ml.showMenu();
+            ml.showMenu(1000);
         }
     }
+
     function update(diff)
     {
         hideTime += diff;
         if(hideTime >= 10000)
         {
             hideTime = 0;
-            if(inHide == 0)
+            if(inHide == 0 && realDisappear == 0)//not disappear
             {
                 inHide = 1;
-                ml.hideMenu();
+                ml.hideMenu(1000);
             }
         }
     }
@@ -180,15 +223,14 @@ class CastleScene extends MyNode
         //ml = null;
         ml.beginBuild();   
         curBuild = mc.beginBuild(building);
-        global.director.pushView(new BuildMenu(this, building));
+        global.director.pushView(new BuildMenu(this, building), 1, 0);
     }
     function buySoldier(id)
     {
-
         var cost = getCost(SOLDIER, id);
         global.user.doCost(cost);
         var sol = mc.buySoldier(id);
-        global.director.pushView(new RoleName(this, sol));
+        global.director.pushView(new RoleName(this, sol), 1, 0);
     }
     function nameSoldier(sol, name)
     {

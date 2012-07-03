@@ -1,25 +1,16 @@
-class Goods extends MyNode
+/*
+非全屏对话框 使用 roleNameClose png
+全屏对话框使用close2 png
+*/
+class Template extends MyNode
 {
-    var goodNum;
-    var flowNode;
-    function Goods()
+    function Template()
     {
         bg = node().pos(261, 129).size(500, 325);
-        flowNode = bg.addnode();
         init();
-        goodNum = [];
-        flowNode.setevent(EVENT_TOUCH, touchBegan);
-        flowNode.setevent(EVENT_MOVE, touchMoved);
-        flowNode.setevent(EVENT_UNTOUCH, touchEnded);
     }
-    function touchBegan(n, e, p, x, y, points)
+    function closeDialog()
     {
-    }
-    function touchMoved(n, e, p, x, y, points)
-    {
-        
-    }
-    function touchEnded(n, e, p, x, y, points)
-    {
+        global.director.popView();
     }
 }

@@ -9,10 +9,10 @@ class Cloud extends MyNode
         init();
         if(k == 2 || k == 5)
             bg.addaction(sequence(
-                    moveto(10000+rand(3000), 3000, 0), callfunc(remove)));
+                    moveto(30000+rand(3000), 3000, 0), callfunc(remove)));
         else
             bg.addaction(sequence(
-                    moveto(20000+rand(3000), 3000, 0), callfunc(remove)));
+                    moveto(50000+rand(3000), 3000, 0), callfunc(remove)));
     }
     function remove()
     {
@@ -244,12 +244,14 @@ class BuildLayer extends MyNode
     */
     function initSoldiers()
     {
+        trace("initSoldiers");
         //id name
         var item = global.user.soldiers.items(); 
         for(var i = 0; i < len(item); i++)
         {
             var sid = item[i][0];
             var sdata = item[i][1];
+            trace("initSol", sid, sdata);
             var data = getData(SOLDIER, sdata.get("id"));
             if(sdata.get("dead", 0) == 1)//死亡士兵不显示
                 continue;
@@ -303,8 +305,8 @@ class CastlePage extends MyNode
 
 
         bg.addsprite("flow0.png").pos(0, 48);
-        bg.addsprite("flow2.png").pos(1650, 45).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
-        bg.addsprite("flow1.png").pos(2352, 13).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
+        bg.addsprite("flow1.png").pos(1650, 25).setevent(EVENT_TOUCH, goFlow, 0).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
+        bg.addsprite("flow2.png").pos(2352, 116).setevent(EVENT_TOUCH, goFlow, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
 
         bg.addsprite("mapInIcon.png").pos(1473, 309).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20))).setevent(EVENT_TOUCH, onMap);
 
@@ -334,8 +336,8 @@ class CastlePage extends MyNode
         dialogController.addCmd(dict([["cmd", "login"]]));
         dialogController.addCmd(dict([["cmd", "rate"]]));
         dialogController.addCmd(dict([["cmd", "levup"]]));
-        dialogController.addCmd(dict([["cmd", "victory"]]));
-        dialogController.addCmd(dict([["cmd", "fail"]]));
+        //dialogController.addCmd(dict([["cmd", "victory"]]));
+        //dialogController.addCmd(dict([["cmd", "fail"]]));
 
         //touchDelegate.enterScene();
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -345,6 +347,10 @@ class CastlePage extends MyNode
         //global.timer.addTimer(this);
         //initBuilding();
 
+    }
+    function goFlow(n, e, p, x, y, points)
+    {
+        global.director.pushScene(new FlowScene(p));
     }
     function onMap()
     {
@@ -380,13 +386,17 @@ class CastlePage extends MyNode
     }
     /*
     先缩放再移动 保留旧的缩放比例
+    屏幕中心移动到建筑物 或者士兵
     */
     var oldScale = null;
     var oldPos = null;
     function moveToBuild(build)
     {
         oldScale = bg.scale();
-        touchDelegate.scaleToMax();
+        var sm = 150;
+        if(build.isBuilding == 0)
+            sm = 200;
+        touchDelegate.scaleToMax(sm);
 
         oldPos = bg.pos();
         var bSize = build.bg.size();
@@ -470,7 +480,7 @@ class CastlePage extends MyNode
         clouds.remove(c);
     }
     var clouds = [];
-    var lastTime = 0;
+    var lastTime = 1000000;
     function update(diff)
     {
         lastTime += diff;

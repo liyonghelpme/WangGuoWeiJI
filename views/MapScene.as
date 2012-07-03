@@ -24,7 +24,7 @@ class MapCloud extends MyNode
         bg = node();
         init();
         clouds = [];
-        lastTime = 0;
+        lastTime = 1000000;
     }
     function removeCloud(c)
     {
@@ -103,11 +103,23 @@ class MapScene extends MyNode
             noOpTime = 0;
             islandLayer.showArrow();
         }
+        showTime += diff;
+        if(needShow == 1 && showTime >= 800)
+        {
+            refreshFly();    
+        }
     }
     override function enterScene()
     {
         super.enterScene(); 
         global.timer.addTimer(this);
+        bg.setevent(EVENT_KEYDOWN, quitMapSel);
+        bg.focus(1);
+    }
+    function quitMapSel(n, e, p, kc)
+    {
+        if(kc == KEYCODE_BACK)
+            global.director.popScene();
     }
     override function exitScene()
     {
@@ -127,6 +139,9 @@ class MapScene extends MyNode
     2: 选择难度页面  删除难度页面
     3: 选择是否进入游戏页面 左右移动 levellayer
     */
+    var showTime = 0;
+    //var showYet = 0;
+    var needShow = 0;
     function gotoIsland(param){
         trace("scene goto island", param, contextStack);
         islandLayer.removeArrow();
@@ -156,7 +171,10 @@ class MapScene extends MyNode
             //进入岛屿
             islandLayer.gotoIsland(param);
             //显示新的等级选择页面
-            bg.addaction(sequence(delaytime(1000),callfunc(refreshFly)));
+            //bg.addaction(sequence(delaytime(1000),callfunc(refreshFly)));
+            showTime = 0;
+            //showYet = 0;
+            needShow = 1;
         }
     }
     
@@ -164,7 +182,6 @@ class MapScene extends MyNode
     {
         var sl = len(contextStack);
         if(sl==1 && param<6){
-            //flyLayer.selectLevel(param);
             flyLayer.selectSmall(param);
             contextStack.append(param);
         }
@@ -181,6 +198,9 @@ class MapScene extends MyNode
     }
     
     function refreshFly(){
+        needShow = 0;
+        //showYet = 1;
+        showTime = 0;
         addChildZ(flyLayer, FLY_LAYER);
     }
 }

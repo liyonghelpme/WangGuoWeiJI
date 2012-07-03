@@ -125,7 +125,7 @@ class DrugDialog extends MyNode
             }
 
 
-            var obj = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).pos(60, 26).anchor(50, 50);
+            var obj = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).pos(60, 35).anchor(50, 50);
             var bsize = obj.prepare().size();
             var sca = min(64*100/bsize[0], 60*100/bsize[1]);
             obj.scale(sca, sca);
@@ -258,7 +258,7 @@ class DrugDialog extends MyNode
     }
     function updateSoldier(sol)
     {
-        if(sol == soldier)
+        if(sol.sid == soldier.sid)
         {
             im.texture("soldier"+str(soldier.id)+".png");
             nameText.text(soldier.myName);

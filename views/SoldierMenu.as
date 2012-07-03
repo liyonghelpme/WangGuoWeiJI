@@ -21,9 +21,9 @@ class SoldierMenu extends MyNode
         banner.addsprite("dialogSolDetail.png").pos(725, 30).anchor(0, 50).setevent(EVENT_TOUCH, onDetail);
 
 
-        var nameBanner = banner.addsprite("soldierMenu.png").pos(12, -37);
+        var nameBanner = banner.addsprite("soldierMenu.png").pos(12, -33);
         nameBanner.addlabel(soldier.myName, null, 18).pos(18, 19).anchor(0, 50).color(38, 86, 93, 100);
-        banner.addlabel(getStr("transferLev", null), null, 18).pos(458, -37).color(0, 0, 0);
+        banner.addlabel(getStr("transferLev", null), null, 20, FONT_BOLD).pos(458, -30).color(0, 0, 0);
 
         var level = soldier.id%10;
         var initX = 313;

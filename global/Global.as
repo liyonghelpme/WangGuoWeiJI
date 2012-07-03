@@ -9,6 +9,7 @@ class Global
     var staticScene = null;
     var map = null;
     var msgCenter;
+    var sensorController;
     function Global()
     {
     }

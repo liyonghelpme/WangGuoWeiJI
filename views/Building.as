@@ -72,6 +72,7 @@ class BuildAnimate extends MyNode
 
 class Building extends MyNode
 {
+    var isBuilding = 1;
     //move rotate 
     var map;
     var data;
@@ -558,7 +559,7 @@ class Building extends MyNode
         trace("doAcc state", state);
         if(state == Working)
         {
-            global.director.pushView(new AccDialog(this));
+            global.director.pushView(new AccDialog(this), 1, 0);
             //funcBuild.doAcc();
         }
     }
@@ -583,7 +584,7 @@ class Building extends MyNode
     */
     function doSell()
     {
-        global.director.pushView(new SellDialog(this));
+        global.director.pushView(new SellDialog(this), 1, 0);
     }
     function sureToSell()
     {

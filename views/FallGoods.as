@@ -92,64 +92,9 @@ class FallGoods extends MyNode
         var fo = new FallObj(this, kind, rx, ry);
         fo.setPos([rx*sizeX, ry*sizeY]);
         allFalls.append(fo);
+        trace("fallObj", rx, ry, ry*sizeY);
         buildLayer.addChildZ(fo, ry*sizeY);
     }
-
-    /*
-    function getNewFall()
-    {
-
-        var possible = [];
-        var i;
-        for(i = 0; i < len(fallThings); i++)
-        {
-            possible.append(fallThings[i][4]);
-        }
-
-        var rv = rand(Sum(possible, len(possible)));
-
-        var kind = len(fallThings)-1;
-        for(i = 1; i <= len(fallThings); i++)
-        {
-            var s = Sum(possible, i);
-            if(rv <= s)
-            {
-                kind = i-1;       
-                break;
-            }
-        }
-        var area = 0;
-        var temp = []
-        for(i = 0; i < len(Zone); i++)
-        {
-            area += Zone[i][2]*Zone[i][3];   
-            temp.append(Zone[i][2]*Zone[i][3]);
-        }
-
-        rv = rand(area);
-        var pos = len(temp)-1;
-        for(i = 1; i <= len(temp); i++)
-        {
-            s = Sum(temp, i);
-            if(rv <= s)
-            {
-                pos = i-1;
-                break;
-            }
-        }
-
-        
-        var curZone = Zone[pos];
-        var x = rand(curZone[2]);
-        var y = rand(curZone[3]);
-        trace("goods", kind, x, y, curZone);
-        var fo = new FallObj(this, kind);
-        fo.setPos([curZone[0]+x, curZone[1]+y]);
-        allFalls.append(fo);
-        
-        addChild(fo);
-    }
-    */
 
     function pickObj(obj)
     {

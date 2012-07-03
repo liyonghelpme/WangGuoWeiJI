@@ -159,7 +159,7 @@ class Farm extends FuncBuild
             var bsize = pl.prepare().size();
             var sca = min(63*100/bsize[0], 42*100/bsize[1]);
             pl.scale(sca);
-            flowBanner.addaction(repeat(scaleto(500, 150, 150), scaleto(500, 100, 100)));
+            flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
         }
     }
     override function initWorking(data)

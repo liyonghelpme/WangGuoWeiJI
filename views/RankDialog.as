@@ -89,9 +89,19 @@ class RankDialog extends MyNode
     }
     function challengeHero()
     {
+        global.director.popView();
+        global.director.pushScene(new BattleScene(5, 0, 
+[[1, 0], [1, 10], [1, 20], [1, 30], [1, 40], [1, 50], [1, 60], [1, 70], [1, 80], [1, 90], [1, 100], [1, 110], [1, 120], [1, 130], [1, 140], [1, 150], [1, 160], [1, 170], [1, 180], [1, 190]]
+        ));
     }
     function challengeGroup()
     {
+        global.director.popView();
+        //map 5 挑战页面
+        global.director.pushScene(new BattleScene(5, 0,  
+[[1, 0], [1, 10], [1, 20], [1, 30], [1, 40], [1, 50], [1, 60], [1, 70], [1, 80], [1, 90], [1, 100], [1, 110], [1, 120], [1, 130], [1, 140], [1, 150], [1, 160], [1, 170], [1, 180], [1, 190]]
+
+        ));
     }
     function doVisit()
     {

@@ -5,12 +5,47 @@ const FLAG_SY = 30;
 
 class Flag extends MyNode
 {
-    function Flag(p)
+    var flag;
+    //var showYet;
+    var showArr;
+    function Flag(p, sA)//如果旗帜是第一个红色旗帜那么显示相应的箭头 闯关结束数据更新则 相应的关卡更新 旗帜
     {
         bg = node().size(FLAG_WIDTH, FLAG_HEIGHT).pos(p[0]-(FLAG_WIDTH-FLAG_SX)/2, p[1]-(FLAG_HEIGHT-FLAG_SY)/2);
         init();
-        bg.addsprite("map_flag_complete.png").size(FLAG_SX, FLAG_SY).anchor(50, 50).pos(FLAG_WIDTH/2, FLAG_HEIGHT/2);
+        flag = null;
+        //showYet = 0;
+        //if(showArr == 1)
+        flag = bg.addsprite("map_flag_complete.png").size(FLAG_SX, FLAG_SY).anchor(50, 50).pos(FLAG_WIDTH/2, FLAG_HEIGHT/2);
+        showArr = sA;
+        trace("showArr", showArr);
+        if(showArr == 1)
+            flag.addsprite("mapArrow.png").anchor(50, 100).pos(FLAG_SX/2, -20).addaction( repeat(moveby(500, 0, -20), moveby(500, 0, 20)) );
     }
+    /*
+    function update(diff)
+    {
+        trace("showFlag", diff, flag, showYet);
+        if(flag != null && showYet == 0)
+        {
+            showYet = 1;
+            flag.addsprite("mapArrow.png").anchor(50, 100).pos(FLAG_SX/2, -20).addaction(sequence(delaytime(5000), repeat(moveby(500, 0, -20), moveby(500, 0, 20))));
+        }
+        global.timer.removeTimer(this); 
+    }
+    override function enterScene()
+    {
+        trace("flag enterScene");
+        super.enterScene();
+        if(showArr == 1)
+            global.timer.addTimer(this);
+    }
+    override function exitScene()
+    {
+        if(showArr == 1)
+            global.timer.removeTimer(this);
+        super.exitScene();
+    }
+    */
 }
 class LevelSelectLayer extends MyNode
 {
@@ -38,15 +73,45 @@ class LevelSelectLayer extends MyNode
     点击选择难度的时候显示 新的浮动node 这个可以交给MapLayer 来控制
     index param diff
     */
+    function setIslandLayer()
+    {
+        var curDif = getCurEnableDif(); 
+        islandLayer.removefromparent();
+        islandLayer = island.addnode();
+
+        trace("select Level", index, curDif);//小关
+        //var newPos;
+        var i;
+        for(i=0; i < 6 && index <= curDif[0]; i++){//该大关 某些关卡被开启
+            if(index == curDif[0] && i > curDif[1])//该大关 绿色表示 改关卡需要征服才能部分被开启
+                break;
+            //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
+            trace("flagPos", flagPos[index][i]);
+            //var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
+            var showArr = 0;
+            if(index == curDif[0] && i == curDif[1])
+                showArr = 1;
+            var b = new Flag(flagPos[index][i], showArr);
+            islandLayer.add(b.bg, FLAG_Z);
+            new Button(b.bg, onSmall, i);
+        }
+        for(;i<6;i++){
+            //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
+            var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
+            islandLayer.add(b2, FLAG_Z);
+        }
+    }
+    //大关  
     function LevelSelectLayer(param, s){
         scene = s;
         //maxLevel = global.user.getValue("maxLevel");
         bg = node();
+        init();
 
         index = param;
         darkNode = null;
         levelNode = null;
-        init();
+
         var jz=bg.addsprite("map_label_big.png").size(150,45).anchor(0,0).pos(615,27).rotate(0);
         jz.addlabel(getStr("mapIsland"+str(index), null),null,33).anchor(50,50).pos(75,22).color(0,0,0,100);
         var back=bg.addsprite("map_back.png").pos(50,360);
@@ -55,6 +120,11 @@ class LevelSelectLayer extends MyNode
 
         //maxLevel 当前  5 大关 * 6 小关* 10 难度 = 300 个关卡
         //maxLevel/10 解锁的关卡 - island (1-5) 
+        island = scene.getIsland(index);//大关
+        islandLayer = island.addnode();
+
+        //setIslandLayer();
+        /*
         var curDif = getCurEnableDif();
 
         island = scene.getIsland(param);
@@ -77,6 +147,7 @@ class LevelSelectLayer extends MyNode
             var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
             islandLayer.add(b2, FLAG_Z);
         }
+        */
     }
     
     function onSmall(param)
@@ -96,9 +167,13 @@ class LevelSelectLayer extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        islandLayer.removefromparent();
-        island.add(islandLayer);
+        //islandLayer.removefromparent();
+        //island.add(islandLayer);
+        setIslandLayer();
     }
+    /*
+    关闭选择对话框 则 移除所有旗帜
+    */
     override function exitScene()
     {
         islandLayer.removefromparent();
@@ -126,18 +201,22 @@ class LevelSelectLayer extends MyNode
             levelNode = null;
             scene.contextStack.pop();
         }
-        else if(sl==3){//返回选择难度页面
+        else if(sl==3){//返回选择难度页面 没有该页面
             levelNode.addaction(sineout(moveto(1000,0,0)));
             scene.contextStack.pop();
         }
     }
     
+    var small;
     function selectSmall(param)
     {
+        small = param;
         darkNode = sprite("dark.png").size(801,481);
         bg.add(darkNode,-1);
         levelNode = node();
         
+        /*
+        10 个难度没有必要
         var first = 0;
         for(var i=0; i < 10 ; i++){
             var b=levelNode.addsprite("map_level_normal.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
@@ -165,15 +244,19 @@ class LevelSelectLayer extends MyNode
         for(;i<10;i++){
             levelNode.addsprite("map_level_lock.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
         }
-        levelNode.addsprite("map_level_info.png").anchor(50,50).pos(1200,240);
-        levelNode.addsprite("map_level_attack.png").anchor(100,0).pos(1550,360).setevent(EVENT_TOUCH, attackNow);
+        */
+
+        levelNode.addsprite("map_level_info.png").anchor(50,50).pos(400,240);
+        levelNode.addsprite("map_level_attack.png").anchor(100,0).pos(750,360).setevent(EVENT_TOUCH, attackNow);
         bg.add(levelNode,0);
     }
     function attackNow()
     {
-        trace("map index", index);
-        global.director.pushScene(new BattleScene(index-1, 
-[[1, 0], [1, 10], [1, 20], [1, 30], [1, 40], [1, 50], [1, 60], [1, 70], [1, 80], [1, 90], [1, 100], [1, 110], [1, 120], [1, 130], [1, 140], [1, 150], [1, 160], [1, 170], [1, 180], [1, 190]]
+        trace("map index", index, small);
+        global.director.pushScene(
+        new BattleScene(index-1, small, 
+            //[[1, 100], [1, 110], [1, 120], [1, 130], [1, 140], [1, 150], [1, 160], [1, 170], [1, 180], [1, 190]]
+            [[1, 100]]
 
         ));
     }

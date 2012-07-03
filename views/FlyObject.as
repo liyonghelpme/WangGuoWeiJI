@@ -11,8 +11,8 @@ class FlyObject extends MyNode
 
         需要场景加上该node
     */
-    const FLY_WIDTH = 50;
-    const FLY_HEIGHT = 50;
+    const FLY_WIDTH = 30;
+    const FLY_HEIGHT = 30;
     function FlyObject(obj, c, cb)
     {
         callback = cb;
@@ -35,7 +35,7 @@ class FlyObject extends MyNode
                 continue;
             num++;
 
-            var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT).size(30, 30);
+            var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT);
             var tar = TarPos.get(k);
             var dis = sqrt(distance(coor2, tar));
             flyObj.addaction(sequence(sinein(bezierby(

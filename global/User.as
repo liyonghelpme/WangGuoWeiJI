@@ -40,6 +40,8 @@ class User
     var tasks;
 
     var taskListener = [];
+
+    var herbs;
     function getCurFinTaskNum()
     {
         var res = 0;
@@ -154,6 +156,10 @@ class User
         if(soldierEquip == null)
             soldierEquip = dict();
 
+        herbs = db.get("herbs");
+        if(herbs == null)
+            herbs = dict();
+
         it = soldierEquip.items();
         sequipId = -1;
         for(i = 0; i < len(it); i++)
@@ -228,50 +234,47 @@ class User
             db.put("loginDays", 1);
             db.put("starNum", [
             [
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3],
+            [3],
+            [3],
+            [3],
+            [3],
+            [3],
             ],
 
             [
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [3],
+            [3],
+            [3],
+            [3],
+            [3],
+            [3],
+            ],
+            [
+            [3],
+            [0],
+            [0],
+            [0],
+            [0],
+            [0],
             ],
 
             [
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [0],
+            [0],
+            [0],
+            [0],
+            [0],
+            [0],
             ],
-
             [
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
+            [0],
+            [0],
+            [0],
+            [0],
+            [0],
+            [0],
             ],
-
-            [
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            [3,3,3,3,3, 0, 0, 0, 0, 0],
-            ],
-
             ]);
             /*
             由客户端 提供新的建筑物的bid 这样的好处是服务器只进行 数据库的唯一性验证 如果出错，则返回失败给客户端
@@ -292,13 +295,14 @@ class User
             ])],
 
             ]));
-            db.put("soldiers", dict([[0, dict([["id", 0], ["name", "liyong"]])]]));
+            //soldier id士兵职业类型 
+            db.put("soldiers", dict([[0, dict([["id", 0], ["name", "liyong"], ["level", 0]])]]));
 
-            //id--->num-->num = -1 soldierId id 
+            //id num 
             db.put("drugs", dict([[0, 1]]));
             db.put("equips", dict([[0, 1]]));
             
-            //eid [kind sid]
+            //eid [equipId sid]
             db.put("soldierEquip", dict([[0, [0, 0]]]))
         }
         initData();
@@ -420,6 +424,15 @@ class User
         //changeValue(replaceStr(GoodsPre[kind], ["[ID]", str(id)]), 1);
     }
 
+    function changeHerb(id, num)
+    {
+        var val = herbs.get(id, 0);
+        val += num;
+        herbs.update(id, val);
+        db.put("herbs", herbs);
+        setValue(NOTIFY, 1);
+    }
+
     function addSoldier(sol)
     {
         allSoldiers.append(sol); 
@@ -460,13 +473,6 @@ class User
     */
     /*
     药品储存， 一次性使用 在某个对象身上 drug+id
-    */
-    /*
-    function buyDrug(id, cost)
-    {
-        doCost(cost);
-        changeValue("drug"+str(id), 1);
-    }
     */
     /*
     规划开始 和 规划取消 函数
@@ -603,11 +609,12 @@ class User
     }
     /*
     修改士兵的数据实体
+    经营页面 和 闯关页面的士兵实体 都需要有以下属性
     */
-    //ID name
+    //士兵类型 名字 当前生命值 经验 等级
     function updateSoldiers(soldier)
     {
-        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["attack", soldier.attack], ["defense", soldier.defense], ["health", soldier.health], ["healthBoundary", soldier.healthBoundary], ["exp", soldier.exp], ["dead", soldier.dead]]));
+        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level]]));
         updateSoldierDB(null);
         for(var i = 0; i < len(soldierListener);)
         {
@@ -617,6 +624,7 @@ class User
             }
             else
             {
+                //监听器判断士兵的sid是否相等 因为有busisoldier 和 soldier两个对象需要处理
                 soldierListener[i][0].updateSoldier(soldier);
                 i++;
             }
@@ -652,14 +660,38 @@ class User
             global.msgCenter.sendMsg(RELIVE_SOL, [sid, sol]);
         }
     }
+    function getSoldierEquip(sid)
+    {
+        var val = soldierEquip.values();
+        var equips = [];
+        for(var i = 0; i < len(val); i++)
+        {
+            if(val[i][1] == sid)
+                equips.append(val[i][0]);
+        }
+        return equips;
+    }
+
+    //usedEquip Id
     function unloadThing(tid)
     {
         trace("unloadThing", tid);
+
         var useData = soldierEquip.pop(tid);
         var num = equips.get(useData[0], 0);
         equips.update(useData[0], num+1);
         db.put("soldierEquip", soldierEquip);
         db.put("equips", equips);
+
+        var sid = useData[1];
+        for(var i = 0; i < len(allSoldiers); i++)
+        {
+            if(allSoldiers[i].sid == sid)
+            {
+                allSoldiers[i].useEquip(-1);
+                break;
+            }
+        }
     }
     function useThing(kind, tid, soldier)
     {
@@ -670,6 +702,8 @@ class User
             num = drugs.get(tid);
             drugs.update(tid, num-1);
             db.put("drugs", drugs);
+
+            soldier.useDrug(tid);
         }
         else if(kind == EQUIP)
         {
@@ -679,6 +713,8 @@ class User
             soldierEquip.update(sequipId++, [tid, soldier.sid]);
             db.put("soldierEquip", soldierEquip);
             trace("equips", equips, soldierEquip, sequipId);
+
+            soldier.useEquip(tid);
         }
     }
 
@@ -702,7 +738,8 @@ class User
     //获取任何物品首先获得 相应类别 再 获取 对应id的值
     function getHerb(id)
     {
-        return getValue("herb"+str(id));   
+        return herbs.get(id, 0);
+        //return getValue("herb"+str(id));   
     }
     function getValue(key)
     {
@@ -787,7 +824,7 @@ class User
                 curY += 1;
             }
         }
-        trace("updateMap", map, len(mapDict));//, mapDict);
+        //trace("updateMap", map, len(mapDict));//, mapDict);
         return [initX, initY];
     }
     //一个MAP中的对象需要实现以下
@@ -803,7 +840,7 @@ class User
         var sy = map[1];
         var initX = map[2];
         var initY = map[3];
-        trace("clearMap", map);//, mapDict);
+        //trace("clearMap", map);//, mapDict);
         for(var i = 0; i < sx; i++)
         {
             var curX = initX+i;

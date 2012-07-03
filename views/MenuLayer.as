@@ -23,6 +23,7 @@ class MenuLayer extends MyNode
     不要设定图片的size属性否则图片会被缩放
     */
     var gloryLevText;
+    //var sensor = null;
     function MenuLayer(s) {
         scene = s;
         trace("pushMenuLayer");
@@ -37,12 +38,12 @@ class MenuLayer extends MyNode
         taskFin = taskbutton.addsprite("taskFin.png").pos(75, 19).anchor(50, 50).visible(0);
         finNum = taskFin.addlabel("", null, 15).pos(17, 17).anchor(50, 50).color(0, 0, 0);
 
-        expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0);
-        expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(0,0).pos(138,34).rotate(0);
+        expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
+        expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(50, 50).pos(144,60).rotate(0);
         collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(50,50).pos(253, 100).rotate(0).setevent(EVENT_TOUCH, openGlory);
 
         rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,98).rotate(0).setevent(EVENT_TOUCH, openCharge);
-        menubutton = banner.addsprite("menu_button.png").scale(100,100).size(112,100).anchor(0,100).pos(686,111).rotate(0);
+        menubutton = banner.addsprite("menu_button.png").scale(100,100).anchor(0,100).pos(686,118);
         new Button(menubutton, onClicked, 0);
 
         initText();
@@ -54,7 +55,7 @@ class MenuLayer extends MyNode
     }
     function openGlory()
     {
-        global.director.pushView(new GloryDialog());
+        global.director.pushView(new GloryDialog(), 1, 0);
     }
     /*
     显示商店充值页面
@@ -63,7 +64,7 @@ class MenuLayer extends MyNode
     {
         var st = new Store(scene);
         st.changeTab(1);
-        global.director.pushView(st);
+        global.director.pushView(st, 1, 0);
     }
     var silverText;
     var goldText;
@@ -76,7 +77,7 @@ class MenuLayer extends MyNode
         silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(336, 99).color(100, 100, 100);
         goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(591, 99).color(100, 100, 100)
         gloryText = banner.addlabel(getStr("glory", null), null, 18).anchor(50, 50).pos(167, 99).color(100, 100, 100);
-        gloryLevText = collectionbutton.addlabel(str("B+"), null, 20).anchor(50, 50).pos(23, 17).color(43, 24, 11);
+        gloryLevText = collectionbutton.addlabel(str("B+"), null, 20, FONT_BOLD).anchor(50, 50).pos(23, 17).color(100, 100, 100);
 
     }
     var building = 0;
@@ -128,7 +129,16 @@ class MenuLayer extends MyNode
         global.user.addTaskListener(this);
         updateValue(global.user.resource);
         updateTaskState();
+        //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
     }
+    /*
+    function menuDisappear(stype, ax, ay, az)
+    {
+        var acc = sqrt(ax*ax+ay*ay+az*az);
+        trace("accelemeter", acc);
+
+    }
+    */
     function updateTaskState()
     {
         var num = global.user.getCurFinTaskNum();
@@ -146,6 +156,7 @@ class MenuLayer extends MyNode
     }
     /*
     用户更新数据的显示接口
+    expfiller 108 11
     */
     function updateValue(res)
     {
@@ -154,44 +165,16 @@ class MenuLayer extends MyNode
         goldText.text(str(res.get("gold")));
     }
     var visLock = 0;
-    function showMenu()
+    function showMenu(t)
     {
-        //if(visLock == 0)
-        //{
-        //    visLock = 1;
-        //build building
-        //if(building)
-        //    return;
-        bg.addaction(fadein(1000));
-        /*
-        for(var i = 0; i < len(menus); i++)
-        {
-            if(menus[i] != null)
-            {
-                menus[i].showMenu();
-            }
-        }
-        */
-        //}
+        finishBuild();
+        bg.addaction(fadein(t));
     }
-    function hideMenu()
+    function hideMenu(t)
     {
-        //if(visLock == 0)
-        //{
-        //    visLock = 1;
-        //if(building)
-        //    return;
         if(ins == 0)
             return;
-        bg.addaction(fadeout(1000));
-        /*
-        for(var i = 0; i < len(menus); i++)
-        {
-            if(menus[i] != null)
-                menus[i].hideMenu();
-        }
-        */
-        //}
+        bg.addaction(sequence(fadeout(t), callfunc(beginBuild)));
     }
     
     
