@@ -123,6 +123,8 @@ class Building extends MyNode
             funcBuild = new House(this);
         else if(funcs == DECOR_BUILD)
             funcBuild = new Decor(this);
+        else if(funcs == STATIC_BOARD)
+            funcBuild = new StaticBuild(this); 
         else 
             funcBuild = new Castle(this);
 
@@ -184,18 +186,17 @@ class Building extends MyNode
     {
         map = m;
     }
-    /*
     override function enterScene()
     {
         super.enterScene();
-        //global.user.updateMap(this);
+        funcBuild.enterScene();
     }
     override function exitScene()
     {
-        //global.user.clearMap(this);
+        funcBuild.exitScene();
         super.exitScene();
     }
-    */
+
     function setDir(d)
     {
         dir = d;
@@ -589,6 +590,10 @@ class Building extends MyNode
     function sureToSell()
     {
         global.director.curScene.addChild(new FlyObject(bg, getBuildCost(data.get("id")), sellOver));
+
+        global.user.changeValue("people", -data.get("people"));//减去人口
+        global.user.changeValue("defense", -data.get("cityDefense"));//减去防御力
+
         map.removeChild(this); 
         global.user.sellBuild(this);
     }

@@ -3,12 +3,14 @@ class SoldierStore extends MyNode
     var scene;
     var flowNode;
     var cl;
-    const OFFX = 215;
-    const ITEM_NUM = 3;
+    const OFFX = 153;
+    const OFFY = 191;
+    const ITEM_NUM = 4;
+    const ROW_NUM = 2;
+
     const WIDTH = OFFX*ITEM_NUM;
-    //const HEIGHT = 300;
-    const INIT_X = 96;
-    const INIT_Y = 148;
+    //const INIT_X = 102;
+    //const INIT_Y = 86;
 
     //kind id
 
@@ -31,7 +33,7 @@ class SoldierStore extends MyNode
         scene = s;
         bg = sprite("soldierBack.png");
         init();
-        cl = bg.addnode().pos(INIT_X, INIT_Y).size(WIDTH, PAN_HEIGHT+10).clipping(1);
+        cl = bg.addnode().pos(102, 86).size(591, 354).clipping(1);
 
         flowNode = cl.addnode();
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
@@ -49,7 +51,6 @@ class SoldierStore extends MyNode
     }
     function moveFlow(param)
     {
-
         var cols;
         var curPos = flowNode.pos();
         if(param == 1)
@@ -61,9 +62,11 @@ class SoldierStore extends MyNode
             curPos[0] -= OFFX*ITEM_NUM;
         }
 
-        cols = -len(data)*OFFX+WIDTH;
+        var pageNum = (len(data)+ITEM_NUM*ROW_NUM-1)/(ITEM_NUM*ROW_NUM);
+        cols = -pageNum*ITEM_NUM*OFFX+WIDTH;
+
         curPos[0] = max(cols, min(0, curPos[0]));
-        trace("moveFlow", param, curPos[0], cols);
+        trace("moveFlow", pageNum, param, curPos[0], cols);
         flowNode.pos(curPos);
         updateTab();
     }
@@ -89,12 +92,16 @@ class SoldierStore extends MyNode
         super.exitScene();
     }
     //MAX 0 MIN 
+    /*
+    得到当前显示的列号
+    */
     function getRange()
     {
         var curPos = flowNode.pos();
         var lowCol = -curPos[0]/OFFX;
         var upCol = (-curPos[0]+WIDTH+OFFX-1)/OFFX;
-        var colNum = len(data);
+        var pageNum = (len(data)+ITEM_NUM*ROW_NUM-1)/(ITEM_NUM*ROW_NUM);
+        var colNum = pageNum*ITEM_NUM;
         return [max(0, lowCol-1), min(colNum, upCol+1)];
     }
     function updateValue(res)
@@ -125,8 +132,8 @@ class SoldierStore extends MyNode
             roleRight.texture("roleArr.png"); 
         }
     }
-    const PAN_WIDTH = 181;
-    const PAN_HEIGHT = 235;
+    const PAN_WIDTH = 127;
+    const PAN_HEIGHT = 164;
     function updateTab()
     {
         updateArr();
@@ -138,65 +145,83 @@ class SoldierStore extends MyNode
 
         var rg = getRange();
         var userLevel = global.user.getValue("level");
-        for(var i = rg[0]; i < rg[1]; i++)
+        var panel = sprite("goodPanel.png");//.pos(i*OFFX, 0);//.scale(sca);
+        var sca = getSca(panel, [PAN_WIDTH, PAN_HEIGHT]);
+
+        for(var j = 0; j < ROW_NUM; j++)
         {
-            var sca = PAN_WIDTH*100/153;
-            var panel = flowNode.addsprite("goodPanel.png").size(153, 182).pos(i*OFFX, 0).scale(sca);
-            var id = data[i];
-            var data = getData(SOLDIER, id);
-            var cost = getCost(SOLDIER, id);
-            trace("updateTab", data, cost);
-            var needLevel = data.get("level");
-            var canBuy = 1;
-            if(needLevel > userLevel)
+            for(var i = rg[0]; i < rg[1]; i++)
             {
-                canBuy = 0;
-            }
-            //123 92
-            var sol;
-            if(canBuy == 0)
-            {
-                sol = panel.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(id)]), BLACK).pos(76, 90).anchor(50, 50);
-                panel.addsprite("roleLevel.png").pos(18, 39).anchor(50, 50);
-                panel.addlabel(str(needLevel), null, 18).pos(18, 39).anchor(50, 50).color(0, 0, 0);
-                panel.addsprite("roleLock.png", 1).pos(14, 127).anchor(50, 50);
-            }
-            else
-                sol = panel.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(id)])).pos(76, 90).anchor(50, 50);
-
-            sol.prepare();
-            var bSize = sol.size();
-            var bl = min(120*100/bSize[0], 90*100/bSize[1]);
-            bl = min(120, max(40, bl));
-            sol.scale(bl);
-
-            var picCost = cost.items();
-            //trace("buildCost", cost);
-            if(len(picCost) > 0)
-            {
-                var picName = picCost[0][0]+".png";
-                var valNum = picCost[0][1];
-                var buyable = global.user.checkCost(cost);
-                var c = [100, 100, 100];
-                if(buyable.get("ok") == 0)
-                {
-                    c = [100, 0, 0];
-                    //canBuy = 0;
-                }
-                /*
-                消耗图片采用 消耗资源的名字
-                消耗数值 
-                */
-                var cPic = panel.addsprite(picName).pos(35, 165).anchor(50, 50);  
-                var cNum = panel.addlabel(str(valNum), null, 18).pos(88, 162).anchor(50, 50).color(c[0], c[1], c[2]);
-
-            }
+                var curNum = (i/ITEM_NUM)*(ITEM_NUM*ROW_NUM)+j*ITEM_NUM+i%ITEM_NUM;
+                trace("curNum", curNum);
+                if(curNum >= len(data))
+                    break;
                 
-            /*
-            canBuy 只表示等级是否足够
-            */
-            panel.addlabel(data.get("name"), null, 20).pos(71, 25).anchor(50, 50).color(0, 0, 0);
-            panel.put([id, canBuy]);
+                //var sca = PAN_WIDTH*100/153;
+                panel = flowNode.addsprite("goodPanel.png").pos(i*OFFX, j*OFFY);//.scale(sca);
+                panel.scale(sca);
+
+                var id = data[curNum];
+                var data = getData(SOLDIER, id);
+                var cost = getCost(SOLDIER, id);
+                trace("updateTab", data, cost);
+                var needLevel = data.get("level");
+                var canBuy = 1;
+                if(needLevel > userLevel)
+                {
+                    canBuy = 0;
+                }
+                //123 92
+                var sol;
+                if(canBuy == 0)
+                {
+                    sol = panel.addsprite("soldier"+str(id)+".png", BLACK).pos(83, 110).anchor(50, 50);
+                    panel.addsprite("roleLevel.png").pos(18, 39).anchor(50, 50);
+                    panel.addlabel(str(needLevel), null, 18).pos(18, 39).anchor(50, 50).color(0, 0, 0);
+                    panel.addsprite("roleLock.png", 1).pos(14, 127).anchor(50, 50);
+                }
+                else
+                    sol = panel.addsprite("soldier"+str(id)+".png").pos(83, 110).anchor(50, 50);
+
+                /*
+                sol.prepare();
+                var bSize = sol.size();
+                var bl = min(120*100/bSize[0], 90*100/bSize[1]);
+                bl = min(120, max(40, bl));
+                sol.scale(bl);
+                */
+
+                var sSca = getSca(sol, [120, 100]);
+                sol.scale(sSca);
+
+                var picCost = cost.items();
+                //trace("buildCost", cost);
+                if(len(picCost) > 0)
+                {
+                    var picName = picCost[0][0]+".png";
+                    var valNum = picCost[0][1];
+                    var buyable = global.user.checkCost(cost);
+                    var c = [100, 100, 100];
+                    if(buyable.get("ok") == 0)
+                    {
+                        c = [100, 0, 0];
+                        //canBuy = 0;
+                    }
+                    /*
+                    消耗图片采用 消耗资源的名字
+                    消耗数值 
+                    */
+                    var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50).size(30, 30);  
+                    var cNum = panel.addlabel(str(valNum), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+
+                }
+                    
+                /*
+                canBuy 只表示等级是否足够
+                */
+                panel.addlabel(data.get("name"), null, 20).pos(71, 25).anchor(50, 50).color(0, 0, 0);
+                panel.put([id, canBuy]);
+            }
         }
 
         trace("finish update Tab");
@@ -222,6 +247,13 @@ class SoldierStore extends MyNode
         moveBack(difx);
         accMove += abs(difx);
     }
+    function solNotEnough()
+    {
+        closeDialog();
+        var st = new Store(scene);
+        st.changeTab(st.BUILD_PAGE);
+        global.director.pushView(st, 1, 0);
+    }
     function touchEnded(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
@@ -233,7 +265,17 @@ class SoldierStore extends MyNode
                 var idCan = child.get(); 
                 if(idCan[1] == 1)//等级足够显示职业介绍
                 {
-                    global.director.pushView(new ProfessionIntroDialog(this, idCan[0]), 1, 0);
+                    var curSolNum = global.user.getSolNum();
+                    var peopleNum = global.user.getPeopleNum();
+                    trace("peopleNum", peopleNum, curSolNum);
+                    if(curSolNum >= MAX_BUSI_SOLNUM)
+                    {
+                        global.director.pushView(new MyWarningDialog(getStr("solTooMany", null), getStr("sorrySol", null), null), 1, 0);
+                    }
+                    else if(curSolNum < peopleNum)
+                        global.director.pushView(new ProfessionIntroDialog(this, idCan[0]), 1, 0);
+                    else
+                        global.director.pushView(new MyWarningDialog(getStr("houseNot", null), getStr("buildHouse", null), solNotEnough), 1, 0);
                 }
                 //等级不足不做响应
 

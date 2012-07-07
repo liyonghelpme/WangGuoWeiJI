@@ -5,19 +5,36 @@ class CastleScene extends MyNode
     var mc = null;
     var ml = null;
     var Planing = 0;
+    var keepMenuLayer;
     /*
     把经营页面 和 菜单在 场景构造的时候 初始化
     如果 将菜单页面作为一个可以弹出 和 压入的 view来处理  
+
+    使用keepMenuLayer 来保持 menuLayer的层次关系
+    因为其它对话框很难加入 zord参数 来控制层次 暂时使用这种空白的层来
     */
+
+    var mapDict;
     function CastleScene()
     {
         bg = node();
         init();
+        mapDict = dict();
 
         mc = new CastlePage(this);
         ml = new MenuLayer(this);
+        
+        keepMenuLayer = new MyNode();
+        keepMenuLayer.bg = node();
+        keepMenuLayer.init();
+
+
         addChild(mc);
-        addChild(ml);
+        addChild(keepMenuLayer);
+        keepMenuLayer.addChild(ml);
+
+        //addChild(ml);
+
     }
     function quitGame(n, e, p, kc)
     {
@@ -32,15 +49,20 @@ class CastleScene extends MyNode
         bg.focus(1);
         //c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
         global.sensorController.addCallback(this);
+        global.msgCenter.registerCallback(SHOW_DIALOG, this);
     }
     var realDisappear = 0;
     var inSen = 0;
     function senBegan(acc)
     {
     }
+    function isBuildOrPlan()
+    {
+        return (curBuild != null) || (Planing == 1);
+    }
     function senDone(acc)
     {
-        if(inSen == 0)
+        if(inSen == 0 && !isBuildOrPlan())
         {
             if(acc > 20000)
             {
@@ -49,7 +71,7 @@ class CastleScene extends MyNode
                     realDisappear = 1;
                     ml.hideMenu(0);
                 }
-                else if(realDisappear == 1)
+                else if(realDisappear == 1 && curBuild == null)
                 {
                     realDisappear = 0;
                     ml.showMenu(0);
@@ -63,6 +85,19 @@ class CastleScene extends MyNode
         inSen = 0;
     }
 
+    function receiveMsg(param)
+    {
+        trace("receiveMsg", param);
+        var msid = param[0];
+        if(msid == SHOW_DIALOG && !isBuildOrPlan())
+        {
+            var p = param[1];
+            if(p == 0)//显示对话框
+                disableMenu();
+            else if(p == 1)//关闭对话框
+                enableMenu();
+        }
+    }
     override function exitScene()
     {
         global.sensorController.removeCallback(this);
@@ -70,8 +105,11 @@ class CastleScene extends MyNode
         bg.setevent(EVENT_KEYDOWN, null);
         global.staticScene = null;
         global.timer.removeTimer(this);
+
+        global.msgCenter.removeCallback(SHOW_DIALOG, this);
         super.exitScene();
     }
+
     var planView = null;
     function doPlan()
     {
@@ -79,7 +117,7 @@ class CastleScene extends MyNode
         Planing = 1;
         global.user.buildKeepPos();
         planView = new BuildMenu(this, null);
-        global.director.pushView(planView, 1, 0);
+        global.director.pushView(planView, 0, 0);
     }
     function finishPlan()
     {
@@ -92,11 +130,13 @@ class CastleScene extends MyNode
     }
     function disableMenu()
     {
-        ml.beginBuild();
+        if(realDisappear == 0)
+            ml.beginBuild();
     }
     function enableMenu()
     {
-        ml.finishBuild();
+        if(realDisappear == 0)
+            ml.finishBuild();
     }
     function onSell()
     {
@@ -153,7 +193,7 @@ class CastleScene extends MyNode
         var other = global.user.checkCollision(curBuild);
         if(other != null)
             return;
-        var id = building.get("id");
+        var id = curBuild.id; //building.get("id");
 
         var cost = getCost(BUILD, id);
         global.user.doCost(cost);
@@ -179,7 +219,7 @@ class CastleScene extends MyNode
         //ml = new MenuLayer(this);
         //addChild(ml);
         global.director.popView();
-        building = null;
+        //building = null;
         curBuild = null;
     }
     function onSwitch()
@@ -188,42 +228,52 @@ class CastleScene extends MyNode
         curBuild.onSwitch();
         //mc.onSwitch(); 
     }
+    /*
+    计时隐藏： 当前没有显示 震动显示 或者 关闭菜单显示
+    clearHideTime 或者震动
+    优先级： 建造规划 > 震动 > 对话框 > 时间
+    当前建造 规划 状态 则也不显示 
+    realDisappear == 0  对话框操作 
+    realDisappear == 0  时间作用 
+    怎么知道当前正在 建造所以不显示菜单
+    */
     function clearHideTime()
     {
         hideTime = 0;
-        if(inHide == 1 && realDisappear == 0)//not disappear
+        //inHide == 1 &&
+        if(realDisappear == 0 && !isBuildOrPlan())//not disappear
         {
-            inHide = 0;
+            //inHide = 0;
             ml.showMenu(1000);
         }
     }
-
     function update(diff)
     {
         hideTime += diff;
         if(hideTime >= 10000)
         {
             hideTime = 0;
-            if(inHide == 0 && realDisappear == 0)//not disappear
+            //inHide == 0 && 
+            if(realDisappear == 0 && !isBuildOrPlan())//not disappear
             {
-                inHide = 1;
+                //inHide = 1;
                 ml.hideMenu(1000);
             }
         }
     }
-    var building = null;
+    //var building = null;
     /*
     开始建造的时候 将菜单释放
     */
     function build(id)
     {
-        building = getData(BUILD, id);
+        var building = getData(BUILD, id);
         //building.update("state", 0);
         //ml.removeSelf();
         //ml = null;
         ml.beginBuild();   
         curBuild = mc.beginBuild(building);
-        global.director.pushView(new BuildMenu(this, building), 1, 0);
+        global.director.pushView(new BuildMenu(this, building), 0, 0);
     }
     function buySoldier(id)
     {
@@ -231,6 +281,7 @@ class CastleScene extends MyNode
         global.user.doCost(cost);
         var sol = mc.buySoldier(id);
         global.director.pushView(new RoleName(this, sol), 1, 0);
+        global.msgCenter.sendMsg(BUYSOL, null);
     }
     function nameSoldier(sol, name)
     {
@@ -239,10 +290,12 @@ class CastleScene extends MyNode
     /*
     关闭全局菜单的时候 可以删除
     全局菜单 可能是 建筑物的 也可以是 士兵的
+
+    没有打开全局菜单 也没有进行建造或者规划
     */
     function showGlobalMenu(build, callback)
     {
-        if(curMenuBuild == null)
+        if(curMenuBuild == null && curBuild == null)
         {
             curMenuBuild = build;
             ml.beginBuild();

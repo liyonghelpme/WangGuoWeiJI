@@ -628,12 +628,13 @@ function getMapAnimate(id)
 x 1 - 11     1-5  7-11
 y 0 - 4  
 返回左上角的格子编号
+士兵的Y值存在 偏移 offY
 */
-function getSolMap(p, sx, sy)
+function getSolMap(p, sx, sy, offY)
 {
     var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
     var xk = ix/MAP_OFFX;
-    var iy = p[1]-MAP_INITY-MAP_OFFY*sy;
+    var iy = p[1]-MAP_INITY-MAP_OFFY*sy-offY;
     var yk = iy/MAP_OFFY;
 
     return [xk, yk];
@@ -671,32 +672,19 @@ function getPosSolMap(p, sx, sy)
 返回士兵需要的对齐坐标
 限制坐标的范围
 */
-/*
-function normalizeSoldierPos(p, sx, sy)
-{
-    var ix = p[0]-MAP_INITX;
-    var k = ix/MAP_OFFX;
-    k = min(MAP_WIDTH, max(0, k));
-    ix = k*MAP_OFFX + MAP_INITX+MAP_OFFX/2;
-
-    var iy = p[1]-MAP_INITY;
-    k = iy/MAP_OFFY;
-    k = min(MAP_HEIGHT, max(0, k));
-    iy = k*MAP_OFFY + MAP_INITY+MAP_OFFY;
-    return [ix, iy];
-}
-*/
 
 /*
 由格子计算士兵的坐标
 */
 //0-12 0-4
-function getSolPos(mx, my, sx, sy)
+function getSolPos(mx, my, sx, sy, offY)
 {
+    trace("getSolPos", offY);
     mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
-    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY;
+    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
     return [mx, my];
 }
+
 
 /*
 计算到某个等级需要的所有经验
@@ -774,4 +762,29 @@ function getLevelNeedExp(expId, level)
     var needExp = soldierLevelExp.get(expId);
     var ne = needExp[min(len(needExp)-1, level)];
     return ne;
+}
+
+/*
+可能存在问题 show 和close 出现的时机不一致 就会导致 经营页面的菜单出现问题
+*/
+function showCastleDialog()
+{
+    global.msgCenter.sendMsg(SHOW_DIALOG, 0);
+}
+
+function closeCastleDialog()
+{
+    global.director.popView();
+    global.msgCenter.sendMsg(SHOW_DIALOG, 1);
+}
+function removeMapEle(arr, obj)
+{
+    for(var i = 0; i < len(arr); i++)
+    {
+        if(arr[i][0] == obj)
+        {
+            arr.pop(i);
+            break;
+        }
+    }
 }

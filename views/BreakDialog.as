@@ -18,6 +18,7 @@ class BreakDialog extends MyNode
 
     function BreakDialog(win, star, reward,  m)//reward,
     {
+
         map = m;
         bg = sprite("dialogBreak.png").anchor(50, 0).pos(global.director.disSize[0]/2, 0);
         init();
@@ -31,6 +32,26 @@ class BreakDialog extends MyNode
         //生成随机的矿物奖励
         if(win == 1)
         {
+            var newLevel = 0;
+            var rewardCry = 0;
+
+            //胜利 并且 新得到的星大于 过去的星 则更新星数据
+            var curStar = global.user.getCurStar(map.kind, map.small);
+            if(curStar < star)
+            {
+                global.user.updateStar(map.kind, map.small, star);
+                newLevel = 1;
+            }
+            //如果第一次闯关成功 大于1颗星 则奖励
+            if(curStar < 2)
+            {
+                if(star == 2)
+                    rewardCry = 1;
+                else 
+                    rewardCry = 3;
+                global.user.changeValue("crystal", rewardCry);
+            }
+
 
             for(i = 0; i < len(reward); i++)
                 global.user.changeHerb(reward[i], 1);
@@ -71,6 +92,11 @@ class BreakDialog extends MyNode
             }
 
             bg.addlabel(levelupStr, null, 18).pos(83, 212).color(0, 0, 0);
+            if(newLevel == 1)
+                bg.addlabel("新的最高分"+str(star), null, 18).pos(83, 234).color(0, 0, 0);
+            if(rewardCry > 0)
+                bg.addlabel("奖励水晶"+str(rewardCry), null, 18).pos(83, 256).color(0, 0, 0);
+
             //bg.addlabel("升级:liyong, xiaoxu", null, 18).pos(83, 244).color(0, 0, 0);
             //bg.addlabel("可以转职:liyong, xiaoxu", null, 18).pos(83, 276).color(0, 0, 0);
         

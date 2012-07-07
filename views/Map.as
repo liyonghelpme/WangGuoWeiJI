@@ -9,6 +9,7 @@ class Map extends MyNode
     var kind;
     var touchDelegate;
     var scene;
+    //var curStar;
     var walkZone = 
     [MAP_INITX+MAP_OFFX/2, MAP_INITY+MAP_OFFY, MAP_INITX+MAP_OFFX*12+MAP_OFFX/2, MAP_INITY+MAP_OFFY*5];
 
@@ -33,6 +34,8 @@ class Map extends MyNode
         scene = sc;
         kind = k;
         small = sm;
+        //curStar = global.user.getCurStar(kind, small);
+
         bg = sprite("map"+str(k)+".jpg").pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         grid = bg.addnode("mapGrid.png").pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1).color(100, 100, 100, 30);
         grid.addsprite("mapGrid.png").color(100, 100, 100, 50);
@@ -70,6 +73,16 @@ class Map extends MyNode
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
+    function getStar()
+    {
+        var myDef = defenses[0];
+        var leftHealth = myDef.health;
+        if(leftHealth == myDef.healthBoundary)
+            return 3;
+        if(leftHealth >= myDef.healthBoundary*80/100)
+            return 2;
+        return 1;
+    }
     function defenseBreak(def)
     {
         var reward = getRandomMapReward(kind, small);
@@ -78,7 +91,7 @@ class Map extends MyNode
         if(def.color == 0)
             global.director.pushView(new BreakDialog(0, 0, reward, this), 1, 0);
         else
-            global.director.pushView(new BreakDialog(1, 2, reward, this), 1, 0);
+            global.director.pushView(new BreakDialog(1, getStar(), reward, this), 1, 0);
     }
     /*
     color kind
@@ -132,7 +145,7 @@ class Map extends MyNode
                     }
                     if(col == 1)
                         continue;
-                    return getSolPos(xk, yk, soldier.sx, soldier.sy);
+                    return getSolPos(xk, yk, soldier.sx, soldier.sy, soldier.offY);
                 }
             }
         }
@@ -164,7 +177,7 @@ class Map extends MyNode
                     if(col == 1)
                         continue;
 
-                    return getSolPos(xk, yk, soldier.sx, soldier.sy);
+                    return getSolPos(xk, yk, soldier.sx, soldier.sy, soldier.offY);
                 }
             }
         }
@@ -190,7 +203,7 @@ class Map extends MyNode
             dir = 1;
         else
             dir = -1;
-        var solMap = getSolMap(myPos, sol.sx, sol.sy);
+        var solMap = getSolMap(myPos, sol.sx, sol.sy, sol.offY);
         for(var j = 0; j < sol.sy; j++)//遍历每一行
         {
             //根据y值得到相应的map行
@@ -210,7 +223,7 @@ class Map extends MyNode
     }
     function checkCol(sol)
     {
-        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy);
+        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var j = 0; j < sol.sy; j++)
         {
             var key = oldMap[0]*10000+oldMap[1]+j;
@@ -228,7 +241,7 @@ class Map extends MyNode
     */
     function setMap(sol)
     {
-        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy);
+        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var i = 0; i < sol.sy; i++)
         {
             var row = soldiers.get(oldMap[1]+i, []);
@@ -251,7 +264,7 @@ class Map extends MyNode
     */
     function clearMap(sol)
     {
-        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy);
+        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var i = 0; i < sol.sy; i++)
         {
             var row = soldiers.get(oldMap[1]+i)
@@ -398,7 +411,7 @@ class Map extends MyNode
         else if(eneCount == 0)
         {
             stopGame();
-            global.director.pushView(new BreakDialog(1, 2, reward, this), 1, 0);
+            global.director.pushView(new BreakDialog(1, getStar(), reward, this), 1, 0);
         }
     }
     function removeSoldier(so)

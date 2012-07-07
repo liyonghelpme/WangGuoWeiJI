@@ -20,10 +20,12 @@ class LevupDialog extends MyNode
 
         dia.addlabel(str(global.user.getValue("level")), null, 35).pos(502, 60).anchor(50, 50).color(100, 100, 100);
 
+        showCastleDialog();
     }
     function closeDialog()
     {
-        global.director.popView();
+        closeCastleDialog();
+        //global.director.popView();
     }
 
 }

@@ -63,7 +63,7 @@ class MenuLayer extends MyNode
     function openCharge()
     {
         var st = new Store(scene);
-        st.changeTab(1);
+        st.changeTab(st.GOLD_PAGE);
         global.director.pushView(st, 1, 0);
     }
     var silverText;
@@ -80,15 +80,20 @@ class MenuLayer extends MyNode
         gloryLevText = collectionbutton.addlabel(str("B+"), null, 20, FONT_BOLD).anchor(50, 50).pos(23, 17).color(100, 100, 100);
 
     }
-    var building = 0;
+    //var building = 0;
     /*
     通用的隐藏菜单的接口
     */
+    var removed = 0;
     function beginBuild()
     {
         //building = 1; 
         //bg.visible(0);
-        removeSelf();
+        if(removed == 0)
+        {
+            removed = 1;
+            removeSelf();
+        }
         /*
         for(var i = 0; i < len(menus); i++)
         {
@@ -104,7 +109,11 @@ class MenuLayer extends MyNode
     */
     function finishBuild()
     {
-        scene.addChild(this);
+        if(removed == 1)
+        {
+            removed = 0;
+            scene.keepMenuLayer.addChild(this);
+        }
         //building = 0;
         //bg.visible(1);
         /*
@@ -164,15 +173,28 @@ class MenuLayer extends MyNode
         silverText.text(str(res.get("silver")));
         goldText.text(str(res.get("gold")));
     }
+    /*
+    管理菜单的显示和隐藏
+    打开对话框 关闭对话框 显示隐藏菜单 立即 beginBuild finishBuild 发送消息
+    等待一定时间显示关闭对话框 showMenu hideMenu    时间计时
+    震动显示隐藏对话框 beginBuild finishBuild   震动感应
+
+    菜单当前的状态 显示 隐藏 状态转移过程中
+    */
     var visLock = 0;
     function showMenu(t)
     {
-        finishBuild();
-        bg.addaction(fadein(t));
+        if(removed == 1)
+        {
+            finishBuild();
+            bg.addaction(fadein(t));
+        }
     }
     function hideMenu(t)
     {
-        if(ins == 0)
+        //if(ins == 0)
+        //    return;
+        if(removed == 1)
             return;
         bg.addaction(sequence(fadeout(t), callfunc(beginBuild)));
     }

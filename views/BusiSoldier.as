@@ -22,6 +22,9 @@ class BusiSoldier extends MyNode
     var shiftAni;
     var data;
 
+    //用于在setMap 和clear Map中设定 农田的上边界 
+    var funcs = BUSI_SOL;
+
     var inspire = INSPIRE;
     var inspirePic = null;
 
@@ -177,7 +180,7 @@ class BusiSoldier extends MyNode
 
         bg = node().scale(showSize);
         init();
-        changeDirNode = bg.sprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
         var bSize = changeDirNode.prepare().size();
         bg.size(bSize).anchor(50, 100).pos(465, 720);
@@ -220,6 +223,7 @@ class BusiSoldier extends MyNode
         map.removeChild(this); 
         //修改数据
         global.user.sellSoldier(this);
+        global.msgCenter.sendMsg(BUYSOL, null);
     }
     function sellOver()
     {
@@ -252,7 +256,7 @@ class BusiSoldier extends MyNode
         {
             for(; 1; )
             {
-                var ne = getLevelNeedExp(data.get("expId"), level);
+                ne = getLevelNeedExp(data.get("expId"), level);
                 if(exp >= ne)
                 {
                     exp -= ne;
@@ -389,9 +393,9 @@ class BusiSoldier extends MyNode
     {
         var difx = tar[0] - bg.pos()[0];
         if(difx < 0)
-            changeDirNode.scale(showSize, showSize);
+            changeDirNode.scale(100, 100);
         else
-            changeDirNode.scale(-showSize, showSize);
+            changeDirNode.scale(-100, 100);
     }
     function showInspire()
     {

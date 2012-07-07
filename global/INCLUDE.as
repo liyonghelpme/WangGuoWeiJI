@@ -8,6 +8,11 @@ import views.FriendMenu;
 import views.VisitDialog;
 
 import views.RankDialog;
+import views.HeroRank;
+import views.GroupRank;
+import views.NewRank;
+
+
 import views.LoginDialog;
 import views.SettingDialog;
 import views.TaskDialog;
@@ -24,6 +29,7 @@ import views.DrugDialog;
 //经营页面
 import views.CastlePage;
 import views.BuildLand;
+import views.SoldierMax;
 
 import views.FallGoods;
 import views.FallObj;
@@ -79,6 +85,8 @@ import views.FriendDialog;
 
 import views.FlowScene;
 import views.FlowMenu;
+
+import views.MyWarningDialog;
 
 
 

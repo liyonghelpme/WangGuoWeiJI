@@ -1,3 +1,7 @@
+const SLOW_MOVE_TIME = 50000;
+const FAST_MOVE_TIME = 30000;
+const NEW_CLOUD_TIME = 6000;
+
 class Cloud extends MyNode
 {
     var map;
@@ -9,10 +13,10 @@ class Cloud extends MyNode
         init();
         if(k == 2 || k == 5)
             bg.addaction(sequence(
-                    moveto(30000+rand(3000), 3000, 0), callfunc(remove)));
+                    moveto(FAST_MOVE_TIME+rand(3000), 3000, 0), callfunc(remove)));
         else
             bg.addaction(sequence(
-                    moveto(50000+rand(3000), 3000, 0), callfunc(remove)));
+                    moveto(SLOW_MOVE_TIME+rand(3000), 3000, 0), callfunc(remove)));
     }
     function remove()
     {
@@ -107,6 +111,7 @@ class BuildLayer extends MyNode
         super.enterScene();
         initSoldiers();
         global.msgCenter.registerCallback(RELIVE_SOL, this);
+
     }
     /*
     注册消息类型------> MSG_ID------>对象 ------>参数[]
@@ -126,6 +131,7 @@ class BuildLayer extends MyNode
     }
     override function exitScene()
     {
+
         global.msgCenter.removeCallback(RELIVE_SOL, this);
         removeSoldiers();
         super.exitScene();
@@ -172,20 +178,6 @@ class BuildLayer extends MyNode
     重新由数据加入到页面中
     但是建筑物的map属性需要重新设置
     */
-    /*
-    function addPureBuild(chd)
-    {
-        super.addChildZ(chd, MAX_BUILD_ZORD);
-        //调整Zord
-        chd.setPos(chd.getPos());
-        //chd.setMap(this);
-    }
-    override function exitScene()
-    {
-        global.user.clearAllBuilding();
-        super.exitScene();
-    }
-    */
 
     /*
     用于从上面的数据开始构造用户的建筑物
@@ -205,9 +197,27 @@ class BuildLayer extends MyNode
     */
     /*
     buildings ----> allBuildings
+    初始化 木牌
+    //banner = bg.addsprite("build126.png").pos(864, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner);
+    //solNum = banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
     */
     function initBuilding()
     {
+        var data;
+        var build;
+        //设置编号126 的木牌建筑
+        //或者设置 木牌的
+        /*
+        var data = getData(BUILD, 126);
+        var build = new Building(this, data, null);
+        build.setBid(-1);
+        var nPos = normalizePos([864, 800], 1, 1);
+        addChildZ(build, MAX_BUILD_ZORD);
+        build.setPos(nPos);
+        global.user.addBuilding(build);
+        */
+
+
         trace("initBuilding", len(global.user.buildings));
         var item = global.user.buildings.items();
         for(var i = 0; i < len(item); i++)
@@ -215,10 +225,10 @@ class BuildLayer extends MyNode
             var bid = item[i][0];
             var bdata = item[i][1];
 
-            var data = getData(BUILD, bdata.get("id"));
+            data = getData(BUILD, bdata.get("id"));
             //data.update("state", bdata.get("state"));
             //data.update("dir", bdata.get("dir"));
-            var build = new Building(this, data, bdata);
+            build = new Building(this, data, bdata);
             build.setBid(bid);
 
 
@@ -292,6 +302,7 @@ class CastlePage extends MyNode
     var buildLayer;
 
     var dialogController;
+    var solNum;
 
     function CastlePage(s)
     {
@@ -304,9 +315,12 @@ class CastlePage extends MyNode
         addChildZ(sky, -2);
 
 
-        bg.addsprite("flow0.png").pos(0, 48);
-        bg.addsprite("flow1.png").pos(1650, 25).setevent(EVENT_TOUCH, goFlow, 0).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
-        bg.addsprite("flow2.png").pos(2352, 116).setevent(EVENT_TOUCH, goFlow, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
+        var flow0 = bg.addsprite("flow0.png").pos(0, 48).setevent(EVENT_TOUCH, goFlow, 0);
+        var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onFlowBanner);
+        banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+
+        bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
+        bg.addsprite("flow2.png").anchor(50, 100).pos(2431, 222).setevent(EVENT_TOUCH, goFlow, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
 
         bg.addsprite("mapInIcon.png").pos(1473, 309).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20))).setevent(EVENT_TOUCH, onMap);
 
@@ -321,8 +335,15 @@ class CastlePage extends MyNode
 
         addChild(new Water());
 
+        //px - (1+1)*32/2 = pYN  / 32 = 26
+        //py - (1+1)*16 = pYN / 16 = 48
+        //260048 特殊的固定建筑 不能移动 也不能任意的点击 由客户端确定的建筑
+        banner = bg.addsprite("build126.png").pos(864, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner);
+        solNum = banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+
         buildLayer = new BuildLayer(this);
         addChild(buildLayer);
+
 
         fallGoods = new FallGoods(this, buildLayer);
         addChild(fallGoods);
@@ -348,9 +369,18 @@ class CastlePage extends MyNode
         //initBuilding();
 
     }
+    function onFlowBanner()
+    {
+        //global.director.pushView(new SoldierMax(), 1, 0); 
+    }
+    function onBanner()
+    {
+        global.director.pushView(new SoldierMax(), 1, 0); 
+    }
     function goFlow(n, e, p, x, y, points)
     {
-        global.director.pushScene(new FlowScene(p));
+        //global.director.pushScene(new FlowScene(p));
+        global.director.pushView(new MyWarningDialog(getStr("notOpen", null), getStr("comeSoon", null), null), 1, 0);
     }
     function onMap()
     {
@@ -474,6 +504,17 @@ class CastlePage extends MyNode
         trace("castal Enter Scene");
         super.enterScene();
         global.timer.addTimer(this);
+        global.msgCenter.registerCallback(BUYSOL, this);
+        solNum.text(str(global.user.getSolNum()));
+    }
+
+    function receiveMsg(msg)
+    {
+        trace("receiveMsg", msg);
+        if(msg[0] == BUYSOL)
+        {
+            solNum.text(str(global.user.getSolNum()));
+        }
     }
     function remove(c)
     {
@@ -484,19 +525,20 @@ class CastlePage extends MyNode
     function update(diff)
     {
         lastTime += diff;
-        if(lastTime >= 10000)
+        if(lastTime >= NEW_CLOUD_TIME)
         {
-            if(len(clouds) < 8 && rand(3) == 0)
+            lastTime = 0;
+            if(len(clouds) < 8 && rand(1) == 0)
             {
                 var r = rand(7);
                 var c = new Cloud(this, r);
                 addChildZ(c, -1);
             }
-            lastTime = 0;
         }
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(BUYSOL, this);
         global.timer.removeTimer(this);
         super.exitScene();
     }

@@ -6,7 +6,7 @@
 class MapDefense extends MyNode
 {
     var health = 100;
-    var healthBound = 100;
+    var healthBoundary = 100;
     var color;
     var map;
     var state;

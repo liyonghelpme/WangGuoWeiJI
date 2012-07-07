@@ -72,6 +72,7 @@ class Soldier extends MyNode
     var changeDirNode;
     var sx = 1;
     var sy = 1;
+    var offY = 0;
 
     var attack = 100;
     var defense = 50;
@@ -89,6 +90,7 @@ class Soldier extends MyNode
         sy = data.get("sy");
         gainexp = data.get("gainexp");
         attSpeed = data.get("attSpeed");
+        offY = data.get("offY");
 
 
         if(sid == -1)//敌对方士兵 地图怪兽 
@@ -203,17 +205,18 @@ class Soldier extends MyNode
 
 
         shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
-        changeDirNode.add(shadow, -1);
+        //changeDirNode.add(shadow, -1);
+        bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
         init();
 
         var vol = data.get("volumn");
-        if(vol > MIN_VOL && vol < MID_VOL)
+        if(sx < 2)
         {
-            bloodScaX = 120*100/139;//大体积 采用144的长度 中等体积 采用普通长度    
+            bloodScaX = 70*100/139;//大体积 采用144的长度 中等体积 采用普通长度    
         }
-        if(vol > MID_VOL)
+        else 
         {
-            bloodScaX = 150*100/139;
+            bloodScaX = 139*100/139;
         }
 
         var banner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
@@ -341,11 +344,13 @@ class Soldier extends MyNode
     {
         inMoving = 0;
     }
+    /*
     var inAttacking = 0;
     function finAttack()
     {
         inAttacking = 0;
     }
+    */
     var oldPos = null;
     /*
     移动清除旧的map 
@@ -386,7 +391,7 @@ class Soldier extends MyNode
             //移动位置不能超过边界
             newMap[0] = max(1, min(6-sx, newMap[0]));
             newMap[1] = max(0, min(5-sy, newMap[1]));
-            var nPos = getSolPos(newMap[0], newMap[1], sx, sy);
+            var nPos = getSolPos(newMap[0], newMap[1], sx, sy, offY);
             setPos(nPos);
             setCol();
         }
@@ -460,7 +465,7 @@ class Soldier extends MyNode
     {
         //同一条线的敌方对象 面前纵格子的对象 
         //如何有纵向的范围攻击 
-        var myMap = getSolMap(getPos(), sx, sy);
+        var myMap = getSolMap(getPos(), sx, sy, offY);
         var minDist = 10000;
         var minTar = null;
         for(var j = 0; j < sy; j++)
@@ -499,7 +504,7 @@ class Soldier extends MyNode
     {
         movAni.stop();
         attAni.stop();
-        inAttacking = 0;
+        //inAttacking = 0;
     }
     function getVolumn()
     {

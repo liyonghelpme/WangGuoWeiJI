@@ -59,7 +59,7 @@ class MapPause extends MyNode
         solH.scale(sca);
 
         nameBlock = bg.addsprite("mapNameBlock.png").pos(712, 50).anchor(100, 0);
-        nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(32, 17).color(0, 0, 0).anchor(0, 50);
+        nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(213, 17).color(0, 0, 0).anchor(100, 50);
 
 
         bg.addsprite("mapMenuBlock.png").pos(skillPos[0]);
@@ -75,21 +75,21 @@ class MapPause extends MyNode
     {
         if(defense.color == 0)
         {
-            if(defense.health*100/defense.healthBound < 30)
+            if(defense.health*100/defense.healthBoundary < 30)
                 leftDef.texture("mapCastleRed.png");
             else
                 leftDef.texture("mapCastleBlue.png");
-            leftDef.size(297*defense.health/defense.healthBound, 29);
-            leftText.text(str(defense.health)+"/"+str(defense.healthBound));
+            leftDef.size(297*defense.health/defense.healthBoundary, 29);
+            leftText.text(str(defense.health)+"/"+str(defense.healthBoundary));
         }
         else if(defense.color == 1)
         {
-            if(defense.health*100/defense.healthBound < 30)
+            if(defense.health*100/defense.healthBoundary < 30)
                 rightDef.texture("mapCastleRed.png");
             else
                 rightDef.texture("mapCastleBlue.png");
-            rightDef.size(297*defense.health/defense.healthBound, 29);
-            rightText.text(str(defense.health)+"/"+str(defense.healthBound));
+            rightDef.size(297*defense.health/defense.healthBoundary, 29);
+            rightText.text(str(defense.health)+"/"+str(defense.healthBoundary));
         }
     }
     override function enterScene()

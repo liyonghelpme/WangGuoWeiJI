@@ -34,3 +34,34 @@ class Castle extends FuncBuild
         baseBuild = b;
     }
 }
+class StaticBuild extends FuncBuild
+{
+    var solNum;
+    function StaticBuild(b)
+    {
+        baseBuild = b;
+        solNum = baseBuild.bg.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+    }
+    override function whenFree()
+    {
+        global.director.pushView(new SoldierMax(), 1, 0); 
+        return 1;
+    }
+    function receiveMsg(msg)
+    {
+        trace("receiveMsg", msg);
+        if(msg[0] == BUYSOL)
+        {
+            solNum.text(str(global.user.getSolNum()));
+        }
+    }
+    override function enterScene()
+    {
+        global.msgCenter.registerCallback(BUYSOL, this);
+        solNum.text(str(global.user.getSolNum()));
+    }
+    override function exitScene()
+    {
+        global.msgCenter.removeCallback(BUYSOL, this);
+    }
+}

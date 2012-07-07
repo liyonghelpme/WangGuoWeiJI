@@ -1,6 +1,12 @@
 class FuncBuild
 {
     var baseBuild;
+    function enterScene()
+    {
+    }
+    function exitScene()
+    {
+    }
     function whenFree()
     {
         return 0;

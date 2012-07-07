@@ -94,11 +94,12 @@ class MapScene extends MyNode
         contextStack=[];
     }
     var noOpTime = 0;
+    const SHOW_ARROW_TIME = 5000;
     function update(diff)
     {
         if(len(contextStack) == 0)//在主界面 没有选择地图
             noOpTime += diff;
-        if(noOpTime >= 10000)
+        if(noOpTime >= SHOW_ARROW_TIME)
         {
             noOpTime = 0;
             islandLayer.showArrow();

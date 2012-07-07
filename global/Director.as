@@ -60,7 +60,7 @@ class Director
             if(kc == KEYCODE_BACK)
             {
                 quitState = 1;
-                global.director.pushView(new QuitBanner());
+                global.director.pushView(new QuitBanner(), 0, 0);
             }
         }
         else if(quitState == 1)

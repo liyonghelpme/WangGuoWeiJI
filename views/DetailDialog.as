@@ -32,6 +32,10 @@ function getRecoverLev(rc)
         return getStr("mid", null);
     return getStr("fast", null);
 }
+/*
+构建对话框的时候 关闭场景的菜单栏
+关闭对话框的时候需要重性显示场景的对话框
+*/
 class DetailDialog extends MyNode
 {
     var soldier;
@@ -40,7 +44,7 @@ class DetailDialog extends MyNode
         soldier = sol;
         bg = sprite("dialogDetail.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
-        bg.addlabel(soldier.myName+"("+soldier.data.get("name")+")", null, 30).anchor(50, 50).pos(280, 26).color(0, 0, 0);
+        bg.addlabel(soldier.myName+"("+soldier.data.get("name")+")", null, 30).anchor(50, 50).pos(264, 26).color(0, 0, 0);
         bg.addsprite("roleNameClose.png").pos(499, 9).setevent(EVENT_TOUCH, closeDialog);
         var contentNode = bg.addnode().pos(36, 88);
         contentNode.addlabel(getStr("attVal", ["[NUM]", str(sol.attack)]), null, 20).pos(0, 0).color(0, 0, 0);
@@ -61,23 +65,27 @@ class DetailDialog extends MyNode
             contentNode.addlabel(getStr("noTransfer", null), null, 20).pos(0, 210).color(0, 0, 0);
 
         trace("soldierpng", soldier.id);
-        var sol = bg.addsprite("soldier"+str(soldier.id)+".png").pos(460, 283).anchor(50, 50);
-        var sca = getSca(sol, [90, 90]);
-        sol.scale(sca);
+        var solPic = bg.addsprite("soldier"+str(soldier.id)+".png").pos(460, 283).anchor(50, 50);
+        var sca = getSca(solPic, [90, 90]);
+        solPic.scale(sca);
 
-        var block = bg.addsprite("whiteBlock.png").anchor(0, 100).pos(20, 10).scale(-100, 100).setevent(EVENT_TOUCH, onInfo);
+        var block = solPic.addsprite("whiteBlock.png").anchor(0, 100).pos(20, 10).scale(-100, 100).setevent(EVENT_TOUCH, onInfo);
         block.addsprite("infoIcon.png").pos(27, 21).anchor(50, 50).scale(-100, 100);
 
-        global.director.curScene.disableMenu();
+        //global.director.curScene.disableMenu();
+        showCastleDialog();
     }
     function onInfo()
     {
-        global.director.popView();
-        global.director.pushView(new ProfessionIntroDialog(null, sol.id), 1, 0);
+        //global.director.popView();
+        //global.director.curScene.enableMenu();
+        closeCastleDialog();
+        global.director.pushView(new ProfessionIntroDialog(null, soldier.id), 1, 0);
     }
     function closeDialog()
     {
-        global.director.popView();
-        global.director.curScene.enableMenu();
+        closeCastleDialog();
+        //global.director.popView();
+        //global.
     }
 }

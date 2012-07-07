@@ -21,10 +21,13 @@ class PlantChoose extends MyNode
         new Button(pback, onBack, null);
 
         initPlant();
+
+        showCastleDialog();
     }
     function onBack(p)
     {
-        global.director.popView();
+        //global.director.popView();
+        closeCastleDialog();
     }
     var minPos;
     function initPlant()
@@ -81,7 +84,8 @@ class PlantChoose extends MyNode
             if(child != null)
             {
                 building.funcBuild.beginPlant(child.get()); 
-                global.director.popView();
+                //global.director.popView();
+                closeCastleDialog();
             }
         }
         var oldPos = flowNode.pos();

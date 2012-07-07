@@ -77,7 +77,7 @@ class BuildMenu extends MyNode
         var kind = building.get("kind");
         if(building.get("changeDir") == 0)
         {
-            if(kind != 3 && inPlan == 1)
+            if(kind != MAIN_ZONE && inPlan == 1)
                 buttonNode.addsprite("buildSell.png").pos(687-OFFX, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
                 
             buttonNode.addsprite("buildOk.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
@@ -86,7 +86,7 @@ class BuildMenu extends MyNode
         }
         else
         {
-            if(kind != 3 && inPlan == 1)
+            if(kind != MAIN_ZONE && inPlan == 1)
                 buttonNode.addsprite("buildSell.png").pos(633-OFFX, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
 
             buttonNode.addsprite("buildOk.png").pos(633, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
@@ -101,6 +101,7 @@ class BuildMenu extends MyNode
         //卖出建筑成功后 清空当前控制条的显示
         setBuilding(null);
     }
+
     function finishPlan()
     {
         scene.finishPlan();

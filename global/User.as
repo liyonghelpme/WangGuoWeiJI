@@ -219,6 +219,19 @@ class User
     //士兵数据实体
     //updateSoldiers 修改士兵本地数据
     var soldiers;
+    function getCurStar(big, small)
+    {
+        var starNum = db.get("starNum");
+        //0-4
+        //0-5
+        return starNum[big][small];
+    }
+    function updateStar(big, small, star)
+    {
+        var starNum = db.get("starNum");
+        starNum[big][small] = star;
+        db.put("starNum", starNum);
+    }
     function User()
     {
         uid = ppy_userid();
@@ -230,7 +243,7 @@ class User
         {
             trace("first login");
             db.put(str(uid), 1),
-            db.put("silver", 1000, "gold", 1000, "crystal", 1000, "level", 10, "people", 0, "papaya", 1000);
+            db.put("silver", 1000, "gold", 1000, "crystal", 1000, "level", 10, "people", 5, "papaya", 1000);
             db.put("loginDays", 1);
             db.put("starNum", [
             [
@@ -251,7 +264,7 @@ class User
             [3],
             ],
             [
-            [3],
+            [2],
             [0],
             [0],
             [0],
@@ -314,6 +327,15 @@ class User
         /*
         在初始化数据之后 初始化 建筑物
         */
+    }
+    function getPeopleNum()
+    {
+        return getValue("people");
+    }
+    //每个士兵占用一个人口
+    function getSolNum()
+    {
+        return len(soldiers);
     }
     /*
     如果建筑数据未初始化 则首先初始化
@@ -437,6 +459,7 @@ class User
     {
         allSoldiers.append(sol); 
     }
+    //清除士兵的一个格子的map
     function clearSolMap(sol)
     {
         if(sol.curMap != null)
@@ -445,7 +468,7 @@ class User
             var v = mapDict.get(key, null);
             if(v != null)
             {
-                v.remove(sol);
+                removeMapEle(v, sol);
             }
         }
     }
@@ -782,17 +805,20 @@ class User
     */
     /*
     建筑和士兵 都有 sx sy 属性 都可以得到 位置
+    传入建筑物类型 如果是farm则需要扩充bound
     */
     function updateMap(build)
     {
         var p = build.getPos();
         return updatePosMap([build.sx, build.sy, p[0], p[1], build]);
     }
+    //掉落物品更新 可以建造 可以移动
+    //obj 可建造 0/1   可移动0/1
     function updateRxRyMap(rx, ry, obj)
     {
         var key = rx*10000+ry;
         var v = mapDict.get(key, []);
-        v.append(obj);
+        v.append([obj, 1, 1]);
         mapDict.update(key, v);
     }
     function removeRxRyMap(rx, ry, obj)
@@ -800,15 +826,28 @@ class User
         var key = rx*10000+ry;
         var v = mapDict.get(key, null);
         if(v != null)
-            v.remove(obj);
+        {
+            removeMapEle(v, obj);
+            //v.remove(obj);
+        }
     }
+    //可建造 可移动 更新建筑物的map 不可建造 px py sx sy obj kind
+    //map --->[[obj, 1, 1]] 不可建造 不可移动
+    //map ---->[[obj, 0, 1]] 可以建造 不可移动
+    //block 不可建造 可以移动
+    //士兵检测冲突 
+    //建筑物检测冲突
     function updatePosMap(sizePos)
     {
         var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
+        var kind = sizePos[4].funcs;
+
+
         var sx = map[0];
         var sy = map[1];
         var initX = map[2];
         var initY = map[3];
+
         for(var i = 0; i < sx; i++)
         {
             var curX = initX+i;
@@ -817,18 +856,109 @@ class User
             {
                 var key = curX*10000+curY;
                 var v = mapDict.get(key, []);
-                v.append(sizePos[4]);
+                v.append([sizePos[4], 1, 1]);
                 mapDict.update(key, v);
 
                 curX -= 1;
                 curY += 1;
             }
         }
+        setFarmLandMap(map, sizePos, kind);
+
+
         //trace("updateMap", map, len(mapDict));//, mapDict);
         return [initX, initY];
     }
+    function setFarmLandMap(map, sizePos, kind)
+    {
+        var curX;
+        var curY;
+        var key;
+        var i;
+        var v;
+
+        var sx = map[0];
+        var sy = map[1];
+
+        if(kind == FARM_BUILD)
+        {
+            var bInitX = map[2];
+            var bInitY = map[3] - 2;
+            curX = bInitX;
+            curY = bInitY;
+            for(i = 0; i < (sy+1); i++)
+            {
+                key = curX*10000+curY;
+                v = mapDict.get(key, []);
+                v.append([sizePos[4], 0, 1]);
+                mapDict.update(key, v);
+
+                curX -= 1;
+                curY += 1;
+            }
+            curX = bInitX+1;
+            curY = bInitY+1;
+            for(i = 0; i < sx; i++)
+            {
+                key = curX*10000+curY;
+                v = mapDict.get(key, []);
+                v.append([sizePos[4], 0, 1]);
+                mapDict.update(key, v);
+                
+                curX += 1;
+                curY += 1;
+            }
+
+        }
+    }
+    function clearFarmLandMap(map, build, kind)
+    {
+        var curX;
+        var curY;
+        var key;
+        var i;
+        var v;
+
+        var sx = build.sx;
+        var sy = build.sy;
+
+        if(kind == FARM_BUILD)
+        {
+            var bInitX = map[2];
+            var bInitY = map[3] - 2;
+            curX = bInitX;
+            curY = bInitY;
+            for(i = 0; i < (sy+1); i++)
+            {
+                key = curX*10000+curY;
+                v = mapDict.get(key, []);
+                removeMapEle(v, build);
+                if(len(v) == 0)
+                    mapDict.pop(key);
+
+                curX -= 1;
+                curY += 1;
+            }
+            curX = bInitX+1;
+            curY = bInitY+1;
+            for(i = 0; i < sx; i++)
+            {
+                key = curX*10000+curY;
+                v = mapDict.get(key, []);
+                removeMapEle(v, build);
+                if(len(v) == 0)
+                    mapDict.pop(key);
+                
+                curX += 1;
+                curY += 1;
+            }
+
+            
+        }
+    }
     //一个MAP中的对象需要实现以下
     /*
+    清楚Farm的上边界 移动冲突
     只在清楚状态的时候 清理建筑物状态
     包括建筑和士兵
     士兵不需要设置 底部颜色
@@ -851,24 +981,28 @@ class User
                 var v = mapDict.get(key, []);
                 if(len(v) == 0)
                     continue;
-                v.remove(build);
+                removeMapEle(v, build);
+                //v.remove(build);
                 //没有建筑则删除
                 if(len(v) == 0)
                     mapDict.pop(key);
+                /*
+                不用更新dict
                 else//剩余建筑 士兵 掉落物品不用检测状态
                 {
-                    /*
                     for(var k = 0; k < len(v); k++)
                     {
                         v[k].setColPos();
                     }
-                    */
                     mapDict.update(key, v);
                 }
+                */
                 curX -= 1;
                 curY += 1;
             }
         }
+
+        clearFarmLandMap(map, build, build.funcs);
     }
    
     /*
@@ -895,7 +1029,14 @@ class User
         */
         var v = mapDict.get(key, []);
         if(len(v) > 0)
-            return v[0];
+        {
+            for(var i = 0; i < len(v); i++)
+            {
+                if(v[i][2] == 1)//不可行走区域
+                    return v[0];
+            }
+            //return v[0];
+        }
         /*
         检测不与静态河流冲突
         */
@@ -922,6 +1063,7 @@ class User
         return 0;
     }
     /*
+    建筑物检测建造冲突
     检测冲突， 值返回还有几个对象，每次移动的时候把自己从中清除即可
     i++ i--
     建筑物 士兵 sx sy pos
@@ -946,7 +1088,7 @@ class User
                 {
                     for(var k = 0; k < len(v); k++)
                     {
-                        if(v[k] != build)
+                        if(v[k][0] != build && v[k][1] == 1)//不可建造
                         {
                             trace("colWithBuild", v[k]);
                             return v[k];
@@ -972,7 +1114,8 @@ class User
     */
 
     /*
-    只能控制一个建筑物 所以冲突状态是确定的
+    只能控制一个建筑物 所以冲突状态是确定
+    必须把该建筑移动到没有冲突的位置 才可以移动其它建筑
     */
     function checkBuildCol()
     {

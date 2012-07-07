@@ -306,6 +306,9 @@ var strings = dict([
 [ "attack" , ["攻击力", ""]],
 [ "defense" , ["防御力", ""]],
 [ "health" , ["生命值", ""]],
+
+["healthAndBoundary", "生命值：[HEALTH]/[BOUND]"],
+
 [ "levelNot" , ["需要等级[[LEVEL]]", ""]],
 [ "people" , ["人口", ""]],
 [ "cityDefense" , ["城堡防御力", ""]],
@@ -342,7 +345,7 @@ var strings = dict([
 [ "attSpeed" , ["攻击速度：[LEV]", ""]],
 [ "attRange" , ["攻击范围：[LEV]", ""]],
 [ "recLife" , ["回血速度：[LEV]", ""]],
-[ "levVal" , ["[LEV1]级，还需要[EXP]升到[LEV2]级", ""]],
+[ "levVal" , ["[LEV1]级，还需要[EXP]exp升到[LEV2]级", ""]],
 [ "nextTrans" , ["下次转职需要等级[LEV]", ""]],
 [ "friGift" , ["好友礼物", ""]],
 [ "moreGame" , ["更多游戏", ""]],
@@ -366,7 +369,16 @@ var strings = dict([
 ["fast", "快"],
 ["near", "近"],
 ["far", "远"],
-["noTransfer", "已经达到最高级"],
+["noTransfer", "已经达到最高级职业"],
+["trainZone", "训练场"],
+["curSolSolBound", "当前士兵数量/士兵数量上限：[NUM1]/[NUM2]"],
+["solTip", "提示：训练场不能摆放建筑，开启浮岛可以容纳更多士兵，点击经营页面上方浮岛查看详细信息。"],
+["houseNot", "民居不足"],
+["buildHouse", "你需要建造更多的民居来容纳士兵"],
+["solTooMany", "士兵超出"],
+["sorrySol", "抱歉，奇迹村最多只能容纳50个人口，开启浮岛来容纳更多人口！"],
+["notOpen", "尚未开启"],
+["comeSoon", "敬请期待"],
 
 
 ["solDes0", "solDes0"],

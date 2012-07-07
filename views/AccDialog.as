@@ -4,6 +4,10 @@
     getAccCost 接口返回 加速消耗
     sureToAcc 确认加速接口
 */
+/*
+所有经营页面显示的对话框 
+在进入时 关闭菜单 在退出的时候显示菜单
+*/
 class AccDialog extends MyNode
 {
     var accObj;
@@ -25,14 +29,18 @@ class AccDialog extends MyNode
         but.addlabel(getStr("ok", null), null, 35).anchor(50, 50).color(100, 100, 100).pos(90, 32);
         but = bg.addsprite("roleNameBut1.png").size(180, 65).pos(370, 265).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         but.addlabel(getStr("cancel", null), null, 35).anchor(50, 50).color(100, 100, 100).pos(90, 32);
+
+        showCastleDialog();
     }
     function closeDialog()
     {
-        global.director.popView();
+        closeCastleDialog();
+        //global.director.popView();
     }
     function acc()
     {
         accObj.sureToAcc();
-        global.director.popView();
+        //global.director.popView();
+        closeCastleDialog();
     }
 }

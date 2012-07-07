@@ -10,10 +10,12 @@ class SettingDialog extends MyNode
         music = 0;
         button = bg.addsprite("dialogOff.png").pos(397, 136).setevent(EVENT_TOUCH, switchMusic);
 
+        showCastleDialog();
     }
     function closeDialog()
     {
-        global.director.popView();
+        closeCastleDialog();
+        //global.director.popView();
     }
     function switchMusic()
     {

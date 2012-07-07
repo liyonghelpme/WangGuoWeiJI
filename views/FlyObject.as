@@ -26,30 +26,52 @@ class FlyObject extends MyNode
 
         var item = cost.items();
         trace("flyObject", cost);
-        var offY = 0;
+        //var offY = 0;
+        var waitTime = 0;
         for(var i = 0; i < len(item); i++)
         {
             var k = item[i][0];
             var v = item[i][1];
+
             if(v == 0)
                 continue;
-            num++;
+            
+            var cut = 1;
+            if(v < 10)
+                cut = 1;
+            else if(v < 100)
+                cut = 3;
+            else 
+                cut = 5;
+            num += cut;//显示的fly对象的数量
 
-            var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT);
-            var tar = TarPos.get(k);
-            var dis = sqrt(distance(coor2, tar));
-            flyObj.addaction(sequence(sinein(bezierby(
-                        500+dis*25,
-                        coor2[0], coor2[1]+offY, 
-                        coor2[0]+100, coor2[1]-100, 
-                        coor2[0]+100, coor2[1]+100, 
-                        tar[0], tar[1])),callfunc(pickMe)));
-            var words = flyObj.addlabel(str(v), null, 22).pos(FLY_WIDTH, FLY_HEIGHT/2).anchor(0, 50).color(78, 39, 4);
-            offY += 50;
+            var showVal = v/cut;
+            //飞起来 等待 一会 接着一起落下
+            for(var j = 0; j < cut; j++)
+            {
+                var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT);
+                var tar = TarPos.get(k);
+                var dis = sqrt(distance(coor2, tar));
+                //var rx = rand(40);
+                //var ry = rand(40); 
+                //隐藏 等待 出现
+                flyObj.addaction(sequence(itintto(0, 0, 0, 0), delaytime(waitTime), itintto(100, 100, 100, 100), sinein(bezierby(
+                            1500+dis*25,
+                            coor2[0], coor2[1], 
+                            coor2[0]+150, coor2[1]-300, 
+                            coor2[0]+100, coor2[1]+100, 
+                            tar[0], tar[1])), callfunc(pickMe)));
+                if(j == (cut-1))
+                    showVal = v-showVal*j;
+                var words = flyObj.addlabel(str(showVal), null, 22).pos(FLY_WIDTH, FLY_HEIGHT/2).anchor(0, 50).color(78, 39, 4);
+                //offY += 50;
+                waitTime += 200;
+            }
         }
     }
-    function pickMe()
+    function pickMe(n)
     {
+        n.removefromparent();
         trace("flyOver", num);
         num--;
         if(num == 0)
