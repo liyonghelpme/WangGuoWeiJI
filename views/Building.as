@@ -36,6 +36,8 @@ class BuildAnimate extends MyNode
     /*
     切换帧动画的位置播放
     切换旋转动画的纹理和旋转方向
+
+    建筑物菜单也可以旋转建筑物
     */
     function changeDir()
     {
@@ -53,7 +55,10 @@ class BuildAnimate extends MyNode
                 deg = -360;
             bg.addaction(sequence(stop(), repeat(rotateby(ani[2], deg)))); 
         }
-        global.user.updateBuilding(this);
+
+        //global.httpController.addRequest("buildingC/changeDir", dict([["uid", uid], ["bid", bid]]), null, null);
+
+
     }
     override function enterScene()
     {
@@ -107,6 +112,9 @@ class Building extends MyNode
     所有建筑都有方向属性， 只是农田不能改变方向而已
     */
     var aniNode = null;
+
+    var changeDirNode;
+
     function Building(m, d, privateData)
     {
         map = m;
@@ -129,7 +137,14 @@ class Building extends MyNode
             funcBuild = new Castle(this);
 
         trace("init building", data);
-        bg = sprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
+        bg = node();
+        changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
+        var bSize = changeDirNode.prepare().size();
+        bg.size(bSize).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+        changeDirNode.pos(bSize[0]/2, bSize[1]);
+
+        //.pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
+        
         init();
         if(privateData != null)//初始化数据建筑
         {
@@ -157,11 +172,14 @@ class Building extends MyNode
         funcBuild.initWorking(privateData);
         /*
         初始化动画
+        动画加在 bg 上， 则 旋转时不能准确控制方向
+        动画加在changeDirNode 上 需要 在enterScene 和 exitScene 是调用动画node函数
         */
         if(data.get("hasAni") == 1 )
         {
             aniNode = new BuildAnimate(this);
-            addChild(aniNode);
+            //addChild(aniNode);
+            changeDirNode.add(aniNode.bg);
         }
         //global.user.updateMap(this);
 
@@ -190,9 +208,13 @@ class Building extends MyNode
     {
         super.enterScene();
         funcBuild.enterScene();
+        if(aniNode != null)
+            aniNode.enterScene();
     }
     override function exitScene()
     {
+        if(aniNode != null)
+            aniNode.exitScene();
         funcBuild.exitScene();
         super.exitScene();
     }
@@ -201,33 +223,41 @@ class Building extends MyNode
     {
         dir = d;
         if(dir == 0)
-            bg.scale(100, 100);
+            changeDirNode.scale(100, 100);
         else 
-            bg.scale(-100, 100);
+            changeDirNode.scale(-100, 100);
     }
     function onSwitch()
     {
         if(data.get("changeDir") == 0)
             return;
+
+        dirty = 1;
+
         dir = 1-dir;
         //bg.texture("build"+str(id+dir)+".png");
         //bg.texture("build"+str(id)+".png");
         if(dir == 0)
-            bg.scale(100, 100);
+            changeDirNode.scale(100, 100);
         else 
-            bg.scale(-100, 100);
+            changeDirNode.scale(-100, 100);
         //if(aniNode != null)
         //    aniNode.changeDir();
         
+        global.user.updateBuilding(this);
     }
     //remove OldPosition map 
     //set NewPosition map
-    function setZord()
+    override function setZord(z)
     {
         var zOrd = bg.pos()[1];
         var par = bg.parent();
-        bg.removefromparent();
-        par.add(bg, zOrd);
+
+        if(par != null)
+        {
+            bg.removefromparent();
+            par.add(bg, zOrd);
+        }
     }
 
     /*
@@ -252,6 +282,8 @@ class Building extends MyNode
         if(par == null)
             return;
         bg.removefromparent();
+        //if(funcs == FARM_BUILD && zOrd != MAX_BUILD_ZORD)
+        //    zOrd = 0;
         par.add(bg, zOrd);
     }
 
@@ -268,11 +300,13 @@ class Building extends MyNode
         if(z == NotBigZone)
         {
             setColor(NotBigZone);
+            trace("not In Zone", NotBigZone);
             colNow = 1;
         }
         else
         {
             var other = global.user.checkCollision(this);
+            trace("col With Other", other);
             if(other != null)
             {
                 //global.user.setCol(this);
@@ -284,13 +318,18 @@ class Building extends MyNode
                 setColor(InZone);
             }
         }
+        //funcBuild.setPos();
+        trace("col Now", colNow);
     }
     /*
     进入规划模式， 保存旧的坐标 
+    检测是否移动
     */
+    var dirty = 0;
     function keepPos()
     {
         oldPos = getPos();
+        dirty = 0;
     }
     /*
     取消规划模式
@@ -308,7 +347,7 @@ class Building extends MyNode
         state = s;
         if((state == Moving) || checkPlaning())
         {
-            bg.prepare();
+            //bg.prepare();
             var bSize = bg.size();
 
             trace("back Size", bSize, (sx+sy)/2*sizeY);
@@ -340,7 +379,7 @@ class Building extends MyNode
     {
         setState(Free);
         finishBottom();
-        setZord();
+        setZord(null);
         global.user.updateBuilding(this);
     }
     /*
@@ -348,6 +387,7 @@ class Building extends MyNode
     */
     function finishBottom()
     {
+        trace("finishBottom", getPos());
         bg.color(100, 100, 100, 100);
         bottom.removefromparent();
         bottom = null;
@@ -380,8 +420,12 @@ class Building extends MyNode
             }
         }
 
+        /*
+        规划状态 如果点击 则需要更新
+        */
         if(state == Moving || checkPlaning())
         {
+            dirty = 1;
             global.user.clearMap(this);
         }
 
@@ -389,10 +433,11 @@ class Building extends MyNode
     }
     function finishPlan()
     {
+        dirty = 0;
         if(bottom != null)
         {
             finishBottom();
-            setZord();
+            setZord(null);
             //bottom.removefromparent();
             //bottom = null;
         }
@@ -451,7 +496,8 @@ class Building extends MyNode
                 return;
             var parPos = bg.parent().world2node(lastPoints[0], lastPoints[1]);
             var newPos = normalizePos(parPos, sx, sy)
-            moveBack(newPos);
+            //moveBack(newPos);
+            setPos(newPos);
             setColPos();
             if(len(points) >= 3)//-1 0 1
             {
@@ -489,7 +535,7 @@ class Building extends MyNode
                 return;
             if(colNow == 0 && state != Moving)//无冲突规划状态 清除zord 和 底座
             {
-                setZord();
+                setZord(null);
                 //finishBottom();
             }
                 
@@ -529,6 +575,8 @@ class Building extends MyNode
                 }
             }
         }
+        //等待解锁状态
+
         //父亲节点移动结束
         map.touchEnded(n, e, p, x, y, points);
     }
@@ -589,10 +637,17 @@ class Building extends MyNode
     }
     function sureToSell()
     {
-        global.director.curScene.addChild(new FlyObject(bg, getBuildCost(data.get("id")), sellOver));
+
+        global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid]]), null, null);
+        var cost = getCost(BUILD, id);
+        cost = changeToSilver(cost);
+
+        trace("sureToSell", cost);
+
+        global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
 
         global.user.changeValue("people", -data.get("people"));//减去人口
-        global.user.changeValue("defense", -data.get("cityDefense"));//减去防御力
+        global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
 
         map.removeChild(this); 
         global.user.sellBuild(this);
@@ -604,5 +659,32 @@ class Building extends MyNode
     function doPhoto()
     {
         global.director.getPid(); 
+    }
+    var oldState = Free;
+    var lockAni = null;
+    function waitLock(tar)
+    {
+        oldState = state;
+        state = Wait_Lock;
+        var bSize = bg.size();
+        lockAni = bg.addnode();
+        var HEI = -20;
+        lockAni.addsprite().size(30, 30).pos(29, HEI).anchor(50, 100).addaction(
+            repeat(
+                animate(1000, "feed0.png", "feed1.png", "feed2.png", "feed3.png", "feed4.png", "feed5.png", "feed7.png" )
+            )); 
+        if(tar == "feeding")
+            lockAni.addsprite("feeding.png").pos(48, HEI).anchor(0, 100);
+        else if(tar == "harvesting")
+            lockAni.addsprite("harvesting.png").pos(48, HEI).anchor(0, 100);
+    }
+    function removeLock()
+    {
+        state = oldState;
+        if(lockAni != null)
+        {
+            lockAni.removefromparent();
+            lockAni = null;
+        }
     }
 }

@@ -1,6 +1,13 @@
+/*
+TODO:
+    清理 所有本地 db 数据库
+*/
 class User
 {
-    var uid;
+    var uid=-1;
+    var papayaId;
+    var papayaName;
+
     var resource;
     var updateList;
     
@@ -17,7 +24,11 @@ class User
     //当前可用的最大的建筑物的编号
     var maxBid;
     var maxSid;
+    var starNum;
+
+    //所有修改db的行为都对应修改 服务器数据
     var db;
+    var rated = 0;
     /*
     存放当前场景所有冲突的建筑物
     每次一个建筑物移动，则检测当前的冲突状态
@@ -34,14 +45,18 @@ class User
 
 
     var drugs;
+    //eid --->kind level owner
+    //
     var equips;
-    var soldierEquip;
-    var sequipId;
+    var maxEid;
     var tasks;
 
     var taskListener = [];
 
     var herbs;
+    var serverTime;
+    var clientTime;
+
     function getCurFinTaskNum()
     {
         var res = 0;
@@ -79,9 +94,13 @@ class User
     }
     /*
     可以做一个1000ms的timer 定时清理已经退出的对象
+    更新任务状态:
+        任务id 任务 完成数目 任务是否完成 任务是否进入下一个阶段
+
+
     */
     //addTaskNum or just FinishIt
-    function updateTask(id, num, fin)
+    function updateTask(id, num, fin, sta)
     {
         var val = tasks.get(id, [0, 0]);
         //任务已经完成没有必要继续  
@@ -91,10 +110,36 @@ class User
         //任务的数量已经满足 则没有必要增加
         if(val[0] >= need && num != 0)
             return;
-        val[0] += num;
-        val[1] = fin;
+
+        //增加任务数目
+        if(num != 0)
+        {
+            val[0] += num;
+            global.httpController.addRequest("taskC/doTask", dict([["uid", uid], ["tid", id], ["num", num]]), null, null);
+        }
+        /*
+        //完成某个任务 检测是否进入下一个阶段
+        else if(fin != 0)
+        {
+            val[1] = fin;
+            global.httpController.addRequest("taskC/finishTask", dict([["uid", uid], ["tid", id]]), null, null);
+        }
+        */
+
+        /*
+        //累计任务进入下一个阶段
+        if(sta == 1)
+        {
+            val[0] = 0;
+            val[1] = 0;
+            val[2]++;
+        }
+        */
         tasks.update(id, val);
         db.put("tasks", tasks);
+
+        //global.httpController.addRequest("taskC/updateTask", dict([["uid", uid], ["tid", id], ["num", num], ["fin", fin], ["stage", val[2]]]), null, null);
+
         for(var i = 0; i < len(taskListener);)
         {
             if(taskListener[i][1] == 1)
@@ -109,84 +154,183 @@ class User
         }
     }
 
-    function initData()
+    function initBuildings(b)
     {
-        var keys = ["silver", "gold", "crystal", "level", "people", "papaya", "starNum", "loginDays"];
-        var value = db.get("silver", "gold", "crystal", "level", "people", "papaya", "starNum", "loginDays");
-        resource = dict();
-        trace("visitDb", value);
+        var keys = b.keys();
+        buildings = dict();
+        maxBid = -1;
         for(var i = 0; i < len(keys); i++)
         {
-            if(value[i] != null)
-                resource.update(keys[i], value[i]);
-            else
-                resource.update(keys[i], 0);
-        }
-        //resource.update("loginDays", 10);
-        db.put("loginDays", resource.get("loginDays")+1);
-        //bid kind px py state direction workId workStartTime
-        //var bkeys = ["id", "px", "py", "state", "dir", "objectId", "objectTime"];
-        //var build = db.get("buildings");
-        maxBid = -1;
-        buildings = db.get("buildings");
-        var it = buildings.items();
-        for(i = 0; i < len(it); i++)
-        {
-            if(it[i][0] > maxBid)
-                maxBid = it[i][0];
+            buildings.update(int(keys[i]), b.get(keys[i]));
+            if(int(keys[i]) > maxBid)
+                maxBid = int(keys[i]);
         }
         maxBid++;
-        trace("initBuilding", maxBid);
-
-
-        /*
-        drugs id num
-        equps id num
-        */
-
-        drugs = db.get("drugs");
-        if(drugs == null)
-            drugs = dict();
-
-        equips = db.get("equips");
-        if(equips == null)
-            equips = dict();
-
-        soldierEquip = db.get("soldierEquip");
-        if(soldierEquip == null)
-            soldierEquip = dict();
-
-        herbs = db.get("herbs");
-        if(herbs == null)
-            herbs = dict();
-
-        it = soldierEquip.items();
-        sequipId = -1;
-        for(i = 0; i < len(it); i++)
-        {
-            if(it[i][0] > sequipId)
-                sequipId = it[i][0];
-        }
-        sequipId++;
-        trace("maxSoldier EquipId", sequipId);
-
-        soldiers = db.get("soldiers");
+    }
+    function initSoldiers(s)
+    {
+        var keys = s.keys();
+        soldiers = dict();
         maxSid = -1;
-        it = soldiers.items();
-        for(i = 0; i < len(it); i++)
+        for(var i = 0; i < len(keys); i++)
         {
-            if(it[i][0] > maxSid)
-                maxSid = it[i][0];
+            var k = int(keys[i]);
+            soldiers.update(k, s.get(keys[i]));
+            if(k > maxSid)
+                maxSid = k;
         }
         maxSid++;
-        trace("maxBid maxSid", maxBid, maxSid);
-
-        //[id [finNum, getRewardYet]]
-        tasks = db.get("tasks");
-        if(tasks == null)
-            tasks = dict();
+    }
+    function initThings(d)
+    {
+        var keys = d.keys();
+        var temp = dict();
+        for(var i = 0; i < len(keys); i++)
+        {
+            var k = int(keys[i]);
+            temp.update(k, d.get(keys[i]));
+        }
+        return temp;
+    }
+    function initEquips(eq)
+    {
+        equips = dict();
+        var key = eq.keys();
+        maxEid = -1;
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = int(key[i]);
+            if(k > maxEid)
+                maxEid = k;
+            equips.update(k, eq.get(key[i]));
+        }
+        maxEid += 1;
+        trace("equips", equips, maxEid, eq);
 
     }
+
+    function initStarNum(s)
+    {
+        starNum = s;
+        trace("init starNum", starNum);
+        //resource.update("starNum", s);
+    }
+    //编号7的物品掉落次数有限
+    function getFallNum()
+    {
+        return fallNum;
+    }
+    function updateFallNum()
+    {
+        fallNum += 1;
+        db.put("fallNum", fallNum);
+    }
+    function setRated()
+    {
+        rated = 1;
+        db.put("rated", rated);
+    }
+    var fallNum = 0;
+    //sendMsg 需要castlePage 响应 
+    function initDataOver(rid, rcode, con, req, param)
+    {
+        trace("initDataOver", con);
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            uid = con.get("uid");
+            resource = con.get("resource");
+            initStarNum(con.get("starNum"));
+            initBuildings(con.get("buildings"));
+            initSoldiers(con.get("soldiers"));
+            drugs = initThings(con.get("drugs"));
+            initEquips(con.get("equips"));
+
+            herbs = initThings(con.get("herbs"));
+            tasks = initThings(con.get("tasks"));
+
+            //记录金币掉落次数
+            fallNum = db.get("fallNum");
+            if(fallNum == null)
+            {
+                fallNum = 0;
+                db.put("fallNum", 0);
+            }
+            rated = db.get("rated");
+            if(rated == null)
+            {
+                rated = 0;
+                db.put("rated", 0);
+            }
+            
+            serverTime = con.get("serverTime");
+            clientTime = time()/1000;
+
+            //资源更新 需要 更新本地数据库
+            db.put("resource", resource);
+            //闯关星 和 资源分开
+            db.put("starNum", starNum);
+            db.put("buildings", buildings);
+            db.put("soldiers", soldiers);
+            db.put("drugs", drugs);
+            db.put("equips", equips);
+            db.put("herbs", herbs);
+            db.put("tasks", tasks);
+            
+
+            
+            initYet = 1;        
+            global.msgCenter.sendMsg(INITDATA_OVER, null);
+        }
+        else
+        {
+            useLocalDB();
+            trace("user local database replaced");
+            initYet = 1;
+            global.msgCenter.sendMsg(INITDATA_OVER, null);
+        }
+    }
+
+    function initData()
+    {
+        global.httpController.addRequest("login", dict([["papayaId", papayaId], ["papayaName", papayaName]]), initDataOver, null);
+    }
+    function useLocalDB()
+    {
+        resource = dict([["silver", 1000], ["gold", 1000], ["crystal", 1000], ["level", 10], ["people", 5], ["papaya", 1000]]);
+        starNum = [[[3], [3], [3], [3], [3], [3]], [[3], [3], [3], [3], [3], [3]], [[3], [3], [3], [3], [3], [3]], [[3], [3], [3], [3], [3], [3]], [[0], [0], [0], [0], [0], [0]]]; 
+        buildings = dict([
+            [0, dict([
+            ["id", 200], ["px", 1504], ["py", 640], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ])],
+            [1, dict([
+            ["id", 202], ["px", 1664], ["py", 656], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ])],
+            [2, dict([
+            ["id", 204], ["px", 1280], ["py", 720], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ])],
+            [3, dict([
+            ["id", 206], ["px", 1728], ["py", 848], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ])],
+
+            ]);
+        soldiers = dict([[0, dict([["id", 0], ["name", "liyong"], ["level", 0]])]]); 
+    }
+    function tempSetData()
+    {
+        resource = dict();
+        buildings = dict();
+        soldiers = dict();
+        drugs = dict();
+        equips = dict();
+        herbs = dict();
+        tasks = dict();
+
+        oldPos = db.get("oldPos");
+        if(oldPos == null)
+            oldPos = dict();
+    }
+
     function getTaskFinData(id)
     {
         return tasks.get(id, [0, 0]);
@@ -221,109 +365,49 @@ class User
     var soldiers;
     function getCurStar(big, small)
     {
-        var starNum = db.get("starNum");
+        //var starNum = db.get("starNum");
+
         //0-4
         //0-5
-        return starNum[big][small];
+        return starNum[big][small][0];
     }
     function updateStar(big, small, star)
     {
-        var starNum = db.get("starNum");
-        starNum[big][small] = star;
+        //var starNum = db.get("starNum");
+        starNum[big][small][0] = star;
+        trace("setStarNum", starNum);
         db.put("starNum", starNum);
+        //global.httpController.addRequest("challengeC/updateChallenge", dict([["uid", uid], ["big", big], ["small", small], ["star", star]]), null, null);
     }
+    var initYet = 0;
+    function getInitYet()
+    {
+        return initYet;
+    }
+    function initPapaya()
+    {
+    }
+    var oldPos = null;
     function User()
     {
-        uid = ppy_userid();
+        papayaId = ppy_userid();
+        if(papayaId == null)
+            return;
+        papayaName = ppy_username();
+        //uid = ppy_userid();
         db = c_opendb();
-        trace("initUser", uid, db);
-        var inYet = db.get(str(uid));
-        trace("first login", inYet);
-        if(inYet == null)
-        {
-            trace("first login");
-            db.put(str(uid), 1),
-            db.put("silver", 1000, "gold", 1000, "crystal", 1000, "level", 10, "people", 5, "papaya", 1000);
-            db.put("loginDays", 1);
-            db.put("starNum", [
-            [
-            [3],
-            [3],
-            [3],
-            [3],
-            [3],
-            [3],
-            ],
+        //trace("initUser", uid, db);
 
-            [
-            [3],
-            [3],
-            [3],
-            [3],
-            [3],
-            [3],
-            ],
-            [
-            [2],
-            [0],
-            [0],
-            [0],
-            [0],
-            [0],
-            ],
+        
 
-            [
-            [0],
-            [0],
-            [0],
-            [0],
-            [0],
-            [0],
-            ],
-            [
-            [0],
-            [0],
-            [0],
-            [0],
-            [0],
-            [0],
-            ],
-            ]);
-            /*
-            由客户端 提供新的建筑物的bid 这样的好处是服务器只进行 数据库的唯一性验证 如果出错，则返回失败给客户端
-            */
-            //bid kind px py state direction workId workStartTime
-            db.put("buildings",dict([
-            [0, dict([
-            ["id", 200], ["px", 1504], ["py", 640], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
-            ])],
-            [1, dict([
-            ["id", 202], ["px", 1664], ["py", 656], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
-            ])],
-            [2, dict([
-            ["id", 204], ["px", 1280], ["py", 720], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
-            ])],
-            [3, dict([
-            ["id", 206], ["px", 1728], ["py", 848], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
-            ])],
-
-            ]));
-            //soldier id士兵职业类型 
-            db.put("soldiers", dict([[0, dict([["id", 0], ["name", "liyong"], ["level", 0]])]]));
-
-            //id num 
-            db.put("drugs", dict([[0, 1]]));
-            db.put("equips", dict([[0, 1]]));
-            
-            //eid [equipId sid]
-            db.put("soldierEquip", dict([[0, [0, 0]]]))
-        }
-        initData();
+        //initData();
+        tempSetData();
         blockBuilding = new MyNode();
         updateList = [];
         allBuildings = [];
         mapDict = dict();
-        allSoldiers = [];
+        //allSoldiers = [];
+        allSoldiers = dict();
         /*
         在初始化数据之后 初始化 建筑物
         */
@@ -347,18 +431,13 @@ class User
         return drugs;
     }
     //kindId ownerid
-    function getUseThing(kind, tid)
-    {
-        if(kind == EQUIP)
-            return soldierEquip.get(tid);
-        return [0, 0];
-    }
+    //装备是独立的显示
     function getThingNum(kind, id)
     {
         if(kind == DRUG)
             return drugs.get(id, 0);
-        else if(kind == EQUIP)
-            return equips.get(id, 0);
+        //else if(kind == EQUIP)
+        //    return equips.get(id, 0);
         return 0;
     }
     function checkInitBuildingYet()
@@ -431,19 +510,32 @@ class User
             drugs.update(id, value);
             db.put("drugs", drugs);
         }
+        /*
         else if(kind == EQUIP)
         {
-            value = equips.get(id, 0);
-            value += 1;
-            equips.update(id, value);
+            //value = equips.get(id, 0);
+            //value += 1;
+            equips.update(newEid, dict([["kind", id], ["level", 0], ["owner", -1]]));
+            //equips.update(id, value);
             db.put("equips", equips);
         }
+        */
 
 
         //通知所有监听器修改数据
         setValue(NOTIFY, 1);
 
         //changeValue(replaceStr(GoodsPre[kind], ["[ID]", str(id)]), 1);
+    }
+    function buyEquip(eid, id, cost)
+    {
+        equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
+        db.put("equips", equips);
+        setValue(NOTIFY, 1);
+    }
+    function getNewEid()
+    {
+        return maxEid++;
     }
 
     function changeHerb(id, num)
@@ -452,12 +544,15 @@ class User
         val += num;
         herbs.update(id, val);
         db.put("herbs", herbs);
+
+        //global.httpController.addRequest("goodsC/updateHerb", dict([["uid", uid], ["kind", id], ["num", value]]), null, null);
         setValue(NOTIFY, 1);
     }
 
     function addSoldier(sol)
     {
-        allSoldiers.append(sol); 
+        //allSoldiers.append(sol); 
+        allSoldiers.update(sol.sid, sol);
     }
     //清除士兵的一个格子的map
     function clearSolMap(sol)
@@ -474,26 +569,21 @@ class User
     }
     function removeSoldier(sol)
     {
-        allSoldiers.remove(sol);
+        //allSoldiers.remove(sol);
+        allSoldiers.pop(sol.sid);
         clearSolMap(sol);
     }
     function removeAllSoldiers()
     {
-        for(var i = 0; i < len(allSoldiers); i++)
+        var solArr = allSoldiers.values();
+        for(var i = 0; i < len(solArr); i++)
         {
-            var sol = allSoldiers[i];
+            var sol = solArr[i];
             clearSolMap(sol);
             sol.removeSelf();
         }
-        allSoldiers = [];
+        allSoldiers = dict();
     }
-    /*
-    function buyEquip(id, cost)
-    {
-        doCost(cost);
-        changeValue("equip"+str(id), 1);
-    }
-    */
     /*
     药品储存， 一次性使用 在某个对象身上 drug+id
     */
@@ -522,72 +612,46 @@ class User
     */
     function finishPlan()
     {
+        var changedBuilding = [];
         for(var i = 0; i < len(allBuildings); i++)
         {
+            if(allBuildings[i].dirty == 1)
+            {
+                tempUpdateBuilding(allBuildings[i]);
+                var cur = allBuildings[i];
+                var p = cur.getPos();
+                changedBuilding.append([cur.bid, p[0], p[1], cur.dir]);
+            }
             allBuildings[i].finishPlan();
-            updateBuilding(allBuildings[i]);
         }
+        updateBuildingDB();
+        if(len(changedBuilding) > 0)
+            global.httpController.addRequest("buildingC/finishPlan", dict([["uid", uid], ["builds", changedBuilding]]), null, null);
     }
     function getNewBid()
     {
         return maxBid++;
     }
 
-    function updateDB(key, value)
-    {
-        db.put(key, value);
-    }
+
 
     //var bkeys = ["id", "px", "py", "state", "dir", "objectId", "objectTime"];
-    function updateBuildingDB(build)
+    function updateBuildingDB()
     {
         db.put("buildings", buildings);
-        /*
-        var bDB = db.get("buildings");
-        for(var i = 0; i < len(bDB); i++)
-        {
-            if(bDB[i][0] == build.bid)
-            {
-                break;
-            }
-        }
-        //新建筑
-        if(i == len(bDB))
-        {
-            bDB.append([build.bid, [build.id, build.getPos()[0], build.getPos()[1], build.state, build.dir, build.getObjectId(), build.getStartTime()]]); 
-        }
-        //旧建筑
-        else
-        {
-            bDB[i][1] = [build.id, build.getPos()[0], build.getPos()[1], build.state, build.dir, build.getObjectId(), build.getStartTime()];
+    }
 
-        }
-        db.put("buildings", bDB);
-        */
-    }
-    /*
-    function removeBuildDB(build)
-    {
-        var bDB = db.get("buildings");
-        for(var i = 0; i < len(bDB); i++)
-        {
-            if(bDB[i][0] == build.bid)
-            {
-                break;
-            }
-        }
-        if(i < len(bDB))
-        {
-            bDB.pop(i);
-        }
-        db.put("buildings", bDB);
-    }
-    */
     function sellBuild(build)
     {
         buildings.pop(build.bid);
+        allBuildings.remove(build);
         //removeBuildDB(build);
-        updateBuildingDB(null);
+        //updateBuildingDB(null);
+        db.put("buildings", buildings);
+    }
+    function tempUpdateBuilding(build)
+    {
+        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
     }
     /*
     修改建筑物的数据实体
@@ -595,12 +659,20 @@ class User
     function updateBuilding(build)
     {
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
-        updateBuildingDB(null);
+        //updateBuildingDB(null);
+        db.put("buildings", buildings);
     }
+    /*
+    这些值是本地的 偶尔需要写回到远程数据库 
+    */
     function setValue(key, value)
     {
         resource.update(key, value);
-        updateDB(key, value);
+        db.put("resource", resource);
+        //updateDB(key, value);
+
+        //global.httpController.addRequest("goodsC/update", dict([["uid", uid], ["drugKind", id], ["num", value]]), null, null);
+
         for(var i = 0; i < len(updateList); )
         {
             if(updateList[i][1] == 1)
@@ -621,15 +693,12 @@ class User
     /*
     保证数据库和内存数据的同构 就比较方便
     */
-    function updateSoldierDB(soldier)
+    /*
+    function updateSoldierDB()
     {
         db.put("soldiers", soldiers);
-        /*
-        var sDB = db.get("soldiers");
-        sDB.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName]]));
-        db.put("soldiers", sDB);
-        */
     }
+    */
     /*
     修改士兵的数据实体
     经营页面 和 闯关页面的士兵实体 都需要有以下属性
@@ -637,8 +706,9 @@ class User
     //士兵类型 名字 当前生命值 经验 等级
     function updateSoldiers(soldier)
     {
-        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level]]));
-        updateSoldierDB(null);
+        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level], ["addAttack", soldier.addAttack], ["addDefense", soldier.addDefense], ["addAttackTime", soldier.addAttackTime], ["addDefenseTime", soldier.addDefenseTime] ]));
+        //updateSoldierDB();
+        db.put("soldiers", soldiers);
         for(var i = 0; i < len(soldierListener);)
         {
             if(soldierListener[i][1] == 1)
@@ -659,6 +729,10 @@ class User
     */
     function doTransfer(sid)
     {
+        var sol = allSoldiers.get(sid);
+        if(sol != null)
+            sol.doTransfer();
+        /*
         for(var i = 0; i < len(allSoldiers); i++)
         {
             if(allSoldiers[i].sid == sid)
@@ -667,10 +741,12 @@ class User
                 return;
             }
         }
+        */
     }
     /*
     修正数据， 显示士兵的view
     */
+    /*
     function doRelive(sid)
     {
         var sol = soldiers.get(sid); 
@@ -679,49 +755,73 @@ class User
         {
             sol.update("dead", 0);
             soldiers.update(sid, sol);
-            updateSoldierDB(null);
+            //updateSoldierDB();
+            db.put("soldiers", soldiers);
             global.msgCenter.sendMsg(RELIVE_SOL, [sid, sol]);
         }
     }
+    */
+    // eid [kind sid]
     function getSoldierEquip(sid)
     {
-        var val = soldierEquip.values();
-        var equips = [];
-        for(var i = 0; i < len(val); i++)
+        var solEquips = [];
+        var key = equips.keys();
+        for(var i = 0; i < len(key); i++)
         {
-            if(val[i][1] == sid)
-                equips.append(val[i][0]);
+            var edata = equips.get(key[i]) ;
+            if(edata.get("owner") == sid)
+                solEquips.append(key[i]);
         }
-        return equips;
+        return solEquips;
+    }
+    function checkSoldierEquip(sid, eid)
+    {
+        var edata = equips.get(eid);
+        var kind = edata.get("kind");
+        kind = getData(EQUIP, kind).get("kind");
+
+        var key = equips.keys();
+        for(var i = 0; i < len(key); i++)
+        {
+            var eData = equips.get(key[i]);
+            var k = eData.get("kind");
+            var detail = getData(EQUIP, k);
+            if(detail.get("kind") == kind && detail.get("owner") == sid)
+                return 0;
+        }
+        return 1;
+    }
+
+    function getEquipData(eid)
+    {
+        return equips.get(eid);
     }
 
     //usedEquip Id
+    //取下 士兵的装备 放回到储藏室
+    //通知士兵去掉装备 可以 优化 map sid -> 士兵
     function unloadThing(tid)
     {
         trace("unloadThing", tid);
-
-        var useData = soldierEquip.pop(tid);
-        var num = equips.get(useData[0], 0);
-        equips.update(useData[0], num+1);
-        db.put("soldierEquip", soldierEquip);
+        var edata = equips.get(tid);
+        var sid = edata.get("owner");
+        edata["owner"] = -1;
         db.put("equips", equips);
+        
+        var sol = allSoldiers.get(sid); 
+        if(sol != null)
+            sol.useEquip(-1);
 
-        var sid = useData[1];
-        for(var i = 0; i < len(allSoldiers); i++)
-        {
-            if(allSoldiers[i].sid == sid)
-            {
-                allSoldiers[i].useEquip(-1);
-                break;
-            }
-        }
     }
+
     function useThing(kind, tid, soldier)
     {
         trace("useThing", kind, tid, soldier.id);
         var num;
         if(kind == DRUG)
         {
+            global.httpController.addRequest("soldierC/useDrug", dict([["uid", uid], ["sid", soldier.sid], ["tid", tid]]), null, null);
+
             num = drugs.get(tid);
             drugs.update(tid, num-1);
             db.put("drugs", drugs);
@@ -730,14 +830,13 @@ class User
         }
         else if(kind == EQUIP)
         {
-            num = equips.get(tid);
-            equips.update(tid, num-1);
-            db.put("equips", equips);
-            soldierEquip.update(sequipId++, [tid, soldier.sid]);
-            db.put("soldierEquip", soldierEquip);
-            trace("equips", equips, soldierEquip, sequipId);
+            global.httpController.addRequest("soldierC/useEquip", dict([["uid", uid], ["sid", soldier.sid], ["eid", tid]]), null, null);
 
+            var edata = equips.get(tid);
+            edata["owner"] = soldier.sid;
+            db.put("equips", equips);
             soldier.useEquip(tid);
+            return 1;
         }
     }
 
@@ -748,16 +847,91 @@ class User
     }
     function sellSoldier(soldier)
     {
+        var key = equips.keys();
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            var eData = equips[k];
+            if(eData["owner"] == soldier.sid)
+                eData["owner"] = -1;
+        }
+        db.put("equips", equips);
         soldiers.pop(soldier.sid);
-        updateSoldierDB(null);
+        db.put("soldiers", soldiers);
+
     }
 
+    function getLevelUpReward()
+    {
+        var ret = dict();
+        var level = getValue("level");
+        var sil = 0;
+        var gol = 0;
+        var cry = 0;
+        for(var i = 0; i < 10; i++)
+        {
+            var reward = getGain(FALL_THING, i/2+5);
+            if(reward["silver"] != 0)
+            {
+                reward["silver"] += global.user.getValue("level")/5*5;
+            }
+            sil += reward["silver"];
+            gol += reward["gold"];
+            cry += reward["cry"];
+        }
+        ret.update("silver", sil);
+        ret.update("gold", gol);
+        ret.update("crystal", cry);
+
+        doAdd(ret);
+        trace("levelUp reward", ret);
+        return ret;
+    }
+    function getNeedExp(level)
+    {
+        return levelExp[min(level, len(levelExp)-1)];
+    }
+    /*
+    改变用户经验 有可能自动升级
+    */
     function changeValue(key, add)
     {
         var v = resource.get(key, 0);
         v += add;
+        if(key == "exp")
+        {
+            var level = getValue("level");
+            var oldLevel = level;
+            while(1)
+            {
+                //var needExp = levelExp[min(level, len(levelExp)-1)];
+                var needExp = getNeedExp(level);
+                if(v >= needExp)
+                {
+                    v -= needExp;
+                    level += 1;
+                }
+                else 
+                    break;
+            }
+            setValue("level", level);
+            if(level != oldLevel)
+            {
+                var ret = global.msgCenter.checkCallback(LEVEL_UP);
+                //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
+                if(ret == 0)
+                {
+                    var rew = getLevelUpReward();
+                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", rew]]), null, null);
+                }
+                //经验界面掉落 5 6 7 8 9 奖励
+                else
+                    global.msgCenter.sendMsg(LEVEL_UP, null);
+            }
+        }
         setValue(key, v);
     }
+
     //获取任何物品首先获得 相应类别 再 获取 对应id的值
     function getHerb(id)
     {
@@ -840,6 +1014,7 @@ class User
     function updatePosMap(sizePos)
     {
         var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
+        //trace("setBuildSolMap", map);
         var kind = sizePos[4].funcs;
 
 
@@ -863,12 +1038,13 @@ class User
                 curY += 1;
             }
         }
-        setFarmLandMap(map, sizePos, kind);
+        //setFarmLandMap(map, sizePos, kind);
 
 
         //trace("updateMap", map, len(mapDict));//, mapDict);
         return [initX, initY];
     }
+    /*
     function setFarmLandMap(map, sizePos, kind)
     {
         var curX;
@@ -956,6 +1132,7 @@ class User
             
         }
     }
+    */
     //一个MAP中的对象需要实现以下
     /*
     清楚Farm的上边界 移动冲突
@@ -1002,7 +1179,7 @@ class User
             }
         }
 
-        clearFarmLandMap(map, build, build.funcs);
+        //clearFarmLandMap(map, build, build.funcs);
     }
    
     /*
@@ -1119,15 +1296,22 @@ class User
     */
     function checkBuildCol()
     {
+
+        /*
+        var curBuild = global.director.curScene.curBuild;
+        if(curBuild.colNow == 1)
+            return 1;
+        return 0;
         for(var i = 0; i < len(allBuildings); i++)
         {
             if(allBuildings[i].colNow == 1)
             {
-                trace("building col", allBuildings[i]);
+                trace("building col", allBuildings[i].bid, allBuildings[i].id);
                 return 1;
             }
         }
         return 0;
+        */
         /*
         var vals = mapDict.values();
         for(var i = 0; i < len(vals); i++)
@@ -1186,5 +1370,53 @@ class User
                 continue;
             changeValue(key, -value);
         }
+    }
+    function getOldPos(sid)
+    {
+        return oldPos.get(sid);        
+    }
+    //经营页面 每一段时间记录一次士兵位置
+    //经营页面退出时记录士兵位置
+    function storeOldPos()
+    {
+        if(oldPos == null)
+            return;
+        var value = allSoldiers.values();
+        for(var i = 0; i < len(value); i++)
+        {
+            var sol = value[i];
+            oldPos.update(sol.sid, sol.getPos());
+        }
+        db.put("oldPos", oldPos);
+    }
+
+    function getFarmEnableNum()
+    {
+        var level = getValue("level");
+        var num = 5+level;
+        return num;
+    }
+    function getFarmNum()
+    {
+        var count = 0;
+        var val = buildings.values();
+        for(var i = 0; i < len(val); i++)
+        {
+            if(val[i].get("funcs") == FARM_BUILD)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    function checkFarmNum()
+    {
+        var now = getFarmNum();
+        var cap = getFarmEnableNum();
+        if(cap > now)//capacity > own
+        {
+            return 1;
+        }
+        return 0;
     }
 }

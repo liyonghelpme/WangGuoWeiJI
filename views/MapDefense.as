@@ -11,14 +11,19 @@ class MapDefense extends MyNode
     var map;
     var state;
     var kind = 3;//0 close 1 far 2 magic 3 defense
-    var defense = 0;
+    //var defense = 0;
+    var physicDefense = 1;
+    var magicDefense = 1;
+    var purePhyDefense = 1;
+    var pureMagDefense = 1;
+
     var hurts = dict();
     function MapDefense(m, i, data)
     {
         map = m;
         color = i;
         state = MAP_SOL_DEFENSE;
-        bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png").pos(data);
+        bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(data);
         init();
     }
     function getKind()

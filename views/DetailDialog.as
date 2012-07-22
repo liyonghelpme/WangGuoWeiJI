@@ -35,6 +35,8 @@ function getRecoverLev(rc)
 /*
 构建对话框的时候 关闭场景的菜单栏
 关闭对话框的时候需要重性显示场景的对话框
+
+如果图形化工具 能够 控制多个元素整体移动 
 */
 class DetailDialog extends MyNode
 {
@@ -47,22 +49,39 @@ class DetailDialog extends MyNode
         bg.addlabel(soldier.myName+"("+soldier.data.get("name")+")", null, 30).anchor(50, 50).pos(264, 26).color(0, 0, 0);
         bg.addsprite("roleNameClose.png").pos(499, 9).setevent(EVENT_TOUCH, closeDialog);
         var contentNode = bg.addnode().pos(36, 88);
-        contentNode.addlabel(getStr("attVal", ["[NUM]", str(sol.attack)]), null, 20).pos(0, 0).color(0, 0, 0);
-        contentNode.addlabel(getStr("defVal", ["[NUM]", str(sol.defense)]), null, 20).pos(0, 30).color(0, 0, 0);
-        contentNode.addlabel(getStr("healthAndBoundary", ["[HEALTH]", str(sol.health), "[BOUND]", str(sol.healthBoundary)]), null, 20).pos(0, 60).color(0, 0, 0);
-        contentNode.addlabel(getStr("attSpeed", ["[LEV]", getAttSpeedLev(sol.attSpeed)]), null, 20).pos(0, 90).color(0, 0, 0);
-        contentNode.addlabel(getStr("attRange", ["[LEV]", getAttRangeLev(sol.attRange)]), null, 20).pos(0, 120).color(0, 0, 0);
-        contentNode.addlabel(getStr("recLife", ["[LEV]", getRecoverLev(sol.recoverTime)]), null, 20).pos(0, 150).color(0, 0, 0);
+        var offY = 0;
+        contentNode.addlabel(getStr("phyAtt", ["[NUM]", str(sol.physicAttack)]), null, 20).pos(0, offY).color(0, 0, 0);
+        contentNode.addlabel(getStr("magAtt", ["[NUM]", str(sol.magicAttack)]), null, 20).pos(150, offY).color(0, 0, 0);
+        offY += 30;
 
-        var ne = getLevelNeedExp(sol.data.get("expId"), sol.level);
+        //offY += 30;
 
-        contentNode.addlabel(getStr("levVal", ["[LEV1]", str(sol.level), "[EXP]", str(ne-sol.exp), "[LEV2]", str(sol.level+1)]), null, 20).pos(0, 180).color(0, 0, 0);
+        contentNode.addlabel(getStr("phyDef", ["[NUM]", str(sol.physicDefense)]), null, 20).pos(0, offY).color(0, 0, 0);
+        contentNode.addlabel(getStr("magDef", ["[NUM]", str(sol.magicDefense)]), null, 20).pos(150, offY).color(0, 0, 0);
+        offY += 30;
+
+        //offY += 30;
+
+        contentNode.addlabel(getStr("healthAndBoundary", ["[HEALTH]", str(sol.health), "[BOUND]", str(sol.healthBoundary)]), null, 20).pos(0, offY).color(0, 0, 0);
+        offY += 30;
+        contentNode.addlabel(getStr("attSpeed", ["[LEV]", getAttSpeedLev(sol.attSpeed)]), null, 20).pos(0, offY).color(0, 0, 0);
+        offY += 30;
+        contentNode.addlabel(getStr("attRange", ["[LEV]", getAttRangeLev(sol.attRange)]), null, 20).pos(0, offY).color(0, 0, 0);
+        offY += 30;
+        contentNode.addlabel(getStr("recLife", ["[LEV]", getRecoverLev(sol.recoverTime)]), null, 20).pos(0, offY).color(0, 0, 0);
+        offY += 30;
+
+        var ne = getLevelUpExp(sol.id, sol.level);
+
+        contentNode.addlabel(getStr("levVal", ["[LEV1]", str(sol.level+1), "[EXP]", str(ne-sol.exp), "[LEV2]", str(sol.level+1)]), null, 20).pos(0, offY).color(0, 0, 0);
+        offY += 30;
 
         var tranLevel = sol.getTransferLevel();
         if(tranLevel > 0)
-            contentNode.addlabel(getStr("nextTrans", ["[LEV]", str(tranLevel)]), null, 20).pos(0, 210).color(0, 0, 0);
+            contentNode.addlabel(getStr("nextTrans", ["[LEV]", str(tranLevel)]), null, 20).pos(0, offY).color(0, 0, 0);
         else
-            contentNode.addlabel(getStr("noTransfer", null), null, 20).pos(0, 210).color(0, 0, 0);
+            contentNode.addlabel(getStr("noTransfer", null), null, 20).pos(0, offY).color(0, 0, 0);
+        offY += 30;
 
         trace("soldierpng", soldier.id);
         var solPic = bg.addsprite("soldier"+str(soldier.id)+".png").pos(460, 283).anchor(50, 50);

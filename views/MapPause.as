@@ -75,19 +75,25 @@ class MapPause extends MyNode
     {
         if(defense.color == 0)
         {
+            leftDef.texture("mapCastleBlue.png");
+            /*
             if(defense.health*100/defense.healthBoundary < 30)
                 leftDef.texture("mapCastleRed.png");
             else
                 leftDef.texture("mapCastleBlue.png");
+            */
             leftDef.size(297*defense.health/defense.healthBoundary, 29);
             leftText.text(str(defense.health)+"/"+str(defense.healthBoundary));
         }
         else if(defense.color == 1)
         {
+            rightDef.texture("mapCastleRed.png");
+            /*
             if(defense.health*100/defense.healthBoundary < 30)
                 rightDef.texture("mapCastleRed.png");
             else
                 rightDef.texture("mapCastleBlue.png");
+            */
             rightDef.size(297*defense.health/defense.healthBoundary, 29);
             rightText.text(str(defense.health)+"/"+str(defense.healthBoundary));
         }

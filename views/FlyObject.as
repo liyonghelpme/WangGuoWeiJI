@@ -3,6 +3,7 @@ class FlyObject extends MyNode
     var callback;
     var num;
     var cost;
+    //const FLY_REWARD = ["silver", "gold", "crystal", "exp"];
     //getscene.add(bg)
     /*
         obj 飞行物体出现位置的原来物体
@@ -15,6 +16,7 @@ class FlyObject extends MyNode
     const FLY_HEIGHT = 30;
     function FlyObject(obj, c, cb)
     {
+        trace("FlyObject", obj, c, cb);
         callback = cb;
         num = 0;
         cost = c;
@@ -22,7 +24,7 @@ class FlyObject extends MyNode
 
         var TarPos = dict([["silver", [297, 460]], ["crystal", [253, 460]], ["gold", [550, 460]], ["exp", [196, 427]]]);
         var bsize = obj.size();
-        var coor2 = obj.node2world(bsize[0]/2, bsize[1]/2);
+        var coor2 = obj.node2world(bsize[0]/2, -10);
 
         var item = cost.items();
         trace("flyObject", cost);
@@ -31,12 +33,14 @@ class FlyObject extends MyNode
         for(var i = 0; i < len(item); i++)
         {
             var k = item[i][0];
+
             var v = item[i][1];
 
             if(v == 0)
                 continue;
             
             var cut = 1;
+            //根据奖励的数量 切割奖励的份数
             if(v < 10)
                 cut = 1;
             else if(v < 100)
@@ -49,7 +53,7 @@ class FlyObject extends MyNode
             //飞起来 等待 一会 接着一起落下
             for(var j = 0; j < cut; j++)
             {
-                var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT);
+                var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT).anchor(50, 100);
                 var tar = TarPos.get(k);
                 var dis = sqrt(distance(coor2, tar));
                 //var rx = rand(40);

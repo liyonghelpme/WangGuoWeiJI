@@ -22,10 +22,20 @@ class TransferSoldier extends MyNode
         //sid kindId name 
         for(var i = 0; i < len(sol); i++)
         {
-            var exp = sol[i][1].get("exp");
-            var solData = getData(SOLDIER, sol[i][1].get("id"));
-            if(exp >= solData.get("needExp"))
+            //var exp = sol[i][1].get("exp");
+            var id = sol[i][1].get("id")
+            var level = sol[i][1].get("level");
+            var solData = getData(SOLDIER, id);
+
+            var ret = checkTransfer(level, solData);
+            /*
+            var proLevel = id%10;
+            var solOrMon = solData.get("solOrMon"); 
+            if(proLevel < 3 && (proLevel+1)*5 <= level && solOrMon == 0)//每5级可以转职一次
+            */
+            if(ret == 1)
                 data.append([sol[i][0], sol[i][1].get("id"), sol[i][1].get("name")]);
+
         }
     }
     function TransferSoldier()

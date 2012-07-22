@@ -24,6 +24,7 @@ class MenuLayer extends MyNode
     */
     var gloryLevText;
     //var sensor = null;
+    
     function MenuLayer(s) {
         scene = s;
         trace("pushMenuLayer");
@@ -109,6 +110,7 @@ class MenuLayer extends MyNode
     */
     function finishBuild()
     {
+        trace("finish Build", removed);
         if(removed == 1)
         {
             removed = 0;
@@ -167,11 +169,26 @@ class MenuLayer extends MyNode
     用户更新数据的显示接口
     expfiller 108 11
     */
+    function initDataOver()
+    {
+        silverText.text(str(global.user.resource.get("silver", 0)));
+        goldText.text(str(global.user.resource.get("gold", 0)));
+        
+        var level = global.user.getValue("level");
+        var exp = global.user.getValue("exp");
+        var needExp = global.user.getNeedExp(level);
+        expfiller.size(exp*108/needExp, 12);
+    }
     function updateValue(res)
     {
         trace("update Value");
-        silverText.text(str(res.get("silver")));
-        goldText.text(str(res.get("gold")));
+        silverText.text(str(res.get("silver", 0)));
+        goldText.text(str(res.get("gold", 0)));
+
+        var level = global.user.getValue("level");
+        var exp = global.user.getValue("exp");
+        var needExp = global.user.getNeedExp(level);
+        expfiller.size(exp*108/needExp, 12);
     }
     /*
     管理菜单的显示和隐藏

@@ -52,12 +52,13 @@ class MapBanner extends MyNode
         //updateTab();
         onMove(null, null, 0, null, null, null);
     }
-    var lastPoints;
-    var accMove;
+    //var lastPoints;
+    //var accMove;
     /*
     点击某个士兵 之后士兵出现在场景中 
     点击士兵的头上的取消按钮 则士兵消失
     */
+    /*
     function touchBegan(n, e, p, x, y, points)
     {
         controlSoldier = null;
@@ -73,13 +74,11 @@ class MapBanner extends MyNode
     }
     function touchMoved(n, e, p, x, y, points)
     {
-        /*    
         var oldPos = lastPoints;
         lastPoints = n.node2world(x, y);
         var difx = lastPoints[0]-oldPos[0];
         moveBack(difx);
         accMove += abs(difx);
-        */
     }
 
     function touchEnded(n, e, p, x, y, points)
@@ -92,24 +91,14 @@ class MapBanner extends MyNode
             return;
 
         data.remove(sid);
-        /*
-        if(accMove < 10)
-        {
-            var child = checkInChild(flowNode, lastPoints);
-            if(child != null)
-            {
-                var sid = child.get(); 
-                controlSoldier = scene.map.addSoldier(sid);
-                data.remove(sid);
-            }
-        }
-        */
+
         var curPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;
         curPos[0] = min(0, max(cols, curPos[0]));
         flowNode.pos(curPos);
         updateTab();
     }
+    */
     function clearSoldier(so)
     {
         var sid = so.sid;
@@ -137,14 +126,71 @@ class MapBanner extends MyNode
         var rg = getRange();
         for(var i = rg[0]; i < rg[1]; i++)
         {
-            var panel = flowNode.addsprite("mapMenuBlock.png").pos(i*OFFX, 0).anchor(0, 100).setevent(EVENT_TOUCH, touchEnded, data[i]);
+            var panel = flowNode.addsprite("mapMenuBlock.png").pos(i*OFFX, 0).anchor(0, 100);
+
+            panel.setevent(EVENT_TOUCH, touchBegan, data[i]);
+            panel.setevent(EVENT_MOVE, touchMoved);
+            panel.setevent(EVENT_UNTOUCH, touchEnded);
+
             var sdata = global.user.getSoldierData(data[i]);
             trace("soldierData", sdata, data[i], i);
-            panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(40, 76).anchor(50, 100).scale(-100, 100);
-            panel.addlabel(sdata.get("name"), null, 18).pos(61, 40).color(0, 0, 0);
+            var solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(40, 76).anchor(50, 100);
+            var sca = getSca(solPic, [120, 120]);
+            solPic.scale(-sca, sca);
+
+            //panel.addlabel(sdata.get("name"), null, 18).pos(61, 40).color(0, 0, 0);
             panel.put(data[i]);
         }
     }
+    function touchBegan(n, e, p, x, y, points)
+    {
+        var newPos = n.node2world(x, y);
+        var sid = p;
+        controlSoldier = scene.map.addSoldier(sid);
+        if(controlSoldier == null)
+            return;
+
+        var nPos = n.node2world(x, y);
+        var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
+        controlSoldier.setPos(mPos);
+        trace("controller setPos", nPos);
+        
+        //nPos = controlSoldier.bg.world2node(nPos[0], nPos[1]);
+        trace("sol node began", nPos);
+        controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+
+        data.remove(sid);
+        n.visible(0);
+    }
+    function touchMoved(n, e, p, x, y, points)
+    {
+        if(controlSoldier != null)
+        {
+            var nPos = n.node2world(x, y);
+            //nPos = controlSoldier.bg.world2node(nPos[0], nPos[1]);
+            //trace("sol node move", nPos);
+            controlSoldier.touchWorldMoved(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+        }
+    }
+    function touchEnded(n, e, p, x, y, points)
+    {
+        //在点击之后更新panel
+        var curPos = flowNode.pos();
+        var cols = -len(data)*OFFX+WIDTH;
+        curPos[0] = min(0, max(cols, curPos[0]));
+        flowNode.pos(curPos);
+        updateTab();
+
+        if(controlSoldier != null)
+        {
+            var nPos = n.node2world(x, y);
+            //nPos = controlSoldier.bg.world2node(nPos[0], nPos[1]);
+            trace("sol node end", nPos);
+            controlSoldier.touchWorldEnded(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+        }
+        controlSoldier = null;
+    }
+
     //-1 0 1
     function onMove(n, e, p, x, y, points)
     {

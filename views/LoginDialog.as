@@ -1,7 +1,7 @@
 class LoginDialog extends MyNode
 {
     //与商店相同的编号
-    const reward = [[SILVER, 1000], [GOLD, 1000], [CRYSTAL, 100], [SILVER, 2000]];
+    //const reward = [[SILVER, 1000], [GOLD, 1000], [CRYSTAL, 100], [SILVER, 2000]];
     /*
     根据用户当前连续登录的数据得到需要得到的奖励
 
@@ -14,8 +14,28 @@ class LoginDialog extends MyNode
     const POS = [[97, 229], [233, 229], [369, 229]];
     const WORDS = [[108, 174], [241, 174], [375, 174], [504, 174]];
     const REWARD = [[97, 263], [233, 263], [369, 263]];
-    function LoginDialog()
+    var curCmd;
+    function getLoginReward(day)
     {
+        var reward = dict();
+        if(day == 0)
+            reward.update("silver", 0);
+        else if(day%2 == 0)
+        {
+            reward.update("crystal", 2+day);
+        }
+        else 
+        {
+            var level = global.user.getValue("level");
+            //silver = int(100*(uselevel+1)*(0.97+0.03*user.loginDays))
+            var base = 100*(level+1);
+            reward.update("silver", base*97/100+base*3*day/100);
+        }
+        return reward;
+    }
+    function LoginDialog(cc)
+    {
+        curCmd = cc;
         bg = sprite("dialogLoginBack.png").size(global.director.disSize[0], global.director.disSize[1]);
         init();
         var dia = bg.addsprite("dialogLogin.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);  
@@ -25,19 +45,41 @@ class LoginDialog extends MyNode
         but0 = dia.addsprite("roleNameBut0.png").pos(323, 354).size(209, 61).setevent(EVENT_TOUCH, shareGift);
         but0.addlabel(getStr("shareGift", null), null, 25).pos(104, 30).anchor(50, 50);
 
-        var loginDays = global.user.getValue("loginDays");
+        var loginDays = curCmd.get("loginDays");//global.user.getValue("loginDays");
+
         //第0天登录怎么办?
         var now = loginDays-1;
-        loginDays = (loginDays-1)%len(reward);
+        //loginDays = (loginDays-1)%len(reward);
         trace("now", now, loginDays);
 
         for(var i = 0; i < 3; i++)
         {
             dia.addlabel(str(now), null, 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);        
-            dia.addsprite(PICS.get(reward[loginDays][0])).pos(POS[i]).anchor(50, 50).size(57, 53);
-            dia.addlabel(str(reward[loginDays][1]), null, 25).color(68, 4, 7).anchor(50, 50).pos(REWARD[i]);
-            loginDays += 1;
-            loginDays %= len(reward);
+            var rewardKind;
+            var rewardNum;
+            var re;
+            if(now%2 == 0)
+            {
+                rewardKind = CRYSTAL;
+                re = getLoginReward(now);
+                rewardNum = re.get("crystal"); //curCmd.get("crystal");
+            }
+            else
+            {
+                rewardKind = SILVER;
+                re = getLoginReward(now);
+                rewardNum = re.get("silver"); //curCmd.get("silver");
+            }
+            if(now == 0)//第一天连续登录
+            {
+                rewardKind = SILVER;
+                rewardNum = 0;
+            }
+
+            dia.addsprite(PICS.get(rewardKind)).pos(POS[i]).anchor(50, 50).size(57, 53);
+            dia.addlabel(str(rewardNum), null, 25).color(68, 4, 7).anchor(50, 50).pos(REWARD[i]);
+            //loginDays += 1;
+            //loginDays %= len(reward);
             now += 1;
         }
         dia.addlabel(str(now), null, 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);        
@@ -49,7 +91,8 @@ class LoginDialog extends MyNode
     function closeDialog()
     {
         closeCastleDialog();
-        //global.director.popView();
+        global.user.changeValue("silver", curCmd.get("silver"));
+        global.user.changeValue("crystal", curCmd.get("crystal"));
     }
     function shareGift()
     {

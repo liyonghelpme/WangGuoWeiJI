@@ -92,9 +92,12 @@ class Magic extends MyNode
         //攻击对象没有死亡
         if(sol.tar != null)
         {
+            /*
             var coff = getSoldierKindCoff(sol.kind, sol.tar.getKind());
             var hurt = coff*(sol.attack-sol.tar.defense)/100;
             hurt = max(hurt, sol.attack/10);//伤害最小是攻击力的1/10
+            */
+            var hurt = calHurt(sol, tar);
             tar.changeHealth(sol, -hurt);
         }
         removeSelf();

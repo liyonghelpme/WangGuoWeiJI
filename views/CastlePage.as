@@ -1,6 +1,6 @@
-const SLOW_MOVE_TIME = 50000;
-const FAST_MOVE_TIME = 30000;
-const NEW_CLOUD_TIME = 6000;
+const SLOW_MOVE_TIME = 70000;
+const FAST_MOVE_TIME = 50000;
+const NEW_CLOUD_TIME = 9000;
 
 class Cloud extends MyNode
 {
@@ -94,8 +94,20 @@ class BuildLayer extends MyNode
         bg = node();
         init();
         //buildings = global.user.buildings;
-        initBuilding();
+        //initBuilding();
         //initSoldiers();
+    }
+
+    /*
+    闯关页面士兵死亡 则 通知
+    */
+    function initDataOver()
+    {
+        removeSoldiers();
+
+        initBuilding();
+        initSoldiers();
+
     }
     /*
     避免在receivMsg 的时候 删除代理
@@ -121,6 +133,7 @@ class BuildLayer extends MyNode
         trace("receiveMsg", msg);
         if(msg[0] == RELIVE_SOL)
         {
+            //sid sdata
             var sdata = msg[1];
             var data = getData(SOLDIER, sdata[1].get("id"));
             var soldier = new BusiSoldier(this, data, sdata[1], sdata[0]);
@@ -132,8 +145,10 @@ class BuildLayer extends MyNode
     override function exitScene()
     {
 
+        global.user.storeOldPos();
         global.msgCenter.removeCallback(RELIVE_SOL, this);
         removeSoldiers();
+
         super.exitScene();
         solTimer.stop();
         solTimer = null;
@@ -304,6 +319,28 @@ class CastlePage extends MyNode
     var dialogController;
     var solNum;
 
+    function getLoginReward(rid, rcode, con, req, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            var silver = con.get("silver");
+            var crystal = con.get("crystal");
+            var loginDays = con.get("loginDays");
+            global.user.setValue("loginDays", loginDays);
+            if(silver != 0 || crystal != 0)
+                dialogController.addCmd(dict([["cmd", "login"], ["silver", silver], ["crystal", crystal], ["loginDays", loginDays]]));
+        }
+    }
+
+    function initDataOver()
+    {
+        buildLayer.initDataOver();
+        solNum.text(str(global.user.getSolNum()));
+
+        global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid]]), getLoginReward, null);
+    }
+
     function CastlePage(s)
     {
         scene = s;
@@ -338,7 +375,7 @@ class CastlePage extends MyNode
         //px - (1+1)*32/2 = pYN  / 32 = 26
         //py - (1+1)*16 = pYN / 16 = 48
         //260048 特殊的固定建筑 不能移动 也不能任意的点击 由客户端确定的建筑
-        banner = bg.addsprite("build126.png").pos(864, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner);
+        banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner);
         solNum = banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
 
         buildLayer = new BuildLayer(this);
@@ -354,9 +391,10 @@ class CastlePage extends MyNode
 
         dialogController = new DialogController();
         addChild(dialogController);
-        dialogController.addCmd(dict([["cmd", "login"]]));
-        dialogController.addCmd(dict([["cmd", "rate"]]));
-        dialogController.addCmd(dict([["cmd", "levup"]]));
+
+        //dialogController.addCmd(dict([["cmd", "login"]]));
+        //dialogController.addCmd(dict([["cmd", "rate"]]));
+        //dialogController.addCmd(dict([["cmd", "levup"]]));
         //dialogController.addCmd(dict([["cmd", "victory"]]));
         //dialogController.addCmd(dict([["cmd", "fail"]]));
 
@@ -367,7 +405,6 @@ class CastlePage extends MyNode
 
         //global.timer.addTimer(this);
         //initBuilding();
-
     }
     function onFlowBanner()
     {
@@ -409,8 +446,10 @@ class CastlePage extends MyNode
     function buySoldier(id)
     {
         var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id), null, global.user.getNewSid());
+
         //newSol.setSid(global.user.getNewSid());
         buildLayer.addSoldier(newSol);
+
         global.user.updateSoldiers(newSol);
         return newSol;
     }
@@ -505,6 +544,7 @@ class CastlePage extends MyNode
         super.enterScene();
         global.timer.addTimer(this);
         global.msgCenter.registerCallback(BUYSOL, this);
+        global.msgCenter.registerCallback(LEVEL_UP, this);
         solNum.text(str(global.user.getSolNum()));
     }
 
@@ -515,6 +555,11 @@ class CastlePage extends MyNode
         {
             solNum.text(str(global.user.getSolNum()));
         }
+        else if(msg[0] == LEVEL_UP)
+        {
+            dialogController.addCmd(dict([["cmd", "levup"], ["castlePage", this]]));
+            //fallGoods.genLevelUpFallGoods();
+        }
     }
     function remove(c)
     {
@@ -522,22 +567,32 @@ class CastlePage extends MyNode
     }
     var clouds = [];
     var lastTime = 1000000;
+    var storeSolTime = 0;
     function update(diff)
     {
         lastTime += diff;
         if(lastTime >= NEW_CLOUD_TIME)
         {
             lastTime = 0;
-            if(len(clouds) < 8 && rand(1) == 0)
+            if(len(clouds) < 8 && rand(3) == 0)
             {
                 var r = rand(7);
                 var c = new Cloud(this, r);
                 addChildZ(c, -1);
             }
         }
+
+        //30s store 
+        storeSolTime += diff;
+        if(storeSolTime >= 30000)
+        {
+            storeSolTime = 0;
+            global.user.storeOldPos();
+        }
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(LEVEL_UP, this);
         global.msgCenter.removeCallback(BUYSOL, this);
         global.timer.removeTimer(this);
         super.exitScene();

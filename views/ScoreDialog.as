@@ -8,10 +8,15 @@ class ScoreDialog extends MyNode
         var but0 = dia.addsprite("roleNameBut1.png").pos(143, 340).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog).size(174, 55);
         but0.addlabel(getStr("nextTime", null), null, 25).anchor(50, 50).pos(87, 27);
 
-        but0 = dia.addsprite("roleNameBut0.png").pos(363, 340).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog).size(174, 55);
+        but0 = dia.addsprite("roleNameBut0.png").pos(363, 340).anchor(50, 50).setevent(EVENT_TOUCH, onRate).size(174, 55);
         but0.addlabel(getStr("ok", null), null, 25).anchor(50, 50).pos(87, 27);
 
         showCastleDialog();
+    }
+    function onRate()
+    {
+        closeDialog();
+        global.user.setRated();
     }
     function closeDialog()
     {

@@ -10,6 +10,8 @@ class Global
     var map = null;
     var msgCenter;
     var sensorController;
+    var httpController;
+    var friendController;
     function Global()
     {
     }

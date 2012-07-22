@@ -60,8 +60,29 @@ class FallObj extends MyNode
     */
     
     function onclicked(){
+        //var reward = getFallThing(kind);
+        //var pos = getData(FALL_THING, kind);
+        var reward = getGain(FALL_THING, kind);
 
-        global.director.curScene.addChild(new FlyObject(bg, getFallThing(kind), pickMe));
+        /*
+        //升级奖励的特殊物品 银币奖励 * 等级
+        if(pos["possible"] == 0)
+        {
+            var level = global.user.getValue("level");
+            reward["silver"] *= level;
+        }
+        //掉落银币不为0 则5级增加5银币 50级 50个银币 
+        else 
+
+        0值消耗 不存在于getCost中
+        */
+        if(reward.get("silver", null) != null)
+        {
+            reward["silver"] += global.user.getValue("level")/5*5;
+        }
+
+        global.httpController.addRequest("goodC/pickObj", dict([["uid", global.user.uid], ["silver", reward.get("silver")], ["crystal", reward.get("crystal")], ["gold", reward.get("gold")]]), null, null);
+        global.director.curScene.addChild(new FlyObject(bg, reward, pickMe));
         bg.setevent(EVENT_TOUCH|EVENT_UNTOUCH|EVENT_MOVE, null);
         bg.removefromparent();
 
@@ -70,7 +91,7 @@ class FallObj extends MyNode
     {
         removeSelf();
         map.pickObj(this);
-        //测试任务完成
-        global.user.updateTask(0, 10, 0);
+        //测试任务完成 更新任务状态 
+        global.user.updateTask(0, 10, 0, 0);
     }
 }

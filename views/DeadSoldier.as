@@ -72,8 +72,15 @@ class DeadSoldier extends MyNode
             {
                 var sid = child.get();
                 trace("dead id", sid);
-                global.user.doRelive(sid);//soldier sid
-                initDead();
+
+                var sol = global.user.getSoldierData(sid);
+                var data = getData(SOLDIER, sol.get("id"));
+
+                var soldier = new BusiSoldier(null, data, sol, sid);
+
+                global.director.pushView(new DrugDialog(soldier, RELIVE), 1, 0);
+                //global.user.doRelive(sid);//soldier sid 士兵复活之后才可以更新界面
+                //initDead();
             }
         }
         var curPos = flowNode.pos();
@@ -81,6 +88,25 @@ class DeadSoldier extends MyNode
         curPos[1] = min(0, max(-rows*OFFY+HEIGHT,curPos[1]));
         flowNode.pos(curPos);
         updateTab();
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.msgCenter.registerCallback(RELIVE_SOL, this);
+    }
+    function receiveMsg(msg)
+    {
+        trace("receiveMsg", msg);
+        if(msg[0] == RELIVE_SOL)
+        {
+            initDead();
+            updateTab();
+        }
+    }
+    override function exitScene()
+    {
+        global.msgCenter.removeCallback(RELIVE_SOL, this);
+        super.exitScene();
     }
     function getRange()
     {

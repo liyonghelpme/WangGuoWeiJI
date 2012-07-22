@@ -37,12 +37,38 @@ class PlantChoose extends MyNode
             var planting = getData(PLANT, i);//getPlant(i);
             var panel = flowNode.addsprite("plantPanel.png").pos(0, i*Height);
             panel.addsprite("Wplant"+str(i)+".png").pos(169, 48).anchor(50, 50);
-            panel.addsprite("silver.png").pos(31, 24).anchor(50, 50).size(30, 30);
-            panel.addlabel(str(planting.get("silver")), null, 18).anchor(0, 50).pos(51, 24).color(0, 0, 0);
+
+            
+            /*
+            var cost = planting.get("silver");
+            var cur = global.user.getValue("silver");
+            var cl = [0, 0, 0];
+            if(cur < cost)
+                cl = [100, 0, 0];
+            */
+
+            var cost = getCost(PLANT, i);
+            var buyable = global.user.checkCost(cost);
+            var cl = [0, 0, 0];
+            if(buyable.get("ok") == 0)
+            {
+                cl = [100, 0, 0];
+            }
+            var key = cost.keys();
+            key = key[0];
+            var val = cost.values();
+            val = val[0];
+
+            panel.addsprite(key+".png").pos(31, 24).anchor(50, 50).size(30, 30);
+            panel.addlabel(str(val), null, 18).anchor(0, 50).pos(51, 24).color(cl[0], 0, 0);
+
             panel.addlabel(getTimeStr(planting.get("time")), null, 18).anchor(0, 50).pos(7, 50).color(0, 0, 0);
+
+            panel.addsprite("exp.png").size(30, 30).pos(80, 50).anchor(100, 50);
             panel.addlabel(str(planting.get("exp")), null, 18).pos(83, 50).color(0, 0, 0).anchor(0, 50);
+
             panel.addsprite("silver.png").pos(31, 76).anchor(50, 50).size(30, 30);
-            panel.addlabel(str(planting.get("gain")), null, 18).anchor(0, 50).pos(51, 76).color(0, 0, 0);
+            panel.addlabel(str(planting.get("gainsilver")), null, 18).anchor(0, 50).pos(51, 76).color(0, 0, 0);
             panel.put(i);
         }
         var row = len(plantData)*Height;
@@ -83,9 +109,36 @@ class PlantChoose extends MyNode
             var child = checkInChild(n, newPos);
             if(child != null)
             {
-                building.funcBuild.beginPlant(child.get()); 
-                //global.director.popView();
-                closeCastleDialog();
+                var id = child.get();
+
+                var cost = getCost(PLANT, id);
+                var buyable = global.user.checkCost(cost);
+                var level = global.user.getValue("level");
+                var plantData = getData(PLANT, id);
+                var needLevel = plantData.get("level");
+                if(level < needLevel)
+                {
+                    global.director.pushView(new MyWarningDialog(getStr("levelNotTitle", null), getStr("plantLevel", ["[NAME]", plantData.get("name"), "[LEVEL]", str(needLevel)]), null), 1, 0);
+                }
+                else if(buyable.get("ok") == 0)
+                {
+                    //资源不足 欠一种类型的资源
+                    var key = cost.keys()[0];
+                    //var val = cost.values()[0];
+
+                    global.director.pushView(
+                        new MyWarningDialog(getStr("resNot", null), getStr("resLack", ["[NAME]", getStr(key, null),  "[NUM]", str(buyable[key])]),  null), 1, 0);
+                }
+                else
+                {
+                    global.httpController.addRequest("buildingC/beginPlant", dict([["uid", global.user.uid], ["bid", building.bid], ["objectId", child.get()]]), beginPlant, [cost, child.get()]);
+                    building.waitLock("feeding");
+                    //global.user.doCost(cost);
+                    //building.waitLock();
+                    //building.funcBuild.beginPlant(child.get()); 
+                    //global.director.popView();
+                    closeCastleDialog();
+                }
             }
         }
         var oldPos = flowNode.pos();
@@ -94,5 +147,16 @@ class PlantChoose extends MyNode
         oldPos[1] = sel*Height;
         flowNode.pos(oldPos[0], oldPos[1]);
     }
-        
+    function beginPlant(rid, rcode, con, req, param)
+    {
+        if(rcode != 0)
+        {
+            var cost = param[0];
+            var id = param[1];
+
+            global.user.doCost(cost);
+            building.removeLock();
+            building.funcBuild.beginPlant(id); 
+        }
+    }   
 }

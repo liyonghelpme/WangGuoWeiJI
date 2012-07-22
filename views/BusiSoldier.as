@@ -31,8 +31,18 @@ class BusiSoldier extends MyNode
     var healthBoundary;
     var health;
 
-    var attack;
-    var defense;
+    //var attack;
+    //var defense;
+    var physicAttack;
+    var physicDefense;
+    var purePhyDefense;
+
+    var magicAttack;
+    var magicDefense;
+    var pureMagDefense;
+
+    //var base;
+
     var attSpeed;
     var attRange;
     
@@ -68,40 +78,38 @@ class BusiSoldier extends MyNode
             privateData = dict();
 
         level = privateData.get("level", 0);
-        setHealthBoundary();
-        //healthBoundary = data.get("health")+level*data.get("addHealth");
-        health = privateData.get("health", healthBoundary);//新购买的士兵生命值满 
+
+        addAttack = privateData.get("addAttack", 0);
+        addAttackTime = privateData.get("addAttackTime", 0);
+        addDefense = privateData.get("addDefense", 0);
+        addDefenseTime = privateData.get("addDefenseTime", 0);
+
+        health = privateData.get("health", 0);
+        recoverSpeed = data.get("recoverSpeed");
+        initAttackAndDefense(this);
         
-        //healthBoundary = privateData.get("healthBoundary", 0); 
-
-
-        //attack = privateData.get("attack", 0); 
-        //defense = privateData.get("defense", 0); 
         exp = privateData.get("exp", 0);
         dead = privateData.get("dead", 0);
         
-        initAttackAndDefense();
-        recoverSpeed = data.get("recoverSpeed")*1000;
+
+
 
         attSpeed = data.get("attSpeed");
         attRange = data.get("range");
+
+
     }
     var recoverTime = 0;
-    function initAttackAndDefense()
-    {
-        attack = data.get("attack")+level*data.get("addAttack");
-        defense = data.get("defense")+level*data.get("addDefense");
-        
-        var equips = global.user.getSoldierEquip(sid);
-        for(var i = 0; i < len(equips); i++)
-        {
-            var e = getData(EQUIP, equips[i]);
-            attack += e.get("attack");
-            defense += e.get("defense");
-        }
-    }
+    //[[lev, [health, magicDefense, physicDefense, physicAttack, magicAttack]], ...]
+    //if i >= len(stage)
+    //计算裸 基本属性
 
-    //攻击药水 防御药水 在闯关的1个回合中暂时提升士兵能力
+    var addAttack = 0;
+    var addAttackTime = 0;
+    var addDefense = 0;
+    var addDefenseTime = 0;
+    //攻击药水 防御药水 在闯关的1个回合中暂时提升士兵能力 100 attack 100 defense
+    //复活药水 复活士兵 增加 0 
     function useDrug(tid)
     {
         var dd = getData(DRUG, tid);    
@@ -109,27 +117,38 @@ class BusiSoldier extends MyNode
         health = min(healthBoundary, health);
         //exp += dd.get("exp");
         changeExp(dd.get("exp"));
+
+        if(dd.get("attack") != 0)
+        {
+            addAttack = data.get("attack");
+            addAttackTime = data.get("effectTime");
+        }
+        else if(dd.get("defense") != 0)
+        {
+            addDefense = data.get("defense");
+            addDefenseTime = data.get("effectTime");
+        }
+        else if(dd.get("relive") == 1)//x% life dead = 0
+        {
+            trace("reliveSoldier", sid);
+            dead = 0;
+            health = dd.get("effectTime")*healthBoundary/100; 
+            //复活本士兵
+
+        }
+        initAttackAndDefense(this);
         global.user.updateSoldiers(this);
+
+        if(dd.get("relive") == 1)
+            global.msgCenter.sendMsg(RELIVE_SOL, [sid, global.user.getSoldierData(sid)]);
     }
     //参数  -1 表示去掉某件装备
     //其它表示 装备某个类型的装备
+    //关闭装备菜单 士兵选择使用某个装备
     function useEquip(tid)
     {
-        initAttackAndDefense();
+        initAttackAndDefense(this);
         global.user.updateSoldiers(this);
-    }
-    /*
-    计算士兵的转职需要等级 但是怪兽不能转职100-190
-    士兵0-90 可以转职 0 1 2 3
-    */
-    function getTransferLevel()
-    {
-        var proLevel = id%10;
-        if(proLevel < 3 && id < 100)
-        {
-            return (proLevel+1)*5;
-        }
-        return 0;
     }
 
     function updateStaticData(d)
@@ -149,12 +168,14 @@ class BusiSoldier extends MyNode
     }
     //杀死该士兵后
     //view 消失 user 场景对象消失
+    /*
     function killMonster()
     {
         dead = 1;
         global.user.updateSoldiers(this);//更新死亡状态
         map.removeChild(this); 
     }
+    */
     //闯关页面士兵死亡  经营页面 在进入场景的时候会根据数据重新生成士兵
 
     function doTrain()
@@ -183,7 +204,12 @@ class BusiSoldier extends MyNode
         changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
         var bSize = changeDirNode.prepare().size();
-        bg.size(bSize).anchor(50, 100).pos(465, 720);
+
+        var oldPos = global.user.getOldPos(sid);
+        if(oldPos == null)
+            oldPos = [465, 720];
+
+        bg.size(bSize).anchor(50, 100).pos(oldPos);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
         shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
@@ -194,7 +220,10 @@ class BusiSoldier extends MyNode
 
         var nPos = normalizePos(bg.pos(), sx, sy);
         setPos(nPos);
-        curMap = global.user.updateMap(this);
+        
+        //死亡士兵 打开药店 不需要更新地图
+        if(map != null)
+            curMap = global.user.updateMap(this);
 
         movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
@@ -218,16 +247,20 @@ class BusiSoldier extends MyNode
     }
     function sureToSell()
     {
-        global.director.curScene.addChild(new FlyObject(bg, getBuildCost(data.get("id")), sellOver));
+        global.httpController.addRequest("soldierC/sellSoldier", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
+        var cost = getCost(SOLDIER, id);
+        cost = changeToSilver(cost);
+        global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
         //修改view
         map.removeChild(this); 
         //修改数据
-        global.user.sellSoldier(this);
+        global.user.sellSoldier(this);//修改士兵的装备属性
         global.msgCenter.sendMsg(BUYSOL, null);
     }
     function sellOver()
     {
     }
+    //鼓励士兵 奖励经验
     function inspireMe()
     {
         inspire = 0;
@@ -235,28 +268,22 @@ class BusiSoldier extends MyNode
         inspirePic.removefromparent();
         inspirePic = null;
         //exp += 100;
+        global.httpController.addRequest("soldierC/inspireMe", dict([["uid", global.user.uid], ["sid", sid], ["exp", 10]]), null, null);
         changeExp(10);
+
         global.user.updateSoldiers(this);
         var nPos = bg.node2world(0, -10);
-        global.director.curScene.addChild(new TrainBanner(nPos, 100));
-    }
-    /*
-    被其它内部函数调用 更新士兵数据库 由其它函数进行
-    士兵的bg 应该和changeDirNode 区分开来
-    */
-    function setHealthBoundary()
-    {
-        healthBoundary = data.get("health")+level*data.get("addHealth");
+        //global.director.curScene.addChild(new TrainBanner(nPos, 100));
     }
     function changeExp(add)
     {
         exp += add;
-        var ne = getLevelNeedExp(data.get("expId"), level);
+        var ne = getLevelUpExp(id, level);
         if(exp >= ne)
         {
             for(; 1; )
             {
-                ne = getLevelNeedExp(data.get("expId"), level);
+                ne = getLevelUpExp(id, level);
                 if(exp >= ne)
                 {
                     exp -= ne;
@@ -265,8 +292,10 @@ class BusiSoldier extends MyNode
                 else 
                     break;
             }
-            setHealthBoundary();
-            health = healthBoundary;
+            //setHealthBoundary();
+            initAttackAndDefense(this);
+            if(dead == 0)
+                health = healthBoundary;
         }
 
         var temp = bg.addnode();
@@ -282,10 +311,15 @@ class BusiSoldier extends MyNode
     */
     function doTransfer()
     {
-        var proLevel = id%10;
-        if(proLevel < 3 && (proLevel+1)*5 <= level && id < 100)//每5级可以转职一次
+        //var proLevel = id%10;
+        //var solOrMon = data.get("solOrMon");
+        var ret = checkTransfer(level, data);
+
+        //if(proLevel < 3 && (proLevel+1)*5 <= level && solOrMon == 0)//每5级可以转职一次
+        if(ret == 1)
         {
         //改变形象bg  改变数据 id 
+            global.httpController.addRequest("soldierC/doTransfer", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
             id += 1;
             var d = getData(SOLDIER, id);
             updateStaticData(d);
@@ -313,6 +347,9 @@ class BusiSoldier extends MyNode
     {
         showMenuYet = 1;
         var func1 = ["photo", "drug", "equip"];
+        var solOrMon = data.get("solOrMon");
+        if(solOrMon == 1)
+            func1 = ["photo", "drug"];
         var func2 = ["train", "gather"];
         if(inspire == INSPIRE)
             func2 = ["inspire", "train", "gather"];
@@ -336,6 +373,7 @@ class BusiSoldier extends MyNode
     function setName(n)
     {
         myName = n;
+        global.httpController.addRequest("soldierC/setName", dict([["uid", global.user.uid], ["sid", sid], ["name", myName]]), null, null);
         global.user.updateSoldiers(this);
     }
     override function enterScene()
@@ -428,9 +466,9 @@ class BusiSoldier extends MyNode
     function update(diff)
     {
         recoverTime += diff;
-        if(recoverTime >= recoverSpeed)
+        if(recoverTime >= RECOVER_TIME)
         {
-            health += 1;
+            health += recoverSpeed;
             health = min(health, healthBoundary);
             recoverTime = 0;
         }

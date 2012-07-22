@@ -319,6 +319,7 @@ class SoldierStore extends MyNode
         }
 
         scene.buySoldier(id);
+
         var sucB = new SucBanner();
         sucB.setPos([412, 255]);
         addChildZ(sucB, 1);

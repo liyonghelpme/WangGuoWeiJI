@@ -18,6 +18,15 @@ class MyNode
         bg.removefromparent();
         exitScene();
     }
+    function setZord(z)
+    {
+        var par = bg.parent();
+        if(par != null)
+        {
+            bg.removefromparent();
+            par.add(bg, z);
+        }
+    }
 
     function enterScene()
     {

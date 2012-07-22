@@ -1,6 +1,7 @@
 
 function replaceStr(s, rep)
 {
+    trace("replaceStr", s, rep);
     for(var i = 0; i < len(rep); i += 2)
     {
         if(type(rep[i+1]) != type(""))
@@ -128,19 +129,8 @@ function checkInChild(bg, pos)
 直接返回所有的条目， 即便是0 
 这里只返回非0条目的目的是为了商店显示价格的时候， 只显示非0条目
 */
-function getBuildCost(id)
-{
-    var build = buildingData.get(id);
-    var cost = dict();
-    if(build[1] != 0)
-        cost.update("silver", build[1]);
-    if(build[2] != 0)
-        cost.update("crystal", build[2]);
-    if(build[3] != 0)
-        cost.update("gold", build[3]);
-    //var cost = dict([["silver", build[1]], ["crystal", build[2]], ["gold", build[3]]]);
-    return cost;
-}
+//costKey 不包含level的需求，因此在检测需求的时候需要确认level存在
+//doCost不包含level
 function getCost(kind, id)
 {
     trace("getCost", kind, id);
@@ -373,6 +363,7 @@ function getPosMap(sx, sy, px, py)
 
     px /= sizeX;
     py /= sizeY;
+    //trace("getBuildMap", px+sx, py+1);
     return [sx, sy, px+sx, py+1];
 }
 /*
@@ -471,10 +462,11 @@ const PassDifficult = 0;
 */
 function getCurEnableDif()
 {
-    var star = global.user.getValue("starNum");
+    var star = global.user.starNum;
     var i;
     var j;
     var find = 0;
+    trace("curEnable ", star);
     for(i = 0; i < len(star); i++)
     {
         for(j = 0; j < len(star[i]); j++)
@@ -495,7 +487,7 @@ function getCurEnableDif()
 */
 function getStar(big, small, dif)
 {
-    var star = global.user.getValue("starNum");
+    var star = global.user.starNum;
     return star[big-1][small][dif]; 
 }
 /*
@@ -533,12 +525,14 @@ function flyObject(bg, cost, callback)
     }
 }
 */
+/*
 function getFallThing(kind)
 {
     var v = fallThings[kind];
     trace("getFallThing", v);
     return dict([["silver", v[1]], ["crystal", v[2]], ["gold", v[3]]]);
 }
+*/
 /*
 building id-->function id -> function array
 */
@@ -639,6 +633,12 @@ function getSolMap(p, sx, sy, offY)
 
     return [xk, yk];
 }
+function getGridPos(gridId)
+{
+    var x = gridId[0]*MAP_OFFX+MAP_INITX;
+    var y = gridId[1]*MAP_OFFY+MAP_INITY;
+    return [x, y];
+}
 /*
 根据手指的位置计算相应的 网格编号
 一个大型士兵有2*2个网格 得到的是 左下角的网格
@@ -654,6 +654,7 @@ function getSolMap(p, sx, sy, offY)
 
 手指点击士兵网格的中心
 
+对齐网格
 */
 function getPosSolMap(p, sx, sy)
 {
@@ -757,25 +758,27 @@ function getRandomMapReward(big, small)
     trace("small reward", reward);
     return [reward[0][0], reward[1][0]];
 }
+/*
 function getLevelNeedExp(expId, level)
 {
     var needExp = soldierLevelExp.get(expId);
     var ne = needExp[min(len(needExp)-1, level)];
     return ne;
 }
+*/
 
 /*
 可能存在问题 show 和close 出现的时机不一致 就会导致 经营页面的菜单出现问题
 */
 function showCastleDialog()
 {
-    global.msgCenter.sendMsg(SHOW_DIALOG, 0);
+    //global.msgCenter.sendMsg(SHOW_DIALOG, 0);
 }
 
 function closeCastleDialog()
 {
     global.director.popView();
-    global.msgCenter.sendMsg(SHOW_DIALOG, 1);
+    //global.msgCenter.sendMsg(SHOW_DIALOG, 1);
 }
 function removeMapEle(arr, obj)
 {
@@ -788,3 +791,86 @@ function removeMapEle(arr, obj)
         }
     }
 }
+
+function changeToSilver(data)
+{
+    var key = data.keys();
+    //不能归还金币 和 水晶 1金币 = 2水晶 = 1000银币
+    var addSilver = 0;
+    for(var i = 0; i < len(key); i++)
+    {
+        var val = data.get(key[i]);
+        if(key == "gold")
+        {
+            addSilver += val*1000/SELL_RATE;
+        }
+        else if(key == "crystal")
+        {
+            addSilver += val*500/SELL_RATE;
+        }
+        else
+            addSilver += val/SELL_RATE;
+    }
+    trace("changeToSilver", data, addSilver);
+    data = dict([["silver", addSilver]]);
+
+    return data;
+}
+function server2Client(t)
+{
+    return t-global.user.serverTime+global.user.clientTime;
+}
+function client2Server(t)
+{
+    return t-global.user.clientTime+global.user.serverTime;
+}
+//可以初始化时构造level更新数组
+function getAllData(kind)
+{
+    var datas = dict();
+    var key = CostData[kind].keys();
+    for(var i = 0; i < len(key); i++)
+    {
+        var d = getData(kind, key[i]);
+        var lev = datas.get(d.get("level"), []);
+        lev.append([kind, d]);
+        datas.update(d.get("level"), lev);
+    }
+    return datas;
+}
+//level ---> kind id
+function getLevelupThing()
+{
+    var allSoldiers = getAllData(SOLDIER);
+    var allBuildings = getAllData(BUILD);
+    var lev = global.user.getValue("level");
+    var res1 = allSoldiers.get(lev, []);
+    var res2 = allBuildings.get(lev, []);
+    return res1+res2;
+}
+//0 == 1 > -1  <
+//mid Element = first
+//until begin >= end
+//qsort = qsort(A) + midElement + qsort(B)
+function qsort(obj, begin, end, cmp)
+{
+    if(begin >= end)
+        return;
+    var initX = begin;
+    var mid = obj[begin];
+    for(var i = begin+1; i < end; i++)
+    {
+        var ret = cmp(mid, obj[i]);
+        if(ret > 0)// small ---> big
+        {
+            var temp = obj[i];
+            obj[i] = obj[initX];
+            obj[initX] = temp;
+            initX++;
+        }
+    }
+    obj[initX] = mid;
+    qsort(obj, begin, initX-1, cmp);
+    qsort(obj, initX+1, end, cmp);
+}
+

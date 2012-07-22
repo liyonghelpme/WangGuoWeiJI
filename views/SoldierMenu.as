@@ -11,13 +11,18 @@ class SoldierMenu extends MyNode
         //banner.addlabel(soldier.data.get("name"), null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
 
         banner.addsprite("dialogSolLev.png").pos(38, 30).anchor(0, 50);
-        banner.addlabel(str(soldier.level), null, 18).anchor(0, 50).pos(101, 30).color(100, 100, 100);
+        banner.addlabel(str(soldier.level+1), null, 18).anchor(0, 50).pos(101, 30).color(100, 100, 100);
         banner.addsprite("dialogSolHealth.png").pos(161, 30).anchor(0, 50);
         banner.addlabel(str(soldier.health)+"/"+str(soldier.healthBoundary), null, 18).anchor(0, 50).pos(201, 30).color(100, 100, 100);
         banner.addsprite("dialogSolAtt.png").pos(298, 30).anchor(0, 50);
-        banner.addlabel(str(soldier.defense), null, 18).anchor(0, 50).pos(332, 30).color(100, 100, 100);
+        var attack = soldier.physicAttack;
+        if(soldier.magicAttack > 0)
+            attack = soldier.magicAttack;
+        banner.addlabel(str(attack), null, 18).anchor(0, 50).pos(332, 30).color(100, 100, 100);
+
         banner.addsprite("dialogSolDef.png").pos(405, 30).anchor(0, 50);
-        banner.addlabel(str(soldier.defense), null, 18).anchor(0, 50).pos(441, 30).color(100, 100, 100);
+        banner.addlabel(str(soldier.physicDefense), null, 18).anchor(0, 50).pos(441, 30).color(100, 100, 100);
+
         banner.addsprite("dialogSolDetail.png").pos(725, 30).anchor(0, 50).setevent(EVENT_TOUCH, onDetail);
 
 

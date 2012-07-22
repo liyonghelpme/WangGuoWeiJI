@@ -24,14 +24,14 @@ class DialogController extends MyNode
                 var curCmd = cmds.pop(0);
                 if(curCmd.get("cmd") == "login")
                 {
-                    global.director.pushView(new LoginDialog(), 1, 0);
+                    global.director.pushView(new LoginDialog(curCmd), 1, 0);
                 }   
                 else if(curCmd.get("cmd") == "rate")
                 {
                     global.director.pushView(new ScoreDialog(), 1, 0);
                 }
                 else if(curCmd.get("cmd") == "levup")
-                    global.director.pushView(new LevupDialog(), 1, 0);
+                    global.director.pushView(new LevupDialog(curCmd), 1, 0);
                 /*
                 else if(curCmd.get("cmd") == "victory")
                     global.director.pushView(new BreakDialog(1, 2, dict()), 1, 0);

@@ -29,6 +29,62 @@ class Map extends MyNode
     var myTimer;
     //color kind
     var small;
+
+    var gridRow = null;
+    var gridCol = null;
+    /*
+    function showGrid(sol)
+    {
+        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
+        var gp = getGridPos(oldMap);
+        if(gridRow == null)
+            gridRow = bg.addsprite("occGrid.png").pos(MAP_INITX, gp[1]).size(MAP_OFFX*6, MAP_OFFY*sol.sy);
+        if(gridCol == null)
+            gridCol = bg.addsprite("occGrid.png").pos(gp[0], MAP_INITY).size(MAP_OFFX*sol.sx, MAP_OFFY*5);
+    }
+    */
+    function removeGrid()
+    {
+        if(gridRow != null)
+        {
+            gridRow.removefromparent();
+            gridRow = null;
+        }
+        if(gridCol != null)
+        {
+            gridCol.removefromparent();
+            gridCol = null;
+        }
+    }
+    function checkInBoundary(sol, oldMap)
+    {
+        if(oldMap[0] < 1 || oldMap[0] > (6-sol.sx) || oldMap[1] < 0 || oldMap[1] > (5-sol.sy))
+        {
+            return 0;
+        }
+        return 1;
+    }
+    function moveGrid(sol)
+    {
+        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
+        var ret = checkInBoundary(sol, oldMap);
+        if(ret == 0)
+        {
+            removeGrid();
+            return;
+        }
+
+        var gp = getGridPos(oldMap);
+
+        //newMap[0] = max(1, min(6-sx, newMap[0]));
+        //newMap[1] = max(0, min(5-sy, newMap[1]));
+        if(gridRow == null)
+            gridRow = bg.addsprite("occGrid.png").pos(MAP_INITX, gp[1]).size(MAP_OFFX*6, MAP_OFFY*sol.sy);
+        gridRow.pos(MAP_INITX, gp[1]);
+        if(gridCol == null)
+            gridCol = bg.addsprite("occGrid.png").pos(gp[0], MAP_INITY).size(MAP_OFFX*sol.sx, MAP_OFFY*5);
+        gridCol.pos(gp[0], MAP_INITY);
+    }
     function Map(k, sm, s, sc)
     {
         scene = sc;
@@ -36,7 +92,7 @@ class Map extends MyNode
         small = sm;
         //curStar = global.user.getCurStar(kind, small);
 
-        bg = sprite("map"+str(k)+".jpg").pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
+        bg = sprite("map"+str(k)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         grid = bg.addnode("mapGrid.png").pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1).color(100, 100, 100, 30);
         grid.addsprite("mapGrid.png").color(100, 100, 100, 50);
 
@@ -86,12 +142,19 @@ class Map extends MyNode
     function defenseBreak(def)
     {
         var reward = getRandomMapReward(kind, small);
+        var levelUpSol = getAllLevelUp();
 
         stopGame();
+        if(def.color == 0)
+            challengeOver(0, 0, null, levelUpSol);
+        else 
+            challengeOver(1, getStar(), reward, levelUpSol);
+        /*
         if(def.color == 0)
             global.director.pushView(new BreakDialog(0, 0, reward, this), 1, 0);
         else
             global.director.pushView(new BreakDialog(1, getStar(), reward, this), 1, 0);
+        */
     }
     /*
     color kind
@@ -221,6 +284,9 @@ class Map extends MyNode
         }
         return null;
     }
+    /*
+    计算士兵的位置map
+    */
     function checkCol(sol)
     {
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
@@ -268,6 +334,8 @@ class Map extends MyNode
         for(var i = 0; i < sol.sy; i++)
         {
             var row = soldiers.get(oldMap[1]+i)
+            if(row == null)
+                continue;
             row.remove(sol);
             for(var j = 0; j < sol.sx; j++)
             {
@@ -277,22 +345,29 @@ class Map extends MyNode
         }
     }
 
+    /*
+    结束战斗之后更新所有我方士兵的状态
+    */
     function getAllLevelUp()
     {
+        var updateSoldierData = [];
         var levelUpSol = [];
         trace("mySoldiers", mySoldiers);
         for(var i = 0; i < len(mySoldiers); i++)
         {
-            var ne = getLevelNeedExp(mySoldiers[i].data.get("expId"), mySoldiers[i].level);
+            var ne = getLevelUpExp(mySoldiers[i].id, mySoldiers[i].level);
+            var sol = mySoldiers[i];
             if(mySoldiers[i].exp >= ne)
             {
                 mySoldiers[i].getLevelUp();
 
                 levelUpSol.append(mySoldiers[i]);
             }
+            updateSoldierData.append([sol.sid, sol.health, sol.exp, sol.dead, sol.level]);
             global.user.updateSoldiers(mySoldiers[i]);
         }
-        return levelUpSol;
+        //global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", updateSoldierData]]), null, null);
+        return [levelUpSol, updateSoldierData];
     }
     //保持所有我方士兵的引用 检测如果杀死对方奖励我方经验
     //我方士兵如果没有死亡
@@ -350,15 +425,18 @@ class Map extends MyNode
     {
         var sdata = global.user.getSoldierData(sid);
         var so = new Soldier(this, [0, sdata.get("id")], sid);
-        var nPos = getInitPos(so);
-        if(nPos[0] == -1)
-            return null;
+        //var nPos = getInitPos(so);
+        //if(nPos[0] == -1)
+        //    return null;
         addChild(so);
-        so.setPos(nPos);
-        setMap(so);
+        //so.setPos(nPos);
+        //setMap(so);
         return so;
     }
 
+    /*
+    死亡对象更新所有的士兵状态 计算经验
+    */
     function calHurts(so)
     {
         var it = so.hurts.values();
@@ -374,6 +452,14 @@ class Map extends MyNode
         {
             it[i][0].changeExp(totalExp*it[i][1]/totalHurt);
         }
+    }
+    function challengeOver(win, star, reward, levelUpSol)
+    {
+        var updateSoldierData = levelUpSol[1];
+        levelUpSol = levelUpSol[0];
+
+        global.director.pushView(new BreakDialog(win, star, reward, this, levelUpSol), 1, 0);
+        global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", updateSoldierData], ["reward", reward], ["star", star], ["big", kind], ["small", small]]), null, null);
     }
 
     function soldierDead(so)
@@ -402,16 +488,27 @@ class Map extends MyNode
         }
         trace("myCount", myCount, eneCount);
 
-        var reward = getRandomMapReward(kind, small);
-        if(myCount == 0)
+        if(myCount == 0 || eneCount == 0)
         {
+            var reward = getRandomMapReward(kind, small);
+            var levelUpSol = getAllLevelUp();
             stopGame();
-            global.director.pushView(new BreakDialog(0, 0, reward, this), 1, 0);
-        }
-        else if(eneCount == 0)
-        {
-            stopGame();
-            global.director.pushView(new BreakDialog(1, getStar(), reward, this), 1, 0);
+            if(myCount == 0)
+                challengeOver(0, 0, null, levelUpSol);
+            else
+                challengeOver(1, getStar(), reward, levelUpSol);
+            /*
+            if(myCount == 0)
+            {
+                stopGame();
+                global.director.pushView(new BreakDialog(0, 0, reward, this, levelUpSol), 1, 0);
+            }
+            else if(eneCount == 0)
+            {
+                stopGame();
+                global.director.pushView(new BreakDialog(1, getStar(), reward, this, levelUpSol), 1, 0);
+            }
+            */
         }
     }
     function removeSoldier(so)

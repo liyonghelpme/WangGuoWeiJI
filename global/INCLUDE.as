@@ -6,11 +6,14 @@ import global.User;
 import views.FriendScene;
 import views.FriendMenu;
 import views.VisitDialog;
+import views.FriendSoldier;
+
 
 import views.RankDialog;
 import views.HeroRank;
 import views.GroupRank;
 import views.NewRank;
+import views.RankBase;
 
 
 import views.LoginDialog;
@@ -85,6 +88,7 @@ import views.FriendDialog;
 
 import views.FlowScene;
 import views.FlowMenu;
+import views.FlowIsland;
 
 import views.MyWarningDialog;
 
@@ -113,6 +117,8 @@ import views.Soldier;
 import views.CloseSoldier;
 import views.CloseAttackEffect;
 
+import model.SoldierBase;
+
 import views.Arrow;
 import views.Magic;
 import views.MoveObject;
@@ -139,6 +145,9 @@ import views.StandardTouchHandler;
 import global.MyAnimate;
 import global.MyNode;
 import global.TouchManager;
+
+import model.FriendController;
+import model.HttpController;
 import util.Util;
 
 import global.Global;
@@ -149,6 +158,7 @@ import data.Static;
 
 import data.String;
 
+global.httpController = new HttpController();
 global.msgCenter = new MessageCenter();
 global.director = new Director();
 global.touchManager = new TouchManager();
@@ -159,6 +169,7 @@ global.myAction = new MyAction();
 //global.staticScene = new CastleScene();
 global.user = new User();
 global.sensorController = new SensorController();
+global.friendController = new FriendController();
 
 
 

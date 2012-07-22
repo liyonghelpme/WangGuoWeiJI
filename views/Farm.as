@@ -70,7 +70,7 @@ class Plant extends MyNode
     function setState()
     {
         var needTime = data.get("time")*1000;
-        var newState = passTime*4/needTime;
+        var newState = passTime*3/needTime;
         newState = min(MATURE, max(SOW, newState));
 
         if((newState == MATURE) && (passTime >= 2*needTime) && acced == 0)
@@ -162,6 +162,9 @@ class Farm extends FuncBuild
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
         }
     }
+    override function setPos()
+    {
+    }
     override function initWorking(data)
     {
         trace("planting", data);
@@ -171,10 +174,17 @@ class Farm extends FuncBuild
             return;
         var id = data.get("objectId"); 
         var plant = getData(PLANT, id);//getPlant(id);
-        var now = time();
-        var start = data.get("objectTime");
-        //plant.update("passTime", now-start);
-        var privateData = dict([["passTime", now-start]]);
+        
+        var now = time()/1000;//秒为单位
+
+        var startTime = data.get("objectTime");//serverTime 秒为单位
+
+        startTime = server2Client(startTime); 
+        trace("startTime", startTime, now, id);
+
+        
+        var privateData = dict([["passTime", (now-startTime)*1000]]);//毫秒为单位
+
         planting = new Plant(baseBuild, plant, privateData);
         baseBuild.addChild(planting);
     }
@@ -200,20 +210,64 @@ class Farm extends FuncBuild
         //建筑状态也需要改变
         global.user.updateBuilding(baseBuild);
     }
-    function harvestPlant()
+    function doHarvest()
     {
+        baseBuild.removeLock();
+
         baseBuild.state = Free;
         planting.removeSelf();
 
-        if(planting.getState() == ROT)
+        var rate = baseBuild.data.get("rate", 1);
+        var gain = getGain(PLANT, planting.id);
+        //魔法农田经验 银币 rate 是2倍
+        if(planting.getState() == ROT)//2倍时间没有收获则腐烂 收获1/3
         {
-            global.director.curScene.addChild(new FlyObject(baseBuild.bg, getGain(PLANT, planting.id), harvestOver));
+            gain = dict([["exp", gain["exp"]]]);
         }
-        else
-            global.director.curScene.addChild(new FlyObject(baseBuild.bg, getGain(PLANT, planting.id), harvestOver));
-        //flyObject(bg, dict([["silver", planting.data.get("silver")]]), harvestOver);
+
+        var keys = gain.keys();
+        for(var k = 0; k < len(keys); k++)
+        {
+            var v = gain[keys[k]];
+            v *= rate;
+            gain[keys[k]] = v;
+        }
+
+        global.director.curScene.addChild(new FlyObject(baseBuild.bg, gain, harvestOver));
+
         planting = null;
         global.user.updateBuilding(baseBuild);
+    }
+    function harvestPlant()
+    {
+        global.httpController.addRequest("buildingC/harvestPlant", dict([["uid", global.user.uid], ["bid", baseBuild.bid]]), doHarvest, null);
+        baseBuild.waitLock("harvesting");
+
+        /*
+        baseBuild.state = Free;
+        planting.removeSelf();
+
+        var rate = baseBuild.data.get("rate", 1);
+        var gain = getGain(PLANT, planting.id);
+        //魔法农田经验 银币 rate 是2倍
+        if(planting.getState() == ROT)//2倍时间没有收获则腐烂 收获1/3
+        {
+            gain = dict([["exp", gain["exp"]]]);
+        }
+
+        var keys = gain.keys();
+        for(var k = 0; k < len(keys); k++)
+        {
+            var v = gain[keys[k]];
+            v *= rate;
+            gain[keys[k]] = v;
+        }
+
+        global.director.curScene.addChild(new FlyObject(baseBuild.bg, gain, harvestOver));
+
+        planting = null;
+        global.user.updateBuilding(baseBuild);
+        */
     }
     function harvestOver()
     {
@@ -237,9 +291,11 @@ class Farm extends FuncBuild
             return planting.getStartTime();
         return 0;
     }
+    /*
     override function doAcc()
     {
         planting.finish();
         global.user.updateBuilding(baseBuild);
     }
+    */
 }

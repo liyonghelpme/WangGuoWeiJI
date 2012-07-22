@@ -204,8 +204,16 @@ class TaskDialog extends MyNode
     function finishTask(n, e, p, x, y, points)
     {
         trace("finishTask", p);
-        global.user.updateTask(p, 0, 1);
+        
+        //完成任务task 得到奖励gain
+        global.httpController.addRequest("taskC/finishTask", dict([["uid", global.user.uid], ["tid", p]]), null, null);
+
+        //更新 累计任务 need = -1 进入下一个阶段 
+        global.user.updateTask(p, 0, 1, 0);
         global.director.pushView(new RewardBanner(getGain(TASK, p)), 0, 0);
+        global.user.doAdd(getGain(TASK, p));
+
+
         initData();
         updateTab();
     }

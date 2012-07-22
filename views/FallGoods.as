@@ -8,6 +8,7 @@ class FallGoods extends MyNode
     var lastFallTime = 0;
     var Zone = [[60, 492, 774, 468], [831, 483, 294, 537], [1920, 510, 357, 480], [2292, 483, 576, 429]];
     var possible = [];
+    var ids = [];
     var buildLayer;
     function FallGoods(m, b)
     {
@@ -17,9 +18,15 @@ class FallGoods extends MyNode
         init();
         allFalls = [];
         var i;
-        for(i = 0; i < len(fallThings); i++)
+        var key = fallThingData.keys();
+        for(var k = 0; k < len(key); k++)
         {
-            possible.append(fallThings[i][4]);
+            var data = getData(FALL_THING, k);
+            if(data.get("possible") > 0)//possible > 0 正常掉落物品   == 0 升级掉落物品
+            {
+                ids.append(k);
+                possible.append(data.get("possible"));
+            }
         }
     }
     override function enterScene()
@@ -27,24 +34,56 @@ class FallGoods extends MyNode
         super.enterScene();
         global.timer.addTimer(this);
     }
+    const FALL_TIME = 100000;
+    const FALL_NUM = 5;
     function update(diff)
     {
         //trace("lastTime", lastFallTime);
         lastFallTime += diff;
-        if(lastFallTime >= 3000 )
+        if(lastFallTime >= FALL_TIME )
         {
-            if(len(allFalls) < 8)
+            if(len(allFalls) < FALL_NUM)
             {
                 getNewFall();       
             }
-            /*
             else
             {
-                var f = allFalls.pop(0);
+                var f = allFalls.pop(0);//删除旧的没有拾取的物品
                 f.removeSelf();
             }
-            */
             lastFallTime = 0;
+        }
+    }
+    //得到当前屏幕中心 生成 若干 掉落物品
+    function getLevelUpFallGoods()
+    {
+        //var level = global.user.getValue("level");
+        //kind = 6 7 8 9 10
+
+
+        var leftUp = buildLayer.bg.world2node(200, 100);
+        var rightBottom = buildLayer.bg.world2node(global.director.disSize[0]-200, global.director.disSize[1]-100);
+        var width = rightBottom[0]-leftUp[0];
+        var height = rightBottom[1]-leftUp[1];
+
+        trace("levelUpGoods", leftUp, rightBottom, width, height);
+
+        for(var i = 0; i < 10; i++)
+        {
+            var rx = (rand(width)+leftUp[0])/sizeX;
+            var ry = (rand(height)+leftUp[1])/sizeY;
+
+            if(rx%2 != ry%2)
+                ry++;
+
+            var curX = rx*sizeX;
+            var curY = ry*sizeY;
+
+            var fo = new FallObj(this, i/2+5, rx, ry);
+            fo.setPos([rx*sizeX, ry*sizeY]);
+            allFalls.append(fo);
+            trace("fallObj", rx, ry, ry*sizeY);
+            buildLayer.addChildZ(fo, MAX_BUILD_ZORD+1);
         }
     }
     /*
@@ -55,9 +94,9 @@ class FallGoods extends MyNode
     */
     function getNewFall()
     {
-        var rv = rand(Sum(possible, len(possible)));
-        var kind = len(fallThings)-1;
-        for(var i = 1; i <= len(fallThings); i++)
+        var rv = rand(sum(possible));
+        var kind = len(possible)-1;
+        for(var i = 1; i <= len(possible); i++)
         {
             var s = Sum(possible, i);
             if(rv <= s)
@@ -66,6 +105,7 @@ class FallGoods extends MyNode
                 break;
             }
         }
+        kind = ids[kind];
 
         var rx = rand(MapWidth/sizeX);
         var ry = rand(MapHeight/sizeY);
@@ -94,6 +134,9 @@ class FallGoods extends MyNode
         allFalls.append(fo);
         trace("fallObj", rx, ry, ry*sizeY);
         buildLayer.addChildZ(fo, ry*sizeY);
+
+        //ry*sizeY  普通掉落物品显示在最高的位置 
+        //用户升级 掉落物品 供用户拾取
     }
 
     function pickObj(obj)

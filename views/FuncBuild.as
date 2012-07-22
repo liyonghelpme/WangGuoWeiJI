@@ -37,5 +37,8 @@ class FuncBuild
     {
         return 0;
     }
+    function setPos()
+    {
+    }
 }
 

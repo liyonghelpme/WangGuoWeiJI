@@ -131,11 +131,25 @@ class Store extends MyNode
         //1 equip
         if(kind == BUILD)
         {
+            var data = getData(BUILD, id);
+            if(data.get("funcs") == FARM_BUILD)//FARM 
+            {
+                var ret = global.user.checkFarmNum(); 
+                if(ret == 0)
+                {
+                    global.director.pushView(new MyWarningDialog(getStr("farmTooTitle", null), getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1)]), null), 1, 0);
+                    return;
+                }
+            }
+
             global.director.popView();
             scene.build(id);
         }
-        else if(kind == EQUIP || kind == DRUG)
+        else if(kind == DRUG)
         {
+            if(kind == DRUG)
+                global.httpController.addRequest("goodsC/buyDrug", dict([["uid", global.user.uid], ["drugKind", id]]), null, null);
+
             global.user.buySomething(kind, id, cost);
             //global.user.buyEquip(id, cost);
             /*
@@ -143,6 +157,12 @@ class Store extends MyNode
             */
             setTab(curSel);
             addChildZ(new SucBanner(), 1);
+        }
+        else if(kind == EQUIP)
+        {
+            var newEid = global.user.getNewEid();
+            global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
+            global.user.buyEquip(newEid, id, cost);
         }
         /*
         else if(kind == DRUG)

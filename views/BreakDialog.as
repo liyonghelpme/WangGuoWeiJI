@@ -16,7 +16,7 @@ class BreakDialog extends MyNode
     var map;
     //胜利还是失败 得分 奖励
 
-    function BreakDialog(win, star, reward,  m)//reward,
+    function BreakDialog(win, star, reward,  m, levelUpSol)//reward,
     {
 
         map = m;
@@ -27,7 +27,7 @@ class BreakDialog extends MyNode
         bg.addaction(moveby(500, 0, bSize[1]));
         var i;
 
-        var levelUpSol = map.getAllLevelUp();
+        //var levelUpSol = map.getAllLevelUp();
 
         //生成随机的矿物奖励
         if(win == 1)

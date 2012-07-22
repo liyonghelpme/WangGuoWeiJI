@@ -5,9 +5,15 @@ import global.INCLUDE;
 //global.director.pushView(new CastlePage(), 0, 0);
 //global.director.pushView(new MenuLayer(null), 0, 0);
 
+//显示场景
 global.director.replaceScene(new CastleScene());
+global.director.pushView(new Loading(), 1, 0);//DarkNod
 
-//global.director.pushView(new Loading(), 1, 0);//DarkNode
+//初始化场景数据 数据初始化结束之后 取出loading页面
+global.user.initData();
+
+
+
 //global.director.pushView(new FriendMenu(), 1, 0);
 //global.director.pushView(new RankDialog(), 1, 0);
 //global.director.pushView(new LoginDialog(), 1, 0);

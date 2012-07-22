@@ -75,6 +75,9 @@ class LevelSelectLayer extends MyNode
     */
     function setIslandLayer()
     {
+        island = scene.getIsland(index);//大关
+        //islandLayer = island.addnode();
+
         var curDif = getCurEnableDif(); 
         islandLayer.removefromparent();
         islandLayer = island.addnode();
@@ -252,6 +255,7 @@ class LevelSelectLayer extends MyNode
     }
     function attackNow()
     {
+        goBack();//close Choose Page
         trace("map index", index, small);
         global.director.pushScene(
         new BattleScene(index-1, small, 

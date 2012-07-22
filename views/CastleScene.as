@@ -38,6 +38,7 @@ class CastleScene extends MyNode
     }
     function quitGame(n, e, p, kc)
     {
+        //global.director.popScene();//退出场景 保存数据
         global.director.quitGame(n, e, p, kc);
     }
     override function enterScene()
@@ -50,6 +51,7 @@ class CastleScene extends MyNode
         //c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
         global.sensorController.addCallback(this);
         global.msgCenter.registerCallback(SHOW_DIALOG, this);
+        global.msgCenter.registerCallback(INITDATA_OVER, this);
     }
     var realDisappear = 0;
     var inSen = 0;
@@ -62,6 +64,7 @@ class CastleScene extends MyNode
     }
     function senDone(acc)
     {
+        /*
         if(inSen == 0 && !isBuildOrPlan())
         {
             if(acc > 20000)
@@ -79,6 +82,7 @@ class CastleScene extends MyNode
                 inSen = 1;
             }
         }
+        */
     }
     function senEnded(acc)
     {
@@ -97,6 +101,11 @@ class CastleScene extends MyNode
             else if(p == 1)//关闭对话框
                 enableMenu();
         }
+        else if(msid == INITDATA_OVER)
+        {
+            mc.initDataOver();
+            ml.initDataOver();
+        }
     }
     override function exitScene()
     {
@@ -107,6 +116,7 @@ class CastleScene extends MyNode
         global.timer.removeTimer(this);
 
         global.msgCenter.removeCallback(SHOW_DIALOG, this);
+        global.msgCenter.removeCallback(INITDATA_OVER, this);
         super.exitScene();
     }
 
@@ -121,10 +131,13 @@ class CastleScene extends MyNode
     }
     function finishPlan()
     {
-        var ret = global.user.checkBuildCol();
-        trace("buildCollision", ret);
-        if(ret == 1)
+        //var ret = global.user.checkBuildCol();
+        trace("buildCollision", curBuild);
+        if(curBuild != null && curBuild.colNow == 1)
             return;
+
+        //if(ret == 1)
+        //    return;
         global.user.finishPlan();
         closePlan();
     }
@@ -193,6 +206,10 @@ class CastleScene extends MyNode
         var other = global.user.checkCollision(curBuild);
         if(other != null)
             return;
+
+        var p = curBuild.getPos();
+        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir]]), null, null);
+
         var id = curBuild.id; //building.get("id");
 
         var cost = getCost(BUILD, id);
@@ -268,6 +285,7 @@ class CastleScene extends MyNode
     function build(id)
     {
         var building = getData(BUILD, id);
+
         //building.update("state", 0);
         //ml.removeSelf();
         //ml = null;
@@ -282,6 +300,8 @@ class CastleScene extends MyNode
         var sol = mc.buySoldier(id);
         global.director.pushView(new RoleName(this, sol), 1, 0);
         global.msgCenter.sendMsg(BUYSOL, null);
+
+        global.httpController.addRequest("soldierC/buySoldier", dict([["uid", global.user.uid], ["sid", sol.sid], ["kind", sol.id]]), null, null);
     }
     function nameSoldier(sol, name)
     {

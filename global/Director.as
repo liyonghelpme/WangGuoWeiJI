@@ -67,6 +67,10 @@ class Director
         {
             if(kc == KEYCODE_BACK)
             {
+                popScene();//关闭场景
+                global.timer.stop();//关闭定时器
+                global.myAction.stop();//关闭全局动画
+
                 trace("quitGame now");
                 quitgame();
             }
@@ -106,6 +110,8 @@ class Director
     {
         curScene.removeSelf();
         curScene = view;
+        if(curScene == null)
+            return;
         stack = []
 
         getscene().add(curScene.bg);
@@ -133,7 +139,11 @@ class Director
     }
     function popScene()
     {
-        var oldS = sceneStack.pop();
+        var oldS;
+        if(len(sceneStack) > 0)
+            oldS = sceneStack.pop();
+        else 
+            oldS = null;
         replaceScene(oldS);
     }
     function popView()
