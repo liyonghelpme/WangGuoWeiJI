@@ -93,9 +93,9 @@ class BreakDialog extends MyNode
 
             bg.addlabel(levelupStr, null, 18).pos(83, 212).color(0, 0, 0);
             if(newLevel == 1)
-                bg.addlabel("新的最高分"+str(star), null, 18).pos(83, 234).color(0, 0, 0);
+                bg.addlabel(getStr("newRecord", ["[NUM]",str(star) ]), null, 18).pos(83, 234).color(0, 0, 0);
             if(rewardCry > 0)
-                bg.addlabel("奖励水晶"+str(rewardCry), null, 18).pos(83, 256).color(0, 0, 0);
+                bg.addlabel(getStr("rewardCry", ["[NUM]",str(rewardCry) ]), null, 18).pos(83, 256).color(0, 0, 0);
 
             //bg.addlabel("升级:liyong, xiaoxu", null, 18).pos(83, 244).color(0, 0, 0);
             //bg.addlabel("可以转职:liyong, xiaoxu", null, 18).pos(83, 276).color(0, 0, 0);
@@ -160,7 +160,8 @@ class BreakDialog extends MyNode
         global.director.popScene();
         global.director.pushScene(
             new BattleScene( map.kind,  map.small,
-            [[1, 0], [1, 10], [1, 20], [1, 30], [1, 40], [1, 50], [1, 60], [1, 70], [1, 80], [1, 90], [1, 100], [1, 110], [1, 120], [1, 130], [1, 140], [1, 150], [1, 160], [1, 170], [1, 180], [1, 190]]
+            [dict([["id", 100]])],
+            CHALLENGE_MON, null, null
             )
         );
     }

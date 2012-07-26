@@ -443,3 +443,9 @@ const MAX_BUSI_SOLNUM = 50;
 const SELL_RATE = 10;
 
 const RECOVER_TIME = 15000;
+
+const CHALLENGE_MON = 0;
+const CHALLENGE_FRI = 1;
+
+const ENEMY = -1;
+const MAX_SCORE = 9999999;

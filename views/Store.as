@@ -151,7 +151,6 @@ class Store extends MyNode
                 global.httpController.addRequest("goodsC/buyDrug", dict([["uid", global.user.uid], ["drugKind", id]]), null, null);
 
             global.user.buySomething(kind, id, cost);
-            //global.user.buyEquip(id, cost);
             /*
             刷新当前购买页面
             */
@@ -163,15 +162,9 @@ class Store extends MyNode
             var newEid = global.user.getNewEid();
             global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
             global.user.buyEquip(newEid, id, cost);
-        }
-        /*
-        else if(kind == DRUG)
-        {
-            global.user.buyDrug(id, cost);
             setTab(curSel);
             addChildZ(new SucBanner(), 1);
         }
-        */
         else if(kind == GOLD || kind == SILVER || kind == CRYSTAL)
         {
             global.user.buyResource(kind, id, cost, getGain(kind, id)); 

@@ -398,6 +398,10 @@ var strings = dict([
 ["eqLevel", "强化等级[LEV]"],
 ["oneEquipTitle", "装备类型重复"],
 ["oneEquipCon", "已经拥有一件同类型的装备了！"],
+["rewardCry", "奖励水晶[NUM]"],
+["newRecord", "新的最高得分[NUM]"],
+["challengeScore", "积分增加[NUM]"],
+["lostScore", "损失基本[NUM]"],
 
 
 

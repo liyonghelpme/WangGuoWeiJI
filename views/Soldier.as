@@ -212,6 +212,27 @@ class Soldier extends MyNode
     var nameBanner = null;
     var backBanner = null;
 
+    function setMonEquip(equips)
+    {
+        if(equips == null)
+            return;
+        for(var i = 0; i < len(equips); i++)
+        {
+            var eData = equips[i];
+            //敌方士兵持有该武器
+            if(eData.get("owner") == monsterData.get("sid"))
+            {
+                var e = getData(EQUIP, eData.get("kind"));
+                physicAttack += e.get("physicAttack");
+                magicAttack += e.get("magicAttack");
+
+                physicDefense += e.get("physicDefense");
+                magicDefense += e.get("magicDefense");
+                recoverSpeed += e.get("recoverSpeed");
+                healthBoundary += e.get("healthBoundary"); 
+            }
+        }
+    }
     //攻击速度 
     function initData()
     {
@@ -223,13 +244,23 @@ class Soldier extends MyNode
         volumn = data.get("volumn");
         recoverSpeed = 0;
 
-
-        if(sid == -1)//敌对方士兵 地图怪兽 
+    
+        if(sid == ENEMY)//敌对方士兵 地图怪兽 
         {
-            level = 0;
+            if(monsterData != null)
+            {
+                level = monsterData.get("level");
+                addAttack = monsterData.get("addAttack", 0);
+                addAttackTime = monsterData.get("addAttackTime", 0);
+                addDefense = monsterData.get("addDefense", 0);
+                addDefenseTime = monsterData.get("addDefenseTime", 0);
+            }
+
             attRange = data.get("range");
 
+            health = 0;
             initAttackAndDefense(this);
+            setMonEquip(map.monEquips);
             health = healthBoundary;
 
             myName = null;
@@ -265,8 +296,12 @@ class Soldier extends MyNode
         return color == 0;
     }
     var attSpeed;
-    function Soldier(m, d, s)
+
+    //挑战的时候初始化怪兽 和 敌方士兵的时候使用 该数据 sid=-1
+    var monsterData;
+    function Soldier(m, d, s, md)
     {
+        monsterData = md;
         sid = s;
         map = m;
         color = d[0];
@@ -353,18 +388,7 @@ class Soldier extends MyNode
             nameBanner = new SpeakDialog(this);
             nameBanner.setPos([bSize[0]/2, 0]);
             addChild(nameBanner);
-            /*
-            nameBanner = bg.addsprite("speakBack.png").pos(bSize[0]/2, 0).anchor(50, 100);
-            nameBanner.addlabel(getStr("myNameIs", ["[NAME]", myName]), null, 20).anchor(50, 50).pos(79, 25).color(0, 0, 0);
-            */
         }
-
-    
-        //closeIcon = bg.addsprite("buildCancel.png").pos(bSize[0]/2, -10).anchor(50, 100);
-        //if(color == 0)
-        //    closeIcon.setevent(EVENT_TOUCH, onCancel);
-        //else
-        //    closeIcon.visible(0);
 
 
         initHealth();

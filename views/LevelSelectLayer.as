@@ -259,8 +259,7 @@ class LevelSelectLayer extends MyNode
         trace("map index", index, small);
         global.director.pushScene(
         new BattleScene(index-1, small, 
-            //[[1, 100], [1, 110], [1, 120], [1, 130], [1, 140], [1, 150], [1, 160], [1, 170], [1, 180], [1, 190]]
-            [[1, 100]]
+            [dict([["id", 100]])], CHALLENGE_MON, null, null
 
         ));
     }

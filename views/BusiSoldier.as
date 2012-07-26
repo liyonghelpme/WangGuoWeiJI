@@ -72,10 +72,20 @@ class BusiSoldier extends MyNode
 
     攻击速度1500 慢 1000 中等 500 快
     */
+
+
+    var bloodTotalLen = 134;
+    var bloodHeight = 9;
+    var bloodScaX = 72*100/139;//根据怪兽的体积计算血条长度 
+    var bloodScaY = 9*100/12;
+    var firstBuy = 0;
     function initData(privateData)
     {
         if(privateData == null)
+        {
+            firstBuy = 1;
             privateData = dict();
+        }
 
         level = privateData.get("level", 0);
 
@@ -87,6 +97,8 @@ class BusiSoldier extends MyNode
         health = privateData.get("health", 0);
         recoverSpeed = data.get("recoverSpeed");
         initAttackAndDefense(this);
+        if(firstBuy)
+            health = healthBoundary;
         
         exp = privateData.get("exp", 0);
         dead = privateData.get("dead", 0);
@@ -113,8 +125,9 @@ class BusiSoldier extends MyNode
     function useDrug(tid)
     {
         var dd = getData(DRUG, tid);    
-        health += dd.get("health");
-        health = min(healthBoundary, health);
+        //health += dd.get("health");
+        //health = min(healthBoundary, health);
+        changeHealth(dd.get("health"));
         //exp += dd.get("exp");
         changeExp(dd.get("exp"));
 
@@ -137,6 +150,7 @@ class BusiSoldier extends MyNode
 
         }
         initAttackAndDefense(this);
+        initHealth();
         global.user.updateSoldiers(this);
 
         if(dd.get("relive") == 1)
@@ -148,6 +162,7 @@ class BusiSoldier extends MyNode
     function useEquip(tid)
     {
         initAttackAndDefense(this);
+        initHealth();
         global.user.updateSoldiers(this);
     }
 
@@ -158,10 +173,11 @@ class BusiSoldier extends MyNode
         var colStr = "red";
         load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
         changeDirNode.texture("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png");
+        initAttackAndDefense(this);
+        initHealth();
         if(movAni != null)
         {
             movAni.stop();
-            //featureMov.stop();
         }
         movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
 
@@ -190,6 +206,14 @@ class BusiSoldier extends MyNode
     改变位置的shift不变
     添加子节点不变
     */
+    var backBanner;
+    var bloodBanner;
+
+    function initHealth()
+    {
+        var sx = bloodTotalLen*health/healthBoundary;
+        bloodBanner.size(sx, bloodHeight);
+    }
     function BusiSoldier(m, d, privateData, s)
     {
         sid = s;
@@ -233,6 +257,20 @@ class BusiSoldier extends MyNode
             myName = "";
         showInspire();
 
+        if(data.get("sx") < 2)
+        {
+            bloodScaX = 70*100/139;//大体积 采用144的长度 中等体积 采用普通长度    
+        }
+        else 
+        {
+            bloodScaX = 139*100/139;
+        }
+
+        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
+            
+        bloodBanner = backBanner.addsprite("mapSolBlood.png", BLUE).pos(2, 2);
+        initHealth();
+
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
@@ -275,8 +313,11 @@ class BusiSoldier extends MyNode
         var nPos = bg.node2world(0, -10);
         //global.director.curScene.addChild(new TrainBanner(nPos, 100));
     }
+    //使用药品应该出现生命图标
     function changeExp(add)
     {
+        if(add == 0)
+            return;
         exp += add;
         var ne = getLevelUpExp(id, level);
         if(exp >= ne)
@@ -292,14 +333,26 @@ class BusiSoldier extends MyNode
                 else 
                     break;
             }
-            //setHealthBoundary();
             initAttackAndDefense(this);
+            initHealth();
             if(dead == 0)
                 health = healthBoundary;
         }
 
         var temp = bg.addnode();
         temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
+        temp.addlabel("+"+str(add), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
+    }
+    function changeHealth(add)
+    {
+        if(add == 0)
+            return;
+        health += add;
+        health = min(healthBoundary, health);
+
+        var temp = bg.addnode();
+        temp.addsprite("drug0.png").anchor(0, 50).pos(0, -30).size(30, 30);
         temp.addlabel("+"+str(add), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
@@ -468,9 +521,18 @@ class BusiSoldier extends MyNode
         recoverTime += diff;
         if(recoverTime >= RECOVER_TIME)
         {
+            //需要优化生命值数据
+            //回复累计1min
+            if(health < healthBoundary)
+            {
+                var addHealth = min(recoverSpeed, healthBoundary-health);
+                global.httpController.addRequest("soldierC/recoverHealth", dict([["uid", global.user.uid], ["sid", sid], ["addHealth", addHealth]]), null, null);
+            }
             health += recoverSpeed;
             health = min(health, healthBoundary);
             recoverTime = 0;
+            initHealth();
+
         }
         if(inspire == 0)
         {

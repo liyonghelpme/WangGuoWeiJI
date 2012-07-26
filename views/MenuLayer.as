@@ -85,48 +85,20 @@ class MenuLayer extends MyNode
     /*
     通用的隐藏菜单的接口
     */
-    var removed = 0;
     function beginBuild()
     {
-        //building = 1; 
-        //bg.visible(0);
-        if(removed == 0)
-        {
-            removed = 1;
+        if(ins == 1)
             removeSelf();
-        }
-        /*
-        for(var i = 0; i < len(menus); i++)
-        {
-            if(menus[i] != null)
-            {
-                menus[i].bg.visible(0);
-            }
-        }
-        */
     }
     /*
     通用的显示菜单的接口
     */
     function finishBuild()
     {
-        trace("finish Build", removed);
-        if(removed == 1)
+        if(ins == 0)
         {
-            removed = 0;
             scene.keepMenuLayer.addChild(this);
         }
-        //building = 0;
-        //bg.visible(1);
-        /*
-        for(var i = 0; i < len(menus); i++)
-        {
-            if(menus[i] != null)
-            {
-                menus[i].bg.visible(1);
-            }
-        }
-        */
     }
     /*
     进入场景之后 需要更新显示的用户数据
@@ -201,7 +173,7 @@ class MenuLayer extends MyNode
     var visLock = 0;
     function showMenu(t)
     {
-        if(removed == 1)
+        if(ins == 0)
         {
             finishBuild();
             bg.addaction(fadein(t));
@@ -209,9 +181,7 @@ class MenuLayer extends MyNode
     }
     function hideMenu(t)
     {
-        //if(ins == 0)
-        //    return;
-        if(removed == 1)
+        if(ins == 0)
             return;
         bg.addaction(sequence(fadeout(t), callfunc(beginBuild)));
     }

@@ -608,6 +608,8 @@ function getMagicAnimate(id)
 function getMapAnimate(id)
 {
     var ani = mapAllAnimate.get(id);
+    if(ani == null)
+        return null;
     var res = [];
     for(var i = 0; i < len(ani); i++)
     {

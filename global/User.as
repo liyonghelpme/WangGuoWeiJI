@@ -231,8 +231,28 @@ class User
         db.put("rated", rated);
     }
     var fallNum = 0;
+
+    //今日已经挑战的进行的挑战记录
+    var challengeRecord = [];
+    //今日的挑战得分
+    var rankScore = 0;
+    //今日的挑战排名
+    var rankOrder = 0;
+    //challengeNum 当前已经挑战的次数
+
+    function checkChallengeYet(oid)
+    {
+        var ret = challengeRecord.index(oid);
+        if(ret == -1)
+            return 0;
+        return 1;
+    }
+    function addChallengeRecord(oid)
+    {
+        challengeRecord.append(oid);
+    }
     //sendMsg 需要castlePage 响应 
-    function initDataOver(rid, rcode, con, req, param)
+    function initDataOver(rid, rcode, con, param)
     {
         trace("initDataOver", con);
         if(rcode != 0)
@@ -248,6 +268,12 @@ class User
 
             herbs = initThings(con.get("herbs"));
             tasks = initThings(con.get("tasks"));
+
+            challengeRecord = con.get("challengeRecord");
+            rankScore = con.get("rank")[0];
+            if(rankScore > MAX_SCORE)
+                rankScore = MAX_SCORE;
+            rankOrder = con.get("rank")[1];
 
             //记录金币掉落次数
             fallNum = db.get("fallNum");
@@ -289,6 +315,12 @@ class User
             initYet = 1;
             global.msgCenter.sendMsg(INITDATA_OVER, null);
         }
+    }
+    function updateRankScore(add)
+    {
+        rankScore += add;
+        if(rankScore > MAX_SCORE)
+            rankScore = MAX_SCORE;
     }
 
     function initData()
@@ -525,10 +557,10 @@ class User
         //通知所有监听器修改数据
         setValue(NOTIFY, 1);
 
-        //changeValue(replaceStr(GoodsPre[kind], ["[ID]", str(id)]), 1);
     }
     function buyEquip(eid, id, cost)
     {
+        doCost(cost);
         equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
         db.put("equips", equips);
         setValue(NOTIFY, 1);
@@ -745,21 +777,6 @@ class User
     }
     /*
     修正数据， 显示士兵的view
-    */
-    /*
-    function doRelive(sid)
-    {
-        var sol = soldiers.get(sid); 
-        trace("relive soldier", sol);
-        if(sol.get("dead") == 1)
-        {
-            sol.update("dead", 0);
-            soldiers.update(sid, sol);
-            //updateSoldierDB();
-            db.put("soldiers", soldiers);
-            global.msgCenter.sendMsg(RELIVE_SOL, [sid, sol]);
-        }
-    }
     */
     // eid [kind sid]
     function getSoldierEquip(sid)

@@ -147,7 +147,7 @@ class PlantChoose extends MyNode
         oldPos[1] = sel*Height;
         flowNode.pos(oldPos[0], oldPos[1]);
     }
-    function beginPlant(rid, rcode, con, req, param)
+    function beginPlant(rid, rcode, con, param)
     {
         if(rcode != 0)
         {

@@ -14,10 +14,14 @@ class VisitDialog extends MyNode
         super.enterScene();
         global.timer.addTimer(this);
     }
+    /*
+    访问好友或者挑战好友 获取数据成功之后关闭对话框
+    */
     function update(diff)
     {
         if(friendScene.initOver == 1)
         {
+            trace("popVisit");
             global.director.popView();
         }
     }

@@ -1,3 +1,7 @@
+/*
+普通闯关页面: 怪兽倍率
+挑战好友其它人: 人物实际属性
+*/
 class MapBanner extends MyNode
 {
     var scene;
@@ -235,21 +239,20 @@ class BattleScene extends MyNode
 {
     var map;
     var banner;
+    var kind;//0 闯关 1 挑战
 
-    /*
-    var leftHealth = 100;
-    var leftBound = 100;
-    var rightHealth = 50;
-    var rightBound = 100;
-    */
+    var param;
+
 
     var pausePage;
     //big small soldierData
-    function BattleScene(k, sm, s)
+    function BattleScene(k, sm, s, ki, par, eq)
     {
+        param = par;
+        kind = ki;
         bg = node();
         init();
-        map = new Map(k, sm, s, this);
+        map = new Map(k, sm, s, this, eq);
         addChild(map);
         banner = new MapBanner(this);
         addChild(banner);

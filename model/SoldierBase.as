@@ -144,11 +144,11 @@ function calculateStage(sol)
 }
 /*
 裸露属性 和 装备 药品属性
+首先初始化私有属性
+再初始化公共属性
 */
 function initAttackAndDefense(sol)
 {
-    //attack = data.get("attack")+level*data.get("addAttack");
-    //defense = data.get("defense")+level*data.get("addDefense");
     calculateStage(sol);
 
     //士兵攻击类型 增加相应的攻击力
@@ -166,6 +166,7 @@ function initAttackAndDefense(sol)
         sol.magicDefense += sol.addDefense;
     }
 
+    //士兵拥有的武器
     var equips = global.user.getSoldierEquip(sol.sid);
     for(var i = 0; i < len(equips); i++)
     {
@@ -180,6 +181,10 @@ function initAttackAndDefense(sol)
         sol.healthBoundary += e.get("healthBoundary"); 
     }
     sol.health = min(sol.health, sol.healthBoundary);
+
+    var phurt = getPhysicHurt(sol.data);
+    var mhurt = getMagicHurt(sol.data);
+    trace("Basic Attribute", sol.physicAttack, sol.magicAttack, sol.physicDefense, sol.magicDefense, sol.healthBoundary, phurt, mhurt);
 }
 /*
     attack * cofficient * pure/total / 100
@@ -224,21 +229,24 @@ function getBasicAbiliy(id, level)
     var pcoff = getPhysicHurt(data);
     var mcoff = getMagicHurt(data);
     
-    var phyBasic = pureData[4]*pureData[0]/pcoff;
-    var magBasic = pureData[4]*pureData[2]/mcoff;
-    return max(phyBasic, magBasic);
+    var phyBasic = pureData[4]*pureData[0]*100/pcoff;
+    var magBasic = pureData[4]*pureData[2]*100/mcoff;
+    var ab = max(phyBasic, magBasic)/(33*13);
+    trace("basicAbility", ab);
+    return ab; //士兵能力
 }
 
 function getAddExp(id, level)
 {
     var basic = getBasicAbiliy(id, level);
-    trace("soldierExp", sqrt(basic));
-    return sqrt(basic);
+    var exp = (2*basic-1)*3;
+    trace("soldierExp", exp);
+    return exp; 
 }
 //升级经验5倍于普通经验
 function getLevelUpExp(id, level)
 {
-    var basic = getBasicAbiliy(id, level);
-    trace("levelNeedExp", sqrt(basic)*5);
-    return sqrt(basic)*5;
+    var exp = getAddExp(id, level)*(5+level);
+    trace("levelNeedExp", exp);
+    return exp;
 }

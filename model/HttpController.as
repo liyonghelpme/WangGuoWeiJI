@@ -8,9 +8,8 @@ class HttpController
     var registerHandler;
     function HttpController()
     {
-        //baseUrl = sysinfo(INFO_BASE_URL);
-        //baseUrl = "http://uhz000738.chinaw3.com:8100/";
-        baseUrl = "http://192.168.3.102:8100/";
+        baseUrl = "http://uhz000738.chinaw3.com:8100/";
+        //baseUrl = "http://192.168.3.102:8100/";
         trace("base", baseUrl);
         requestList = [];//请求是有序的
         registerHandler = dict();//注册对应id 请求的处理函数
@@ -48,7 +47,7 @@ class HttpController
             trace("request Failed");
         }
         if(handler != null)
-            handler(rid, rcode, con, req, param);    
+            handler(rid, rcode, con, param);    
         doRequest();
     }
 }

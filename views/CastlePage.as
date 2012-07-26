@@ -319,7 +319,7 @@ class CastlePage extends MyNode
     var dialogController;
     var solNum;
 
-    function getLoginReward(rid, rcode, con, req, param)
+    function getLoginReward(rid, rcode, con, param)
     {
         if(rcode != 0)
         {

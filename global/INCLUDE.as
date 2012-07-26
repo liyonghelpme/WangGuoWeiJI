@@ -10,10 +10,11 @@ import views.FriendSoldier;
 
 
 import views.RankDialog;
-import views.HeroRank;
-import views.GroupRank;
-import views.NewRank;
+//import views.HeroRank;
+//import views.GroupRank;
+//import views.NewRank;
 import views.RankBase;
+import views.ChallengeScene;
 
 
 import views.LoginDialog;
@@ -116,6 +117,7 @@ import views.Map;
 import views.Soldier;
 import views.CloseSoldier;
 import views.CloseAttackEffect;
+import views.ChallengeOver;
 
 import model.SoldierBase;
 

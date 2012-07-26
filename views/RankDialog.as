@@ -10,6 +10,7 @@ new Hero
 
 */
 
+//根据挑战次数 得到挑战的排名
 //configure getRank updateTab data
 class RankDialog extends MyNode
 {
@@ -21,14 +22,18 @@ class RankDialog extends MyNode
     */
 
     var showLabel;
-    var curShow = -1;
-    var labelPng = [ "groupRank.png", "heroRank.png", "newRank.png"];
+    //var curShow = -1;
+    var labelPng = [ "groupRank.png", "newRank.png"];
 
-    var heroView;
-    var groupView;
-    var newView;
+    //var heroView;
+    //var groupView;
+    //var newView;
 
-    var views;
+    var showView;
+
+    //var views;
+    var switchTab;
+    var upArrow;
     function RankDialog()
     {
         bg = sprite("dialogFriend.png");
@@ -36,37 +41,32 @@ class RankDialog extends MyNode
         bg.addsprite("dialogRankTitle.png").pos(69, 7);
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
-        var but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37).setevent(EVENT_TOUCH, switchView, 0);
-        but0.addlabel(getStr("groupRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+        var challengeNum = global.user.getValue("challengeNum");
+        trace("challengeNum", challengeNum);
+        if(challengeNum >= 10)
+        {
+            switchTab = 0;
+            var but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37);
+            but0.addlabel(getStr("groupRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+        }
+        else
+        {
+            switchTab = 1;
+            but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37);
+            but0.addlabel(getStr("newRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+        }
 
-        but0 = bg.addsprite("roleNameBut0.png").pos(505, 24).size(96, 37).setevent(EVENT_TOUCH, switchView, 1);
-        but0.addlabel(getStr("heroRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
-
-        but0 = bg.addsprite("roleNameBut0.png").pos(620, 24).size(96, 37).setevent(EVENT_TOUCH, switchView, 2);
-        but0.addlabel(getStr("newRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
-
-        showLabel = bg.addsprite("groupRank.png").pos(395, 96).anchor(50, 50);
+        showLabel = bg.addsprite(labelPng[switchTab]).pos(395, 96).anchor(50, 50);
 
 
         var clPos = [66, 117];
         var clSize = [665, 338];
-        heroView = new HeroRank(clPos, clSize);
-        groupView = new GroupRank(clPos, clSize);
-        newView = new NewRank(clPos, clSize);
-        views = [ groupView, heroView, newView];
 
-        curShow = -1;
-        switchView(null, null, 0, null, null, null);
-    }
-    function switchView(n, e, p, x, y, points)
-    {
-        if(curShow == p)
-            return;
-        showLabel.texture(labelPng[p]);
-        if(curShow != -1)
-            views[curShow].removeSelf();
-        curShow = p;
-        addChild(views[curShow]);
+        upArrow = sprite("upArrow.png").pos(735, 371);
+        bg.add(upArrow, 1);
+        showView = new RankBase(clPos, clSize, this);
+
+        addChild(showView);
     }
 
     function closeDialog()
