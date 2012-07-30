@@ -26,7 +26,7 @@ class Director
     var quitState = 0;
     function Director()
     {
-        trace("init director");
+//        trace("init director");
         stack = [];
         disSize = [800, 480];
         v_scale(disSize[0], disSize[1]);
@@ -46,7 +46,7 @@ class Director
 
     function quitGame(n, e, p, kc)
     {
-        trace("KeyEVENT", n, e, p, kc);
+//        trace("KeyEVENT", n, e, p, kc);
         /*
         退出战斗页面
         if(global.map != null)
@@ -71,7 +71,7 @@ class Director
                 global.timer.stop();//关闭定时器
                 global.myAction.stop();//关闭全局动画
 
-                trace("quitGame now");
+//                trace("quitGame now");
                 quitgame();
             }
         }
@@ -81,7 +81,7 @@ class Director
     {
         if(dark == 1)
         {
-            trace("push dark");
+//            trace("push dark");
             var temp = new MyNode();
             temp.bg = node();
             var d = new Dark(autoPop);
@@ -93,18 +93,18 @@ class Director
         }
         else
         {
-            trace("begin add");
+//            trace("begin add");
             curScene.addChild(view); 
-            trace("add view");
+//            trace("add view");
             stack.append(view);
         }
-        trace("director push", len(stack));
+//        trace("director push", len(stack));
     }
     function pushPage(view, z)
     {
         curScene.addChildZ(view, z);
         stack.append(view);
-        trace("push Page", len(stack));
+//        trace("push Page", len(stack));
     }
     function replaceScene(view)
     {
@@ -130,7 +130,7 @@ class Director
     }
     function shotOver(rid, rc, con, para)
     {
-        trace("shotOver", rid, rc, con, para);
+//        trace("shotOver", rid, rc, con, para);
     }
     function pushScene(view)
     {
@@ -150,6 +150,6 @@ class Director
     {
         var v = stack.pop();
         curScene.removeChild(v);
-        trace("director pop", len(stack));
+//        trace("director pop", len(stack));
     }
 }

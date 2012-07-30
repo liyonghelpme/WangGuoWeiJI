@@ -130,7 +130,7 @@ class BuildLayer extends MyNode
     */
     function receiveMsg(msg)
     {
-        trace("receiveMsg", msg);
+//        trace("receiveMsg", msg);
         if(msg[0] == RELIVE_SOL)
         {
             //sid sdata
@@ -233,7 +233,7 @@ class BuildLayer extends MyNode
         */
 
 
-        trace("initBuilding", len(global.user.buildings));
+//        trace("initBuilding", len(global.user.buildings));
         var item = global.user.buildings.items();
         for(var i = 0; i < len(item); i++)
         {
@@ -269,14 +269,14 @@ class BuildLayer extends MyNode
     */
     function initSoldiers()
     {
-        trace("initSoldiers");
+//        trace("initSoldiers");
         //id name
         var item = global.user.soldiers.items(); 
         for(var i = 0; i < len(item); i++)
         {
             var sid = item[i][0];
             var sdata = item[i][1];
-            trace("initSol", sid, sdata);
+//            trace("initSol", sid, sdata);
             var data = getData(SOLDIER, sdata.get("id"));
             if(sdata.get("dead", 0) == 1)//死亡士兵不显示
                 continue;
@@ -364,7 +364,7 @@ class CastlePage extends MyNode
             reward = getLoginReward(day);
             global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
         }
-        trace("loginReward", day, reward);
+//        trace("loginReward", day, reward);
     }
 
     function CastlePage(s)
@@ -566,7 +566,7 @@ class CastlePage extends MyNode
     }
     override function enterScene()
     {
-        trace("castal Enter Scene");
+//        trace("castal Enter Scene");
         super.enterScene();
         global.timer.addTimer(this);
         global.msgCenter.registerCallback(BUYSOL, this);
@@ -576,7 +576,7 @@ class CastlePage extends MyNode
 
     function receiveMsg(msg)
     {
-        trace("receiveMsg", msg);
+//        trace("receiveMsg", msg);
         if(msg[0] == BUYSOL)
         {
             solNum.text(str(global.user.getSolNum()));

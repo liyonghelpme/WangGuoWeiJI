@@ -75,7 +75,7 @@ class MakeDrug extends MyNode
             }
 
             var picName = replaceStr(KindsPre[kind], ["[ID]", str(id)]);
-            trace("picName", picName);
+//            trace("picName", picName);
             panel.addsprite(picName).pos(87, 28).anchor(50, 50).size(45, 45);
             var tarData = getData(kind, id);
 
@@ -88,7 +88,7 @@ class MakeDrug extends MyNode
             var makable = 1;
             for(var j = 0; j < len(needs); j++)
             {
-                trace("show prescription", needs);
+//                trace("show prescription", needs);
                 var hid = needs[j][0];
                 var hNum = needs[j][1];
                 var hData = getData(HERB, hid);
@@ -110,12 +110,12 @@ class MakeDrug extends MyNode
                 }
                 INITX += 130;
             }
-            trace("prescriptions", needLev, makable);
+//            trace("prescriptions", needLev, makable);
             var but1;
             if(needLev == 0)
             {
                 var words = colorWords(getStr("needLev",  ["[LEV]", str(level)]));
-                trace("needLev words", words);
+//                trace("needLev words", words);
                 panel.addlabel(words[0], null, 25).pos(555, 33).anchor(0, 50).color(97, 3, 3);
                 panel.addlabel(words[1], null, 25).pos(555+words[2]*25, 33).color(13, 78, 13).anchor(0, 50);
             }
@@ -130,7 +130,7 @@ class MakeDrug extends MyNode
                 but1.addlabel(getStr("makeDrug", null), null, 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
                 
             }
-            trace("finish Init MakeDrug");
+//            trace("finish Init MakeDrug");
 
         }
     }
@@ -166,7 +166,7 @@ class Herb extends MyNode
     }
     function updateTab()
     {
-        trace("init Herb View");
+//        trace("init Herb View");
         var oldPos = flowNode.pos();
         flowNode.removefromparent();
         flowNode = bg.addnode().pos(oldPos);
@@ -179,13 +179,13 @@ class Herb extends MyNode
             var data = getData(HERB, herbs[i]);
             panel.addlabel(data.get("name"), null, 15).anchor(50, 50).pos(60, 52).color(0, 0, 0);
             var num = global.user.getHerb(herbs[i]);
-            trace("herbNum", num, data);
+//            trace("herbNum", num, data);
             var co = [14, 64, 26];
             if(num == 0)
                 co = [99, 42, 47];
             panel.addlabel(str(num), null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
             panel.addlabel(data.get("des"), null, 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
-            trace("initHerb", num);
+//            trace("initHerb", num);
         }
     }
     var lastPoints;
@@ -271,6 +271,6 @@ class MakeDrugDialog extends MyNode
                 addChild(herbView);
             }
         }
-        trace("finish SwitchView", selected);
+//        trace("finish SwitchView", selected);
     }
 }

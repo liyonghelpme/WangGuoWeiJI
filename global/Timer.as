@@ -11,7 +11,7 @@ class Timer
     var myTimer;
     function Timer(i)
     {
-        trace("init timer", i);
+//        trace("init timer", i);
         gstop = 0;
         timers = new Array();
         slowUpdate = [];
@@ -27,7 +27,7 @@ class Timer
     }
     function start()
     {
-        trace("start");
+//        trace("start");
     }
     function gameStop()
     {
@@ -55,10 +55,10 @@ class Timer
     function addAction()
     {
         /*
-        trace("nodes", sysinfo(24));
-        trace("actions", sysinfo(23));
-        trace("timers", sysinfo(22))
-        trace("fps", getfps());
+//        trace("nodes", sysinfo(24));
+//        trace("actions", sysinfo(23));
+//        trace("timers", sysinfo(22))
+//        trace("fps", getfps());
         */
         var actNum = sysinfo(23);
         if(actNum == 0)
@@ -79,7 +79,7 @@ class Timer
     }
     function addTimer(obj)
     {
-        trace("timerNum", len(timers));
+//        trace("timerNum", len(timers));
         timers.append([obj, 0]);
     }
     /*

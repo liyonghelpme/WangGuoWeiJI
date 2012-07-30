@@ -97,7 +97,7 @@ class RankBase extends MyNode
         var error = 0;
         var i;
         var j;
-        trace("inPutData", newData);
+//        trace("inPutData", newData);
         //检测一遍数据是否已经排好序列没有空洞 一般服务器是按照插入顺序返回数据的所以数据可能没有排好序列
         for(i = 1; i < len(newData); i++)
         {
@@ -107,7 +107,7 @@ class RankBase extends MyNode
                 break;
             }
         }
-        trace("error", error);
+//        trace("error", error);
         if(error == 1)
         {
             //插入排好序列
@@ -153,7 +153,7 @@ class RankBase extends MyNode
             }
             newData = temp;
         }
-        trace("adjustData", newData);
+//        trace("adjustData", newData);
         return newData;
     }
     /*
@@ -174,7 +174,7 @@ class RankBase extends MyNode
         var endRank;
         var k;
 
-        trace("getRankOver", rid, rcode, con, param);
+//        trace("getRankOver", rid, rcode, con, param);
         if(rcode != 0)
         {
             con = json_loads(con);
@@ -184,7 +184,7 @@ class RankBase extends MyNode
                 newData = adjustData(con.get("res"));
                 data = newData;
 
-                trace("param1", data, len(data));
+//                trace("param1", data, len(data));
                 if(data[0][3] > preMin)
                     minRank = data[0][3];
                 if(data[len(data)-1][3] < (preMax-1))
@@ -221,7 +221,7 @@ class RankBase extends MyNode
                 data += newData;
 
                 //data += con.get("res");
-                trace("param1", data, len(data));
+//                trace("param1", data, len(data));
                 if(data[len(data)-1][3] < (preMax-1))
                 {
                     maxRank = data[len(data)-1][3];   
@@ -256,7 +256,7 @@ class RankBase extends MyNode
                 data = newData+data;
                 if(data[0][3] > preMin)//没有小于某个某个数据的数据
                     minRank = data[0][3];
-                trace("param0", data, len(data));
+//                trace("param0", data, len(data));
                 if(len(data) > MAX_BUFFER)
                 {
                     temp = [];
@@ -268,8 +268,8 @@ class RankBase extends MyNode
             }
             initYet = 1;
             fetchData = 0;
-            trace("getRankDataOver", data);
-            trace("getRankDataOver", len(data));
+//            trace("getRankDataOver", data);
+//            trace("getRankDataOver", len(data));
             updateTab();
         }
     }
@@ -333,9 +333,9 @@ class RankBase extends MyNode
             if(beginItem > showBegin || endItem < (showEnd-1))
                 initYet = 0;
 
-            trace("getShowRangeAndBufferRange", "maxRank", maxRank, "minRank", minRank, "lowRow", lowRow, "upRow", upRow, "rowNum", rowNum, beginRank, endRank, beginItem, endItem, "fetchData",fetchData, "initYet", initYet);
+//            trace("getShowRangeAndBufferRange", "maxRank", maxRank, "minRank", minRank, "lowRow", lowRow, "upRow", upRow, "rowNum", rowNum, beginRank, endRank, beginItem, endItem, "fetchData",fetchData, "initYet", initYet);
         }
-        trace("data", data);
+//        trace("data", data);
         var limit;
         //获取缓存数据
         //当前的数据范围 如果data 为空 0 - 0 [-1, 0) 显示范围
@@ -399,7 +399,7 @@ class RankBase extends MyNode
         //var rg = getRange();
         var rg = getShowRangeAndBufferRange();
         var oldPos = flowNode.pos();
-        trace("updateTab", initYet, fetchData, rg, oldPos);
+//        trace("updateTab", initYet, fetchData, rg, oldPos);
         if(initYet == 0)
             return;
 
@@ -525,11 +525,14 @@ class RankBase extends MyNode
         var papayaId = data[diff][1];
         var score = data[diff][2];
         var rank = data[diff][3];
-        if(uid == global.user.uid)
-            return;
+        /*
+        挑战自己 则进入 服务器获取怪兽数据模式
+        */
+        //if(uid == global.user.uid)
+        //    return;
 
         var shadow = sprite("dialogRankShadow.png").pos(PANEL_WIDTH/2, PANEL_HEIGHT/2).anchor(50, 50);
-        trace("child", child, shadow);
+//        trace("child", child, shadow);
         child.add(shadow, 100, 1);
 
 
@@ -540,7 +543,7 @@ class RankBase extends MyNode
         //but0.addlabel(getStr("challengeHero", null), null, 21).pos(47, 19).anchor(50, 50);
 
         //未挑战过 且不是自身
-        if(global.user.checkChallengeYet(uid) == 0)
+        if(global.user.checkChallengeYet(uid) == 0 || uid == global.user.uid)//挑战自身显示按钮
         {
             but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+56+56).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
             but0.addlabel(getStr("challengeGroup", null), null, 21).pos(47, 19).anchor(50, 50);

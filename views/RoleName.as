@@ -26,7 +26,7 @@ class RoleName extends MyNode
         //bg.addsprite("roleNameDia.png").pos(141, 115);
         var oriX = global.director.disSize[0]/2-bSize[0]/2+165;
         var oriY = global.director.disSize[1]/2-bSize[1]/2+100;
-        trace("inputView", oriX, oriY, 220, 29);
+//        trace("inputView", oriX, oriY, 220, 29);
 
 
         inputView = v_create(V_INPUT_VIEW, 327, 214, 220, 50);

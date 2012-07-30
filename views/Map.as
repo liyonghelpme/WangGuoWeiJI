@@ -93,7 +93,7 @@ class Map extends MyNode
         touchDelegate = new StandardTouchHandler();
         touchDelegate.bg = bg;
         var ani = getMapAnimate(kind);
-        trace("animate", ani);
+//        trace("animate", ani);
         /*
         多个类型动画， 每个动画多个位置
         */
@@ -310,7 +310,7 @@ class Map extends MyNode
                 mapDict.update(key, sol);
             }
         }
-        trace("setMap", oldMap, sol.sy);
+//        trace("setMap", oldMap, sol.sy);
     }
     /*
     每个位置只有一个士兵
@@ -342,7 +342,7 @@ class Map extends MyNode
     {
         var updateSoldierData = [];
         var levelUpSol = [];
-        trace("mySoldiers", mySoldiers);
+//        trace("mySoldiers", mySoldiers);
         for(var i = 0; i < len(mySoldiers); i++)
         {
             var ne = getLevelUpExp(mySoldiers[i].id, mySoldiers[i].level);
@@ -388,24 +388,43 @@ class Map extends MyNode
     //sid=-1 kind level addAttack addDefense addAttackTime addDefenseTime
     function initSoldier(s)
     {
-        for(var i = 0; i < len(s); i++)
+        var i;
+        var so;
+        var nPos;
+        //根据monX monY 确定位置
+        //0-12
+        if(scene.kind == CHALLENGE_SELF)
         {
-            var so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
-            /*
-            设定人物位置会设定人物的zord 
-            所以要在添加了人物之后 设定位置
+            for(i = 0; i < len(s); i++)
+            {
+                so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
+                nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
+                addChild(so);
+                so.setPos(nPos);
+                setMap(so);
+            }
+        }
+        else
+        {
+            for(i = 0; i < len(s); i++)
+            {
+                so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
+                /*
+                设定人物位置会设定人物的zord 
+                所以要在添加了人物之后 设定位置
 
-            */
+                */
 
-            var nPos = getInitPos(so);
-            if(nPos[0] == -1)
-                continue;
-            addChild(so);
-            so.setPos(nPos); 
-            setMap(so);
+                nPos = getInitPos(so);
+                if(nPos[0] == -1)
+                    continue;
+                addChild(so);
+                so.setPos(nPos); 
+                setMap(so);
+            }
         }
         //trace("soldiers", soldiers);
-        trace("allSoldiers", len(soldiers));
+//        trace("allSoldiers", len(soldiers));
     }
     /*
     用户点击 下方block 则在地图上生成一个士兵
@@ -473,7 +492,7 @@ class Map extends MyNode
                 crystal = challengeReward[i][1];
                 
                 score = eneScore*challengeReward[i][2]/100;
-                trace("score", eneScore, challengeReward[i][2], MAX_SCORE, myScore, score, MAX_INT);
+//                trace("score", eneScore, challengeReward[i][2], MAX_SCORE, myScore, score, MAX_INT);
                 score = min(MAX_SCORE-myScore, score);
             }
             else
@@ -483,7 +502,7 @@ class Map extends MyNode
             global.user.updateRankScore(score); 
             global.user.changeValue("crystal", crystal);
 
-            trace("challengeReward", challengeReward[i], crystal, score, "eneScore", eneScore, "eneRank", eneRank, "myRank", myRank);
+//            trace("challengeReward", challengeReward[i], crystal, score, "eneScore", eneScore, "eneRank", eneRank, "myRank", myRank);
         }
 
 
@@ -523,7 +542,7 @@ class Map extends MyNode
             if(myCount > 0 && eneCount > 0)
                 break;
         }
-        trace("myCount", myCount, eneCount);
+//        trace("myCount", myCount, eneCount);
 
         if(myCount == 0 || eneCount == 0)
         {
@@ -559,6 +578,7 @@ class Map extends MyNode
         var d = new MapDefense(this, 0, defense[0]);
         var i;
         var row;
+        d.setDefense(global.user.getValue("cityDefense"));
         addChildZ(d, 0);
         for(i = 0; i < 5; i++)
         {
@@ -568,7 +588,11 @@ class Map extends MyNode
         }
         defenses.append(d);
 
+
+        //big*10+small
         d = new MapDefense(this, 1, defense[1]);
+        d.setDefense(scene.getEneDefense());
+
         addChildZ(d, 0);
         for(i = 0; i < 5; i++)
         {
@@ -578,7 +602,7 @@ class Map extends MyNode
         }
         defenses.append(d);
 
-        trace("soldiers each row", soldiers);
+//        trace("soldiers each row", soldiers);
     }
     function getDefense(id)
     {
@@ -619,7 +643,7 @@ class Map extends MyNode
     }
     override function enterScene()
     {
-        trace("enterScene map");
+//        trace("enterScene map");
         myTimer = new Timer(100);
         super.enterScene();
         bg.setevent(EVENT_KEYDOWN, quitMap);
@@ -627,7 +651,7 @@ class Map extends MyNode
     }
     override function exitScene()
     {
-        trace("exitScene map");
+//        trace("exitScene map");
         bg.setevent(EVENT_KEYDOWN, null);
         super.exitScene();
         myTimer.stop();

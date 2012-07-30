@@ -42,7 +42,7 @@ class Plant extends MyNode
     */
     function getLeftTime()
     {
-        trace("leftTime", data.get("time"), passTime);
+//        trace("leftTime", data.get("time"), passTime);
         return (data.get("time")*1000-passTime)/1000;
     }
     function getStartTime()
@@ -54,7 +54,7 @@ class Plant extends MyNode
     {
         acced = 1;
         passTime = data.get("time")*1000;
-        trace("farm Finish", passTime, acced);
+//        trace("farm Finish", passTime, acced);
         setState();
     }
     function getAccCost()
@@ -77,7 +77,7 @@ class Plant extends MyNode
         {
             newState = ROT; 
         }
-        trace("pass Time", passTime, needTime, newState, curState);
+//        trace("pass Time", passTime, needTime, newState, curState);
 
         if(newState != curState)
         {
@@ -104,13 +104,13 @@ class Plant extends MyNode
     }
     override function enterScene()
     {
-        trace("plant EnterScene");
+//        trace("plant EnterScene");
         super.enterScene();
         global.timer.addTimer(this);
     }
     override function exitScene()
     {
-        trace("exit Timer");
+//        trace("exit Timer");
         global.timer.removeTimer(this);
         super.exitScene();
     }
@@ -167,7 +167,7 @@ class Farm extends FuncBuild
     }
     override function initWorking(data)
     {
-        trace("planting", data);
+//        trace("planting", data);
         if(data == null)
             return;
         if(baseBuild.state != Working)
@@ -180,7 +180,7 @@ class Farm extends FuncBuild
         var startTime = data.get("objectTime");//serverTime 秒为单位
 
         startTime = server2Client(startTime); 
-        trace("startTime", startTime, now, id);
+//        trace("startTime", startTime, now, id);
 
         
         var privateData = dict([["passTime", (now-startTime)*1000]]);//毫秒为单位
@@ -203,7 +203,7 @@ class Farm extends FuncBuild
     {
         //baseBuild.state = Working;
         baseBuild.setState(Working);
-        trace("planting", id);
+//        trace("planting", id);
         var plant = getData(PLANT, id);//getPlant(id);
         planting = new Plant(baseBuild, plant, null);
         baseBuild.addChild(planting);

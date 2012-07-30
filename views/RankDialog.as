@@ -42,7 +42,7 @@ class RankDialog extends MyNode
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         var challengeNum = global.user.getValue("challengeNum");
-        trace("challengeNum", challengeNum);
+//        trace("challengeNum", challengeNum);
         if(challengeNum >= 10)
         {
             switchTab = 0;

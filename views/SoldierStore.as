@@ -66,7 +66,7 @@ class SoldierStore extends MyNode
         cols = -pageNum*ITEM_NUM*OFFX+WIDTH;
 
         curPos[0] = max(cols, min(0, curPos[0]));
-        trace("moveFlow", pageNum, param, curPos[0], cols);
+//        trace("moveFlow", pageNum, param, curPos[0], cols);
         flowNode.pos(curPos);
         updateTab();
     }
@@ -114,7 +114,7 @@ class SoldierStore extends MyNode
     {
         var oldPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;
-        trace("updateArr", oldPos, cols);
+//        trace("updateArr", oldPos, cols);
         if(oldPos[0] >= 0)
         {
             roleLeft.texture("roleArr.png", GRAY);
@@ -153,7 +153,7 @@ class SoldierStore extends MyNode
             for(var i = rg[0]; i < rg[1]; i++)
             {
                 var curNum = (i/ITEM_NUM)*(ITEM_NUM*ROW_NUM)+j*ITEM_NUM+i%ITEM_NUM;
-                trace("curNum", curNum);
+//                trace("curNum", curNum);
                 if(curNum >= len(data))
                     break;
                 
@@ -164,7 +164,7 @@ class SoldierStore extends MyNode
                 var id = data[curNum];
                 var data = getData(SOLDIER, id);
                 var cost = getCost(SOLDIER, id);
-                trace("updateTab", data, cost);
+//                trace("updateTab", data, cost);
                 var needLevel = data.get("level");
                 var canBuy = 1;
                 if(needLevel > userLevel)
@@ -224,7 +224,7 @@ class SoldierStore extends MyNode
             }
         }
 
-        trace("finish update Tab");
+//        trace("finish update Tab");
     }
     var lastPoints;
     function touchBegan(n, e, p, x, y, points)
@@ -267,7 +267,7 @@ class SoldierStore extends MyNode
                 {
                     var curSolNum = global.user.getSolNum();
                     var peopleNum = global.user.getPeopleNum();
-                    trace("peopleNum", peopleNum, curSolNum);
+//                    trace("peopleNum", peopleNum, curSolNum);
                     if(curSolNum >= MAX_BUSI_SOLNUM)
                     {
                         global.director.pushView(new MyWarningDialog(getStr("solTooMany", null), getStr("sorrySol", null), null), 1, 0);

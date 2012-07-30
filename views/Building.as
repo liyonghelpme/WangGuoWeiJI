@@ -9,7 +9,7 @@ class BuildAnimate extends MyNode
         build = b;
         var ani = getAni(build.data.get("id"));
         var aniKind = ani[3];
-        trace("building animate", ani);
+//        trace("building animate", ani);
         if(aniKind != BUILD_ANI_ANI)
         {
             bg = sprite(ani[0][0], ARGB_8888).pos(ani[1][0], ani[1][1]).anchor(ani[4][0], ani[4][1]);
@@ -62,7 +62,7 @@ class BuildAnimate extends MyNode
     }
     override function enterScene()
     {
-        trace("animate enter scene");
+//        trace("animate enter scene");
         super.enterScene();
         if(cus != null)
             cus.enterScene();
@@ -136,7 +136,7 @@ class Building extends MyNode
         else 
             funcBuild = new Castle(this);
 
-        trace("init building", data);
+//        trace("init building", data);
         bg = node();
         changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
         var bSize = changeDirNode.prepare().size();
@@ -271,12 +271,12 @@ class Building extends MyNode
     */
     override function setPos(p)
     {
-        trace("setPos", p);
+//        trace("setPos", p);
         var curPos = p;
         var zOrd = curPos[1];
         if(state == Moving || (checkPlaning() && global.director.curScene.curBuild == this))
             zOrd = MAX_BUILD_ZORD;
-        trace("setZord", zOrd);
+//        trace("setZord", zOrd);
         bg.pos(p);
         var par = bg.parent();
         if(par == null)
@@ -300,13 +300,13 @@ class Building extends MyNode
         if(z == NotBigZone)
         {
             setColor(NotBigZone);
-            trace("not In Zone", NotBigZone);
+//            trace("not In Zone", NotBigZone);
             colNow = 1;
         }
         else
         {
             var other = global.user.checkCollision(this);
-            trace("col With Other", other);
+//            trace("col With Other", other);
             if(other != null)
             {
                 //global.user.setCol(this);
@@ -319,7 +319,7 @@ class Building extends MyNode
             }
         }
         //funcBuild.setPos();
-        trace("col Now", colNow);
+//        trace("col Now", colNow);
     }
     /*
     进入规划模式， 保存旧的坐标 
@@ -350,7 +350,7 @@ class Building extends MyNode
             //bg.prepare();
             var bSize = bg.size();
 
-            trace("back Size", bSize, (sx+sy)/2*sizeY);
+//            trace("back Size", bSize, (sx+sy)/2*sizeY);
             /*
             如果方块的大小恰好和建筑物的底座一样大小 那么要求建筑物底座必须要一定大小
             +40 +20
@@ -387,7 +387,7 @@ class Building extends MyNode
     */
     function finishBottom()
     {
-        trace("finishBottom", getPos());
+//        trace("finishBottom", getPos());
         bg.color(100, 100, 100, 100);
         bottom.removefromparent();
         bottom = null;
@@ -444,7 +444,7 @@ class Building extends MyNode
     }
     function setColor(inZ)
     {
-        trace("setColor", inZ);
+//        trace("setColor", inZ);
         if(bottom == null)
             return;
         if(inZ != InZone)
@@ -515,7 +515,7 @@ class Building extends MyNode
     {
         showMenuYet = 1;
         var func = getBuildFunc(funcs);
-        trace("getFunc", func, funcs);
+//        trace("getFunc", func, funcs);
         global.director.pushView(new BuildWorkMenu(this, func[0], func[1]), 0, 0);
     }
     var showMenuYet = 0;
@@ -528,7 +528,7 @@ class Building extends MyNode
     {
 
         var ret;
-        trace("building State", state, accMove, kind, funcs);
+//        trace("building State", state, accMove, kind, funcs);
         if((state == Moving) || checkPlaning())
         {
             if(global.director.curScene.curBuild != this)
@@ -605,7 +605,7 @@ class Building extends MyNode
     */
     function doAcc()
     {
-        trace("doAcc state", state);
+//        trace("doAcc state", state);
         if(state == Working)
         {
             global.director.pushView(new AccDialog(this), 1, 0);
@@ -618,7 +618,7 @@ class Building extends MyNode
     }
     function sureToAcc()
     {
-        trace("doAcc state", state);
+//        trace("doAcc state", state);
         if(state == Working)
         {
             funcBuild.doAcc();
@@ -642,7 +642,7 @@ class Building extends MyNode
         var cost = getCost(BUILD, id);
         cost = changeToSilver(cost);
 
-        trace("sureToSell", cost);
+//        trace("sureToSell", cost);
 
         global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
 
@@ -654,7 +654,7 @@ class Building extends MyNode
     }
     function sellOver()
     {
-        trace("sellOver");
+//        trace("sellOver");
     }
     function doPhoto()
     {

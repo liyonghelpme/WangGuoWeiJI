@@ -110,7 +110,7 @@ class MapLayer extends MyNode
     */
     function onClicked(param)
     {
-        trace("mapOnclick", param);
+//        trace("mapOnclick", param);
         if(param == 0)
         {
             global.director.popScene();

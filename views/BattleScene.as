@@ -106,7 +106,7 @@ class MapBanner extends MyNode
     function clearSoldier(so)
     {
         var sid = so.sid;
-        trace("soldier clear", sid);
+//        trace("soldier clear", sid);
         data.append(sid);
         updateTab();
     }
@@ -117,7 +117,7 @@ class MapBanner extends MyNode
         var lowCol = -oldPos[0]/OFFX;
         var upCol = (-oldPos[0]+WIDTH+OFFX-1)/OFFX;
         var total = len(data);
-        trace("getRange", data);
+//        trace("getRange", data);
         return [max(0, lowCol-1), min(upCol+1, total)];
 
     }
@@ -137,7 +137,7 @@ class MapBanner extends MyNode
             panel.setevent(EVENT_UNTOUCH, touchEnded);
 
             var sdata = global.user.getSoldierData(data[i]);
-            trace("soldierData", sdata, data[i], i);
+//            trace("soldierData", sdata, data[i], i);
             var solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(40, 76).anchor(50, 100);
             var sca = getSca(solPic, [120, 120]);
             solPic.scale(-sca, sca);
@@ -157,10 +157,10 @@ class MapBanner extends MyNode
         var nPos = n.node2world(x, y);
         var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
         controlSoldier.setPos(mPos);
-        trace("controller setPos", nPos);
+//        trace("controller setPos", nPos);
         
         //nPos = controlSoldier.bg.world2node(nPos[0], nPos[1]);
-        trace("sol node began", nPos);
+//        trace("sol node began", nPos);
         controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
 
         data.remove(sid);
@@ -189,7 +189,7 @@ class MapBanner extends MyNode
         {
             var nPos = n.node2world(x, y);
             //nPos = controlSoldier.bg.world2node(nPos[0], nPos[1]);
-            trace("sol node end", nPos);
+//            trace("sol node end", nPos);
             controlSoldier.touchWorldEnded(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
         }
         controlSoldier = null;
@@ -241,21 +241,36 @@ class BattleScene extends MyNode
     var banner;
     var kind;//0 闯关 1 挑战
 
+    //oid papayaId score rank cityDefense
     var param;
 
 
     var pausePage;
     //big small soldierData
+    var big;
+    var small;
     function BattleScene(k, sm, s, ki, par, eq)
     {
         param = par;
         kind = ki;
         bg = node();
         init();
+        big = k;
+        small = sm;
         map = new Map(k, sm, s, this, eq);
         addChild(map);
         banner = new MapBanner(this);
         addChild(banner);
+    }
+    function getEneDefense()
+    {
+        if(kind == CHALLENGE_MON)
+            return mapDefense.get(big*10+small);
+        else if(kind == CHALLENGE_FRI)
+            return param[4];
+        else if(kind == CHALLENGE_SELF)
+            return param[4];
+        return 0;
     }
     function finishArrage()
     {

@@ -33,7 +33,7 @@ class Goods extends MyNode
         var data = getData(buildData[0], buildData[1]);
         var needLevel = data.get("level", 0);
         var gain = getGain(buildData[0], buildData[1]);
-        trace("initSameElement", cost, data, gain);
+//        trace("initSameElement", cost, data, gain);
 
         /*
         采用字符串替换的方法，这样如果图片不需要ID的话可以直接返回
@@ -66,7 +66,7 @@ class Goods extends MyNode
         {
             panel.addlabel(data.get("name"), null, 25).pos(79, 28).anchor(50, 50).color(0, 0, 0);
             var picCost = cost.items();
-            trace("buildCost", cost);
+//            trace("buildCost", cost);
             if(len(picCost) > 0)
             {
                 var c = [100, 100, 100];
@@ -142,7 +142,7 @@ class Goods extends MyNode
     {
         var posX = 0;
         var posY = -offY+rg[0]*offY;
-        trace("update Tab", posX, posY, rg, len(goodNum));
+//        trace("update Tab", posX, posY, rg, len(goodNum));
         
         var oldPos = flowNode.pos();
         flowNode.removefromparent();
@@ -165,7 +165,7 @@ class Goods extends MyNode
             var buildData = store.allGoods[selTab][i];
 
             var canBuy = initSameElement(buildData, panel);
-            trace("canBuy", canBuy);
+//            trace("canBuy", canBuy);
 
             panel.put([selTab, i, canBuy]);
             flowNode.add(panel, 0, i);
@@ -227,11 +227,11 @@ class Goods extends MyNode
     function touchEnded(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
-        trace("goods flownode", newPos, accMove);
+//        trace("goods flownode", newPos, accMove);
         if(accMove < 10)
         {
             var child = checkInChild(n, newPos);
-            trace("in which child", child);
+//            trace("in which child", child);
             if(child != null)
             {
                 var buildData = child.get();

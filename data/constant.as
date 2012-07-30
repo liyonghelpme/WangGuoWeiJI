@@ -446,6 +446,10 @@ const RECOVER_TIME = 15000;
 
 const CHALLENGE_MON = 0;
 const CHALLENGE_FRI = 1;
+const CHALLENGE_SELF = 2;//怪兽布局 由数据库monX monY 决定
 
 const ENEMY = -1;
 const MAX_SCORE = 9999999;
+
+//0-4 闯关页面
+const MAX_CHALLENGE = 4;

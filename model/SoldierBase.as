@@ -147,6 +147,24 @@ function calculateStage(sol)
 首先初始化私有属性
 再初始化公共属性
 */
+function setEquipAttribute(sol)
+{
+    //士兵拥有的武器
+    var equips = global.user.getSoldierEquip(sol.sid);
+    for(var i = 0; i < len(equips); i++)
+    {
+        var eData = global.user.getEquipData(equips[i]);
+        var e = getData(EQUIP, eData.get("kind"));
+        sol.physicAttack += e.get("physicAttack");
+        sol.magicAttack += e.get("magicAttack");
+
+        sol.physicDefense += e.get("physicDefense");
+        sol.magicDefense += e.get("magicDefense");
+        sol.recoverSpeed += e.get("recoverSpeed");
+        sol.healthBoundary += e.get("healthBoundary"); 
+    }
+}
+
 function initAttackAndDefense(sol)
 {
     calculateStage(sol);
@@ -166,25 +184,12 @@ function initAttackAndDefense(sol)
         sol.magicDefense += sol.addDefense;
     }
 
-    //士兵拥有的武器
-    var equips = global.user.getSoldierEquip(sol.sid);
-    for(var i = 0; i < len(equips); i++)
-    {
-        var eData = global.user.getEquipData(equips[i]);
-        var e = getData(EQUIP, eData.get("kind"));
-        sol.physicAttack += e.get("physicAttack");
-        sol.magicAttack += e.get("magicAttack");
-
-        sol.physicDefense += e.get("physicDefense");
-        sol.magicDefense += e.get("magicDefense");
-        sol.recoverSpeed += e.get("recoverSpeed");
-        sol.healthBoundary += e.get("healthBoundary"); 
-    }
+    setEquipAttribute(sol);
     sol.health = min(sol.health, sol.healthBoundary);
 
     var phurt = getPhysicHurt(sol.data);
     var mhurt = getMagicHurt(sol.data);
-    trace("Basic Attribute", sol.physicAttack, sol.magicAttack, sol.physicDefense, sol.magicDefense, sol.healthBoundary, phurt, mhurt);
+//    trace("Basic Attribute", sol.physicAttack, sol.magicAttack, sol.physicDefense, sol.magicDefense, sol.healthBoundary, phurt, mhurt);
 }
 /*
     attack * cofficient * pure/total / 100
@@ -195,10 +200,11 @@ function calHurt(src, tar)
     var phyHurt = src.physicAttack*pcoff*tar.purePhyDefense/tar.physicDefense/100;
     var mcoff = getMagicHurt(tar.data);
     var magHurt = src.magicAttack*mcoff*tar.pureMagDefense/tar.magicDefense/100;
-    phyHurt = max(phyHurt, 1);
-    magHurt = max(magHurt, 1);
+    //phyHurt = max(phyHurt, 1);
+    //magHurt = max(magHurt, 1);
 
     var hurt = phyHurt+magHurt;
+    trace("hurt", phyHurt, magHurt, pcoff, mcoff);
     return hurt;
 }
 
@@ -232,7 +238,7 @@ function getBasicAbiliy(id, level)
     var phyBasic = pureData[4]*pureData[0]*100/pcoff;
     var magBasic = pureData[4]*pureData[2]*100/mcoff;
     var ab = max(phyBasic, magBasic)/(33*13);
-    trace("basicAbility", ab);
+//    trace("basicAbility", ab);
     return ab; //士兵能力
 }
 
@@ -240,13 +246,13 @@ function getAddExp(id, level)
 {
     var basic = getBasicAbiliy(id, level);
     var exp = (2*basic-1)*3;
-    trace("soldierExp", exp);
+//    trace("soldierExp", exp);
     return exp; 
 }
 //升级经验5倍于普通经验
 function getLevelUpExp(id, level)
 {
     var exp = getAddExp(id, level)*(5+level);
-    trace("levelNeedExp", exp);
+//    trace("levelNeedExp", exp);
     return exp;
 }

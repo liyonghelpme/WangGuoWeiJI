@@ -83,7 +83,7 @@ class MovLayer extends MyNode
     {
         var sol = scene.soldiers;
         var val = sol.values();
-        trace("initFriend Soldier", len(sol));
+//        trace("initFriend Soldier", len(sol));
         for(var i = 0; i < len(val); i++)
         {
             var s = new FriendSoldier(val[i], this);
@@ -114,7 +114,7 @@ class MovLayer extends MyNode
         */
         if(inZ == 0)
         {
-            trace("not in zone");
+//            trace("not in zone");
             return 1;//not In zone
         }
         var key = mx*10000+my;

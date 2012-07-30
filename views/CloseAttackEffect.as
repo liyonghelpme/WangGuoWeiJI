@@ -11,7 +11,7 @@ class CloseAttackEffect extends MyNode
     {
         sol = s;
         ani = soldierAnimate.get(sol.data.get("attSpe"));//根据特效id 得到相应的特效
-        trace("closeAttack", ani);
+//        trace("closeAttack", ani);
         var sPos = sol.getPos();
         var offset = ani[1];
 

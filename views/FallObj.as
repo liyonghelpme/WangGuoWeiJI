@@ -20,7 +20,7 @@ class FallObj extends MyNode
         kind = k;
         var fallData = getData(FALL_THING, kind);
         var view = fallData.get("view");
-        trace("genNewFallObj", m, k, rx, ry, view, "goods"+str(view)+".png");
+//        trace("genNewFallObj", m, k, rx, ry, view, "goods"+str(view)+".png");
         //升级奖励掉落物品
 
         curMap = [rx, ry];

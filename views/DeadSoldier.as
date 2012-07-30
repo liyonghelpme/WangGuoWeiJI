@@ -71,7 +71,7 @@ class DeadSoldier extends MyNode
             if(child != null)
             {
                 var sid = child.get();
-                trace("dead id", sid);
+//                trace("dead id", sid);
 
                 var sol = global.user.getSoldierData(sid);
                 var data = getData(SOLDIER, sol.get("id"));
@@ -96,7 +96,7 @@ class DeadSoldier extends MyNode
     }
     function receiveMsg(msg)
     {
-        trace("receiveMsg", msg);
+//        trace("receiveMsg", msg);
         if(msg[0] == RELIVE_SOL)
         {
             initDead();

@@ -92,7 +92,7 @@ class MyAnimate
     }
     function exitScene()
     {
-        trace("custom animate exit scene");
+//        trace("custom animate exit scene");
         global.myAction.removeAct(this);
     }
 }

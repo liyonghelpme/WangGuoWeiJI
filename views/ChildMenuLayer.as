@@ -118,7 +118,7 @@ class ChildMenuLayer extends MyNode
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
-            trace("funcs", funcs[i]);
+//            trace("funcs", funcs[i]);
             var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(DARK_WIDTH/2, OFFY/2+OFFY*i);
             new Button(button, model[1], null);
         }
@@ -132,11 +132,11 @@ class ChildMenuLayer extends MyNode
     */
     function newsFeedResponse(rid, rcode)
     {
-        trace("newsFeedSuc", rid, rcode);
+//        trace("newsFeedSuc", rid, rcode);
     }
     function uploadResponse(rid, rcode, con, param)
     {
-        trace("uploadContent", rid, rcode, con, param);
+//        trace("uploadContent", rid, rcode, con, param);
         var pid = con.get("pid");
         ppy_postnewsfeed("just post a screenshot", null, pid, newsFeedResponse);
     }
@@ -193,7 +193,7 @@ class ChildMenuLayer extends MyNode
     }
     function onClicked(param)
     {
-        trace("click", param) 
+//        trace("click", param) 
 
     }
     function onMap()

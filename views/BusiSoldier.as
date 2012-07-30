@@ -143,7 +143,7 @@ class BusiSoldier extends MyNode
         }
         else if(dd.get("relive") == 1)//x% life dead = 0
         {
-            trace("reliveSoldier", sid);
+//            trace("reliveSoldier", sid);
             dead = 0;
             health = dd.get("effectTime")*healthBoundary/100; 
             //复活本士兵

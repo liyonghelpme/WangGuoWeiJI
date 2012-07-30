@@ -44,7 +44,7 @@ class FallGoods extends MyNode
         if(lastFallTime >= FALL_TIME )
         {
             lastFallTime = 0;
-            trace("getFallObj", lastFallTime, len(allFalls));
+//            trace("getFallObj", lastFallTime, len(allFalls));
             if(len(allFalls) < FALL_NUM)
             {
                 getNewFall();       
@@ -69,7 +69,7 @@ class FallGoods extends MyNode
         var width = rightBottom[0]-leftUp[0];
         var height = rightBottom[1]-leftUp[1];
 
-        trace("levelUpGoods", leftUp, rightBottom, width, height);
+//        trace("levelUpGoods", leftUp, rightBottom, width, height);
 
         //掉落10-15 编号的物品
         for(var i = 10; i < 15; i++)
@@ -86,7 +86,7 @@ class FallGoods extends MyNode
             var fo = new FallObj(this, i, rx, ry);
             fo.setPos([rx*sizeX, ry*sizeY]);
             allFalls.append(fo);
-            trace("fallObj", rx, ry, ry*sizeY);
+//            trace("fallObj", rx, ry, ry*sizeY);
             buildLayer.addChildZ(fo, MAX_BUILD_ZORD+1);
         }
     }
@@ -114,12 +114,12 @@ class FallGoods extends MyNode
         var fallData = getData(FALL_THING, kind);
         //掉落物品有次数 限制 
         var times = fallData.get("times");
-        trace("fallData", fallData, kind, rv, ids, times);
+//        trace("fallData", fallData, kind, rv, ids, times);
 
         if(times > 0)
         {
             var fallNum = global.user.getFallNum(kind);
-            trace("fallNum", fallNum);
+//            trace("fallNum", fallNum);
             //超过掉落的最大次数 则停止掉落
             if(fallNum >= times)
             {
@@ -148,11 +148,11 @@ class FallGoods extends MyNode
         if(i > len(Zone))
         {
             lastFallTime = FALL_TIME;
-            trace("Fall not in zone");
+//            trace("Fall not in zone");
             return;
         }
         var col = global.user.checkFallGoodCol(rx, ry);
-        trace("FallGoods", rx, ry, col);
+//        trace("FallGoods", rx, ry, col);
         if(col == 1)
         {
             lastFallTime = FALL_TIME;
@@ -161,7 +161,7 @@ class FallGoods extends MyNode
         var fo = new FallObj(this, kind, rx, ry);
         fo.setPos([rx*sizeX, ry*sizeY]);
         allFalls.append(fo);
-        trace("fallObj", rx, ry, ry*sizeY);
+//        trace("fallObj", rx, ry, ry*sizeY);
         buildLayer.addChildZ(fo, ry*sizeY);
 
         //ry*sizeY  普通掉落物品显示在最高的位置 

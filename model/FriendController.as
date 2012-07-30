@@ -39,7 +39,7 @@ class FriendController
     }
     function receiveMsg(param)
     {
-        trace("initOver initFriend");
+//        trace("initOver initFriend");
         var msid = param[0];
         if(msid == INITDATA_OVER)
         {
@@ -75,7 +75,7 @@ class FriendController
     }
     function addFriendOver(rid, rcode, con, param)
     {
-        trace("addFriend", rid, rcode, con, param);
+//        trace("addFriend", rid, rcode, con, param);
         if(rcode != 0)
         {
             //新加的好友的等级和是否访问过 放置到本地数据库中
@@ -87,7 +87,7 @@ class FriendController
             newFriendList = null;
             initFriendList();            
         }
-        trace("initFriendOver", len(showFriend), len(papayaFriend), len(inGameFriend));
+//        trace("initFriendOver", len(showFriend), len(papayaFriend), len(inGameFriend));
     }
     function cmpLev(a, b)
     {
@@ -109,7 +109,7 @@ class FriendController
             if(data.get("isplayer") == 1)
                 showFriend.append(data);            
         }
-        trace("initFriend finish", initFriend);
+//        trace("initFriend finish", initFriend);
         initFriend = 1;
     }
     //本地数据存储记录在远程服务器上的好友
@@ -134,13 +134,13 @@ class FriendController
     var getPapa = 0;
     function getPapayaOver(rid, rcode, con, param)
     {
-        trace("getPapayaOver", rid, rcode, con, param);
+//        trace("getPapayaOver", rid, rcode, con, param);
         if(rcode != 0)
         {
             //con = json_loads(con);
-            trace("type con", type(con));
+//            trace("type con", type(con));
             var flist = con.get("data");
-            trace("flist", len(flist));
+//            trace("flist", len(flist));
             //con.get("data");
             for(var i = 0; i < len(flist); i++)
             {
@@ -168,7 +168,7 @@ class FriendController
     var getInGame = 0;
     function getInGameOver(rid, rcode, con, param)
     {
-        trace("getInGameOver", rid, rcode, con, param);
+//        trace("getInGameOver", rid, rcode, con, param);
         if(rcode != 0)
         {
             con = json_loads(con);

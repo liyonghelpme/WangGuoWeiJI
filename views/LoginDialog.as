@@ -34,7 +34,7 @@ class LoginDialog extends MyNode
         //第0天登录怎么办?
         var now = loginDays-1;
         //loginDays = (loginDays-1)%len(reward);
-        trace("now", now, loginDays);
+//        trace("now", now, loginDays);
 
         for(var i = 0; i < 3; i++)
         {
@@ -77,7 +77,7 @@ class LoginDialog extends MyNode
         closeCastleDialog();
         var loginDays = curCmd.get("loginDays");//global.user.getValue("loginDays");
         var reward = getLoginReward(loginDays);
-        trace("loginReward", loginDays, reward);
+//        trace("loginReward", loginDays, reward);
         global.user.doAdd(reward);
         /*
         global.user.changeValue("silver", reward.get("silver"));

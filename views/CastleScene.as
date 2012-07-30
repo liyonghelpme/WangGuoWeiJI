@@ -91,7 +91,7 @@ class CastleScene extends MyNode
 
     function receiveMsg(param)
     {
-        trace("receiveMsg", param);
+//        trace("receiveMsg", param);
         var msid = param[0];
         if(msid == SHOW_DIALOG && !isBuildOrPlan())
         {
@@ -132,7 +132,7 @@ class CastleScene extends MyNode
     function finishPlan()
     {
         //var ret = global.user.checkBuildCol();
-        trace("buildCollision", curBuild);
+//        trace("buildCollision", curBuild);
         if(curBuild != null && curBuild.colNow == 1)
             return;
 
@@ -217,7 +217,7 @@ class CastleScene extends MyNode
         //var gain = getBuildGain(id);
         var gain = getGain(BUILD, id);
         global.user.doAdd(gain);
-        trace("finish Build", cost, gain);
+//        trace("finish Build", cost, gain);
         mc.finishBuild();
         //curBuild.setPos(curBuild.getPos());
         closeBuild();
@@ -241,7 +241,7 @@ class CastleScene extends MyNode
     }
     function onSwitch()
     {
-        trace("switch");
+//        trace("switch");
         curBuild.onSwitch();
         //mc.onSwitch(); 
     }

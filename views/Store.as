@@ -112,7 +112,7 @@ class Store extends MyNode
     function buy(gi)
     {
         var item = allGoods[gi[0]][gi[1]]; 
-        trace("store buy", gi, item);
+//        trace("store buy", gi, item);
         var kind = item[0];
         var id = item[1];
         var cost;
@@ -121,7 +121,7 @@ class Store extends MyNode
         cost = getCost(kind, id);
         buyable = global.user.checkCost(cost);
 
-        trace("buy Cost", cost, buyable);
+//        trace("buy Cost", cost, buyable);
         if(buyable.get("ok") == 0)
         {
             addChildZ(new ResourceBanner(buyable, 506, 231), 1);
@@ -190,11 +190,13 @@ class Store extends MyNode
             }
         }
         else
-            trace("商店 当前选择越界", i);
+        {
+//            trace("商店 当前选择越界", i);
+        }
     }
     function changeTab(i)
     {
-        trace("store changeTab", i);
+//        trace("store changeTab", i);
         tabs.changeTab(i);        
         //setTab(i);
     }

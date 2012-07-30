@@ -26,7 +26,7 @@ class DeadOver extends MyNode
             dir = -90
         else
             dir = 90;
-        trace("changeDirNode", cs, curPos, dir, "soldier"+str(soldier.id)+"dead.png");
+//        trace("changeDirNode", cs, curPos, dir, "soldier"+str(soldier.id)+"dead.png");
         changeDirNode.anchor(50, 50).pos(curPos[0], curPos[1]-cs[1]/2);
 
         changeDirNode.addaction(
@@ -244,6 +244,8 @@ class Soldier extends MyNode
         volumn = data.get("volumn");
         recoverSpeed = 0;
 
+        trace("soldierData", monsterData, map.monEquips);
+
     
         if(sid == ENEMY)//敌对方士兵 地图怪兽 
         {
@@ -269,7 +271,7 @@ class Soldier extends MyNode
         else
         {
             var privateData = global.user.getSoldierData(sid);
-            trace("initMapSoldier", privateData);
+//            trace("initMapSoldier", privateData);
             level = privateData.get("level", 0);
 
             
@@ -289,6 +291,7 @@ class Soldier extends MyNode
 
         }
         gainexp = getAddExp(id, level);
+        trace("soldierData", physicAttack, physicDefense, magicAttack, magicDefense, purePhyDefense);
     }
 
     function isMySoldier()
@@ -434,7 +437,7 @@ class Soldier extends MyNode
 
     function changeExp(e)
     {
-        trace("changeExp", e);
+//        trace("changeExp", e);
         exp += e; 
         
         //为了游戏流畅 在中间过程可以不写数据库 在结算经验的 被攻击方处 更新所有士兵状态
@@ -714,10 +717,10 @@ class Soldier extends MyNode
             //trace("my tar", this, t);
             //var posible = [];
 
-            trace("myTar", t, myMap);
+//            trace("myTar", t, myMap);
             for(var i = 0; i < len(t); i++)
             {
-                trace("eneColor", t[i].color, t[i].state);
+//                trace("eneColor", t[i].color, t[i].state);
                 if(t[i].color == color || t[i].state == MAP_SOL_DEAD)
                     continue;
                 var p = t[i].getPos();
@@ -851,7 +854,7 @@ class Soldier extends MyNode
         else if(state == MAP_SOL_FREE)
         {
             tar = getTar();
-            trace("free tar", tar);
+//            trace("free tar", tar);
             if(tar != null)
             {
                 clearAnimation();
@@ -958,7 +961,7 @@ class Soldier extends MyNode
     }
     override function enterScene()
     {
-        trace("map", map, map.myTimer);
+//        trace("map", map, map.myTimer);
         super.enterScene();   
         map.myTimer.addTimer(this);
     }

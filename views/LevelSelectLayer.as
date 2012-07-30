@@ -17,14 +17,14 @@ class Flag extends MyNode
         //if(showArr == 1)
         flag = bg.addsprite("map_flag_complete.png").size(FLAG_SX, FLAG_SY).anchor(50, 50).pos(FLAG_WIDTH/2, FLAG_HEIGHT/2);
         showArr = sA;
-        trace("showArr", showArr);
+//        trace("showArr", showArr);
         if(showArr == 1)
             flag.addsprite("mapArrow.png").anchor(50, 100).pos(FLAG_SX/2, -20).addaction( repeat(moveby(500, 0, -20), moveby(500, 0, 20)) );
     }
     /*
     function update(diff)
     {
-        trace("showFlag", diff, flag, showYet);
+//        trace("showFlag", diff, flag, showYet);
         if(flag != null && showYet == 0)
         {
             showYet = 1;
@@ -34,7 +34,7 @@ class Flag extends MyNode
     }
     override function enterScene()
     {
-        trace("flag enterScene");
+//        trace("flag enterScene");
         super.enterScene();
         if(showArr == 1)
             global.timer.addTimer(this);
@@ -89,7 +89,7 @@ class LevelSelectLayer extends MyNode
             if(index == curDif[0] && i > curDif[1])//该大关 绿色表示 改关卡需要征服才能部分被开启
                 break;
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
-            trace("flagPos", flagPos[index][i]);
+//            trace("flagPos", flagPos[index][i]);
             //var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
             var showArr = 0;
             if(index == curDif[0] && i == curDif[1])
@@ -133,13 +133,13 @@ class LevelSelectLayer extends MyNode
         island = scene.getIsland(param);
         islandLayer = island.addnode();
         //var isPos = island.pos();
-        trace("select Level", param, curDif);
+//        trace("select Level", param, curDif);
         //var newPos;
         for(i=0;i < 6 && index <= curDif[0]; i++){
             if(index == curDif[0] && i > curDif[1])
                 break;
             //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
-            trace("flagPos", flagPos[index][i]);
+//            trace("flagPos", flagPos[index][i]);
             //var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
             var b = new Flag(flagPos[index][i]);
             islandLayer.add(b.bg, FLAG_Z);
@@ -155,12 +155,12 @@ class LevelSelectLayer extends MyNode
     
     function onSmall(param)
     {
-        trace("onSmall", param);
+//        trace("onSmall", param);
         scene.onSmall(param);   
     }
     function onDiff(param)
     {
-        trace("on Dif", param);
+//        trace("on Dif", param);
         scene.onDiff(param);
     }
     /*
@@ -184,7 +184,7 @@ class LevelSelectLayer extends MyNode
     }
     /*
     function onClicked(param){
-        trace("level select", param);
+//        trace("level select", param);
         scene.selectLevel(param);
     }
     */
@@ -193,7 +193,7 @@ class LevelSelectLayer extends MyNode
     //全部岛屿 -> 某个岛屿小关 ->选择难度 -> 查看难度->进入游戏
     function goBack(){
         var sl = len(scene.contextStack);
-        trace("goBack", sl, scene.contextStack);
+//        trace("goBack", sl, scene.contextStack);
         if(sl == 1){//返回主页面
             scene.gotoIsland(0);
         }
@@ -256,7 +256,7 @@ class LevelSelectLayer extends MyNode
     function attackNow()
     {
         goBack();//close Choose Page
-        trace("map index", index, small);
+//        trace("map index", index, small);
         global.director.pushScene(
         new BattleScene(index-1, small, 
             [dict([["id", 100]])], CHALLENGE_MON, null, null

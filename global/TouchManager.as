@@ -6,7 +6,7 @@ class TouchManager
     var curStandard;
     function TouchManager()
     {
-        trace("init touch");
+//        trace("init touch");
         standardHandlers = new Array();
         targetHandlers = new Array();
         getscene().setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -16,7 +16,7 @@ class TouchManager
     function addHead(obj, pri, swallow)
     {
         targetHandlers.insert(0, [obj, pri, swallow, 0]);
-        trace("addHead", len(targetHandlers), len(standardHandlers));
+//        trace("addHead", len(targetHandlers), len(standardHandlers));
     }
     function addTargeted(obj, pri, swallow)
     {
@@ -24,12 +24,12 @@ class TouchManager
             if(targetHandlers[i][1] >= pri)
                 break;
         targetHandlers.insert(i, [obj, pri, swallow, 0]);
-        trace("addTargetTouch", len(targetHandlers), len(standardHandlers));
+//        trace("addTargetTouch", len(targetHandlers), len(standardHandlers));
     }
     function addStandard(obj)
     {
         standardHandlers.append([obj, 0]);
-        trace("addStandardTouch", len(targetHandlers), len(standardHandlers));
+//        trace("addStandardTouch", len(targetHandlers), len(standardHandlers));
     }
     function removeTouch(obj)
     {
@@ -52,7 +52,7 @@ class TouchManager
                 }
             }
         }
-        trace("removeTouch", len(targetHandlers), len(standardHandlers));
+//        trace("removeTouch", len(targetHandlers), len(standardHandlers));
     }
     function touchBegan(n, e, p, x, y, points)
     {
@@ -69,7 +69,7 @@ class TouchManager
                 var ret = targetHandlers[i][0].touchBegan(x, y);
                 if(ret == 1)
                 {
-                    trace("targetHandlers", i);
+//                    trace("targetHandlers", i);
                     swallow = targetHandlers[i][2];//swallow
                     //trace("swallow", swallow, i);
                     curTargeted = i;

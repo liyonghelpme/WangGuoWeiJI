@@ -11,7 +11,7 @@ class RewardBanner extends MyNode
         {
             var pic = bg.addsprite(it[i][0]+".png").pos(initX, initY).anchor(0, 50).size(30, 30);
             var num = bg.addlabel(str(it[i][1]), null, 25).pos(initX+30, initY).anchor(0, 50);
-            trace("label size", num.prepare().size());
+//            trace("label size", num.prepare().size());
             initX += 112;
         }
         bg.addaction(sequence(delaytime(1000), callfunc(removeSelf)));
@@ -77,7 +77,7 @@ class TaskDialog extends MyNode
         init();
         bg.addsprite("dialogTaskExp.png").pos(120, 140).size(194, EXP_HEI);
         moveExp = bg.addsprite("dialogTaskExp.png").pos(120+194, 140);
-        trace("init Exp bar");
+//        trace("init Exp bar");
 
         bg.addsprite("close2.png").anchor(50, 50).pos(764, 29).setevent(EVENT_TOUCH, closeDialog);
 
@@ -88,7 +88,7 @@ class TaskDialog extends MyNode
         bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level))]), null, 18).anchor(50, 50).pos(118, 195).color(0, 0, 0);
 
         bg.addlabel(str(level), null, 25).anchor(50, 50).pos(INITX, 154).color(76, 97, 34);
-        trace("init star");
+//        trace("init star");
 
 
         //70 67
@@ -106,7 +106,7 @@ class TaskDialog extends MyNode
         block.addsprite("roleLock.png").pos(12, 56).anchor(50, 50).size(20, 21);
         block.addsprite("dialogTaskShadow.png").anchor(50, 50).pos(49, 56);
         block.addlabel(str(level+1), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
-        trace("init block 1");
+//        trace("init block 1");
 
 
         block = bg.addsprite("dialogTaskBlock.png").anchor(50, 50).pos(INITX+OFFX*3, 154);
@@ -118,7 +118,7 @@ class TaskDialog extends MyNode
         block.addsprite("roleLock.png").pos(12, 56).anchor(50, 50).size(20, 21);
         block.addsprite("dialogTaskShadow.png").anchor(50, 50).pos(49, 56);
         block.addlabel(str(level+2), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
-        trace("init block 2");
+//        trace("init block 2");
 
         cl = bg.addnode().pos(85, 210).size(629, 226).clipping(1);
         flowNode = cl.addnode();
@@ -149,7 +149,7 @@ class TaskDialog extends MyNode
             panel.addsprite("dialogTaskLine.png").pos(315, 75).anchor(50, 50);
             var t = tasks[i];
             var data = getData(TASK, t[0]);
-            trace("init task Panel", data, t);
+//            trace("init task Panel", data, t);
             var need = data.get("need");
             var fin = t[1];
             if(t[1] < need)
@@ -169,7 +169,7 @@ class TaskDialog extends MyNode
             panel.addlabel(data.get("title"), null, 25).pos(100, 21).anchor(0, 50).color(0, 0, 0);
             panel.addlabel(data.get("des"), null, 17, FONT_NORMAL, 259, 34, ALIGN_LEFT).pos(100, 39).color(56, 54, 54);
             var gain = getGain(TASK, t[0]);
-            trace("init task gain", gain);
+//            trace("init task gain", gain);
             var offY = 38;
             var it = gain.items();
             var initY = 19;
@@ -203,7 +203,7 @@ class TaskDialog extends MyNode
 
     function finishTask(n, e, p, x, y, points)
     {
-        trace("finishTask", p);
+//        trace("finishTask", p);
         
         //完成任务task 得到奖励gain
         global.httpController.addRequest("taskC/finishTask", dict([["uid", global.user.uid], ["tid", p]]), null, null);

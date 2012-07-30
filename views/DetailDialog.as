@@ -83,7 +83,7 @@ class DetailDialog extends MyNode
             contentNode.addlabel(getStr("noTransfer", null), null, 20).pos(0, offY).color(0, 0, 0);
         offY += 30;
 
-        trace("soldierpng", soldier.id);
+//        trace("soldierpng", soldier.id);
         var solPic = bg.addsprite("soldier"+str(soldier.id)+".png").pos(460, 283).anchor(50, 50);
         var sca = getSca(solPic, [90, 90]);
         solPic.scale(sca);

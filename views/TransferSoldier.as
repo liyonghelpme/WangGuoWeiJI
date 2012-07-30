@@ -83,7 +83,7 @@ class TransferSoldier extends MyNode
             if(child != null)
             {
                 var sid = child.get();
-                trace("transfer id", sid);
+//                trace("transfer id", sid);
                 global.user.doTransfer(sid);//soldier sid
                 initTransfer();
             }

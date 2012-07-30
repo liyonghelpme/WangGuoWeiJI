@@ -21,7 +21,7 @@ class Magic extends MyNode
         sol = s;
         tar = t;
         var ani = getMagicAnimate(sol.id/10*10);
-        trace("animateAni", ani, sol.id);
+//        trace("animateAni", ani, sol.id);
 
         var p = sol.getPos();
         rowY = p[1];

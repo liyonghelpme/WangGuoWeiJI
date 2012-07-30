@@ -21,7 +21,7 @@ class VisitDialog extends MyNode
     {
         if(friendScene.initOver == 1)
         {
-            trace("popVisit");
+//            trace("popVisit");
             global.director.popView();
         }
     }

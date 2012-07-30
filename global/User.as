@@ -205,20 +205,20 @@ class User
             equips.update(k, eq.get(key[i]));
         }
         maxEid += 1;
-        trace("equips", equips, maxEid, eq);
+//        trace("equips", equips, maxEid, eq);
 
     }
 
     function initStarNum(s)
     {
         starNum = s;
-        trace("init starNum", starNum);
+//        trace("init starNum", starNum);
         //resource.update("starNum", s);
     }
     //编号5-9的物品掉落次数有限 不超过3次
     function getFallNum(id)
     {
-        trace("fallNum", fallNum);
+//        trace("fallNum", fallNum);
         return fallNum.get(id, 0);
     }
     function updateFallNum(id)
@@ -258,7 +258,7 @@ class User
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
-        trace("initDataOver", con);
+//        trace("initDataOver", con);
         if(rcode != 0)
         {
             con = json_loads(con);
@@ -310,7 +310,7 @@ class User
         else
         {
             useLocalDB();
-            trace("user local database replaced");
+//            trace("user local database replaced");
             initYet = 1;
             global.msgCenter.sendMsg(INITDATA_OVER, null);
         }
@@ -368,7 +368,7 @@ class User
             fallNum = dict();
             db.put("fallNum", fallNum);
         }
-        trace("initFallNum", fallNum);
+//        trace("initFallNum", fallNum);
     }
 
     function getTaskFinData(id)
@@ -415,7 +415,7 @@ class User
     {
         //var starNum = db.get("starNum");
         starNum[big][small][0] = star;
-        trace("setStarNum", starNum);
+//        trace("setStarNum", starNum);
         db.put("starNum", starNum);
         //global.httpController.addRequest("challengeC/updateChallenge", dict([["uid", uid], ["big", big], ["small", small], ["star", star]]), null, null);
     }
@@ -482,7 +482,7 @@ class User
     }
     function checkInitBuildingYet()
     {
-        trace("checkInitBuilding", len(allBuildings), len(buildings));
+//        trace("checkInitBuilding", len(allBuildings), len(buildings));
         return len(allBuildings) < len(buildings);
     }
     function addBuilding(build)
@@ -542,7 +542,7 @@ class User
     {
         doCost(cost);
         var value;
-        trace("buy Something", kind, id);
+//        trace("buy Something", kind, id);
         if(kind == DRUG)
         {
             value = drugs.get(id, 0);
@@ -789,6 +789,13 @@ class User
     // eid [kind sid]
     function getSoldierEquip(sid)
     {
+        /*
+        士兵sid为-1 表示怪兽和敌方士兵不能使用自己装备
+        */
+        if(sid == -1)
+        {
+            return [];
+        }
         var solEquips = [];
         var key = equips.keys();
         for(var i = 0; i < len(key); i++)
@@ -827,7 +834,7 @@ class User
     //通知士兵去掉装备 可以 优化 map sid -> 士兵
     function unloadThing(tid)
     {
-        trace("unloadThing", tid);
+//        trace("unloadThing", tid);
         var edata = equips.get(tid);
         var sid = edata.get("owner");
         edata["owner"] = -1;
@@ -841,7 +848,7 @@ class User
 
     function useThing(kind, tid, soldier)
     {
-        trace("useThing", kind, tid, soldier.id);
+//        trace("useThing", kind, tid, soldier.id);
         var num;
         if(kind == DRUG)
         {
@@ -867,7 +874,7 @@ class User
 
     function getSoldierData(sid)
     {
-        trace("getSoldierData", sid, soldiers);
+//        trace("getSoldierData", sid, soldiers);
         return soldiers.get(sid);
     }
     function sellSoldier(soldier)
@@ -916,7 +923,7 @@ class User
         ret.update("gold", gold);
         ret.update("crystal", cry);
         doAdd(ret);
-        trace("levelUp reward", ret);
+//        trace("levelUp reward", ret);
         return ret;
     }
     /*
@@ -943,7 +950,7 @@ class User
         ret.update("crystal", cry);
 
         doAdd(ret);
-        trace("levelUp reward", ret);
+//        trace("levelUp reward", ret);
         return ret;
     }
     */
@@ -978,7 +985,7 @@ class User
                 //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
                 if(ret == 0)
                 {
-                    trace("not in business page!");
+//                    trace("not in business page!");
                     var rew = getLevelUpReward();
                     global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", rew]]), null, null);
                 }
@@ -1255,7 +1262,7 @@ class User
         */
         if(inZ == 0)
         {
-            trace("not in zone");
+//            trace("not in zone");
             return 1;//not In zone
         }
         var key = mx*10000+my;
@@ -1277,7 +1284,7 @@ class User
         */
         if(obstacleBlock.get(key, null) != null)
         {
-            trace("colWithRiver", key);
+//            trace("colWithRiver", key);
             return blockBuilding;
         }
         return null;
@@ -1325,7 +1332,7 @@ class User
                     {
                         if(v[k][0] != build && v[k][1] == 1)//不可建造
                         {
-                            trace("colWithBuild", v[k]);
+//                            trace("colWithBuild", v[k]);
                             return v[k];
                         }
                     }
@@ -1333,7 +1340,7 @@ class User
                 //trace("col key", key);
                 if(obstacleBlock.get(key, null) != null)
                 {
-                    trace("colWithRiver", key);
+//                    trace("colWithRiver", key);
                     return blockBuilding;
                 }
                 curX -= 1;
@@ -1364,7 +1371,7 @@ class User
         {
             if(allBuildings[i].colNow == 1)
             {
-                trace("building col", allBuildings[i].bid, allBuildings[i].id);
+//                trace("building col", allBuildings[i].bid, allBuildings[i].id);
                 return 1;
             }
         }

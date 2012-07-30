@@ -22,7 +22,7 @@ class LevupDialog extends MyNode
             var id = thing[i][1].get("id");
             var data = getData(kind, id);
             var picName = replaceStr(KindsPre[kind], ["[ID]", str(id)]);
-            trace("picName", picName, kind, id);
+//            trace("picName", picName, kind, id);
             var pic = dia.addsprite(picName).pos(165+OFFX*i, 186).anchor(50, 50);//.size(109, 108);
             var sca = getSca(pic, [109, 108]);
             pic.scale(sca);
@@ -44,7 +44,7 @@ class LevupDialog extends MyNode
 
         var cp = cmd.get("castlePage");
         cp.fallGoods.getLevelUpFallGoods();
-        trace("fallThing", cp);
+//        trace("fallThing", cp);
 
         var level = global.user.getValue("level");
         if(level == 4 || level == 6 || level == 10)

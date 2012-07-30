@@ -15,7 +15,7 @@ class BuildWorkMenu extends MyNode
         bg = node();
         var banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
         init();
-        trace("name", build.data.get("name"));
+//        trace("name", build.data.get("name"));
         banner.addlabel(build.data.get("name"), null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
         var state = build.state;
         if(state == Working)

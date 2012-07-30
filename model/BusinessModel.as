@@ -78,7 +78,7 @@ function getTotalIncome(level)
     var num = getFarmNum(level);
     var per = getFarmIncome(level);
     var coff = getFarmCoff(level);
-    trace("farmNum", num, per, coff);
+//    trace("farmNum", num, per, coff);
     return num*per*coff/100;
 }
 //掉落物品价值value/1000
@@ -90,7 +90,7 @@ function getFallObjValue(id)
     var gain = getGain(FALL_THING, id);
     if(gain.get("silver") != null)
         gain["silver"] = gain["silver"]*income/1000;
-    trace("FallThing", gain, income);
+//    trace("FallThing", gain, income);
     return gain;
 }
 
@@ -109,6 +109,6 @@ function getLoginReward(day)
         income = income*20/100;
         reward.update("silver", income);
     }
-    trace("login reward", reward);
+//    trace("login reward", reward);
     return reward;
 }

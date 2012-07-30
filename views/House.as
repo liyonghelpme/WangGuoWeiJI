@@ -49,7 +49,7 @@ class StaticBuild extends FuncBuild
     }
     function receiveMsg(msg)
     {
-        trace("receiveMsg", msg);
+//        trace("receiveMsg", msg);
         if(msg[0] == BUYSOL)
         {
             solNum.text(str(global.user.getSolNum()));

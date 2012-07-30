@@ -7,7 +7,7 @@ class SoldierMenu extends MyNode
         bg = node();
         var banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
         init();
-        trace("soldier name", soldier.myName, soldier.data.get("name"));
+//        trace("soldier name", soldier.myName, soldier.data.get("name"));
         //banner.addlabel(soldier.data.get("name"), null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
 
         banner.addsprite("dialogSolLev.png").pos(38, 30).anchor(0, 50);

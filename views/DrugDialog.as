@@ -66,7 +66,7 @@ class DrugDialog extends MyNode
             data.append([FREE_EQUIP, 22]);
             data.append([FREE_EQUIP, 32]);
         }
-        trace("equipData", data);
+//        trace("equipData", data);
 
         //id number 
         //列表的count不会改变 只会改变数量 和排序
@@ -120,7 +120,7 @@ class DrugDialog extends MyNode
     */
     function updateTab()
     {
-        trace("init Drug Dialog View");
+//        trace("init Drug Dialog View");
         var oldPos = flowNode.pos();
         flowNode.removefromparent();
         flowNode = cl.addnode().pos(oldPos);
@@ -146,7 +146,7 @@ class DrugDialog extends MyNode
                 useData = global.user.getEquipData(data[i][1]);
                 id = useData.get("kind");
             }
-            trace("equipData", useData, data[i], ifUse);
+//            trace("equipData", useData, data[i], ifUse);
 
 
             var obj = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).pos(60, 35).anchor(50, 50);
@@ -172,7 +172,7 @@ class DrugDialog extends MyNode
                 num = 1;
             */
 
-            trace("herbNum", num, objData);
+//            trace("herbNum", num, objData);
             var co = [14, 64, 26];
             if(num == 0)
                 co = [99, 42, 47];
@@ -201,7 +201,7 @@ class DrugDialog extends MyNode
             */
                 
             panel.addlabel("desc", null, 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
-            trace("initHerb", num);
+//            trace("initHerb", num);
             var but0 = panel.addsprite("roleNameBut0.png").pos(611, 34).size(126, 37).anchor(50, 50);
             var words = getStr("useIt", null);
             if(num == 0)
@@ -230,7 +230,7 @@ class DrugDialog extends MyNode
     //tid [id sid]
     function unloadIt(n, e, p, x, y, points)
     {
-        trace("unloadIt", p);
+//        trace("unloadIt", p);
         global.httpController.addRequest("soldierC/unloadThing", dict([["uid", global.user.uid], ["eid", p]]), null, null);
 
         global.user.unloadThing(p);
@@ -282,7 +282,7 @@ class DrugDialog extends MyNode
 
     function useIt(n, e, p, x, y, points)
     {
-        trace("useIt", p);
+//        trace("useIt", p);
         //装备检测同种类型重复
         if(kind == EQUIP)
         {

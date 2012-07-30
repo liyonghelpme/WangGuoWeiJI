@@ -55,7 +55,7 @@ class GloryDialog extends MyNode
                 map.update(id, level);
         }
         it = map.items();
-        trace("gloryMap", map);
+//        trace("gloryMap", map);
         for(i = 0; i < len(it); i++)
         {
             id = it[i][0]/10;
@@ -145,7 +145,7 @@ class GloryDialog extends MyNode
     {
         var oldPos = lastPoints;
         lastPoints = n.node2world(x, y);
-        trace("oldPos", lastPoints, oldPos);
+//        trace("oldPos", lastPoints, oldPos);
         var dify = lastPoints[1] - oldPos[1];
         var curPos = flowNode.pos();
         curPos[1] += dify;

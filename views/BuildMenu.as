@@ -13,7 +13,7 @@ class BuildMenu extends MyNode
     {
         scene = s;
         building = b;
-        trace("building data", building);
+//        trace("building data", building);
         //移动建筑
         if(building == null)
         {

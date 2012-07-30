@@ -144,7 +144,7 @@ class MapScene extends MyNode
     //var showYet = 0;
     var needShow = 0;
     function gotoIsland(param){
-        trace("scene goto island", param, contextStack);
+//        trace("scene goto island", param, contextStack);
         islandLayer.removeArrow();
         noOpTime = 0;
 
@@ -189,7 +189,7 @@ class MapScene extends MyNode
     }
     function onDiff(param)
     {
-        trace("scene onDiff", param, contextStack);
+//        trace("scene onDiff", param, contextStack);
         var sl = len(contextStack);
         if(sl==2){
             //flyLayer.selectLevel(param);

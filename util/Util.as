@@ -1,12 +1,12 @@
 
 function replaceStr(s, rep)
 {
-    trace("replaceStr", s, rep);
+//    trace("replaceStr", s, rep);
     for(var i = 0; i < len(rep); i += 2)
     {
         if(type(rep[i+1]) != type(""))
         {
-            trace("error type", rep[i+1]);
+//            trace("error type", rep[i+1]);
             continue;
         }
         s = s.replace(rep[i], rep[i+1])
@@ -23,14 +23,14 @@ function getStr(key, rep)
     {
         s = s[LANGUAGE];
     }
-    trace("getStr", key, rep, s);
+//    trace("getStr", key, rep, s);
     if(type(rep) == type([]))
     {
         for(var i = 0; i < len(rep); i += 2)
         {
             if(type(rep[i+1]) != type(""))
             {
-                trace("error type", rep[i+1]);
+//                trace("error type", rep[i+1]);
                 continue;
             }
             s = s.replace(rep[i], rep[i+1]);
@@ -116,7 +116,7 @@ function checkInChild(bg, pos)
     var sub = bg.subnodes();
     if(sub == null)
         return null;
-    trace("inchild", len(sub));
+//    trace("inchild", len(sub));
     for(var i = 0; i < len(sub); i++)
     {
         var inIt = checkIn(sub[i], pos);
@@ -133,7 +133,7 @@ function checkInChild(bg, pos)
 //doCost不包含level
 function getCost(kind, id)
 {
-    trace("getCost", kind, id);
+//    trace("getCost", kind, id);
     var build = getData(kind, id);
     var cost = dict();
     for(var i = 0; i < len(costKey); i++)
@@ -149,7 +149,7 @@ function getCost(kind, id)
 */
 function getGain(kind, id)
 {
-    trace("getGain", kind, id);
+//    trace("getGain", kind, id);
     var build = getData(kind, id);
     var gain = dict();
     for(var i = 0; i < len(addKey); i++)
@@ -181,7 +181,7 @@ function getBuildGain(id)
 var dataPool = dict();
 function getData(kind, id)
 {
-    trace("getData", kind, id);
+//    trace("getData", kind, id);
     var key = kind*100000+id;
     var ret = dataPool.get(key, null);
     if(ret == null)
@@ -203,7 +203,7 @@ function getData(kind, id)
         }
         dataPool.update(key, ret);
     }
-    trace("getData", kind, id, key, ret);
+//    trace("getData", kind, id, key, ret);
     return ret;
 }
 
@@ -226,7 +226,7 @@ function getZone()
 
 function getWorkTime(t)
 {
-    trace("workTime", t);
+//    trace("workTime", t);
     var sec = t % 60;
     t = t / 60;
     var min = t % 60;
@@ -466,7 +466,7 @@ function getCurEnableDif()
     var i;
     var j;
     var find = 0;
-    trace("curEnable ", star);
+//    trace("curEnable ", star);
     for(i = 0; i < len(star); i++)
     {
         for(j = 0; j < len(star[i]); j++)
@@ -529,7 +529,7 @@ function flyObject(bg, cost, callback)
 function getFallThing(kind)
 {
     var v = fallThings[kind];
-    trace("getFallThing", v);
+//    trace("getFallThing", v);
     return dict([["silver", v[1]], ["crystal", v[2]], ["gold", v[3]]]);
 }
 */
@@ -592,11 +592,11 @@ function getAttAnimate(id)
 
 function colorWords(str)
 {
-    trace("colorWords", str);
+//    trace("colorWords", str);
     var end = str.split("]");
     var begin = end[0].split("[");
     var lenBegin = len(begin[0])/3;
-    trace("color", begin, lenBegin);
+//    trace("color", begin, lenBegin);
     return [begin[0], begin[1], lenBegin];
 }
 
@@ -682,7 +682,7 @@ function getPosSolMap(p, sx, sy)
 //0-12 0-4
 function getSolPos(mx, my, sx, sy, offY)
 {
-    trace("getSolPos", offY);
+//    trace("getSolPos", offY);
     mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
     my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
     return [mx, my];
@@ -726,7 +726,7 @@ function getCurLevelAllTask(level)
         }
     }
     res = fin + notFin;
-    trace("curLevelAllTask", level, res);
+//    trace("curLevelAllTask", level, res);
     return res;
 }
 function getSca(n, box)
@@ -757,7 +757,7 @@ function getSoldierKindCoff(attKind, defKind)
 function getRandomMapReward(big, small)
 {
     var reward = smallMapInfoData.get(big*1000+small);
-    trace("small reward", reward);
+//    trace("small reward", reward);
     return [reward[0][0], reward[1][0]];
 }
 /*
@@ -813,7 +813,7 @@ function changeToSilver(data)
         else
             addSilver += val/SELL_RATE;
     }
-    trace("changeToSilver", data, addSilver);
+//    trace("changeToSilver", data, addSilver);
     data = dict([["silver", addSilver]]);
 
     return data;

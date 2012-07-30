@@ -32,6 +32,6 @@ class Dark extends MyNode
     {
         if(autoPop == 1)
             global.director.popView();
-        trace("dark pop");
+//        trace("dark pop");
     }
 }

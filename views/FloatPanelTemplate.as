@@ -119,7 +119,7 @@ class FloatPanelTemplate extends MyNode
     function showShadow(child)
     {
         var shadow = sprite("dialogRankShadow.png").pos(PANEL_WIDTH/2, PANEL_HEIGHT/2).anchor(50, 50);
-        trace("child", child, shadow);
+//        trace("child", child, shadow);
         child.add(shadow, 100, 1);
         var but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit);
         but0.addlabel(getStr("visit", null), null, 21).pos(47, 19).anchor(50, 50);

@@ -16,7 +16,7 @@ class FlyObject extends MyNode
     const FLY_HEIGHT = 30;
     function FlyObject(obj, c, cb)
     {
-        trace("FlyObject", obj, c, cb);
+//        trace("FlyObject", obj, c, cb);
         callback = cb;
         num = 0;
         cost = c;
@@ -27,7 +27,7 @@ class FlyObject extends MyNode
         var coor2 = obj.node2world(bsize[0]/2, -10);
 
         var item = cost.items();
-        trace("flyObject", cost);
+//        trace("flyObject", cost);
         //var offY = 0;
         var waitTime = 0;
         for(var i = 0; i < len(item); i++)
@@ -76,7 +76,7 @@ class FlyObject extends MyNode
     function pickMe(n)
     {
         n.removefromparent();
-        trace("flyOver", num);
+//        trace("flyOver", num);
         num--;
         if(num == 0)
         {

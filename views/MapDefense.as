@@ -26,6 +26,10 @@ class MapDefense extends MyNode
         bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(data);
         init();
     }
+    function setDefense(val)
+    {
+        health = val;
+    }
     function getKind()
     {
         return kind;

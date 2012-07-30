@@ -58,7 +58,7 @@ class Choice extends MyNode
     }
     function setTabs(sel)
     {
-        trace("sel", sel);
+//        trace("sel", sel);
         for(var i = 0; i < len(tabArray); i++)
         {
             if(tabArray[i][1] == sel)
@@ -78,7 +78,7 @@ class Choice extends MyNode
     //0 1 2 3
     function changeTab(sel)
     {
-        trace("changeTab", sel);
+//        trace("changeTab", sel);
         var curPos = flowTab.pos();
         flowTab.pos(curPos[0], InitOff+Height*-sel);
         getTabs();
@@ -111,7 +111,7 @@ class Choice extends MyNode
         var t;
         var curPos = flowTab.pos();
         var selected = -(curPos[1]-InitOff)/Height;
-        trace("choice", start, end, selected);
+//        trace("choice", start, end, selected);
         setTabs(selected);
         store.setTab(selected);
     }

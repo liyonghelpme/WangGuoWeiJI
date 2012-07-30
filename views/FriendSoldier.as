@@ -17,7 +17,7 @@ class FriendSoldier extends MyNode
 
     function FriendSoldier(d, m)
     {
-        trace("friendSoldier", d, m);
+//        trace("friendSoldier", d, m);
         privateData = d;
         id = privateData.get("id");
         data = getData(SOLDIER, id);

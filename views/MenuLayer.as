@@ -27,7 +27,7 @@ class MenuLayer extends MyNode
     
     function MenuLayer(s) {
         scene = s;
-        trace("pushMenuLayer");
+//        trace("pushMenuLayer");
         menus = new Array(null,null);
         bg = node();
         banner = bg.addsprite("menu_back.png").scale(100,100).anchor(0,100).pos(0,480).rotate(0);
@@ -107,7 +107,7 @@ class MenuLayer extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        trace("menuLayer enterScene");
+//        trace("menuLayer enterScene");
         global.user.addListener(this);
         global.user.addTaskListener(this);
         updateValue(global.user.resource);
@@ -118,7 +118,7 @@ class MenuLayer extends MyNode
     function menuDisappear(stype, ax, ay, az)
     {
         var acc = sqrt(ax*ax+ay*ay+az*az);
-        trace("accelemeter", acc);
+//        trace("accelemeter", acc);
 
     }
     */
@@ -154,7 +154,7 @@ class MenuLayer extends MyNode
     }
     function updateValue(res)
     {
-        trace("update Value");
+//        trace("update Value");
         silverText.text(str(res.get("silver", 0)));
         goldText.text(str(res.get("gold", 0)));
 
@@ -162,7 +162,7 @@ class MenuLayer extends MyNode
         var exp = global.user.getValue("exp");
         //var needExp = global.user.getNeedExp(level);
         var needExp = getLevelUpNeedExp(level);
-        trace("needExp", needExp, exp);
+//        trace("needExp", needExp, exp);
         expfiller.size(exp*108/needExp, 12);
     }
     /*

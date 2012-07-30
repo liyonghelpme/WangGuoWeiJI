@@ -117,7 +117,7 @@ class FriendDialog extends MyNode
     var showRefresh = null;
     function update(diff)
     {
-        trace("getFriendData", global.friendController.initFriend);
+//        trace("getFriendData", global.friendController.initFriend);
         if(global.friendController.initFriend == 0)
         {
             if(showRefresh == null)
@@ -144,7 +144,7 @@ class FriendDialog extends MyNode
         var rg = getRange();
         var curX = 0;
         //行号
-        trace("friend", friend);
+//        trace("friend", friend);
         for(var i = rg[0]; i < rg[1]; i++)
         {
             curX = 0;
@@ -156,7 +156,7 @@ class FriendDialog extends MyNode
                     break;
                 var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, curY);
 
-                trace("friendData", friend[curNum]);
+//                trace("friendData", friend[curNum]);
                 var papayaId = friend[curNum].get("id");
 
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(69, 105);
