@@ -35,7 +35,7 @@ class FallGoods extends MyNode
         global.timer.addTimer(this);
     }
     //100s
-    const FALL_TIME = 10000;
+    const FALL_TIME = 50000;
     const FALL_NUM = 5;
     function update(diff)
     {

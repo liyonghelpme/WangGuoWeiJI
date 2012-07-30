@@ -42,8 +42,14 @@ function getFarmExp(level)
         return 66;
     return 91;
 }
+/*
+服务器自动计算的升级需要经验
+客户端使用和服务器相同的数据
+*/
 // /1000 天数 
 //6 10 20 30 40 50
+
+/*
 var NEED_DAY = [500, 1000, 1500, 2000, 2500, 3000];
 function getLevelUpNeedExp(level)
 {
@@ -57,8 +63,14 @@ function getLevelUpNeedExp(level)
         return exp*(1000+50*(level-10))/1000;
     if(level < 100)
         return exp*(3000+40*(level-50))/1000;
-
     return exp*(5000+30*(level-100))/1000;
+}
+*/
+//最大等级经验
+//等级数据 由programWan 中生成经验序列
+function getLevelUpNeedExp(level)
+{
+    return levelExp[min(len(levelExp)-1, level)];
 }
 
 function getTotalIncome(level)
@@ -76,7 +88,8 @@ function getFallObjValue(id)
     var level = global.user.getValue("level");
     var income = getTotalIncome(level);
     var gain = getGain(FALL_THING, id);
-    gain["silver"] = gain["silver"]*income/1000;
+    if(gain.get("silver") != null)
+        gain["silver"] = gain["silver"]*income/1000;
     trace("FallThing", gain, income);
     return gain;
 }

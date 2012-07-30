@@ -127,6 +127,7 @@ class Store extends MyNode
             addChildZ(new ResourceBanner(buyable, 506, 231), 1);
             return;
         }
+
         //0 building
         //1 equip
         if(kind == BUILD)
@@ -171,6 +172,8 @@ class Store extends MyNode
             setTab(curSel);
             addChildZ(new SucBanner(), 1);
         }
+
+
     }
     /*
     在当前没有选择该页面的时候， 改变页面

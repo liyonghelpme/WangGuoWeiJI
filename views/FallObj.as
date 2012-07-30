@@ -70,7 +70,7 @@ class FallObj extends MyNode
         var level = global.user.getValue("level");
         if(fallData.get("possible") == 0)
         {
-            if(reward.get("crystal") != 0)
+            if(reward.get("crystal") != 0 && reward.get("crystal") != null)
                 reward.update("crystal", 3+level/reward.get("crystal"));//等级/10的水晶数量   
         }
 
