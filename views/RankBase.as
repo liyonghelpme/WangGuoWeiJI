@@ -19,8 +19,10 @@ class RankBase extends MyNode
     //var startOff;
 
     var maxRank = 9999999;
+    var minRank = 0;
     //预测得到的最大的数据范围
     var preMax;
+    var preMin;
 
     function getUserRow()
     {
@@ -28,51 +30,6 @@ class RankBase extends MyNode
         var rowBegin = rankOrder/ITEM_NUM;
         return rowBegin;
     }
-    /*
-
-    function getUserItem()
-    {
-        var rowBegin = getUserRow();
-        var beginItem = rowBegin*ITEM_NUM;
-        preMax = beginItem+FETCH_NUM;
-        initYet = 0;
-        trace("initDataOver", initYet, beginItem, preMax);
-        global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginItem], ["limit", FETCH_NUM]]), getDataOver, null);
-    }
-
-    //offset of Array
-    //得到用户的初始化行 以及
-    function initData()
-    {
-        data = [];
-        getUserItem();
-        //var rankOrder = global.user.rankOrder;
-        //global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", rankOrder], ["limit", 16]]), getDataOver, null);
-        //starOff = rankOrder;
-        //data = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9]];
-    }
-
-    //如何给并列的用户排序？
-    //根据rank范围得到需要的用户？
-    //rankOrder - 8
-    //rankOrder + 8
-    function getDataOver(rid, rcode, con, param)
-    {
-        //uid papayaId score rank
-        if(rcode != 0)
-        {
-            con = json_loads(con);
-            data = con.get("res");
-            initYet = 1;
-            var beginItem = data[0][3];
-            trace("initRank", data, -beginItem*OFFY);
-            if(data[len(data)-1][3] < (preMax-1))
-                maxRank = data[len(data)-1][3];
-            flowNode.pos(0, -beginItem*OFFY);
-            updateTab();
-        }
-    }
-    */
     var lock = null;
 
     function update(diff)
@@ -128,7 +85,77 @@ class RankBase extends MyNode
         bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
 
+    /*
+    首先按照rank 从小到大排好序
+    删除重复的排名
+    补上没有的空洞
 
+    和原始data进行拼接的时候 确保 是连接在一起的 如果有空洞则补上空洞
+    */
+    function adjustData(newData)
+    {
+        var error = 0;
+        var i;
+        var j;
+        trace("inPutData", newData);
+        //检测一遍数据是否已经排好序列没有空洞 一般服务器是按照插入顺序返回数据的所以数据可能没有排好序列
+        for(i = 1; i < len(newData); i++)
+        {
+            if(newData[i][3] != (newData[i-1][3]+1))
+            {
+                error = 1;
+                break;
+            }
+        }
+        trace("error", error);
+        if(error == 1)
+        {
+            //插入排好序列
+            var temp = [];
+            var k;
+            for(i = 0; i < len(newData); i++)
+            {
+                var same = 0;
+                for(j = 0; j < len(temp); j++)
+                {
+                    if(newData[i][3] < temp[j][3])//找到插入点
+                    {
+                        break;
+                    }
+                    else if(newData[i][3] == temp[j][3])//排名重复 则忽略 如果新的是自身 则替换
+                    {
+                        same = 1;
+                        if(newData[i][0] == global.user.uid)
+                        {
+                            temp[j]= newData[i];
+                        }
+                        break;
+                    }
+                }
+                if(same == 0)
+                    temp.insert(j, newData[i]);
+                
+                if(len(temp) > 1)
+                {
+                    var l = len(temp);
+                    //补上 数据内部的空洞
+                    if((temp[l-1][3]-temp[l-2][3]) > 1)
+                    {
+                        var beginRank = temp[l-2][3]+1;
+                        var endRank = temp[l-1][3];
+                        for(k = beginRank; k < endRank; k++)
+                        {
+                            //uid=-1 papayaId score rank name finish
+                            temp.insert(l-1, [-1, 0, 0, k, "", 1]);
+                        }
+                    }
+                }
+            }
+            newData = temp;
+        }
+        trace("adjustData", newData);
+        return newData;
+    }
     /*
     排名是连续的
     根据当前位置计算排名
@@ -142,19 +169,64 @@ class RankBase extends MyNode
     {
         var temp;
         var i;
+        var newData;
+        var beginRank;
+        var endRank;
+        var k;
+
         trace("getRankOver", rid, rcode, con, param);
         if(rcode != 0)
         {
             con = json_loads(con);
-
-            if(param == 1)
+            //同时考虑 最大最小 数据为空
+            if(param == 2)
             {
-                data += con.get("res");
-                trace("param1", data);
+                newData = adjustData(con.get("res"));
+                data = newData;
+
+                trace("param1", data, len(data));
+                if(data[0][3] > preMin)
+                    minRank = data[0][3];
                 if(data[len(data)-1][3] < (preMax-1))
                 {
                     maxRank = data[len(data)-1][3];   
                 }
+                //获取的数据过多丢弃一半
+                if(len(data) > MAX_BUFFER)
+                {
+                    temp = [];
+                    for(i = len(data)/2; i < len(data); i++)
+                        temp.append(data[i]);
+                    data = temp;
+                }
+                
+            }
+            else if(param == 1)
+            {
+                newData = adjustData(con.get("res"));
+                //判断data 和 newData 之间是否存在 间隙
+                if(len(data) > 0 && len(newData) > 0)
+                {
+                    beginRank = data[len(data)-1][3];
+                    endRank = newData[0][3];
+                    if((endRank-beginRank) > 1)
+                    {
+                        for(k=beginRank+1; k < endRank; k++)
+                        {
+                            data.append([-1, 0, 0, k, "", 1]);
+                        }
+                    }
+                }
+
+                data += newData;
+
+                //data += con.get("res");
+                trace("param1", data, len(data));
+                if(data[len(data)-1][3] < (preMax-1))
+                {
+                    maxRank = data[len(data)-1][3];   
+                }
+                //获取的数据过多丢弃一半
                 if(len(data) > MAX_BUFFER)
                 {
                     temp = [];
@@ -165,8 +237,26 @@ class RankBase extends MyNode
             }
             else if(param == 0)
             {
-                data = con.get("res")+data;
-                trace("param0", data);
+                newData = adjustData(con.get("res"));
+
+                if(len(data) > 0 && len(newData) > 0)
+                {
+                    beginRank = newData[len(newData)-1][3];
+                    endRank = data[0][3];
+
+                    if((endRank-beginRank) > 1)
+                    {
+                        for(k=beginRank+1; k < endRank; k++)
+                        {
+                            newData.append([-1, 0, 0, k, "", 1]);
+                        }
+                    }
+                }
+
+                data = newData+data;
+                if(data[0][3] > preMin)//没有小于某个某个数据的数据
+                    minRank = data[0][3];
+                trace("param0", data, len(data));
                 if(len(data) > MAX_BUFFER)
                 {
                     temp = [];
@@ -213,8 +303,8 @@ class RankBase extends MyNode
     function getShowRangeAndBufferRange()
     {
         var curPos = flowNode.pos();
-        //显示范围
-        var lowRow = max(-curPos[1]/OFFY, 0);
+        //显示范围 minRank 如果获取的数据上边界有洞则minRank 
+        var lowRow = max(-curPos[1]/OFFY, minRank);
         var upRow = min((-curPos[1]+HEIGHT+OFFY-1)/OFFY, (maxRank+ITEM_NUM-1)/ITEM_NUM);
         var rowNum = (maxRank+ITEM_NUM-1)/ITEM_NUM;
 
@@ -229,7 +319,7 @@ class RankBase extends MyNode
         }
 
         //缓存范围
-        var beginRank = max(lowRow*ITEM_NUM-FETCH_NUM, 0);
+        var beginRank = max(lowRow*ITEM_NUM-FETCH_NUM, minRank);
         var endRank = min(upRow*ITEM_NUM+FETCH_NUM, maxRank);
 
         if(len(data) > 0)
@@ -237,10 +327,13 @@ class RankBase extends MyNode
             //判定显示范围是否足够 不足进入更新状态
             var beginItem = data[0][3];
             var endItem = data[len(data)-1][3];
-            if(beginItem > beginRank || endItem < endRank)
+            //数据区域是半开半闭区间[a, b)
+            var showBegin = max(lowRow*ITEM_NUM, minRank);
+            var showEnd = min(upRow*ITEM_NUM, maxRank)
+            if(beginItem > showBegin || endItem < (showEnd-1))
                 initYet = 0;
 
-            trace("getShowRangeAndBufferRange", "maxRank", maxRank, "lowRow", lowRow, "upRow", upRow, "rowNum", rowNum, beginRank, endRank, beginItem, endItem, "fetchData",fetchData, "initYet",initYet);
+            trace("getShowRangeAndBufferRange", "maxRank", maxRank, "minRank", minRank, "lowRow", lowRow, "upRow", upRow, "rowNum", rowNum, beginRank, endRank, beginItem, endItem, "fetchData",fetchData, "initYet", initYet);
         }
         trace("data", data);
         var limit;
@@ -255,35 +348,39 @@ class RankBase extends MyNode
             {
                 data = [];
             }
-
+            //[ )
             if(len(data) == 0)//计算整个缓存范围
             {
                 limit = endRank - beginRank;
                 fetchData = 1;
                 initYet = 0;
                 preMax = endRank;
-                global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 0);
+                preMin = beginRank;
+                //考虑最小最大范围
+                global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 2);
+
 
             }
             //获取缓存数据 判定显示数据足够则继续显示 否则停止显示更新
             else
             {
-
                 //如果没有超出范围 则 尽量获取FETCH_NUM 的数据 
-                if(beginItem > beginRank && beginItem > 0)//上部缓存数据不足 且上部没有到达顶部
+                if(beginItem > beginRank && beginItem > minRank)//上部缓存数据不足 且上部没有到达顶部
                 {
-                    beginRank = min(beginRank, max(beginItem-FETCH_NUM, 0));
+                    beginRank = min(beginRank, max(beginItem-FETCH_NUM, minRank));
                     limit = beginItem-beginRank;
                     fetchData = 1;
+                    preMin = beginRank;
                     global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 0);
                 }
-                else if(endRank > endItem && endItem < maxRank)//下部缓存数据不足 且下部没有到达最后
+                else if((endRank-1) > endItem && endItem < maxRank)//下部缓存数据不足 且下部没有到达最后
                 {
                     endRank = min(max(endRank, endItem+FETCH_NUM), maxRank);
                     limit = endRank-endItem;
                     fetchData = 1;
                     preMax = endRank;
-                    global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 1);
+                    // 当前数据中的 >= endItem 
+                    global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", endItem+1], ["limit", limit]]), getRankOver, 1);
                 }
             }
         }
@@ -293,44 +390,6 @@ class RankBase extends MyNode
     /*
     maxRank 所有数据已经获取 同一时刻 只能进行一个数据获取
     */
-    /*
-    function getRange()
-    {
-        var curPos = flowNode.pos();
-        var lowRow = -curPos[1]/OFFY;
-        var upRow = (-curPos[1]+HEIGHT+OFFY-1)/OFFY;
-
-        var rowNum = (maxRank+ITEM_NUM-1)/ITEM_NUM;
-
-        var beginItem = max(0, lowRow-ROW_NUM)*ITEM_NUM;
-        var endItem = (upRow+ROW_NUM)*ITEM_NUM;
-        
-        var beginRank = data[0][3];
-        var endRank = data[len(data)-1][3];
-        var limit;
-        trace("beginRank", beginRank, endRank, beginItem, endItem, maxRank);
-
-        if(beginRank > beginItem)
-        {
-            beginItem = min(beginItem, max(beginRank-FETCH_NUM, 0));
-            limit = beginRank - beginItem;  
-            global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginItem], ["limit", limit]]), getRankOver, 0);
-            initYet = 0;
-        }
-
-        else if(endRank < endItem && endRank < maxRank)
-        {
-            endItem = max(min(endRank+FETCH_NUM, maxRank), endItem);
-            limit = endItem-endRank;
-            preMax = endItem;
-            global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", endRank], ["limit", limit]]), getRankOver, 1);
-            initYet = 0;
-        }
-        //计算data data[0][3] 是开始的rank编号
-        return [max(0, lowRow-ROW_NUM), min(rowNum, upRow+ROW_NUM)];
-    }
-    */
-
     /*
     如果新的数据不能显示 initYet == 0
     则停止更新tab 
@@ -361,7 +420,7 @@ class RankBase extends MyNode
                     break;
                 var diff = curNum-begin;
                 if(diff < 0)
-                    break;
+                    continue;
                 var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY);
                 var sca = getSca(panel, [PANEL_WIDTH, PANEL_HEIGHT]);
                 panel.scale(sca);
@@ -453,9 +512,16 @@ class RankBase extends MyNode
         var curNum = child.get();
         var beginRank = data[0][3];
         var diff = curNum-beginRank;
+        //访问的数据超出范围
         if(diff < 0 || diff >= len(data))
             return;
         var uid = data[diff][0];
+        //数据漏洞补偿的数据 
+        if(uid == -1)
+        {   
+            return;
+        }
+
         var papayaId = data[diff][1];
         var score = data[diff][2];
         var rank = data[diff][3];

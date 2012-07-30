@@ -9,14 +9,24 @@ class FallObj extends MyNode
     /*
     背后的大bg 的anchor 决定了内部奖励物品图片的位置
     进行zord的计算进行比较
+    
+    kind 决定数据
+    显示的图片由view 决定
+
     */
-    function FallObj(m,k, rx, ry){
+    function FallObj(m, k, rx, ry){
+
         map = m;
         kind = k;
+        var fallData = getData(FALL_THING, kind);
+        var view = fallData.get("view");
+        trace("genNewFallObj", m, k, rx, ry, view, "goods"+str(view)+".png");
+        //升级奖励掉落物品
+
         curMap = [rx, ry];
         bg = node().size(100, 100).anchor(50, 80).scale(60);
         init();
-        obj = bg.addsprite("goods"+str(k)+".png").anchor(50,50).size(30,30).pos(50, 50);
+        obj = bg.addsprite("goods"+str(view)+".png").anchor(50,50).size(30,30).pos(50, 50);
         var shadow = sprite("roleShadow.png").anchor(50, 50).pos(15, 30).size(39, 19);
         obj.add(shadow, -1);
 
@@ -52,33 +62,16 @@ class FallObj extends MyNode
     {
         onclicked();
     }
-    /*
-    function animateFall(){
-        //map.add(bg.pos(x,y-400),y);
-        //bg.addaction(bounceout(moveby(1000,0,400)));
-    }
-    */
     
     function onclicked(){
-        //var reward = getFallThing(kind);
-        //var pos = getData(FALL_THING, kind);
-        var reward = getGain(FALL_THING, kind);
-
-        /*
-        //升级奖励的特殊物品 银币奖励 * 等级
-        if(pos["possible"] == 0)
+        var fallData = getData(FALL_THING, kind);
+        //var reward = getGain(FALL_THING, kind);
+        var reward = getFallObjValue(kind);
+        var level = global.user.getValue("level");
+        if(fallData.get("possible") == 0)
         {
-            var level = global.user.getValue("level");
-            reward["silver"] *= level;
-        }
-        //掉落银币不为0 则5级增加5银币 50级 50个银币 
-        else 
-
-        0值消耗 不存在于getCost中
-        */
-        if(reward.get("silver", null) != null)
-        {
-            reward["silver"] += global.user.getValue("level")/5*5;
+            if(reward.get("crystal") != 0)
+                reward.update("crystal", 3+level/reward.get("crystal"));//等级/10的水晶数量   
         }
 
         global.httpController.addRequest("goodC/pickObj", dict([["uid", global.user.uid], ["silver", reward.get("silver")], ["crystal", reward.get("crystal")], ["gold", reward.get("gold")]]), null, null);

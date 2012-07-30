@@ -15,24 +15,8 @@ class LoginDialog extends MyNode
     const WORDS = [[108, 174], [241, 174], [375, 174], [504, 174]];
     const REWARD = [[97, 263], [233, 263], [369, 263]];
     var curCmd;
-    function getLoginReward(day)
-    {
-        var reward = dict();
-        if(day == 0)
-            reward.update("silver", 0);
-        else if(day%2 == 0)
-        {
-            reward.update("crystal", 2+day);
-        }
-        else 
-        {
-            var level = global.user.getValue("level");
-            //silver = int(100*(uselevel+1)*(0.97+0.03*user.loginDays))
-            var base = 100*(level+1);
-            reward.update("silver", base*97/100+base*3*day/100);
-        }
-        return reward;
-    }
+
+
     function LoginDialog(cc)
     {
         curCmd = cc;
@@ -91,8 +75,14 @@ class LoginDialog extends MyNode
     function closeDialog()
     {
         closeCastleDialog();
-        global.user.changeValue("silver", curCmd.get("silver"));
-        global.user.changeValue("crystal", curCmd.get("crystal"));
+        var loginDays = curCmd.get("loginDays");//global.user.getValue("loginDays");
+        var reward = getLoginReward(loginDays);
+        trace("loginReward", loginDays, reward);
+        global.user.doAdd(reward);
+        /*
+        global.user.changeValue("silver", reward.get("silver"));
+        global.user.changeValue("crystal", rew.get("crystal"));
+        */
     }
     function shareGift()
     {

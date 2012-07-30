@@ -34,7 +34,8 @@ class FallGoods extends MyNode
         super.enterScene();
         global.timer.addTimer(this);
     }
-    const FALL_TIME = 100000;
+    //100s
+    const FALL_TIME = 10000;
     const FALL_NUM = 5;
     function update(diff)
     {
@@ -42,16 +43,19 @@ class FallGoods extends MyNode
         lastFallTime += diff;
         if(lastFallTime >= FALL_TIME )
         {
+            lastFallTime = 0;
+            trace("getFallObj", lastFallTime, len(allFalls));
             if(len(allFalls) < FALL_NUM)
             {
                 getNewFall();       
+
             }
             else
             {
                 var f = allFalls.pop(0);//删除旧的没有拾取的物品
                 f.removeSelf();
             }
-            lastFallTime = 0;
+
         }
     }
     //得到当前屏幕中心 生成 若干 掉落物品
@@ -60,7 +64,6 @@ class FallGoods extends MyNode
         //var level = global.user.getValue("level");
         //kind = 6 7 8 9 10
 
-
         var leftUp = buildLayer.bg.world2node(200, 100);
         var rightBottom = buildLayer.bg.world2node(global.director.disSize[0]-200, global.director.disSize[1]-100);
         var width = rightBottom[0]-leftUp[0];
@@ -68,7 +71,8 @@ class FallGoods extends MyNode
 
         trace("levelUpGoods", leftUp, rightBottom, width, height);
 
-        for(var i = 0; i < 10; i++)
+        //掉落10-15 编号的物品
+        for(var i = 10; i < 15; i++)
         {
             var rx = (rand(width)+leftUp[0])/sizeX;
             var ry = (rand(height)+leftUp[1])/sizeY;
@@ -79,7 +83,7 @@ class FallGoods extends MyNode
             var curX = rx*sizeX;
             var curY = ry*sizeY;
 
-            var fo = new FallObj(this, i/2+5, rx, ry);
+            var fo = new FallObj(this, i, rx, ry);
             fo.setPos([rx*sizeX, ry*sizeY]);
             allFalls.append(fo);
             trace("fallObj", rx, ry, ry*sizeY);
@@ -106,6 +110,27 @@ class FallGoods extends MyNode
             }
         }
         kind = ids[kind];
+        
+        var fallData = getData(FALL_THING, kind);
+        //掉落物品有次数 限制 
+        var times = fallData.get("times");
+        trace("fallData", fallData, kind, rv, ids, times);
+
+        if(times > 0)
+        {
+            var fallNum = global.user.getFallNum(kind);
+            trace("fallNum", fallNum);
+            //超过掉落的最大次数 则停止掉落
+            if(fallNum >= times)
+            {
+                lastFallTime = FALL_TIME;
+                return;
+            }
+            else
+            {
+                global.user.updateFallNum(kind);
+            }
+        }
 
         var rx = rand(MapWidth/sizeX);
         var ry = rand(MapHeight/sizeY);
@@ -122,13 +147,17 @@ class FallGoods extends MyNode
         }
         if(i > len(Zone))
         {
+            lastFallTime = FALL_TIME;
             trace("Fall not in zone");
             return;
         }
         var col = global.user.checkFallGoodCol(rx, ry);
         trace("FallGoods", rx, ry, col);
         if(col == 1)
+        {
+            lastFallTime = FALL_TIME;
             return;
+        }
         var fo = new FallObj(this, kind, rx, ry);
         fo.setPos([rx*sizeX, ry*sizeY]);
         allFalls.append(fo);

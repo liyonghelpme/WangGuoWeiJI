@@ -215,14 +215,17 @@ class User
         trace("init starNum", starNum);
         //resource.update("starNum", s);
     }
-    //编号7的物品掉落次数有限
-    function getFallNum()
+    //编号5-9的物品掉落次数有限 不超过3次
+    function getFallNum(id)
     {
-        return fallNum;
+        trace("fallNum", fallNum);
+        return fallNum.get(id, 0);
     }
-    function updateFallNum()
+    function updateFallNum(id)
     {
-        fallNum += 1;
+        var v = fallNum.get(id, 0);
+        v += 1;
+        fallNum.update(id, v);
         db.put("fallNum", fallNum);
     }
     function setRated()
@@ -230,7 +233,8 @@ class User
         rated = 1;
         db.put("rated", rated);
     }
-    var fallNum = 0;
+    //5-->次数 6 次数
+    var fallNum = dict();
 
     //今日已经挑战的进行的挑战记录
     var challengeRecord = [];
@@ -275,13 +279,8 @@ class User
                 rankScore = MAX_SCORE;
             rankOrder = con.get("rank")[1];
 
-            //记录金币掉落次数
-            fallNum = db.get("fallNum");
-            if(fallNum == null)
-            {
-                fallNum = 0;
-                db.put("fallNum", 0);
-            }
+
+
             rated = db.get("rated");
             if(rated == null)
             {
@@ -361,6 +360,15 @@ class User
         oldPos = db.get("oldPos");
         if(oldPos == null)
             oldPos = dict();
+
+        //记录金币掉落次数
+        fallNum = db.get("fallNum");
+        if(fallNum == null || type(fallNum) != type(dict())) 
+        {
+            fallNum = dict();
+            db.put("fallNum", fallNum);
+        }
+        trace("initFallNum", fallNum);
     }
 
     function getTaskFinData(id)
@@ -880,6 +888,40 @@ class User
 
     function getLevelUpReward()
     {
+        //kind = 6 7 8 9 10
+
+        var ret = dict();
+        var sil = 0;
+        var cry = 0;
+        var gold = 0;
+        //掉落10-15 编号的物品
+        for(var i = 10; i < 15; i++)
+        {
+            var kind = i;
+
+            var fallData = getData(FALL_THING, kind);
+            //银币是百分比值
+            var reward = getFallObjValue(kind);
+            var level = global.user.getValue("level");
+            //水晶是等级相关
+            if(reward.get("crystal") != 0)
+                reward.update("crystal", 3+level/reward.get("crystal"));//等级/10的水晶数量   
+
+            sil += reward["silver"];
+            cry += reward["crystal"];
+            gold += reward["gold"];
+
+        }
+        ret.update("silver", sil);
+        ret.update("gold", gold);
+        ret.update("crystal", cry);
+        doAdd(ret);
+        trace("levelUp reward", ret);
+        return ret;
+    }
+    /*
+    function getLevelUpReward()
+    {
         var ret = dict();
         var level = getValue("level");
         var sil = 0;
@@ -904,10 +946,7 @@ class User
         trace("levelUp reward", ret);
         return ret;
     }
-    function getNeedExp(level)
-    {
-        return levelExp[min(level, len(levelExp)-1)];
-    }
+    */
     /*
     改变用户经验 有可能自动升级
     */
@@ -922,7 +961,8 @@ class User
             while(1)
             {
                 //var needExp = levelExp[min(level, len(levelExp)-1)];
-                var needExp = getNeedExp(level);
+                //var needExp = getNeedExp(level);
+                var needExp = getLevelUpNeedExp(level);
                 if(v >= needExp)
                 {
                     v -= needExp;
@@ -938,6 +978,7 @@ class User
                 //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
                 if(ret == 0)
                 {
+                    trace("not in business page!");
                     var rew = getLevelUpReward();
                     global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", rew]]), null, null);
                 }

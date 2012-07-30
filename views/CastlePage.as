@@ -319,17 +319,18 @@ class CastlePage extends MyNode
     var dialogController;
     var solNum;
 
-    function getLoginReward(rid, rcode, con, param)
+    function getLoginRewardOver(rid, rcode, con, param)
     {
         if(rcode != 0)
         {
-            con = json_loads(con);
-            var silver = con.get("silver");
-            var crystal = con.get("crystal");
-            var loginDays = con.get("loginDays");
+            //con = json_loads(con);
+            //var silver = con.get("silver");
+            //var crystal = con.get("crystal");
+            //var loginDays = con.get("loginDays");
+            var loginDays = param;
             global.user.setValue("loginDays", loginDays);
-            if(silver != 0 || crystal != 0)
-                dialogController.addCmd(dict([["cmd", "login"], ["silver", silver], ["crystal", crystal], ["loginDays", loginDays]]));
+            //if(silver != 0 || crystal != 0)
+            dialogController.addCmd(dict([["cmd", "login"], ["loginDays", loginDays]]));
         }
     }
 
@@ -337,8 +338,33 @@ class CastlePage extends MyNode
     {
         buildLayer.initDataOver();
         solNum.text(str(global.user.getSolNum()));
+        /*
+        检测是否今天第一次登录 以及连续登录次数
+        传递奖励数据给后台
+        */
+        var conDays = global.user.getValue("loginDays");
+        var loginTime = global.user.getValue("loginTime");
+        var serverTime = global.user.serverTime;
+        var lastDay = loginTime/(3600*24);
+        var today = serverTime/(3600*24);
+        var diff = today - lastDay;
+        var day = 0;
 
-        global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid]]), getLoginReward, null);
+        if(diff == 1)
+        {
+            day = conDays+1;
+        }
+        else if(diff > 1)
+        {
+            day = 1;
+        }
+        var reward = null;
+        if(day >= 1)
+        {
+            reward = getLoginReward(day);
+            global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+        }
+        trace("loginReward", day, reward);
     }
 
     function CastlePage(s)

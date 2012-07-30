@@ -148,7 +148,8 @@ class MenuLayer extends MyNode
         
         var level = global.user.getValue("level");
         var exp = global.user.getValue("exp");
-        var needExp = global.user.getNeedExp(level);
+        //var needExp = global.user.getNeedExp(level);
+        var needExp = getLevelUpNeedExp(level);
         expfiller.size(exp*108/needExp, 12);
     }
     function updateValue(res)
@@ -159,7 +160,9 @@ class MenuLayer extends MyNode
 
         var level = global.user.getValue("level");
         var exp = global.user.getValue("exp");
-        var needExp = global.user.getNeedExp(level);
+        //var needExp = global.user.getNeedExp(level);
+        var needExp = getLevelUpNeedExp(level);
+        trace("needExp", needExp, exp);
         expfiller.size(exp*108/needExp, 12);
     }
     /*

@@ -120,6 +120,7 @@ import views.CloseAttackEffect;
 import views.ChallengeOver;
 
 import model.SoldierBase;
+import model.BusinessModel;
 
 import views.Arrow;
 import views.Magic;
