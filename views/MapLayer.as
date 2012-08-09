@@ -7,6 +7,7 @@ class MapLayer extends MyNode
     var islandLayer;
     function initLock()
     {
+
         islandLayer.removefromparent();
         if(arrow != null)
         {
@@ -27,9 +28,12 @@ class MapLayer extends MyNode
         var i=0;
         //big small
         var curDif = getCurEnableDif(); 
-        for(;i <= curDif[0] && i <= 5; i++){
+        //big 0 1 2 3 4 5 
+        //0 村落
+        //1-5 其它岛屿
+        var openBig = getOpenBig();
+        for(;i <= curDif[0] && i <= 5 && i <= openBig; i++){
             island[i].color(100,100,100,100);
-            //global.touchManager.addTargeted(new ButtonDelegate(island[i],1,0,bg.parent().get(),i),7-i,1);
             new Button(island[i], onClicked, i);
         }
         for(;i<=5;i++){
@@ -37,7 +41,6 @@ class MapLayer extends MyNode
             var size=island[i].size();
             var lock = sprite("map_island_lock.png").anchor(50,50).pos(LockPos[i][0], LockPos[i][1]).scale(200);
             island[i].add(lock, LOCK_Z);
-            //global.touchManager.addTargeted(new ButtonDelegate(island[i],1,0,bg.parent().get(),i),7-i,1);
             new Button(island[i], onClicked, i);
         }
     }

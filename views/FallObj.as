@@ -6,6 +6,7 @@ class FallObj extends MyNode
     var sx = 1;
     var sy = 1;
     var curMap = null;
+    var buildLayer;
     /*
     背后的大bg 的anchor 决定了内部奖励物品图片的位置
     进行zord的计算进行比较
@@ -14,8 +15,9 @@ class FallObj extends MyNode
     显示的图片由view 决定
 
     */
-    function FallObj(m, k, rx, ry){
-
+    function FallObj(m, k, rx, ry, bl)
+    {
+        buildLayer = bl;
         map = m;
         kind = k;
         var fallData = getData(FALL_THING, kind);
@@ -37,11 +39,11 @@ class FallObj extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        global.user.updateRxRyMap(curMap[0], curMap[1], this);
+        buildLayer.updateRxRyMap(curMap[0], curMap[1], this);
     }
     override function exitScene()
     {
-        global.user.removeRxRyMap(curMap[0], curMap[1], this);
+        buildLayer.removeRxRyMap(curMap[0], curMap[1], this);
         super.exitScene();
     }
     var tarPos;

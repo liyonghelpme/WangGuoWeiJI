@@ -32,8 +32,25 @@ class ChildMenuLayer extends MyNode
     ["equip", ["menu_button_equip.png", onEquip]],
     ["gather", ["menu_button_gather.png", onGather]],
     ["train", ["menu_button_train.png", onTrain]],
+    ["upgrade", ["menu_button_upgrade.png", onUpgrade]],
 
     ]);
+    //矿 升级
+    function onUpgrade()
+    {
+        //建筑物关闭全局菜单
+        global.director.curScene.closeGlobalMenu();
+        scene.funcBuild.sureToUpgrade();
+
+        /*
+        var cost = dict([["colorCrystal", mineProduction.get("colorCrystal")]]);
+
+        var buyable = global.user.checkCost(cost);
+        global.director.pushView(new ResourceWarningDialog(
+                        getStr("upgradeMineTit", null), getStr("upgradeMineCon", null), sureToUpgrade, buyable, cost, "colorCrystal.png"), 1, 0);
+        */
+    }
+    
     function onTrain()
     {
         global.director.curScene.closeGlobalMenu(this);
@@ -164,11 +181,13 @@ class ChildMenuLayer extends MyNode
     }
     function onForge()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new MakeDrugDialog(MAKE_EQUIP), 1, 0);
     }
     function onMakeDrug()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new MakeDrugDialog(), 1, 0);
+        global.director.pushView(new MakeDrugDialog(MAKE_DRUG), 1, 0);
     }
     /*
     关闭建筑的全局 控制view

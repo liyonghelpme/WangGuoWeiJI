@@ -176,6 +176,8 @@ function getBuildGain(id)
 建筑需要的时候，根据自身的id 来构建这样一个对象 节约空间
     
 所有物品的名字都通过字符串函数得到
+
+物品的ID 不能 超过100000 5次
 */
 //KIND*100000+id = key --->data
 var dataPool = dict();
@@ -754,20 +756,7 @@ function getSoldierKindCoff(attKind, defKind)
     var key = attKind*1000+defKind;
     return soldierKindCoff.get(key, 100);
 }
-function getRandomMapReward(big, small)
-{
-    var reward = smallMapInfoData.get(big*1000+small);
-//    trace("small reward", reward);
-    return [reward[0][0], reward[1][0]];
-}
-/*
-function getLevelNeedExp(expId, level)
-{
-    var needExp = soldierLevelExp.get(expId);
-    var ne = needExp[min(len(needExp)-1, level)];
-    return ne;
-}
-*/
+
 
 /*
 可能存在问题 show 和close 出现的时机不一致 就会导致 经营页面的菜单出现问题
@@ -818,6 +807,7 @@ function changeToSilver(data)
 
     return data;
 }
+//秒为单位
 function server2Client(t)
 {
     return t-global.user.serverTime+global.user.clientTime;

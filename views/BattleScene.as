@@ -262,8 +262,10 @@ class BattleScene extends MyNode
         banner = new MapBanner(this);
         addChild(banner);
     }
+    //防御力的key = 10*big+small 
     function getEneDefense()
     {
+        trace("getEneDefense", big, small);
         if(kind == CHALLENGE_MON)
             return mapDefense.get(big*10+small);
         else if(kind == CHALLENGE_FRI)

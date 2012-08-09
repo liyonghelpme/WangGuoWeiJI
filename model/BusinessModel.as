@@ -112,3 +112,62 @@ function getLoginReward(day)
 //    trace("login reward", reward);
     return reward;
 }
+//<= bigNum
+function getOpenBig()
+{
+    var level = global.user.getValue("level");
+    if(level < 15)
+        return 1;
+    if(level < 30)
+        return 2;
+    if(level < 40)
+        return 3;
+    if(level < 50)
+        return 4;
+    return 5;
+}
+
+
+function showCost(bg, cost)
+{
+    var it = cost.items();
+    for(var i = 0; i < len(it); i++)
+    {
+        var temp = bg.addnode();
+        //key.png
+        temp.addsprite(str(it[i][0])+".png").anchor(0, 50).pos(0, -30).size(30, 30);
+        temp.addlabel("-"+str(it[i][1]), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
+    }
+}
+
+
+function getFarmEnableNum()
+{
+    var level = global.user.getValue("level");
+    var num = 5+level;
+    return num;
+}
+function getCurFarmNum()
+{
+    var count = 0;
+    var val = global.user.buildings.values();
+    for(var i = 0; i < len(val); i++)
+    {
+        if(val[i].get("funcs") == FARM_BUILD)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+function checkFarmNum()
+{
+    var now = getCurFarmNum();
+    var cap = getFarmEnableNum();
+    if(cap > now)//capacity > own
+    {
+        return 1;
+    }
+    return 0;
+}

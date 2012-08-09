@@ -114,6 +114,8 @@ class Building extends MyNode
     var aniNode = null;
 
     var changeDirNode;
+    //水晶矿需要等级信息
+    var buildLevel = 0;
 
     function Building(m, d, privateData)
     {
@@ -133,14 +135,26 @@ class Building extends MyNode
             funcBuild = new Decor(this);
         else if(funcs == STATIC_BOARD)
             funcBuild = new StaticBuild(this); 
+        else if(funcs == MINE_KIND)
+        {
+            funcBuild = new Mine(this);
+            //等级大于6级水晶进入工作状态
+            var level = global.user.getValue("level");
+            if(level >= MINE_BEGIN_LEVEL)
+                privateData["state"] = Working;
+            else 
+                privateData["state"] = Free;
+            buildLevel = privateData.get("level");
+        }
         else 
             funcBuild = new Castle(this);
 
-//        trace("init building", data);
         bg = node();
         changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
         var bSize = changeDirNode.prepare().size();
+        //新建筑需要确定初始化位置
         bg.size(bSize).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
         //.pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
@@ -158,10 +172,6 @@ class Building extends MyNode
         }
         setDir(dir);
 
-
-
-
-
         var npos = normalizePos(bg.pos(), sx, sy);
         setPos(npos);
         setColPos();
@@ -178,10 +188,8 @@ class Building extends MyNode
         if(data.get("hasAni") == 1 )
         {
             aniNode = new BuildAnimate(this);
-            //addChild(aniNode);
             changeDirNode.add(aniNode.bg);
         }
-        //global.user.updateMap(this);
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
@@ -305,7 +313,8 @@ class Building extends MyNode
         }
         else
         {
-            var other = global.user.checkCollision(this);
+            //var other = global.user.checkCollision(this);
+            var other = map.checkCollision(this);
 //            trace("col With Other", other);
             if(other != null)
             {
@@ -426,7 +435,8 @@ class Building extends MyNode
         if(state == Moving || checkPlaning())
         {
             dirty = 1;
-            global.user.clearMap(this);
+            //global.user.clearMap(this);
+            map.clearMap(this);
         }
 
 
@@ -539,10 +549,8 @@ class Building extends MyNode
                 //finishBottom();
             }
                 
-            //var npos = normalizePos(bg.pos(), sx, sy);
-            //setPos(npos);
-            //colNow = setColPos();
-            global.user.updateMap(this);
+            //global.user.updateMap(this);
+            map.updateMap(this);
         }
         /*
         如果移动过多则不打开建筑物菜单
@@ -590,7 +598,12 @@ class Building extends MyNode
         //global.director.popView();
     }
 
-
+    function getName()
+    {
+        if(funcs != MINE_KIND)
+            return data.get("name");
+        return data.get("name")+"等级"+str(buildLevel);
+    }
     /*
     返回当前工作状态的剩余时间 和建筑物类型相关
     */
@@ -637,7 +650,6 @@ class Building extends MyNode
     }
     function sureToSell()
     {
-
         global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid]]), null, null);
         var cost = getCost(BUILD, id);
         cost = changeToSilver(cost);
@@ -649,9 +661,11 @@ class Building extends MyNode
         global.user.changeValue("people", -data.get("people"));//减去人口
         global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
 
-        map.removeChild(this); 
-        global.user.sellBuild(this);
+        //map.removeChild(this);
+        map.sellBuild(this);
+        //global.user.sellBuild(this);
     }
+
     function sellOver()
     {
 //        trace("sellOver");

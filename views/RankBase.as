@@ -579,10 +579,11 @@ class RankBase extends MyNode
     }
     function doVisit(n, e, p, x, y, points)
     {
+        var userData = data[p];
         global.director.popView();
         var papayaId = data[p][1];
         //排行榜不是好友 不能进行下一个
-        var friend = new FriendScene(papayaId, -1); 
+        var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, dict([["uid", userData[0]], ["id", userData[1]], ["name", userData[4]]])); 
         global.director.pushScene(friend);
         global.director.pushView(new VisitDialog(friend), 1, 0);
     }

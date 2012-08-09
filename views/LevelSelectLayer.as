@@ -257,9 +257,11 @@ class LevelSelectLayer extends MyNode
     {
         goBack();//close Choose Page
 //        trace("map index", index, small);
+
+        var mon = getRoundMonster(index-1, small); 
         global.director.pushScene(
         new BattleScene(index-1, small, 
-            [dict([["id", 100]])], CHALLENGE_MON, null, null
+            mon, CHALLENGE_MON, null, null
 
         ));
     }

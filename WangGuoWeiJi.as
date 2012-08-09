@@ -1,4 +1,4 @@
-import global.INCLUDE;
+import Global.INCLUDE;
 
 //global.director.pushView(new Store(null), 0, 0);
 //global.director.pushView(new FallGoods(null), 0, 0);

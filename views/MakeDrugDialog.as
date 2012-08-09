@@ -1,15 +1,46 @@
 class MakeDrug extends MyNode
 {
     var flowNode;
-    var prescriptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+    var prescriptions;// = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
     const OFFY = 72;
     const ROW_NUM = 5;
     const HEIGHT = OFFY*ROW_NUM;
     const ITEM_NUM = 1;
-    function MakeDrug()
+    var MakeWhat;
+    function initData()
     {
+        prescriptions = [];
+        var i;
+        var key = prescriptionData.keys(); 
+        var pData;
+        if(MakeWhat == MAKE_DRUG)
+        {
+            for(i = 0; i < len(key); i++)
+            {
+                pData = getData(PRESCRIPTION, key[i])
+
+                if(pData.get("kind") == DRUG)
+                {
+                    prescriptions.append(key[i]);
+                }
+            }
+        }
+        else if(MakeWhat == MAKE_EQUIP)
+        {
+            for(i = 0; i < len(key); i++)
+            {
+                pData = getData(PRESCRIPTION, key[i]);
+                if(pData.get("kind") == EQUIP)
+                    prescriptions.append(key[i]);
+            }
+        }
+    }
+    function MakeDrug(k)
+    {
+        MakeWhat = k;
         bg = node().pos(46, 90).size(703, 357).clipping(1);
         init();
+        initData();
         flowNode = bg.addnode();
 
         updateTab();
@@ -122,34 +153,99 @@ class MakeDrug extends MyNode
             else if(makable == 0)
             {
                 but1 = panel.addsprite("roleNameBut0.png").pos(618, 33).anchor(50, 50).size(129, 37);
-                but1.addlabel(getStr("herbNot", null), null, 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
+                if(MakeWhat == MAKE_DRUG)
+                    but1.addlabel(getStr("herbNot", null), null, 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
+                else if(MakeWhat == MAKE_EQUIP) 
+                    but1.addlabel(getStr("oreNot", null), null, 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
             }
             else
             {
                 but1 = panel.addsprite("roleNameBut0.png").pos(618, 33).anchor(50, 50).size(129, 37).setevent(EVENT_TOUCH, makeDrug, prescriptions[i]);
-                but1.addlabel(getStr("makeDrug", null), null, 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
-                
+                if(MakeWhat == MAKE_DRUG)
+                    but1.addlabel(getStr("makeDrug", null), null, 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
+                else if(MakeWhat == MAKE_EQUIP) 
+                    but1.addlabel(getStr("makeEquip", null), null, 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
             }
 //            trace("finish Init MakeDrug");
 
         }
     }
+    /*
+    配方ID---> 对应的配方数据
+    */
     function makeDrug(n, e, p, x, y, points)
     {
+
+        var pre = getData(PRESCRIPTION, p);
+        
+        var needs = pre.get("needs");
+        var kind = pre.get("kind");
+        var tid = pre.get("tid");
+        //消耗药材和矿石
+        for(var i = 0; i < len(needs); i++)
+        {
+            global.user.changeHerb(needs[i][0], -needs[i][1]); 
+        }
+        if(kind == DRUG)
+        {
+            global.httpController.addRequest("goodsC/makeDrug", dict([["uid", global.user.uid], ["pid", p]]), null, null); 
+            global.user.makeDrug(tid);
+        }
+        else if(kind == EQUIP)
+        {
+            var eid = global.user.getNewEid();
+            global.httpController.addRequest("goodsC/makeEquip", dict([["uid", global.user.uid], ["eid", eid], ["pid", p]]), null, null); 
+            global.user.makeEquip(eid, tid);
+        }
+
+        updateTab();
     }
 }
 class Herb extends MyNode
 {
-    var herbs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+    var herbs;// = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
     var flowNode;
     const OFFY = 72;
     const ROW_NUM = 5;
     const HEIGHT = OFFY*ROW_NUM;
     const ITEM_NUM = 1;
-    function Herb()
+    var MakeWhat;
+
+    function initData()
     {
+        herbs = [];
+        var i;
+        var key = herbData.keys();
+        var hData;
+        if(MakeWhat == MAKE_DRUG)
+        {
+            for(i = 0; i < len(key); i++)
+            {
+                hData = getData(HERB, key[i]);
+                if(hData.get("kind") == MEDICINE)
+                {
+                    herbs.append(key[i]);
+                }
+            }
+        }
+        else if(MakeWhat == MAKE_EQUIP)
+        {
+            for(i = 0; i < len(key); i++)
+            {
+                hData = getData(HERB, key[i]);
+                if(hData.get("kind") == ORE)
+                {
+                    herbs.append(key[i]);
+                }
+            }
+        }
+    }
+    function Herb(k)
+    {
+        MakeWhat = k;
         bg = node().pos(46, 90).size(703, 357).clipping(1);
         init();
+        initData();
         flowNode = bg.addnode();
         updateTab();
         bg.setevent(EVENT_TOUCH, touchBegan);
@@ -223,8 +319,10 @@ class MakeDrugDialog extends MyNode
     //var flowNode;
     var makeDrugView;
     var herbView;
-    function MakeDrugDialog()
+    var MakeWhat;
+    function MakeDrugDialog(k)
     {
+        MakeWhat = k;
         bg = sprite("dialogFriend.png");
         init();
         bg.addsprite("dialogMakeDrug.png").pos(150, 40).anchor(50, 50);
@@ -234,12 +332,13 @@ class MakeDrugDialog extends MyNode
         but0.addlabel(getStr("makeDrugPage", null), null, 22).anchor(50, 50).pos(63, 20);
 
         but0 = bg.addsprite("roleNameBut0.png").pos(560, 23).size(126, 40).setevent(EVENT_TOUCH, switchView, 1);
-        but0.addlabel(getStr("drugs", null), null, 22).anchor(50, 50).pos(63, 20);
+        if(MakeWhat == MAKE_DRUG)
+            but0.addlabel(getStr("drugs", null), null, 22).anchor(50, 50).pos(63, 20);
+        else if(MakeWhat == MAKE_EQUIP)
+            but0.addlabel(getStr("allOres", null), null, 22).anchor(50, 50).pos(63, 20);
         //cl = bg.addnode().pos(46, 90).size(703, 357).clipping(1);
         //flowNode = cl.addnode();
         
-        //makeDrugView = new MakeDrug();
-        //herbView = new Herb(); 
         makeDrugView = null;
         herbView = null;
 
@@ -261,13 +360,13 @@ class MakeDrugDialog extends MyNode
             if(p == 0)
             {
                 if(makeDrugView == null)
-                    makeDrugView = new MakeDrug();
+                    makeDrugView = new MakeDrug(MakeWhat);
                 addChild(makeDrugView);
             }
             else if(p == 1)
             {
                 if(herbView == null)
-                    herbView = new Herb();
+                    herbView = new Herb(MakeWhat);
                 addChild(herbView);
             }
         }

@@ -23,6 +23,8 @@ class FlyObject extends MyNode
         bg = node();
 
         var TarPos = dict([["silver", [297, 460]], ["crystal", [253, 460]], ["gold", [550, 460]], ["exp", [196, 427]]]);
+        var defaultPos = [297, 460];
+
         var bsize = obj.size();
         var coor2 = obj.node2world(bsize[0]/2, -10);
 
@@ -54,7 +56,7 @@ class FlyObject extends MyNode
             for(var j = 0; j < cut; j++)
             {
                 var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT).anchor(50, 100);
-                var tar = TarPos.get(k);
+                var tar = TarPos.get(k, defaultPos);
                 var dis = sqrt(distance(coor2, tar));
                 //var rx = rand(40);
                 //var ry = rand(40); 
@@ -82,7 +84,8 @@ class FlyObject extends MyNode
         {
             removeSelf();
             global.user.doAdd(cost);
-            callback();       
+            if(callback != null)
+                callback();       
         }
     }
 }

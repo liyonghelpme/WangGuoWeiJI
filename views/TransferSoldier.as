@@ -73,6 +73,9 @@ class TransferSoldier extends MyNode
     最大位置 0
 
     当整体高度小于显示高度的时候 向0 对齐
+
+    士兵的职业转职 
+    士兵必须是活得才可以转职！
     */
     function touchEnded(n, e, p, x, y, points)
     {
@@ -83,8 +86,12 @@ class TransferSoldier extends MyNode
             if(child != null)
             {
                 var sid = child.get();
-//                trace("transfer id", sid);
-                global.user.doTransfer(sid);//soldier sid
+                //global.user.doTransfer(sid);//soldier sid
+                var sdata = global.user.getSoldierData(sid);
+                if(sdata.get("dead") == 1)
+                    global.director.pushView(new MyWarningDialog(getStr("solDead", null), getStr("solDeadCon", null), null), 1, 0);
+                else
+                    global.msgCenter.sendMsg(SOL_TRANSFER, sid);
                 initTransfer();
             }
         }

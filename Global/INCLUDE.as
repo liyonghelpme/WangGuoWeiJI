@@ -1,7 +1,7 @@
 //注意这些文件是倒序编译的，所以其排序和依赖关系相反
 
 //构造初始化的建筑物分布时，需要初始化一个河流相关的冲突图
-import global.User;
+
 
 import views.FriendScene;
 import views.FriendMenu;
@@ -32,8 +32,12 @@ import views.DrugDialog;
 
 //经营页面
 import views.CastlePage;
+import views.BuildLayer;
 import views.BuildLand;
 import views.SoldierMax;
+import views.CrystalIsland;
+import views.MineMenu;
+import views.MineFunc;
 
 import views.FallGoods;
 import views.FallObj;
@@ -68,6 +72,7 @@ import views.SoldierMenu;
 import views.DetailDialog;
 import views.ChildMenuLayer;
 import views.MailDialog;
+import views.RequestView;
 import views.GiftView;
 
 import views.BreakDialog;
@@ -92,6 +97,7 @@ import views.FlowMenu;
 import views.FlowIsland;
 
 import views.MyWarningDialog;
+import views.ResourceWarningDialog;
 
 
 
@@ -121,6 +127,7 @@ import views.ChallengeOver;
 
 import model.SoldierBase;
 import model.BusinessModel;
+import model.RoundModel;
 
 import views.Arrow;
 import views.Magic;
@@ -131,29 +138,35 @@ import views.MapDefense;
 
 import views.Loading;
 import views.LevupDialog;
+import model.MapGridController;
 
 
 //菜单使用的按钮对象
 import views.Button;
-import global.MessageCenter;
+
+import Global.User;
+import Global.MessageCenter;
 
 
-import global.SensorController;
-import global.Director;
-import global.Controller;
+import Global.SensorController;
+import Global.Director;
+import Global.Controller;
 import views.QuitBanner;
-import global.Timer;
+import Global.Timer;
 import views.Dark;
 import views.StandardTouchHandler;
-import global.MyAnimate;
-import global.MyNode;
-import global.TouchManager;
+import Global.MyAnimate;
+import Global.MyNode;
+import Global.TouchManager;
+import model.TaskModel;
+import model.MailController;
 
 import model.FriendController;
 import model.HttpController;
 import util.Util;
 
-import global.Global;
+import Global.GlobalController;
+
 //import data.String;
 import data.constant;
 import data.Static;
@@ -161,11 +174,12 @@ import data.Static;
 
 import data.String;
 
+
+global.timer = new Timer(1000);
 global.httpController = new HttpController();
 global.msgCenter = new MessageCenter();
 global.director = new Director();
 global.touchManager = new TouchManager();
-global.timer = new Timer(1000);
 global.controller = new Controller();
 global.myAction = new MyAction();
 
@@ -173,6 +187,8 @@ global.myAction = new MyAction();
 global.user = new User();
 global.sensorController = new SensorController();
 global.friendController = new FriendController();
+global.taskModel = new TaskModel();
+global.mailController = new MailController();
 
 
 

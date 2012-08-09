@@ -9,9 +9,11 @@ class FriendMenu extends MyNode
         var banner = bg.addsprite("pageFriendBanner.png").pos(0, 480).anchor(0, 100);
         bg.addsprite("pageFriendReturn.png").pos(0, 480).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
         
-        var friends = global.friendController.showFriend;
+        //var friends = global.friendController.showFriend;
+        var friends = global.friendController.getFriends(scene.kind);
+
         //通过排行榜访问 其它用户 不能点击下一个
-        if(scene.curNum >= (len(friends)-1) || scene.curNum == -1)
+        if(scene.curNum == -1 || scene.curNum >= (len(friends)-1) )
         {
             bg.addsprite("pageFriendNext.png", GRAY).pos(617, -1);
         }

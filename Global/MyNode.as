@@ -92,3 +92,12 @@ class MyNode
         bg.addaction(act.cus);
     }
 }
+
+class EmptyNode extends MyNode
+{
+    function EmptyNode()
+    {
+        bg = node();
+        init();
+    }
+}

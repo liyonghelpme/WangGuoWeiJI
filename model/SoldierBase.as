@@ -83,7 +83,7 @@ function getSolPureData(id, level)
     var magicDefense = begin[1][1]+(level-begin[0])*addMagicDefense/levelDiff; 
 
     var healthBoundary = begin[1][0]+(level-begin[0])*addHealth/levelDiff;
-    return [physicAttack, physicDefense, magicAttack, magicDefense, healthBoundary];
+    return dict([["physicAttack", physicAttack], ["physicDefense", physicDefense], ["magicAttack", magicAttack], ["magicDefense", magicDefense], ["healthBoundary", healthBoundary]]);
 }
 //士兵属性 和 士兵 数据
 
@@ -94,58 +94,23 @@ function calculateStage(sol)
 {
     var pureData = getSolPureData(sol.id, sol.level);
 
-    /*
-    //var stage = sol.data.get("stage");
-    var stage = getStage(sol.data);
-    var begin = 0;
-    var end = 1;
-    var i;
-    for(i = end; i < len(stage); i++)
-    {
-        if(sol.level < stage[i][0])
-            break;
-    }
-    if(i == len(stage))
-    {
-        i--;
-    }
-    begin = i-1;
-    end = i;
-    begin = stage[begin];
-    end = stage[end];
-    // /(end[0]-begin[0]) level add
-    var levelDiff = end[0]-begin[0];
 
-    var addHealth = end[1][0]-begin[1][0];
-    var addMagicDefense = end[1][1]-begin[1][1];
-    var addPhysicDefense = end[1][2]-begin[1][2];
-    var addPhysicAttack = end[1][3]-begin[1][3];
-    var addMagicAttack = end[1][4]-begin[1][4];
+    sol.physicAttack = pureData.get("physicAttack");
+    sol.physicDefense = pureData.get("physicDefense");
+    sol.purePhyDefense = pureData.get("physicDefense");
 
-    sol.physicAttack = begin[1][3]+(sol.level-begin[0])*addPhysicAttack/levelDiff; 
-    sol.physicDefense = begin[1][2]+(sol.level-begin[0])*addPhysicDefense/levelDiff; 
-    sol.purePhyDefense = sol.physicDefense;
-
-    sol.magicAttack = begin[1][4]+(sol.level-begin[0])*addMagicAttack/levelDiff; 
-    sol.magicDefense = begin[1][1]+(sol.level-begin[0])*addMagicDefense/levelDiff; 
-    sol.pureMagDefense = sol.magicDefense;
-
-    sol.healthBoundary = begin[1][0]+(sol.level-begin[0])*addHealth/levelDiff;
-    */
-
-    sol.physicAttack = pureData[0];
-    sol.physicDefense = pureData[1];
-    sol.purePhyDefense = pureData[1];
-
-    sol.magicAttack = pureData[2];
-    sol.magicDefense = pureData[3];
-    sol.pureMagDefense = pureData[3];
-    sol.healthBoundary = pureData[4];
+    sol.magicAttack = pureData.get("magicAttack");
+    sol.magicDefense = pureData.get("magicDefense");
+    sol.pureMagDefense = pureData.get("magicDefense");
+    sol.healthBoundary = pureData.get("healthBoundary");
 }
 /*
 裸露属性 和 装备 药品属性
 首先初始化私有属性
 再初始化公共属性
+
+装备没有恢复速度属性
+士兵没有生命值 攻击力等属性
 */
 function setEquipAttribute(sol)
 {
@@ -160,7 +125,7 @@ function setEquipAttribute(sol)
 
         sol.physicDefense += e.get("physicDefense");
         sol.magicDefense += e.get("magicDefense");
-        sol.recoverSpeed += e.get("recoverSpeed");
+        //sol.recoverSpeed += e.get("recoverSpeed");
         sol.healthBoundary += e.get("healthBoundary"); 
     }
 }
@@ -184,15 +149,24 @@ function initAttackAndDefense(sol)
         sol.magicDefense += sol.addDefense;
     }
 
+    if(sol.addHealthBoundaryTime > 0)
+    {
+        sol.healthBoundary += sol.addHealthBoundary;
+    }
+
+
     setEquipAttribute(sol);
     sol.health = min(sol.health, sol.healthBoundary);
 
-    var phurt = getPhysicHurt(sol.data);
-    var mhurt = getMagicHurt(sol.data);
+    //var phurt = getPhysicHurt(sol.data);
+    //var mhurt = getMagicHurt(sol.data);
 //    trace("Basic Attribute", sol.physicAttack, sol.magicAttack, sol.physicDefense, sol.magicDefense, sol.healthBoundary, phurt, mhurt);
 }
 /*
     attack * cofficient * pure/total / 100
+    攻击城墙的物理伤害系数是100 魔法伤害系数是100
+
+    攻击力伤害至少为1
 */
 function calHurt(src, tar)
 {
@@ -203,11 +177,21 @@ function calHurt(src, tar)
     //phyHurt = max(phyHurt, 1);
     //magHurt = max(magHurt, 1);
 
-    var hurt = phyHurt+magHurt;
-    trace("hurt", phyHurt, magHurt, pcoff, mcoff);
+    var hurt = max(phyHurt+magHurt, 1);
+    //trace("hurt", phyHurt, magHurt, pcoff, mcoff);
     return hurt;
 }
 
+function getTransferLevel(sol)
+{
+    var id = sol.id;
+    var proLevel = id%10;
+    var nextLevel = proLevel+1;
+    var solOrMon = sol.data.get("solOrMon"); 
+    if(nextLevel < len(soldierTransfer) && solOrMon == 0)
+        return soldierTransfer[nextLevel];
+    return -1;
+}
 function checkTransfer(level, solData)
 {
     var id = solData.get("id");
@@ -235,8 +219,8 @@ function getBasicAbiliy(id, level)
     var pcoff = getPhysicHurt(data);
     var mcoff = getMagicHurt(data);
     
-    var phyBasic = pureData[4]*pureData[0]*100/pcoff;
-    var magBasic = pureData[4]*pureData[2]*100/mcoff;
+    var phyBasic = pureData["physicAttack"]*pureData["healthBoundary"]*100/pcoff;
+    var magBasic = pureData["magicAttack"]*pureData["healthBoundary"]*100/mcoff;
     var ab = max(phyBasic, magBasic)/(33*13);
 //    trace("basicAbility", ab);
     return ab; //士兵能力

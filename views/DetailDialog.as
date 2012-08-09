@@ -76,7 +76,7 @@ class DetailDialog extends MyNode
         contentNode.addlabel(getStr("levVal", ["[LEV1]", str(sol.level+1), "[EXP]", str(ne-sol.exp), "[LEV2]", str(sol.level+1)]), null, 20).pos(0, offY).color(0, 0, 0);
         offY += 30;
 
-        var tranLevel = sol.getTransferLevel();
+        var tranLevel = getTransferLevel(sol);
         if(tranLevel > 0)
             contentNode.addlabel(getStr("nextTrans", ["[LEV]", str(tranLevel)]), null, 20).pos(0, offY).color(0, 0, 0);
         else

@@ -28,11 +28,16 @@ class SoldierStore extends MyNode
 
     flowNode 移动的距离 条目数量需要变动
     */
+    function initSoldierList()
+    {
+    }
     function SoldierStore(s)
     {
         scene = s;
         bg = sprite("soldierBack.png");
         init();
+        initSoldierList();
+
         cl = bg.addnode().pos(102, 86).size(591, 354).clipping(1);
 
         flowNode = cl.addnode();
@@ -183,13 +188,6 @@ class SoldierStore extends MyNode
                 else
                     sol = panel.addsprite("soldier"+str(id)+".png").pos(83, 110).anchor(50, 50);
 
-                /*
-                sol.prepare();
-                var bSize = sol.size();
-                var bl = min(120*100/bSize[0], 90*100/bSize[1]);
-                bl = min(120, max(40, bl));
-                sol.scale(bl);
-                */
 
                 var sSca = getSca(sol, [120, 100]);
                 sol.scale(sSca);
@@ -284,20 +282,6 @@ class SoldierStore extends MyNode
                 /*
                 资源和等级 满足条件
                 soldierId  canBuy
-                */
-                /*
-                if(buyable.get("ok") == 0)
-                {
-                    var resB = new ResourceBanner(buyable, 412, 255);
-                    addChildZ(resB, 1);
-                }
-                else if(idCan[1] == 1)
-                {
-                    scene.buySoldier(idCan[0]);
-                    var sucB = new SucBanner();
-                    sucB.setPos([412, 255]);
-                    addChildZ(sucB, 1);
-                }
                 */
             }
         }

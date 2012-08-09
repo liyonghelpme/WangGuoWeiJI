@@ -55,6 +55,7 @@ const FORGE_SHOP = 6;
 const BUSI_SOL = 7;
 //木牌 不可移动 不再allBuildings 中 
 const STATIC_BOARD = 8;
+const MINE_KIND = 9;
 
 
 const GRAY = m_color(
@@ -170,6 +171,7 @@ var buildFunc = dict([
 [GOD_BUILD, [["photo"], ["relive", "transfer"]]],
 [DRUG_BUILD, [["photo"], ["makeDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge"]]],
+[MINE_KIND, [["photo"], ["upgrade"]]],
 ]);
 
 
@@ -232,7 +234,7 @@ const MAIN_ZONE = 3;
 var ZoneCenter = [
 [2526, 626],
 [1533, 726],
-//[423, 732],
+[1533, 726],
 [1533, 726],
 [1533, 726],
 ];
@@ -282,7 +284,9 @@ var attEffect = dict([
 ]);
 
 var addKey = ["people", "cityDefense", "attack", "defense", "health", "gainsilver", "gaincrystal", "gaingold", "exp", 
-    "healthBoundary", "physicAttack", "physicDefense", "magicAttack", "magicDefense", "recoverSpeed",];
+    "healthBoundary", "physicAttack", "physicDefense", "magicAttack", "magicDefense", "recoverSpeed",
+    "percentHealth", "percentHealthBoundary", "percentAttack", "percentDefense"];
+
 var costKey = ["silver", "gold", "crystal", "papaya", "free"];
 
 //必须name 引用string中内容
@@ -437,12 +441,17 @@ const SHOW_DIALOG = 2;
 const BUYSOL = 3;//购买卖出士兵 修改士兵数量
 const INITDATA_OVER = 4;//初始化用户数据结束
 const LEVEL_UP = 5;
+const SOL_TRANSFER = 6;//sid
+const SOL_UNLOADTHING = 7; //sid
 
 
 const MAX_BUSI_SOLNUM = 50;
 const SELL_RATE = 10;
 
-const RECOVER_TIME = 15000;
+/*
+士兵生命值回复 可以缓冲 1分钟再统一发送状态请求
+*/
+const RECOVER_TIME = 5000;
 
 const CHALLENGE_MON = 0;
 const CHALLENGE_FRI = 1;
@@ -453,3 +462,34 @@ const MAX_SCORE = 9999999;
 
 //0-4 闯关页面
 const MAX_CHALLENGE = 4;
+
+const MAKE_DRUG = 0;
+const MAKE_EQUIP = 1;
+
+const MEDICINE = 0;
+const ORE = 1;
+
+const ONCE_TASK = 0;
+const CYCLE_TASK = 1;
+const DAILY_TASK = 2;
+
+const NEIBOR_REQ = 0;
+
+const VISIT_PAPAYA = 0;
+const VISIT_NEIBOR = 1;
+const VISIT_RECOMMAND = 2;
+const VISIT_RANK = 3;
+
+const UNVISIT_FRIEND = -1;
+const EMPTY_SEAT = -2;
+const ADD_NEIBOR_MAX = -3;
+
+const FRIEND_CRY = 15;
+const PAPAYA_CRY = 10;
+const NEIBOR_CRY = 3;//3* neibornum
+
+const ADD_MAX_CAE = 10;
+const MINE_BUILD = 300;
+const MINE_BID = -1;
+
+const MINE_BEGIN_LEVEL = 6;

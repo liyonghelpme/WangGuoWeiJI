@@ -125,7 +125,8 @@ class CastleScene extends MyNode
     {
         ml.beginBuild();
         Planing = 1;
-        global.user.buildKeepPos();
+        mc.buildLayer.buildKeepPos();
+
         planView = new BuildMenu(this, null);
         global.director.pushView(planView, 0, 0);
     }
@@ -141,6 +142,16 @@ class CastleScene extends MyNode
         global.user.finishPlan();
         closePlan();
     }
+    /*
+    function doTransfer(sid)
+    {
+        mc.buildLayer.doTransfer(sid); 
+    }
+    function unloadThing(sid)
+    {
+        mc.buildLayer.unloadThing(sid);
+    }
+    */
     function disableMenu()
     {
         if(realDisappear == 0)
@@ -159,7 +170,7 @@ class CastleScene extends MyNode
     }
     function cancelPlan()
     {
-        global.user.restoreBuildPos();
+        mc.buildLayer.restoreBuildPos();
         closePlan();
     }
     function closePlan()
@@ -213,15 +224,26 @@ class CastleScene extends MyNode
         var id = curBuild.id; //building.get("id");
 
         var cost = getCost(BUILD, id);
+        showCost(curBuild.bg, cost);
+
         global.user.doCost(cost);
         //var gain = getBuildGain(id);
         var gain = getGain(BUILD, id);
-        global.user.doAdd(gain);
-//        trace("finish Build", cost, gain);
+        
+        //增加经验 防御力 人口显示奖励 消耗银币水晶金币 显示FlyObject 自动增加数值
+        if(len(gain) > 0)
+        {
+            global.director.curScene.addChild(new FlyObject(curBuild.bg, gain, null));
+        }
+       
+        var buildId = curBuild.id;
         mc.finishBuild();
-        //curBuild.setPos(curBuild.getPos());
         closeBuild();
+
+        //在关闭 选择菜单之后再显示任务奖励菜单
+        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, buildId]);
     }
+
     function cancelBuild()
     {
         mc.cancelBuild();
@@ -232,18 +254,13 @@ class CastleScene extends MyNode
     */
     function closeBuild()
     {
-        ml.finishBuild();
-        //ml = new MenuLayer(this);
-        //addChild(ml);
-        global.director.popView();
-        //building = null;
         curBuild = null;
+        ml.finishBuild();
+        global.director.popView();
     }
     function onSwitch()
     {
-//        trace("switch");
         curBuild.onSwitch();
-        //mc.onSwitch(); 
     }
     /*
     计时隐藏： 当前没有显示 震动显示 或者 关闭菜单显示
@@ -257,10 +274,8 @@ class CastleScene extends MyNode
     function clearHideTime()
     {
         hideTime = 0;
-        //inHide == 1 &&
         if(realDisappear == 0 && !isBuildOrPlan())//not disappear
         {
-            //inHide = 0;
             ml.showMenu(1000);
         }
     }
@@ -270,10 +285,8 @@ class CastleScene extends MyNode
         if(hideTime >= 10000)
         {
             hideTime = 0;
-            //inHide == 0 && 
             if(realDisappear == 0 && !isBuildOrPlan())//not disappear
             {
-                //inHide = 1;
                 ml.hideMenu(1000);
             }
         }
@@ -286,9 +299,6 @@ class CastleScene extends MyNode
     {
         var building = getData(BUILD, id);
 
-        //building.update("state", 0);
-        //ml.removeSelf();
-        //ml = null;
         ml.beginBuild();   
         curBuild = mc.beginBuild(building);
         global.director.pushView(new BuildMenu(this, building), 0, 0);
@@ -302,6 +312,7 @@ class CastleScene extends MyNode
         global.msgCenter.sendMsg(BUYSOL, null);
 
         global.httpController.addRequest("soldierC/buySoldier", dict([["uid", global.user.uid], ["sid", sol.sid], ["kind", sol.id]]), null, null);
+        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, sol.id]);
     }
     function nameSoldier(sol, name)
     {

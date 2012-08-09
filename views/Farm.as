@@ -2,7 +2,10 @@
 如果所有建筑都有一个底层node 是菱形拼接图形
 那么就可以绝对定位
 现在的定位是已经知道农田的2*2 所以直接设置位置
+
 */
+
+
 class Plant extends MyNode
 {
     var building;
@@ -10,51 +13,49 @@ class Plant extends MyNode
     var data;
     var passTime;
     var id;
+    var objectTime;
 
+    //采用客户端计时
     function Plant(b, d, privateData)
     {
+        if(privateData != null)
+            objectTime = privateData.get("objectTime");
+        else
+            objectTime = time()/1000;
+
         building = b;
         data = d;
         id = data.get("id");
         var sx = building.data.get("sx");
         var sy = building.data.get("sy");
         
-        //bg = sprite("p0.png").anchor(50, 50).pos(sx/2*sizeX+sx%2*sizeX, sy/2*sizeY+sy%2*sizeY);
         var bSize = building.bg.size();
         bg = sprite("p0.png").anchor(50, 100).pos((sx+sy)/2*sizeX, (sx+sy)*sizeY);
-        //bg = sprite("p0.png");
         init();
+
+        /*
         if(privateData != null)
             passTime = privateData.get("passTime"); 
         else 
             passTime = 0;
+        */
         curState = 0;
     }
 
-    /*
-    function setPosition()
-    {
-        var sx = building.data.get("sx");
-        var sy = building.data.get("sy");
-        //bg.pos(sx/2*sizeX+sx%2*sizeX, sy/2*sizeY+sy%2*sizeY);
-        bg.pos((sx+sy)/2*sizeX, (sx+sy)/2*sizeY);
-    }
-    */
     function getLeftTime()
     {
-//        trace("leftTime", data.get("time"), passTime);
         return (data.get("time")*1000-passTime)/1000;
     }
+    //计算开始工作的服务器时间单位秒
     function getStartTime()
     {
-        return time()-passTime;
+        return client2Server((time()-passTime)/1000);
     }
     var acced = 0;
     function finish()
     {
         acced = 1;
         passTime = data.get("time")*1000;
-//        trace("farm Finish", passTime, acced);
         setState();
     }
     function getAccCost()
@@ -77,7 +78,6 @@ class Plant extends MyNode
         {
             newState = ROT; 
         }
-//        trace("pass Time", passTime, needTime, newState, curState);
 
         if(newState != curState)
         {
@@ -104,13 +104,13 @@ class Plant extends MyNode
     }
     override function enterScene()
     {
-//        trace("plant EnterScene");
         super.enterScene();
+        var now = time()/1000;
+        passTime = (now-objectTime)*1000;//客户端时间
         global.timer.addTimer(this);
     }
     override function exitScene()
     {
-//        trace("exit Timer");
         global.timer.removeTimer(this);
         super.exitScene();
     }
@@ -175,15 +175,11 @@ class Farm extends FuncBuild
         var id = data.get("objectId"); 
         var plant = getData(PLANT, id);//getPlant(id);
         
-        var now = time()/1000;//秒为单位
-
+        //var now = time()/1000;//秒为单位
         var startTime = data.get("objectTime");//serverTime 秒为单位
-
         startTime = server2Client(startTime); 
-//        trace("startTime", startTime, now, id);
-
         
-        var privateData = dict([["passTime", (now-startTime)*1000]]);//毫秒为单位
+        var privateData = dict([["objectTime", startTime]]);//采用客户端计时
 
         planting = new Plant(baseBuild, plant, privateData);
         baseBuild.addChild(planting);
@@ -201,7 +197,6 @@ class Farm extends FuncBuild
     */
     function beginPlant(id)
     {
-        //baseBuild.state = Working;
         baseBuild.setState(Working);
 //        trace("planting", id);
         var plant = getData(PLANT, id);//getPlant(id);
@@ -242,40 +237,9 @@ class Farm extends FuncBuild
     {
         global.httpController.addRequest("buildingC/harvestPlant", dict([["uid", global.user.uid], ["bid", baseBuild.bid]]), doHarvest, null);
         baseBuild.waitLock("harvesting");
-
-        /*
-        baseBuild.state = Free;
-        planting.removeSelf();
-
-        var rate = baseBuild.data.get("rate", 1);
-        var gain = getGain(PLANT, planting.id);
-        //魔法农田经验 银币 rate 是2倍
-        if(planting.getState() == ROT)//2倍时间没有收获则腐烂 收获1/3
-        {
-            gain = dict([["exp", gain["exp"]]]);
-        }
-
-        var keys = gain.keys();
-        for(var k = 0; k < len(keys); k++)
-        {
-            var v = gain[keys[k]];
-            v *= rate;
-            gain[keys[k]] = v;
-        }
-
-        global.director.curScene.addChild(new FlyObject(baseBuild.bg, gain, harvestOver));
-
-        planting = null;
-        global.user.updateBuilding(baseBuild);
-        */
     }
     function harvestOver()
     {
-        //global.user.changeValue("silver", planting.data.get("silver"));
-        //sil.removefromparent();
-        //sil = null;
-        //planting = null;
-        //global.user.doAdd(getBuildCost(data.get("id")));
     }
     override function getLeftTime()
     {
@@ -299,3 +263,5 @@ class Farm extends FuncBuild
     }
     */
 }
+
+

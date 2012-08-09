@@ -83,228 +83,7 @@ class Sky extends MyNode
         
     }
 }
-class BuildLayer extends MyNode
-{
-    var map;
-    //var buildings = null;
-    var solTimer = null;
-    function BuildLayer(m)
-    {
-        map = m;
-        bg = node();
-        init();
-        //buildings = global.user.buildings;
-        //initBuilding();
-        //initSoldiers();
-    }
 
-    /*
-    闯关页面士兵死亡 则 通知
-    */
-    function initDataOver()
-    {
-        removeSoldiers();
-
-        initBuilding();
-        initSoldiers();
-
-    }
-    /*
-    避免在receivMsg 的时候 删除代理
-    可能存在这样一种情况 虽然 对象退出了场景 导致这个消息没有被接受到
-    但是再次进入场景的时候 需要重新获得消息
-    或者进入场景的时候根据数据重新根据数据 构建view
-
-    进入场景 
-    */
-    override function enterScene()
-    {
-        solTimer = new Timer(200);
-        super.enterScene();
-        initSoldiers();
-        global.msgCenter.registerCallback(RELIVE_SOL, this);
-
-    }
-    /*
-    注册消息类型------> MSG_ID------>对象 ------>参数[]
-    */
-    function receiveMsg(msg)
-    {
-//        trace("receiveMsg", msg);
-        if(msg[0] == RELIVE_SOL)
-        {
-            //sid sdata
-            var sdata = msg[1];
-            var data = getData(SOLDIER, sdata[1].get("id"));
-            var soldier = new BusiSoldier(this, data, sdata[1], sdata[0]);
-            //soldier.setSid(sdata[0]);
-            addChildZ(soldier, MAX_BUILD_ZORD);
-            global.user.addSoldier(soldier);
-        }
-    }
-    override function exitScene()
-    {
-
-        global.user.storeOldPos();
-        global.msgCenter.removeCallback(RELIVE_SOL, this);
-        removeSoldiers();
-
-        super.exitScene();
-        solTimer.stop();
-        solTimer = null;
-    }
-    /*
-    addChild 会隐藏调用addChildZ
-    增加建筑需要注册map
-    删除建筑时清理map
-    初始化建筑物数据的时候, 构造这些数据对象
-
-    应该把view和数据分离 addChildZ只是处理view 部分  
-    而数据部分由user自身处理
-    */
-    /*
-    设置zord
-    */
-    function addBuilding(chd, z)
-    {
-        addChildZ(chd, z);
-        global.user.addBuilding(chd);
-    }
-    function removeBuilding(chd)
-    {
-        removeChild(chd);
-        global.user.removeBuilding(chd);
-    }
-
-    function addSoldier(sol)
-    {
-        addChildZ(sol, MAX_BUILD_ZORD);
-        sol.setPos(sol.getPos());
-        global.user.addSoldier(sol);
-    }
-    function removeSoldier(sol)
-    {
-        removeChild(sol);
-        global.user.removeSoldier(sol);
-    }
-
-    /*
-    建筑物已经在allBuildings 和map中存在
-    重新由数据加入到页面中
-    但是建筑物的map属性需要重新设置
-    */
-
-    /*
-    用于从上面的数据开始构造用户的建筑物
-    这个需要在 上面的数组构造好之后进行 通常在用户下载完数据之后
-    初始化 建筑图层的时候 将会 根据数据初始化相应的 allBuildings 建筑物实体  
-
-    由数据变成实体
-
-    数据保存在本地 每次重新进入可以重新从本地加载到数据
-
-    新建和初始化建筑
-    */
-
-    /*
-    初始化数组和map
-    保证数据唯一性
-    */
-    /*
-    buildings ----> allBuildings
-    初始化 木牌
-    //banner = bg.addsprite("build126.png").pos(864, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner);
-    //solNum = banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
-    */
-    function initBuilding()
-    {
-        var data;
-        var build;
-        //设置编号126 的木牌建筑
-        //或者设置 木牌的
-        /*
-        var data = getData(BUILD, 126);
-        var build = new Building(this, data, null);
-        build.setBid(-1);
-        var nPos = normalizePos([864, 800], 1, 1);
-        addChildZ(build, MAX_BUILD_ZORD);
-        build.setPos(nPos);
-        global.user.addBuilding(build);
-        */
-
-
-//        trace("initBuilding", len(global.user.buildings));
-        var item = global.user.buildings.items();
-        for(var i = 0; i < len(item); i++)
-        {
-            var bid = item[i][0];
-            var bdata = item[i][1];
-
-            data = getData(BUILD, bdata.get("id"));
-            //data.update("state", bdata.get("state"));
-            //data.update("dir", bdata.get("dir"));
-            build = new Building(this, data, bdata);
-            build.setBid(bid);
-
-
-            //默认z值
-            addChildZ(build, MAX_BUILD_ZORD);
-            //调整Z值
-            build.setPos([bdata.get("px"), bdata.get("py")]);
-            //设置MAP数据 需要根据坐标设置冲突
-            global.user.addBuilding(build);
-        }
-    }
-    /*
-    从user的 soldiers 数据 到 士兵状态转化
-    user 的allSoldiers 关联 士兵的view 实体 这个可以和数据绑定在一起
-    方案如下：
-        soldiers -------士兵私有数据
-        士兵的私有数据 ----- 士兵实体 
-        这样耦合性太高  
-    */
-    /*
-    从数据实体到 view 实体
-    soldiers ----> allSoldiers
-    */
-    function initSoldiers()
-    {
-//        trace("initSoldiers");
-        //id name
-        var item = global.user.soldiers.items(); 
-        for(var i = 0; i < len(item); i++)
-        {
-            var sid = item[i][0];
-            var sdata = item[i][1];
-//            trace("initSol", sid, sdata);
-            var data = getData(SOLDIER, sdata.get("id"));
-            if(sdata.get("dead", 0) == 1)//死亡士兵不显示
-                continue;
-            var soldier = new BusiSoldier(this, data, sdata, sid);
-            //soldier.setSid(sid);
-            addChildZ(soldier, MAX_BUILD_ZORD);
-            global.user.addSoldier(soldier);
-        }
-    }
-    function removeSoldiers()
-    {
-        global.user.removeAllSoldiers();
-    }
-        
-
-    function touchBegan(n, e, p, x, y, points)
-    {
-        map.touchBegan(n, e, p, x, y, points);
-    }
-    function touchMoved(n, e, p, x, y, points)
-    {
-        map.touchMoved(n, e, p, x, y, points);
-    }
-    function touchEnded(n, e, p, x, y, points)
-    {
-        map.touchEnded(n, e, p, x, y, points);
-    }
-}
 class CastlePage extends MyNode
 {
     var farm;
@@ -359,8 +138,12 @@ class CastlePage extends MyNode
             day = 1;
         }
         var reward = null;
+        //first login Today
         if(day >= 1)
         {
+            //每天第一次登录清理推荐数据 
+            global.user.db.remove("recommand");
+
             reward = getLoginReward(day);
             global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
         }
@@ -382,8 +165,9 @@ class CastlePage extends MyNode
         var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onFlowBanner);
         banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
 
-        bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0)));
-        bg.addsprite("flow2.png").anchor(50, 100).pos(2431, 222).setevent(EVENT_TOUCH, goFlow, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
+        bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0))).setevent(EVENT_TOUCH, visitNeibor);
+
+        bg.addsprite("flow2.png").anchor(50, 100).pos(2431, 222).setevent(EVENT_TOUCH, onCryIsland, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
 
         bg.addsprite("mapInIcon.png").pos(1473, 309).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20))).setevent(EVENT_TOUCH, onMap);
 
@@ -418,19 +202,37 @@ class CastlePage extends MyNode
         dialogController = new DialogController();
         addChild(dialogController);
 
-        //dialogController.addCmd(dict([["cmd", "login"]]));
-        //dialogController.addCmd(dict([["cmd", "rate"]]));
-        //dialogController.addCmd(dict([["cmd", "levup"]]));
-        //dialogController.addCmd(dict([["cmd", "victory"]]));
-        //dialogController.addCmd(dict([["cmd", "fail"]]));
-
-        //touchDelegate.enterScene();
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+    function onCryIsland()
+    {
+        global.director.pushScene(new MineScene()); 
+    }
 
-        //global.timer.addTimer(this);
-        //initBuilding();
+    function visitNeibor()
+    {
+        var lastVisit = global.user.lastVisitNeibor;
+        var neibors = global.friendController.getNeibors();
+        var friendScene;
+        if(neibors == null)
+        {
+            return;
+        }
+        else
+        {
+            if(len(neibors) == 0)
+            {
+                global.director.pushView(new MyWarningDialog(getStr("noNeibor", null), getStr("noNeiborCon", null), null), 1, 0);
+                return;
+            }
+            lastVisit %= neibors;
+            //papayaId
+            friendScene = new FriendScene(neibors[lastVisit].get("id"), lastVisit, VISIT_NEIBOR, neibors[lastVisit].get("crystal"), neibors[lastVisit]);
+            global.director.pushScene(friendScene);
+            global.director.pushView(new VisitDialog(friendScene), 1, 0);
+        }
     }
     function onFlowBanner()
     {
@@ -464,7 +266,6 @@ class CastlePage extends MyNode
         curBuild.setBid(global.user.getNewBid());
 
         buildLayer.addBuilding(curBuild, MAX_BUILD_ZORD);
-        //buildLayer.addChildZ(curBuild, MAX_BUILD_ZORD);
         var kind = building.get("kind");
         moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
         return curBuild;

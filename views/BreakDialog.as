@@ -54,7 +54,7 @@ class BreakDialog extends MyNode
 
 
             for(i = 0; i < len(reward); i++)
-                global.user.changeHerb(reward[i], 1);
+                global.user.changeHerb(reward[i][0], reward[i][1]);
 
             bg.addsprite("dialogVic.png").anchor(50, 50).pos(271, 46);
             //noraml gray
@@ -75,10 +75,19 @@ class BreakDialog extends MyNode
             //var goods = reward.get("goods");
             var offY = 32;
 
-            var g1 = getData(HERB, reward[0]);
-            var g2 = getData(HERB, reward[1]);
+            var res = "";
+            for(i = 0; i < len(reward); i++)
+            {
+                var hdata = getData(HERB, reward[i][0]); 
+                if(i < (len(reward)-1))
+                    res += hdata.get("name")+"X"+str(reward[i][1])+", ";
+                else
+                    res += hdata.get("name")+"X"+str(reward[i][1]);
+            }
+            
 
-            bg.addlabel(getStr("breakReward", ["[GOOD1]", g1.get("name"), "[GOOD2]", g2.get("name")]), null, 18).pos(83, 180).color(0, 0, 0);
+            bg.addlabel(getStr("breakReward", ["[GOOD]", res]), null, 18).pos(83, 180).color(0, 0, 0);
+
 
             var levelupStr = getStr("noLevelUp", null);
             if(len(levelUpSol) > 0)
@@ -158,9 +167,10 @@ class BreakDialog extends MyNode
     function tryAgain()
     {
         global.director.popScene();
+        var mon = getRoundMonster(map.kind, map.small);
         global.director.pushScene(
             new BattleScene( map.kind,  map.small,
-            [dict([["id", 100]])],
+            mon,
             CHALLENGE_MON, null, null
             )
         );

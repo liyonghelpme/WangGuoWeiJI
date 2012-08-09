@@ -18,17 +18,23 @@ class MapDefense extends MyNode
     var pureMagDefense = 1;
 
     var hurts = dict();
-    function MapDefense(m, i, data)
+    var data;
+    function MapDefense(m, i, d)
     {
         map = m;
         color = i;
+        //城墙属性类型100
+        data = dict([["category", 100]]);
         state = MAP_SOL_DEFENSE;
-        bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(data);
+
+        bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(d);
         init();
     }
     function setDefense(val)
     {
+        trace("setDefense", val);
         health = val;
+        healthBoundary = val;
     }
     function getKind()
     {

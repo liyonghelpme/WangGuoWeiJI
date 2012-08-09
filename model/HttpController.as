@@ -8,11 +8,12 @@ class HttpController
     var registerHandler;
     function HttpController()
     {
-        baseUrl = "http://uhz000738.chinaw3.com:8100/";
-        //baseUrl = "http://192.168.3.102:8100/";
+        //baseUrl = "http://uhz000738.chinaw3.com:8100/";
+        baseUrl = "http://192.168.3.102:8100/";
 //        trace("base", baseUrl);
         requestList = [];//请求是有序的
         registerHandler = dict();//注册对应id 请求的处理函数
+        global.timer.addTimer(this);
     }
     function addRequest(req, postData, handler, param)
     {
@@ -30,7 +31,7 @@ class HttpController
             var cmd = req[0];
             var postData = req[2];
             var param = req[3];
-//            trace("doRequest", req, baseUrl+cmd);
+            trace("doRequest", req, baseUrl+cmd);
             var id = http_request(baseUrl+cmd, callbackHandler, postData, 15000, param);
             registerHandler.update(id, req);
         }
@@ -38,16 +39,45 @@ class HttpController
     function callbackHandler(rid, rcode, con, param)
     {
         busy = 0;
-//        trace("request Handler", rid, rcode, con, param);
+        trace("request Handler", rid, rcode,  param);
+        trace("content", con);
+
         var req = registerHandler.pop(rid);
         var handler = req[1];
         //将所有的请求信息作为 参数传给处理函数
         if(rcode == 0)
         {
-//            trace("request Failed");
+            trace("request Failed");
         }
         if(handler != null)
             handler(rid, rcode, con, param);    
         doRequest();
+    }
+    var buffers = dict();
+    function cacheHealthRecover(req)
+    {
+        var v = buffers.get(req.get("sid"), 0);
+        v += req.get("addHealth");
+        buffers.update(req.get("sid"), v);
+    }
+    var passTime = 0;
+    function update(diff)
+    {
+        passTime += diff;
+        //1min 同步一次 生命值数据
+        if(passTime >= 60000)
+        {
+            passTime = 0;
+            synHealth();
+        }
+    }
+    function synHealth()
+    {
+        var item = buffers.items();
+        for(var i = 0; i < len(item); i++)
+        {
+            addRequest("soldierC/recoverHealth", dict([["uid", global.user.uid], ["sid", item[i][0]], ["addHealth", item[i][1]]]), null, null);
+        }
+        buffers = dict();
     }
 }

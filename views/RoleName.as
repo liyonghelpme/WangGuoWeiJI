@@ -3,13 +3,16 @@ class RoleName extends MyNode
     var scene;
     var soldier;
     var inputView;
-    var preName = ["李", "王", "赵", "张", "谢", "司马", "诸葛", "南宫", "东方", "西门", "相里"];
-    var midName = ["白", "天", "彩虹", "腾", "逊", "无极"];
+    //var preName = ["李", "王", "赵", "张", "谢", "司马", "诸葛", "南宫", "东方", "西门", "相里"];
+    //var midName = ["白", "天", "彩虹", "腾", "逊", "无极"];
     var warnText;
+    var male;
     function RoleName(s, sol)
     {
         scene = s;
         soldier = sol;
+        male = soldier.data.get("maleOrFemale");
+
         bg = sprite("roleName.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         bg.addlabel(getStr("nameSol", null), null, 25).pos(243, 29).anchor(50, 50).color(0, 0, 0);
 
@@ -36,24 +39,75 @@ class RoleName extends MyNode
         but.addlabel(getStr("rand", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
         but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(350, 265).anchor(50, 50).setevent(EVENT_TOUCH, nameIt);
         but.addlabel(getStr("ok", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
-
+        
+        var solVal = global.user.soldiers.values();
+        for(var j = 0; j < len(solVal); j++)
+        {
+            var solN = solVal[j]["name"];
+            for(var i = 0; i < len(soldierName);)
+            {
+                var tempName = getStr(soldierName[i][0], null);
+                if(tempName == solN)
+                {
+                    soldierName.pop(i);
+                }
+                else
+                    i++;
+            }
+        }
         randomName();
-
     }
     function randomName()
     {
-        var i = rand(len(preName));
-        var j = rand(len(midName));
-        inputView.text(preName[i]+midName[j]);
+        if(len(soldierName) <= 0)
+            return;
+        var i = rand(len(soldierName));
+        var times = 0;
+        while(soldierName[i][1] != male && times < 10)
+        {
+            i = rand(len(soldierName));
+            times += 1;
+        }
+        inputView.text(getStr(soldierName[i][0], null));
     }
     function nameIt()
     {
         var n = inputView.text();
         if(n == "")
         {
+            warnText.text(getStr("nameNotNull", null));
             warnText.visible(1);
             return;
         }
+        if(LANGUAGE == 0)
+        {
+            if(len(n) > 12)//3*4
+            {
+                warnText.text(getStr("nameTooLong", null));
+                warnText.visible(1);
+                return;
+            }
+        }
+        else
+        {
+            if(len(n) > 15)
+            {
+                warnText.text(getStr("nameTooLong", null));
+                warnText.visible(1);
+            }
+        }
+        var allSoldier = global.user.soldiers;
+        var val = allSoldier.values();
+        for(var i = 0; i < len(val); i++)
+        {
+            if(val[i]["name"] == n)
+            {
+                warnText.text(getStr("nameSame", null));
+                warnText.visible(1);
+                return;
+            }
+        }
+
         scene.nameSoldier(soldier, inputView.text());
         global.director.popView();
     }

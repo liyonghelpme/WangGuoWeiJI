@@ -12,14 +12,14 @@ class User
     var updateList;
     
     //建筑物的view 实体
-    var allBuildings;
+    //var allBuildings;
 
     //地图的建筑物占有块数据
-    var mapDict;
-    var blockBuilding;
+    //var mapDict;
+    //var blockBuilding;
 
     //士兵的view 实体
-    var allSoldiers;
+    //var allSoldiers;
     
     //当前可用的最大的建筑物的编号
     var maxBid;
@@ -56,6 +56,9 @@ class User
     var herbs;
     var serverTime;
     var clientTime;
+
+    var lastVisitNeibor = 0;
+    var mine;
 
     function getCurFinTaskNum()
     {
@@ -258,7 +261,6 @@ class User
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
-//        trace("initDataOver", con);
         if(rcode != 0)
         {
             con = json_loads(con);
@@ -279,7 +281,9 @@ class User
                 rankScore = MAX_SCORE;
             rankOrder = con.get("rank")[1];
 
-
+            mine = con.get("mine");
+            mine["id"] = MINE_BUILD; 
+            mine["bid"] = MINE_BID;
 
             rated = db.get("rated");
             if(rated == null)
@@ -347,6 +351,12 @@ class User
             ]);
         soldiers = dict([[0, dict([["id", 0], ["name", "liyong"], ["level", 0]])]]); 
     }
+
+    function updateMine(build)
+    {
+        mine["level"] = build.buildLevel;
+        mine["objectTime"] = build.getStartTime();
+    }
     function tempSetData()
     {
         resource = dict();
@@ -356,6 +366,8 @@ class User
         equips = dict();
         herbs = dict();
         tasks = dict();
+        mine = null;
+
 
         oldPos = db.get("oldPos");
         if(oldPos == null)
@@ -368,7 +380,18 @@ class User
             fallNum = dict();
             db.put("fallNum", fallNum);
         }
-//        trace("initFallNum", fallNum);
+
+        lastVisitNeibor = db.get("lastVisitNeibor");
+        if(lastVisitNeibor == null)
+        {
+            lastVisitNeibor = 0;
+            db.put("lastVisitNeibor", lastVisitNeibor);
+        }
+    }
+    function setLastVisitNeibor(p)
+    {
+        lastVisitNeibor = p;
+        db.put("lastVisitNeibor", lastVisitNeibor);
     }
 
     function getTaskFinData(id)
@@ -434,23 +457,10 @@ class User
         if(papayaId == null)
             return;
         papayaName = ppy_username();
-        //uid = ppy_userid();
         db = c_opendb();
-        //trace("initUser", uid, db);
 
-        
-
-        //initData();
         tempSetData();
-        blockBuilding = new MyNode();
         updateList = [];
-        allBuildings = [];
-        mapDict = dict();
-        //allSoldiers = [];
-        allSoldiers = dict();
-        /*
-        在初始化数据之后 初始化 建筑物
-        */
     }
     function getPeopleNum()
     {
@@ -470,6 +480,8 @@ class User
     {
         return drugs;
     }
+
+
     //kindId ownerid
     //装备是独立的显示
     function getThingNum(kind, id)
@@ -480,30 +492,9 @@ class User
         //    return equips.get(id, 0);
         return 0;
     }
-    function checkInitBuildingYet()
-    {
-//        trace("checkInitBuilding", len(allBuildings), len(buildings));
-        return len(allBuildings) < len(buildings);
-    }
-    function addBuilding(build)
-    {
-        allBuildings.append(build);
-        updateMap(build);
-    }
-    function removeBuilding(build)
-    {
-        allBuildings.remove(build);
-        clearMap(build);
-    }
-    /*
-    保存当前建筑物的所有状态
-    由实体变成数据
-    */
-    function clearAllBuilding()
-    {
-        allBuildings = [];
-        mapDict = dict();
-    }
+
+    
+    
     //静态建筑 和用户建造的动态建筑的数据 开始工作的时间
     //进入游戏之后 用户可能会卖出建筑物 这时 这个数据需要失效
     //所以只能有效构造一次建筑页面
@@ -538,6 +529,22 @@ class User
      通知所有注册的监听器
     */
 
+    function makeDrug(id)
+    {
+        var num = drugs.get(id, 0);
+        num += 1;
+        drugs.update(id, num);
+        db.put("drugs", drugs);
+
+        setValue(NOTIFY, 1);
+    }
+    function makeEquip(eid, id)
+    {
+        equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
+        db.put("equips", equips);
+        setValue(NOTIFY, 1);
+    }
+
     function buySomething(kind, id, cost)
     {
         doCost(cost);
@@ -550,16 +557,6 @@ class User
             drugs.update(id, value);
             db.put("drugs", drugs);
         }
-        /*
-        else if(kind == EQUIP)
-        {
-            //value = equips.get(id, 0);
-            //value += 1;
-            equips.update(newEid, dict([["kind", id], ["level", 0], ["owner", -1]]));
-            //equips.update(id, value);
-            db.put("equips", equips);
-        }
-        */
 
 
         //通知所有监听器修改数据
@@ -585,89 +582,21 @@ class User
         herbs.update(id, val);
         db.put("herbs", herbs);
 
-        //global.httpController.addRequest("goodsC/updateHerb", dict([["uid", uid], ["kind", id], ["num", value]]), null, null);
         setValue(NOTIFY, 1);
     }
 
-    function addSoldier(sol)
-    {
-        //allSoldiers.append(sol); 
-        allSoldiers.update(sol.sid, sol);
-    }
-    //清除士兵的一个格子的map
-    function clearSolMap(sol)
-    {
-        if(sol.curMap != null)
-        {
-            var key = sol.curMap[0]*10000+sol.curMap[1];
-            var v = mapDict.get(key, null);
-            if(v != null)
-            {
-                removeMapEle(v, sol);
-            }
-        }
-    }
-    function removeSoldier(sol)
-    {
-        //allSoldiers.remove(sol);
-        allSoldiers.pop(sol.sid);
-        clearSolMap(sol);
-    }
-    function removeAllSoldiers()
-    {
-        var solArr = allSoldiers.values();
-        for(var i = 0; i < len(solArr); i++)
-        {
-            var sol = solArr[i];
-            clearSolMap(sol);
-            sol.removeSelf();
-        }
-        allSoldiers = dict();
-    }
+
     /*
     药品储存， 一次性使用 在某个对象身上 drug+id
     */
     /*
     规划开始 和 规划取消 函数
     */
-    function buildKeepPos()
-    {
-        for(var i = 0; i < len(allBuildings); i++)
-        {
-            allBuildings[i].keepPos();
-            //allBuildings[i].oldPos = allBuildings.getPos();
-        }
-    }
-    function restoreBuildPos()
-    {
-        for(var i = 0; i < len(allBuildings); i++)
-        {
-            allBuildings[i].restorePos();
-            //allBuildings[i].setPos(allBuildings[i].oldPos);
-        }
-    }
 
     /*
     成功修改所有建筑物的坐标
     */
-    function finishPlan()
-    {
-        var changedBuilding = [];
-        for(var i = 0; i < len(allBuildings); i++)
-        {
-            if(allBuildings[i].dirty == 1)
-            {
-                tempUpdateBuilding(allBuildings[i]);
-                var cur = allBuildings[i];
-                var p = cur.getPos();
-                changedBuilding.append([cur.bid, p[0], p[1], cur.dir]);
-            }
-            allBuildings[i].finishPlan();
-        }
-        updateBuildingDB();
-        if(len(changedBuilding) > 0)
-            global.httpController.addRequest("buildingC/finishPlan", dict([["uid", uid], ["builds", changedBuilding]]), null, null);
-    }
+
     function getNewBid()
     {
         return maxBid++;
@@ -684,9 +613,7 @@ class User
     function sellBuild(build)
     {
         buildings.pop(build.bid);
-        allBuildings.remove(build);
-        //removeBuildDB(build);
-        //updateBuildingDB(null);
+        //allBuildings.remove(build);
         db.put("buildings", buildings);
     }
     function tempUpdateBuilding(build)
@@ -698,8 +625,10 @@ class User
     */
     function updateBuilding(build)
     {
+        if(build.sid == MINE_BID)
+            return;
+
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
-        //updateBuildingDB(null);
         db.put("buildings", buildings);
     }
     /*
@@ -734,19 +663,18 @@ class User
     保证数据库和内存数据的同构 就比较方便
     */
     /*
-    function updateSoldierDB()
-    {
-        db.put("soldiers", soldiers);
-    }
-    */
-    /*
     修改士兵的数据实体
     经营页面 和 闯关页面的士兵实体 都需要有以下属性
     */
     //士兵类型 名字 当前生命值 经验 等级
     function updateSoldiers(soldier)
     {
-        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level], ["addAttack", soldier.addAttack], ["addDefense", soldier.addDefense], ["addAttackTime", soldier.addAttackTime], ["addDefenseTime", soldier.addDefenseTime] ]));
+        //怪兽 敌方士兵 不更新数据
+        if(soldier.sid == -1)
+        {
+            return;
+        }
+        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level], ["addAttack", soldier.addAttack], ["addDefense", soldier.addDefense], ["addAttackTime", soldier.addAttackTime], ["addDefenseTime", soldier.addDefenseTime], ["addHealthBoundary", soldier.addHealthBoundary], ["addHealthBoundaryTime", soldier.addHealthBoundaryTime] ]));
         //updateSoldierDB();
         db.put("soldiers", soldiers);
         for(var i = 0; i < len(soldierListener);)
@@ -767,22 +695,7 @@ class User
     如果该士兵显示出来则更新状态
     否则只是更新士兵数据 
     */
-    function doTransfer(sid)
-    {
-        var sol = allSoldiers.get(sid);
-        if(sol != null)
-            sol.doTransfer();
-        /*
-        for(var i = 0; i < len(allSoldiers); i++)
-        {
-            if(allSoldiers[i].sid == sid)
-            {
-                allSoldiers[i].doTransfer();
-                return;
-            }
-        }
-        */
-    }
+
     /*
     修正数据， 显示士兵的view
     */
@@ -806,11 +719,14 @@ class User
         }
         return solEquips;
     }
+    //根据装备属性生成装备类型
     function checkSoldierEquip(sid, eid)
     {
         var edata = equips.get(eid);
         var kind = edata.get("kind");
         kind = getData(EQUIP, kind).get("kind");
+
+        trace("equipKind", kind);
 
         var key = equips.keys();
         for(var i = 0; i < len(key); i++)
@@ -818,10 +734,22 @@ class User
             var eData = equips.get(key[i]);
             var k = eData.get("kind");
             var detail = getData(EQUIP, k);
-            if(detail.get("kind") == kind && detail.get("owner") == sid)
+            //trace("detail", detail.get("kind"), detail.get("owner"));
+            if(detail.get("kind") == kind && eData.get("owner") == sid)
                 return 0;
         }
         return 1;
+    }
+    function checkUseLevel(sid, eid)
+    {
+        var sdata = soldiers.get(sid);
+        var edata = equips.get(eid);
+        edata = getData(EQUIP, edata.get("kind"));
+        if(sdata.get("level") < edata.get("useLevel"))
+        {
+            return [0, edata.get("useLevel"), sdata.get("level")];
+        }
+        return [1];
     }
 
     function getEquipData(eid)
@@ -840,11 +768,13 @@ class User
         edata["owner"] = -1;
         db.put("equips", equips);
         
-        var sol = allSoldiers.get(sid); 
-        if(sol != null)
-            sol.useEquip(-1);
-
+        global.msgCenter.sendMsg(SOL_UNLOADTHING, sid);
+        //var sol = allSoldiers.get(sid); 
+        //if(sol != null)
+        //    sol.useEquip(-1);
+        //global.director.curScene.unloadThing(sid);
     }
+    //士兵必须是活的才可以转职
 
     function useThing(kind, tid, soldier)
     {
@@ -965,20 +895,33 @@ class User
         {
             var level = getValue("level");
             var oldLevel = level;
+            var addCityDefense = 0;
             while(1)
             {
                 //var needExp = levelExp[min(level, len(levelExp)-1)];
                 //var needExp = getNeedExp(level);
                 var needExp = getLevelUpNeedExp(level);
+                //升级村庄防御力上升
                 if(v >= needExp)
                 {
                     v -= needExp;
+                    for(var i = 0; i < len(levelDefense); i++)
+                    {
+                        if(level < levelDefense[i][0])
+                            break;
+                    }
+                    i = min(i, len(levelDefense)-1);
+                    addCityDefense += levelDefense[i][1];
+
                     level += 1;
                 }
                 else 
                     break;
             }
             setValue("level", level);
+            changeValue("cityDefense", addCityDefense);
+            trace("levelUp", level, addCityDefense);
+
             if(level != oldLevel)
             {
                 var ret = global.msgCenter.checkCallback(LEVEL_UP);
@@ -986,12 +929,15 @@ class User
                 if(ret == 0)
                 {
 //                    trace("not in business page!");
-                    var rew = getLevelUpReward();
-                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", rew]]), null, null);
+                    var rew = getLevelUpReward();//生成奖励时已经增加
+                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", rew], ["cityDefense", addCityDefense]]), null, null);
                 }
                 //经验界面掉落 5 6 7 8 9 奖励
                 else
+                {
                     global.msgCenter.sendMsg(LEVEL_UP, null);
+                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
+                }
             }
         }
         setValue(key, v);
@@ -1046,158 +992,15 @@ class User
     建筑和士兵 都有 sx sy 属性 都可以得到 位置
     传入建筑物类型 如果是farm则需要扩充bound
     */
-    function updateMap(build)
-    {
-        var p = build.getPos();
-        return updatePosMap([build.sx, build.sy, p[0], p[1], build]);
-    }
-    //掉落物品更新 可以建造 可以移动
-    //obj 可建造 0/1   可移动0/1
-    function updateRxRyMap(rx, ry, obj)
-    {
-        var key = rx*10000+ry;
-        var v = mapDict.get(key, []);
-        v.append([obj, 1, 1]);
-        mapDict.update(key, v);
-    }
-    function removeRxRyMap(rx, ry, obj)
-    {
-        var key = rx*10000+ry;
-        var v = mapDict.get(key, null);
-        if(v != null)
-        {
-            removeMapEle(v, obj);
-            //v.remove(obj);
-        }
-    }
+
     //可建造 可移动 更新建筑物的map 不可建造 px py sx sy obj kind
     //map --->[[obj, 1, 1]] 不可建造 不可移动
     //map ---->[[obj, 0, 1]] 可以建造 不可移动
     //block 不可建造 可以移动
     //士兵检测冲突 
     //建筑物检测冲突
-    function updatePosMap(sizePos)
-    {
-        var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
-        //trace("setBuildSolMap", map);
-        var kind = sizePos[4].funcs;
 
 
-        var sx = map[0];
-        var sy = map[1];
-        var initX = map[2];
-        var initY = map[3];
-
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var key = curX*10000+curY;
-                var v = mapDict.get(key, []);
-                v.append([sizePos[4], 1, 1]);
-                mapDict.update(key, v);
-
-                curX -= 1;
-                curY += 1;
-            }
-        }
-        //setFarmLandMap(map, sizePos, kind);
-
-
-        //trace("updateMap", map, len(mapDict));//, mapDict);
-        return [initX, initY];
-    }
-    /*
-    function setFarmLandMap(map, sizePos, kind)
-    {
-        var curX;
-        var curY;
-        var key;
-        var i;
-        var v;
-
-        var sx = map[0];
-        var sy = map[1];
-
-        if(kind == FARM_BUILD)
-        {
-            var bInitX = map[2];
-            var bInitY = map[3] - 2;
-            curX = bInitX;
-            curY = bInitY;
-            for(i = 0; i < (sy+1); i++)
-            {
-                key = curX*10000+curY;
-                v = mapDict.get(key, []);
-                v.append([sizePos[4], 0, 1]);
-                mapDict.update(key, v);
-
-                curX -= 1;
-                curY += 1;
-            }
-            curX = bInitX+1;
-            curY = bInitY+1;
-            for(i = 0; i < sx; i++)
-            {
-                key = curX*10000+curY;
-                v = mapDict.get(key, []);
-                v.append([sizePos[4], 0, 1]);
-                mapDict.update(key, v);
-                
-                curX += 1;
-                curY += 1;
-            }
-
-        }
-    }
-    function clearFarmLandMap(map, build, kind)
-    {
-        var curX;
-        var curY;
-        var key;
-        var i;
-        var v;
-
-        var sx = build.sx;
-        var sy = build.sy;
-
-        if(kind == FARM_BUILD)
-        {
-            var bInitX = map[2];
-            var bInitY = map[3] - 2;
-            curX = bInitX;
-            curY = bInitY;
-            for(i = 0; i < (sy+1); i++)
-            {
-                key = curX*10000+curY;
-                v = mapDict.get(key, []);
-                removeMapEle(v, build);
-                if(len(v) == 0)
-                    mapDict.pop(key);
-
-                curX -= 1;
-                curY += 1;
-            }
-            curX = bInitX+1;
-            curY = bInitY+1;
-            for(i = 0; i < sx; i++)
-            {
-                key = curX*10000+curY;
-                v = mapDict.get(key, []);
-                removeMapEle(v, build);
-                if(len(v) == 0)
-                    mapDict.pop(key);
-                
-                curX += 1;
-                curY += 1;
-            }
-
-            
-        }
-    }
-    */
     //一个MAP中的对象需要实现以下
     /*
     清楚Farm的上边界 移动冲突
@@ -1205,47 +1008,7 @@ class User
     包括建筑和士兵
     士兵不需要设置 底部颜色
     */
-    function clearMap(build)
-    {
-        var map = getBuildMap(build);
-        var sx = map[0];
-        var sy = map[1];
-        var initX = map[2];
-        var initY = map[3];
-        //trace("clearMap", map);//, mapDict);
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var key = curX*10000+curY;
-                var v = mapDict.get(key, []);
-                if(len(v) == 0)
-                    continue;
-                removeMapEle(v, build);
-                //v.remove(build);
-                //没有建筑则删除
-                if(len(v) == 0)
-                    mapDict.pop(key);
-                /*
-                不用更新dict
-                else//剩余建筑 士兵 掉落物品不用检测状态
-                {
-                    for(var k = 0; k < len(v); k++)
-                    {
-                        v[k].setColPos();
-                    }
-                    mapDict.update(key, v);
-                }
-                */
-                curX -= 1;
-                curY += 1;
-            }
-        }
 
-        //clearFarmLandMap(map, build, build.funcs);
-    }
    
     /*
     士兵移动冲突检测
@@ -1253,102 +1016,15 @@ class User
     建筑物
     河流
     */
-    function checkPosCollision(mx, my, ps)
-    {
-        //var inZ = checkInZone(ps);
-        var inZ = checkInTrain(ps);
-        /*
-        限制上下边界
-        */
-        if(inZ == 0)
-        {
-//            trace("not in zone");
-            return 1;//not In zone
-        }
-        var key = mx*10000+my;
-        /*
-        限制不与其它建筑冲突
-        */
-        var v = mapDict.get(key, []);
-        if(len(v) > 0)
-        {
-            for(var i = 0; i < len(v); i++)
-            {
-                if(v[i][2] == 1)//不可行走区域
-                    return v[0];
-            }
-            //return v[0];
-        }
-        /*
-        检测不与静态河流冲突
-        */
-        if(obstacleBlock.get(key, null) != null)
-        {
-//            trace("colWithRiver", key);
-            return blockBuilding;
-        }
-        return null;
-    }
-    function checkFallGoodCol(rx, ry)
-    {
-        var inZ = checkInZone([rx*sizeX, ry*sizeY]);
-        if(inZ == 0)
-            return 1;
-        var key = rx*10000+ry;
-        var v = mapDict.get(key, null);
-        if(v != null)
-            return 1;
-        if(obstacleBlock.get(key, null) != null)
-        {
-            return 1;
-        }
-        return 0;
-    }
+    
+    
     /*
     建筑物检测建造冲突
     检测冲突， 值返回还有几个对象，每次移动的时候把自己从中清除即可
     i++ i--
     建筑物 士兵 sx sy pos
     */
-    function checkCollision(build)
-    {
-        var map = getBuildMap(build);
-        var sx = map[0];
-        var sy = map[1];
-        var initX = map[2];
-        var initY = map[3];
-        trace("checkCol", map);//, mapDict);
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var key = curX*10000+curY;
-                var v = mapDict.get(key, []);
-                if(len(v) > 0)
-                {
-                    for(var k = 0; k < len(v); k++)
-                    {
-                        if(v[k][0] != build && v[k][1] == 1)//不可建造
-                        {
-//                            trace("colWithBuild", v[k]);
-                            return v[k];
-                        }
-                    }
-                }
-                //trace("col key", key);
-                if(obstacleBlock.get(key, null) != null)
-                {
-//                    trace("colWithRiver", key);
-                    return blockBuilding;
-                }
-                curX -= 1;
-                curY += 1;
-            }
-        }
-        return null;
-    }
+    
     /*
     冲突是一种关系，涉及到两个方面，必须要同时改变两个状态
     mapDict  存储数字 和 存储对象之间 
@@ -1359,42 +1035,7 @@ class User
     只能控制一个建筑物 所以冲突状态是确定
     必须把该建筑移动到没有冲突的位置 才可以移动其它建筑
     */
-    function checkBuildCol()
-    {
 
-        /*
-        var curBuild = global.director.curScene.curBuild;
-        if(curBuild.colNow == 1)
-            return 1;
-        return 0;
-        for(var i = 0; i < len(allBuildings); i++)
-        {
-            if(allBuildings[i].colNow == 1)
-            {
-//                trace("building col", allBuildings[i].bid, allBuildings[i].id);
-                return 1;
-            }
-        }
-        return 0;
-        */
-        /*
-        var vals = mapDict.values();
-        for(var i = 0; i < len(vals); i++)
-        {
-            if(len(vals[i]) > 1)
-                return 1;
-        }
-        return 0;
-        */
-        /*
-        for(var i = 0; i < len(allBuildings); i++)
-        {
-            if(allBuildings[i].col != 0)
-                return 1;
-        }
-        return 0;
-        */
-    }
     function checkCost(cost)
     {
         var buyable = dict([["ok", 1]]);
@@ -1442,7 +1083,7 @@ class User
     }
     //经营页面 每一段时间记录一次士兵位置
     //经营页面退出时记录士兵位置
-    function storeOldPos()
+    function storeOldPos(allSoldiers)
     {
         if(oldPos == null)
             return;
@@ -1455,33 +1096,5 @@ class User
         db.put("oldPos", oldPos);
     }
 
-    function getFarmEnableNum()
-    {
-        var level = getValue("level");
-        var num = 5+level;
-        return num;
-    }
-    function getFarmNum()
-    {
-        var count = 0;
-        var val = buildings.values();
-        for(var i = 0; i < len(val); i++)
-        {
-            if(val[i].get("funcs") == FARM_BUILD)
-            {
-                count++;
-            }
-        }
-        return count;
-    }
-    function checkFarmNum()
-    {
-        var now = getFarmNum();
-        var cap = getFarmEnableNum();
-        if(cap > now)//capacity > own
-        {
-            return 1;
-        }
-        return 0;
-    }
+
 }

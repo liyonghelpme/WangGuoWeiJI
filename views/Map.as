@@ -83,7 +83,7 @@ class Map extends MyNode
         small = sm;
         //curStar = global.user.getCurStar(kind, small);
 
-        bg = sprite("map"+str(k)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
+        bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         grid = bg.addnode("mapGrid.png").pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1).color(100, 100, 100, 30);
         grid.addsprite("mapGrid.png").color(100, 100, 100, 50);
 
@@ -393,7 +393,7 @@ class Map extends MyNode
         var nPos;
         //根据monX monY 确定位置
         //0-12
-        if(scene.kind == CHALLENGE_SELF)
+        if(scene.kind == CHALLENGE_SELF || scene.kind == CHALLENGE_MON)
         {
             for(i = 0; i < len(s); i++)
             {

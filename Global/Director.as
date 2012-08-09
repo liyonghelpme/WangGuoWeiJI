@@ -57,6 +57,7 @@ class Director
         */
         if(quitState == 0)
         {
+            global.httpController.synHealth();
             if(kc == KEYCODE_BACK)
             {
                 quitState = 1;

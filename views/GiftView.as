@@ -11,6 +11,8 @@ class GiftView extends MyNode
     //name object number
     var data = [["haha", "crystal", 4], ["haha", "silver", 4],["haha", "gold", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4],["haha", "crystal", 4]]; 
     var flowNode;
+    var initYet = 1;
+
     function initData()
     {
     }
@@ -128,6 +130,7 @@ class MoreView extends MyNode
     //desc
     var data = [["desc"], ["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"],["desc"]];
     var flowNode;
+    var initYet = 1;
     function initData()
     {
     }

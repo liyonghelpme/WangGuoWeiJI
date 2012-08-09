@@ -111,7 +111,7 @@ class Goods extends MyNode
                     bl = min(120*100/bSize[0], 90*100/bSize[1]);
                     bl = min(120, max(40, bl));
                     buildPic.scale(bl);
-
+                    //trace("labelGain", labelGain[0]);
                     var k = getStr(labelGain[0][0], null);
                     var v = labelGain[0][1];
                     k = k + "+"+ str(v)

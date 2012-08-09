@@ -158,6 +158,9 @@ class Soldier extends MyNode
     var addDefense = 0;
     var addDefenseTime = 0;
 
+    var addHealthBoundary = 0;
+    var addHealthBoundaryTime = 0;
+
     //var attacker = null;
 
 
@@ -256,6 +259,8 @@ class Soldier extends MyNode
                 addAttackTime = monsterData.get("addAttackTime", 0);
                 addDefense = monsterData.get("addDefense", 0);
                 addDefenseTime = monsterData.get("addDefenseTime", 0);
+                addHealthBoundary = monsterData.get("addHealthBoundary", 0);
+                addHealthBoundaryTime = monsterData.get("addHealthBoundaryTime", 0);
             }
 
             attRange = data.get("range");
@@ -271,17 +276,16 @@ class Soldier extends MyNode
         else
         {
             var privateData = global.user.getSoldierData(sid);
-//            trace("initMapSoldier", privateData);
             level = privateData.get("level", 0);
-
             
             attRange = data.get("range");
-
 
             addAttack = privateData.get("addAttack", 0);
             addAttackTime = privateData.get("addAttackTime", 0);
             addDefense = privateData.get("addDefense", 0);
             addDefenseTime = privateData.get("addDefenseTime", 0);
+            addHealthBoundary = privateData.get("addHealthBoundary", 0);
+            addHealthBoundaryTime = privateData.get("addHealthBoundaryTime", 0);
 
             health = privateData.get("health", 0);
             initAttackAndDefense(this);
@@ -309,6 +313,12 @@ class Soldier extends MyNode
         map = m;
         color = d[0];
         id = d[1];//士兵类型id
+
+        var k = id/10;
+        //暂时没有这些士兵的图片
+        if(k >= 20)
+            id = 0;
+
         //movAni = getMoveAnimate(id);
         var colStr = "red";
         if(color == 1)
@@ -356,6 +366,7 @@ class Soldier extends MyNode
         */
         //bg = sprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100).pos(102, 186);
         bg = node();
+
         changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
         changeDirNode.prepare();
         var bSize = changeDirNode.size();
@@ -642,10 +653,15 @@ class Soldier extends MyNode
             addAttackTime -= 1;
             drugUse = 1;
         }
-        else if(addDefenseTime > 0)
+        if(addDefenseTime > 0)
         {
             //defense += addDefense;
             addDefenseTime -= 1;
+            drugUse = 1;
+        }
+        if(addHealthBoundaryTime > 0)
+        {
+            addHealthBoundaryTime -= 1;
             drugUse = 1;
         }
         if(drugUse == 1)

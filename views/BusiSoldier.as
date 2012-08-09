@@ -93,6 +93,8 @@ class BusiSoldier extends MyNode
         addAttackTime = privateData.get("addAttackTime", 0);
         addDefense = privateData.get("addDefense", 0);
         addDefenseTime = privateData.get("addDefenseTime", 0);
+        addHealthBoundary = privateData.get("addHealthBoundary", 0);
+        addHealthBoundaryTime = privateData.get("addHealthBoundaryTime", 0);
 
         health = privateData.get("health", 0);
         recoverSpeed = data.get("recoverSpeed");
@@ -103,8 +105,6 @@ class BusiSoldier extends MyNode
         exp = privateData.get("exp", 0);
         dead = privateData.get("dead", 0);
         
-
-
 
         attSpeed = data.get("attSpeed");
         attRange = data.get("range");
@@ -120,32 +120,67 @@ class BusiSoldier extends MyNode
     var addAttackTime = 0;
     var addDefense = 0;
     var addDefenseTime = 0;
+    var addHealthBoundary = 0;
+    var addHealthBoundaryTime = 0;
+
     //攻击药水 防御药水 在闯关的1个回合中暂时提升士兵能力 100 attack 100 defense
     //复活药水 复活士兵 增加 0 
+    //取消增加经验药水
+    //%生命 %攻击 %防御 加百分比的药水在 使用的时候将会转化成 增加数值
     function useDrug(tid)
     {
         var dd = getData(DRUG, tid);    
-        //health += dd.get("health");
-        //health = min(healthBoundary, health);
         changeHealth(dd.get("health"));
-        //exp += dd.get("exp");
-        changeExp(dd.get("exp"));
 
-        if(dd.get("attack") != 0)
+        var pureData = getSolPureData(id, level);
+        var pureHealthBoundary;
+
+        if(dd.get("healthBoundary") != 0)
         {
-            addAttack = data.get("attack");
-            addAttackTime = data.get("effectTime");
+            addHealthBoundary = dd.get("healthBoundary");
+            addHealthBoundaryTime = dd.get("effectTime");
+        }
+        else if(dd.get("percentHealth") != 0)
+        {
+            pureHealthBoundary = pureData["healthBoundary"];
+            changeHealth(dd.get("percentHealth")*pureHealthBoundary/100);
+        }
+        else if(dd.get("percentHealthBoundary") != 0)
+        {
+            pureHealthBoundary = pureData["healthBoundary"];
+            addHealthBoundary = dd.get("percentHealth")*pureHealthBoundary/100;
+            addHealthBoundaryTime = dd.get("effectTime");
+        }
+        else if(dd.get("percentAttack") != 0)
+        {
+            var purePhyAttack = pureData["physicAttack"];
+            var pureMagAttack = pureData["magicAttack"];
+            addAttack = dd.get("percentAttack")*max(purePhyAttack, pureMagAttack)/100;
+            addAttackTime = dd.get("effectTime");
+        }
+        else if(dd.get("percentDefense") != 0)
+        {
+            var purePhyDef = pureData["physicDefense"];
+            var pureMagDef = pureData["magicDefense"];
+            addDefense = dd.get("percentDefense")*max(purePhyDef, pureMagDef)/100;
+            addDefenseTime = dd.get("effectTime");
+        }
+        else if(dd.get("attack") != 0)
+        {
+            addAttack = dd.get("attack");
+            addAttackTime = dd.get("effectTime");
         }
         else if(dd.get("defense") != 0)
         {
-            addDefense = data.get("defense");
-            addDefenseTime = data.get("effectTime");
+            addDefense = dd.get("defense");
+            addDefenseTime = dd.get("effectTime");
         }
         else if(dd.get("relive") == 1)//x% life dead = 0
         {
 //            trace("reliveSoldier", sid);
             dead = 0;
-            health = dd.get("effectTime")*healthBoundary/100; 
+            //health = dd.get("effectTime")*healthBoundary/100; 
+            health = healthBoundary;
             //复活本士兵
 
         }
@@ -247,7 +282,8 @@ class BusiSoldier extends MyNode
         
         //死亡士兵 打开药店 不需要更新地图
         if(map != null)
-            curMap = global.user.updateMap(this);
+            //curMap = global.user.updateMap(this);
+            curMap = map.updateMap(this);
 
         movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
@@ -290,9 +326,10 @@ class BusiSoldier extends MyNode
         cost = changeToSilver(cost);
         global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
         //修改view
-        map.removeChild(this); 
+        //map.removeChild(this); 
+        map.sellSoldier(this);
         //修改数据
-        global.user.sellSoldier(this);//修改士兵的装备属性
+        //global.user.sellSoldier(this);//修改士兵的装备属性
         global.msgCenter.sendMsg(BUYSOL, null);
     }
     function sellOver()
@@ -458,9 +495,7 @@ class BusiSoldier extends MyNode
             var cur = (start+i)%len(allPos);
             var curMap = allPos[cur];
             var tPos = setBuildMap([sx, sy, curMap[0], curMap[1]]);
-            var col = global.user.checkPosCollision(curMap[0], curMap[1], tPos);
-            //trace("sol col", col, tPos, curPos, curMap);
-            //var build = global.user.mapDict.get(allPos[i][0]*10000+allPos[i][1], []);
+            var col = map.checkPosCollision(curMap[0], curMap[1], tPos);
             if(col == null)
             {
                 moveable = 1;
@@ -526,7 +561,7 @@ class BusiSoldier extends MyNode
             if(health < healthBoundary)
             {
                 var addHealth = min(recoverSpeed, healthBoundary-health);
-                global.httpController.addRequest("soldierC/recoverHealth", dict([["uid", global.user.uid], ["sid", sid], ["addHealth", addHealth]]), null, null);
+                global.httpController.cacheHealthRecover(dict([["sid", sid], ["addHealth", addHealth]]));
             }
             health += recoverSpeed;
             health = min(health, healthBoundary);
@@ -554,8 +589,8 @@ class BusiSoldier extends MyNode
             if(tar != null)
             {
                 state = SOL_MOVE; 
-                global.user.clearMap(this);
-                curMap = global.user.updatePosMap([sx, sy, tar[0], tar[1], this]);
+                map.clearMap(this);
+                curMap = map.updatePosMap([sx, sy, tar[0], tar[1], this]);
                 changeDirNode.addaction(movAni);
                 //featureColor.addaction(featureMov);
                 setDir();

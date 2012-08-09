@@ -124,7 +124,6 @@ class PlantChoose extends MyNode
                 {
                     //资源不足 欠一种类型的资源
                     var key = cost.keys()[0];
-                    //var val = cost.values()[0];
 
                     global.director.pushView(
                         new MyWarningDialog(getStr("resNot", null), getStr("resLack", ["[NAME]", getStr(key, null),  "[NUM]", str(buyable[key])]),  null), 1, 0);
@@ -133,10 +132,6 @@ class PlantChoose extends MyNode
                 {
                     global.httpController.addRequest("buildingC/beginPlant", dict([["uid", global.user.uid], ["bid", building.bid], ["objectId", child.get()]]), beginPlant, [cost, child.get()]);
                     building.waitLock("feeding");
-                    //global.user.doCost(cost);
-                    //building.waitLock();
-                    //building.funcBuild.beginPlant(child.get()); 
-                    //global.director.popView();
                     closeCastleDialog();
                 }
             }
@@ -157,6 +152,8 @@ class PlantChoose extends MyNode
             global.user.doCost(cost);
             building.removeLock();
             building.funcBuild.beginPlant(id); 
+
+            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [PLANT, id]);
         }
     }   
 }

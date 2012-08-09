@@ -46,19 +46,6 @@ class TaskDialog extends MyNode
     //= [[0, 27], [1, 21], [2, 28], [3, 30], [4, 21], [5, 29], [6, 26], [7, 22], [8, 27], [9, 21], [10, 20], [11, 20], [12, 24], [13, 23], [14, 22], [15, 30], [16, 26], [17, 22], [18, 30], [19, 22]];
 
     /*
-    function getTask(id)
-    {
-        var keys = ["exp", "title", "des", "do", "need", "silver", "crystal", "gold"];
-        var t = tasks[id];
-        var res = dict();
-        for(var i = 0; i < len(keys); i++)
-        {
-            res.update(keys[i], t[i]);
-        }
-        return res;
-    }
-    */
-    /*
     当前用户等级 可以得到所有任务 ALLTASK lev < userLevel - 
         用户已经完成的任务 ---》 任务的需求数目已经满足---》并且已经领取了奖励
 

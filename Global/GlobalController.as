@@ -1,4 +1,4 @@
-class Global
+class GlobalController
 {
     var timer;
     var touchManager;
@@ -12,8 +12,10 @@ class Global
     var sensorController;
     var httpController;
     var friendController;
+    var taskModel;
+    var mailController;
     function Global()
     {
     }
 }
-var global = new Global();
+var global = new GlobalController();

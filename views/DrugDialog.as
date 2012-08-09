@@ -283,13 +283,31 @@ class DrugDialog extends MyNode
     function useIt(n, e, p, x, y, points)
     {
 //        trace("useIt", p);
-        //装备检测同种类型重复
+        //装备检测同种类型重复 增加相同属性的装备只能有一件
         if(kind == EQUIP)
         {
             var ret = global.user.checkSoldierEquip(soldier.sid, p);
             if(ret == 0)
             {
                 global.director.pushView(new MyWarningDialog(getStr("oneEquipTitle", null), getStr("oneEquipCon", null), null), 1, 0);
+                return;
+            }
+            ret = global.user.checkUseLevel(soldier.sid, p);
+            if(ret[0] == 0)
+            {
+                global.director.pushView(new MyWarningDialog(getStr("useLevelNot", null), getStr("useLevelCon", ["[LEV0]", str(ret[1]), "[LEV1]", str(ret[2])]), null), 1, 0);
+                return;
+            }
+        }
+        //检测士兵等级 和 复活药水使用的等级 如果 等级 < 则可以使用
+        if(filterIs == RELIVE)
+        {
+            var solLevel = soldier.level;
+            var ddata = getData(DRUG, p);
+            var needLevel = ddata.get("effectLevel");
+            if(solLevel > needLevel && needLevel != -1)//-1 表示药品没有等级限制 士兵等级 超过药品使用等级
+            {
+                global.director.pushView(new MyWarningDialog(getStr("solLevelGtRelive", null), getStr("solLevelGtReliveCon", ["[LEV0]", str(solLevel), "[LEV1]", str(needLevel)]), null), 1, 0);
                 return;
             }
         }

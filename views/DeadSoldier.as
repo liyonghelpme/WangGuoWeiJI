@@ -17,6 +17,7 @@ class DeadSoldier extends MyNode
     {
         data = [];
         var sol = global.user.soldiers.items();
+        //trace("deadSoldiers", sol);
         //sid id name
         for(var i = 0; i < len(sol); i++)    
         {

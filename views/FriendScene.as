@@ -3,11 +3,31 @@ class MovLayer extends MyNode
     var scene;
     var solTimer;
     var mapDict = dict();
-    function MovLayer(sc)
+    var kind;
+    function MovLayer(sc, k)
     {
+        kind = k;
         scene = sc;
         bg = node();
         init();
+    }
+    //代理来自士兵的touch事件
+    //坐标需要首先针对n 转化成 世界坐标
+    //再进行其它计算
+    //违背了封闭原则 访问了没有权限访问的浮岛数据
+    function touchBegan(n, e, p, x, y, points)
+    {
+        scene.island.touchBegan(n, e, p, x, y, points);
+    }
+
+    function touchMoved(n, e, p, x, y, points)
+    {
+        scene.island.touchMoved(n, e, p, x, y, points);
+    }
+
+    function touchEnded(n, e, p, x, y, points)
+    {
+        scene.island.touchEnded(n, e, p, x, y, points);
     }
 
     function clearMap(build)
@@ -79,6 +99,8 @@ class MovLayer extends MyNode
         solTimer = null;
     }
     var allSoldiers = [];
+    //显示不超过50 个士兵
+    //如果水晶不为 null 则 随机选择士兵给予1个单位水晶
     function initSoldiers()
     {
         var sol = scene.soldiers;
@@ -86,7 +108,12 @@ class MovLayer extends MyNode
 //        trace("initFriend Soldier", len(sol));
         for(var i = 0; i < len(val); i++)
         {
-            var s = new FriendSoldier(val[i], this);
+            var hasCry = 0;
+            if(scene.crystal != null && i < scene.crystal)
+            {
+                hasCry = 1;
+            }
+            var s = new FriendSoldier(val[i], this, hasCry);
             addChild(s);
             allSoldiers.append(s);
         }
@@ -144,11 +171,23 @@ class FriendScene extends MyNode
     var soldiers;
     var curNum;
     var menuLayer;
+    var kind;
+    var user;
 
-    function FriendScene(pid, c)
+    //需要收获的水晶数量
+    var crystal;
+    function getUid()
     {
+        return user.get("uid");
+    }
+    function FriendScene(pid, c, k, cry, u)
+    {
+        kind = k;
         papayaId = pid;
         curNum = c;
+        crystal = cry;
+        user = u;
+
         bg = node();
         init();
         island = new FlowIsland(this, 1);
@@ -161,13 +200,31 @@ class FriendScene extends MyNode
 
         fm = new FriendMenu(this);
         menuLayer.addChild(fm);
-
-        global.httpController.addRequest("friendC/getFriend", dict([["uid", global.user.uid], ["papayaId", pid]]), getFriendOver, null);
+        
+        if(kind == VISIT_NEIBOR)
+        {
+            global.user.setLastVisitNeibor(curNum+1);
+        }
+        //访问邻居但是数据没有初始化 好友模块在登录时应该初始化邻居数据
+        if(papayaId == null && kind == VISIT_NEIBOR)
+        {
+            //等待邻居数据初始化结束 
+        }
+        else
+            global.httpController.addRequest("friendC/getFriend", dict([["uid", global.user.uid], ["papayaId", papayaId]]), getFriendOver, null);
     }
+    /*
+    访问邻居 木瓜好友 推荐好友的下一个
+    */
     function visitNext()
     {
+        var friends;
         curNum += 1;
-        var friends = global.friendController.showFriend;
+        friends = global.friendController.getFriends(kind);
+
+        if(kind == VISIT_NEIBOR)
+            global.user.setLastVisitNeibor(curNum);
+
         if(curNum >= len(friends))
         {
             curNum--;
@@ -175,7 +232,7 @@ class FriendScene extends MyNode
         }
         else
         {
-            var friendScene = new FriendScene(friends[curNum].get("id"), curNum);
+            var friendScene = new FriendScene(friends[curNum].get("id"), curNum, kind, friends[curNum].get("crystal"), friends[curNum]);
             global.director.replaceScene(friendScene);
             global.director.pushView(new VisitDialog(friendScene), 1, 0);
         }
@@ -186,10 +243,10 @@ class FriendScene extends MyNode
         if(rcode != 0)
         {
             con = json_loads(con);
-            global.friendController.updateValue(papayaId, [con.get("fid"), con.get("level")]);
+            global.friendController.updateValue(papayaId, [con.get("fid"), con.get("level"), con.get("name")]);
             soldiers = con.get("soldiers");
 
-            movLayer = new MovLayer(this);
+            movLayer = new MovLayer(this, kind);//连接的是FlowIsland
             island.addChild(movLayer);
             initOver = 1;
         }
@@ -197,7 +254,23 @@ class FriendScene extends MyNode
 
     function update(diff)
     {
+        if(papayaId == null && kind == VISIT_NEIBOR)
+        {
+            if(global.friendController.initNeiborYet == 1)
+            {
+                var neibors = global.friendController.getFriends(kind);
+                if(len(neibors) == 0)
+                {
+                    global.director.popScene();
+                    return;
+                }
+                curNum %= len(neibors);
+                papayaId = neibors[curNum].get("id");
+                global.httpController.addRequest("friendC/getFriend", dict([["uid", global.user.uid], ["papayaId", papayaId]]), getFriendOver, null);
+            }
+        }
     }
+
     override function enterScene()
     {
         super.enterScene();

@@ -83,7 +83,7 @@ class FallGoods extends MyNode
             var curX = rx*sizeX;
             var curY = ry*sizeY;
 
-            var fo = new FallObj(this, i, rx, ry);
+            var fo = new FallObj(this, i, rx, ry, buildLayer);
             fo.setPos([rx*sizeX, ry*sizeY]);
             allFalls.append(fo);
 //            trace("fallObj", rx, ry, ry*sizeY);
@@ -158,7 +158,7 @@ class FallGoods extends MyNode
             lastFallTime = FALL_TIME;
             return;
         }
-        var fo = new FallObj(this, kind, rx, ry);
+        var fo = new FallObj(this, kind, rx, ry, buildLayer);
         fo.setPos([rx*sizeX, ry*sizeY]);
         allFalls.append(fo);
 //        trace("fallObj", rx, ry, ry*sizeY);
