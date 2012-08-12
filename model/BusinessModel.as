@@ -49,23 +49,6 @@ function getFarmExp(level)
 // /1000 天数 
 //6 10 20 30 40 50
 
-/*
-var NEED_DAY = [500, 1000, 1500, 2000, 2500, 3000];
-function getLevelUpNeedExp(level)
-{
-    //var level = global.user.getValue("level");
-    var exp = getFarmExp(level)*getFarmNum(level);
-    if(level < 6)
-        return exp/2;
-    if(level < 10)
-        return exp*(500+125*(level-6))/1000;
-    if(level < 50)
-        return exp*(1000+50*(level-10))/1000;
-    if(level < 100)
-        return exp*(3000+40*(level-50))/1000;
-    return exp*(5000+30*(level-100))/1000;
-}
-*/
 //最大等级经验
 //等级数据 由programWan 中生成经验序列
 function getLevelUpNeedExp(level)
@@ -170,4 +153,16 @@ function checkFarmNum()
         return 1;
     }
     return 0;
+}
+
+
+function getProduction(level)
+{
+    var crystal = mineProduction.get("crystal")+mineProduction.get("levelCoff")*level;
+    return crystal;
+}
+
+function getMapKey(x, y)
+{
+    return x*10000+y;
 }

@@ -84,8 +84,8 @@ class DrugDialog extends MyNode
         bg = sprite("dialogFriend.png");
         init();
         initData();
-        im = bg.addsprite("soldier"+str(soldier.id)+".png").pos(98, 40).anchor(50, 50).size(71, 67);
-        nameText = bg.addlabel(soldier.myName, null, 24).pos(160, 44).anchor(0, 50).color(0, 0, 0);
+        im = bg.addsprite("soldier"+str(soldier.id)+".png").pos(104, 40).anchor(50, 50).size(71, 67);
+        nameText = bg.addlabel(soldier.myName, null, 24).pos(181, 44).anchor(0, 50).color(0, 0, 0);
 
 
 
@@ -149,88 +149,78 @@ class DrugDialog extends MyNode
 //            trace("equipData", useData, data[i], ifUse);
 
 
-            var obj = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).pos(60, 35).anchor(50, 50);
-            var bsize = obj.prepare().size();
-            var sca = min(64*100/bsize[0], 60*100/bsize[1]);
+            var obj = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).pos(36, 35).anchor(50, 50);
+            var sca = getSca(obj, [64, 60]);
             obj.scale(sca, sca);
             
             var objData;
-            //if(kind == RELIVE)
-            //    objData = getData(DRUG, id);
-            //else
             objData = getData(kind, id);
-            //panel.addlabel(objData.get("name"), null, 15).anchor(50, 50).pos(60, 52).color(0, 0, 0);
             var num;
             if(kind == DRUG)
                 num = global.user.getThingNum(kind, id);
             else if(kind == EQUIP)
                 num = 1;
-            /*
-            if(ifUse == 0)
-                num = global.user.getThingNum(kind, id);
-            else
-                num = 1;
-            */
-
-//            trace("herbNum", num, objData);
             var co = [14, 64, 26];
             if(num == 0)
                 co = [99, 42, 47];
 
             if(kind == DRUG)
-                panel.addlabel(str(num), null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
+                panel.addlabel(str(num), null, 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
             else if(kind == EQUIP)
             {
                 if(ifUse == 1)
                 {
                     var solData = global.user.getSoldierData(useData.get("owner"));
                     var solName = solData.get("name");
-                    panel.addlabel(solName, null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
+                    panel.addlabel(solName, null, 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
                 }
                 var eqLevel = useData.get("level");
-                panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), null, 15).pos(120, 37).anchor(0, 50).color(co[0], co[1], co[2]);
+                panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), null, 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
             }
-            /*
-            if(ifUse == 0)
-                panel.addlabel(str(num), null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
-            else
-            {
-                var solName = global.user.getSoldierData(useData[1]).get("name");
-                panel.addlabel(solName, null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
-            }
-            */
                 
-            panel.addlabel("desc", null, 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
-//            trace("initHerb", num);
-            var but0 = panel.addsprite("roleNameBut0.png").pos(611, 34).size(126, 37).anchor(50, 50);
+            panel.addlabel(objData.get("name")+" "+objData.get("des"), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+            var butWidth = 69;
+            var butHeight = 36;
+
+            var but0 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50);
             var words = getStr("useIt", null);
             if(num == 0)
             {
                 words = getStr("buyIt", null); 
-                but0.addlabel(words, null , 30).pos(63, 18).anchor(50, 50);
-                but0.setevent(EVENT_TOUCH, buyIt, data[i][1]);
+                but0.addlabel(words, null , 18).pos(34, 18).anchor(50, 50);
+                but0.setevent(EVENT_TOUCH, buyIt, i);
             }
             else
             {
                 if(ifUse == 0)
                 {
-                    but0.addlabel(words, null , 30).pos(63, 18).anchor(50, 50);
+                    but0.addlabel(words, null , 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, useIt, data[i][1]);
                 }
                 else
                 {
                     words = getStr("unloadIt", null);
-                    but0.addlabel(words, null , 30).pos(63, 18).anchor(50, 50);
+                    but0.addlabel(words, null , 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, unloadIt, data[i][1]);
                 }
+                var but1 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50);
+                but1.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, data[i][1]);
             }
 
         }
     }
+    //升级装备 
+    function onUpgrade(n, e, p, x, y, points)
+    {
+        //global.httpController.addRequest("goodsC/upgradeEquip", dict([["uid", global.user.uid], ["eid", p]), null, null);
+        //global.user.upgradeEquip(p);
+        //initData();
+        updateTab();
+    }
+
     //tid [id sid]
     function unloadIt(n, e, p, x, y, points)
     {
-//        trace("unloadIt", p);
         global.httpController.addRequest("soldierC/unloadThing", dict([["uid", global.user.uid], ["eid", p]]), null, null);
 
         global.user.unloadThing(p);

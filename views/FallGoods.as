@@ -74,19 +74,19 @@ class FallGoods extends MyNode
         //掉落10-15 编号的物品
         for(var i = 10; i < 15; i++)
         {
-            var rx = (rand(width)+leftUp[0])/sizeX;
-            var ry = (rand(height)+leftUp[1])/sizeY;
+            var rx = (rand(width)+leftUp[0])/SIZEX;
+            var ry = (rand(height)+leftUp[1])/SIZEY;
 
             if(rx%2 != ry%2)
                 ry++;
 
-            var curX = rx*sizeX;
-            var curY = ry*sizeY;
+            var curX = rx*SIZEX;
+            var curY = ry*SIZEY;
 
             var fo = new FallObj(this, i, rx, ry, buildLayer);
-            fo.setPos([rx*sizeX, ry*sizeY]);
+            fo.setPos([rx*SIZEX, ry*SIZEY]);
             allFalls.append(fo);
-//            trace("fallObj", rx, ry, ry*sizeY);
+//            trace("fallObj", rx, ry, ry*SIZEY);
             buildLayer.addChildZ(fo, MAX_BUILD_ZORD+1);
         }
     }
@@ -132,12 +132,12 @@ class FallGoods extends MyNode
             }
         }
 
-        var rx = rand(MapWidth/sizeX);
-        var ry = rand(MapHeight/sizeY);
+        var rx = rand(MapWidth/SIZEX);
+        var ry = rand(MapHeight/SIZEY);
         if(rx%2 != ry%2)
             ry++;
-        var curX = rx*sizeX;
-        var curY = ry*sizeY;
+        var curX = rx*SIZEX;
+        var curY = ry*SIZEY;
         for(i = 0; i < len(Zone); i++)
         {
             var difx = curX - Zone[i][0];
@@ -148,23 +148,20 @@ class FallGoods extends MyNode
         if(i > len(Zone))
         {
             lastFallTime = FALL_TIME;
-//            trace("Fall not in zone");
             return;
         }
-        var col = global.user.checkFallGoodCol(rx, ry);
-//        trace("FallGoods", rx, ry, col);
+        var col = buildLayer.checkFallGoodCol(rx, ry);
         if(col == 1)
         {
             lastFallTime = FALL_TIME;
             return;
         }
         var fo = new FallObj(this, kind, rx, ry, buildLayer);
-        fo.setPos([rx*sizeX, ry*sizeY]);
+        fo.setPos([rx*SIZEX, ry*SIZEY]);
         allFalls.append(fo);
-//        trace("fallObj", rx, ry, ry*sizeY);
-        buildLayer.addChildZ(fo, ry*sizeY);
+        buildLayer.addChildZ(fo, ry*SIZEY);
 
-        //ry*sizeY  普通掉落物品显示在最高的位置 
+        //ry*SIZEY  普通掉落物品显示在最高的位置 
         //用户升级 掉落物品 供用户拾取
     }
 

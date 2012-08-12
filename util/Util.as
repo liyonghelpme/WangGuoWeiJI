@@ -267,6 +267,7 @@ function checkInZone(position)
 
 function checkInTrain(p)
 {   
+    //trace("checkInTrain", p, TrainZone);
     var difx = p[0] - TrainZone[0];
     var dify = p[1] - TrainZone[1];
     return difx > 0 && difx < TrainZone[2] && dify > 0 && dify < TrainZone[3]; 
@@ -275,12 +276,12 @@ function checkInTrain(p)
 /*
 function getBoundary(dia)
 {
-    var x0 = dia[2]-(dia[0]+dia[1])/2*sizeX;
-    var y0 = dia[3]-(dia[0]+dia[1])/2*sizeY;
-    var x1 = x0+dia[1]*sizeX;
+    var x0 = dia[2]-(dia[0]+dia[1])/2*SIZEX;
+    var y0 = dia[3]-(dia[0]+dia[1])/2*SIZEY;
+    var x1 = x0+dia[1]*SIZEX;
     var y1 = y0;
-    var x2 = x0+dia[0]*sizeX;
-    var y2 = y0+(dia[0]+dia[1])*sizeY;
+    var x2 = x0+dia[0]*SIZEX;
+    var y2 = y0+(dia[0]+dia[1])*SIZEY;
     //trace("x1, y1, x2, y2", x1, y1, x2, y2);
     return [x1, y1, x2, y2];
 }
@@ -288,14 +289,14 @@ function getT1(x, y)
 {
     if(x == 0 && y == 0)
         return 0;
-    var t1 = (x*sizeX+y*-sizeY)/sqrt(x*x+y*y);
+    var t1 = (x*SIZEX+y*-SIZEY)/sqrt(x*x+y*y);
     return t1;
 }
 function getT2(x, y)
 {
     if(x == 0 && y == 0)
         return 0;
-    var t2 = (x*-sizeX+y*-sizeY)/sqrt(x*x+y*y);
+    var t2 = (x*-SIZEX+y*-SIZEY)/sqrt(x*x+y*y);
     return t2;
 }
 function getABound(a)
@@ -328,10 +329,10 @@ function checkCol(a, b)
     //trace("checkCollision", a, b, aBound, bBound);
     var difx = a[2]-b[2];
     var dify = a[3]-b[3];
-    var cx = difx/sizeX;
-    var cy = dify/sizeY;
-    //var size0 = [(a[0])/2*sizeX, (a[0])/2*sizeY];
-    //var size1 = [(b[0])/2*sizeX, (b[0])/2*sizeY];
+    var cx = difx/SIZEX;
+    var cy = dify/SIZEY;
+    //var size0 = [(a[0])/2*SIZEX, (a[0])/2*SIZEY];
+    //var size1 = [(b[0])/2*SIZEX, (b[0])/2*SIZEY];
     var total = a[0]+b[0];
 
     return (abs(cx)+abs(cy)) < total;
@@ -357,14 +358,17 @@ function getBuildMap(build)
 }
 /*
 根据位置 大小 计算map图 
+
+建筑物的位置是 anchor 50 100 
+建筑物菱形 所在的矩形的 左上角的位置--> + sx +1 得到最上子菱形位置编号
 */
 function getPosMap(sx, sy, px, py)
 {
-    px -= (sx+sy)*sizeX/2;
-    py -= (sx+sy)*sizeY;
+    px -= (sx+sy)*SIZEX/2;
+    py -= (sx+sy)*SIZEY;
 
-    px /= sizeX;
-    py /= sizeY;
+    px /= SIZEX;
+    py /= SIZEY;
     //trace("getBuildMap", px+sx, py+1);
     return [sx, sy, px+sx, py+1];
 }
@@ -380,10 +384,10 @@ function setBuildMap(map)
 
     px -= sx;
     py -= 1;
-    px *= sizeX;
-    py *= sizeY;
-    px += (sx+sy)*sizeX/2;
-    py += (sx+sy)*sizeY;
+    px *= SIZEX;
+    py *= SIZEY;
+    px += (sx+sy)*SIZEX/2;
+    py += (sx+sy)*SIZEY;
     return [px, py];
 }
 /*
@@ -394,52 +398,25 @@ function normalizePos(p, sx, sy)
 {
     var x = p[0];
     var y = p[1];
-    x -= (sx+sy)*sizeX/2;
-    y -= (sx+sy)*sizeY;
+    x -= (sx+sy)*SIZEX/2;
+    y -= (sx+sy)*SIZEY;
 
     //x -= FullZone[0];
     //y -= FullZone[1];
-    var q1 = x/sizeX;
-    var q2 = y/sizeY;
+    var q1 = x/SIZEX;
+    var q2 = y/SIZEY;
     if(((q1+sx)%2) != ((q2+1)%2))//q1+sx q2+1 要求建筑物最上方的菱形对齐 
     {
         q2++;
     }
-    x = q1*sizeX;
-    y = q2*sizeY;
+    x = q1*SIZEX;
+    y = q2*SIZEY;
 
-    x += (sx+sy)*sizeX/2;
-    y += (sx+sy)*sizeY;
+    x += (sx+sy)*SIZEX/2;
+    y += (sx+sy)*SIZEY;
     return [x, y];
     //return [x+FullZone[0], y+FullZone[1]];
 }
-/*
-function checkCollision(build, buildings)
-{
-    var sx1 = build.data.get("sx");
-    var sy1 = build.data.get("sy");
-    var bSize = build.getPos();
-    var px1 = bSize[0];
-    var py1 = bSize[1];
-
-
-
-    for(var i = 0; i < len(buildings); i++)
-    {
-        if(build != buildings[i])
-        {
-            var sx2 = buildings[i].data.get("sx");
-            var sy2 = buildings[i].data.get("sy");
-            var oSize = buildings[i].getPos();
-
-            var ret = checkCol([sx1, sy1, px1, py1], [sx2, sy2, oSize[0], oSize[1]]); 
-            if(ret == 1)
-                return buildings[i];
-        }
-    }
-    return null;
-}
-*/
 //0 1 2 3 4 5
 //0村庄 所以初始化用户数据大关=1 0 0
 //1 2 3 4 5
@@ -547,6 +524,7 @@ function getZord(curPos)
     return curPos[1];
 }
 
+/*
 function checkPlaning()
 {
     //trace("curScene", type(global.director.curScene), type(CastleScene));
@@ -556,6 +534,8 @@ function checkPlaning()
         return global.director.curScene.Planing;
     return 0;
 }
+*/
+
 /*
 访问是否存在临时的动画数组，如果不存在则拼接一个并存储在全局范围中，下次调用可以重用
 */
@@ -601,6 +581,26 @@ function colorWords(str)
 //    trace("color", begin, lenBegin);
     return [begin[0], begin[1], lenBegin];
 }
+/*
+根据文字中格式标号决定颜色
+*/
+function colorWordsNode(str, si, nc, sc)
+{
+    var n = node();
+    var end = str.split("]");
+    var begin = end[0].split("[");
+    var l1 = label(begin[0], null, si).color(nc);
+    var l1s = l1.prepare().size();
+    n.add(l1);
+
+    var l2 = label(begin[1], null, si).color(sc);
+    var l2s = l2.prepare().size();
+    l2.pos(l1s[0], 0);
+    n.add(l2);
+
+    n.size(l1s[0]+l2s[0], l1s[1]);
+    return n;
+}
 
 function getMagicAnimate(id)
 {
@@ -621,78 +621,19 @@ function getMapAnimate(id)
 }
 
 
-/*
-获得某个士兵地图格子映射 50 100 2*2
-x 1 - 11     1-5  7-11
-y 0 - 4  
-返回左上角的格子编号
-士兵的Y值存在 偏移 offY
-*/
-function getSolMap(p, sx, sy, offY)
-{
-    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
-    var xk = ix/MAP_OFFX;
-    var iy = p[1]-MAP_INITY-MAP_OFFY*sy-offY;
-    var yk = iy/MAP_OFFY;
 
-    return [xk, yk];
-}
-function getGridPos(gridId)
-{
-    var x = gridId[0]*MAP_OFFX+MAP_INITX;
-    var y = gridId[1]*MAP_OFFY+MAP_INITY;
-    return [x, y];
-}
-/*
-根据手指的位置计算相应的 网格编号
-一个大型士兵有2*2个网格 得到的是 左下角的网格
-位置是 anchor 50 100 位置
 
-放置士兵的时候
-士兵移动的时候
-士兵的zord
-
-限制当前网格的位置 左上角 右下角 超出边界则消失
-
-返回左上角网格的编号
-
-手指点击士兵网格的中心
-
-对齐网格
-*/
-function getPosSolMap(p, sx, sy)
-{
-    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
-    var xk = ix/MAP_OFFX;
-    //var xk = min(MAP_WIDTH-sx, max(0, k));
-
-    var iy = p[1]-MAP_INITY-MAP_OFFY/2*sy;
-    var yk = iy/MAP_OFFY;
-    //var yk = min(MAP_HEIGHT-sy, max(0, k));
-
-    return [xk, yk];
-}
 /*
 根据某个坐标计算网格对齐坐标
 返回士兵需要的对齐坐标
 限制坐标的范围
 */
 
-/*
-由格子计算士兵的坐标
-*/
-//0-12 0-4
-function getSolPos(mx, my, sx, sy, offY)
-{
-//    trace("getSolPos", offY);
-    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
-    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
-    return [mx, my];
-}
 
 
 /*
 计算到某个等级需要的所有经验
+任务模块临时使用
 */
 function getExp(level)
 {
@@ -799,10 +740,9 @@ function changeToSilver(data)
         {
             addSilver += val*500/SELL_RATE;
         }
-        else
+        else if(key == "silver")
             addSilver += val/SELL_RATE;
     }
-//    trace("changeToSilver", data, addSilver);
     data = dict([["silver", addSilver]]);
 
     return data;
@@ -864,5 +804,25 @@ function qsort(obj, begin, end, cmp)
     obj[initX] = mid;
     qsort(obj, begin, initX-1, cmp);
     qsort(obj, initX+1, end, cmp);
+}
+
+function bubbleSort(obj, cmp)
+{
+    for(var i = len(obj)-1; i > 0; i--)
+    {
+        var flag = 0;
+        for(var j = 0; j < i; j++)
+        {
+            if(cmp(obj[j], obj[j+1]) > 0)
+            {
+                flag = 1;
+                var temp = obj[j+1];
+                obj[j+1] = obj[j];
+                obj[j] = temp;
+            }
+        }
+        if(flag == 0)
+            break;
+    }
 }
 

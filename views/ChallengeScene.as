@@ -7,8 +7,20 @@ class ChallengeScene extends MyNode
     var rank;
     var enemies;
     var equips;
-    function ChallengeScene(o, p, s, r)
+    var kind;
+    /*
+    挑战对方的uid
+    挑战对方的papayaId
+    挑战对方的得分
+    挑战对方的排名
+
+    如果挑战对方是邻居
+    */
+    var user;
+    function ChallengeScene(o, p, s, r, k, par)
     {
+        kind = k;
+        user = par;
         oid = o;
         papayaId = p;
         score = s;
@@ -19,11 +31,12 @@ class ChallengeScene extends MyNode
     function initData()
     {
         if(oid == global.user.uid)
-        {
             global.httpController.addRequest("challengeC/challengeSelf", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
-        }
-        else
+        else if(kind == CHALLENGE_FRI)
             global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
+        else if(kind == CHALLENGE_NEIBOR)
+            global.httpController.addRequest("friendC/challengeNeibor", dict([["uid", global.user.uid], ["fid", oid]]), getDataOver, null); 
+
     }
     /*
     生成随机的布局
@@ -48,13 +61,23 @@ class ChallengeScene extends MyNode
                 equips = con.get("equips");
                 global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_SELF, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
             }
-            else{
+            else if(kind == CHALLENGE_FRI){
                 global.user.addChallengeRecord(oid);
                 enemies = con.get("soldiers");
                 equips = con.get("equips");
                 //initOver = 1;
                 //战胜 失败于对方 需要知道对方
                 global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
+            }
+            else if(kind == CHALLENGE_NEIBOR)
+            //根据邻居的uid 得到邻居的数据 getNeiborData
+            {
+                global.friendController.challengeNeibor(oid);
+                enemies = con.get("soldiers");
+                equips = con.get("equips");
+                //initOver = 1;
+                //战胜 失败于对方 需要知道对方
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
             }
         }
     }

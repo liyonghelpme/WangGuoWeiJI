@@ -92,12 +92,14 @@ class MenuLayer extends MyNode
     }
     /*
     通用的显示菜单的接口
+    菜单栏可能通过fadeout 方式消失因此需要fadein方式重新显示出来
     */
     function finishBuild()
     {
         if(ins == 0)
         {
             scene.keepMenuLayer.addChild(this);
+            bg.addaction(fadein(0));
         }
     }
     /*

@@ -249,6 +249,7 @@ class BattleScene extends MyNode
     //big small soldierData
     var big;
     var small;
+    //uid, papayaId, score rank cityDefense
     function BattleScene(k, sm, s, ki, par, eq)
     {
         param = par;
@@ -268,7 +269,7 @@ class BattleScene extends MyNode
         trace("getEneDefense", big, small);
         if(kind == CHALLENGE_MON)
             return mapDefense.get(big*10+small);
-        else if(kind == CHALLENGE_FRI)
+        else if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR)
             return param[4];
         else if(kind == CHALLENGE_SELF)
             return param[4];

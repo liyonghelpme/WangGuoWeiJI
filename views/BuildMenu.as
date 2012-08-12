@@ -30,11 +30,23 @@ class BuildMenu extends MyNode
     }
     /*
     在规划模式下， 每次点击新的建筑的时候就显示新的关于建筑的信息
+    
+    传入建筑物士兵 引用
     传入建筑的getData 的信息
+
+    传入士兵的数据信息
+
     */
+    var opKind = null;
     function setBuilding(b)
     {
-        building = b;
+        if(b != null)
+        {
+            opKind = b[0];
+            building = b[1].data;
+        }
+
+
         if(buttonNode != null)
         {
             setYet = 1;
@@ -74,25 +86,37 @@ class BuildMenu extends MyNode
         按钮顺序: 卖出 确认 切换方向 取消
         offX = 744-687 = 57
         */
-        var kind = building.get("kind");
-        if(building.get("changeDir") == 0)
+        /*
+        士兵只有确认和取消按钮
+        */
+        if(opKind == PLAN_SOLDIER)
         {
-            if(kind != MAIN_ZONE && inPlan == 1)
-                buttonNode.addsprite("buildSell.png").pos(687-OFFX, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
-                
             buttonNode.addsprite("buildOk.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
             buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
             buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
         }
-        else
+        else if(opKind == PLAN_BUILDING)
         {
-            if(kind != MAIN_ZONE && inPlan == 1)
-                buttonNode.addsprite("buildSell.png").pos(633-OFFX, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
+            var kind = building.get("kind");
+            if(building.get("changeDir") == 0)
+            {
+                if(kind != MAIN_ZONE && inPlan == 1)
+                    buttonNode.addsprite("buildSell.png").pos(687-OFFX, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
+                    
+                buttonNode.addsprite("buildOk.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
+                buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
+                buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
+            }
+            else
+            {
+                if(kind != MAIN_ZONE && inPlan == 1)
+                    buttonNode.addsprite("buildSell.png").pos(633-OFFX, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
 
-            buttonNode.addsprite("buildOk.png").pos(633, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
-            buttonNode.addsprite("buildSwitch.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSwitch);
-            buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-            buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
+                buttonNode.addsprite("buildOk.png").pos(633, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
+                buttonNode.addsprite("buildSwitch.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSwitch);
+                buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
+                buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
+            }
         }
     }
     function onSell()

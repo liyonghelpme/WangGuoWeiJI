@@ -59,7 +59,6 @@ class MovLayer extends MyNode
     function updatePosMap(sizePos)
     {
         var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
-        //var kind = sizePos[4].funcs;
         var sx = map[0];
         var sy = map[1];
         var initX = map[2];
@@ -88,11 +87,15 @@ class MovLayer extends MyNode
         solTimer = new Timer(200);
         super.enterScene();
         initSoldiers();
+        if(kind == VISIT_NEIBOR)
+            initMine();
     }
 
     override function exitScene()
     {
         removeSoldiers();
+        if(kind == VISIT_NEIBOR)
+            removeMine();
 
         super.exitScene();
         solTimer.stop();
@@ -105,7 +108,6 @@ class MovLayer extends MyNode
     {
         var sol = scene.soldiers;
         var val = sol.values();
-//        trace("initFriend Soldier", len(sol));
         for(var i = 0; i < len(val); i++)
         {
             var hasCry = 0;
@@ -118,19 +120,40 @@ class MovLayer extends MyNode
             allSoldiers.append(s);
         }
     }
+    var mine = null;
+    function initMine()
+    {
+        mine = bg.addsprite("build300.png", ARGB_8888).pos(768, 352).anchor(50, 100); 
+    }
+
+    function removeMine()
+    {
+        if(mine != null)
+        {
+            mine.removefromparent();
+            mine = null;
+        }
+    }
+
     function removeSoldiers()
     {
         for(var i = 0; i < len(allSoldiers); i++)
             allSoldiers[i].removeSelf();
         allSoldiers = [];
     }
-    const FlowZone = [285, 126, 482, 373];
+    const FlowZone = [[136, 242, 605, 300], [306, 116, 372, 169]];
 
     function checkInFlow(p)
     {   
-        var difx = p[0] - FlowZone[0];
-        var dify = p[1] - FlowZone[1];
-        return difx > 0 && difx < FlowZone[2] && dify > 0 && dify < FlowZone[3]; 
+        trace("checkInFlow", p, FlowZone);
+        for(var i = 0; i < len(FlowZone); i++)
+        {
+            var difx = p[0] - FlowZone[i][0];
+            var dify = p[1] - FlowZone[i][1];
+            if(difx > 0 && difx < FlowZone[i][2] && dify > 0 && dify < FlowZone[i][3])
+                return 1;
+        }
+        return 0;
     }
 
     function checkPosCollision(mx, my, ps)
@@ -141,7 +164,6 @@ class MovLayer extends MyNode
         */
         if(inZ == 0)
         {
-//            trace("not in zone");
             return 1;//not In zone
         }
         var key = mx*10000+my;
@@ -160,6 +182,10 @@ class MovLayer extends MyNode
         return null;
     }
 }
+/*
+邻居：访问消除装天 可以挑战 赠送礼物
+普通好友：只能访问 消除状态
+*/
 class FriendScene extends MyNode
 {
     var island;
@@ -180,6 +206,7 @@ class FriendScene extends MyNode
     {
         return user.get("uid");
     }
+    //user 包含uid id name level 等数据
     function FriendScene(pid, c, k, cry, u)
     {
         kind = k;

@@ -9,40 +9,67 @@ class BuildLayer extends MyNode
     var mapGridController;
     var blockBuilding;
 
+    var gridLayer;
+
     function BuildLayer(m)
     {
         map = m;
         mapGridController = new MapGridController(this);
         bg = node();
+        gridLayer = bg.addnode();
         blockBuilding = new MyNode();
         init();
     }
+    var Planing = 0;
 
-    function checkPosCollision(mx, my, ps)
+    /*
+    px /= SIZEX;
+    py /= SIZEY;
+    //trace("getBuildMap", px+sx, py+1);
+    return [sx, sy, px+sx, py+1];
+    */
+    function updateMapGrid()
     {
+        gridLayer.removefromparent();
+        gridLayer = bg.addnode();
+        var k = mapGridController.mapDict.keys();
+        for(var i = 0; i < len(k); i++)
+        {
+            var x = k[i]/10000;
+            var y = k[i]%10000;
+            var p = setBuildMap([1, 1, x, y]);
+
+            var sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+        }
+        //trace("len grid", len(k));
+    }
+
+    function checkPosCollision(mx, my, ps, sol)
+    {
+        //trace("checkPosCollision", mx, my, ps, sol);
         var inZ = checkInTrain(ps);
         /*
         限制上下边界
         */
         if(inZ == 0)
         {
-//            trace("not in zone");
             return 1;//not In zone
         }
-        var key = mx*10000+my;
+        var key = getMapKey(mx, my);
         /*
         限制不与其它建筑冲突
         */
-        var v = mapGridController.mapDict.get(key, []);
-        if(len(v) > 0)
+        var v = mapGridController.mapDict.get(key, null);
+        if(v != null)
         {
             for(var i = 0; i < len(v); i++)
             {
-                if(v[i][2] == 1)//不可行走区域
-                    return v[0];
+                //if(v[i][2] == 1)//不可行走区域
+                if(v[i][0] != sol)//行走冲突
+                    return v[i];
             }
-            //return v[0];
         }
+        //trace("checkPosCollision", v, inZ);
         /*
         检测不与静态河流冲突
         */
@@ -56,10 +83,11 @@ class BuildLayer extends MyNode
 
     function checkFallGoodCol(rx, ry)
     {
-        var inZ = checkInZone([rx*sizeX, ry*sizeY]);
+        var inZ = checkInZone([rx*SIZEX, ry*SIZEY]);
         if(inZ == 0)
             return 1;
-        var key = rx*10000+ry;
+        //var key = rx*10000+ry;
+        var key = getMapKey(rx, ry);
         var v = mapGridController.mapDict.get(key, null);
         if(v != null)
             return 1;
@@ -83,7 +111,8 @@ class BuildLayer extends MyNode
             var curY = initY+i;
             for(var j = 0; j < sy; j++)
             {
-                var key = curX*10000+curY;
+                //var key = curX*10000+curY;
+                var key = getMapKey(curX, curY);
                 var v = mapGridController.mapDict.get(key, []);
                 if(len(v) > 0)
                 {
@@ -128,9 +157,8 @@ class BuildLayer extends MyNode
     */
     function initDataOver()
     {
-        removeSoldiers();
-
         initBuilding();
+        removeSoldiers();
         initSoldiers();
 
     }
@@ -308,7 +336,7 @@ class BuildLayer extends MyNode
     {
         //id name
         var item = global.user.soldiers.items(); 
-        //trace("initSoldiers", item)
+        trace("initSoldiers", item)
         for(var i = 0; i < len(item); i++)
         {
             var sid = item[i][0];
@@ -318,7 +346,8 @@ class BuildLayer extends MyNode
                 continue;
             var soldier = new BusiSoldier(this, data, sdata, sid);
             addChildZ(soldier, MAX_BUILD_ZORD);
-            global.user.addSoldier(soldier);
+            //global.user.addSoldier(soldier);
+            mapGridController.allSoldiers.update(soldier.sid, soldier);
         }
     }
     function removeSoldiers()
@@ -348,6 +377,12 @@ class BuildLayer extends MyNode
     }
 
 
+    function keepPos()
+    {
+        Planing = 1;
+        buildKeepPos();
+        soldierKeepPos();
+    }
     function buildKeepPos()
     {
         for(var i = 0; i < len(mapGridController.allBuildings); i++)
@@ -355,11 +390,37 @@ class BuildLayer extends MyNode
             mapGridController.allBuildings[i].keepPos();
         }
     }
+    //关闭士兵自动位置保存功能
+    function soldierKeepPos()
+    {
+        var allSoldiers = mapGridController.allSoldiers;
+        for(var i = 0; i < len(allSoldiers); i++)
+            allSoldiers[i].keepPos();
+    }
+    function restorePos()
+    {
+        restoreBuildPos();
+        restoreSoldierPos();
+        clearPlanState();
+    }
+
+    function clearPlanState()
+    {
+        Planing = 0;
+    }
     function restoreBuildPos()
     {
         for(var i = 0; i < len(mapGridController.allBuildings); i++)
         {
             mapGridController.allBuildings[i].restorePos();
+        }
+    }
+    function restoreSoldierPos()
+    {
+        var allSoldiers = mapGridController.allSoldiers;
+        for(var i = 0; i < len(allSoldiers); i++)
+        {
+            allSoldiers[i].restorePos();
         }
     }
 
@@ -380,6 +441,13 @@ class BuildLayer extends MyNode
         global.user.updateBuildingDB();
         if(len(changedBuilding) > 0)
             global.httpController.addRequest("buildingC/finishPlan", dict([["uid", global.user.uid], ["builds", changedBuilding]]), null, null);
+
+        var allSoldiers = mapGridController.allSoldiers;
+        for(i = 0; i < len(allSoldiers); i++)
+        {
+            allSoldiers[i].finishPlan();
+        }
+        clearPlanState();
     }
 
     function doTransfer(sid)

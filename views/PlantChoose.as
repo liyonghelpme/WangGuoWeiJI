@@ -32,9 +32,10 @@ class PlantChoose extends MyNode
     var minPos;
     function initPlant()
     {
+        var level = global.user.getValue(level);
         for(var i = 0; i < len(plantData); i++)
         {
-            var planting = getData(PLANT, i);//getPlant(i);
+            var planting = getData(PLANT, i);
             var panel = flowNode.addsprite("plantPanel.png").pos(0, i*Height);
             panel.addsprite("Wplant"+str(i)+".png").pos(169, 48).anchor(50, 50);
 
@@ -69,6 +70,19 @@ class PlantChoose extends MyNode
 
             panel.addsprite("silver.png").pos(31, 76).anchor(50, 50).size(30, 30);
             panel.addlabel(str(planting.get("gainsilver")), null, 18).anchor(0, 50).pos(51, 76).color(0, 0, 0);
+
+
+            var needLevel = planting.get("level");
+            if(needLevel > level)
+            {
+                panel.addsprite("dialogRankShadow.png").size(230, 106);
+                var words = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
+                words.anchor(50, 50).pos(115, 53);
+                //panel.addlabel(words[0], null, 20).pos(110-20*words[2], 99).anchor(0, 50).color(100, 100, 100);
+                //panel.addlabel(words[1], null, 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
+                panel.add(words);
+
+            }
             panel.put(i);
         }
         var row = len(plantData)*Height;
@@ -118,7 +132,7 @@ class PlantChoose extends MyNode
                 var needLevel = plantData.get("level");
                 if(level < needLevel)
                 {
-                    global.director.pushView(new MyWarningDialog(getStr("levelNotTitle", null), getStr("plantLevel", ["[NAME]", plantData.get("name"), "[LEVEL]", str(needLevel)]), null), 1, 0);
+                    //global.director.pushView(new MyWarningDialog(getStr("levelNotTitle", null), getStr("plantLevel", ["[NAME]", plantData.get("name"), "[LEVEL]", str(needLevel)]), null), 1, 0);
                 }
                 else if(buyable.get("ok") == 0)
                 {

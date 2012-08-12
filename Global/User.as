@@ -482,18 +482,40 @@ class User
     }
 
 
+
+    function getKindEquip(kind)
+    {
+        var ev = equips.items();
+        var res = [];
+        for(var i = 0; i < len(ev); i++)
+        {
+            if(ev[i][1].get("kind") == kind)
+                res.append(ev[i][0]);//eid 
+        }
+        return res;
+    }
+
+    
+
     //kindId ownerid
     //装备是独立的显示
     function getThingNum(kind, id)
     {
         if(kind == DRUG)
             return drugs.get(id, 0);
-        //else if(kind == EQUIP)
-        //    return equips.get(id, 0);
+        else if(kind == EQUIP)
+        {
+            var ev = equips.values();
+            var count = 0;
+            for(var i = 0; i < len(ev); i++)
+            {
+                if(ev[i].get("kind") == id)
+                    count += 1;
+            }
+            return count;
+        }
         return 0;
     }
-
-    
     
     //静态建筑 和用户建造的动态建筑的数据 开始工作的时间
     //进入游戏之后 用户可能会卖出建筑物 这时 这个数据需要失效
@@ -638,9 +660,6 @@ class User
     {
         resource.update(key, value);
         db.put("resource", resource);
-        //updateDB(key, value);
-
-        //global.httpController.addRequest("goodsC/update", dict([["uid", uid], ["drugKind", id], ["num", value]]), null, null);
 
         for(var i = 0; i < len(updateList); )
         {
@@ -889,6 +908,7 @@ class User
     */
     function changeValue(key, add)
     {
+        trace("changeValue", key, add);
         var v = resource.get(key, 0);
         v += add;
         if(key == "exp")
@@ -898,8 +918,6 @@ class User
             var addCityDefense = 0;
             while(1)
             {
-                //var needExp = levelExp[min(level, len(levelExp)-1)];
-                //var needExp = getNeedExp(level);
                 var needExp = getLevelUpNeedExp(level);
                 //升级村庄防御力上升
                 if(v >= needExp)
@@ -920,7 +938,7 @@ class User
             }
             setValue("level", level);
             changeValue("cityDefense", addCityDefense);
-            trace("levelUp", level, addCityDefense);
+            trace("levelUp", level, addCityDefense, v, needExp);
 
             if(level != oldLevel)
             {
@@ -1057,6 +1075,7 @@ class User
     }
     function doAdd(add)
     {
+        trace("doAdd", add);
         var its = add.items();
         for(var i = 0; i < len(its); i++)
         {
@@ -1095,6 +1114,15 @@ class User
         }
         db.put("oldPos", oldPos);
     }
-
-
+    function upgradeEquip()
+    {
+    }
+    function sellDrug(kind)
+    {
+        drugs.pop(kind);
+    }
+    function sellEquip(eid)
+    {
+        equips.pop(eid);
+    }
 }

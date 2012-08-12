@@ -85,6 +85,7 @@ class FriendList extends MyNode
                     break;
 
                 var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, curY);
+                panel.put(curNum);
 
                 var papayaId = data[curNum].get("id");
 
@@ -92,6 +93,7 @@ class FriendList extends MyNode
                 if(data[curNum].get("uid") == ADD_NEIBOR_MAX)
                 {
                     var head = panel.addsprite("loginQuestionMark.png").pos(68, 105).anchor(50, 50);
+
                 }
                 else if(data[curNum].get("uid") == EMPTY_SEAT)
                 {
@@ -102,7 +104,6 @@ class FriendList extends MyNode
 
                     var level = data[curNum].get("level");
                     var name = data[curNum].get("name");
-                    panel.put(curNum);
 
                     panel.addlabel(name, null, 20).pos(66, 53).anchor(50, 50).color(0, 0, 0);
                     panel.addsprite("roleLevel.png").pos(96, 80).anchor(50, 50).size(40, 40);
@@ -252,13 +253,15 @@ class FriendList extends MyNode
             }
         }
     }
+    //解除邻居关系不算发送请求
     function onRemoveNeibor(n, e, curNum, x, y, points)
     {
         global.httpController.addRequest("friendC/removeNeibor", dict([["uid", global.user.uid], ["fid", data[curNum].get("uid")]]), null, null);
-        global.friendController.sendRequest(data[curNum].get("uid"));
+        //global.friendController.sendRequest(data[curNum].get("uid"));
         global.friendController.removeNeibor(data[curNum].get("uid"));
         //清除选择
         selectNum = -1;
+        updateData();
         updateTab();
     }
     /*
@@ -551,7 +554,7 @@ class FriendDialog extends MyNode
         var rec = new Recommand(po, sz, this);
         views = [nei, paf, rec];
         
-        switchView(null, null, 2, null, null, null);
+        switchView(null, null, 0, null, null, null);
 
     }
     function switchView(n, e, sel, x, y, points)
@@ -560,9 +563,10 @@ class FriendDialog extends MyNode
         {
             if(curSel != -1)
                 views[curSel].removeSelf();
-            showTitle.texture(titles[curSel]);
             curSel = sel;
+
             addChild(views[curSel]);
+            showTitle.texture(titles[curSel]);
         }
         
     }

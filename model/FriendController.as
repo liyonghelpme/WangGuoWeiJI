@@ -30,9 +30,11 @@ class FriendController
     var curPapOffset = 0;
     var showFriend = [];
     var sendRequestYet = dict();
+    //只在当前有效
     function sendRequest(uid)
     {
         sendRequestYet.update(uid, 1);   
+        //global.user.db.put("sendRequestYet", sendRequestYet);
     }
     function checkRequest(uid)
     {
@@ -172,10 +174,14 @@ class FriendController
         return null;
     }
     //增加邻居 只有再neibors 数据初始化之后才可以增加邻居
+    //需要邻居的mineLevel 以及是否挑战过的信息
     function addNeibor(nei)
     {
         if(neibors != null)
         {
+            nei = copy(nei);
+            nei["challengeYet"] = 0;
+            nei["mineLevel"] = 0;
             neibors.append(nei);
             setNeiborCrystal();
             global.user.db.put("neibors", neibors);
@@ -186,7 +192,7 @@ class FriendController
     {
         if(neibors != null)
         {
-            for(var i = 0; i < neibors; i++)
+            for(var i = 0; i < len(neibors); i++)
             {
                 if(neibors[i].get("uid") == nid)
                 {
@@ -196,6 +202,27 @@ class FriendController
             }
             global.user.db.put("neibors", neibors);
         }
+    }
+    //每天第一次登录清空邻居信息
+    function firstLogin()
+    {
+        if(neibors != null)
+            for(var i = 0; i < len(neibors); i++)
+            {
+                neibors[i]["challengeYet"] = 0;
+            }
+    }
+
+    function getNeiborData(nid)
+    {
+        for(var i = 0; i < len(neibors); i++)
+        {
+            if(neibors[i].get("uid") == nid)
+            {
+                return neibors[i];
+            }
+        }
+        return null;
     }
     //增级邻居空位
 
@@ -226,12 +253,24 @@ class FriendController
             neibors = [];
             for(var i = 0; i < len(temp); i++)
             {
-                neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]] ]));
+                neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]], ["mineLevel", temp[i][4]], ["challengeYet", temp[i][5]] ]));
             }
             setNeiborCrystal();
             global.user.db.put("neibors", neibors);
             initNeiborYet = 1;
         }
+    }
+    function challengeNeibor(nid)
+    {
+        for(var i = 0; i < len(neibors); i++)
+        {
+            if(neibors[i]["uid"] == nid)
+            {
+                neibors[i]["challengeYet"] = 1;
+                break;
+            }
+        }
+        global.user.db.put("neibors", neibors);
     }
 
     function receiveMsg(param)

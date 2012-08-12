@@ -45,7 +45,7 @@ class CastleScene extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
-        global.staticScene = this;
+        //global.staticScene = this;
         bg.setevent(EVENT_KEYDOWN, quitGame);
         bg.focus(1);
         //c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
@@ -112,7 +112,7 @@ class CastleScene extends MyNode
         global.sensorController.removeCallback(this);
         //c_sensor(SENSOR_ACCELEROMETER);
         bg.setevent(EVENT_KEYDOWN, null);
-        global.staticScene = null;
+        //global.staticScene = null;
         global.timer.removeTimer(this);
 
         global.msgCenter.removeCallback(SHOW_DIALOG, this);
@@ -125,33 +125,22 @@ class CastleScene extends MyNode
     {
         ml.beginBuild();
         Planing = 1;
-        mc.buildLayer.buildKeepPos();
+        mc.buildLayer.keepPos();
+
+        //mc.buildLayer.buildKeepPos();
+        //mc.buildLayer.soldierKeepPos();
 
         planView = new BuildMenu(this, null);
         global.director.pushView(planView, 0, 0);
     }
     function finishPlan()
     {
-        //var ret = global.user.checkBuildCol();
-//        trace("buildCollision", curBuild);
         if(curBuild != null && curBuild.colNow == 1)
             return;
 
-        //if(ret == 1)
-        //    return;
-        global.user.finishPlan();
+        mc.buildLayer.finishPlan();
         closePlan();
     }
-    /*
-    function doTransfer(sid)
-    {
-        mc.buildLayer.doTransfer(sid); 
-    }
-    function unloadThing(sid)
-    {
-        mc.buildLayer.unloadThing(sid);
-    }
-    */
     function disableMenu()
     {
         if(realDisappear == 0)
@@ -170,7 +159,9 @@ class CastleScene extends MyNode
     }
     function cancelPlan()
     {
-        mc.buildLayer.restoreBuildPos();
+        //mc.buildLayer.restoreBuildPos();
+        //mc.buildLayer.restoreSoldierPos();
+        mc.buildLayer.restorePos();
         closePlan();
     }
     function closePlan()
@@ -195,17 +186,20 @@ class CastleScene extends MyNode
     }
     /*
     设置选择的建筑物全局菜单
+    设置Plan当前移动 移动的建筑物
     */
-    function setBuilding(build)
+    function setBuilding(p)
     {
+        var build = p[1];
         if(curBuild != null && curBuild.colNow == 1)
             return 0;
         if(curBuild != null)
             curBuild.finishBottom();
         curBuild = build;
-        planView.setBuilding(build.data);
+        planView.setBuilding(p);
         return 1;
     }
+
     /*
     与beginBuild 是相对的函数
     移动需要将建筑物置于最高层
@@ -214,7 +208,7 @@ class CastleScene extends MyNode
     function finishBuild()
     {
         //var other = checkCollision(mc.curBuild, global.user.allBuildings);
-        var other = global.user.checkCollision(curBuild);
+        var other = mc.buildLayer.checkCollision(curBuild);
         if(other != null)
             return;
 
@@ -295,13 +289,13 @@ class CastleScene extends MyNode
     /*
     开始建造的时候 将菜单释放
     */
-    function build(id)
+    function beginBuild(id)
     {
         var building = getData(BUILD, id);
 
         ml.beginBuild();   
         curBuild = mc.beginBuild(building);
-        global.director.pushView(new BuildMenu(this, building), 0, 0);
+        global.director.pushView(new BuildMenu(this, [PLAN_BUILDING, curBuild]), 0, 0);
     }
     function buySoldier(id)
     {

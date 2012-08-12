@@ -15,6 +15,7 @@ import views.RankDialog;
 //import views.NewRank;
 import views.RankBase;
 import views.ChallengeScene;
+import views.ChallengeNeibor;
 
 
 import views.LoginDialog;
@@ -74,6 +75,7 @@ import views.ChildMenuLayer;
 import views.MailDialog;
 import views.RequestView;
 import views.GiftView;
+import views.AllGoods;
 
 import views.BreakDialog;
 
@@ -156,10 +158,13 @@ import Global.Timer;
 import views.Dark;
 import views.StandardTouchHandler;
 import Global.MyAnimate;
-import Global.MyNode;
+
 import Global.TouchManager;
 import model.TaskModel;
+import views.TaskFinish;
 import model.MailController;
+
+import Global.MyNode;
 
 import model.FriendController;
 import model.HttpController;

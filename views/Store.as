@@ -144,7 +144,7 @@ class Store extends MyNode
             }
 
             global.director.popView();
-            scene.build(id);
+            scene.beginBuild(id);
         }
         else if(kind == DRUG)
         {

@@ -8,9 +8,8 @@ class HttpController
     var registerHandler;
     function HttpController()
     {
-        //baseUrl = "http://uhz000738.chinaw3.com:8100/";
-        baseUrl = "http://192.168.3.102:8100/";
-//        trace("base", baseUrl);
+        baseUrl = "http://uhz000738.chinaw3.com:8100/";
+        //baseUrl = "http://192.168.3.102:8100/";
         requestList = [];//请求是有序的
         registerHandler = dict();//注册对应id 请求的处理函数
         global.timer.addTimer(this);
@@ -48,11 +47,18 @@ class HttpController
         if(rcode == 0)
         {
             trace("request Failed");
+            http_request(baseUrl+"reportError", errorHandler, dict([["uid", global.user.uid], ["errorDetail", [req[0], req[2], req[3]]]]), 15000, null);
+            global.director.pushView(new MyWarningDialog(getStr("netError", null), getStr("netErrorCon", null), null), 1, 0);
         }
         if(handler != null)
             handler(rid, rcode, con, param);    
         doRequest();
     }
+    function errorHandler(rid, rcode, con, param)
+    {
+        trace("report Error");
+    }
+
     var buffers = dict();
     function cacheHealthRecover(req)
     {

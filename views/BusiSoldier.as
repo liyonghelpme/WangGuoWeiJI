@@ -1,5 +1,7 @@
 class BusiSoldier extends MyNode
 {
+    //在同时处理建筑物和士兵的模块 通过这个标志区分两者
+    //或者传递参数的时候， 通过明显的变量区分
     var isBuilding = 0;
     /*
     和建筑物应该在同一个图层上面 这样有正常的遮挡关系
@@ -246,8 +248,8 @@ class BusiSoldier extends MyNode
 
     function initHealth()
     {
-        var sx = bloodTotalLen*health/healthBoundary;
-        bloodBanner.size(sx, bloodHeight);
+        var bx = bloodTotalLen*health/healthBoundary;
+        bloodBanner.size(bx, bloodHeight);
     }
     function BusiSoldier(m, d, privateData, s)
     {
@@ -281,9 +283,9 @@ class BusiSoldier extends MyNode
         setPos(nPos);
         
         //死亡士兵 打开药店 不需要更新地图
+        //设置当前位置为MapDict
         if(map != null)
-            //curMap = global.user.updateMap(this);
-            curMap = map.updateMap(this);
+            curMap = map.mapGridController.updateMap(this);
 
         movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
@@ -418,11 +420,40 @@ class BusiSoldier extends MyNode
     }
     var accMove = 0;
     var lastPoints;
+    /*
+    规划状态下士兵的Zord 只有在冲突的时候才会设置成最大
+    */
     function touchBegan(n, e, p, x, y, points)
     {
         accMove = 0;
         lastPoints = n.node2world(x, y);
+        if(Planing)
+        {
+            var setSuc = global.director.curScene.setBuilding([PLAN_SOLDIER, this]);
+            //点击成功设置bottom
+            if(setSuc)
+            {   
+                setBottom();
+            }
+            //if(global.director.curScene.curBuild == this)
+            map.mapGridController.clearSolMap(this); 
+        }
         map.touchBegan(n, e, p, x, y, points);
+    }
+    function setBottom()
+    {
+        if(bottom == null)
+        {
+            var bSize = bg.size();
+            /*
+            如果方块的大小恰好和建筑物的底座一样大小 那么要求建筑物底座必须要一定大小
+            +40 +20
+            士兵脚底是方块中心
+            士兵的sx sy 与 建筑不同
+            */
+            bottom = sprite().pos(bSize[0]/2, bSize[1]).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
+            bg.add(bottom, -1);
+        }
     }
     function touchMoved(n, e, p, x, y, points)
     {
@@ -431,7 +462,57 @@ class BusiSoldier extends MyNode
         var difx = lastPoints[0] - oldPos[0];
         var dify = lastPoints[1] - oldPos[1];
         accMove += abs(difx)+abs(dify);
-        map.touchMoved(n, e, p, x, y, points); 
+
+        //如果当前的建筑物不是可操作的建筑物 则移动背景地图
+        if(Planing && global.director.curScene.curBuild == this)
+        {
+            var parPos = bg.parent().world2node(lastPoints[0], lastPoints[1]);
+            var newPos = normalizePos(parPos, sx, sy)
+            setPos(newPos);
+            setColPos();
+
+            if(len(points) >= 3)//多个手指允许缩放操作
+            {
+                map.touchMoved(n, e, p, x, y, points);
+            }
+        }
+        else
+            map.touchMoved(n, e, p, x, y, points); 
+    }
+    /*
+    根据当前位置 判断是否冲突 决定底座的颜色 
+    需要设置士兵的curMap 来计算冲突
+
+    colNow 记录当前的冲突状态
+    判定是否在移动区域中checkInTrain
+
+    curMap = map.mapGridController.updatePosMap([sx, sy, tar[0], tar[1], this]);
+    */
+    function setColPos()
+    {
+        colNow = 0;
+        //根据当前位置计算地图映射
+        var curP = bg.pos();
+        var cmap = getPosMap(sx, sy, curP[0], curP[1]);
+        //根据映射检测冲突
+
+        var col = map.checkPosCollision(cmap[2], cmap[3], bg.pos(), this);
+        trace("setSolColor", curP, cmap, col);
+
+        if(col != null)
+        {
+            colNow = 1;
+            setZord(MAX_BUILD_ZORD);
+        }
+
+        if(bottom != null)
+        {
+            if(colNow)
+                bottom.texture("red2.png");
+            else
+                bottom.texture("green2.png");
+        }
+
     }
     function showGlobalMenu()
     {
@@ -453,9 +534,20 @@ class BusiSoldier extends MyNode
     var showMenuYet = 0;
     function touchEnded(n, e, p, x, y, points)
     {
-        if(showMenuYet == 0)
+        if(Planing && global.director.curScene.curBuild == this )
         {
-            global.director.curScene.showGlobalMenu(this, showGlobalMenu);
+            if(colNow == 0)
+            {
+                setPos(bg.pos());
+                //不冲突调整zord正常
+                //冲突zord设置最大
+            }
+            curMap = map.mapGridController.updateMap(this);//设置当前冲突位置
+        }
+        if(showMenuYet == 0 && !Planing)
+        {
+            if(accMove < 20)
+                global.director.curScene.showGlobalMenu(this, showGlobalMenu);
         }
         map.touchEnded(n, e, p, x, y, points);
     }
@@ -475,27 +567,26 @@ class BusiSoldier extends MyNode
     function getTar()
     {
         var curPos = bg.pos();
-        var map = getPosMap(sx, sy, curPos[0], curPos[1]);  
-        //trace("curMap", map, curPos);
-        map = [map[2], map[3]];
+        var posMap = getPosMap(sx, sy, curPos[0], curPos[1]);  
+        posMap = [posMap[2], posMap[3]];
         var allPos = [
-            [map[0]+0, map[1]+-2],
-            [map[0]+-1, map[1]+-1],
-            [map[0]+-2, map[1]+0],
-            [map[0]+-1, map[1]+1],
-            [map[0]+0, map[1]+2],
-            [map[0]+1, map[1]+1],
-            [map[0]+2, map[1]+0],
-            [map[0]+1, map[1]+-1],
+            [posMap[0]+0, posMap[1]+-2],
+            [posMap[0]+-1, posMap[1]+-1],
+            [posMap[0]+-2, posMap[1]+0],
+            [posMap[0]+-1, posMap[1]+1],
+            [posMap[0]+0, posMap[1]+2],
+            [posMap[0]+1, posMap[1]+1],
+            [posMap[0]+2, posMap[1]+0],
+            [posMap[0]+1, posMap[1]+-1],
         ];
         var start = rand(len(allPos));
         var moveable = 0;
         for(var i = 0; i < len(allPos); i++)
         {
             var cur = (start+i)%len(allPos);
-            var curMap = allPos[cur];
-            var tPos = setBuildMap([sx, sy, curMap[0], curMap[1]]);
-            var col = map.checkPosCollision(curMap[0], curMap[1], tPos);
+            var curMap2 = allPos[cur];
+            var tPos = setBuildMap([sx, sy, curMap2[0], curMap2[1]]);
+            var col = map.checkPosCollision(curMap2[0], curMap2[1], tPos, this);
             if(col == null)
             {
                 moveable = 1;
@@ -569,6 +660,8 @@ class BusiSoldier extends MyNode
             initHealth();
 
         }
+
+
         if(inspire == 0)
         {
             inspireTime += diff;
@@ -579,9 +672,13 @@ class BusiSoldier extends MyNode
             }
         }
 
+        if(Planing)//规划中停止移动
+            return;
+
         if(showMenuYet == 1)//显示全局菜单停止移动
             return;
 
+        //设子map映射在没有到达的位置
         if(state == SOL_FREE)
         {
             tar = getTar();
@@ -589,10 +686,9 @@ class BusiSoldier extends MyNode
             if(tar != null)
             {
                 state = SOL_MOVE; 
-                map.clearMap(this);
-                curMap = map.updatePosMap([sx, sy, tar[0], tar[1], this]);
+                map.mapGridController.clearMap(this);
+                curMap = map.mapGridController.updatePosMap([sx, sy, tar[0], tar[1], this]);
                 changeDirNode.addaction(movAni);
-                //featureColor.addaction(featureMov);
                 setDir();
                 doMove();
             }
@@ -609,9 +705,44 @@ class BusiSoldier extends MyNode
     /*
     一个对象清空map状态的时候需要清除相应地图块的士兵和建筑物
     */
-    function setColPos()
+
+    //检测士兵当前是否冲突
+    var colNow = 0;
+
+    var startPos = null;
+    var startMap = null;
+    var Planing = 0;
+    function keepPos()
     {
+        Planing = 1;
+        bg.stop();//停止所有移动
+
+        startPos = getPos();
+        startMap = curMap;
     }
+    function restorePos()
+    {
+        map.mapGridController.clearSolMap(this); 
+        setPos(startPos);
+        curMap = startMap;
+        finishPlan();
+    }
+    var bottom = null;
+    function finishPlan()
+    {
+        Planing = 0;
+        finishBottom();
+    }
+    //冲突的时候士兵将显示在最高的位置
+    function finishBottom()
+    {
+        if(bottom != null)
+        {
+            bottom.removefromparent();
+            bottom = null
+        }
+    }
+
     override function exitScene()
     {
         map.solTimer.removeTimer(this);

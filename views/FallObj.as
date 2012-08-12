@@ -39,11 +39,11 @@ class FallObj extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        buildLayer.updateRxRyMap(curMap[0], curMap[1], this);
+        buildLayer.mapGridController.updateRxRyMap(curMap[0], curMap[1], this);
     }
     override function exitScene()
     {
-        buildLayer.removeRxRyMap(curMap[0], curMap[1], this);
+        buildLayer.mapGridController.clearRxRyMap(curMap[0], curMap[1], this);
         super.exitScene();
     }
     var tarPos;
@@ -75,12 +75,12 @@ class FallObj extends MyNode
             if(reward.get("crystal") != 0 && reward.get("crystal") != null)
                 reward.update("crystal", 3+level/reward.get("crystal"));//等级/10的水晶数量   
         }
-
-        global.httpController.addRequest("goodC/pickObj", dict([["uid", global.user.uid], ["silver", reward.get("silver")], ["crystal", reward.get("crystal")], ["gold", reward.get("gold")]]), null, null);
+        //奖励可能没有某些项 需要 将其设置默认0
+        global.httpController.addRequest("goodsC/pickObj", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)], ["gold", reward.get("gold", 0)]]), null, null);
         global.director.curScene.addChild(new FlyObject(bg, reward, pickMe));
         bg.setevent(EVENT_TOUCH|EVENT_UNTOUCH|EVENT_MOVE, null);
-        bg.removefromparent();
-
+        //bg.removefromparent();
+        bg.visible(0);
     }
     function pickMe()
     {

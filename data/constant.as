@@ -1,12 +1,10 @@
 const DARK_PRI = -1;
-const sizeX = 32;
-const sizeY = 16;
-//const NorSizeX = sizeX+4;
-//const NorSizeY = sizeY+4;
-var SX = sizeX-10;
-var SY = sizeY-10;
-//var XDir = sizeX*10;
-//var YDir = sizeY*10;
+const SIZEX = 32;
+const SIZEY = 16;
+
+//var SX = SIZEX-10;
+//var SY = SIZEY-10;
+
 const AddX = 15;
 const AddY = 7;
 const MapWidth = 3000;
@@ -95,7 +93,7 @@ const WHITE = m_color(
 可能需要提供一个接口 用于确定建筑物类型 和建筑活动区域
 允许用户建造在任意的区域
 
-initX initY sizeX sizeY
+initX initY SIZEX SIZEY
 */
 const FullZone = [
 //[2205, 486, 723, 363],
@@ -104,7 +102,7 @@ const FullZone = [
 //[1209, 483, 678, 543],
 ];
 //limit soldier move zone
-const TrainZone = [93, 498, 2500, 438];
+const TrainZone = [100, 498, 2400, 400];
 //then check in which zone
 const FarmZone = [
 [2193, 432, 735, 393],
@@ -169,8 +167,8 @@ var buildFunc = dict([
 [DECOR_BUILD, [[], []]],
 [CASTLE_BUILD, [["photo", "tip"], ["story", "soldier", "collection"]]],
 [GOD_BUILD, [["photo"], ["relive", "transfer"]]],
-[DRUG_BUILD, [["photo"], ["makeDrug"]]],
-[FORGE_SHOP, [["photo"], ["forge"]]],
+[DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
+[FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
 [MINE_KIND, [["photo"], ["upgrade"]]],
 ]);
 
@@ -456,6 +454,8 @@ const RECOVER_TIME = 5000;
 const CHALLENGE_MON = 0;
 const CHALLENGE_FRI = 1;
 const CHALLENGE_SELF = 2;//怪兽布局 由数据库monX monY 决定
+const CHALLENGE_NEIBOR = 3;
+
 
 const ENEMY = -1;
 const MAX_SCORE = 9999999;
@@ -493,3 +493,7 @@ const MINE_BUILD = 300;
 const MINE_BID = -1;
 
 const MINE_BEGIN_LEVEL = 6;
+
+const PLAN_BUILDING = 0;
+const PLAN_SOLDIER = 1;
+

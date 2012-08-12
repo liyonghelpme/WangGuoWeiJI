@@ -13,7 +13,7 @@ class LoginDialog extends MyNode
     ]);
     const POS = [[97, 229], [233, 229], [369, 229]];
     const WORDS = [[108, 174], [241, 174], [375, 174], [504, 174]];
-    const REWARD = [[97, 263], [233, 263], [369, 263]];
+    const REWARD = [[97, 270], [233, 270], [369, 270]];
     var curCmd;
 
 

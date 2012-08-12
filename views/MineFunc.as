@@ -94,13 +94,12 @@ class Mine extends FuncBuild
 
     收获结束
     */
+
     override function whenBusy()
     {
         if(planting.curState == 1)//成熟则收获
         {
-            var level = baseBuild.buildLevel;
-            var crystal = mineProduction.get("crystal")+mineProduction.get("levelCoff")*level;
-
+            var crystal = getProduction(baseBuild.buildLevel);
             global.httpController.addRequest("mineC/harvest", dict([["uid", global.user.uid], ["crystal", crystal]]), null, null);
             flowBanner.removefromparent();
             flowBanner = null;
@@ -126,13 +125,34 @@ class Mine extends FuncBuild
         global.user.doCost(cost);
         baseBuild.buildLevel += 1;
         global.user.updateMine(baseBuild);
+
+        
+        var it = cost.items();
+        var temp = baseBuild.bg.addnode();
+        var bSize = baseBuild.bg.size();
+
+        var pic = temp.addsprite(it[0][0]+".png").anchor(0, 50).pos(0, -30).size(30, 30);
+        var word = temp.addlabel("-"+str(it[0][1]), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+        var wSize = word.prepare().size();
+
+        var offX = bSize[0]/2-(35+wSize[0])/2;
+        pic.pos(offX, -30);
+        word.pos(offX+35, -30);
+
+        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
     function sureToUpgrade()
     {
         var cost = dict([["colorCrystal", mineProduction.get("colorCrystal")]]);
         var buyable = global.user.checkCost(cost);
+        var crystal = getProduction(baseBuild.buildLevel);
         global.director.pushView(new ResourceWarningDialog(
-                        getStr("upgradeMineTit", null), getStr("upgradeMineCon", null), sureToUpgrade, buyable, cost, "colorCrystal.png"), 1, 0);
+                        getStr("upgradeMineTit", null), 
+                                getStr("upgradeMineCon", 
+                                        ["[NUM0]", str(crystal), 
+                                        "[NUM1]", str(global.user.getValue("colorCrystal")),
+                                        "[NUM2]", str(mineProduction.get("colorCrystal")),
+                                        "[NUM3]", str(getProduction(baseBuild.buildLevel+1))]), doUpgrade, buyable, cost, "colorCrystal.png"), 1, 0);
     }
     //工作时间长度
     override function initWorking(data)

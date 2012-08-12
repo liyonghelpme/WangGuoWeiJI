@@ -54,3 +54,70 @@ function getRandomMapReward(big, small)
     }
     return res;
 }
+
+
+/*
+战斗地图使用的Map 函数
+获得某个士兵地图格子映射 50 100 2*2
+x 1 - 11     1-5  7-11
+y 0 - 4  
+返回左上角的格子编号
+士兵的Y值存在 偏移 offY
+*/
+function getSolMap(p, sx, sy, offY)
+{
+    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
+    var xk = ix/MAP_OFFX;
+    var iy = p[1]-MAP_INITY-MAP_OFFY*sy-offY;
+    var yk = iy/MAP_OFFY;
+
+    return [xk, yk];
+}
+function getGridPos(gridId)
+{
+    var x = gridId[0]*MAP_OFFX+MAP_INITX;
+    var y = gridId[1]*MAP_OFFY+MAP_INITY;
+    return [x, y];
+}
+
+/*
+根据手指的位置计算相应的 网格编号
+一个大型士兵有2*2个网格 得到的是 左下角的网格
+位置是 anchor 50 100 位置
+
+放置士兵的时候
+士兵移动的时候
+士兵的zord
+
+限制当前网格的位置 左上角 右下角 超出边界则消失
+
+返回左上角网格的编号
+
+手指点击士兵网格的中心
+
+对齐网格
+*/
+function getPosSolMap(p, sx, sy)
+{
+    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
+    var xk = ix/MAP_OFFX;
+    //var xk = min(MAP_WIDTH-sx, max(0, k));
+
+    var iy = p[1]-MAP_INITY-MAP_OFFY/2*sy;
+    var yk = iy/MAP_OFFY;
+    //var yk = min(MAP_HEIGHT-sy, max(0, k));
+
+    return [xk, yk];
+}
+
+/*
+由格子计算士兵的坐标
+*/
+//0-12 0-4
+function getSolPos(mx, my, sx, sy, offY)
+{
+//    trace("getSolPos", offY);
+    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
+    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
+    return [mx, my];
+}

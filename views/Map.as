@@ -404,7 +404,7 @@ class Map extends MyNode
                 setMap(so);
             }
         }
-        else
+        else//程序生成士兵的位置 挑战排行榜 挑战邻居
         {
             for(i = 0; i < len(s); i++)
             {
@@ -470,7 +470,8 @@ class Map extends MyNode
 
         var crystal = 0;
         var score = 0;
-        if(scene.param != null) 
+        //挑战RANK 或者 邻居
+        if(scene.kind == CHALLENGE_FRI) 
         {
             var myRank = global.user.rankOrder;
             var myScore = global.user.rankScore;
@@ -492,7 +493,6 @@ class Map extends MyNode
                 crystal = challengeReward[i][1];
                 
                 score = eneScore*challengeReward[i][2]/100;
-//                trace("score", eneScore, challengeReward[i][2], MAX_SCORE, myScore, score, MAX_INT);
                 score = min(MAX_SCORE-myScore, score);
             }
             else
@@ -502,9 +502,25 @@ class Map extends MyNode
             global.user.updateRankScore(score); 
             global.user.changeValue("crystal", crystal);
 
-//            trace("challengeReward", challengeReward[i], crystal, score, "eneScore", eneScore, "eneRank", eneRank, "myRank", myRank);
         }
-
+        else if(scene.kind == CHALLENGE_NEIBOR)
+        {
+            var neibor = global.friendController.getNeiborData(scene.param[0]);
+            var cry;
+            if(win == 1)
+            {
+                cry = getProduction(neibor.get("mineLevel"));
+                if(neibor.get("level") < global.user.getValue("level"))
+                    cry = cry/10;
+                else if(neibor.get("level") == global.user.getValue("level"))
+                    cry = cry/5;
+                else
+                    cry = cry/2;
+            }
+            else
+                cry = 0;
+            global.user.changeValue("crystal", cry);
+        }
 
         if(scene.kind == CHALLENGE_MON)
         {
@@ -515,6 +531,11 @@ class Map extends MyNode
         {
             global.director.pushView(new ChallengeOver(win, star, crystal, score, this, levelUpSol), 1, 0);
             global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["sols", updateSoldierData], ["crystal", crystal], ["score", score]]), null, null);
+        }
+        else if(scene.kind == CHALLENGE_NEIBOR)
+        {
+            global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, levelUpSol), 1, 0);
+            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.param[0]], ["sols", updateSoldierData], ["crystal", cry]]), null, null);
         }
     }
 

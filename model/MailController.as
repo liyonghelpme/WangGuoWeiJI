@@ -10,8 +10,10 @@ class MailController
 
     function MailController()
     {
+        global.timer.addTimer(this);
         global.msgCenter.registerCallback(INITDATA_OVER, this);
     }
+    var getNeiborRequest = 0;
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -39,7 +41,18 @@ class MailController
             {
                 mail.append([NEIBOR_REQ, req[i]]);
             }
+            getNeiborRequest = 1;
             initYet = 1;
+        }
+    }
+    //获取所有的请求礼物信息之后
+    function getGiftOver(rid, rcode, con, param)
+    {
+    }
+    function update(diff)
+    {
+        if(getNeiborRequest == 1)
+        {
         }
     }
 

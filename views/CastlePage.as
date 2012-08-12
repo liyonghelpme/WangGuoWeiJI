@@ -143,9 +143,12 @@ class CastlePage extends MyNode
         {
             //每天第一次登录清理推荐数据 
             global.user.db.remove("recommand");
+            global.friendController.firstLogin();
 
             reward = getLoginReward(day);
             global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+
+
         }
 //        trace("loginReward", day, reward);
     }
@@ -162,7 +165,7 @@ class CastlePage extends MyNode
 
 
         var flow0 = bg.addsprite("flow0.png").pos(0, 48).setevent(EVENT_TOUCH, goFlow, 0);
-        var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onFlowBanner);
+        var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100).size(60, 88).scale(50);
         banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
 
         bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0))).setevent(EVENT_TOUCH, visitNeibor);
@@ -185,7 +188,7 @@ class CastlePage extends MyNode
         //px - (1+1)*32/2 = pYN  / 32 = 26
         //py - (1+1)*16 = pYN / 16 = 48
         //260048 特殊的固定建筑 不能移动 也不能任意的点击 由客户端确定的建筑
-        banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner);
+        banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner).scale(50);
         solNum = banner.addlabel("50", null, 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
 
         buildLayer = new BuildLayer(this);
@@ -233,10 +236,6 @@ class CastlePage extends MyNode
             global.director.pushScene(friendScene);
             global.director.pushView(new VisitDialog(friendScene), 1, 0);
         }
-    }
-    function onFlowBanner()
-    {
-        //global.director.pushView(new SoldierMax(), 1, 0); 
     }
     function onBanner()
     {
@@ -414,7 +413,8 @@ class CastlePage extends MyNode
         if(storeSolTime >= 30000)
         {
             storeSolTime = 0;
-            global.user.storeOldPos();
+            if(scene.Planing == 0)//当前没有进行规划 则保存士兵位置
+                global.user.storeOldPos(buildLayer.mapGridController.allSoldiers);
         }
     }
     override function exitScene()

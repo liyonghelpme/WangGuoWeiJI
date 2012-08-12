@@ -107,8 +107,8 @@ class Building extends MyNode
     /*
     在设置完特殊建筑之后设置相应的建筑的
     锚点 50 100
-    左上角坐标  (sx+sy)/2*sizeX  (sx+sy)*sizeY
-    要保证左上角和sizeX sizeY 网格
+    左上角坐标  (sx+sy)/2*SIZEX  (sx+sy)*SIZEY
+    要保证左上角和SIZEX SIZEY 网格
     所有建筑都有方向属性， 只是农田不能改变方向而已
     */
     var aniNode = null;
@@ -191,10 +191,10 @@ class Building extends MyNode
             changeDirNode.add(aniNode.bg);
         }
 
-        bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
-        bg.setevent(EVENT_MOVE, touchMoved);
-        bg.setevent(EVENT_UNTOUCH, touchEnded);
-
+        //alphatouch 变向node
+        changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
+        changeDirNode.setevent(EVENT_MOVE, touchMoved);
+        changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
     }
     function getObjectId()
     {
@@ -282,7 +282,7 @@ class Building extends MyNode
 //        trace("setPos", p);
         var curPos = p;
         var zOrd = curPos[1];
-        if(state == Moving || (checkPlaning() && global.director.curScene.curBuild == this))
+        if(state == Moving || (Planing && global.director.curScene.curBuild == this))
             zOrd = MAX_BUILD_ZORD;
 //        trace("setZord", zOrd);
         bg.pos(p);
@@ -308,17 +308,13 @@ class Building extends MyNode
         if(z == NotBigZone)
         {
             setColor(NotBigZone);
-//            trace("not In Zone", NotBigZone);
             colNow = 1;
         }
         else
         {
-            //var other = global.user.checkCollision(this);
             var other = map.checkCollision(this);
-//            trace("col With Other", other);
             if(other != null)
             {
-                //global.user.setCol(this);
                 setColor(NotBigZone);
                 colNow = 1;
             }
@@ -327,44 +323,51 @@ class Building extends MyNode
                 setColor(InZone);
             }
         }
-        //funcBuild.setPos();
-//        trace("col Now", colNow);
     }
     /*
     进入规划模式， 保存旧的坐标 
     检测是否移动
+    每个建筑物 每个士兵 需要本地保存状态 知道当前处于Planing 状态或者 buildLayer 存在一个函数用于确定是否Planing
+    依赖于上层逻辑保证了唯一性但是不能保证自身的独立性 需要依赖于未知的对象的接口
+    所有建筑物对外提供接口：
+    keepPos finishPlan
+    用于外界控制建筑的规划状态
+    依赖于外界确定自己是否是当前规划中建筑
     */
     var dirty = 0;
+    var Planing = 0;
     function keepPos()
     {
+        //trace("beginKeepPos");
         oldPos = getPos();
         dirty = 0;
+        Planing = 1;
     }
     /*
     取消规划模式
     */
     function restorePos()
     {
+        map.mapGridController.clearMap(this);//清理map 之后 再设置map
         setPos(oldPos);
         finishPlan();
     }
     /*
     状态可以做成 位与的形式
+    经营页面的建筑物
+    水晶矿的建筑物 检测当前是否处于Planing状态
     */
     function setState(s)
     {
         state = s;
-        if((state == Moving) || checkPlaning())
+        if((state == Moving) || Planing == 1)
         {
-            //bg.prepare();
             var bSize = bg.size();
-
-//            trace("back Size", bSize, (sx+sy)/2*sizeY);
             /*
             如果方块的大小恰好和建筑物的底座一样大小 那么要求建筑物底座必须要一定大小
             +40 +20
             */
-            bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*sizeY).anchor(50, 50).size((sx+sy)*sizeX+20, (sx+sy)*sizeY+10).color(100, 100, 100, 100);
+            bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*SIZEY).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
             bg.add(bottom, -1);
             //half transparent + color
         }
@@ -411,39 +414,37 @@ class Building extends MyNode
     var accMove = 0;
     function touchBegan(n, e, p, x, y, points)
     {
-        //accDifX = 0;
-        //accDifY = 0;
         accMove = 0;
         lastPoints = n.node2world(x, y);         
         
         map.touchBegan(n, e, p, x, y, points); 
 
-        if(checkPlaning())
+        if(Planing)
         {
-            var setSuc = global.director.curScene.setBuilding(this);
-            if(setSuc == 0)
-                return;
-            if(bottom == null)
+            var setSuc = global.director.curScene.setBuilding([PLAN_BUILDING, this]);
+            if(setSuc)
             {
-                setState(state);
+                if(bottom == null)
+                {
+                    setState(state);
+                }
             }
         }
 
         /*
         规划状态 如果点击 则需要更新
         */
-        if(state == Moving || checkPlaning())
+        if(state == Moving || Planing)
         {
             dirty = 1;
-            //global.user.clearMap(this);
-            map.clearMap(this);
+            map.mapGridController.clearMap(this);
         }
-
 
     }
     function finishPlan()
     {
         dirty = 0;
+        Planing = 0;
         if(bottom != null)
         {
             finishBottom();
@@ -454,7 +455,6 @@ class Building extends MyNode
     }
     function setColor(inZ)
     {
-//        trace("setColor", inZ);
         if(bottom == null)
             return;
         if(inZ != InZone)
@@ -500,13 +500,12 @@ class Building extends MyNode
         lastPoints = n.node2world(x, y);
         var difx = lastPoints[0] - oldPos[0];
         var dify = lastPoints[1] - oldPos[1];
-        if(state == Moving || checkPlaning())
+        if(state == Moving || Planing)
         {
             if(global.director.curScene.curBuild != this)
                 return;
             var parPos = bg.parent().world2node(lastPoints[0], lastPoints[1]);
             var newPos = normalizePos(parPos, sx, sy)
-            //moveBack(newPos);
             setPos(newPos);
             setColPos();
             if(len(points) >= 3)//-1 0 1
@@ -538,8 +537,7 @@ class Building extends MyNode
     {
 
         var ret;
-//        trace("building State", state, accMove, kind, funcs);
-        if((state == Moving) || checkPlaning())
+        if((state == Moving) || Planing)
         {
             if(global.director.curScene.curBuild != this)
                 return;
@@ -550,7 +548,7 @@ class Building extends MyNode
             }
                 
             //global.user.updateMap(this);
-            map.updateMap(this);
+            map.mapGridController.updateMap(this);
         }
         /*
         如果移动过多则不打开建筑物菜单

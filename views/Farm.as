@@ -30,7 +30,7 @@ class Plant extends MyNode
         var sy = building.data.get("sy");
         
         var bSize = building.bg.size();
-        bg = sprite("p0.png").anchor(50, 100).pos((sx+sy)/2*sizeX, (sx+sy)*sizeY);
+        bg = sprite("p0.png").anchor(50, 100).pos((sx+sy)/2*SIZEX, (sx+sy)*SIZEY);
         init();
 
         /*
@@ -198,12 +198,13 @@ class Farm extends FuncBuild
     function beginPlant(id)
     {
         baseBuild.setState(Working);
-//        trace("planting", id);
+
         var plant = getData(PLANT, id);//getPlant(id);
         planting = new Plant(baseBuild, plant, null);
         baseBuild.addChild(planting);
         //建筑状态也需要改变
         global.user.updateBuilding(baseBuild);
+        trace("planting", id);
     }
     function doHarvest()
     {
@@ -227,6 +228,7 @@ class Farm extends FuncBuild
             v *= rate;
             gain[keys[k]] = v;
         }
+        trace("farmGain", gain);
 
         global.director.curScene.addChild(new FlyObject(baseBuild.bg, gain, harvestOver));
 

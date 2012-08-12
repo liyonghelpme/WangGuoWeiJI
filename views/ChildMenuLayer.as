@@ -34,21 +34,27 @@ class ChildMenuLayer extends MyNode
     ["train", ["menu_button_train.png", onTrain]],
     ["upgrade", ["menu_button_upgrade.png", onUpgrade]],
 
+    ["allDrug", ["menu_button_drug.png", onAllDrug]],
+    ["allEquip", ["menu_button_equip.png", onAllEquip]],
+    
     ]);
+    function onAllDrug()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new AllGoods(DRUG), 1, 0);
+    }
+    function onAllEquip()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new AllGoods(EQUIP), 1, 0);
+    }
+
     //矿 升级
     function onUpgrade()
     {
         //建筑物关闭全局菜单
         global.director.curScene.closeGlobalMenu();
         scene.funcBuild.sureToUpgrade();
-
-        /*
-        var cost = dict([["colorCrystal", mineProduction.get("colorCrystal")]]);
-
-        var buyable = global.user.checkCost(cost);
-        global.director.pushView(new ResourceWarningDialog(
-                        getStr("upgradeMineTit", null), getStr("upgradeMineCon", null), sureToUpgrade, buyable, cost, "colorCrystal.png"), 1, 0);
-        */
     }
     
     function onTrain()

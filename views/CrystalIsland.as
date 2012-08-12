@@ -20,6 +20,10 @@ class CrystalLayer extends MyNode
     function touchBegan(n, e, p, x, y, points)
     {
     }
+    function checkCollision()
+    {
+        return null;
+    }
 
     function touchMoved(n, e, p, x, y, points)
     {

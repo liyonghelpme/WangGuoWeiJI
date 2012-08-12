@@ -570,7 +570,7 @@ class RankBase extends MyNode
         var score = data[diff][2];
         var rank = data[diff][3];
 
-        var cs = new ChallengeScene(uid, papayaId, score, rank);
+        var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, null);
         global.director.pushScene(cs);
         global.director.pushView(new VisitDialog(cs), 1, 0);
         cs.initData();

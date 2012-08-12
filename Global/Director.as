@@ -61,7 +61,7 @@ class Director
             if(kc == KEYCODE_BACK)
             {
                 quitState = 1;
-                global.director.pushView(new QuitBanner(), 0, 0);
+                pushView(new QuitBanner(), 0, 0);
             }
         }
         else if(quitState == 1)
@@ -74,6 +74,43 @@ class Director
 
 //                trace("quitGame now");
                 quitgame();
+            }
+        }
+    }
+    var controlledStack = []; 
+    function pushControlledFrag(view, dark, autoPop)
+    {
+        if(dark == 1)
+        {
+            var temp = new MyNode();
+            temp.bg = node();
+            var d = new Dark(autoPop);
+            temp.addChild(d);
+            temp.addChild(view);
+
+            curScene.addChild(temp);
+            controlledStack.append([view, 1]);
+        }
+        else
+        {
+            curScene.addChild(view); 
+            controlledStack.append([view, 0]);
+        }
+    }
+    //删除背后的darkNode
+    //但是view 需要知道自己是否是dark的 
+    function popControlledFrag(view)
+    {
+        for(var i = len(controlledStack)-1; i >= 0; i--)
+        {
+            if(controlledStack[i][0] == view)
+            {
+                if(controlledStack[i][1] == 1)
+                    view.bg.parent().get().removeSelf();
+                else
+                    view.removeSelf();
+                controlledStack.pop(i);
+                break;
             }
         }
     }

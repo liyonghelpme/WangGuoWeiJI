@@ -6,7 +6,7 @@ class MineMenu extends MyNode
         scene = s;
         bg = node();
         init();
-        bg.addsprite("map_back.png").pos(20, 460).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
+        bg.addsprite("map_back.png").pos(20, 460).size(62, 40).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
 
         var title = bg.addsprite("pageFriendTitle.png").pos(17, 13);
         title.addlabel("name", null, 20).pos(100, 22).anchor(0, 50);
@@ -15,12 +15,14 @@ class MineMenu extends MyNode
         if(level < MINE_BEGIN_LEVEL )
             title.addlabel(getStr("mineNotBegin", ["[LEVEL]", str(MINE_BEGIN_LEVEL)]), null, 22).pos(91, 44).color(0, 0, 0);
 
+        /*
         var but = bg.addsprite("challengeCry.png", ARGB_8888).anchor(50, 50).pos(735, 426).setevent(EVENT_TOUCH, onChallenge);
         var sca = getSca(but, [70, 70]);
         but.scale(sca);
+        */
 
-        but = bg.addsprite("mail.png", ARGB_8888).anchor(50, 50).pos(658, 426).setevent(EVENT_TOUCH, onMail);
-        sca = getSca(but, [70, 70]);
+        var but = bg.addsprite("mail.png", ARGB_8888).anchor(50, 50).pos(658, 426).setevent(EVENT_TOUCH, onMail);
+        var sca = getSca(but, [70, 70]);
         but.scale(sca);
     }
     function onChallenge()

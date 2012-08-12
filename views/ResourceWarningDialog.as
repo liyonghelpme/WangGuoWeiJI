@@ -17,7 +17,7 @@ class ResourceWarningDialog extends MyNode
         bg = sprite("roleName.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
         bg.addlabel(t, null, 30, FONT_BOLD).pos(243, 29).anchor(50, 50).color(0, 0, 0);
-        var con = bg.addlabel(c, null, 25, FONT_NORMAL, 263, 118, ALIGN_LEFT).pos(177, 86).color(0, 0, 0);
+        var con = bg.addlabel(c, null, 20, FONT_NORMAL, 263, 118, ALIGN_LEFT).pos(177, 86).color(0, 0, 0);
         var conSize = con.prepare().size();
 
 
@@ -51,14 +51,14 @@ class ResourceWarningDialog extends MyNode
         
         var item = showData.items();
         //中间内容的高度+10
-        var initY = 86+con[1]+10;
+        var initY = 86+conSize[1]+10;
 
         for(var i = 0; i < len(item); i++)
         {
             bg.addlabel(getStr("resList", 
                 ["[NAME]", getStr(item[i][0], null), "[VAL]", str(item[i][1])]), 
-                null, 25, FONT_NORMAL).pos(177, initY).color(fil[0], fil[1], fil[2]);
-            initY += 28;
+                null, 18, FONT_NORMAL).pos(177, initY).color(fil[0], fil[1], fil[2]);
+            initY += 20;
         }
 
         showCastleDialog();
