@@ -338,6 +338,7 @@ var Keys = [
     drugKey,
     fallThingKey,
     goodsListKey,
+    magicStoneKey,
 ];
 var CostData = [
     buildingData,
@@ -356,6 +357,7 @@ var CostData = [
     drugData,
     fallThingData,
     goodsListData,
+    magicStoneData,
 ];
 
 var GoodsPre = [
@@ -375,6 +377,7 @@ var GoodsPre = [
     "drug[ID]",
     "",
     "stone[ID]",
+    "magicStone[ID]",
 ];
 var KindsPre = [
     "build[ID].png",
@@ -387,12 +390,13 @@ var KindsPre = [
     "soldier[ID].png",
     "goldBig.png",
     "task",
-    "herb",
+    "herb[ID].png",
     "prescription",
     null,
     "drug[ID].png",
     "",
     "stone[ID].png",
+    "magicStone[ID].png",
 ];
 
 //260048  木牌位置
@@ -482,7 +486,10 @@ const ONCE_TASK = 0;
 const CYCLE_TASK = 1;
 const DAILY_TASK = 2;
 
+
+//邮件信息类型
 const NEIBOR_REQ = 0;
+const GIFT_REQ = 1;
 
 const VISIT_PAPAYA = 0;
 const VISIT_NEIBOR = 1;

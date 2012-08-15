@@ -31,7 +31,7 @@ class Store extends MyNode
     商店去除 编号 126木牌建筑物 数据库也可以删除
     */
     var allGoods = [
-        [[TREASURE_STONE, 0],  [TREASURE_STONE, 1], [TREASURE_STONE, 2], [TREASURE_STONE, 3], [0, 142], [0, 144], [1, 20], [1, 21]],
+        [[MAGIC_STONE, 0], [MAGIC_STONE, 1], [MAGIC_STONE, 2], [MAGIC_STONE, 3],  [TREASURE_STONE, 0],  [TREASURE_STONE, 1], [TREASURE_STONE, 2], [TREASURE_STONE, 3], [0, 142], [0, 144], [1, 20], [1, 21]],
         [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [FREE_GOLD, 0]],
         [[4, 0], [4, 1], [4, 2]],
         [[5, 0], [5, 1], [5, 2]],
@@ -180,6 +180,13 @@ class Store extends MyNode
         {
             global.httpController.addRequest("goodsC/buyTreasureStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
             global.user.buyTreasureStone(id);
+            setTab(curSel);
+            addChildZ(new SucBanner(), 1);
+        }
+        else if(kind == MAGIC_STONE)
+        {
+            global.httpController.addRequest("goodsC/buyMagicStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
+            global.user.buyMagicStone(id);
             setTab(curSel);
             addChildZ(new SucBanner(), 1);
         }

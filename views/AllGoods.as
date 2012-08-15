@@ -127,7 +127,7 @@ class AllGoods extends MyNode
             //同种类型药品装备的数量
             if(data[i][0] == EQUIP_KIND)
             {
-                num = global.user.getThingNum(kind, id);
+                num = global.user.getGoodsNum(kind, id);
                 var co = [14, 64, 26];
                 if(num == 0)
                     co = [99, 42, 47];
@@ -246,7 +246,7 @@ class AllGoods extends MyNode
         if(kind == DRUG)
         {
             var dd = getData(DRUG, data[p][1]);
-            var num = global.user.getThingNum(DRUG, data[p][1]);
+            var num = global.user.getGoodsNum(DRUG, data[p][1]);
             addSilver = changeToSilver(dd);
             addSilver["silver"] *= num;
 

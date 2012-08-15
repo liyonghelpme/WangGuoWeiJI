@@ -19,6 +19,8 @@ function replaceStr(s, rep)
 function getStr(key, rep)
 {
     var s = strings.get(key);
+    if(s == null)
+        return "";
     if(type(s) == type([]))
     {
         s = s[LANGUAGE];

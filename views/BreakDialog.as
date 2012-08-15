@@ -54,7 +54,7 @@ class BreakDialog extends MyNode
 
 
             for(i = 0; i < len(reward); i++)
-                global.user.changeHerb(reward[i][0], reward[i][1]);
+                global.user.changeGoodsNum(HERB, reward[i][0], reward[i][1]);
 
             bg.addsprite("dialogVic.png").anchor(50, 50).pos(271, 46);
             //noraml gray

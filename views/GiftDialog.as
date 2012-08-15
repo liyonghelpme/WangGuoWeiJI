@@ -49,7 +49,7 @@ class GiftDialog extends MyNode
         bg = sprite("dialogFriend.png");
         init();
         initData();
-        bg.addsprite("sendGift.png").anchor(50, 50).pos(169, 41);
+        bg.addsprite("sendGiftTitle.png").anchor(50, 50).pos(169, 41);
 
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
@@ -160,7 +160,8 @@ class GiftDialog extends MyNode
                     id = ed.get("kind");
                     objData = getData(EQUIP, id);
 
-                    obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", id])).pos(36, 35).anchor(50, 50);
+                    obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(id)])).pos(36, 35).anchor(50, 50);
+                    //trace("equipName", map.get(data[i][0]), data[i], ed);
                     if(ed.get("owner") != -1)
                     {
                         var solData = global.user.getSoldierData(ed.get("owner"));
@@ -180,23 +181,8 @@ class GiftDialog extends MyNode
                     id = data[i][1];
                     obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(data[i][1])])).pos(36, 35).anchor(50, 50);
                     objData = getData(map.get(data[i][0]), id);
-                    if(data[i][0] == DRUG_ITEM)
-                    {
-                        num = global.user.getThingNum(map.get(data[i][0]), id);
 
-                    }
-                    else if(data[i][0] == HERB_ITEM)
-                    {
-                        num = global.user.getHerb(id);
-                    }
-                    else if(data[i][0] == TREASURE_ITEM)
-                    {
-                        num = global.user.getGoodsNum(map.get(data[i][0]), id);
-                    }
-                    else if(data[i][0] == MAGIC_ITEM)
-                    {
-                        num = global.user.getGoodsNum(map.get(data[i][0]), id);
-                    }
+                    num = global.user.getGoodsNum(map.get(data[i][0]), id);
 
                     co = [14, 64, 26];
                     if(num == 0)
@@ -223,32 +209,31 @@ class GiftDialog extends MyNode
         var num = 0;
         if(k == EQUIP_ITEM)
         {
-            global.httpController.addRequest("goods/sendEquip", dict([["uid", global.user.uid], ["fid", neiborUid], ["eid", data[p][1]], ["ti", giftId]]), null, null);
+            global.httpController.addRequest("goodsC/sendEquip", dict([["uid", global.user.uid], ["fid", neiborUid], ["eid", data[p][1]], ["ti", giftId]]), null, null);
             global.user.sellEquip(data[p][1]);//只是删除用户装备数据
         }
-        else if(k == DRUG_ITEM)
+        else 
         {
-            global.httpController.addRequest("goods/sendDrug", dict([["uid", global.user.uid], ["fid", neiborUid], ["did", data[p][1]], ["ti", giftId]]), null, null);
-            global.user.decreaseDrug(data[p][1]);
-            num = global.user.getThingNum(DRUG, data[p][1]);
-        }
-        else if(k == HERB_ITEM)
-        {
-            global.httpController.addRequest("goods/sendHerb", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
-            global.user.changeHerb(data[p][1], -1);
-            num = global.user.getHerb(data[p][1]);
-        }
-        else if(k == TREASURE_ITEM)
-        {
-            global.httpController.addRequest("goods/sendTreasureStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
-            global.user.useTreasureStone(data[p][1]);
-            num = global.user.getGoodsNum(TREASURE_STONE, data[p][1]);
-        }
-        else if(k == MAGIC_ITEM)
-        {
-            global.httpController.addRequest("goods/sendMagicStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
-            global.user.changeGoodsNum(MAGIC_STONE, data[p][1], -1);
-            num = global.user.getGoodsNum(TREASURE_STONE, data[p][1]);
+
+            if(k == DRUG_ITEM)
+            {
+                global.httpController.addRequest("goodsC/sendDrug", dict([["uid", global.user.uid], ["fid", neiborUid], ["did", data[p][1]], ["ti", giftId]]), null, null);
+            }
+            else if(k == HERB_ITEM)
+            {
+                global.httpController.addRequest("goodsC/sendHerb", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
+            }
+            else if(k == TREASURE_ITEM)
+            {
+                global.httpController.addRequest("goodsC/sendTreasureStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
+            }
+            else if(k == MAGIC_ITEM)
+            {
+                global.httpController.addRequest("goodsC/sendMagicStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
+            }
+
+            global.user.changeGoodsNum(map.get(k), data[p][1], -1);
+            num = global.user.getGoodsNum(map.get(k), data[p][1]);
         }
 
         if(num == 0)
@@ -309,7 +294,7 @@ class GiftDialog extends MyNode
     }
     function onClose(n, e, p, x, y, points)
     {
-        if(data[p][0] != KIND_ITEM)
+        if(data[p][0] == KIND_ITEM)
         {
             var removeKind = data[p][1];
             data[p][2] = 0;

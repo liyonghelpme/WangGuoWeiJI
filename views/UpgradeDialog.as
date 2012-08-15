@@ -48,7 +48,7 @@ class UpgradeDialog extends MyNode
             pan.addsprite("stone"+str(i)+".png").pos(54, 82).anchor(50, 50);
             pan.addlabel(getStr("sucPos", ["[POS]", str(pos0)]), null, 18).pos(57, 20).anchor(50, 50).color(31, 17, 5);
 
-            var num = global.user.getTreasureStoneNum(i);
+            var num = global.user.getGoodsNum(TREASURE_STONE, i);
             pan.addlabel(getStr("treaNum", ["[NUM]", str(num)]), null, 18).pos(57, 144).anchor(50, 50).color(0, 0, 0);
         }
 
@@ -93,7 +93,7 @@ class UpgradeDialog extends MyNode
 
         words.text(getStr("stoneLevel", ["[NAME]", sdata.get("name"), "[LEV0]", str(ed.get("level")+1), 
                                 "[POS0]", str(pos0), "[POS1]", str(pos1)]) );
-        var num = global.user.getTreasureStoneNum(curChoose);
+        var num = global.user.getGoodsNum(TREASURE_STONE, curChoose);
         if(num == 0)
         {
             but1.setevent(EVENT_TOUCH, null);
@@ -120,12 +120,12 @@ class UpgradeDialog extends MyNode
     //使用宝石等待服务器返回
     function onUpgrade(n, e, p, x, y, points)
     {
-        var num = global.user.getTreasureStoneNum(curChoose);
+        var num = global.user.getGoodsNum(TREASURE_STONE, curChoose);
         //宝石数量足够
         if(num >= 1)
         {
             global.director.popView();
-            global.user.useTreasureStone(curChoose);
+            global.user.changeGoodsNum(TREASURE_STONE, curChoose);
             global.httpController.addRequest("goodsC/upgradeEquip", dict([["uid", global.user.uid], ["eid", eid], ["tid", curChoose]]), upgradeFinish, eid);
         }
     }

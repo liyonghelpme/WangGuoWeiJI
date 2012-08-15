@@ -1,7 +1,7 @@
 class RequestView extends MyNode
 {
     const OFFY = 62;
-    const ROW_NUM = 6;
+    const ROW_NUM = 5;
     const PANEL_WIDTH = 784;
     const PANEL_HEIGHT = 60;
     const ITEM_NUM = 1;
@@ -13,6 +13,9 @@ class RequestView extends MyNode
     var flowNode;
     var cl;
     var initYet = 0;
+    var giftNum;
+
+    var recAllBut;
     
     function RequestView(p, s)
     {
@@ -22,13 +25,35 @@ class RequestView extends MyNode
         flowNode = cl.addnode();
         initData();
 
+        giftNum = bg.addlabel(getStr("howManyGift", null), null, 25).color(100, 100, 100).pos(26, 103);
+
+        recAllBut = bg.addsprite("greenButton.png").pos(623, 87).size(148, 53).setevent(EVENT_TOUCH, receiveAll);
+        recAllBut.addlabel(getStr("recAll", null), null, 25).color(0, 0, 0).anchor(50, 50).pos(74, 26);
+
+        setGiftNum();
+
         cl.setevent(EVENT_TOUCH, touchBegan);
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
     }
+    function receiveAll()
+    {
+        for(var i = 0; i < len(data); i++)
+        {
+            if(data[i][0] == GIFT_REQ)
+            {
+                receiveGift(i);
+            }
+        }
+        setGiftNum();
+        updateTab();
+    }
     function initData()
     {
         data = global.mailController.getMail();
+        initYet = 1;
+        updateTab();
+        /*
         if(data == null)
         {
             initYet = 0;
@@ -38,6 +63,7 @@ class RequestView extends MyNode
             initYet = 1;
             updateTab();
         }
+        */
     }
     function update(diff)
     {
@@ -126,15 +152,88 @@ class RequestView extends MyNode
         var rg = getRange();
         for(var i = rg[0]; i < rg[1]; i++)
         {
+             
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i).size(PANEL_WIDTH, PANEL_HEIGHT);
-            panel.addlabel(getStr("neiborRequest", ["[NAME]", data[i][1][2]]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+            if(data[i][0] == NEIBOR_REQ)
+            {
+                panel.addlabel(getStr("neiborRequest", ["[NAME]", data[i][1][2]]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
 
-            var but0 = panel.addsprite("greenButton.png").pos(500, 8).size(119, 42).setevent(EVENT_TOUCH, onReceive, i);
-            but0.addlabel(getStr("receive", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+                var but0 = panel.addsprite("greenButton.png").pos(500, 8).size(119, 42).setevent(EVENT_TOUCH, onReceive, i);
+                but0.addlabel(getStr("receive", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
 
-            but0 = panel.addsprite("greenButton.png").pos(640, 8).size(119, 42).setevent(EVENT_TOUCH, onRefuse, i);
-            but0.addlabel(getStr("refuse", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+                but0 = panel.addsprite("greenButton.png").pos(640, 8).size(119, 42).setevent(EVENT_TOUCH, onRefuse, i);
+                but0.addlabel(getStr("refuse", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+            }
+            //uid name kind tid level time
+            else if(data[i][0] == GIFT_REQ)
+            {
+                var uName = data[i][1][1];
+                var gKind = data[i][1][2];
+                var gId = data[i][1][3];
+                var gLevel = data[i][1][4];
+                var objData = getData(gKind, gId);
+                if(gKind == EQUIP)
+                {
+                    panel.addlabel(getStr("friSendEquip", ["[NAME]", uName, "[ENAME]", objData.get("name"), "[LEVEL]", str(gLevel)]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+                }
+                else
+                {
+                    panel.addlabel(getStr("friSendOthers", ["[NAME]", uName, "[ONAME]", objData.get("name")]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+                }
+                panel.addsprite(replaceStr(KindsPre[gKind], ["[ID]", gId])).pos(556, 13).size(30, 30);
+
+                but0 = panel.addsprite("greenButton.png").pos(640, 8).size(119, 42).setevent(EVENT_TOUCH, onGift, i);
+                but0.addlabel(getStr("receive", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+            }
         }
+    }
+    function setGiftNum()
+    {
+        var count = 0;
+        for(var i = 0; i < len(data); i++)
+        {
+            if(data[i][0] == GIFT_REQ)
+            {
+                count++;
+            }
+        }
+        if(count == 0)
+        {
+            recAllBut.texture("greenButton.png", GRAY);
+            recAllBut.setevent(EVENT_TOUCH, null);
+        }
+        else 
+        {
+            recAllBut.texture("greenButton.png", WHITE);
+            recAllBut.setevent(EVENT_TOUCH, receiveAll);
+        }
+        giftNum.text(getStr("howManyGift", ["[NUM]", str(count)]));
+    }
+    function receiveGift(p)
+    {
+        var fid = data[p][1][0];
+        var gKind = data[p][1][2];
+        var gId = data[p][1][3];
+        var gLevel = data[p][1][4];
+        var ti = data[p][1][5];
+        if(gKind == EQUIP)
+        {
+            var eid = global.user.getNewEid();
+            global.httpController.addRequest("goodsC/receiveGift", dict([["uid", global.user.uid], ["fid", fid], ["ti", ti], ["eid", eid]]), null, null);
+            global.user.getNewEquip(eid, gId, gLevel);
+        }
+        else
+        {
+            global.httpController.addRequest("goodsC/receiveGift", dict([["uid", global.user.uid], ["fid", fid], ["ti", ti], ["eid", 0]]), null, null);
+            global.user.changeGoodsNum();
+        }
+        data.pop(p);
+    }
+    function onGift(n, e, p, x, y, points)
+    {
+        receiveGift(p);
+        setGiftNum();
+        updateTab();
     }
 
     //请求由对方发送过来 接受和 拒绝的uid 和 fid 需要是相反的

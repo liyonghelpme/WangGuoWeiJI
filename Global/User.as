@@ -276,44 +276,64 @@ class User
         challengeRecord.append(oid);
     }
     
-    function getTreasureStoneNum(id)
-    {
-        return treasureStone.get(getGoodsKey(TREASURE_STONE, id), 0);
-    }
-    function getMagicStoneNum(id)
-    {
-        return treasureStone.get(getGoodsKey(MAGIC_STONE, id), 0);
-    }
+
     function changeGoodsNum(kind, id, num)
     {
-        treasureStone[getGoodsKey(kind, id)] += num;
-        db.put("treasureStone", treasureStone);
-        global.msgCenter.sendMsg(UPDATE_TREASURE, id);
+        if(kind == TREASURE_STONE || kind == MAGIC_STONE)
+        {
+            treasureStone[getGoodsKey(kind, id)] += num;
+            db.put("treasureStone", treasureStone);
+        }
+        else if(kind == DRUG)
+        {
+            changeDrugNum(id, num);
+        }
+        else if(kind == HERB)
+        {
+            changeHerbNum(id, num);
+        }
     }
     function getGoodsNum(kind , id)
     {
-        return treasureStone.get(getGoodsKey(kind, id), 0);
+        if(kind == TREASURE_STONE || kind == MAGIC_STONE)
+            return treasureStone.get(getGoodsKey(kind, id), 0);
+        if(kind == DRUG)
+            return drugs.get(id, 0);
+        if(kind == HERB)
+            return herbs.get(id, 0);
+
+        if(kind == EQUIP)
+        {
+            var ev = equips.values();
+            var count = 0;
+            for(var i = 0; i < len(ev); i++)
+            {
+                if(ev[i].get("kind") == id)
+                    count += 1;
+            }
+            return count;
+        }
+        return 0;
     }
     //所有装备页面 宝石数量更新数据
-    function useTreasureStone(id)
-    {
-        treasureStone[getGoodsKey(TREASURE_STONE, id)] -= 1;
-        db.put("treasureStone", treasureStone);
-        global.msgCenter.sendMsg(UPDATE_TREASURE, id);
-    }
+
 
     function buyTreasureStone(id)
     {
         var cost = getCost(TREASURE_STONE, id);
         doCost(cost);
 
-        var k = getGoodsKey(TREASURE_STONE, id);
-        var v = treasureStone.get(k, 0);
-        v += 1;
-        treasureStone[k] = v;
-        db.put("treasureStone", treasureStone);
+        changeGoodsNum(TREASURE_STONE, id, 1);
 
         global.msgCenter.sendMsg(UPDATE_TREASURE, id);
+    }
+
+    function buyMagicStone(id)
+    {
+        var cost = getCost(MAGIC_STONE, id);
+        doCost(cost);
+
+        changeGoodsNum(MAGIC_STONE, id, 1); 
     }
 
     function getNewGiftId()
@@ -571,23 +591,7 @@ class User
 
     //kindId ownerid
     //装备是独立的显示
-    function getThingNum(kind, id)
-    {
-        if(kind == DRUG)
-            return drugs.get(id, 0);
-        else if(kind == EQUIP)
-        {
-            var ev = equips.values();
-            var count = 0;
-            for(var i = 0; i < len(ev); i++)
-            {
-                if(ev[i].get("kind") == id)
-                    count += 1;
-            }
-            return count;
-        }
-        return 0;
-    }
+
     
     //静态建筑 和用户建造的动态建筑的数据 开始工作的时间
     //进入游戏之后 用户可能会卖出建筑物 这时 这个数据需要失效
@@ -625,10 +629,7 @@ class User
 
     function makeDrug(id)
     {
-        var num = drugs.get(id, 0);
-        num += 1;
-        drugs.update(id, num);
-        db.put("drugs", drugs);
+        changeGoodsNum(DRUG, id, 1);
 
         setValue(NOTIFY, 1);
     }
@@ -646,12 +647,8 @@ class User
 //        trace("buy Something", kind, id);
         if(kind == DRUG)
         {
-            value = drugs.get(id, 0);
-            value += 1;
-            drugs.update(id, value);
-            db.put("drugs", drugs);
+            changeGoodsNum(DRUG, id, 1);
         }
-
 
         //通知所有监听器修改数据
         setValue(NOTIFY, 1);
@@ -664,20 +661,19 @@ class User
         db.put("equips", equips);
         setValue(NOTIFY, 1);
     }
+
+    function getNewEquip(eid, id, level)
+    {
+        equips.update(eid, dict([["kind", id], ["level", level], ["owner", -1]]));
+        db.put("equips", equips);
+    }
+
     function getNewEid()
     {
         return maxEid++;
     }
 
-    function changeHerb(id, num)
-    {
-        var val = herbs.get(id, 0);
-        val += num;
-        herbs.update(id, val);
-        db.put("herbs", herbs);
 
-        setValue(NOTIFY, 1);
-    }
 
 
     /*
@@ -974,10 +970,22 @@ class User
     //士兵必须是活的才可以转职
 
     //减少药品数量
-    function decreaseDrug(id)
+
+    function changeDrugNum(id, num)
     {
-        drugs[id] -= 1;
+        var v = drugs.get(id, 0);
+        v += num;
+        drugs[id] = v;
         db.put("drugs", drugs);
+    }
+    function changeHerbNum(id, num)
+    {
+        var v = herbs.get(id, 0);
+        v += num;
+        herbs[id] = v;
+        db.put("herbs", herbs);
+
+        setValue(NOTIFY, 1);
     }
     function useThing(kind, tid, soldier)
     {
@@ -987,9 +995,8 @@ class User
         {
             global.httpController.addRequest("soldierC/useDrug", dict([["uid", uid], ["sid", soldier.sid], ["tid", tid]]), null, null);
 
-            num = drugs.get(tid);
-            drugs.update(tid, num-1);
-            db.put("drugs", drugs);
+
+            changeGoodsNum(DRUG, tid, -1);
 
             soldier.useDrug(tid);
         }
@@ -1146,11 +1153,7 @@ class User
     }
 
     //获取任何物品首先获得 相应类别 再 获取 对应id的值
-    function getHerb(id)
-    {
-        return herbs.get(id, 0);
-        //return getValue("herb"+str(id));   
-    }
+
     function getValue(key)
     {
         return resource.get(key, 0);
@@ -1325,4 +1328,5 @@ class User
     {
         equips.pop(eid);
     }
+
 }

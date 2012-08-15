@@ -842,7 +842,7 @@ var strings = dict([
 ["recFriend", "推荐好友"],
 ["addNeibor", "邻居请求"],
 ["removeNeibor", "解除邻居"],
-["request", "邻居请求"],
+["friendReq", "好友互动"],
 ["neiborRequest", "[NAME]请求添加您为邻居."],
 ["refuse", "拒绝"],
 ["showNeibor", "邻居"],
@@ -887,7 +887,7 @@ var strings = dict([
 ["buyObj", "购买[NAME]"],
 ["exp", "经验"],
 
-
+/*
 [ "drugDes0" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
 [ "drugDes1" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
 [ "drugDes2" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
@@ -1043,6 +1043,7 @@ var strings = dict([
 [ "equipDes131" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
 [ "equipDes132" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
 [ "equipDes133" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
+*/
 
 /*
 [ "magicStone0" , ["橙色魔法球", ""]],
@@ -1077,6 +1078,8 @@ var strings = dict([
 ["moreThings", "你拥有多个物品，点击展开查看详细信息"],
 ["noThing", "没有该类物品"],
 ["sendIt", "赠送"],
+["friSendEquip", "[NAME]赠送你一件装备[ENAME]等级[LEVEL]"],
+["friSendOthers", "[NAME]赠送你[ONAME]"],
 ]);
 
 

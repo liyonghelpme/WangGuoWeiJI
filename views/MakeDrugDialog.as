@@ -124,9 +124,9 @@ class MakeDrug extends MyNode
                 var hNum = needs[j][1];
                 var hData = getData(HERB, hid);
 
-                panel.addsprite("herb"+str(hid)+".png").pos(INITX, INITY).anchor(50, 50).size(46, 44);
+                panel.addsprite(replaceStr(KindsPre[HERB], ["[ID]", str(hid)])).pos(INITX, INITY).anchor(50, 50).size(46, 44);
                 panel.addlabel(hData.get("name"), null, 15).pos(INITX, 57).color(0, 0, 0).anchor(50, 50);
-                var ownNum = global.user.getHerb(hid);
+                var ownNum = global.user.getGoodsNum(HERB, hid);
                 var co = [14, 64, 26];
                 if(ownNum < hNum)
                 {
@@ -184,7 +184,7 @@ class MakeDrug extends MyNode
         //消耗药材和矿石
         for(var i = 0; i < len(needs); i++)
         {
-            global.user.changeHerb(needs[i][0], -needs[i][1]); 
+            global.user.changeGoodsNum(HERB, needs[i][0], -needs[i][1]); 
         }
         if(kind == DRUG)
         {
@@ -274,7 +274,7 @@ class Herb extends MyNode
             panel.addsprite("herb"+str(herbs[i])+".png").pos(60, 26).anchor(50, 50).size(54, 40);
             var data = getData(HERB, herbs[i]);
             panel.addlabel(data.get("name"), null, 15).anchor(50, 50).pos(60, 52).color(0, 0, 0);
-            var num = global.user.getHerb(herbs[i]);
+            var num = global.user.getGoodsNum(HERB, herbs[i]);
 //            trace("herbNum", num, data);
             var co = [14, 64, 26];
             if(num == 0)

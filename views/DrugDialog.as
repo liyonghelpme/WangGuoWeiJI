@@ -157,7 +157,7 @@ class DrugDialog extends MyNode
             objData = getData(kind, id);
             var num;
             if(kind == DRUG)
-                num = global.user.getThingNum(kind, id);
+                num = global.user.getGoodsNum(DRUG, id);
             else if(kind == EQUIP)
                 num = 1;
             var co = [14, 64, 26];
