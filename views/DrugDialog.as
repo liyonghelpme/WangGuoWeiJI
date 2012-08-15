@@ -184,39 +184,53 @@ class DrugDialog extends MyNode
 
             var but0 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50);
             var words = getStr("useIt", null);
-            if(num == 0)
+            //药品 使用/购买
+            //装备 使用/卸载 升级
+            if(kind == DRUG)
             {
-                words = getStr("buyIt", null); 
-                but0.addlabel(words, null , 18).pos(34, 18).anchor(50, 50);
-                but0.setevent(EVENT_TOUCH, buyIt, i);
-            }
-            else
-            {
-                if(ifUse == 0)
+                if(num == 0)
                 {
-                    but0.addlabel(words, null , 18).pos(34, 18).anchor(50, 50);
-                    but0.setevent(EVENT_TOUCH, useIt, data[i][1]);
+                    but0.addlabel(getStr("buyIt", null), null , 18).pos(34, 18).anchor(50, 50);
+                    but0.setevent(EVENT_TOUCH, buyIt, i);
                 }
                 else
                 {
-                    words = getStr("unloadIt", null);
-                    but0.addlabel(words, null , 18).pos(34, 18).anchor(50, 50);
-                    but0.setevent(EVENT_TOUCH, unloadIt, data[i][1]);
+                    but0.addlabel(getStr("useIt", null), null , 18).pos(34, 18).anchor(50, 50);
+                    but0.setevent(EVENT_TOUCH, useIt, data[i][1]);
                 }
-                var but1 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50);
-                but1.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, data[i][1]);
             }
-
+            else if(kind == EQUIP)
+            {
+                if(ifUse == 0)
+                {
+                    but0.addlabel(getStr("useIt", null), null , 18).pos(34, 18).anchor(50, 50);
+                    but0.setevent(EVENT_TOUCH, buyIt, i);
+                }
+                else
+                {
+                    but0.addlabel(getStr("unloadIt", null), null , 18).pos(34, 18).anchor(50, 50);
+                    but0.setevent(EVENT_TOUCH, unloadIt, data[i][1]);
+                    
+                }
+                
+                if(useData.get("level") < MAX_EQUIP_LEVEL)
+                {
+                    var but1 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50);
+                    but1.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, data[i][1]);
+                }
+            }
         }
     }
-    //升级装备 
+    //升级装备 参数为eid 
     function onUpgrade(n, e, p, x, y, points)
     {
         //global.httpController.addRequest("goodsC/upgradeEquip", dict([["uid", global.user.uid], ["eid", p]), null, null);
         //global.user.upgradeEquip(p);
         //initData();
-        updateTab();
+        global.director.pushView(new UpgradeDialog(this, p), 1, 0);
+        //updateTab();
     }
+
 
     //tid [id sid]
     function unloadIt(n, e, p, x, y, points)
@@ -311,24 +325,32 @@ class DrugDialog extends MyNode
         }
     }
 
+    function receiveMsg(para)
+    {
+        var msgId = para[0];
+        if(msgId == UPDATE_EQUIP)
+        {
+            updateTab(); 
+        }
+    }
     override function enterScene()
     {
         super.enterScene();
         global.user.addSoldierListener(this);
         updateSoldier(soldier);
-        global.user.addListener(this);
-        updateValue(global.user.resource);
+
+        if(kind == EQUIP)
+            global.msgCenter.registerCallback(UPDATE_EQUIP, this);
     }
     override function exitScene()
     {
-        global.user.removeListener(this);
+        if(kind == EQUIP)
+            global.msgCenter.removeCallback(UPDATE_EQUIP, this);
+
         global.user.removeSoldierListener(this);
         super.exitScene();
     }
-    function updateValue(res)
-    {
-    
-    }
+
     function updateSoldier(sol)
     {
         if(sol.sid == soldier.sid)

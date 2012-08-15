@@ -95,20 +95,7 @@ function getLoginReward(day)
 //    trace("login reward", reward);
     return reward;
 }
-//<= bigNum
-function getOpenBig()
-{
-    var level = global.user.getValue("level");
-    if(level < 15)
-        return 1;
-    if(level < 30)
-        return 2;
-    if(level < 40)
-        return 3;
-    if(level < 50)
-        return 4;
-    return 5;
-}
+
 
 
 function showCost(bg, cost)
@@ -165,4 +152,14 @@ function getProduction(level)
 function getMapKey(x, y)
 {
     return x*10000+y;
+}
+
+const GOODS_COFF = 10000;
+function getGoodsKey(kind, id)
+{
+    return kind*GOODS_COFF+id;
+}
+function getGoodsKindAndId(k)
+{
+    return [k/GOODS_COFF, k%GOODS_COFF];
 }

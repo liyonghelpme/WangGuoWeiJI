@@ -215,6 +215,7 @@ class Soldier extends MyNode
     var nameBanner = null;
     var backBanner = null;
 
+    /*
     function setMonEquip(equips)
     {
         if(equips == null)
@@ -231,11 +232,12 @@ class Soldier extends MyNode
 
                 physicDefense += e.get("physicDefense");
                 magicDefense += e.get("magicDefense");
-                recoverSpeed += e.get("recoverSpeed");
+                //recoverSpeed += e.get("recoverSpeed");
                 healthBoundary += e.get("healthBoundary"); 
             }
         }
     }
+    */
     //攻击速度 
     function initData()
     {
@@ -267,7 +269,9 @@ class Soldier extends MyNode
 
             health = 0;
             initAttackAndDefense(this);
-            setMonEquip(map.monEquips);
+            //setMonEquip(map.monEquips);
+
+            setEquipAttribute(this, map.monEquips);
             health = healthBoundary;
 
             myName = null;

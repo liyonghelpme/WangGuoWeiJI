@@ -7,8 +7,9 @@ class MyAction
     {
         actions = [];
         lastTime = time();
-        cus = customaction(MAX_INT, start, update);
-        getscene().addaction(cus);
+        //cus = customaction(MAX_INT, start, update);
+        cus = c_addtimer(50, update, null, 0, -1);
+        //getscene().addaction(cus);
     }
     function stop()
     {

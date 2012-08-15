@@ -496,28 +496,33 @@ class FriendController
         fri["level"] = param[1];
         fri["name"] = param[2];
         global.user.db.put("friends", inGameFriend);
-
-        for(var i = 0; i < len(recommandFriends); i++)
+        if(recommandFriends != null)
         {
-            if(recommandFriends[i]["id"] == pid)
+            for(var i = 0; i < len(recommandFriends); i++)
             {
-                recommandFriends[i]["level"] = param[1];
-                recommandFriends[i]["name"] = param[2];
-                break;
+                if(recommandFriends[i]["id"] == pid)
+                {
+                    recommandFriends[i]["level"] = param[1];
+                    recommandFriends[i]["name"] = param[2];
+                    break;
+                }
             }
+            global.user.db.put("recommand", recommandFriends);
         }
-        global.user.db.put("recommand", recommandFriends);
         
-        for(i = 0; i < len(neibors); i++)
+        if(neibors != null)
         {
-            if(neibors[i]["id"] == pid)
+            for(i = 0; i < len(neibors); i++)
             {
-                neibors[i]["level"] = param[1];
-                neibors[i]["name"] = param[2];
-                break;
+                if(neibors[i]["id"] == pid)
+                {
+                    neibors[i]["level"] = param[1];
+                    neibors[i]["name"] = param[2];
+                    break;
+                }
             }
+            global.user.db.put("neibors", neibors);
         }
-        global.user.db.put("neibors", neibors);
     }
     function getInGameFriend()
     {

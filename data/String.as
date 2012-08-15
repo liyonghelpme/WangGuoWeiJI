@@ -885,6 +885,7 @@ var strings = dict([
 ["netErrorCon", "网络异常，请退出游戏重试，或者忽略该问题，并向我们报告。"],
 ["finishTask", "完成！"],
 ["buyObj", "购买[NAME]"],
+["exp", "经验"],
 
 
 [ "drugDes0" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
@@ -1043,6 +1044,39 @@ var strings = dict([
 [ "equipDes132" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
 [ "equipDes133" , "暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验暂时试验" ],
 
+/*
+[ "magicStone0" , ["橙色魔法球", ""]],
+[ "magicStone1" , ["黄色魔法球", ""]],
+[ "magicStone2" , ["绿色魔法球", ""]],
+[ "magicStone3" , ["蓝色魔法球", ""]],
+[ "magicStoneDes0" , "" ],
+[ "magicStoneDes1" , "" ],
+[ "magicStoneDes2" , "" ],
+[ "magicStoneDes3" , "" ],
+
+
+[ "goodsList0" , ["红宝石", "redTreasureStone"]],
+[ "goodsList1" , ["绿宝石", ""]],
+[ "goodsList2" , ["蓝宝石", ""]],
+[ "goodsList3" , ["紫宝石", ""]],
+[ "goodsListDes0" , "" ],
+[ "goodsListDes1" , "" ],
+[ "goodsListDes2" , "" ],
+[ "goodsListDes3" , "" ],
+*/
+
+["upgradeEquip", "装备升级"],
+["stoneLevel", "[NAME]提升装备等级到[LEV0], 成功概率[POS0]%, 装备损坏概率[POS1]%"],
+["sucPos", "成功率[POS]%"],
+["treaNum", "[NUM]颗"], 
+["brokenEquip", "装备损坏会降低等级"],
+["sucUpgrade", "恭喜，装备升级成功！"],
+["failUpgrade", "抱歉，升级失败，但装备未损坏！"],
+["failEquip", "抱歉，升级失败，装备损坏！"],
+["sendGift", "赠送礼物"],
+["moreThings", "你拥有多个物品，点击展开查看详细信息"],
+["noThing", "没有该类物品"],
+["sendIt", "赠送"],
 ]);
 
 

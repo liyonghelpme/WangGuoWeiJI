@@ -192,8 +192,11 @@ class AllGoods extends MyNode
                 //升级 卖出传入 数据位置编号
                 else if(data[i][0] == DETAIL_EQUIP)
                 {
-                    but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
-                    but0.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50);
+                    if(ed.get("level") < MAX_EQUIP_LEVEL)//未升级到最高级
+                    {
+                        but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
+                        but0.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50);
+                    }
 
                     but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onSell, i);
                     but1.addlabel(getStr("sell", null), null , 18).pos(34, 18).anchor(50, 50);
@@ -274,13 +277,15 @@ class AllGoods extends MyNode
             }
         }
     }
-    //升级装备 
+    //升级装备 参数位置 
     function onUpgrade(n, e, p, x, y, points)
     {
         //global.httpController.addRequest("goodsC/upgradeEquip", dict([["uid", global.user.uid], ["eid", p]), null, null);
         //global.user.upgradeEquip(p);
         //initData();
-        updateTab();
+        var eid = data[p][1];
+        global.director.pushView(new UpgradeDialog(this, eid), 1, 0);
+        //updateTab();
     }
 
     //tid [id sid]
@@ -335,20 +340,29 @@ class AllGoods extends MyNode
             store.changeTab(store.EQUIP_PAGE);
     }
 
-
+    //升级装备 降级装备
+    function receiveMsg(para)
+    {
+        var msgId = para[0];
+        if(msgId == UPDATE_EQUIP)
+        {
+            updateTab(); 
+        }
+        else if(msgId == UPDATE_TREASURE)//变更宝石数量
+        {
+            
+        }
+    }
     override function enterScene()
     {
         super.enterScene();
-        global.user.addListener(this);
-        updateValue(global.user.resource);
+        if(kind == EQUIP)
+            global.msgCenter.registerCallback(UPDATE_EQUIP, this);
     }
     override function exitScene()
     {
-        global.user.removeListener(this);
+        if(kind == EQUIP)
+            global.msgCenter.removeCallback(UPDATE_EQUIP, this);
         super.exitScene();
-    }
-    function updateValue(res)
-    {
-    
     }
 }

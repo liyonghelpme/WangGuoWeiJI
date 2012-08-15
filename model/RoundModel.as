@@ -121,3 +121,18 @@ function getSolPos(mx, my, sx, sy, offY)
     my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
     return [mx, my];
 }
+
+//<= bigNum
+function getOpenBig()
+{
+    var level = global.user.getValue("level");
+    if(level < 15)
+        return 1;
+    if(level < 30)
+        return 2;
+    if(level < 40)
+        return 3;
+    if(level < 50)
+        return 4;
+    return 5;
+}

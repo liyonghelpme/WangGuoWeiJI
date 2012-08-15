@@ -111,22 +111,35 @@ function calculateStage(sol)
 
 装备没有恢复速度属性
 士兵没有生命值 攻击力等属性
+
+初始化用户自己的士兵的装备属性
+
+初始化怪兽和敌人士兵的装备属性在MapSoldier中处理
+
+
+参数:士兵， 装备数据集
 */
-function setEquipAttribute(sol)
+function setEquipAttribute(sol, equips)
 {
+    if(equips == null)
+        return;
     //士兵拥有的武器
-    var equips = global.user.getSoldierEquip(sol.sid);
+    //var equips = global.user.getSoldierEquip(sol.sid);
     for(var i = 0; i < len(equips); i++)
     {
-        var eData = global.user.getEquipData(equips[i]);
-        var e = getData(EQUIP, eData.get("kind"));
-        sol.physicAttack += e.get("physicAttack");
-        sol.magicAttack += e.get("magicAttack");
+        //var eData = global.user.getEquipData(equips[i]);
+        var eData = equips[i];
+        var eqLevel = eData.get("level");
+        var eCoff = equipLevel[eqLevel];
 
-        sol.physicDefense += e.get("physicDefense");
-        sol.magicDefense += e.get("magicDefense");
-        //sol.recoverSpeed += e.get("recoverSpeed");
-        sol.healthBoundary += e.get("healthBoundary"); 
+        var e = getData(EQUIP, eData.get("kind"));
+
+        sol.physicAttack += e.get("physicAttack")*eCoff/100;
+        sol.magicAttack += e.get("magicAttack")*eCoff/100;
+
+        sol.physicDefense += e.get("physicDefense")*eCoff/100;
+        sol.magicDefense += e.get("magicDefense")*eCoff/100;
+        sol.healthBoundary += e.get("healthBoundary")*eCoff/100; 
     }
 }
 
@@ -155,7 +168,8 @@ function initAttackAndDefense(sol)
     }
 
 
-    setEquipAttribute(sol);
+    setEquipAttribute(sol, global.user.getSoldierEquipData(sol.sid));
+
     sol.health = min(sol.health, sol.healthBoundary);
 
     //var phurt = getPhysicHurt(sol.data);

@@ -141,3 +141,12 @@ var levelDefense = [[15, 78], [30, 173], [45, 411], [60, 945], [70, 3049], [-1, 
 
 
 var mineProduction = dict( [["crystal", 10], ["colorCrystal", 1], ["levelCoff", 1], ["time", 28800]] );
+
+
+var goodsListKey = ["name", "gold", "crystal", "des", "possible", "silver", "id"] ;
+var goodsListData = dict( [[0, ["goodsList0", 0, 0, "goodsListDes0", [[50, 10], [46, 15], [42, 21], [38, 27], [35, 33], [31, 39], [27, 45], [23, 50], [20, 56], [16, 62], [12, 68], [8, 74], [5, 80]], 100, 0]], [1, ["goodsList1", 0, 10, "goodsListDes1", [[60, 8], [55, 11], [51, 15], [47, 18], [42, 22], [38, 25], [34, 29], [29, 32], [25, 35], [21, 39], [16, 43], [12, 46], [8, 50]], 0, 1]], [2, ["goodsList2", 0, 50, "goodsListDes2", [[80, 5], [75, 7], [71, 9], [67, 11], [63, 13], [59, 15], [55, 17], [50, 19], [46, 21], [42, 23], [38, 25], [34, 27], [30, 30]], 0, 2]], [3, ["goodsList3", 10, 0, "goodsListDes3", [[100, 0], [99, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0], [100, 0]], 0, 3]]] );
+
+var equipLevel = [100, 105, 110, 115, 121, 126, 133, 139, 162, 189, 220, 257, 300] ;
+
+var magicStoneKey = ["crystal", "name", "gold", "des", "silver", "id"] ;
+var magicStoneData = dict( [[0, [0, "magicStone0", 0, "magicStoneDes0", 150, 0]], [1, [0, "magicStone1", 0, "magicStoneDes1", 300, 1]], [2, [60, "magicStone2", 0, "magicStoneDes2", 0, 2]], [3, [0, "magicStone3", 10, "magicStoneDes3", 0, 3]]] );

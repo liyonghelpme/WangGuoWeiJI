@@ -32,7 +32,7 @@ class MapLayer extends MyNode
         //0 村落
         //1-5 其它岛屿
         var openBig = getOpenBig();
-        for(;i <= curDif[0] && i <= 5 && i <= openBig; i++){
+        for(;i <= curDif[0] && i <= ROUND_MAP_NUM && i <= openBig; i++){
             island[i].color(100,100,100,100);
             new Button(island[i], onClicked, i);
         }

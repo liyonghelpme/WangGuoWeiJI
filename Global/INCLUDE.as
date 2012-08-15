@@ -31,6 +31,7 @@ import views.DeadSoldier;
 import views.TransferSoldier;
 import views.DrugDialog;
 
+
 //经营页面
 import views.CastlePage;
 import views.BuildLayer;
@@ -76,6 +77,7 @@ import views.MailDialog;
 import views.RequestView;
 import views.GiftView;
 import views.AllGoods;
+import views.UpgradeDialog;
 
 import views.BreakDialog;
 
@@ -93,6 +95,7 @@ import views.BuildWorkMenu;
 import views.SellDialog;
 import views.AccDialog;
 import views.FriendDialog;
+import views.GiftDialog;
 
 import views.FlowScene;
 import views.FlowMenu;

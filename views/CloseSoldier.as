@@ -40,17 +40,6 @@ class CloseSoldier
             {
                 sol.map.addChildZ(new CloseAttackEffect(sol), 0);
             }
-            /*
-            //var coff = getSoldierKindCoff(sol.kind, sol.tar.getKind());
-            var phyHurt = sol.physicAttack - sol.tar.physicDefense;
-            var magHurt = sol.magicAttack - sol.tar.magicDefense;
-            phyHurt = max(phyHurt, sol.physicAttack/10);
-            magHurt = max(magHurt, sol.magicAttack/10);
-
-            //var hurt = coff*(sol.attack-sol.tar.defense)/100;
-            //hurt = max(hurt, sol.attack/10);//伤害最小是攻击力的1/10
-            hurt = phyHurt+magHurt;
-            */
             var hurt = calHurt(sol, sol.tar);
             sol.tar.changeHealth(sol, -hurt);
         }

@@ -562,7 +562,19 @@ class BusiSoldier extends MyNode
     {
         super.enterScene();
         map.solTimer.addTimer(this);
+        global.msgCenter.registerCallback(UPDATE_EQUIP, this);
     }
+    function receiveMsg(param)
+    {
+        var mid = param[0];
+        if(mid == UPDATE_EQUIP)
+        {
+            var eid = param[1];
+            if(global.user.getEquipData(eid).get("owner") == sid)
+                initAttackAndDefense(this);//升级装备之后 更新士兵属性
+        }
+    }
+
     //8 目标位置
     function getTar()
     {
@@ -745,6 +757,7 @@ class BusiSoldier extends MyNode
 
     override function exitScene()
     {
+        global.msgCenter.removeCallback(UPDATE_EQUIP, this);
         map.solTimer.removeTimer(this);
         super.exitScene();
     }

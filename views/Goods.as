@@ -106,11 +106,9 @@ class Goods extends MyNode
                     图片向上移动用于显示增加
                     */
                     buildPic.pos(83, 100);
-                    buildPic.prepare();
-                    bSize = buildPic.size();
-                    bl = min(120*100/bSize[0], 90*100/bSize[1]);
-                    bl = min(120, max(40, bl));
-                    buildPic.scale(bl);
+                    var sca = getSca(buildPic, [120, 90]);
+                    buildPic.scale(sca);
+
                     //trace("labelGain", labelGain[0]);
                     var k = getStr(labelGain[0][0], null);
                     var v = labelGain[0][1];

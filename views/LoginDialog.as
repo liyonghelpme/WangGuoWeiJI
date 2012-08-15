@@ -20,7 +20,7 @@ class LoginDialog extends MyNode
     function LoginDialog(cc)
     {
         curCmd = cc;
-        bg = sprite("dialogLoginBack.png").size(global.director.disSize[0], global.director.disSize[1]);
+        bg = sprite("dialogLoginBack.png");//.size(global.director.disSize[0], global.director.disSize[1]);
         init();
         var dia = bg.addsprite("dialogLogin.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);  
         dia.addsprite("roleNameClose.png").pos(590, 31).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);

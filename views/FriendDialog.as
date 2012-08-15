@@ -17,6 +17,8 @@ class FriendList extends MyNode
     const PANEL_WIDTH = 154;
     const PANEL_HEIGHT = 160;
 
+    //uid id level name 字典存储 推荐好友 木瓜  邻居数据
+    //邻居包含额外的 水晶矿数据
     var data;
     var flowNode;
     var scene;
@@ -194,6 +196,13 @@ class FriendList extends MyNode
         selectNum = -1;
         updateTab();
     }
+    function onSend(n, e, curNum, x, y, points)
+    {
+        var nei = data[curNum].get("uid");
+        global.director.pushView(new GiftDialog(nei), 1, 0);
+        selectNum = -1; 
+        updateTab();
+    }
     function showShadow(child)
     {
         var curNum = child.get();
@@ -236,8 +245,17 @@ class FriendList extends MyNode
         {
             return;
         }
+        //访问邻居 赠送礼物 可以多次赠送
+        if(friendKind == VISIT_NEIBOR)
+        {
+            but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+56).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onSend, curNum);
+            but0.addlabel(getStr("sendGift", null), null, 21).pos(47, 19).anchor(50, 50);
+        }
+
+        //非邻居
         if(global.friendController.checkNeibor(uid) == null)
         {
+            //没有发送过邻居请求
             if(global.friendController.checkRequest(uid) == null)
             {
                 but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+56+56).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onAddNeibor, curNum);

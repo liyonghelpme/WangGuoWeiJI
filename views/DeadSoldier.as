@@ -72,16 +72,13 @@ class DeadSoldier extends MyNode
             if(child != null)
             {
                 var sid = child.get();
-//                trace("dead id", sid);
 
                 var sol = global.user.getSoldierData(sid);
-                var data = getData(SOLDIER, sol.get("id"));
+                var sdata = getData(SOLDIER, sol.get("id"));
 
-                var soldier = new BusiSoldier(null, data, sol, sid);
+                var soldier = new BusiSoldier(null, sdata, sol, sid);
 
                 global.director.pushView(new DrugDialog(soldier, RELIVE), 1, 0);
-                //global.user.doRelive(sid);//soldier sid 士兵复活之后才可以更新界面
-                //initDead();
             }
         }
         var curPos = flowNode.pos();

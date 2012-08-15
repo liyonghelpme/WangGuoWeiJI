@@ -62,29 +62,13 @@ class Arrow extends MyNode
         passTime += diff;
         if(passTime >= attackTime)
             doHarm();
-        /*
-        movAct.stop();
-        var tPos = tar.getPos();
-        var dist = abs(bg.pos()[0]-tPos[0]);
-        var t = dist*100/speed;
-        if(t <= 50)
-        {
-            doHarm();
-            return;
-        }
-        setDir();
-        movAct = moveto(t, tPos[0], rowY+offY);
-        bg.addaction(movAct);
-        */
     }
     function doHarm()
     {
-        if(sol.tar != null)//攻击对象没有死亡
+        if(tar != null)//攻击对象没有死亡
         {
-            var coff = getSoldierKindCoff(sol.kind, sol.tar.getKind());//攻击城墙的话也需要得到类型
-            var hurt = coff*(sol.attack-sol.tar.defense)/100;
-            hurt = max(hurt, sol.attack/10);//伤害最小是攻击力的1/10
-            sol.tar.changeHealth(sol, -hurt);
+            var hurt = calHurt(sol, tar);
+            tar.changeHealth(sol, -hurt);
         }
         removeSelf();
     }

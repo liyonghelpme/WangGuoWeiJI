@@ -281,10 +281,12 @@ var attEffect = dict([
 [13, [["ss10e0.png", "ss10e0.png", "ss10e0.png", "ss10e0.png", "ss10e0.png", "ss10e0.png", "ss10e0.png", "ss10e0.png"], [-32, 15], 2000]]
 ]);
 
+//getGain
 var addKey = ["people", "cityDefense", "attack", "defense", "health", "gainsilver", "gaincrystal", "gaingold", "exp", 
     "healthBoundary", "physicAttack", "physicDefense", "magicAttack", "magicDefense", "recoverSpeed",
     "percentHealth", "percentHealthBoundary", "percentAttack", "percentDefense"];
 
+//getCost
 var costKey = ["silver", "gold", "crystal", "papaya", "free"];
 
 //必须name 引用string中内容
@@ -315,6 +317,7 @@ const NOTIFY = 12;
 const RELIVE = 13; //打开士兵的复活药水页面
 const FALL_THING = 14;
 const TREASURE_STONE = 15;
+const MAGIC_STONE = 16;
 
 
 
@@ -334,6 +337,7 @@ var Keys = [
     null,
     drugKey,
     fallThingKey,
+    goodsListKey,
 ];
 var CostData = [
     buildingData,
@@ -351,6 +355,7 @@ var CostData = [
     null,
     drugData,
     fallThingData,
+    goodsListData,
 ];
 
 var GoodsPre = [
@@ -369,6 +374,7 @@ var GoodsPre = [
     null,
     "drug[ID]",
     "",
+    "stone[ID]",
 ];
 var KindsPre = [
     "build[ID].png",
@@ -386,6 +392,7 @@ var KindsPre = [
     null,
     "drug[ID].png",
     "",
+    "stone[ID].png",
 ];
 
 //260048  木牌位置
@@ -441,6 +448,8 @@ const INITDATA_OVER = 4;//初始化用户数据结束
 const LEVEL_UP = 5;
 const SOL_TRANSFER = 6;//sid
 const SOL_UNLOADTHING = 7; //sid
+const UPDATE_EQUIP = 8; //更新装备数据
+const UPDATE_TREASURE = 9; //更新宝石数量
 
 
 const MAX_BUSI_SOLNUM = 50;
@@ -497,3 +506,6 @@ const MINE_BEGIN_LEVEL = 6;
 const PLAN_BUILDING = 0;
 const PLAN_SOLDIER = 1;
 
+const MAX_EQUIP_LEVEL = 12;
+
+const ROUND_MAP_NUM = 5;//闯关地图的数量 每关旗帜的数量由 LevelSelect 中旗帜的数量决定

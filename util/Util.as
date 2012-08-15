@@ -420,21 +420,7 @@ function normalizePos(p, sx, sy)
 //0 1 2 3 4 5
 //0村庄 所以初始化用户数据大关=1 0 0
 //1 2 3 4 5
-/*
-function getMaxLevel(big, small, difficult)
-{
-    return (big-1)*6*10+small*10+difficult;
-}
-function getBSD(level)
-{
-    var difficult = level%10;
-    var small = level/10;
-    var big = small/6;
-    small %= 6;
-    return [big+1, small, difficult];
-}
-*/
-const PassDifficult = 0;
+//const PassDifficult = 0;
 //1-5
 /*
 计算大地图当前开启的大关 小关
@@ -442,6 +428,9 @@ const PassDifficult = 0;
 function getCurEnableDif()
 {
     var star = global.user.starNum;
+    if(star == null)
+        return [1, 0];
+        
     var i;
     var j;
     var find = 0;
@@ -449,7 +438,7 @@ function getCurEnableDif()
     for(i = 0; i < len(star); i++)
     {
         for(j = 0; j < len(star[i]); j++)
-            if(star[i][j][PassDifficult] == 0)
+            if(star[i][j] == 0)
             {
                 find = 1;
                 break;
@@ -464,11 +453,13 @@ function getCurEnableDif()
 /*
 得到某个小关卡 难度的得分
 */
+/*
 function getStar(big, small, dif)
 {
     var star = global.user.starNum;
     return star[big-1][small][dif]; 
 }
+*/
 /*
 function checkPosSame(p1, p2)
 {

@@ -54,12 +54,13 @@ class LevelSelectLayer extends MyNode
     //不同等级的地图位置不同
     var flagPos = [
     [],//Level 0 is village
-    [[303, 81], [179, 87], [139, 155],[239, 155], [220, 199], [147, 252]],
-    [[164, 49], [122, 113], [151, 176], [236, 173], [314, 161], [399, 87]],
-    [[85, 132], [138, 191], [213, 245], [305, 241], [407, 202], [393, 120]],
-    [[146, 92], [247, 108], [317, 125], [416, 132], [461, 209], [401, 266]],
-    [[359, 235], [296, 233], [286, 186], [348, 137], [276, 104], [177, 89]],
-    [[300,200],[340,220],[380,240],[420,260],[460,280],[500,300]]
+    [[303, 81], [241, 71], [179, 87], [139, 155],[239, 155], [220, 199], [147, 252]],
+    [[164, 49], [122, 113], [151, 176], [236, 173], [314, 161], [399, 141], [399, 87]],
+    [[85, 132], [138, 191], [213, 245], [305, 241], [391, 246], [407, 202], [393, 120]],
+    [[146, 92], [360, 202], [247, 108], [317, 125], [416, 132], [461, 209], [401, 266]],
+    [[359, 235], [296, 233], [286, 186], [348, 137], [276, 104], [218, 100], [151, 79]],
+
+    //[[300,200],[340,220],[380,240],[420,260],[460,280],[500,300]]
     ];
     
     var darkNode;
@@ -76,21 +77,17 @@ class LevelSelectLayer extends MyNode
     function setIslandLayer()
     {
         island = scene.getIsland(index);//大关
-        //islandLayer = island.addnode();
 
         var curDif = getCurEnableDif(); 
         islandLayer.removefromparent();
         islandLayer = island.addnode();
 
         trace("select Level", index, curDif);//小关
-        //var newPos;
         var i;
-        for(i=0; i < 6 && index <= curDif[0]; i++){//该大关 某些关卡被开启
+        for(i=0; i < len(flagPos[index]) && index <= curDif[0]; i++){//该大关 某些关卡被开启
             if(index == curDif[0] && i > curDif[1])//该大关 绿色表示 改关卡需要征服才能部分被开启
                 break;
-            //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
-//            trace("flagPos", flagPos[index][i]);
-            //var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
+
             var showArr = 0;
             if(index == curDif[0] && i == curDif[1])
                 showArr = 1;
@@ -98,8 +95,7 @@ class LevelSelectLayer extends MyNode
             islandLayer.add(b.bg, FLAG_Z);
             new Button(b.bg, onSmall, i);
         }
-        for(;i<6;i++){
-            //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
+        for(; i < len(flagPos[index]); i++){
             var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
             islandLayer.add(b2, FLAG_Z);
         }
@@ -126,31 +122,6 @@ class LevelSelectLayer extends MyNode
         island = scene.getIsland(index);//大关
         islandLayer = island.addnode();
 
-        //setIslandLayer();
-        /*
-        var curDif = getCurEnableDif();
-
-        island = scene.getIsland(param);
-        islandLayer = island.addnode();
-        //var isPos = island.pos();
-//        trace("select Level", param, curDif);
-        //var newPos;
-        for(i=0;i < 6 && index <= curDif[0]; i++){
-            if(index == curDif[0] && i > curDif[1])
-                break;
-            //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
-//            trace("flagPos", flagPos[index][i]);
-            //var b = sprite("map_flag_complete.png").pos(flagPos[index][i]).size(20, 29);
-            var b = new Flag(flagPos[index][i]);
-            islandLayer.add(b.bg, FLAG_Z);
-            new Button(b.bg, onSmall, i);
-        }
-        for(;i<6;i++){
-            //newPos = [isPos[0]+flagPos[index][i][0], isPos[1]+flagPos[index][i][1]]; 
-            var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
-            islandLayer.add(b2, FLAG_Z);
-        }
-        */
     }
     
     function onSmall(param)
@@ -182,12 +153,6 @@ class LevelSelectLayer extends MyNode
         islandLayer.removefromparent();
         super.exitScene();
     }
-    /*
-    function onClicked(param){
-//        trace("level select", param);
-        scene.selectLevel(param);
-    }
-    */
     
     //状态:
     //全部岛屿 -> 某个岛屿小关 ->选择难度 -> 查看难度->进入游戏
@@ -218,36 +183,6 @@ class LevelSelectLayer extends MyNode
         bg.add(darkNode,-1);
         levelNode = node();
         
-        /*
-        10 个难度没有必要
-        var first = 0;
-        for(var i=0; i < 10 ; i++){
-            var b=levelNode.addsprite("map_level_normal.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
-            //临时数据
-
-            var starNum = getStar(index, param, i);
-
-            //var level = getMaxLevel(index, param, i)
-            //starNum = starNum[level];
-
-            //if(maxLevel-index*60+60-param*10==i)
-            //    starNum=0;
-                
-            var j;
-            for(j=0;j < starNum;j++){
-                b.addsprite("map_level_star1.png").anchor(50,0).pos(13+j*31,64);
-            }
-            for(;j<3;j++){
-                b.addsprite("map_level_star0.png").anchor(50,0).pos(13+j*31,64);
-            }
-            new Button(b, onDiff, i);
-            if(starNum == 0)
-                break;
-        }
-        for(;i<10;i++){
-            levelNode.addsprite("map_level_lock.png").anchor(50,50).pos(200+i%5*100, 180+i/5*90);
-        }
-        */
 
         levelNode.addsprite("map_level_info.png").anchor(50,50).pos(400,240);
         levelNode.addsprite("map_level_attack.png").anchor(100,0).pos(750,360).setevent(EVENT_TOUCH, attackNow);
@@ -256,7 +191,6 @@ class LevelSelectLayer extends MyNode
     function attackNow()
     {
         goBack();//close Choose Page
-//        trace("map index", index, small);
 
         var mon = getRoundMonster(index-1, small); 
         global.director.pushScene(

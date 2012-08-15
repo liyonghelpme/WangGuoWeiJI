@@ -60,6 +60,8 @@ class User
     var lastVisitNeibor = 0;
     var mine;
 
+    var maxGiftId = 0;
+
     function getCurFinTaskNum()
     {
         var res = 0;
@@ -212,11 +214,26 @@ class User
 
     }
 
-    function initStarNum(s)
+    function initStarNum()
     {
-        starNum = s;
+        starNum = db.get("starNum");
+        if(starNum == null)
+        {
+            global.httpController.addRequest("getStars", dict([["uid", global.user.uid]]), getStarOver, null);
+        }
 //        trace("init starNum", starNum);
         //resource.update("starNum", s);
+    }
+    //big small ---> difficult
+    function getStarOver(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            starNum = con.get("res");
+            trace("getStarOver", starNum);
+            db.put("starNum", starNum);
+        }
     }
     //编号5-9的物品掉落次数有限 不超过3次
     function getFallNum(id)
@@ -258,6 +275,52 @@ class User
     {
         challengeRecord.append(oid);
     }
+    
+    function getTreasureStoneNum(id)
+    {
+        return treasureStone.get(getGoodsKey(TREASURE_STONE, id), 0);
+    }
+    function getMagicStoneNum(id)
+    {
+        return treasureStone.get(getGoodsKey(MAGIC_STONE, id), 0);
+    }
+    function changeGoodsNum(kind, id, num)
+    {
+        treasureStone[getGoodsKey(kind, id)] += num;
+        db.put("treasureStone", treasureStone);
+        global.msgCenter.sendMsg(UPDATE_TREASURE, id);
+    }
+    function getGoodsNum(kind , id)
+    {
+        return treasureStone.get(getGoodsKey(kind, id), 0);
+    }
+    //所有装备页面 宝石数量更新数据
+    function useTreasureStone(id)
+    {
+        treasureStone[getGoodsKey(TREASURE_STONE, id)] -= 1;
+        db.put("treasureStone", treasureStone);
+        global.msgCenter.sendMsg(UPDATE_TREASURE, id);
+    }
+
+    function buyTreasureStone(id)
+    {
+        var cost = getCost(TREASURE_STONE, id);
+        doCost(cost);
+
+        var k = getGoodsKey(TREASURE_STONE, id);
+        var v = treasureStone.get(k, 0);
+        v += 1;
+        treasureStone[k] = v;
+        db.put("treasureStone", treasureStone);
+
+        global.msgCenter.sendMsg(UPDATE_TREASURE, id);
+    }
+
+    function getNewGiftId()
+    {
+        return maxGiftId++;
+    }
+    var treasureStone;
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
@@ -265,8 +328,13 @@ class User
         {
             con = json_loads(con);
             uid = con.get("uid");
+            maxGiftId = con.get("maxGiftId");
+
             resource = con.get("resource");
-            initStarNum(con.get("starNum"));
+            
+            //con.get("starNum")
+            initStarNum();
+
             initBuildings(con.get("buildings"));
             initSoldiers(con.get("soldiers"));
             drugs = initThings(con.get("drugs"));
@@ -295,16 +363,19 @@ class User
             serverTime = con.get("serverTime");
             clientTime = time()/1000;
 
+            treasureStone = dict(con.get("treasure"));
+
             //资源更新 需要 更新本地数据库
             db.put("resource", resource);
             //闯关星 和 资源分开
-            db.put("starNum", starNum);
+            //db.put("starNum", starNum);
             db.put("buildings", buildings);
             db.put("soldiers", soldiers);
             db.put("drugs", drugs);
             db.put("equips", equips);
             db.put("herbs", herbs);
             db.put("tasks", tasks);
+            db.put("treasureStone", treasureStone);
             
 
             
@@ -367,6 +438,9 @@ class User
         herbs = dict();
         tasks = dict();
         mine = null;
+        treasureStone = dict();
+        starNum = null;
+        maxGiftId = 0;
 
 
         oldPos = db.get("oldPos");
@@ -428,19 +502,17 @@ class User
     var soldiers;
     function getCurStar(big, small)
     {
-        //var starNum = db.get("starNum");
-
-        //0-4
-        //0-5
-        return starNum[big][small][0];
+        if(starNum != null)
+            return starNum[big][small];
+        return 0;
     }
     function updateStar(big, small, star)
     {
-        //var starNum = db.get("starNum");
-        starNum[big][small][0] = star;
-//        trace("setStarNum", starNum);
-        db.put("starNum", starNum);
-        //global.httpController.addRequest("challengeC/updateChallenge", dict([["uid", uid], ["big", big], ["small", small], ["star", star]]), null, null);
+        if(starNum != null)
+        {
+            starNum[big][small] = star;
+            db.put("starNum", starNum);
+        }
     }
     var initYet = 0;
     function getInitYet()
@@ -485,12 +557,12 @@ class User
 
     function getKindEquip(kind)
     {
-        var ev = equips.items();
+        var evi = equips.items();
         var res = [];
-        for(var i = 0; i < len(ev); i++)
+        for(var i = 0; i < len(evi); i++)
         {
-            if(ev[i][1].get("kind") == kind)
-                res.append(ev[i][0]);//eid 
+            if(evi[i][1].get("kind") == kind)
+                res.append(evi[i][0]);//eid 
         }
         return res;
     }
@@ -738,6 +810,24 @@ class User
         }
         return solEquips;
     }
+    function getSoldierEquipData(sid)
+    {
+        if(sid == -1)
+        {
+            return [];
+        }
+         
+        var solEquips = [];
+        var key = equips.keys();
+        for(var i = 0; i < len(key); i++)
+        {
+            var edata = equips.get(key[i]) ;
+            if(edata.get("owner") == sid)
+                solEquips.append(edata);
+        }
+        return solEquips;
+    }
+
     //根据装备属性生成装备类型
     function checkSoldierEquip(sid, eid)
     {
@@ -776,6 +866,94 @@ class User
         return equips.get(eid);
     }
 
+    function getAllEquipNum()
+    {
+        return len(equips);
+    }
+    function getAllEquip()
+    {
+        return equips.keys();
+    }
+    function getAllDrug()
+    {
+        var res = [];
+        var key = drugs.keys();
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            if(drugs[k] > 0)
+                res.append(k);
+        }
+        return res;
+    }
+    function getAllHerb()
+    {
+        var res = [];
+        var key = herbs.keys();
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            if(herbs[k] > 0)
+                res.append(k);
+        }
+        return res;
+    }
+    function getAllDrugNum()
+    {
+        var key = drugs.keys();
+        var count = 0;
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            count += drugs[k];
+        }
+        return count;
+    }
+    function getAllHerbNum()
+    {
+        var key = herbs.keys();
+        var count = 0;
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            count += herbs[k];
+        }
+        return count;
+    }
+
+    function getAllGoodsNum(kind)
+    {
+        var key = treasureStone.keys();
+        var count = 0;
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            var gKind = getGoodsKindAndId(k);
+            if(gKind[0] == kind)
+            {
+                count += treasureStone[k];
+            }
+        }
+        return count;
+    }
+
+    function getAllGoods(kind)
+    {
+        var key = treasureStone.keys();
+        var res = [];
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            var gKind = getGoodsKindAndId(k);
+            if(gKind[0] == kind)
+            {
+                if(treasureStone[k] > 0)
+                    res.append(gKind[1]);
+            }
+        }
+        return res;
+    }
+
     //usedEquip Id
     //取下 士兵的装备 放回到储藏室
     //通知士兵去掉装备 可以 优化 map sid -> 士兵
@@ -795,6 +973,12 @@ class User
     }
     //士兵必须是活的才可以转职
 
+    //减少药品数量
+    function decreaseDrug(id)
+    {
+        drugs[id] -= 1;
+        db.put("drugs", drugs);
+    }
     function useThing(kind, tid, soldier)
     {
 //        trace("useThing", kind, tid, soldier.id);
@@ -1114,13 +1298,29 @@ class User
         }
         db.put("oldPos", oldPos);
     }
-    function upgradeEquip()
+    //通知其它部分更新 装备等级数据
+    function upgradeEquip(eid)
     {
+        var e = equips.get(eid);
+        e["level"] += 1;
+        db.put("equips", equips);
+        global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
     }
+    function breakEquip(eid)
+    {
+        var e = equips.get(eid);
+        e["level"] -= 1;
+        e["level"] = max(e["level"], 0);
+        db.put("equips", equips);
+        global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
+    }
+
+    //全部卖出
     function sellDrug(kind)
     {
         drugs.pop(kind);
     }
+
     function sellEquip(eid)
     {
         equips.pop(eid);

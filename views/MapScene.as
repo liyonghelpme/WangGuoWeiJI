@@ -181,11 +181,13 @@ class MapScene extends MyNode
     
     function onSmall(param)
     {
-        var sl = len(contextStack);
-        if(sl==1 && param<6){
-            flyLayer.selectSmall(param);
-            contextStack.append(param);
-        }
+        //var sl = len(contextStack);//第一阶段 
+        //if(sl == 1 && param<6){
+
+        flyLayer.selectSmall(param);
+        contextStack.append(param);
+
+        //}
     }
     function onDiff(param)
     {
