@@ -59,6 +59,13 @@ class AllGoods extends MyNode
         //列表的count不会改变 只会改变数量 和排序
     }
     //s 操作士兵对象 k 药品或者 武器 复活药水
+    //0 1 2 3 stoneNum
+    var nums = [];
+    function setStoneNum()
+    {
+        for(var i = 0; i < 4; i++)
+            nums[i].text(str(global.user.getGoodsNum(TREASURE_STONE, i)));
+    }
     function AllGoods(k)
     {
         kind = k;
@@ -68,7 +75,24 @@ class AllGoods extends MyNode
         if(kind == DRUG)
             bg.addsprite("allDrug.png").anchor(50, 50).pos(169, 41);
         else if(kind == EQUIP)
+        {
             bg.addsprite("allEquip.png").anchor(50, 50).pos(169, 41);
+            var stoneNum = bg.addsprite("stoneNum.png").pos(280, 28);
+
+            var s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(45, 18).anchor(0, 50);
+            nums.append(s);
+
+            s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(154, 18).anchor(0, 50);
+            nums.append(s);
+
+            s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(273, 18).anchor(0, 50);
+            nums.append(s);
+
+            s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(380, 18).anchor(0, 50);
+            nums.append(s);
+
+            setStoneNum();
+        }
 
 
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
@@ -350,19 +374,25 @@ class AllGoods extends MyNode
         }
         else if(msgId == UPDATE_TREASURE)//变更宝石数量
         {
-            
+            setStoneNum(); 
         }
     }
     override function enterScene()
     {
         super.enterScene();
         if(kind == EQUIP)
+        {
             global.msgCenter.registerCallback(UPDATE_EQUIP, this);
+            global.msgCenter.registerCallback(UPDATE_TREASURE, this);
+        }
     }
     override function exitScene()
     {
         if(kind == EQUIP)
+        {
             global.msgCenter.removeCallback(UPDATE_EQUIP, this);
+            global.msgCenter.removeCallback(UPDATE_TREASURE, this);
+        }
         super.exitScene();
     }
 }

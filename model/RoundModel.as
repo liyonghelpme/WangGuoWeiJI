@@ -63,6 +63,11 @@ x 1 - 11     1-5  7-11
 y 0 - 4  
 返回左上角的格子编号
 士兵的Y值存在 偏移 offY
+
+范围攻击技能的
+
+士兵是50 100
+群体技能 是 50 50 位置
 */
 function getSolMap(p, sx, sy, offY)
 {
@@ -73,11 +78,41 @@ function getSolMap(p, sx, sy, offY)
 
     return [xk, yk];
 }
+function getSkillMap(p, sx, sy, offY)
+{
+    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
+    var xk = ix/MAP_OFFX;
+    var iy = p[1]-MAP_INITY-MAP_OFFY/2*sy-offY;
+    var yk = iy/MAP_OFFY;
+
+    return [xk, yk];
+}
+/*
+计算安排士兵时 的 士兵下方网格的位置
+
+士兵和技能的网格 都是 左上角网格
+*/
 function getGridPos(gridId)
 {
     var x = gridId[0]*MAP_OFFX+MAP_INITX;
     var y = gridId[1]*MAP_OFFY+MAP_INITY;
     return [x, y];
+}
+/*
+function getSolPos(mx, my, sx, sy, offY)
+{
+//    trace("getSolPos", offY);
+    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
+    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
+    return [mx, my];
+}
+*/
+//计算群体技能的位置
+function getSkillPos(mx, my, sx, sy)
+{
+    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
+    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY;
+    return [mx, my];
 }
 
 /*
@@ -112,6 +147,8 @@ function getPosSolMap(p, sx, sy)
 
 /*
 由格子计算士兵的坐标
+
+根据左上格子的坐标 计算 50 100 的位置
 */
 //0-12 0-4
 function getSolPos(mx, my, sx, sy, offY)

@@ -222,10 +222,11 @@ class RequestView extends MyNode
             global.httpController.addRequest("goodsC/receiveGift", dict([["uid", global.user.uid], ["fid", fid], ["ti", ti], ["eid", eid]]), null, null);
             global.user.getNewEquip(eid, gId, gLevel);
         }
+        //药水 材料 宝石 魔法石
         else
         {
             global.httpController.addRequest("goodsC/receiveGift", dict([["uid", global.user.uid], ["fid", fid], ["ti", ti], ["eid", 0]]), null, null);
-            global.user.changeGoodsNum();
+            global.user.changeGoodsNum(gKind, gId, 1);
         }
         data.pop(p);
     }

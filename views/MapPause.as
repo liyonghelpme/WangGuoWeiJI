@@ -27,14 +27,22 @@ class MapPause extends MyNode
     var leftText;
     var rightText;
 
-    var skillPos = [[76, 384], [198, 384], [324, 384]];
+    
+    //var skillPos = [[76, 384], [198, 384], [324, 384]];
+    var skillFlowBanner;
 
+
+    function selectSkill(sol, skillId)//soldierId skillId level
+    {
+        scene.selectSkill(sol, skillId); 
+    }
     function MapPause(s)
     {
         scene = s;
         bg = node();
         init();
         bg.addsprite("mapMenuPause.png").pos(703, 385).setevent(EVENT_TOUCH, onPause);
+
 
 
         var banner = bg.addsprite("mapCastleBanner.png").pos(45, 20).anchor(0, 0);
@@ -48,7 +56,9 @@ class MapPause extends MyNode
         var nameBlock = bg.addsprite("mapNameBlock.png").pos(88, 50).anchor(0, 0);
         nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(32, 17).color(0, 0, 0).anchor(0, 50);
 
-        
+
+        //skillFlowBanner = new SkillFlowBanner(this);
+        addChild(skillFlowBanner);
 
         banner = bg.addsprite("mapCastleBanner.png").pos(755, 20).anchor(100, 0);
         rightDef = banner.addsprite().pos(300, 5).anchor(100, 0);
@@ -62,9 +72,9 @@ class MapPause extends MyNode
         nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(213, 17).color(0, 0, 0).anchor(100, 50);
 
 
-        bg.addsprite("mapMenuBlock.png").pos(skillPos[0]);
-        bg.addsprite("mapMenuBlock.png").pos(skillPos[1]);
-        bg.addsprite("mapMenuBlock.png").pos(skillPos[2]);
+        //bg.addsprite("mapMenuBlock.png").pos(skillPos[0]);
+        //bg.addsprite("mapMenuBlock.png").pos(skillPos[1]);
+        //bg.addsprite("mapMenuBlock.png").pos(skillPos[2]);
     }
     /*
     需要保证生命值 > 0

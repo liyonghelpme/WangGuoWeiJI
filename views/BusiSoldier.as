@@ -517,13 +517,22 @@ class BusiSoldier extends MyNode
     function showGlobalMenu()
     {
         showMenuYet = 1;
-        var func1 = ["photo", "drug", "equip"];
+        var func1;
         var solOrMon = data.get("solOrMon");
         if(solOrMon == 1)
             func1 = ["photo", "drug"];
-        var func2 = ["train", "gather"];
+        else
+            func1 = ["photo", "drug", "equip"];
+            
+        var func2;
         if(inspire == INSPIRE)
             func2 = ["inspire", "train", "gather"];
+        else
+            func2 = ["train", "gather"];
+            
+        var isHero = data.get("isHero");
+        if(isHero)
+            func2.append("skill");
             
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
     }

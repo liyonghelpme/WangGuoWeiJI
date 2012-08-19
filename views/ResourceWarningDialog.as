@@ -17,7 +17,7 @@ class ResourceWarningDialog extends MyNode
         bg = sprite("roleName.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
         bg.addlabel(t, null, 30, FONT_BOLD).pos(243, 29).anchor(50, 50).color(0, 0, 0);
-        var con = bg.addlabel(c, null, 20, FONT_NORMAL, 263, 118, ALIGN_LEFT).pos(177, 86).color(0, 0, 0);
+        var con = bg.addlabel(c, null, 20, FONT_NORMAL, 263, 0, ALIGN_LEFT).pos(177, 86).color(0, 0, 0);
         var conSize = con.prepare().size();
 
 

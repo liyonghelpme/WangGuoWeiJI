@@ -61,6 +61,7 @@ class User
     var mine;
 
     var maxGiftId = 0;
+    var skills;
 
     function getCurFinTaskNum()
     {
@@ -281,8 +282,15 @@ class User
     {
         if(kind == TREASURE_STONE || kind == MAGIC_STONE)
         {
-            treasureStone[getGoodsKey(kind, id)] += num;
+            var k = getGoodsKey(kind, id);
+            var v = treasureStone.get(k, 0);
+            v += num;
+            treasureStone[k] = v;
             db.put("treasureStone", treasureStone);
+            if(kind == TREASURE_STONE)
+                global.msgCenter.sendMsg(UPDATE_TREASURE, id);
+            else if(kind == MAGIC_STONE)
+                global.msgCenter.sendMsg(UPDATE_MAGIC_STONE, id);
         }
         else if(kind == DRUG)
         {
@@ -325,7 +333,6 @@ class User
 
         changeGoodsNum(TREASURE_STONE, id, 1);
 
-        global.msgCenter.sendMsg(UPDATE_TREASURE, id);
     }
 
     function buyMagicStone(id)
@@ -340,6 +347,18 @@ class User
     {
         return maxGiftId++;
     }
+    //soldierId dict([[skillId, level], ...])
+    function initSkill(sk)
+    {
+        skills = dict();
+        for(var i = 0; i < len(sk); i++)
+        {
+            var k = sk[i];
+            var v = skills.get(k[0], dict());
+            v.update(k[1], k[2]);
+            skills.update(k[0], v);
+        }
+    }
     var treasureStone;
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
@@ -349,6 +368,10 @@ class User
             con = json_loads(con);
             uid = con.get("uid");
             maxGiftId = con.get("maxGiftId");
+
+            var temp = con.get("skills");//soldierId  skillId level
+            initSkill(temp);
+
 
             resource = con.get("resource");
             
@@ -461,6 +484,7 @@ class User
         treasureStone = dict();
         starNum = null;
         maxGiftId = 0;
+        skills = null;
 
 
         oldPos = db.get("oldPos");
@@ -1329,4 +1353,38 @@ class User
         equips.pop(eid);
     }
 
+    function getCurSkillNum(sid)
+    {
+        var sk = skills.get(sid, dict()); 
+        return len(sk);
+    }
+    function getSolSkills(sid)
+    {
+        return skills.get(sid, dict());
+    }
+    function getSolSkillLevel(sid, skillId)
+    {
+        var v = skills.get(sid);
+        return v.get(skillId, -1);
+    }
+
+    function giveupSkill(sid, skillId)
+    {
+        var v = skills.get(sid);
+        v.pop(skillId);
+    }
+    function buySkill(soldierId, skillId)
+    {
+        var cost = getCost(SKILL, skillId);
+        doCost(cost);
+        var v = skills.get(soldierId, dict());
+        v.update(skillId, 0);
+        skills.update(soldierId, v);
+    }
+    function upgradeSkill(soldierId, skillId)
+    {
+        var v = skills.get(soldierId, []);
+        v[skillId] += 1;
+        global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
+    }
 }

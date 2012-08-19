@@ -163,3 +163,12 @@ function getGoodsKindAndId(k)
 {
     return [k/GOODS_COFF, k%GOODS_COFF];
 }
+
+function getMaxSkillNum(career)
+{
+    return career+2;
+}
+function getCareer(kindId)
+{
+    return kindId%10;
+}

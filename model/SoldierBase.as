@@ -182,19 +182,8 @@ function initAttackAndDefense(sol)
 
     攻击力伤害至少为1
 */
-function calHurt(src, tar)
-{
-    var pcoff = getPhysicHurt(tar.data);
-    var phyHurt = src.physicAttack*pcoff*tar.purePhyDefense/tar.physicDefense/100;
-    var mcoff = getMagicHurt(tar.data);
-    var magHurt = src.magicAttack*mcoff*tar.pureMagDefense/tar.magicDefense/100;
-    //phyHurt = max(phyHurt, 1);
-    //magHurt = max(magHurt, 1);
 
-    var hurt = max(phyHurt+magHurt, 1);
-    //trace("hurt", phyHurt, magHurt, pcoff, mcoff);
-    return hurt;
-}
+
 
 function getTransferLevel(sol)
 {
@@ -253,4 +242,42 @@ function getLevelUpExp(id, level)
     var exp = getAddExp(id, level)*(5+level);
 //    trace("levelNeedExp", exp);
     return exp;
+}
+
+/*
+计算用户自己的士兵的技能攻击力
+
+技能等级 基础伤害
+
+敌方士兵的技能攻击力
+*/
+const BASE_SOLDIER = 70;
+function getTotalSkillDamage(sol, skillId)
+{
+    var sdata = getData(SKILL, skillId);
+    var level =  global.user.getSolSkillLevel(sol.sid, skillId);
+    level += sdata.get("effectLevel");
+
+    var pureData = getSolPureData(BASE_SOLDIER, level);
+    var attack = pureData.get("physicAttack");
+    return attack*2;
+}
+
+function calSkillHurt(attack, tar)
+{
+    var mcoff = getMagicHurt(tar.data);
+    var magHurt = attack*mcoff*tar.pureMagDefense/tar.magicDefense/100;
+    magHurt = max(magHurt, 1);
+    return magHurt;
+}
+
+function calHurt(src, tar)
+{
+    var pcoff = getPhysicHurt(tar.data);
+    var phyHurt = src.physicAttack*pcoff*tar.purePhyDefense/tar.physicDefense/100;
+    var mcoff = getMagicHurt(tar.data);
+    var magHurt = src.magicAttack*mcoff*tar.pureMagDefense/tar.magicDefense/100;
+
+    var hurt = max(phyHurt+magHurt, 1);
+    return hurt;
 }

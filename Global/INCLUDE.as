@@ -78,6 +78,8 @@ import views.RequestView;
 import views.GiftView;
 import views.AllGoods;
 import views.UpgradeDialog;
+import views.Skill;
+import views.UpgradeSkillDialog;
 
 import views.BreakDialog;
 
@@ -126,6 +128,8 @@ import views.BattleScene;
 //闯关地图
 import views.Map;
 import views.Soldier;
+import views.DeadOver;
+import views.SkillEffect;
 import views.CloseSoldier;
 import views.CloseAttackEffect;
 import views.ChallengeOver;
@@ -138,6 +142,7 @@ import views.Arrow;
 import views.Magic;
 import views.MoveObject;
 import views.MapPause;
+//import views.SkillFlowBanner;
 
 import views.MapDefense;
 

@@ -69,7 +69,7 @@ const BLACK = m_color(
 0, 0, 0, 100, 0
 );
 const RED = m_color(
-100, 100, 100, 0, 0,
+0, 0, 0, 0, 10000,
 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0,
 0, 0, 0, 100, 0
@@ -77,7 +77,7 @@ const RED = m_color(
 const BLUE = m_color(
 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0,
-100, 100, 100, 0, 0,
+0, 0, 0, 0, 10000,
 0, 0, 0, 100, 0
 );
 const WHITE = m_color(
@@ -159,6 +159,12 @@ var buildAnimate = dict([
     [162, [["build162.png", "build162a1.png", "build162a2.png", "build162a3.png", "build162a4.png"], [0, 0], 2000, 2, [0, 0]]],
 ]);
 
+//skillId
+var skillAnimate = dict([
+    [0, ["skill0f0.png", "skill0f1.png","skill0f2.png","skill0f3.png","skill0f4.png","skill0f5.png","skill0f6.png","skill0f7.png","skill0f8.png","skill0f9.png","skill0f10.png"]],
+    [2, [["skill2a0.png", "skill2a1.png","skill2a2.png","skill2a3.png","skill2a4.png","skill2a5.png","skill2a6.png","skill2a7.png","skill2a8.png","skill2a9.png", "skill2a10.png", "skill2a11.png", "skill2a12.png", "skill2a13.png"], 1500]],
+    [4, [["skill4a0.png", "skill4a1.png", "skill4a2.png", "skill4a3.png", "skill4a4.png", "skill4a5.png", "skill4a6.png", "skill4a7.png", "skill4a8.png", "skill4a9.png", "skill4a10.png", "skill4a11.png", "skill4a12.png", "skill4a13.png", "skill4a14.png", "skill4a15.png", "skill4a16.png", "skill4a17.png", "skill4a18.png", "skill4a19.png", "skill4a20.png", "skill4a21.png", "skill4a22.png", "skill4a23.png", "skill4a24.png", "skill4a25.png", "skill4a26.png", "skill4a27.png"], 3000]],
+]);
 
 
 var buildFunc = dict([
@@ -318,6 +324,7 @@ const RELIVE = 13; //打开士兵的复活药水页面
 const FALL_THING = 14;
 const TREASURE_STONE = 15;
 const MAGIC_STONE = 16;
+const SKILL = 17;
 
 
 
@@ -339,6 +346,7 @@ var Keys = [
     fallThingKey,
     goodsListKey,
     magicStoneKey,
+    skillsKey,
 ];
 var CostData = [
     buildingData,
@@ -358,8 +366,10 @@ var CostData = [
     fallThingData,
     goodsListData,
     magicStoneData,
+    skillsData,
 ];
 
+/*
 var GoodsPre = [
     "build[ID]",
     "equip[ID]",
@@ -378,7 +388,9 @@ var GoodsPre = [
     "",
     "stone[ID]",
     "magicStone[ID]",
+    "skill[ID]",
 ];
+*/
 var KindsPre = [
     "build[ID].png",
     "equip[ID].png",
@@ -397,6 +409,7 @@ var KindsPre = [
     "",
     "stone[ID].png",
     "magicStone[ID].png",
+    "skill[ID].png",
 ];
 
 //260048  木牌位置
@@ -454,6 +467,13 @@ const SOL_TRANSFER = 6;//sid
 const SOL_UNLOADTHING = 7; //sid
 const UPDATE_EQUIP = 8; //更新装备数据
 const UPDATE_TREASURE = 9; //更新宝石数量
+const UPDATE_SKILL = 10;
+const UPDATE_MAGIC_STONE = 11;
+const UPDATE_SKILL_STATE = 12; //战斗地图更新 技能状态  开始释放 确定目标 结束释放
+
+//开始技能选择目标 释放技能选择目标结束
+const MAP_START_SKILL;
+const MAP_FINISH_SKILL;
 
 
 const MAX_BUSI_SOLNUM = 50;
@@ -516,3 +536,15 @@ const PLAN_SOLDIER = 1;
 const MAX_EQUIP_LEVEL = 12;
 
 const ROUND_MAP_NUM = 5;//闯关地图的数量 每关旗帜的数量由 LevelSelect 中旗帜的数量决定
+
+const LINE_SKILL = 0;
+const SINGLE_ATTACK_SKILL = 1;
+const MULTI_ATTACK_SKILL = 2;
+const MAKEUP_SKILL = 3;
+const REEL_SKILL = 4;
+const SAVE_SKILL = 5;
+const HEAL_SKILL = 6;
+const MULTI_HEAL_SKILL = 7;
+
+const MYCOLOR = 0;
+const ENECOLOR = 1;

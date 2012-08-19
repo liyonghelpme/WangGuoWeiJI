@@ -13,7 +13,6 @@ class Map extends MyNode
     var walkZone = 
     [MAP_INITX+MAP_OFFX/2, MAP_INITY+MAP_OFFY, MAP_INITX+MAP_OFFX*12+MAP_OFFX/2, MAP_INITY+MAP_OFFY*5];
 
-    //getSolMap = map[1] 行号作为 key
     var soldiers = dict();
 
     /*
@@ -52,6 +51,14 @@ class Map extends MyNode
             return 0;
         }
         return 1;
+    }
+    function checkSkillInBoundary(si, oldMap)
+    {
+        return (oldMap[0] < 1 || oldMap[0] > (6-si[0]) || oldMap[1] < 0 || oldMap[1] > (5-si[1]))
+    }
+    function setSkillSoldier(sol)
+    {
+        scene.setSkillSoldier(sol);
     }
     function moveGrid(sol)
     {
@@ -294,6 +301,8 @@ class Map extends MyNode
 
     多行士兵 属于多个row 
     左上角作为起始row 
+
+    oldMap 的左上角 
     */
     function setMap(sol)
     {
@@ -364,7 +373,7 @@ class Map extends MyNode
     
     //存储所有我方士兵实体 当战斗结束之后清算奖励 只变更我方士兵的数据状态
     var mySoldiers = [];
-    function finishArrage()
+    function finishArrange()
     {
         var it = soldiers.values();
         grid.removefromparent();
@@ -374,9 +383,9 @@ class Map extends MyNode
             {
                 var so = it[i][j];
                 //占有多行的士兵只 清理一次
-                so.finishArrage();
+                so.finishArrange();
                 //占有多行的士兵只加入一次
-                if(so.isMySoldier() == 1 && so.addToMySol() == 0)//我方士兵且 不为防御装置 且没有加入我方士兵列表
+                if(so.color == MYCOLOR && so.addToMySol() == 0)//我方士兵且 不为防御装置 且没有加入我方士兵列表
                 {
                     mySoldiers.append(so);
                 }
@@ -678,16 +687,191 @@ class Map extends MyNode
         myTimer.stop();
         myTimer = null;
     }
+
+    
+    var skillGrid = null;
+    function moveSkillGrid(skillData, x, y)
+    {
+        var sx = skillData.get("sx");
+        var sy = skillData.get("sy");
+
+
+        var oldMap = getSkillMap([x, y], sx, sy, sol.offY);
+        var ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
+            
+        if(skillGrid == null)
+            skillGrid = bg.addsprite("occGrid.png").size(MAP_OFFX*sx, MAP_OFFY*sy);
+
+        if(ret == 0)
+        {
+            skillGrid.texture("occGrid.png", RED);        
+        }
+        else
+        {
+            skillGrid.texture("occGrid.png", WHITE);
+        }
+
+        var gp = getGridPos(oldMap);
+        skillGrid.pos(gp[0], gp[1]);
+    }
+    function checkSkillPos(sol, skillData, oldMap)
+    {
+        var ret = checkSkillInBoundary([skillData.get("sx"), skillData.get("sy")], oldMap);
+        if(ret == 0)
+            return 0;
+
+        //直线攻击需要在 英雄所在的若干条直线上
+        var skillKind = skillData.get("kind");
+        var solMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
+        if(skillKind == LINE_SKILL)
+        {
+            for(var j = 0; j < sol.sy; j++)
+            {
+                if(oldMap[1] == (solMap[1]+j))
+                    return 1;
+            }
+            return 0;
+        }
+        //范围攻击任意位置
+        return 1;
+    }
     function touchBegan(n, e, p, x, y, points)
     {
-        touchDelegate.tBegan(n, e, p, x, y, points);
+        if(scene.state == MAP_START_SKILL)//释放技能选择目标开始
+        {
+            var skillData = getData(SKILL, scene.skillId);
+            var skillKind = skillData.get("kind");
+            var po = n.node2world(x, y);
+            po = bg.world2node(po[0], po[1]);
+            //线性方向选择
+            if(skillKind == LINE_SKILL)
+            {
+                moveSkillGrid(skillData, po[0], po[1]);
+            }
+            //选择攻击目标士兵
+            else if(skillKind == SINGLE_ATTACK_SKILL)
+            {
+                
+            }
+            //选择攻击范围
+            else if(skillKind == MULTI_ATTACK_SKILL)
+            {
+                //坐标可能从 士兵传来 需要先转化成 世界坐标再计算相对地图坐标位置
+                moveSkillGrid(skillData, po[0], po[1]);
+            }
+        }
+        else
+            touchDelegate.tBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)
     {
-        touchDelegate.tMoved(n, e, p, x, y, points);
+        if(scene.state == MAP_START_SKILL)//释放技能选择目标开始
+        {
+            var skillData = getData(SKILL, scene.skillId);
+            var skillKind = skillData.get("kind");
+            var po;
+            po = n.node2world(x, y);
+            po = bg.world2node(po[0], po[1]);
+            //线性方向选择
+            if(skillKind == LINE_SKILL)
+            {
+                moveSkillGrid(skillData, po[0], po[1]);
+            }
+            //选择攻击目标士兵
+            else if(skillKind == SINGLE_ATTACK_SKILL)
+            {
+            }
+            //选择攻击范围
+            else if(skillKind == MULTI_ATTACK_SKILL)
+            {
+                moveSkillGrid(skillData, po[0], po[1]);
+            }
+        }
+        else
+            touchDelegate.tMoved(n, e, p, x, y, points);
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        touchDelegate.tEnded(n, e, p, x, y, points);
+        if(scene.state == MAP_START_SKILL)//释放技能选择目标开始
+        {
+            var skillData = getData(SKILL, scene.skillId);
+            var skillKind = skillData.get("kind");
+            var po;
+
+            po = n.node2world(x, y);
+            po = bg.world2node(po[0], po[1]);
+            var sx = skillData.get("sx");
+            var sy = skillData.get("sy");
+            //线性方向选择
+            if(skillKind == LINE_SKILL)
+            {
+                var oldMap = getSkillMap(po, sx, sy, sol.offY);
+                var ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
+                if(ret == 0)
+                {
+                    scene.setTargetSol(null);
+                }
+                else
+                {
+                    scene.setTargetSol(po);//攻击左右方向
+                }
+                skillGrid.removefromparent();
+                skillGrid = null;
+            }
+            //选择攻击目标士兵
+            else if(skillKind == SINGLE_ATTACK_SKILL)
+            {
+                scene.setTargetSol(null);
+            }
+            //选择攻击范围
+            else if(skillKind == MULTI_ATTACK_SKILL)
+            {
+                var oldMap = getSkillMap(po, sx, sy, sol.offY);
+                var ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
+                if(ret == 0)
+                {
+                    scene.setTargetSol(null);
+                }
+                else
+                {
+                    scene.setTargetSol([oldMap[0], oldMap[1]]);
+                }
+                skillGrid.removefromparent();
+                skillGrid = null;
+            }
+        }
+        else
+            touchDelegate.tEnded(n, e, p, x, y, points);
     }
+
+    //单体技能设定 目标士兵
+    //群体技能设定 范围网格
+    function doSkillEffect(attacker, target, skillId)
+    {
+        var data = getData(SKILL, skillId);
+        var skill = null;
+        if(data["kind"] == LINE_SKILL)
+        {
+            skill = new LineSkill(this, attacker, target, skillId); 
+        }
+        else if(data["kind"] == SINGLE_ATTACK_SKILL)
+        {
+            skill = new SingleSkill(this, attacker, target, skillId);
+        }
+        else if(data["kind"] == MULTI_ATTACK_SKILL)
+        {
+            skill = new MultiSkill(this, attacker, target, skillId);
+        }
+
+        addChildZ(skill, MAX_BUILD_ZORD);
+    }
+
+    //返回士兵所在行
+    /*
+    function getSoldierRow(sol)
+    {
+        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
+        return oldMap[1]; 
+    }
+    */
 }

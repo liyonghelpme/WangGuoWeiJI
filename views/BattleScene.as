@@ -217,7 +217,7 @@ class MapBanner extends MyNode
     }
     function onOk()
     {
-        scene.finishArrage();
+        scene.finishArrange();
     }
     function onCancel()
     {
@@ -249,6 +249,34 @@ class BattleScene extends MyNode
     //big small soldierData
     var big;
     var small;
+
+    var state = MAP_FINISH_SKILL;
+
+    var skillSoldier;
+    var skillId;
+    function selectSkill(sol, skId)
+    {
+        skillSoldier = sol;
+        skillId = skId;
+
+        state = MAP_START_SKILL;
+    }
+    function setTargetSol(sol)
+    {
+
+        //pausePage.finishSkill();
+        global.msgCenter.sendMsg(UPDATE_SKILL, MAP_FINISH_SKILL);
+        state = MAP_FINISH_SKILL;
+
+        //单体技能确定 攻击目标
+        //群体技能确定 攻击位置 左上角
+        if(sol != null)
+            map.doSkillEffect(skillSoldier, sol, skillId);
+        
+        skillSoldier = null;
+        skillId = -1;
+    }
+
     //uid, papayaId, score rank cityDefense
     function BattleScene(k, sm, s, ki, par, eq)
     {
@@ -275,13 +303,18 @@ class BattleScene extends MyNode
             return param[4];
         return 0;
     }
-    function finishArrage()
+    function finishArrange()
     {
         banner.removeSelf();
         banner = null;
-        map.finishArrage();
+        map.finishArrange();
         pausePage = new MapPause(this);
         addChild(pausePage);
+    }
+    function setSkillSoldier(sol)
+    {
+        if(pausePage != null)
+            pausePage.skillFlowBanner.setSoldier(sol);
     }
     function stopGame()
     {

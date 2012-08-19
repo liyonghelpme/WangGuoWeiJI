@@ -36,8 +36,15 @@ class ChildMenuLayer extends MyNode
 
     ["allDrug", ["menu_button_drug.png", onAllDrug]],
     ["allEquip", ["menu_button_equip.png", onAllEquip]],
+    ["skill", ["menu_button_skill.png", onSkill]],
     
     ]);
+    //soldier skill
+    function onSkill()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new Skill(scene), 1, 0);
+    }
     function onAllDrug()
     {
         global.director.curScene.closeGlobalMenu(this);

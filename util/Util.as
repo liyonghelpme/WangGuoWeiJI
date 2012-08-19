@@ -498,14 +498,6 @@ function flyObject(bg, cost, callback)
 }
 */
 /*
-function getFallThing(kind)
-{
-    var v = fallThings[kind];
-//    trace("getFallThing", v);
-    return dict([["silver", v[1]], ["crystal", v[2]], ["gold", v[3]]]);
-}
-*/
-/*
 building id-->function id -> function array
 */
 function getBuildFunc(id)
@@ -532,6 +524,7 @@ function checkPlaning()
 /*
 访问是否存在临时的动画数组，如果不存在则拼接一个并存储在全局范围中，下次调用可以重用
 */
+/*
 function getMoveAnimate(id)
 {
     var ani = moveAnimate.get(id, null);
@@ -564,6 +557,7 @@ function getAttAnimate(id)
     attAnimate.update(id, ani);
     return ani;
 }
+*/
 
 function colorWords(str)
 {

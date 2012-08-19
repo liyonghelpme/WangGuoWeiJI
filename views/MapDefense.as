@@ -44,7 +44,7 @@ class MapDefense extends MyNode
     {
         return 40;
     }
-    function finishArrage()
+    function finishArrange()
     {
     }
     function changeHealth(sol, add)
@@ -67,10 +67,6 @@ class MapDefense extends MyNode
     }
     function continueGame()
     {
-    }
-    function isMySoldier()
-    {
-        return 0;
     }
     function addToMySol()
     {

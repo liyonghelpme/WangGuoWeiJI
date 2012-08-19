@@ -1,119 +1,10 @@
-/*
-人物 changeDirNode anchor -->50 50
-人物位置 移动 cs = changeDirNode.size()    curPos = changeDirNode.pos()   curPos[0] curPos[1]-cs[1]/2
-人物 跳起 moveTo(curPos[0], curPos[1]-cs[1]/2-20) 
-人物 旋转 -90 +90
-人物 落下
-人物 出现 血迹
-*/
-class DeadOver extends MyNode
-{
-    var soldier;
-    var cs;
-    const FALL_TIME = 700;
-    var changeDirNode;
-    function DeadOver(sol)
-    {
-        soldier = sol;
-        bg = node();
-        init();
-
-        changeDirNode = soldier.changeDirNode;
-        cs = changeDirNode.size();
-        var curPos = changeDirNode.pos();
-        var dir = soldier.getDir();
-        if(dir < 0)
-            dir = -90
-        else
-            dir = 90;
-//        trace("changeDirNode", cs, curPos, dir, "soldier"+str(soldier.id)+"dead.png");
-        changeDirNode.anchor(50, 50).pos(curPos[0], curPos[1]-cs[1]/2);
-
-        changeDirNode.addaction(
-            sequence(
-                moveby(200, 0, -30), 
-                spawn(rotateby(500, dir), moveby(500, 0, 20+cs[1]/2)), 
-                itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
-                irotateby(-dir),
-                fadeout(1000)) 
-        );
-
-        var blood = sprite("blood.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
-        soldier.bg.add(blood, -1);
-        blood.addaction( 
-            sequence(
-                itintto(0, 0, 0, 0), 
-                delaytime(FALL_TIME), 
-                itintto(100, 100, 100, 100), 
-                fadeout(2000))
-        );
-    }
-    /*
-    var passTime = 0;
-    function udpate(diff)
-    {
-        passTime += diff;
-        if(passTime >= FALL_TIME)
-        {
-            blood = sprite("blood.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
-            soldier.bg.add(blood, -1);
-            blood.addaction(fadeout(400));
-        }
-    }
-    override function enterScene()
-    {
-        super.enterScene();
-        soldier.map.myTimer.addTimer(this);
-    }
-    override function exitScene()
-    {
-        soldier.map.myTimer.removeTimer(this)
-        super.exitScene();
-    }
-    */
-}
-class SpeakDialog extends MyNode
-{
-    var words;
-    var soldier;
-    var randWord;
-    var curWord = 0;
-    function SpeakDialog(s)
-    {
-        soldier = s;
-        randWord = [getStr("myNameIs", ["[NAME]", soldier.myName]), getStr("letFight", null)];
-        bg = sprite("speakBack.png").anchor(50, 100);
-        words = bg.addlabel(randWord[curWord], null, 20).anchor(50, 50).pos(79, 25).color(0, 0, 0);
-        init();
-    }
-    override function enterScene()
-    {
-        super.enterScene();
-        global.timer.addTimer(this);
-    }
-    var passTime = 0;
-    function update(diff)
-    {
-        passTime += diff;
-        if(passTime >= 5000)
-        {
-            passTime = 0;
-            curWord ++;
-            curWord %= len(randWord);
-            words.text(randWord[curWord]);
-        }
-    }
-    override function exitScene()
-    {
-        global.timer.removeTimer(this);
-        super.exitScene();
-    }
-}
 
 
 //default left
 /*
 布局的时候 拖出 0-24 的范围就认为是归还给系统
+
+MAP_START_SKILL 场景 状态时， 点击士兵释放技能
 */
 class Soldier extends MyNode
 {
@@ -215,30 +106,8 @@ class Soldier extends MyNode
     var nameBanner = null;
     var backBanner = null;
 
-    /*
-    function setMonEquip(equips)
-    {
-        if(equips == null)
-            return;
-        for(var i = 0; i < len(equips); i++)
-        {
-            var eData = equips[i];
-            //敌方士兵持有该武器
-            if(eData.get("owner") == monsterData.get("sid"))
-            {
-                var e = getData(EQUIP, eData.get("kind"));
-                physicAttack += e.get("physicAttack");
-                magicAttack += e.get("magicAttack");
-
-                physicDefense += e.get("physicDefense");
-                magicDefense += e.get("magicDefense");
-                //recoverSpeed += e.get("recoverSpeed");
-                healthBoundary += e.get("healthBoundary"); 
-            }
-        }
-    }
-    */
     //攻击速度 
+    /*
     function initData()
     {
         sx = data.get("sx");
@@ -249,7 +118,7 @@ class Soldier extends MyNode
         volumn = data.get("volumn");
         recoverSpeed = 0;
 
-        trace("soldierData", monsterData, map.monEquips);
+        //trace("soldierData", monsterData, map.monEquips);
 
     
         if(sid == ENEMY)//敌对方士兵 地图怪兽 
@@ -301,11 +170,8 @@ class Soldier extends MyNode
         gainexp = getAddExp(id, level);
         trace("soldierData", physicAttack, physicDefense, magicAttack, magicDefense, purePhyDefense);
     }
+    */
 
-    function isMySoldier()
-    {
-        return color == 0;
-    }
     var attSpeed;
 
     //挑战的时候初始化怪兽 和 敌方士兵的时候使用 该数据 sid=-1
@@ -323,7 +189,6 @@ class Soldier extends MyNode
         if(k >= 20)
             id = 0;
 
-        //movAni = getMoveAnimate(id);
         var colStr = "red";
         if(color == 1)
             colStr = "blue";
@@ -331,12 +196,11 @@ class Soldier extends MyNode
         load_sprite_sheet("soldiera"+str(id)+colStr+".plist");
 
         movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
-        //attAni = getAttAnimate(id);
         //1500 ms攻击一次 
         //经营页面回复生命值 60s 一次
 
         data = getData(SOLDIER, id);
-        initData();
+        //initData();
 
         attAni = repeat(animate(attSpeed, "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a6.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a7.png", UPDATE_SIZE));//, callfunc(finAttack)
 
@@ -380,7 +244,6 @@ class Soldier extends MyNode
 
 
         shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
-        //changeDirNode.add(shadow, -1);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
         init();
 
@@ -408,7 +271,6 @@ class Soldier extends MyNode
             addChild(nameBanner);
         }
 
-
         initHealth();
 
         setDir();
@@ -420,7 +282,7 @@ class Soldier extends MyNode
     var attTime = 0;
     function getLevelUp()
     {
-        for(; 1; )
+        while(1)
         {
             var ne = getLevelUpExp(id, level);
             if(exp >= ne)
@@ -474,6 +336,7 @@ class Soldier extends MyNode
     //士兵 伤害
     //生命值 < 0 表示死亡
     //死亡之后复活的生命值 >= 0
+    /*
     function changeHealth(sol, add)
     {
         var val = hurts.get(sol.sid, [sol, 0]);
@@ -499,6 +362,7 @@ class Soldier extends MyNode
         //bg 的size和图片的size大小相同
         bg.addlabel(str(add), null, 30).pos(bSize[0]/2, -5).color(100, 0, 0).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), callfunc(removeTempNode)));
     }
+    */
 
     function onCancel()
     {
@@ -510,39 +374,32 @@ class Soldier extends MyNode
     {
         inMoving = 0;
     }
-    /*
-    var inAttacking = 0;
-    function finAttack()
-    {
-        inAttacking = 0;
-    }
-    */
     var oldPos = null;
     /*
     移动清除旧的map 
     相对于map的 位置 
     设置grid 显示 设置zord 最大
     */
+    var chooseStar = null;
     function touchWorldBegan(n, e, p, x, y, points)
     {
-        /*
-        if(state != MAP_SOL_ARRANGE)//not in arrange
+        if(color == MYCOLOR)
         {
-            state = MAP_SOL_TOUCH;
-            clearAnimation();
-        }
-        */
+            if(state == MAP_SOL_ARRANGE)
+            {
+                map.moveGrid(this);
+                setZord(MAX_SOL_ZORD);
+                map.clearMap(this);
+            }
 
-        if(state == MAP_SOL_ARRANGE && color == 0)
+        }
+        else if(map.scene.state == MAP_START_SKILL)//攻击敌方士兵
         {
-            //map.showGrid(this);
-            map.moveGrid(this);
-            setZord(MAX_SOL_ZORD);
-            map.clearMap(this);
+            var bSize = bg.prepare().size();
+            chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+            chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
+            bg.add(chooseStar, -1);
         }
-
-        //lastPoints = map.bg.world2node(x, y);
-
     }
     function touchBegan(n, e, p, x, y, points)
     {
@@ -564,23 +421,34 @@ class Soldier extends MyNode
 
     移动士兵 移动grid zord最大
     */
-
+    /*
     function touchWorldMoved(n, e, p, x, y, points)
     {
         //trace("touchWorldMoved", x, y);
-        if(state == MAP_SOL_ARRANGE && color == 0)
+        if(color == MYCOLOR)
         {
-            lastPoints = map.bg.world2node(x, y);
+            if(state == MAP_SOL_ARRANGE)
+            {
+                lastPoints = map.bg.world2node(x, y);
 
-            bg.pos(lastPoints);
-            map.moveGrid(this);
-            setCol();
+                bg.pos(lastPoints);
+                map.moveGrid(this);
+                setCol();
+            }
+
+        }
+        else
+        {
+            if(map.scene.state == MAP_START_SKILL)
+            {
+            }
         }
     }
+    */
     function touchMoved(n, e, p, x, y, points)
     {
         lastPoints = n.node2world(x, y);
-        touchWorldMoved(n, e, p, lastPoints[0], lastPoints[1], points);
+        //touchWorldMoved(n, e, p, lastPoints[0], lastPoints[1], points);
     }
     /*
     根据map 
@@ -592,9 +460,10 @@ class Soldier extends MyNode
     设置正常的zord
     清理 地图上显示的grid
     */
+    /*
     function touchWorldEnded(n, e, p, x, y, points)
     {
-        if(state == MAP_SOL_ARRANGE && color == 0)
+        if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
             var oldMap = getSolMap(bg.pos(), sx, sy, offY);
             var ret = map.checkInBoundary(this, oldMap);
@@ -625,14 +494,23 @@ class Soldier extends MyNode
             map.setMap(this);
             map.removeGrid();
         }
-
-        //if(state != MAP_SOL_ARRANGE)
-        //    state = MAP_SOL_FREE; 
-
+        //战斗状态 场景设定 技能选择 只有英雄才有技能
+        else if(state != MAP_SOL_ARRANGE && map.scene.state == MAP_FINISH_SKILL && color == MYCOLOR)
+        {
+            map.setSkillSoldier(this); 
+        }
+        //给敌方士兵释放魔法
+        else if(state != MAP_SOL_ARRANGE && map.scene.state == MAP_START_SKILL && color == ENECOLOR)
+        {
+            chooseStar.removefromparent();
+            chooseStar = null;
+            map.scene.setTargetSol(this);
+        }
     }
+    */
     function touchEnded(n, e, p, x, y, points)
     {
-        touchWorldEnded(n, e, p, x, y, points);
+        //touchWorldEnded(n, e, p, x, y, points);
     }
     var addedYet = 0;
     /*
@@ -648,7 +526,7 @@ class Soldier extends MyNode
         return 1;
     }
     //布局结束 增加士兵的攻击力 防御力 消耗 士兵的药水状态
-    function finishArrage()
+    function finishArrange()
     {
         var drugUse = 0;
         if(addAttackTime > 0)
@@ -678,16 +556,8 @@ class Soldier extends MyNode
         if(nameBanner != null)
         {
             nameBanner.removeSelf();
-            //nameBanner.removefromparent();
             nameBanner = null;
         }
-        /*
-        if(closeIcon != null)
-        {
-            closeIcon.removefromparent();
-            closeIcon = null;
-        }
-        */
     }
     function getDir()
     {
@@ -763,15 +633,6 @@ class Soldier extends MyNode
         if(par != null)
             par.add(bg, zOrd);
     }
-    /*
-    function setZord(z)
-    {
-        var par = bg.parent();
-        bg.removefromparent();
-        if(par != null)
-            par.add(bg, z);
-    }
-    */
     function clearAnimation()
     {
         movAni.stop();
@@ -796,9 +657,6 @@ class Soldier extends MyNode
     function continueGame()
     {
         stopNow = 0;
-    }
-    function finishFallDown()
-    {
     }
 
     function update(diff)
@@ -831,34 +689,8 @@ class Soldier extends MyNode
             backBanner.removefromparent();
             addChild(new DeadOver(this));
 
-            /*
-            var dir = getDir();
-            if(dir < 0)
-            {
-                changeDirNode.addaction(sequence(rotateby(-90, 500), itexture("soldier"+str(id)+"dead.png", UPDATE_SIZE), fadeout(500)));
-            }
-            else
-            {
-                changeDirNode.addaction( sequence(rotateby(90, 500), itexture("soldier"+str(id)+"dead.png", UPDATE_SIZE), fadeout(500)) );
-            }
-
-            //增加血液
-            var cs = bg.size();
-            var blood = sprite("blood.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
-            bg.add(blood, -1);
-            deadTime = 0;
-
-            //changeDirNode.addaction(fadeout(2000));
-            blood.addaction(fadeout(DEAD_TIME));
-            */
 
             //设置最小zord 在死亡之后设置zord
-            /*
-            //var par = bg.parent();
-            //bg.removefromparent();
-            //par.add(bg, MIN_SOL_ZORD);
-            setZord(MIN_SOL_ZORD);
-            */
 
             tar = null;
             //增加经验
@@ -950,15 +782,6 @@ class Soldier extends MyNode
                 //changeDirNode.addaction(attAni);
                 attTime -= attSpeed;
             }
-            /*
-            if(inAttacking == 0)
-            {
-                funcSoldier.doAttack();
-                clearAnimation();
-                inAttacking = 1;
-                changeDirNode.addaction(attAni);
-            }
-            */
         }
         else if(state == MAP_SOL_WATI_TOUCH)
         {
