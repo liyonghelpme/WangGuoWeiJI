@@ -78,7 +78,7 @@ import views.RequestView;
 import views.GiftView;
 import views.AllGoods;
 import views.UpgradeDialog;
-import views.Skill;
+import views.SkillDialog;
 import views.UpgradeSkillDialog;
 
 import views.BreakDialog;
@@ -129,7 +129,15 @@ import views.BattleScene;
 import views.Map;
 import views.Soldier;
 import views.DeadOver;
-import views.SkillEffect;
+//import views.SkillEffect;
+import views.LineSkill;
+import views.SingleSkill;
+import views.MultiSkill;
+import views.SpinSkill;
+import views.HealSkill;
+import views.SaveSkill;
+
+
 import views.CloseSoldier;
 import views.CloseAttackEffect;
 import views.ChallengeOver;
@@ -142,7 +150,7 @@ import views.Arrow;
 import views.Magic;
 import views.MoveObject;
 import views.MapPause;
-//import views.SkillFlowBanner;
+import views.SkillFlowBanner;
 
 import views.MapDefense;
 

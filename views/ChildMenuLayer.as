@@ -43,7 +43,7 @@ class ChildMenuLayer extends MyNode
     function onSkill()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new Skill(scene), 1, 0);
+        global.director.pushView(new SkillDialog(scene), 1, 0);
     }
     function onAllDrug()
     {

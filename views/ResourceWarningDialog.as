@@ -79,11 +79,11 @@ class ResourceWarningDialog extends MyNode
         {
             store.changeTab(store.SILVER_PAGE);
         }
-        else if(c[1] == "crystal")
+        else if(c[0] == "crystal")
         {
             store.changeTab(store.CRYSTAL_PAGE);
         }
-        else if(c[2] == "gold")
+        else if(c[0] == "gold")
         {
             store.changeTab(store.GOLD_PAGE);
         }

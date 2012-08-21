@@ -281,3 +281,14 @@ function calHurt(src, tar)
     var hurt = max(phyHurt+magHurt, 1);
     return hurt;
 }
+
+function getSkillColdTime(soldierId, skillId)
+{
+    var sdata = getData(SKILL, skillId);
+    //var skillKind = sdata.get("kind");
+    var skillLevel = global.user.getSolSkillLevel(soldierId, skillId);
+    var coldTime = sdata.get("coldTime");
+
+    coldTime = max(coldTime-sdata.get("addTime")*skillLevel, 5)*1000;//最少时间5s 拯救技能 最少5s时间
+    return coldTime;
+}

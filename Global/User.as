@@ -1368,10 +1368,12 @@ class User
         return v.get(skillId, -1);
     }
 
-    function giveupSkill(sid, skillId)
+    function giveupSkill(soldierId, skillId)
     {
-        var v = skills.get(sid);
+        var v = skills.get(soldierId);
         v.pop(skillId);
+
+        global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
     }
     function buySkill(soldierId, skillId)
     {
@@ -1380,6 +1382,8 @@ class User
         var v = skills.get(soldierId, dict());
         v.update(skillId, 0);
         skills.update(soldierId, v);
+
+        global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
     }
     function upgradeSkill(soldierId, skillId)
     {

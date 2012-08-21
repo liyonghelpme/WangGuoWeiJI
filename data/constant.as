@@ -161,9 +161,34 @@ var buildAnimate = dict([
 
 //skillId
 var skillAnimate = dict([
-    [0, ["skill0f0.png", "skill0f1.png","skill0f2.png","skill0f3.png","skill0f4.png","skill0f5.png","skill0f6.png","skill0f7.png","skill0f8.png","skill0f9.png","skill0f10.png"]],
+    //红色冲击波
+    [0, ["skill0a0.png", "skill0a1.png","skill0a2.png","skill0a3.png","skill0a4.png","skill0a5.png","skill0a6.png","skill0a7.png","skill0a8.png","skill0a9.png","skill0a10.png"]],
+    //蓝色冲击波
+    [1, [["skill1a0.png", "skill1a1.png", "skill1a2.png", "skill1a3.png", "skill1a4.png", "skill1a5.png", "skill1a6.png", "skill1a7.png", "skill1a8.png", "skill1a9.png", "skill1a10.png"], 1500]],
+    //刀气
     [2, [["skill2a0.png", "skill2a1.png","skill2a2.png","skill2a3.png","skill2a4.png","skill2a5.png","skill2a6.png","skill2a7.png","skill2a8.png","skill2a9.png", "skill2a10.png", "skill2a11.png", "skill2a12.png", "skill2a13.png"], 1500]],
+    //单个火球术攻击在士兵身上
+    [3, [["skill3a0.png", "skill3a1.png", "skill3a2.png", "skill3a3.png", "skill3a4.png", "skill3a5.png", "skill3a6.png", "skill3a7.png", "skill3a8.png", "skill3a9.png", "skill3a10.png", "skill3a11.png", "skill3a12.png"], 1500]] ,
+    //火焰雨 
     [4, [["skill4a0.png", "skill4a1.png", "skill4a2.png", "skill4a3.png", "skill4a4.png", "skill4a5.png", "skill4a6.png", "skill4a7.png", "skill4a8.png", "skill4a9.png", "skill4a10.png", "skill4a11.png", "skill4a12.png", "skill4a13.png", "skill4a14.png", "skill4a15.png", "skill4a16.png", "skill4a17.png", "skill4a18.png", "skill4a19.png", "skill4a20.png", "skill4a21.png", "skill4a22.png", "skill4a23.png", "skill4a24.png", "skill4a25.png", "skill4a26.png", "skill4a27.png"], 3000]],
+    //单个闪电
+    [5, [["skill5a0.png", "skill5a1.png", "skill5a2.png", "skill5a3.png", "skill5a4.png", "skill5a5.png", "skill5a6.png", "skill5a7.png", "skill5a8.png", "skill5a9.png"], 1500]] ,
+    //流星
+    [6, [
+        ["skill6a0.png", "skill6a1.png", "skill6a2.png", "skill6a3.png", "skill6a4.png", "skill6a5.png", "skill6a6.png", "skill6a7.png", "skill6a8.png", "skill6a9.png", "skill6a10.png", "skill6a11.png", "skill6a12.png"]
+    , 1500]] ,
+    //流星雨
+    [7, [
+    ["skill7a0.png", "skill7a1.png", "skill7a2.png", "skill7a3.png", "skill7a4.png", "skill7a5.png", "skill7a6.png", "skill7a7.png", "skill7a8.png", "skill7a9.png", "skill7a10.png", "skill7a11.png", "skill7a12.png", "skill7a13.png", "skill7a14.png", "skill7a15.png", "skill7a16.png", "skill7a17.png", "skill7a18.png", "skill7a19.png", "skill7a20.png"]
+        , 1500]] ,
+    //眩晕
+    [8, [["skill8a0.png", "skill8a1.png", "skill8a2.png", "skill8a3.png", "skill8a4.png", "skill8a5.png", "skill8a6.png", "skill8a7.png", "skill8a8.png", "skill8a9.png", "skill8a10.png", "skill8a11.png", "skill8a12.png", "skill8a13.png", "skill8a14.png", "skill8a15.png", "skill8a16.png"], 1500]] ,
+    //拯救
+    [9, [["skill9a0.png", "skill9a1.png", "skill9a2.png", "skill9a3.png", "skill9a4.png", "skill9a5.png", "skill9a6.png", "skill9a7.png", "skill9a8.png", "skill9a9.png", "skill9a10.png", "skill9a11.png", "skill9a12.png", "skill9a13.png", "skill9a14.png", "skill9a15.png", "skill9a16.png", "skill9a17.png", "skill9a18.png", "skill9a19.png"], 1500]] ,
+    //单体治疗
+    [10, [["skill10a0.png", "skill10a1.png", "skill10a2.png", "skill10a3.png", "skill10a4.png", "skill10a5.png", "skill10a6.png", "skill10a7.png", "skill10a8.png", "skill10a9.png"], 1500]] ,
+    //群体治疗 同单体治疗图片
+    [11, [["skill10a0.png", "skill10a1.png", "skill10a2.png", "skill10a3.png", "skill10a4.png", "skill10a5.png", "skill10a6.png", "skill10a7.png", "skill10a8.png", "skill10a9.png"], 1500]] ,
 ]);
 
 
@@ -454,6 +479,7 @@ const MAP_SOL_ATTACK = 5;
 const MAP_SOL_DEAD = 6;
 const MAP_SOL_WATI_TOUCH = 7;
 const MAP_SOL_DEFENSE = 8;
+const MAP_SOL_SAVE = 9;
 
 
 //MSG_ID
@@ -472,8 +498,8 @@ const UPDATE_MAGIC_STONE = 11;
 const UPDATE_SKILL_STATE = 12; //战斗地图更新 技能状态  开始释放 确定目标 结束释放
 
 //开始技能选择目标 释放技能选择目标结束
-const MAP_START_SKILL;
-const MAP_FINISH_SKILL;
+const MAP_START_SKILL = 0;
+const MAP_FINISH_SKILL = 1;
 
 
 const MAX_BUSI_SOLNUM = 50;
@@ -541,10 +567,11 @@ const LINE_SKILL = 0;
 const SINGLE_ATTACK_SKILL = 1;
 const MULTI_ATTACK_SKILL = 2;
 const MAKEUP_SKILL = 3;
-const REEL_SKILL = 4;
+const SPIN_SKILL = 4;
 const SAVE_SKILL = 5;
 const HEAL_SKILL = 6;
 const MULTI_HEAL_SKILL = 7;
 
 const MYCOLOR = 0;
 const ENECOLOR = 1;
+

@@ -26,16 +26,10 @@ class MapPause extends MyNode
     var rightDef;
     var leftText;
     var rightText;
-
     
     //var skillPos = [[76, 384], [198, 384], [324, 384]];
     var skillFlowBanner;
 
-
-    function selectSkill(sol, skillId)//soldierId skillId level
-    {
-        scene.selectSkill(sol, skillId); 
-    }
     function MapPause(s)
     {
         scene = s;
@@ -57,7 +51,7 @@ class MapPause extends MyNode
         nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(32, 17).color(0, 0, 0).anchor(0, 50);
 
 
-        //skillFlowBanner = new SkillFlowBanner(this);
+        skillFlowBanner = new SkillFlowBanner(this);
         addChild(skillFlowBanner);
 
         banner = bg.addsprite("mapCastleBanner.png").pos(755, 20).anchor(100, 0);

@@ -1,4 +1,4 @@
-class Skill extends MyNode
+class SkillDialog extends MyNode
 {
     //var soldier;
     //var healthText;
@@ -15,6 +15,7 @@ class Skill extends MyNode
     const HEIGHT = OFFY*ROW_NUM;
     const ITEM_NUM = 1;
     var kind;
+    const CLIP_HEIGHT = 320;
 
     //kind EQUIP  eid ---> global.user.equips level, owner, kind 
     //kind DRUG   kindId
@@ -48,7 +49,14 @@ class Skill extends MyNode
     }
     var soldier;
     var skillText;
-    function Skill(sol)
+    function updateSkillText()
+    {
+        var curSkillNum = global.user.getCurSkillNum(soldier.sid);
+        var maxSkillNum = getMaxSkillNum(getCareer(soldier.id));
+        //trace("maxSkillNum", maxSkillNum, curSkillNum, sol.sid, sol.id);
+        skillText.text(getStr("heroSkillNum", ["[MAXNUM]", str(maxSkillNum), "[LEFTNUM]", str(maxSkillNum-curSkillNum)]));
+    }
+    function SkillDialog(sol)
     {
         soldier = sol;
         bg = sprite("dialogFriend.png");
@@ -57,9 +65,10 @@ class Skill extends MyNode
 
         bg.addsprite("allSkills.png").anchor(50, 50).pos(169, 41);
 
-        var curSkillNum = global.user.getCurSkillNum(sol.sid);
-        var maxSkillNum = getMaxSkillNum(getCareer(sol.id));
-        skillText = bg.addlabel(getStr("heroSkillNum", ["[MAXNUM]", str(maxSkillNum), "[LEFTNUM]", str(maxSkillNum-curSkillNum)]), null, 20).anchor(50, 50).pos(393, 104).color(26, 2, 2);
+        var curSkillNum = global.user.getCurSkillNum(soldier.sid);
+        var maxSkillNum = getMaxSkillNum(getCareer(soldier.id));
+        trace("maxSkillNum", maxSkillNum, curSkillNum, sol.sid, sol.id);
+        skillText = bg.addlabel(getStr("heroSkillNum", ["[MAXNUM]", str(maxSkillNum), "[LEFTNUM]", str(maxSkillNum-curSkillNum)]), null, 20).anchor(50, 50).pos(400, 104).color(26, 2, 2);
         var stoneNum = bg.addsprite("magicNum.png").pos(280, 28);
 
         var s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(45, 18).anchor(0, 50);
@@ -79,7 +88,8 @@ class Skill extends MyNode
     
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
-        cl = bg.addnode().pos(46, 90).size(703, 357).clipping(1);
+        //90 357 127 330
+        cl = bg.addnode().pos(46, 127).size(703, CLIP_HEIGHT).clipping(1);
         flowNode = cl.addnode();
 
         updateTab();
@@ -92,7 +102,7 @@ class Skill extends MyNode
     {
         var curPos = flowNode.pos();
         var lowRow = -curPos[1]/OFFY;
-        var upRow = (-curPos[1]+HEIGHT+OFFY-1)/OFFY;
+        var upRow = (-curPos[1]+CLIP_HEIGHT+OFFY-1)/OFFY;
         var rowNum = len(data);
         return [max(0, lowRow-ROW_NUM), min(rowNum, upRow+ROW_NUM)];
     }
@@ -169,18 +179,38 @@ class Skill extends MyNode
         global.httpController.addRequest("soldierC/giveupSkill", dict([["uid", global.user.uid], ["soldierId", soldier.sid], ["skillId", skillId]]), null, null);
 
         global.user.giveupSkill(soldier.sid, skillId);
-        updateTab();
+        //updateTab();
+        //updateSkillText();
     }
     var buySkillId;
     //显示购买的资源资源对话框
+    //英雄转职剩余技能点
     function onBuyIt(n, e, p, x, y, points)
     {
+        var curSkillNum = global.user.getCurSkillNum(soldier.sid);
+        var maxSkillNum = getMaxSkillNum(getCareer(soldier.id));
+        var leftNum = maxSkillNum-curSkillNum;
+        if(leftNum <= 0)//技能点不足
+        {
+            global.director.curScene.addChild(new UpgradeBanner(getStr("heroSkillCountNot", null), [100, 0, 0]));
+            return;
+        }
+        
+
         var skillId = data[p];
         buySkillId = skillId;
 
-        var cost = getCost(SKILL, skillId);
         var sdata = getData(SKILL, skillId);
+        var needLevel = sdata.get("heroLevel");
+        if(soldier.level < needLevel)
+        {
+            global.director.curScene.addChild(new UpgradeBanner(getStr("heroLevelNot", ["[LEV]", str(needLevel)]), [100, 0, 0]));
+            return;
+        }
+
+        var cost = getCost(SKILL, skillId);
         var buyable = global.user.checkCost(cost);
+
         global.director.pushView(
                 new ResourceWarningDialog(
                         getStr("buySkillTit", null), 
@@ -193,7 +223,8 @@ class Skill extends MyNode
     {
         global.httpController.addRequest("soldierC/buySkill", dict([["uid", global.user.uid], ["soldierId", soldier.sid], ["skillId", buySkillId]]), null, null);
         global.user.buySkill(soldier.sid, buySkillId);
-        updateTab();
+        //updateTab();
+        //updateSkillText();
     }
 
     var lastPoints;
@@ -218,7 +249,7 @@ class Skill extends MyNode
     {
         var curPos = flowNode.pos();
         var rows = (len(data)+ITEM_NUM-1)/ITEM_NUM;
-        curPos[1] = min(0, max(-rows*OFFY+HEIGHT, curPos[1]));
+        curPos[1] = min(0, max(-rows*OFFY+CLIP_HEIGHT, curPos[1]));
         flowNode.pos(curPos);
         updateTab();
     }
@@ -245,6 +276,7 @@ class Skill extends MyNode
         if(msgId == UPDATE_SKILL)
         {
             updateTab(); 
+            updateSkillText();
         }
         else if(msgId == UPDATE_MAGIC_STONE)//变更宝石数量
         {

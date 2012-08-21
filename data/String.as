@@ -1090,7 +1090,11 @@ var strings = dict([
 ["magicStoneLevel", "[NAME]提升技能到[LEV0]等级, 成功概率[POS0]%"],
 ["sucUpgradeSkill", "恭喜，技能升级成功！"],
 ["failUpgradeSkill", "抱歉，技能升级失败！"],
-["selTarget", "选择施法对象"],
+["selTarget", "选择施法敌方士兵"],
+["selOurSol", "选择我方士兵"],
+["selMulti", "选择施法区域"],
+["selRow", "选择施法所在行"],
+
 
 [ "skills0" , ["红色冲击波", "0"]],
 [ "skills1" , ["蓝色冲击波", "0"]],
@@ -1108,6 +1112,10 @@ var strings = dict([
 [ "skills13" , ["火人变身", "0"]],
 [ "skills14" , ["熊变身", "0"]],
 [ "skills15" , ["凤凰变身", "0"]],
+
+["heroSkillNum", "该英雄目前最多只能学习[MAXNUM]个技能，剩余[LEFTNUM]个技能点。"],
+["heroSkillCountNot", "英雄剩余技能点不足，转职可以增加技能点"],
+["heroLevelNot", "需要英雄等级[LEV]才能学习该技能"],
 ]);
 
 

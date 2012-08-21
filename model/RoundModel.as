@@ -78,6 +78,9 @@ function getSolMap(p, sx, sy, offY)
 
     return [xk, yk];
 }
+//skill Map ---> 50 50 heart 
+
+//根据手指 50 50 计算 技能网格的左上角位置
 function getSkillMap(p, sx, sy, offY)
 {
     var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
@@ -91,6 +94,8 @@ function getSkillMap(p, sx, sy, offY)
 计算安排士兵时 的 士兵下方网格的位置
 
 士兵和技能的网格 都是 左上角网格
+
+根据网格左上角位置 实际位置
 */
 function getGridPos(gridId)
 {
@@ -98,20 +103,14 @@ function getGridPos(gridId)
     var y = gridId[1]*MAP_OFFY+MAP_INITY;
     return [x, y];
 }
-/*
-function getSolPos(mx, my, sx, sy, offY)
+//计算群体技能的左上角网格得到的 0 0 的位置偏移位置
+//群体技能应该有偏移值
+function getSkillPos(mx, my, sx, sy, offX, offY)
 {
-//    trace("getSolPos", offY);
-    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
-    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
-    return [mx, my];
-}
-*/
-//计算群体技能的位置
-function getSkillPos(mx, my, sx, sy)
-{
-    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
-    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY;
+    //+MAP_OFFX/2*sx
+    //+MAP_OFFY*sy
+    mx = mx*MAP_OFFX+MAP_INITX+offX;
+    my = my*MAP_OFFY+MAP_INITY+offY;
     return [mx, my];
 }
 

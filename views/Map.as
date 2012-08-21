@@ -44,22 +44,17 @@ class Map extends MyNode
             gridCol = null;
         }
     }
+
+    //start + length <= Max
     function checkInBoundary(sol, oldMap)
     {
-        if(oldMap[0] < 1 || oldMap[0] > (6-sol.sx) || oldMap[1] < 0 || oldMap[1] > (5-sol.sy))
-        {
-            return 0;
-        }
-        return 1;
+        return (oldMap[0] >= 1 && oldMap[0] <= (6-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-sol.sy))
     }
     function checkSkillInBoundary(si, oldMap)
     {
-        return (oldMap[0] < 1 || oldMap[0] > (6-si[0]) || oldMap[1] < 0 || oldMap[1] > (5-si[1]))
+        return (oldMap[0] >= 1 && oldMap[0] <= (MAP_WIDTH-si[0]) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-si[1]))
     }
-    function setSkillSoldier(sol)
-    {
-        scene.setSkillSoldier(sol);
-    }
+
     function moveGrid(sol)
     {
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
@@ -91,7 +86,7 @@ class Map extends MyNode
         //curStar = global.user.getCurStar(kind, small);
 
         bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
-        grid = bg.addnode("mapGrid.png").pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1).color(100, 100, 100, 30);
+        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1).color(100, 100, 100, 30);
         grid.addsprite("mapGrid.png").color(100, 100, 100, 50);
 
         bg.prepare();
@@ -548,7 +543,7 @@ class Map extends MyNode
         }
     }
 
-    function soldierDead(so)
+    function disappearSoldier(so)
     {
         removeSoldier(so);
         var v = soldiers.values(); 
@@ -558,11 +553,11 @@ class Map extends MyNode
         {
             for(var j = 0; j < len(v[i]); j++)
             {
-                if(v[i][j].color == 0 && v[i][j].state != MAP_SOL_DEFENSE && v[i][j].state != MAP_SOL_DEAD)
+                if(v[i][j].color == 0 && v[i][j].state != MAP_SOL_DEFENSE && v[i][j].state != MAP_SOL_DEAD && v[i][j].state != MAP_SOL_SAVE)
                 {
                     myCount++;
                 }
-                else if(v[i][j].color == 1 && v[i][j].state != MAP_SOL_DEFENSE && v[i][j].state != MAP_SOL_DEAD) 
+                else if(v[i][j].color == 1 && v[i][j].state != MAP_SOL_DEFENSE && v[i][j].state != MAP_SOL_DEAD && v[i][j].state != MAP_SOL_SAVE) 
                 {
                     eneCount++;
                 }
@@ -586,6 +581,14 @@ class Map extends MyNode
             else
                 challengeOver(1, getStar(), reward, levelUpSol);
         }
+    }
+    function saveSoldier(so)
+    {
+        disappearSoldier(so);
+    }
+    function soldierDead(so)
+    {
+        disappearSoldier(so);
     }
     function removeSoldier(so)
     {
@@ -695,12 +698,18 @@ class Map extends MyNode
         var sx = skillData.get("sx");
         var sy = skillData.get("sy");
 
+        var oldMap = getSkillMap([x, y], sx, sy, 0);
 
-        var oldMap = getSkillMap([x, y], sx, sy, sol.offY);
+
         var ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
+        //trace("moveSkillGrid", skillData, x, y, sx, sy, "oldMap", oldMap, ret);
             
         if(skillGrid == null)
+        {
             skillGrid = bg.addsprite("occGrid.png").size(MAP_OFFX*sx, MAP_OFFY*sy);
+            //bg.add(grid);
+            //grid.clipping(0);
+        }
 
         if(ret == 0)
         {
@@ -714,9 +723,14 @@ class Map extends MyNode
         var gp = getGridPos(oldMap);
         skillGrid.pos(gp[0], gp[1]);
     }
+    /*
+    技能位置在50 50 中心点
+    getSkillMap 计算
+    */
     function checkSkillPos(sol, skillData, oldMap)
     {
         var ret = checkSkillInBoundary([skillData.get("sx"), skillData.get("sy")], oldMap);
+        //trace("checkSkillPos", skillData, oldMap);
         if(ret == 0)
             return 0;
 
@@ -748,8 +762,8 @@ class Map extends MyNode
             {
                 moveSkillGrid(skillData, po[0], po[1]);
             }
-            //选择攻击目标士兵
-            else if(skillKind == SINGLE_ATTACK_SKILL)
+            //选择攻击目标士兵 
+            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL)
             {
                 
             }
@@ -778,7 +792,7 @@ class Map extends MyNode
                 moveSkillGrid(skillData, po[0], po[1]);
             }
             //选择攻击目标士兵
-            else if(skillKind == SINGLE_ATTACK_SKILL)
+            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL)
             {
             }
             //选择攻击范围
@@ -802,11 +816,13 @@ class Map extends MyNode
             po = bg.world2node(po[0], po[1]);
             var sx = skillData.get("sx");
             var sy = skillData.get("sy");
+            var oldMap;
+            var ret;
             //线性方向选择
             if(skillKind == LINE_SKILL)
             {
-                var oldMap = getSkillMap(po, sx, sy, sol.offY);
-                var ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
+                oldMap = getSkillMap(po, sx, sy, 0);
+                ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
                 if(ret == 0)
                 {
                     scene.setTargetSol(null);
@@ -817,17 +833,18 @@ class Map extends MyNode
                 }
                 skillGrid.removefromparent();
                 skillGrid = null;
+                //grid.removefromparent();
             }
             //选择攻击目标士兵
-            else if(skillKind == SINGLE_ATTACK_SKILL)
+            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL)
             {
                 scene.setTargetSol(null);
             }
             //选择攻击范围
             else if(skillKind == MULTI_ATTACK_SKILL)
             {
-                var oldMap = getSkillMap(po, sx, sy, sol.offY);
-                var ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
+                oldMap = getSkillMap(po, sx, sy, 0);
+                ret = checkSkillPos(scene.skillSoldier, skillData, oldMap);
                 if(ret == 0)
                 {
                     scene.setTargetSol(null);
@@ -850,20 +867,41 @@ class Map extends MyNode
     {
         var data = getData(SKILL, skillId);
         var skill = null;
+        //直线 范围攻击 在地图上
+        //单体攻击在 士兵身上 但是相对位置不同
         if(data["kind"] == LINE_SKILL)
         {
             skill = new LineSkill(this, attacker, target, skillId); 
+            addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == SINGLE_ATTACK_SKILL)
         {
             skill = new SingleSkill(this, attacker, target, skillId);
+            addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == MULTI_ATTACK_SKILL)
         {
             skill = new MultiSkill(this, attacker, target, skillId);
+            addChildZ(skill, MAX_BUILD_ZORD);
+        }
+        else if(data["kind"] == SPIN_SKILL)
+        {
+            skill = new SpinSkill(this, attacker, target, skillId);
+            addChildZ(skill, MAX_BUILD_ZORD);
+        }
+        else if(data["kind"] == HEAL_SKILL || data["kind"] == MULTI_HEAL_SKILL)
+        {
+            skill = new HealSkill(this, attacker, target, skillId);//显示的图片是默认的治疗图片
+            target.addChildZ(skill, MAX_BUILD_ZORD);
+        }
+        //单体技能加在士兵身上
+        else if(data["kind"] == SAVE_SKILL)
+        {
+            skill = new SaveSkill(this, attacker, target, skillId);
+            addChildZ(skill, MAX_BUILD_ZORD);
         }
 
-        addChildZ(skill, MAX_BUILD_ZORD);
+        //addChildZ(skill, MAX_BUILD_ZORD);
     }
 
     //返回士兵所在行

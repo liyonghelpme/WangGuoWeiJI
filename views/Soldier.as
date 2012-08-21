@@ -106,12 +106,23 @@ class Soldier extends MyNode
     var nameBanner = null;
     var backBanner = null;
 
+    var skillList;
+
     //攻击速度 
-    /*
+    //skId level coldTime ready
     function initData()
     {
+        //初始化技能列表 等级 冷却时间
+        skillList = global.user.getSolSkills(sid).items();//skillId level
+        for(var i = 0; i < len(skillList); i++)
+        {
+            skillList[i].append(0);//累计的 冷却时间
+            skillList[i].append(1);//ready 是否准备好
+        }
+
         sx = data.get("sx");
         sy = data.get("sy");
+
 
         attSpeed = data.get("attSpeed");
         offY = data.get("offY");
@@ -138,7 +149,6 @@ class Soldier extends MyNode
 
             health = 0;
             initAttackAndDefense(this);
-            //setMonEquip(map.monEquips);
 
             setEquipAttribute(this, map.monEquips);
             health = healthBoundary;
@@ -170,7 +180,6 @@ class Soldier extends MyNode
         gainexp = getAddExp(id, level);
         trace("soldierData", physicAttack, physicDefense, magicAttack, magicDefense, purePhyDefense);
     }
-    */
 
     var attSpeed;
 
@@ -200,7 +209,7 @@ class Soldier extends MyNode
         //经营页面回复生命值 60s 一次
 
         data = getData(SOLDIER, id);
-        //initData();
+        initData();
 
         attAni = repeat(animate(attSpeed, "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a6.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a7.png", UPDATE_SIZE));//, callfunc(finAttack)
 
@@ -232,7 +241,6 @@ class Soldier extends MyNode
         bg 的大小 和 士兵图片完全相同
         切换方向 只切换changeNode
         */
-        //bg = sprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100).pos(102, 186);
         bg = node();
 
         changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
@@ -258,11 +266,11 @@ class Soldier extends MyNode
         }
 
         backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
-        var filter = WHITE;
-        if(color == 0)
-            filter = BLUE;
+        //var filter = WHITE;
+        //if(color == 0)
+        //    filter = BLUE;
             
-        bloodBanner = backBanner.addsprite("mapSolBlood.png", filter).pos(2, 2);
+        bloodBanner = backBanner.addsprite("mapSolBlood.png").pos(2, 2);
 
         if(color == 0)//nameBanner
         {
@@ -296,10 +304,6 @@ class Soldier extends MyNode
         initAttackAndDefense(this);
         health = healthBoundary;
         //等级自动变动
-    }
-    function getKind()
-    {
-        return kind;
     }
 
     /*
@@ -336,7 +340,6 @@ class Soldier extends MyNode
     //士兵 伤害
     //生命值 < 0 表示死亡
     //死亡之后复活的生命值 >= 0
-    /*
     function changeHealth(sol, add)
     {
         var val = hurts.get(sol.sid, [sol, 0]);
@@ -362,18 +365,8 @@ class Soldier extends MyNode
         //bg 的size和图片的size大小相同
         bg.addlabel(str(add), null, 30).pos(bSize[0]/2, -5).color(100, 0, 0).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), callfunc(removeTempNode)));
     }
-    */
 
-    function onCancel()
-    {
-        map.clearSoldier(this); 
-    }
 
-    var inMoving = 0;
-    function finMov()
-    {
-        inMoving = 0;
-    }
     var oldPos = null;
     /*
     移动清除旧的map 
@@ -381,24 +374,44 @@ class Soldier extends MyNode
     设置grid 显示 设置zord 最大
     */
     var chooseStar = null;
+    //multi Line 技能点击士兵 将会 向map 传播
+    function showChoose(n, e, p, x, y, points)
+    {
+        var skillId;
+        var sdata;
+        var skillKind;
+        var bSize;
+        if(map.scene.state == MAP_START_SKILL)
+        {
+            skillId = map.scene.skillId;
+            sdata = getData(SKILL, skillId);
+            skillKind = sdata.get("kind");
+            
+            if((color == ENECOLOR && (skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL))
+                    || (color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL))
+                    )
+            {
+                bSize = bg.size();
+                chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+                chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
+                bg.add(chooseStar, -1);
+            }
+            else if(skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL)
+                map.touchBegan(n, e, p, x, y, points);
+        }
+    }
     function touchWorldBegan(n, e, p, x, y, points)
     {
-        if(color == MYCOLOR)
-        {
-            if(state == MAP_SOL_ARRANGE)
-            {
-                map.moveGrid(this);
-                setZord(MAX_SOL_ZORD);
-                map.clearMap(this);
-            }
 
-        }
-        else if(map.scene.state == MAP_START_SKILL)//攻击敌方士兵
+        if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
-            var bSize = bg.prepare().size();
-            chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
-            chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
-            bg.add(chooseStar, -1);
+            map.moveGrid(this);
+            setZord(MAX_SOL_ZORD);
+            map.clearMap(this);
+        }
+        else
+        {
+            showChoose(n, e, p, x, y, points);
         }
     }
     function touchBegan(n, e, p, x, y, points)
@@ -421,34 +434,40 @@ class Soldier extends MyNode
 
     移动士兵 移动grid zord最大
     */
-    /*
     function touchWorldMoved(n, e, p, x, y, points)
     {
         //trace("touchWorldMoved", x, y);
-        if(color == MYCOLOR)
+        
+        if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
-            if(state == MAP_SOL_ARRANGE)
-            {
-                lastPoints = map.bg.world2node(x, y);
+            lastPoints = map.bg.world2node(x, y);
 
-                bg.pos(lastPoints);
-                map.moveGrid(this);
-                setCol();
-            }
-
+            bg.pos(lastPoints);
+            map.moveGrid(this);
+            setCol();
         }
-        else
+        else if(map.scene.state == MAP_START_SKILL)
         {
-            if(map.scene.state == MAP_START_SKILL)
+            var skillId = map.scene.skillId;
+            var sdata = getData(SKILL, skillId);
+
+            var skillKind = sdata.get("kind");
+            if(skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL)
+            {
+                map.touchMoved(n, e, p, x, y, points);
+            }
+            else if((skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL) && color == ENECOLOR)//单体攻击 移动到其它 移动没有作用
+            {
+            }
+            else if(color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL))
             {
             }
         }
     }
-    */
     function touchMoved(n, e, p, x, y, points)
     {
         lastPoints = n.node2world(x, y);
-        //touchWorldMoved(n, e, p, lastPoints[0], lastPoints[1], points);
+        touchWorldMoved(n, e, p, lastPoints[0], lastPoints[1], points);
     }
     /*
     根据map 
@@ -460,7 +479,6 @@ class Soldier extends MyNode
     设置正常的zord
     清理 地图上显示的grid
     */
-    /*
     function touchWorldEnded(n, e, p, x, y, points)
     {
         if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
@@ -495,22 +513,37 @@ class Soldier extends MyNode
             map.removeGrid();
         }
         //战斗状态 场景设定 技能选择 只有英雄才有技能
-        else if(state != MAP_SOL_ARRANGE && map.scene.state == MAP_FINISH_SKILL && color == MYCOLOR)
+        else if(map.scene.state == MAP_FINISH_SKILL && color == MYCOLOR)
         {
-            map.setSkillSoldier(this); 
+            map.scene.setSkillSoldier(this); 
         }
         //给敌方士兵释放魔法
-        else if(state != MAP_SOL_ARRANGE && map.scene.state == MAP_START_SKILL && color == ENECOLOR)
+        else if(map.scene.state == MAP_START_SKILL)//对敌方操作
         {
-            chooseStar.removefromparent();
-            chooseStar = null;
-            map.scene.setTargetSol(this);
+            var skillId = map.scene.skillId;
+            var sdata = getData(SKILL, skillId);
+            var skillKind = sdata.get("kind");
+            if(color == ENECOLOR && (skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL))//单体攻击 眩晕攻击
+            {
+                chooseStar.removefromparent();
+                chooseStar = null;
+                map.scene.setTargetSol(this);
+            }
+            else if(color == ENECOLOR && (skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL))
+            {
+                map.touchEnded(n, e, p, x, y, points);
+            }
+            else if(color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL))
+            {
+                chooseStar.removefromparent();
+                chooseStar = null;
+                map.scene.setTargetSol(this); 
+            }
         }
     }
-    */
     function touchEnded(n, e, p, x, y, points)
     {
-        //touchWorldEnded(n, e, p, x, y, points);
+        touchWorldEnded(n, e, p, x, y, points);
     }
     var addedYet = 0;
     /*
@@ -531,13 +564,11 @@ class Soldier extends MyNode
         var drugUse = 0;
         if(addAttackTime > 0)
         {
-            //attack += addAttack;
             addAttackTime -= 1;
             drugUse = 1;
         }
         if(addDefenseTime > 0)
         {
-            //defense += addDefense;
             addDefenseTime -= 1;
             drugUse = 1;
         }
@@ -611,7 +642,7 @@ class Soldier extends MyNode
             for(var i = 0; i < len(t); i++)
             {
 //                trace("eneColor", t[i].color, t[i].state);
-                if(t[i].color == color || t[i].state == MAP_SOL_DEAD)
+                if(t[i].color == color || t[i].state == MAP_SOL_DEAD || t[i].state == MAP_SOL_SAVE)
                     continue;
                 var p = t[i].getPos();
                 var dist = abs(bg.pos()[0]-p[0]);   
@@ -637,13 +668,11 @@ class Soldier extends MyNode
     {
         movAni.stop();
         attAni.stop();
-        //inAttacking = 0;
     }
     var volumn;
     function getVolumn()
     {
         return volumn;
-        //return data.get("volumn");
     }
     var deadTime = 0;
     const DEAD_TIME = 4000;
@@ -659,6 +688,17 @@ class Soldier extends MyNode
         stopNow = 0;
     }
 
+    function checkTarState()
+    {
+        if(tar.state == MAP_SOL_DEAD || tar.state == MAP_SOL_SAVE)
+        {
+            state = MAP_SOL_FREE;
+            clearAnimation();
+            tar = null;
+            return 1;
+        }
+        return 0;
+    }
     function update(diff)
     {
         //trace("update soldier", diff, state, tar);
@@ -668,12 +708,43 @@ class Soldier extends MyNode
         if(stopNow == 1)
             return;
 
+
+
+        if(spinState == 1)
+        {
+            spinTime -= diff;
+            if(spinTime > 0)//仍在眩晕状态 停止移动 停止攻击
+                return;
+            spinState = 0;//眩晕状态结束
+        }
+
+        if(state == MAP_SOL_SAVE)
+        {
+            return;
+        }
         //应该在死亡倒地之后， 去除阴影 但是阴影的大小位置都会变化的 
         //倒地是以anchor 50 100 为 轴转动 但是人物的相对位置是变化的
         //倒地的方向需要确定
         //倒地需要执行一个动作变换函数
         //倒地的时间需要控制 1 s 0-90 4frame 3 time 300ms 
         //血液在倒地 之后显示
+        //id level coldTime ready
+        if(state != MAP_SOL_DEAD)
+        {
+            for(var i = 0; i < len(skillList); i++)
+            {
+                var sk = skillList[i];
+                if(sk[3] == 0)
+                {
+                    sk[2] += diff;
+                    var coldTime = getSkillColdTime(sid, sk[0]);
+                    if(sk[2] >= coldTime)
+                        sk[3] = 1;
+                }
+            }
+        }
+
+        var ret;
         if(health < 0 && state != MAP_SOL_DEAD)
         {
             dead = 1;
@@ -716,12 +787,18 @@ class Soldier extends MyNode
                 state = MAP_SOL_MOVE;
             }
         }
+        //对方在移动过程中死亡 或者 被save 都停止攻击
         else if(state == MAP_SOL_MOVE)
         {
+            ret = checkTarState();
+            if(ret)
+                return;
+
             shiftAni.stop();
 
             tPos = tar.getPos();
             dist = abs(bg.pos()[0]-tPos[0]);//同一行 
+
             if((dist-getVolumn()-tar.getVolumn()) <= attRange)//攻击范围
             {
                 //trace("mePos tarPos", bg.pos(), tPos, tar.getVolumn(), attRange );
@@ -756,13 +833,9 @@ class Soldier extends MyNode
         */
         else if(state == MAP_SOL_ATTACK)
         {
-            if(tar.state == MAP_SOL_DEAD)
-            {
-                state = MAP_SOL_FREE;
-                clearAnimation();
-                tar = null;
+            ret = checkTarState();
+            if(ret)
                 return;
-            }
             tPos = tar.getPos();
             dist = abs(tPos[0]-bg.pos()[0]);
             if((dist- getVolumn() - tar.getVolumn())> attRange)
@@ -813,5 +886,48 @@ class Soldier extends MyNode
         map.myTimer.removeTimer(this);
         //cus.exitScene();
         super.exitScene();   
+    }
+    //眩晕不能攻击 不能 移动 
+    var spinState = 0;
+    var spinTime = 0;
+    function beginSpinState(t)
+    {
+        spinState = 1;
+        spinTime = t;//总共眩晕时间
+        clearAnimation();
+        shiftAni.stop();
+    }
+    function doHeal(heal)
+    {
+        var addHealth = healthBoundary*heal/100;
+        health += addHealth;
+        health = min(health, healthBoundary);
+        initHealth();
+    }
+    //所有攻击我的士兵都停止攻击
+    function doSave()
+    {
+        state = MAP_SOL_SAVE;
+        clearAnimation();
+        map.saveSoldier(this);
+    }
+    var greenStar = null;//当前技能释放者
+    function setSkillState()
+    {
+        var bSize = bg.size();
+        greenStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+        greenStar.addaction(repeat(animate(1500, 
+            "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", "greenStar11.png", "greenStar12.png", "greenStar13.png", "greenStar14.png", "greenStar15.png", "greenStar16.png", "greenStar17.png", "greenStar18.png"
+            , UPDATE_SIZE)));
+
+        bg.add(greenStar, -1);
+    }
+    function clearSkillState()
+    {
+        if(greenStar != null)
+        {
+            greenStar.removefromparent();
+            greenStar = null;
+        }
     }
 }
