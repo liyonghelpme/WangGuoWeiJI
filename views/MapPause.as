@@ -29,13 +29,29 @@ class MapPause extends MyNode
     
     //var skillPos = [[76, 384], [198, 384], [324, 384]];
     var skillFlowBanner;
-
+    var blood = 0;
+    var bloodBut;
+    function onBlood()
+    {
+        if(blood == 0)
+        {
+            scene.map.hideBlood();
+            bloodBut.texture("showBlood.png", GRAY);
+        }
+        else
+        {
+            scene.map.showBlood();
+            bloodBut.texture("showBlood.png");
+        }
+        blood = 1-blood;
+    }
     function MapPause(s)
     {
         scene = s;
         bg = node();
         init();
         bg.addsprite("mapMenuPause.png").pos(703, 385).setevent(EVENT_TOUCH, onPause);
+        bloodBut = bg.addsprite("showBlood.png").pos(600, 385).setevent(EVENT_TOUCH, onBlood);
 
 
 

@@ -28,8 +28,9 @@ class MultiSkill extends MyNode
         sx = data.get("sx");
         sy = data.get("sy");
         effectTime = data.get("effectTime");
-
     
+        attackTime = attackPeriod;//初次释放 需要立即造成伤害？ 或者需要吟唱时间？
+
         bg = sprite().pos(getSkillPos(leftUp[0], leftUp[1], sx, sy, data["offX"], data["offY"])).anchor(0, 0);
         var ani = skillAnimate.get(skillId);
         cus = new MyAnimate(ani[1], ani[0], bg);

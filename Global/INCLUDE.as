@@ -124,6 +124,8 @@ import views.FlyLayer;
 import views.LevelSelectLayer;
 
 import views.BattleScene;
+import views.MapBanner;
+import views.NoTipDialog;
 
 //闯关地图
 import views.Map;
@@ -136,6 +138,7 @@ import views.MultiSkill;
 import views.SpinSkill;
 import views.HealSkill;
 import views.SaveSkill;
+import views.UseDrugSkill;
 
 
 import views.CloseSoldier;

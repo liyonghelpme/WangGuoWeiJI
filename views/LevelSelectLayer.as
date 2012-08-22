@@ -198,6 +198,8 @@ class LevelSelectLayer extends MyNode
             mon, CHALLENGE_MON, null, null
 
         ));
+        if(global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
+            global.director.pushView(new NoTipDialog(), 1, 0);
     }
     function selectDiff(param)
     {

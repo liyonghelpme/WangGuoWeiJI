@@ -185,7 +185,7 @@ function getBuildGain(id)
 var dataPool = dict();
 function getData(kind, id)
 {
-//    trace("getData", kind, id);
+    //trace("getData", kind, id);
     var key = kind*100000+id;
     var ret = dataPool.get(key, null);
     if(ret == null)
@@ -199,9 +199,7 @@ function getData(kind, id)
             if(k[i] == "name")
                 ret.update(k[i], getStr(datas[i], null));
             else if(k[i] == "title" || k[i] == "des")//任务的描述字符串 配方的描述字符串 药材矿石的描述字符串
-            {
                 ret.update(k[i], getStr(datas[i], null));
-            }
             else
                 ret.update(k[i], datas[i]);
         }
@@ -812,4 +810,34 @@ function bubbleSort(obj, cmp)
             break;
     }
 }
+//等级 从 大到小排列
+function insertArr(arr, obj, cmp)
+{
+    for(var i = 0; i < len(arr); i++)
+    {
+        if(cmp(arr[i], obj) > 0)
+        {
+            break;
+        }
+    }
+    arr.insert(i, obj);
+}
 
+//返回node
+//font sz
+//lineHeight
+function stringLines(s, sz, lineHeight, color)
+{
+    var n = node();
+    s = s.split("\n");
+    var nSize = [0, 0];
+    for(var i = 0; i < len(s); i++)
+    {
+        var lab = n.addlabel(s[i], null, sz).pos(0, lineHeight*i).color(color);
+        var lSize = lab.prepare().size();
+        nSize[0] = max(lSize[0], nSize[0]);
+        nSize[1] += lineHeight;
+    }
+    n.size(nSize);
+    return n;
+}

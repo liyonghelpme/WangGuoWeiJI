@@ -755,7 +755,7 @@ class Map extends MyNode
         {
             var skillData = getData(SKILL, scene.skillId);
             var skillKind = skillData.get("kind");
-            var po = n.node2world(x, y);
+            var po = n.node2world(x, y);//可能是soldier 传递的touch时间所以需要先转化成本地的touch点
             po = bg.world2node(po[0], po[1]);
             //线性方向选择
             if(skillKind == LINE_SKILL)
@@ -763,7 +763,7 @@ class Map extends MyNode
                 moveSkillGrid(skillData, po[0], po[1]);
             }
             //选择攻击目标士兵 
-            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL)
+            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == USE_DRUG_SKILL)
             {
                 
             }
@@ -792,7 +792,7 @@ class Map extends MyNode
                 moveSkillGrid(skillData, po[0], po[1]);
             }
             //选择攻击目标士兵
-            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL)
+            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == USE_DRUG_SKILL)
             {
             }
             //选择攻击范围
@@ -836,7 +836,7 @@ class Map extends MyNode
                 //grid.removefromparent();
             }
             //选择攻击目标士兵
-            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL)
+            else if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL || skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == USE_DRUG_SKILL)
             {
                 scene.setTargetSol(null);
             }
@@ -900,16 +900,42 @@ class Map extends MyNode
             skill = new SaveSkill(this, attacker, target, skillId);
             addChildZ(skill, MAX_BUILD_ZORD);
         }
+        else if(data["kind"] == USE_DRUG_SKILL)
+        {
+            skill = new UseDrugSkill(this, attacker, target, scene.drugId);
+            target.addChildZ(skill, MAX_BUILD_ZORD);
+        }
+        else if(data["kind"] == MAKEUP_SKILL)
+        {
+            attacker.doMakeUp(skillId);
+        }
 
         //addChildZ(skill, MAX_BUILD_ZORD);
     }
-
-    //返回士兵所在行
-    /*
-    function getSoldierRow(sol)
+    function hideBlood()
     {
-        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-        return oldMap[1]; 
+        var allSol = soldiers.values();
+        for(var i = 0; i < len(allSol); i++)
+        {
+            for(var j = 0; j < len(allSol[i]); j++)
+            {
+                var sol = allSol[i][j];
+                if(sol.state != MAP_SOL_DEFENSE && sol.state != MAP_SOL_DEAD && sol.state != MAP_SOL_SAVE)
+                    sol.hideBlood();
+            }
+        }
     }
-    */
+    function showBlood()
+    {
+        var allSol = soldiers.values();
+        for(var i = 0; i < len(allSol); i++)
+        {
+            for(var j = 0; j < len(allSol[i]); j++)
+            {
+                var sol = allSol[i][j];
+                if(sol.state != MAP_SOL_DEFENSE && sol.state != MAP_SOL_DEAD && sol.state != MAP_SOL_SAVE)
+                    sol.showBlood();
+            }
+        }
+    }
 }

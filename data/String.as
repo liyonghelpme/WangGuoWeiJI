@@ -1116,6 +1116,11 @@ var strings = dict([
 ["heroSkillNum", "该英雄目前最多只能学习[MAXNUM]个技能，剩余[LEFTNUM]个技能点。"],
 ["heroSkillCountNot", "英雄剩余技能点不足，转职可以增加技能点"],
 ["heroLevelNot", "需要英雄等级[LEV]才能学习该技能"],
+["noTip", "1.士兵佩戴高等级装备闯关更轻松\n2.闯关时英雄可以使用技能\n3.可以使用加生命值上限，加攻击，加防御力药水(生命值，复活药水除外)"],
+["roundTip", "闯关诀窍"],
+["selectSol", "选择士兵"],
+["dragSol", "([NAME])拖动士兵到指定位置"],
+["solAtt", "生命值:[HEAL]/[BOUNDARY]\n物理攻击力:[PATTACK]\n物理防御力:[PDEFENSE]\n魔法攻击力:[MAGATT]\n魔法防御:[MAGDEF]\n攻击范围:[RANGE]\n攻击速度:[SPEED]\n经验:[EXP]/[NEEDEXP]\n等级:[LEV]"],
 ]);
 
 

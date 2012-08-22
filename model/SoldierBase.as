@@ -285,10 +285,43 @@ function calHurt(src, tar)
 function getSkillColdTime(soldierId, skillId)
 {
     var sdata = getData(SKILL, skillId);
-    //var skillKind = sdata.get("kind");
+    var skillKind = sdata.get("kind");
     var skillLevel = global.user.getSolSkillLevel(soldierId, skillId);
     var coldTime = sdata.get("coldTime");
-
-    coldTime = max(coldTime-sdata.get("addTime")*skillLevel, 5)*1000;//最少时间5s 拯救技能 最少5s时间
+    //ms 单位
+    coldTime = max(coldTime-sdata.get("coldMinusTime")*skillLevel, SKILL_MIN_COLDTIME);//最少时间5s 拯救技能 最少5s时间
     return coldTime;
+}
+
+//得到转职等级
+function getProLevel(sid)
+{
+    var sdata = global.user.getSoldierData(sid);
+    var kind = sdata.get("id");
+    var proLevel = kind%10;
+    return proLevel;
+}
+
+function getMakeUpRate(sid)
+{
+    var proLevel = getProLevel(sid);
+    return 110+20*proLevel;
+}
+function getAttSpeedRate(sid)
+{
+    var proLevel = getProLevel(sid);
+    return 95-proLevel*5;
+}
+function getRangeAdd(sid)
+{
+    var proLevel = getProLevel(sid);
+    return proLevel*MAP_OFFX;
+}
+
+function getMakeUpTime(sid, skillId)
+{
+    var skLevel = global.user.getSolSkillLevel(sid, skillId);
+    var skData = getData(SKILL, skillId);
+
+    return skData.get("effectTime")+skLevel*skData.get("addTime");
 }

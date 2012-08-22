@@ -189,6 +189,9 @@ var skillAnimate = dict([
     [10, [["skill10a0.png", "skill10a1.png", "skill10a2.png", "skill10a3.png", "skill10a4.png", "skill10a5.png", "skill10a6.png", "skill10a7.png", "skill10a8.png", "skill10a9.png"], 1500]] ,
     //群体治疗 同单体治疗图片
     [11, [["skill10a0.png", "skill10a1.png", "skill10a2.png", "skill10a3.png", "skill10a4.png", "skill10a5.png", "skill10a6.png", "skill10a7.png", "skill10a8.png", "skill10a9.png"], 1500]] ,
+
+    //使用药品
+    [16, [["skill10a0.png", "skill10a1.png", "skill10a2.png", "skill10a3.png", "skill10a4.png", "skill10a5.png", "skill10a6.png", "skill10a7.png", "skill10a8.png", "skill10a9.png"], 1500]] ,
 ]);
 
 
@@ -571,7 +574,18 @@ const SPIN_SKILL = 4;
 const SAVE_SKILL = 5;
 const HEAL_SKILL = 6;
 const MULTI_HEAL_SKILL = 7;
+const USE_DRUG_SKILL = 8;
+
+const DRUG_SKILL_ID = 16;
 
 const MYCOLOR = 0;
 const ENECOLOR = 1;
 
+const SKILL_MIN_COLDTIME = 5000;
+
+const DRUG_COLD_TIME = 1000;//ms
+
+//soldier type
+const CLOSE_FIGHTING = 0;
+const LONG_DISTANCE = 1;
+const MAGIC = 2;

@@ -7,7 +7,7 @@ class BusiSoldier extends MyNode
     和建筑物应该在同一个图层上面 这样有正常的遮挡关系
     */
     var map; 
-    var kind;
+    //var kind;
     var sid;
     var id;
     var sx = 1;

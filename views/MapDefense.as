@@ -72,4 +72,10 @@ class MapDefense extends MyNode
     {
         return 1;
     }
+    function showBlood()
+    {
+    }
+    function hideBlood()
+    {
+    }
 }

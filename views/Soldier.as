@@ -5,6 +5,12 @@
 布局的时候 拖出 0-24 的范围就认为是归还给系统
 
 MAP_START_SKILL 场景 状态时， 点击士兵释放技能
+
+
+实现士兵的方法时 需要 注意 防御装置 相应接口实现
+
+
+任何initAttackAndDefense 的敌方 需要 加测是否需要 初始化 变身状态
 */
 class Soldier extends MyNode
 {
@@ -55,9 +61,7 @@ class Soldier extends MyNode
     //var attacker = null;
 
 
-    const CLOSE_FIGHTING = 0;
-    const LONG_DISTANCE = 1;
-    const MAGIC = 2;
+
 
     /*
     移动动画似乎有些卡
@@ -156,6 +160,7 @@ class Soldier extends MyNode
             myName = null;
             dead = 0;
         }
+        //初始化额外攻击力 和 额外 防御力 以及 额外 生命值上限
         else
         {
             var privateData = global.user.getSoldierData(sid);
@@ -233,8 +238,6 @@ class Soldier extends MyNode
 
         state = MAP_SOL_ARRANGE;
 
-
-        //replaceStr(KindsPre[SOLDIER], ["[ID]", str(id)])
         /*
         依赖士兵的位置 计算都采用changeDirNode
         getSolMap getSolPos
@@ -272,12 +275,14 @@ class Soldier extends MyNode
             
         bloodBanner = backBanner.addsprite("mapSolBlood.png").pos(2, 2);
 
+        /*
         if(color == 0)//nameBanner
         {
             nameBanner = new SpeakDialog(this);
             nameBanner.setPos([bSize[0]/2, 0]);
             addChild(nameBanner);
         }
+        */
 
         initHealth();
 
@@ -286,6 +291,14 @@ class Soldier extends MyNode
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+    function showBlood()
+    {
+        backBanner.visible(1);
+    }
+    function hideBlood()
+    {
+        backBanner.visible(0);
     }
     var attTime = 0;
     function getLevelUp()
@@ -303,6 +316,7 @@ class Soldier extends MyNode
         }
         initAttackAndDefense(this);
         health = healthBoundary;
+        initMakeUpData();
         //等级自动变动
     }
 
@@ -375,6 +389,7 @@ class Soldier extends MyNode
     */
     var chooseStar = null;
     //multi Line 技能点击士兵 将会 向map 传播
+    //士兵已经转化成 touchWorldBegan 世界坐标
     function showChoose(n, e, p, x, y, points)
     {
         var skillId;
@@ -388,7 +403,7 @@ class Soldier extends MyNode
             skillKind = sdata.get("kind");
             
             if((color == ENECOLOR && (skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL))
-                    || (color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL))
+                    || (color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == USE_DRUG_SKILL))
                     )
             {
                 bSize = bg.size();
@@ -397,7 +412,10 @@ class Soldier extends MyNode
                 bg.add(chooseStar, -1);
             }
             else if(skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL)
-                map.touchBegan(n, e, p, x, y, points);
+            {
+                var nPos = n.world2node(x, y);
+                map.touchBegan(n, e, p, nPos[0], nPos[1], points);
+            }
         }
     }
     function touchWorldBegan(n, e, p, x, y, points)
@@ -454,12 +472,13 @@ class Soldier extends MyNode
             var skillKind = sdata.get("kind");
             if(skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL)
             {
-                map.touchMoved(n, e, p, x, y, points);
+                var nPos = n.world2node(x, y);
+                map.touchMoved(n, e, p, nPos[0], nPos[1], points);
             }
             else if((skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL) && color == ENECOLOR)//单体攻击 移动到其它 移动没有作用
             {
             }
-            else if(color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL))
+            else if(color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == USE_DRUG_SKILL))
             {
             }
         }
@@ -513,7 +532,7 @@ class Soldier extends MyNode
             map.removeGrid();
         }
         //战斗状态 场景设定 技能选择 只有英雄才有技能
-        else if(map.scene.state == MAP_FINISH_SKILL && color == MYCOLOR)
+        else if(map.scene.state == MAP_FINISH_SKILL && color == MYCOLOR)//&& data.get("isHero")
         {
             map.scene.setSkillSoldier(this); 
         }
@@ -531,9 +550,10 @@ class Soldier extends MyNode
             }
             else if(color == ENECOLOR && (skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL))
             {
-                map.touchEnded(n, e, p, x, y, points);
+                var worldPos = n.world2node(x, y);
+                map.touchEnded(n, e, p, worldPos[0], worldPos[1], points);
             }
-            else if(color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL))
+            else if(color == MYCOLOR && (skillKind == HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == USE_DRUG_SKILL))
             {
                 chooseStar.removefromparent();
                 chooseStar = null;
@@ -543,7 +563,8 @@ class Soldier extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        touchWorldEnded(n, e, p, x, y, points);
+        lastPoints = n.node2world(x, y);
+        touchWorldEnded(n, e, p, lastPoints[0], lastPoints[1], points);
     }
     var addedYet = 0;
     /*
@@ -709,7 +730,6 @@ class Soldier extends MyNode
             return;
 
 
-
         if(spinState == 1)
         {
             spinTime -= diff;
@@ -739,11 +759,25 @@ class Soldier extends MyNode
                     sk[2] += diff;
                     var coldTime = getSkillColdTime(sid, sk[0]);
                     if(sk[2] >= coldTime)
+                    {
+                        trace("skillReady", sk);
                         sk[3] = 1;
+                    }
                 }
             }
         }
-
+        //变身时间到解除变身状态 重新计算属性值
+        if(makeUpState)
+        {
+            makeUpTime += diff;
+            var totalMT = getMakeUpTime(sid, makeUpSkillId);
+            if(makeUpTime >= totalMT)
+            {
+                makeUpState = 0;
+                initAttackAndDefense(this);
+                initHealth();
+            }
+        }
         var ret;
         if(health < 0 && state != MAP_SOL_DEAD)
         {
@@ -904,6 +938,54 @@ class Soldier extends MyNode
         health = min(health, healthBoundary);
         initHealth();
     }
+
+    //根据药品重新计算士兵的生命值上限 和 攻击力 以及防御力
+    function doDrug(drugId)
+    {
+        var dd = getData(DRUG, drugId);    
+
+        var pureData = getSolPureData(id, level);
+        var pureHealthBoundary;
+        if(dd.get("healthBoundary") != 0)
+        {
+            addHealthBoundary = dd.get("healthBoundary");
+            addHealthBoundaryTime = dd.get("effectTime");
+        }
+        else if(dd.get("percentHealthBoundary") != 0)
+        {
+            pureHealthBoundary = pureData["healthBoundary"];
+            addHealthBoundary = dd.get("percentHealth")*pureHealthBoundary/100;
+            addHealthBoundaryTime = dd.get("effectTime");
+        }
+        else if(dd.get("percentAttack") != 0)
+        {
+            var purePhyAttack = pureData["physicAttack"];
+            var pureMagAttack = pureData["magicAttack"];
+            addAttack = dd.get("percentAttack")*max(purePhyAttack, pureMagAttack)/100;
+            addAttackTime = dd.get("effectTime");
+        }
+        else if(dd.get("percentDefense") != 0)
+        {
+            var purePhyDef = pureData["physicDefense"];
+            var pureMagDef = pureData["magicDefense"];
+            addDefense = dd.get("percentDefense")*max(purePhyDef, pureMagDef)/100;
+            addDefenseTime = dd.get("effectTime");
+        }
+        else if(dd.get("attack") != 0)
+        {
+            addAttack = dd.get("attack");
+            addAttackTime = dd.get("effectTime");
+        }
+        else if(dd.get("defense") != 0)
+        {
+            addDefense = dd.get("defense");
+            addDefenseTime = dd.get("effectTime");
+        }
+        initAttackAndDefense(this);
+        initMakeUpData();
+        initHealth();
+    }
+
     //所有攻击我的士兵都停止攻击
     function doSave()
     {
@@ -911,6 +993,62 @@ class Soldier extends MyNode
         clearAnimation();
         map.saveSoldier(this);
     }
+    var makeUpState = 0;
+    
+    var makeUpTime = 0;
+
+    var makeUpRate = 100;
+    var makeUpSkillId = -1;
+    //选择某个英雄 在 右上角显示士兵的能力数值
+
+    //确定对应的变身对象
+    //播放变身动画---》获得相应的 移动动画 和 攻击动画
+    //计时变身时间
+    //计算变身技能
+
+    //喝药水 重新计算能力时
+    function doMakeUp(skillId)
+    {
+        if(makeUpState == 0)
+        {
+            makeUpSkillId = skillId;
+            makeUpState = 1;
+            makeUpTime = 0;
+            makeUpRate = getMakeUpRate(sid); 
+            initMakeUpData();
+            initHealth();
+        }
+    }
+    function initMakeUpData()
+    {
+        if(!makeUpState)
+            return;
+        physicAttack *= makeUpRate;
+        physicAttack /= 100;
+
+        physicDefense *= makeUpRate;
+        physicDefense /= 100;
+        
+        magicAttack *= makeUpRate;
+        magicAttack /= 100;
+
+        magicDefense *= makeUpRate;
+        magicDefense /= 100;
+
+        healthBoundary *= makeUpRate;
+        healthBoundary /= 100;
+
+        health *= makeUpRate;
+        health /= 100;
+        health = min(health, healthBoundary);
+
+        attSpeed *= getAttSpeedRate(sid);
+        attSpeed /= 100;
+        
+        if(kind == LONG_DISTANCE || kind == MAGIC )
+            attRange += getRangeAdd(sid); 
+    }
+
     var greenStar = null;//当前技能释放者
     function setSkillState()
     {
@@ -930,4 +1068,5 @@ class Soldier extends MyNode
             greenStar = null;
         }
     }
+
 }
