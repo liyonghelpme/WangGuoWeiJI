@@ -24,14 +24,14 @@ class FriendSoldier extends MyNode
         id = privateData.get("id");
         data = getData(SOLDIER, id);
         map = m;
-        var colStr = "blue";
+        //var colStr = "blue";
 
-        load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
+        load_sprite_sheet("soldierm"+str(id)+".plist");
 
         bg = node().scale(showSize);
         init();
 
-        changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
         var bSize = changeDirNode.prepare().size();
 
@@ -41,7 +41,7 @@ class FriendSoldier extends MyNode
 
         changeDirNode.add(shadow, -1);
 
-        movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
+        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
         
         state = SOL_FREE;

@@ -207,16 +207,16 @@ class BusiSoldier extends MyNode
     {
         data = d;
         id = data.get("id");
-        var colStr = "red";
-        load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
-        changeDirNode.texture("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png");
+        //var colStr = "red";
+        load_sprite_sheet("soldierm"+str(id)+".plist");
+        changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png");
         initAttackAndDefense(this);
         initHealth();
         if(movAni != null)
         {
             movAni.stop();
         }
-        movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
+        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
 
     }
     //杀死该士兵后
@@ -257,12 +257,12 @@ class BusiSoldier extends MyNode
         data = d;
         map = m;
         id = data.get("id");
-        var colStr = "red";
-        load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
+        //var colStr = "red";
+        load_sprite_sheet("soldierm"+str(id)+".plist");
 
         bg = node().scale(showSize);
         init();
-        changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
         var bSize = changeDirNode.prepare().size();
 
@@ -287,7 +287,7 @@ class BusiSoldier extends MyNode
         if(map != null)
             curMap = map.mapGridController.updateMap(this);
 
-        movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png"));
+        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
         if(privateData != null)
             myName = privateData.get("name", "");

@@ -140,6 +140,7 @@ import views.HealSkill;
 import views.SaveSkill;
 import views.UseDrugSkill;
 
+import views.SoldierAnimate;
 
 import views.CloseSoldier;
 import views.CloseAttackEffect;

@@ -123,6 +123,11 @@ class SkillDialog extends MyNode
         {
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i);
             var id = data[i];
+            
+            var pSize = panel.prepare().size();
+            var level = skills.get(id, -1);
+            if(level == -1)
+                panel.addsprite("black.png").size(pSize).color(0, 0, 0, 30);
 
             var obj = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(id)])).pos(36, 35).anchor(50, 50);
             var sca = getSca(obj, [64, 60]);
@@ -131,16 +136,19 @@ class SkillDialog extends MyNode
             var objData = getData(SKILL, id);
             panel.addlabel(objData.get("name")+" "+objData.get("des"), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
             
-            var level = skills.get(id, -1);
+
             var but0;
             var but1;
             var butWidth = 69;
             var butHeight = 36;
             
             //570 650
+            //按钮右对齐
             if(level == -1)//没有学习该技能
             {
-                but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onBuyIt, i);
+                //panel.color(70, 70, 70);//灰色 会把整个panel 上所有元素color 变低
+
+                but0 = panel.addsprite("greenButton.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onBuyIt, i);
                 but0.addlabel(getStr("buyIt", null), null, 18).pos(34, 18).anchor(50, 50);
             }
             else 
@@ -150,7 +158,7 @@ class SkillDialog extends MyNode
 
                 if(objData.get("kind") == MAKEUP_SKILL)//变身技能只能升级
                 {
-                    but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
+                    but0 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
                     but0.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50);
                 }
                 else//已经学习的技能可以放弃 和 升级

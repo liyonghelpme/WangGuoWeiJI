@@ -165,6 +165,7 @@ class Map extends MyNode
     {
         return xk*10000+yk;
     }
+    //每次从头开始寻找位置 而不是从上一个位置开始寻找
     function getInitPos(soldier)
     {
         var yk;
@@ -174,16 +175,18 @@ class Map extends MyNode
         var i;
         var j;
         var col;
-        if(soldier.color == 0)
+        if(soldier.color == MYCOLOR)//自上而下 自右而左
         {
-            for(yk = 0; yk < 5; yk++)
+            for(xk = 5; xk > 1; xk--)
             {
-                if((yk+soldier.sy) > 5)
+                if((xk+soldier.sx) > 6)
                     continue;
-                for(xk = 1; xk < 6; xk++)
+
+                for(yk = 0; yk < 5; yk++)
                 {
-                    if((xk+soldier.sx) > 6)
+                    if((yk+soldier.sy) > 5)
                         continue;
+
                     col = 0;    
                     for(i = 0; i < soldier.sy && !col; i++)
                     {
@@ -412,7 +415,7 @@ class Map extends MyNode
         {
             for(i = 0; i < len(s); i++)
             {
-                so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
+                so = new Soldier(this, [ENECOLOR, s[i].get("id")], ENEMY, s[i]);  
                 /*
                 设定人物位置会设定人物的zord 
                 所以要在添加了人物之后 设定位置
@@ -430,6 +433,26 @@ class Map extends MyNode
         //trace("soldiers", soldiers);
 //        trace("allSoldiers", len(soldiers));
     }
+    function randomAllSoldier(data)
+    {
+        var removed = [];
+        for(var i = 0; i < len(data); i++)
+        {
+            var sid = data[i];
+            var sdata = global.user.getSoldierData(sid);
+            var so = new Soldier(this, [MYCOLOR, sdata.get("id")], sid, null);
+            var nPos = getInitPos(so);
+            if(nPos[0] == -1)
+                continue;
+            addChild(so);
+            so.setPos(nPos);
+            setMap(so);
+            
+            removed.append(sid);
+        }
+        return removed;
+    }
+
     /*
     用户点击 下方block 则在地图上生成一个士兵
     士兵位置第一个合理空位
@@ -438,7 +461,7 @@ class Map extends MyNode
     function addSoldier(sid)
     {
         var sdata = global.user.getSoldierData(sid);
-        var so = new Soldier(this, [0, sdata.get("id")], sid, null);
+        var so = new Soldier(this, [MYCOLOR, sdata.get("id")], sid, null);
         addChild(so);
         return so;
     }

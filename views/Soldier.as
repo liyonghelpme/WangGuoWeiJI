@@ -114,6 +114,10 @@ class Soldier extends MyNode
 
     //攻击速度 
     //skId level coldTime ready
+    /*
+    初始化数据 之后 修改攻击速度 修改动画帧率
+    初始化动画 使用数据来初始化动画帧率
+    */
     function initData()
     {
         //初始化技能列表 等级 冷却时间
@@ -129,6 +133,8 @@ class Soldier extends MyNode
 
 
         attSpeed = data.get("attSpeed");
+        //attAni.duration = attSpeed;
+
         offY = data.get("offY");
         volumn = data.get("volumn");
         recoverSpeed = 0;
@@ -190,6 +196,8 @@ class Soldier extends MyNode
 
     //挑战的时候初始化怪兽 和 敌方士兵的时候使用 该数据 sid=-1
     var monsterData;
+    //var solAni;
+    var fea;
     function Soldier(m, d, s, md)
     {
         monsterData = md;
@@ -203,20 +211,27 @@ class Soldier extends MyNode
         if(k >= 20)
             id = 0;
 
-        var colStr = "red";
-        if(color == 1)
-            colStr = "blue";
-        load_sprite_sheet("soldierm"+str(id)+colStr+".plist");
-        load_sprite_sheet("soldiera"+str(id)+colStr+".plist");
+        var feaFil = FEA_BLUE;
+        if(color == ENECOLOR)
+            feaFil = FEA_RED;
 
-        movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
+        load_sprite_sheet("soldierm"+str(id)+".plist");
+        load_sprite_sheet("soldiera"+str(id)+".plist");
+
+        load_sprite_sheet("soldierfm"+str(id)+".plist");
+        load_sprite_sheet("soldierfa"+str(id)+".plist");
+
+
+
+
+        //movAni = repeat(animate(1500, "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
         //1500 ms攻击一次 
         //经营页面回复生命值 60s 一次
 
         data = getData(SOLDIER, id);
         initData();
 
-        attAni = repeat(animate(attSpeed, "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a6.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a7.png", UPDATE_SIZE));//, callfunc(finAttack)
+        //attAni = repeat(animate(attSpeed, "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a6.png","soldiera"+str(id)+colStr+".plist/ss"+str(id)+"a7.png", UPDATE_SIZE));//, callfunc(finAttack)
 
         shiftAni = moveto(0, 0, 0);
 
@@ -246,12 +261,20 @@ class Soldier extends MyNode
         */
         bg = node();
 
-        changeDirNode = bg.addsprite("soldierm"+str(id)+colStr+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
         changeDirNode.prepare();
         var bSize = changeDirNode.size();
 
         bg.size(bSize).anchor(50, 100).pos(102, 186);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
+
+        //变身之后特征色消失
+        fea = changeDirNode.addsprite("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil);
+
+        var ani = getSolAnimate(id);
+        movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
+        //攻击速度提升 则 动画的频率也提升
+        attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
 
         shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
@@ -815,7 +838,8 @@ class Soldier extends MyNode
             if(tar != null)
             {
                 clearAnimation();
-                changeDirNode.addaction(movAni);
+                //changeDirNode.addaction(movAni);
+                movAni.enterScene();
 
                 setDir();
                 state = MAP_SOL_MOVE;
@@ -839,7 +863,8 @@ class Soldier extends MyNode
                 state = MAP_SOL_ATTACK;
                 clearAnimation();
                 //inAttacking = 1;
-                changeDirNode.addaction(attAni);
+                //changeDirNode.addaction(attAni);
+                attAni.enterScene();
                 return;
             }
             
@@ -859,7 +884,8 @@ class Soldier extends MyNode
         {
             tar = null;
             clearAnimation();
-            changeDirNode.addaction(movAni);
+            //changeDirNode.addaction(movAni);
+            movAni.enterScene();
             state = MAP_SOL_WATI_TOUCH; 
         }
         /*
@@ -875,7 +901,8 @@ class Soldier extends MyNode
             if((dist- getVolumn() - tar.getVolumn())> attRange)
             {
                 clearAnimation();
-                changeDirNode.addaction(movAni);
+                //changeDirNode.addaction(movAni);
+                movAni.enterScene();
                 setDir();
                 state = MAP_SOL_MOVE; 
                 return;
@@ -919,6 +946,7 @@ class Soldier extends MyNode
     {
         map.myTimer.removeTimer(this);
         //cus.exitScene();
+        clearAnimation();
         super.exitScene();   
     }
     //眩晕不能攻击 不能 移动 
@@ -1045,6 +1073,8 @@ class Soldier extends MyNode
         attSpeed *= getAttSpeedRate(sid);
         attSpeed /= 100;
         
+        attAni.duration = attSpeed;//修正攻击速度
+
         if(kind == LONG_DISTANCE || kind == MAGIC )
             attRange += getRangeAdd(sid); 
     }
