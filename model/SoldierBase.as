@@ -344,3 +344,10 @@ function getSolAnimate(id)
     return ret;
 }
 
+
+function getSkillAnimate(id)
+{
+    var ani = skillAnimate.get(id);
+    load_sprite_sheet(ani[2]);
+    return ani;
+}

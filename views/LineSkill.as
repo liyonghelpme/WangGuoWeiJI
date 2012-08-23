@@ -104,8 +104,9 @@ class LineSkill extends MyNode
         attackTime = dist*100/speed;
         setDir();
 
-        var ani = skillAnimate.get(skillId);
-        cus = new MyAnimate(attackTime, ani, bg);//播放飞行 攻击动画
+        //var ani = skillAnimate.get(skillId);
+        var ani = getSkillAnimate(skillId);
+        cus = new MyAnimate(attackTime, ani[0], bg);//播放飞行 攻击动画
 
         var eneSize = tar.bg.size();
 

@@ -21,7 +21,8 @@ class SaveSkill extends MyNode
 
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
          
-        var ani = skillAnimate.get(skillId);
+        //var ani = skillAnimate.get(skillId);
+        var ani = getSkillAnimate(skillId);
         attackTime = ani[1];//动画时间
         cus = new MyAnimate(ani[1], ani[0], bg);
         tar.doSave();

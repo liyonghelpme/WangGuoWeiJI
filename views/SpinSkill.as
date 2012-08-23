@@ -17,7 +17,8 @@ class SpinSkill extends MyNode
 
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
         init();
-        var ani = skillAnimate.get(skillId);
+        //var ani = skillAnimate.get(skillId);
+        var ani = getSkillAnimate(skillId);
 
         attackTime = effectTime;//眩晕时间ms
         
