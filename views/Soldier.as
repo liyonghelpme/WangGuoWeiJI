@@ -556,7 +556,9 @@ class Soldier extends MyNode
                 setPos(nPos);
             }
 
-            var col = map.checkCol(this);
+            //var col = map.checkCol(this);
+
+            var col = map.checkSolOutOrCol(this);
             if(col != null)
             {
                 if(oldPos == null)//初始布阵失败则消失
@@ -662,11 +664,28 @@ class Soldier extends MyNode
         var sca = changeDirNode.scale();
         return sca[0];
     }
+    function setMoveDir()
+    {
+        if(tarMovePos != null)
+        {
+            var tpos = tarMovePos;
+            var mpos = bg.pos();
+            var difx = tpos[0] - mpos[0];
+            if(difx > 0)
+            {
+                changeDirNode.scale(-100, 100);
+            }
+            else
+            {
+                changeDirNode.scale(100, 100);
+            }
+        }
+    }
     function setDir()
     {
         if(tar == null)
         {
-            if(color == 0)
+            if(color == MYCOLOR)
                 changeDirNode.scale(-100, 100);
             else
                 changeDirNode.scale(100, 100);
@@ -861,6 +880,7 @@ class Soldier extends MyNode
         else if(state == MAP_SOL_POS)
         {
             shiftAni.stop();
+            //clearAnimation();
              
             tPos = tarMovePos;
             dist = abs(bg.pos()[0]-tPos[0]);//同一行 
@@ -868,11 +888,14 @@ class Soldier extends MyNode
             {
                 state = MAP_SOL_FREE;
                 clearAnimation();
+                return;
             }
 
             colObj = map.checkMoveDirCol(this, tarMovePos);
             if(colObj != null)
             {
+                clearAnimation();
+                state = MAP_SOL_FREE;
                 return;
             }
             t = dist*100/speed;
@@ -893,8 +916,6 @@ class Soldier extends MyNode
                 setDir();
                 state = MAP_SOL_MOVE;
             }
-
-
 
         }
         //对方在移动过程中死亡 或者 被save 都停止攻击
@@ -920,11 +941,14 @@ class Soldier extends MyNode
                 return;
             }
             
-            //在前方存在冲突对象不能移动
+            //在前方存在冲突对象不能移动 更换攻击目标
             colObj = map.checkDirCol(this, tar);
             //trace("colObj", colObj);
             if(colObj != null)
             {
+                clearAnimation();
+                state = MAP_SOL_FREE;
+                tar = null;
                 //trace("col now", bg.pos(), colObj.getPos());
                 return;
             }
@@ -1171,29 +1195,16 @@ class Soldier extends MyNode
         if(state != MAP_SOL_DEAD && state != MAP_SOL_SAVE)
         {
             state = MAP_SOL_POS;
+            setMoveDir();
+            clearAnimation();
+            movAni.enterScene();//进入行走状态
         }
     }
 
+    
     function doAppearAni()
     {
-        var bSize = bg.size();
-        var appearStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
-        appearStar.addaction(repeat(animate(1500, 
-            "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", "greenStar11.png", "greenStar12.png", "greenStar13.png", "greenStar14.png", "greenStar15.png", "greenStar16.png", "greenStar17.png", "greenStar18.png"
-            , UPDATE_SIZE)));
-
-        bg.add(appearStar, -1);
-        appearStar.addaction(sequence(delaytime(1500), callfunc(removeTempNode(appearStar))));
-
-
-
-        var smokeNode = sprite().pos(bSize[0]/2, bSize[1]).anchor(50, 100);
-        bg.add(smokeNode, 1);
-        var ani = getSkillAnimate(SMOKE_SKILL_ID);
-        var cus = new OneAnimate(ani[1], ani[0], smokeNode, null, 0);
-        cus.enterScene();
-
-        smokeNode.addaction(sequence(delaytime(1500), callfunc(removeTempNode(smokeNode))));
+        map.addChildZ(new MonSmoke(map, null, this, SMOKE_SKILL_ID), MAX_BUILD_ZORD);
     }
     function setAttackCofficient(sol, dif)
     {
@@ -1204,8 +1215,11 @@ class Soldier extends MyNode
             rate = ATTACK_RATE.get(MONSTER)[dif];
         else
             rate = ATTACK_RATE.get(NORMAL_SOL)[dif];
-        attack *= rate;
-        attack /= 100;
+        physicAttack *= rate;
+        physicAttack /= 100;
+        magicAttack *= rate;
+        magicAttack /= 100;
+
         //总的经验值 也随攻击力 成倍数增长
         gainexp *= rate;
         gainexp /= 100;

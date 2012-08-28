@@ -135,6 +135,7 @@ import views.NoTipDialog;
 import views.Map;
 import views.TrainOverDialog;
 import views.Soldier;
+import views.MonSmoke;
 import views.DeadOver;
 //import views.SkillEffect;
 import views.LineSkill;

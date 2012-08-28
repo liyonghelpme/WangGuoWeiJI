@@ -19,7 +19,8 @@ class DeadOver extends MyNode
         init();
 
         changeDirNode = soldier.changeDirNode;
-        cs = changeDirNode.size();
+        //cs = changeDirNode.prepare().size();
+        cs = sol.bg.size();//bg Size
         var curPos = changeDirNode.pos();
         var dir = soldier.getDir();
         if(dir < 0)

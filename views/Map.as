@@ -685,6 +685,7 @@ class Map extends MyNode
             addChild(so);
             setMap(so);
             so.finishArrange();
+            so.doAppearAni();
             so.setAttackCofficient(sol, scene.difficult);//攻击方士兵 场景难度
             return so;
         }
