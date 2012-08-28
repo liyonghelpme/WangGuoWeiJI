@@ -366,7 +366,17 @@ class User
         if(rcode != 0)
         {
             con = json_loads(con);
-            uid = con.get("uid");
+
+            uid = con.get("uid");//记忆用户uid 新手任务选择英雄时使用
+            var newState = con.get("newState");
+            if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
+            {
+                global.director.replaceScene(new WelcomeDialog());
+                //global.director.replaceScene(new SelectHero());
+                return;
+            }
+
+
             maxGiftId = con.get("maxGiftId");
 
             var temp = con.get("skills");//soldierId  skillId level

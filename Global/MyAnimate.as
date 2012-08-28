@@ -6,7 +6,8 @@ class MyAction
     function MyAction()
     {
         actions = [];
-        lastTime = time();
+        //lastTime = time();
+        lastTime = 0;
         //cus = customaction(MAX_INT, start, update);
         cus = c_addtimer(50, update, null, 0, -1);
         //getscene().addaction(cus);
@@ -35,7 +36,11 @@ class MyAction
     function update()
     {
         var now = time();
-        var diff = now - lastTime;
+        var diff;
+        if(lastTime == 0)
+            diff = 0;
+        else
+            diff = now - lastTime;
         lastTime = now;
         for(var i = 0; i < len(actions);)
         {
@@ -74,6 +79,7 @@ class MyAnimate
     {
         ani = a[0];
         duration = a[1];
+        accTime = 0;
     }
     function enterScene()
     {
@@ -89,11 +95,71 @@ class MyAnimate
         accTime += diff;
         accTime %= duration;
         var curFrame = accTime*len(ani)/duration;
-        bg.texture(ani[curFrame], ARGB_8888);
+        bg.texture(ani[curFrame], ARGB_8888, UPDATE_SIZE);
     }
     function exitScene()
     {
 //        trace("custom animate exit scene");
+        global.myAction.removeAct(this);
+    }
+}
+
+class OneAnimate
+{
+    var bg;
+    var ani;
+    var accTime;
+    var duration;
+    var restore = 0;
+    var oldTexture;
+    function OneAnimate(d, a, b, old, re)
+    {
+        restore = re;
+        bg = b;
+        oldTexture = old;
+        duration = d;
+        ani = a;
+        accTime = 0;
+    }
+
+    /*
+    function reverseAni()
+    {
+        ani.reverse();
+        accTime = 0;
+    }
+    */
+    function setAni(a, re)
+    {
+        restore = re;
+
+        ani = a[0];
+        duration = a[1];
+        accTime = 0;
+    }
+    function enterScene()
+    {
+        global.myAction.addAct(this);
+    }
+    function update(diff)
+    {
+        accTime += diff;
+        //动画显示最后一张
+        if(accTime >= duration)
+        {
+            exitScene();
+            if(restore)
+                bg.texture(oldTexture, ARGB_8888, UPDATE_SIZE);
+            else
+                bg.texture(ani[len(ani)-1], ARGB_8888, UPDATE_SIZE);
+            return;
+        }
+        accTime %= duration;
+        var curFrame = accTime*len(ani)/duration;
+        bg.texture(ani[curFrame], ARGB_8888, UPDATE_SIZE);
+    }
+    function exitScene()
+    {
         global.myAction.removeAct(this);
     }
 }

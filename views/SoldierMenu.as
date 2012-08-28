@@ -8,7 +8,7 @@ class SoldierMenu extends MyNode
         var banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
         init();
 //        trace("soldier name", soldier.myName, soldier.data.get("name"));
-        //banner.addlabel(soldier.data.get("name"), null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
+        //banner.addlabel(, null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
 
         banner.addsprite("dialogSolLev.png").pos(38, 30).anchor(0, 50);
         banner.addlabel(str(soldier.level+1), null, 18).anchor(0, 50).pos(101, 30).color(100, 100, 100);
@@ -29,7 +29,7 @@ class SoldierMenu extends MyNode
         var nameBanner = sprite("soldierMenu.png").pos(12, -33);
         banner.add(nameBanner, -1);
 
-        nameBanner.addlabel(soldier.myName, null, 18).pos(18, 19).anchor(0, 50).color(38, 86, 93, 100);
+        nameBanner.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", soldier.data.get("name")]) , null, 18).pos(18, 19).anchor(0, 50).color(38, 86, 93, 100);
 
         var tranLevel = getTransferLevel(soldier);
         var w;

@@ -80,6 +80,10 @@ import views.AllGoods;
 import views.UpgradeDialog;
 import views.SkillDialog;
 import views.UpgradeSkillDialog;
+import views.TrainDialog;
+
+import views.TrainScene;
+import views.TrainTip;
 
 import views.BreakDialog;
 
@@ -103,7 +107,7 @@ import views.FlowScene;
 import views.FlowMenu;
 import views.FlowIsland;
 
-import views.MyWarningDialog;
+
 import views.ResourceWarningDialog;
 
 
@@ -129,6 +133,7 @@ import views.NoTipDialog;
 
 //闯关地图
 import views.Map;
+import views.TrainOverDialog;
 import views.Soldier;
 import views.DeadOver;
 //import views.SkillEffect;
@@ -146,9 +151,8 @@ import views.CloseSoldier;
 import views.CloseAttackEffect;
 import views.ChallengeOver;
 
-import model.SoldierBase;
-import model.BusinessModel;
-import model.RoundModel;
+
+
 
 import views.Arrow;
 import views.Magic;
@@ -160,11 +164,28 @@ import views.MapDefense;
 
 import views.Loading;
 import views.LevupDialog;
-import model.MapGridController;
-
 
 //菜单使用的按钮对象
 import views.Button;
+
+
+
+import model.BusinessModel;
+import model.RoundModel;
+import model.MapGridController;
+import model.SoldierBase;
+
+import views.MyWarningDialog;
+
+
+import views.SelectHero;
+import views.SelectMenu;
+
+import views.BattleEnd;
+import views.NewBattle;
+import views.WelcomeDialog;
+import views.PrintWord;
+import views.GrayWord;
 
 import Global.User;
 import Global.MessageCenter;

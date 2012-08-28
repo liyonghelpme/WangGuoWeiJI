@@ -215,7 +215,7 @@ A 生命值*B攻击力/A受伤比           B生命值*A攻击力/B受伤比
 A 1 xxx 1                          Bheal * 1 / B受伤比
 A/B攻击力   = 1                   
 */
-function getBasicAbiliy(id, level)
+function getBasicAbility(id, level)
 {
     var data = getData(SOLDIER, id);
     var pureData = getSolPureData(id, level);
@@ -224,14 +224,14 @@ function getBasicAbiliy(id, level)
     
     var phyBasic = pureData["physicAttack"]*pureData["healthBoundary"]*100/pcoff;
     var magBasic = pureData["magicAttack"]*pureData["healthBoundary"]*100/mcoff;
-    var ab = max(phyBasic, magBasic)/(33*13);
+    var ab = max(phyBasic, magBasic)/(soldierAttBase[0][0]*soldierAttBase[0][3]);//除以基本攻击力系数 base的攻击力 生命值
 //    trace("basicAbility", ab);
     return ab; //士兵能力
 }
 
 function getAddExp(id, level)
 {
-    var basic = getBasicAbiliy(id, level);
+    var basic = getBasicAbility(id, level);
     var exp = (2*basic-1)*3;
 //    trace("soldierExp", exp);
     return exp; 
@@ -256,7 +256,7 @@ function getTotalSkillDamage(sol, skillId)
 {
     var sdata = getData(SKILL, skillId);
     var level =  global.user.getSolSkillLevel(sol.sid, skillId);
-    level += sdata.get("effectLevel");
+    level += sdata.get("startLevel");
 
     var pureData = getSolPureData(BASE_SOLDIER, level);
     var attack = pureData.get("physicAttack");
@@ -350,4 +350,10 @@ function getSkillAnimate(id)
     var ani = skillAnimate.get(id);
     load_sprite_sheet(ani[2]);
     return ani;
+}
+
+//士兵 怪兽 档次 ----》对应的大档次编号
+function getGradeKey(g)
+{
+    return g/10;
 }

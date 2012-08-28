@@ -63,11 +63,13 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.closeGlobalMenu();
         scene.funcBuild.sureToUpgrade();
     }
-    
+    //点击神像训练士兵 
     function onTrain()
     {
         global.director.curScene.closeGlobalMenu(this);
-        scene.doTrain();
+        //scene.doTrain();
+        //没有士兵则无法练级
+        global.director.pushView(new TrainDialog(), 1, 0);
     }
     function onDrug()
     {

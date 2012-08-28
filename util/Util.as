@@ -424,6 +424,8 @@ function normalizePos(p, sx, sy)
 //1-5
 /*
 计算大地图当前开启的大关 小关
+返回big+1 small
+1 2 3 4 5
 */
 function getCurEnableDif()
 {
@@ -841,3 +843,4 @@ function stringLines(s, sz, lineHeight, color)
     n.size(nSize);
     return n;
 }
+

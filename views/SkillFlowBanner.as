@@ -54,6 +54,12 @@ class SkillFlowBanner extends MyNode
                 {
                     drugData.append([temp[i][0], 0, 0, 1]);//drugId
                 }
+                //训练场景显示补血药品
+                if(pausePage.scene.kind == CHALLENGE_TRAIN)
+                {
+                    if(dd.get("health") > 0 || dd.get("percentHealth") > 0)
+                        drugData.append([temp[i][0], 0, 0, 1]);//drugId
+                }
             }
         }
         bubbleSort(drugData, cmp);
@@ -103,6 +109,7 @@ class SkillFlowBanner extends MyNode
         if(soldier != null)
         {
             attributeList = stringLines(getStr("solAtt", ["[HEAL]", str(soldier.health), 
+                                        "[NAME]", soldier.data.get("name"), 
                                         "[BOUNDARY]", str(soldier.healthBoundary),
                                         "[PATTACK]", str(soldier.physicAttack),
                                         "[PDEFENSE]", str(soldier.physicDefense),
@@ -201,10 +208,12 @@ class SkillFlowBanner extends MyNode
         }
 
     }
+    //停止药品更新状态
     override function enterScene()
     {
         super.enterScene();
         pausePage.scene.sceneSlowTimer.addTimer(this);
+        //global.timer.addTimer(this);
         //global.msgCenter.registerCallback(UPDATE_SKILL_STATE, this);
     }
     //使用技能tar！=null 施法成功
@@ -254,6 +263,7 @@ class SkillFlowBanner extends MyNode
     override function exitScene()
     {
         pausePage.scene.sceneSlowTimer.removeTimer(this);
+        //global.timer.removeTimer(this);
         super.exitScene();
     }
     var curSel;

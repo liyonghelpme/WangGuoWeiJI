@@ -16,7 +16,7 @@ class SingleSkill extends MyNode
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
         init();
         //var ani = skillAnimate.get(skillId);
-        var ani = getSKillAnimate(skillId);
+        var ani = getSkillAnimate(skillId);
         attackTime = ani[1];
         cus = new MyAnimate(ani[1], ani[0], bg);
     }

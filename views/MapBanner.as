@@ -57,9 +57,20 @@ class MapBanner extends MyNode
         initData();
         
         //117
-        bg.addsprite("mapMenuOk.png").pos(440, 19).setevent(EVENT_TOUCH, onOk);
-        bg.addsprite("mapMenuCancel.png").pos(557, 19).setevent(EVENT_TOUCH, onCancel);
-        bg.addsprite("random.png").pos(674, 19).setevent(EVENT_TOUCH, onRandom);
+
+        if(scene.kind != CHALLENGE_TRAIN)
+        {
+            bg.addsprite("mapMenuOk.png").pos(440, 19).setevent(EVENT_TOUCH, onOk);
+            bg.addsprite("mapMenuCancel.png").pos(557, 19).setevent(EVENT_TOUCH, onCancel);
+            //练级没有随机放置功能
+
+            bg.addsprite("random.png").pos(674, 19).setevent(EVENT_TOUCH, onRandom);
+        }
+        else
+        {
+            bg.addsprite("mapMenuOk.png").pos(557, 19).setevent(EVENT_TOUCH, onOk);
+            bg.addsprite("mapMenuCancel.png").pos(674, 19).setevent(EVENT_TOUCH, onCancel);
+        }
 
         cl = bg.addnode().pos(103, 451).size(CLIP_WIDTH, CLIP_HEIGHT).clipping(1).anchor(0, 100);
         flowNode = cl.addnode().pos(0, CLIP_HEIGHT);

@@ -100,7 +100,7 @@ class Goods extends MyNode
             if(showGain == 1)
             {
                 var labelGain = gain.items();
-                if(len(labelGain) > 0)
+                if(len(labelGain) != 0)
                 {
                     /*
                     图片向上移动用于显示增加
@@ -112,7 +112,10 @@ class Goods extends MyNode
                     //trace("labelGain", labelGain[0]);
                     var k = getStr(labelGain[0][0], null);
                     var v = labelGain[0][1];
-                    k = k + "+"+ str(v)
+                    if(v < 0)
+                        k = k + getStr("unlimit", null);
+                    else
+                        k = k + str(v);
                     panel.addlabel(k, null, 18).pos(79, 152).anchor(50, 50).color(0, 0, 0);
                 }
             }

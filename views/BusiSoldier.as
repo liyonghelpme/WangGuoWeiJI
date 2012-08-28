@@ -526,9 +526,9 @@ class BusiSoldier extends MyNode
             
         var func2;
         if(inspire == INSPIRE)
-            func2 = ["inspire", "train", "gather"];
+            func2 = ["inspire", "gather"];
         else
-            func2 = ["train", "gather"];
+            func2 = ["gather"];
             
         var isHero = data.get("isHero");
         if(isHero)

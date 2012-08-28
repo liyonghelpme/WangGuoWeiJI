@@ -151,6 +151,7 @@ class SoldierStore extends MyNode
         var rg = getRange();
         var userLevel = global.user.getValue("level");
         var panel = sprite("goodPanel.png");//.pos(i*OFFX, 0);//.scale(sca);
+        var pSize = panel.prepare().size();
         var sca = getSca(panel, [PAN_WIDTH, PAN_HEIGHT]);
 
         for(var j = 0; j < ROW_NUM; j++)
@@ -217,7 +218,7 @@ class SoldierStore extends MyNode
                 /*
                 canBuy 只表示等级是否足够
                 */
-                panel.addlabel(data.get("name"), null, 20).pos(71, 25).anchor(50, 50).color(0, 0, 0);
+                panel.addlabel(data.get("name"), null, 20).pos(pSize[0]/2, 25).anchor(50, 50).color(0, 0, 0);
                 panel.put([id, canBuy]);
             }
         }

@@ -4,7 +4,7 @@ class Dark extends MyNode
     function Dark(auto)
     {
         autoPop = auto;
-        bg = sprite("dark.png").color(0, 0, 0, 65).size(global.director.disSize[0], global.director.disSize[1]);
+        bg = sprite("black.png").color(0, 0, 0, 65).size(global.director.disSize[0], global.director.disSize[1]);
         init();
     }
     override function enterScene()

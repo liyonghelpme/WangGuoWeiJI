@@ -1,5 +1,3 @@
-
-
 class Store extends MyNode
 {
     var stores;

@@ -84,7 +84,7 @@ class LevelSelectLayer extends MyNode
 
         trace("select Level", index, curDif);//小关
         var i;
-        for(i=0; i < len(flagPos[index]) && index <= curDif[0]; i++){//该大关 某些关卡被开启
+        for(i=0; i < len(flagPos[index]) && index <= curDif[0]; i++){//该大关 某些关卡被开启 
             if(index == curDif[0] && i > curDif[1])//该大关 绿色表示 改关卡需要征服才能部分被开启
                 break;
 

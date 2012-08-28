@@ -21,6 +21,8 @@ class LineSkill extends MyNode
         var skillMap = getSkillMap(tar, skillData.get("sx"), skillData.get("sy"), 0);//所在行 所在列
 
         //向左攻击攻击一条直线上所有第一个单位
+        //如果直线上没有单位则只是简单的向该方向位置移动而已
+        //或者在移动过程中 动态确定攻击目标
         var row = null;
         var near = null;
         var minDistance = 1000000;
@@ -28,16 +30,17 @@ class LineSkill extends MyNode
         row = map.soldiers.get(skillMap[1]);
         var i;
         var ene;
+        var tarDis;
         if(row != null)
         {
-            var tarDis = tar[0]-p[0];
+            tarDis = tar[0]-p[0];
             for(i = 0; i < len(row); i++)
             {
                 ene = row[i];
                 if(ene.color != sol.color && ene.state != MAP_SOL_DEAD)
                 {
                     var dist = ene.getPos()[0]-p[0];
-                    if(dist*tarDis >= 0 && abs(dist) < minDistance)
+                    if(dist*tarDis >= 0 && abs(dist) < minDistance)//所在行最近距离的敌人
                     {
                         near = ene;
                         minDistance = abs(dist);
@@ -56,6 +59,18 @@ class LineSkill extends MyNode
                 near = ene;
                 break;
             }
+        }
+        //攻击 左侧 或者 右侧虚拟敌人
+        if(near == null)
+        {
+            tarDis = tar[0]-p[0];
+            //color id 所在行 所在列
+            near = new Soldier(map, [0, 0], -1, null);
+            if(tarDis > 0)
+                tar[0] = MAP_OFFX*MAP_WIDTH;
+            else
+                tar[0] = 0;
+            near.setPos([tar[0], tar[1]]);//地图两侧边界
         }
         return near;
     }
@@ -121,9 +136,9 @@ class LineSkill extends MyNode
     {
         var difx = tar.getPos()[0]-bg.pos()[0];
         if(difx > 0)
-            bg.scale(-100, 100);
-        else
             bg.scale(100, 100);
+        else
+            bg.scale(-100, 100);
     }
     function update(diff)
     {
