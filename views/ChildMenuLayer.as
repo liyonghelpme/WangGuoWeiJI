@@ -28,7 +28,7 @@ class ChildMenuLayer extends MyNode
     ["makeDrug", ["menu_button_makeDrug.png", onMakeDrug]],
 
     ["drug", ["menu_button_drug.png", onDrug]],
-    ["inspire", ["menu_button_inspire.png", onInspire]],
+    //["inspire", ["menu_button_inspire.png", onInspire]],
     ["equip", ["menu_button_equip.png", onEquip]],
     ["gather", ["menu_button_gather.png", onGather]],
     ["train", ["menu_button_train.png", onTrain]],
@@ -37,8 +37,90 @@ class ChildMenuLayer extends MyNode
     ["allDrug", ["menu_button_drug.png", onAllDrug]],
     ["allEquip", ["menu_button_equip.png", onAllEquip]],
     ["skill", ["menu_button_skill.png", onSkill]],
+
+    //士兵状态
+    ["menu0", ["menu0.png", onBlood]],
+    ["menu1", ["menu1.png", onHeart]],
+    ["menu2", ["menu2.png", onTranStatus]],
+    ["menu3", ["menu3.png", onInspire]],
+    ["menu4", ["menu4.png", onSunFlower]],
+    ["menu5", ["menu5.png", onSun]],
+    ["menu6", ["menu6.png", onFlower]],
+    ["menu7", ["menu7.png", onStar]],
+    ["menu8", ["menu8.png", onMoon]],
     
     ]);
+    function onBlood()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+        global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
+    }
+    function onHeart()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+        //隐藏菜单栏 游戏结束显示菜单栏
+        global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
+        global.director.pushView(new GameOne(scene, HEART_STATUS), 0, 0);
+    }
+    function onTranStatus()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+        global.director.pushView(new SoldierDialog(2), 1, 0);
+    }
+    function onInspire()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+
+        global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
+        global.director.pushView(new GameOne(scene, INSPIRE_STATUS), 0, 0);
+    }
+
+    function onSunFlower()
+    {
+        global.director.curScene.closeGlobalMenu(this);//这个会显示菜单
+        scene.clearStatus();
+        //操作士兵 
+        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
+        global.director.pushView(new GameTwo(scene, SUNFLOWER_STATUS), 0, 0);
+    }
+    function onSun()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+
+        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
+        global.director.pushView(new GameTwo(scene, SUN_STATUS), 0, 0);
+    }
+    function onFlower()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+
+        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
+        global.director.pushView(new GameTwo(scene, FLOWER_STATUS), 0, 0);
+    }
+    function onStar()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+
+        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
+        global.director.pushView(new GameTwo(scene, STAR_STATUS), 0, 0);
+    }
+    function onMoon()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+
+        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
+        global.director.pushView(new GameTwo(scene, MOON_STATUS), 0, 0);
+    }
+    
+
     //soldier skill
     function onSkill()
     {
@@ -79,11 +161,13 @@ class ChildMenuLayer extends MyNode
     /*
     鼓舞士兵
     */
+    /*
     function onInspire()
     {
         global.director.curScene.closeGlobalMenu(this);
         scene.inspireMe();   
     }
+    */
     /*
     关闭城堡全局菜单
     */

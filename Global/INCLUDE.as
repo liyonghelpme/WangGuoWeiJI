@@ -62,6 +62,7 @@ import views.RoleName;
 //人物对话框
 import views.SoldierStore;
 import views.BusiSoldier;
+
 import views.TrainBanner;
 import views.ProfessionIntroDialog;
 
@@ -73,6 +74,8 @@ import views.ResourceBanner;
 import views.SoldierMenu;
 import views.DetailDialog;
 import views.ChildMenuLayer;
+import views.GameTwo;
+import views.GameOne;
 import views.MailDialog;
 import views.RequestView;
 import views.GiftView;

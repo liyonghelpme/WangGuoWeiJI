@@ -297,6 +297,24 @@ class CastleScene extends MyNode
         curBuild = mc.beginBuild(building);
         global.director.pushView(new BuildMenu(this, [PLAN_BUILDING, curBuild]), 0, 0);
     }
+    var inGame = 0;
+    var gameId = -1;
+    function showGame(sol, gid)
+    {
+        inGame = 1;
+        gameId = gid;
+        curBuild = sol;
+        ml.beginBuild();//隐藏菜单
+        mc.moveToBuild(curBuild);//移动屏幕中心到游戏士兵位置
+    }
+    function finishGame()
+    {
+        inGame = 0;
+        gameId = -1;
+        curBuild = null;
+        ml.finishBuild();
+        mc.closeGlobalMenu();//还原场景状态
+    }
     function buySoldier(id)
     {
         var cost = getCost(SOLDIER, id);

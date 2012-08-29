@@ -18,6 +18,7 @@ class BusiSoldier extends MyNode
     //var cus = null;
     var myName;
     var shadow;
+    //50 /s 
     var speed = 5;
 
     var movAni;
@@ -27,8 +28,8 @@ class BusiSoldier extends MyNode
     //用于在setMap 和clear Map中设定 农田的上边界 
     var funcs = BUSI_SOL;
 
-    var inspire = INSPIRE;
-    var inspirePic = null;
+    //var inspire = INSPIRE;
+    //var inspirePic = null;
 
     var healthBoundary;
     var health;
@@ -73,6 +74,7 @@ class BusiSoldier extends MyNode
     普通等级
 
     攻击速度1500 慢 1000 中等 500 快
+
     */
 
 
@@ -293,7 +295,7 @@ class BusiSoldier extends MyNode
             myName = privateData.get("name", "");
         else
             myName = "";
-        showInspire();
+        //showInspire();
 
         if(data.get("sx") < 2)
         {
@@ -337,6 +339,7 @@ class BusiSoldier extends MyNode
     function sellOver()
     {
     }
+    /*
     //鼓励士兵 奖励经验
     function inspireMe()
     {
@@ -351,6 +354,21 @@ class BusiSoldier extends MyNode
         global.user.updateSoldiers(this);
         var nPos = bg.node2world(0, -10);
         //global.director.curScene.addChild(new TrainBanner(nPos, 100));
+    }
+    */
+    function changeMoney(gain)
+    {
+        var temp = bg.addnode();
+        var it = gain.items();
+        var curY = -30;
+        for(var i = 0; i < len(it); i++)
+        {
+            var g = it[i];
+            temp.addsprite(g[0]+".png").anchor(0, 50).pos(0, curY).size(30, 30);
+            temp.addlabel("+"+str(g[1]), null, 25).anchor(0, 50).pos(35, curY).color(0, 0, 0);
+            curY -= 30;
+        }
+        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
     //使用药品应该出现生命图标
     function changeExp(add)
@@ -395,7 +413,6 @@ class BusiSoldier extends MyNode
         temp.addlabel("+"+str(add), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
-
     /*
     修改士兵的id
     修改士兵的攻击力 防御力 经验
@@ -438,8 +455,10 @@ class BusiSoldier extends MyNode
             //if(global.director.curScene.curBuild == this)
             map.mapGridController.clearSolMap(this); 
         }
-        map.touchBegan(n, e, p, x, y, points);
+        else //if(curStatus == NO_STATUS)
+            map.touchBegan(n, e, p, x, y, points);
     }
+
     function setBottom()
     {
         if(bottom == null)
@@ -476,7 +495,7 @@ class BusiSoldier extends MyNode
                 map.touchMoved(n, e, p, x, y, points);
             }
         }
-        else
+        else //if(curStatus == NO_STATUS)
             map.touchMoved(n, e, p, x, y, points); 
     }
     /*
@@ -525,8 +544,9 @@ class BusiSoldier extends MyNode
             func1 = ["photo", "drug", "equip"];
             
         var func2;
-        if(inspire == INSPIRE)
-            func2 = ["inspire", "gather"];
+        //trace("curStatus", curStatus);
+        if(curStatus != NO_STATUS)
+            func2 = ["menu"+str(curStatus), "gather"];
         else
             func2 = ["gather"];
             
@@ -543,6 +563,7 @@ class BusiSoldier extends MyNode
     var showMenuYet = 0;
     function touchEnded(n, e, p, x, y, points)
     {
+        //正在建造 且为当前建筑
         if(Planing && global.director.curScene.curBuild == this )
         {
             if(colNow == 0)
@@ -553,12 +574,31 @@ class BusiSoldier extends MyNode
             }
             curMap = map.mapGridController.updateMap(this);//设置当前冲突位置
         }
-        if(showMenuYet == 0 && !Planing)
+        //没有建造 且 没有 显示菜单 且 没有状态
+        if(showMenuYet == 0 && !Planing)//&& curStatus == NO_STATUS
         {
             if(accMove < 20)
                 global.director.curScene.showGlobalMenu(this, showGlobalMenu);
         }
+        //没有状态
+        //if(curStatus == NO_STATUS)
         map.touchEnded(n, e, p, x, y, points);
+        //没有规划
+        /*
+        if(!Planing)
+        {
+            if(curStatus == BLOOD_STATUS)
+            {
+                clearStatus();
+                global.director.pushView(new DrugDialog(this, DRUG), 1, 0);
+            }
+            else if(curStatus == HEART_STATUS)
+            {
+                clearStatus();
+
+            }
+        }
+        */
     }
 
     function setName(n)
@@ -582,6 +622,42 @@ class BusiSoldier extends MyNode
             if(global.user.getEquipData(eid).get("owner") == sid)
                 initAttackAndDefense(this);//升级装备之后 更新士兵属性
         }
+    }
+
+    var newTar = null;
+    function setTarPos(x, y)
+    {
+        clearMoveState();
+
+        var posMap = getPosMap(sx, sy, x, y);//士兵的目标位置  
+        posMap = [posMap[2], posMap[3]];
+        newTar = setBuildMap([sx, sy, posMap[0], posMap[1]]);
+        curMap = map.mapGridController.updatePosMap([sx, sy, newTar[0], newTar[1], this]);
+        
+        //没有在移动 则 开始移动
+        if(state != SOL_POS)//防止多次点击设置移动状态 多次添加移动action的问题
+            changeDirNode.addaction(movAni);
+        setTarDir();
+        //设定新的目的位置
+        state = SOL_POS;
+    }
+
+
+    function clearMoveState()
+    {
+        map.mapGridController.clearSolMap(this);
+        shiftAni.stop();
+        if(state != SOL_POS)//没有在移动
+            movAni.stop();
+    }
+
+    function setTarDir()
+    {
+        var difx = newTar[0] - bg.pos()[0];
+        if(difx < 0)
+            changeDirNode.scale(100, 100);
+        else
+            changeDirNode.scale(-100, 100);
     }
 
     //8 目标位置
@@ -635,6 +711,7 @@ class BusiSoldier extends MyNode
         else
             changeDirNode.scale(-100, 100);
     }
+    /*
     function showInspire()
     {
         if(inspire == 1)
@@ -643,7 +720,8 @@ class BusiSoldier extends MyNode
             inspirePic = bg.addsprite("soldierMorale.png").pos(bsize[0]/2, -5).anchor(50, 100);
         }
     }
-    var inspireTime = 0;
+    */
+    //var inspireTime = 0;
     //士兵当前占用的map映射格子 
     var curMap = null;
     function doMove()
@@ -682,7 +760,7 @@ class BusiSoldier extends MyNode
 
         }
 
-
+        /*
         if(inspire == 0)
         {
             inspireTime += diff;
@@ -692,12 +770,34 @@ class BusiSoldier extends MyNode
                 showInspire();
             }
         }
+        */
 
         if(Planing)//规划中停止移动
             return;
 
-        if(showMenuYet == 1)//显示全局菜单停止移动
+        if(showMenuYet == 1)//显示全局菜单停止移动 
             return;
+        //到达目的地之后 进入等待状态
+        if(inGame == 1)//正在游戏中
+        {
+            if(state == SOL_POS)
+            {
+                shiftAni.stop();
+                var oldPos = bg.pos();
+                setPos(oldPos);
+                var dist = distance(bg.pos(), newTar);
+                if(oldPos[0] == newTar[0] && oldPos[1] == newTar[1])
+                {
+                    movAni.stop();
+                    state = SOL_FREE;
+                    return;
+                }
+                var t = dist*100/speed;
+                shiftAni = moveto(t, newTar[0], newTar[1]);
+                bg.addaction(shiftAni);
+            }
+            return;
+        }
 
         //设子map映射在没有到达的位置
         if(state == SOL_FREE)
@@ -707,7 +807,7 @@ class BusiSoldier extends MyNode
             if(tar != null)
             {
                 state = SOL_MOVE; 
-                map.mapGridController.clearMap(this);
+                map.mapGridController.clearSolMap(this);
                 curMap = map.mapGridController.updatePosMap([sx, sy, tar[0], tar[1], this]);
                 changeDirNode.addaction(movAni);
                 setDir();
@@ -781,5 +881,113 @@ class BusiSoldier extends MyNode
             par.add(bg, zOrd);
         }
     }
-    
+    var curStatus = NO_STATUS;
+    var status = null;
+    function showCurStatus()
+    {
+        if(curStatus == NO_STATUS)
+            return;
+        if(status != null)
+        {
+            status.removefromparent();
+            status = null;
+        }
+
+        var bsize = bg.size();
+        status = bg.addsprite("soldierStatus.png").pos(bsize[0]/2, -5).anchor(50, 100);
+        var pic = status.addsprite("status"+str(curStatus)+".png").anchor(50, 50).pos(26, 19);
+        var sca = getSca(pic, [39, 31]);
+        pic.scale(sca);
+    }
+
+    //保证只有5 个士兵有状态
+    function clearStatus()
+    {
+        if(status != null)
+        {
+            curStatus = NO_STATUS;
+            status.removefromparent();
+            status = null;
+        }
+    }
+    //生命值少于2/3
+    //返回是否有了状态
+    function genBloodAndTransferStatus()
+    {
+        if(inGame)
+            return;
+        if(status == null)
+        {
+            var rd = rand(100);
+            if(health < healthBoundary*2/3) 
+            {
+                if(rd < 50)
+                    curStatus = BLOOD_STATUS;
+                else
+                    curStatus = HEART_STATUS;
+            }
+            else
+            {
+                var tranLev = getTransferLevel(this);
+                if(level >= tranLev && tranLev != -1)
+                {
+                    curStatus = TRANSFER_STATUS;
+                }
+            }
+            showCurStatus();
+        }
+        return curStatus;
+    }
+    var possible = null;
+    function initPossible()
+    {
+        possible = [];
+        var i;
+        possible.append(statusPossible[0][1]);
+        for(i = 1; i < len(statusPossible); i++)
+        {
+            possible.append(statusPossible[i][1]+possible[i-1]);
+        }
+    }
+    function genNewStatus()
+    {
+        if(inGame)
+            return;
+        if(curStatus == NO_STATUS)
+        {
+            var rd = rand(100);
+            if(possible == null)
+                initPossible();
+            for(var i = 0; i < len(possible); i++)
+            {
+                if(rd <= possible[i])
+                {
+                    break;
+                }
+            }
+            curStatus = statusPossible[min(i, len(statusPossible)-1)][0];
+            showCurStatus();
+        }
+    }
+    //清除随机奖励金钱状态
+    //清除所有状态 重新生成所有生命值 转职状态
+    //由士兵控制的状态
+    function clearRandomStatus()
+    {
+        clearStatus();
+    }
+    //游戏1 不动
+    //游戏2 点击左右移动 点击移动的目的地 最近的方块区域
+    var inGame = 0;
+    var gameId = -1;
+    function beginGame(gId)
+    {
+        inGame = 1;
+        gameId = gId;
+    }
+    function endGame()
+    {
+        inGame = 0;
+        gameId = -1;
+    }
 }

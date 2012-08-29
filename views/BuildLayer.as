@@ -169,6 +169,11 @@ class BuildLayer extends MyNode
     或者进入场景的时候根据数据重新根据数据 构建view
 
     进入场景 
+
+
+    士兵移动 timer 
+    士兵状态 内部更新 还是 全局更新
+    mapGridController 管理所有的数据
     */
     override function enterScene()
     {
@@ -179,8 +184,39 @@ class BuildLayer extends MyNode
         global.msgCenter.registerCallback(SOL_TRANSFER, this);
         global.msgCenter.registerCallback(SOL_UNLOADTHING, this);
 
+        global.timer.addTimer(this); 
     }
+    const UPDATE_STATUS_TIME = 10000;
+    const MAX_STATUS_SOL = 5;
+    var passTime = UPDATE_STATUS_TIME;
 
+    //随机5 个 士兵 出现状态
+    //sid 
+    function update(diff)
+    {
+        passTime += diff;
+        if(passTime > UPDATE_STATUS_TIME)
+        {
+            passTime = 0;
+
+            var soldiers = mapGridController.allSoldiers.values();
+            var rd = rand(len(soldiers));
+            var i;
+            for(i = 0; i < len(soldiers); i++)
+                soldiers[i].clearRandomStatus();
+
+            for(i = 0; i < len(soldiers); i++)
+                soldiers[i].genBloodAndTransferStatus();
+
+            //生成随机奖励金银币状态
+            for(i  = 0; i < len(soldiers) && i < MAX_STATUS_SOL; i++)
+            {
+                var n = (rd+i)%len(soldiers);
+                var so = soldiers[n];
+                so.genNewStatus();
+            }
+        }
+    }
     /*
     注册消息类型------> MSG_ID------>对象 ------>参数[]
     */
@@ -209,6 +245,7 @@ class BuildLayer extends MyNode
     }
     override function exitScene()
     {
+        global.timer.removeTimer(this);
         global.user.storeOldPos(mapGridController.allSoldiers);
         global.msgCenter.removeCallback(RELIVE_SOL, this);
         global.msgCenter.removeCallback(SOL_TRANSFER, this);

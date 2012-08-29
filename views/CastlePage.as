@@ -299,6 +299,7 @@ class CastlePage extends MyNode
         bPos[1] -= bSize[1]/2;
         moveToPoint(bPos[0], bPos[1]);
     }
+    //如果没有进入游戏则可以恢复到原来的位置
     function closeGlobalMenu()
     {
         if(oldScale != null)
@@ -354,15 +355,29 @@ class CastlePage extends MyNode
     {
         scene.clearHideTime();
         scene.closeGlobalMenu(this);
-        touchDelegate.tBegan(n, e, p, x, y, points);
+
+        //在游戏2中 需要设定士兵的 移动目标位置
+        if(scene.inGame)
+        {
+            if(scene.gameId == MONEY_GAME)//点击金钱游戏才有必要移动士兵
+            {
+                var pp = n.node2world(x, y);
+                pp = bg.world2node(pp[0], pp[1]);
+                scene.curBuild.setTarPos(pp[0], pp[1]);
+            }
+        }
+        else
+            touchDelegate.tBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)
     {
-        touchDelegate.tMoved(n, e, p, x, y, points);
+        if(!scene.inGame)
+            touchDelegate.tMoved(n, e, p, x, y, points);
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        touchDelegate.tEnded(n, e, p, x, y, points);
+        if(!scene.inGame)
+            touchDelegate.tEnded(n, e, p, x, y, points);
     }
     override function enterScene()
     {

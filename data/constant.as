@@ -30,6 +30,7 @@ const ROT = 4;
 const SOL_FREE = 0;
 const SOL_MOVE = 1;
 const SOL_WAIT = 2;
+const SOL_POS = 3;
 
 const INSPIRE = 1; 
 
@@ -357,6 +358,7 @@ const FALL_THING = 14;
 const TREASURE_STONE = 15;
 const MAGIC_STONE = 16;
 const SKILL = 17;
+const STATUS = 18;
 
 
 
@@ -379,6 +381,7 @@ var Keys = [
     goodsListKey,
     magicStoneKey,
     skillsKey,
+    statusPossibleKey,
 ];
 var CostData = [
     buildingData,
@@ -399,6 +402,7 @@ var CostData = [
     goodsListData,
     magicStoneData,
     skillsData,
+    statusPossibleData,
 ];
 
 /*
@@ -442,6 +446,7 @@ var KindsPre = [
     "stone[ID].png",
     "magicStone[ID].png",
     "skill[ID].png",
+    "status[ID].png",
 ];
 
 //260048  木牌位置
@@ -678,3 +683,22 @@ const CAVE_MAP = 3;
 const SNOWFIELD_MAP = 4;
 
 const SMOKE_SKILL_ID = 9;
+
+//需要特定条件状态
+const NO_STATUS = -1;
+//可以清除
+const BLOOD_STATUS = 0;
+const HEART_STATUS = 1;
+const TRANSFER_STATUS = 2;
+
+//随机状态 可以清除
+const INSPIRE_STATUS = 3;
+const SUNFLOWER_STATUS = 4;
+const SUN_STATUS = 5;
+const FLOWER_STATUS = 6;
+const STAR_STATUS = 7;
+const MOON_STATUS = 8;
+const GATHER_STATUS = 9;
+
+const SOL_GAME = 1;
+const MONEY_GAME = 2;
