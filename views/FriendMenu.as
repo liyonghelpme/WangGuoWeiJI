@@ -2,6 +2,9 @@ class FriendMenu extends MyNode
 {
     var scene;
     var challengeBut = null;
+    var heartYet = null;
+    //好友场景的 邻居数据 是 拷贝得到的 不能通过本地修改来 修改全局的状态
+    //需要访问全局接口来修改状态
     function FriendMenu(s)
     {
         scene = s;
@@ -30,21 +33,36 @@ class FriendMenu extends MyNode
         if(scene.kind == VISIT_NEIBOR)
         {
             if(scene.user.get("challengeYet") == 1)
-                challengeBut = bg.addsprite("challengeNeibor.png", GRAY).pos(708, 211);
+                challengeBut = bg.addsprite("challengeNeibor.png", GRAY).pos(741, 280).anchor(50, 50);
             else
-                challengeBut = bg.addsprite("challengeNeibor.png").pos(708, 211).setevent(EVENT_TOUCH, onChallenge);
+                challengeBut = bg.addsprite("challengeNeibor.png").pos(741, 280).anchor(50, 50).setevent(EVENT_TOUCH, onChallenge);
+            if(scene.user.get("heartYet") == 1)
+                heartYet = bg.addsprite("heartPlus.png", GRAY).pos(741, 208).anchor(50, 50);
+            else
+                heartYet = bg.addsprite("heartPlus.png").pos(741, 208).anchor(50, 50).setevent(EVENT_TOUCH, onSendHeart);
 
             var sca = getSca(challengeBut, [70, 60]);
             challengeBut.scale(sca);
         }
+    }
+    function onSendHeart()
+    {
+        heartYet.texture("heartPlus.png", GRAY);
+        heartYet.setevent(EVENT_TOUCH, null);
+
+        var user = scene.user;
+        global.friendController.sendHeart(user["uid"]);
+        global.httpController.addRequest("friendC/sendHeart", dict([["uid", global.user.uid], ["fid", user.get("uid")]]), null, null);
     }
     //挑战结束返回好友页面
     //已经有一个 挑战排行榜
     //挑战邻居有什么意义
     function onChallenge()
     {
-        challengeBut.removefromparent();
-        challengeBut = bg.addsprite("challengeNeibor.png", GRAY).pos(708, 211);
+        //challengeBut.removefromparent();
+        //challengeBut = bg.addsprite("challengeNeibor.png", GRAY).pos(708, 211);
+        challengeBut.texture("challengeNeibor.png", GRAY);
+        challengeBut.setevent(EVENT_TOUCH, null);
 
         var user = scene.user;
         var cs = new ChallengeScene(user.get("uid"), user.get("id"), 0, 0, CHALLENGE_NEIBOR, user);

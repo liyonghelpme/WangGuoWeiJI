@@ -32,6 +32,16 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "levup")
                     global.director.pushView(new LevupDialog(curCmd), 1, 0);
+                else if(curCmd.get("cmd") == "update")
+                {
+                    var find = getUpdateObject();
+                    if(find != null)
+                        global.director.pushView(new UpdateDialog(find[0], find[1]), 1, 0);
+                }
+                else if(curCmd.get("cmd") == "heart")
+                {
+                    global.director.pushView(new LiveHeartDialog(), 1, 0);
+                }
             }
         }
     }

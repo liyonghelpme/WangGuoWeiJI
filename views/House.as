@@ -16,6 +16,13 @@ class House extends FuncBuild
         baseBuild = b;
     }
 }
+class LoveTree extends FuncBuild
+{
+    function LoveTree(b)
+    {
+        baseBuild = b;
+    }
+}
 class Decor extends FuncBuild
 {
     function Decor(b)

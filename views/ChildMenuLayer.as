@@ -48,8 +48,22 @@ class ChildMenuLayer extends MyNode
     ["menu6", ["menu6.png", onFlower]],
     ["menu7", ["menu7.png", onStar]],
     ["menu8", ["menu8.png", onMoon]],
+
+    //爱心树
+    ["love", ["menu1.png", onLove]],
+    ["loveRank", ["menuLoveRank.png", onLoveRank]],
     
     ]);
+    function onLove()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new LoveDialog(scene));
+    }
+    function onLoveRank()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new HeartRankDialog());
+    }
     function onBlood()
     {
         global.director.curScene.closeGlobalMenu(this);

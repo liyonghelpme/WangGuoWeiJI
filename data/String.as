@@ -12,6 +12,7 @@ var strings = dict([
 [ "building202" , "神像" ],
 [ "building204" , "药店" ],
 [ "building206" , "铁匠铺" ],
+
 [ "building102" , "树2" ],
 [ "building104" , "树3" ],
 [ "building106" , "军帐篷" ],
@@ -42,6 +43,23 @@ var strings = dict([
 [ "building162" , "蜗牛" ],
 [ "building164" , "路牌" ],
 [ "building300" , ["水晶矿", ""]],
+
+
+[ "building208" , ["爱心树", ""]],
+[ "building209" , ["爱心树", ""]],
+[ "building210" , ["爱心树", ""]],
+[ "building211" , ["爱心树", ""]],
+[ "building212" , ["爱心树", ""]],
+[ "building213" , ["爱心树", ""]],
+[ "building214" , ["爱心树", ""]],
+[ "building215" , ["爱心树", ""]],
+[ "building216" , ["爱心树", ""]],
+[ "building217" , ["爱心树", ""]],
+[ "building218" , ["爱心树", ""]],
+[ "building219" , ["爱心树", ""]],
+[ "building220" , ["爱心树", ""]],
+[ "building221" , ["爱心树", ""]],
+[ "building222" , ["爱心树", ""]],
 
 [ "crystal0" , "10 水晶" ],
 [ "crystal1" , "50 水晶" ],
@@ -1277,6 +1295,20 @@ var strings = dict([
 ["solTrainOver1", "[NAME]经验增加[EXP], 等级提升[LEV](可以转职)"],
 ["trainTipLine", "1.每行只能放置一个士兵\n2.练级可以使用技能和所有药水(包括回血药水)\n3.士兵练级建议佩戴高级装备\n4.右边数字表示该行剩余怪兽数量"],
 ["selTarPos", "点击选择士兵移动位置"],
+["buySol", "购买[NAME]来丰富你的军队!"],
+["buyEquip", "购买[NAME]来丰富你的装备!"],
+["buyBuild", "购买[NAME]来丰富你的装饰！"],
+["richThing", "丰富的装备，建筑物，军队能够吸引更多的好友来你的页面赠送爱心。爱心越多，奖励越丰盛！"],
+["loveTree", "[LEV]级[NAME]"],
+["moreHeart", "好友赠送的爱心越多，爱心树成长的越快"],
+["heartNum", "本周获得好友爱心：[WEEKNUM]\n历史累计爱心数量：[ACCNUM]\n[LEV]级爱心树还需要爱心：[LEFTNUM]"],
+["topHeartNum", "本周获得好友爱心：[WEEKNUM]\n历史累计爱心数量：[ACCNUM]\n顶级爱心树"],
+["heartTip", "提示：每周一凌晨统计大家的爱心数量，每棵爱心都可以兑换一颗水晶。"],
+["inviteFri", "邀请好友"],
+["rank", "排行榜"],
+["liveHeart", "第[NUM]周，恭喜你获得了[NUM1]爱心"],
+["heartReward0", "你在上周获得了[N0]个爱心，奖励[N1]个水晶。赶快邀请你的好友进入王国危机，给你赠送爱心吧！"],
+["heartReward1", "你在上周获得了[N0]个爱心，奖励[N1]个水晶。爱心树还差[N2]个爱心进入下一个阶段。赶快邀请你的好友进入王国危机，给你赠送爱心吧！"],
 ]);
 
 

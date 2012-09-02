@@ -146,14 +146,29 @@ class Building extends MyNode
                 privateData["state"] = Free;
             buildLevel = privateData.get("level");
         }
+        /*
+        else if(funcs == LOVE_TREE)
+        {
+            funcBuild = new Decor(this);
+        }
+        */
         else 
             funcBuild = new Castle(this);
 
         bg = node();
         changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
+        
+        var offY = 0;
+        if(data.get("isoView") == 1)
+        {
+            offY = (sy+sx)*SIZEY/2;
+        }
+
         var bSize = changeDirNode.prepare().size();
-        //新建筑需要确定初始化位置
-        bg.size(bSize).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+
+        //新建筑需要确定初始化位置 
+        //如果建筑物是平底的 则 高度需要补偿 否则高度正常
+        bg.size(bSize[0], bSize[1]+offY).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
 
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 

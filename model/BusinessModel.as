@@ -172,3 +172,44 @@ function getCareer(kindId)
 {
     return kindId%10;
 }
+
+const UPDATE = [SOLDIER, EQUIP, BUILD];
+function getUpdateObject()
+{
+    var updateState = global.user.updateState%len(UPDATE);
+    var kind = UPDATE[updateState];
+    var level = global.user.getValue("level");
+    var i;
+    var find = null;
+    var now;
+    if(kind == SOLDIER)
+    {
+        now = global.user.getAllSoldierKinds();
+    }
+    else if(kind == EQUIP)
+    {
+        now = global.user.getAllEquipKinds();
+    }
+    else if(kind == BUILD)
+    {
+        now = global.user.getAllBuildingKinds();
+    }
+
+    for(i = level; i <= MAX_LEVEL; i++)
+    {
+        var curObj = levelUpdate.get(i);
+        if(curObj != null)
+            for(var j = 0; j < len(curObj); j++)
+            {
+                var temp = curObj[j][1];
+                if(curObj[j][0] == kind && now.get(temp) == null)
+                {
+                    find = curObj[j];
+                    break;
+                }
+            }
+        if(find != null)
+            break;
+    }
+    return find;
+}

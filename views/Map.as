@@ -147,7 +147,8 @@ class Map extends MyNode
         var levelUpSol = getAllLevelUp();
 
         stopGame();
-        if(def.color == 0)
+        trace("MapDefenseBreak");
+        if(def.color == MYCOLOR)
             challengeOver(0, 0, null, levelUpSol);
         else 
             challengeOver(1, getStar(), reward, levelUpSol);
@@ -820,6 +821,7 @@ class Map extends MyNode
             global.user.changeValue("crystal", cry);
         }
 
+        trace("sceneKind", scene.kind, CHALLENGE_FRI);
         if(scene.kind == CHALLENGE_MON)
         {
             global.director.pushView(new BreakDialog(win, star, reward, this, levelUpSol), 1, 0);

@@ -46,9 +46,9 @@ import views.FallObj;
 
 import views.DialogController;
 
+import views.UpdateDialog;
 //菜单
 import views.MenuLayer;
-
 
 
 //商店
@@ -84,6 +84,10 @@ import views.UpgradeDialog;
 import views.SkillDialog;
 import views.UpgradeSkillDialog;
 import views.TrainDialog;
+import views.LoveDialog;
+import views.HeartRankDialog;
+import views.HeartRankBase;
+import views.LiveHeartDialog;
 
 import views.TrainScene;
 import views.TrainTip;
@@ -173,6 +177,18 @@ import views.LevupDialog;
 import views.Button;
 
 
+//新手剧情对话框 依赖于CastlePageScene
+//如果使用消息机制就能避免显示的依赖关系
+import views.SelectHero;
+import views.SelectMenu;
+
+import views.BattleEnd;
+import views.NewBattle;
+import views.WelcomeDialog;
+import views.PrintWord;
+import views.GrayWord;
+
+
 
 import model.BusinessModel;
 import model.RoundModel;
@@ -182,14 +198,7 @@ import model.SoldierBase;
 import views.MyWarningDialog;
 
 
-import views.SelectHero;
-import views.SelectMenu;
 
-import views.BattleEnd;
-import views.NewBattle;
-import views.WelcomeDialog;
-import views.PrintWord;
-import views.GrayWord;
 
 import Global.User;
 import Global.MessageCenter;

@@ -12,14 +12,10 @@ class User
     var updateList;
     
     //建筑物的view 实体
-    //var allBuildings;
 
     //地图的建筑物占有块数据
-    //var mapDict;
-    //var blockBuilding;
 
     //士兵的view 实体
-    //var allSoldiers;
     
     //当前可用的最大的建筑物的编号
     var maxBid;
@@ -159,7 +155,39 @@ class User
             }
         }
     }
-
+    //buildingKind 1
+    function getAllBuildingKinds()
+    {
+        var b = buildings.values();
+        var res = dict();
+        for(var i = 0; i < len(b); i++)
+        {
+            res.update(b[i].get("id"), 1);
+        }
+        return res;
+    }
+    function getAllEquipKinds()
+    {
+        var e = equips.values();
+        var res = dict();
+        for(var i = 0; i < len(e); i++)
+        {
+            res.update(e[i].get("kind"), 1);
+        }
+        return res;
+    }
+    //士兵必须是没有转职的兵力id%10 == 0
+    function getAllSoldierKinds()
+    {
+        var s = soldiers.values();
+        var res = dict();
+        for(var i = 0; i < len(s); i++)
+        {
+            res.update(s[i].get("id"), 1);
+        }
+        return res;
+    }
+    //id--->
     function initBuildings(b)
     {
         var keys = b.keys();
@@ -360,6 +388,10 @@ class User
         }
     }
     var treasureStone;
+    var week;
+    var updateState;
+    var registerTime;
+    var heartRank;
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
@@ -372,10 +404,12 @@ class User
             if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
             {
                 global.director.replaceScene(new WelcomeDialog());
-                //global.director.replaceScene(new SelectHero());
                 return;
             }
+            registerTime = con.get("registerTime");
 
+            week = con.get("week");
+            updateState = con.get("updateState");
 
             maxGiftId = con.get("maxGiftId");
 
@@ -384,6 +418,12 @@ class User
 
 
             resource = con.get("resource");
+
+            var heart = con.get("heart");
+            resource.update("weekNum", heart["weekNum"]);
+            resource.update("accNum", heart["accNum"]);
+            resource.update("liveNum", heart["liveNum"]);
+            heartRank = heart.get("rank");
             
             //con.get("starNum")
             initStarNum();
@@ -1400,5 +1440,11 @@ class User
         var v = skills.get(soldierId, []);
         v[skillId] += 1;
         global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
+    }
+    function collectHeart()
+    {
+        var l = getValue("liveNum");
+        changeValue("crystal", l);
+        changeValue("liveNum", -l);
     }
 }

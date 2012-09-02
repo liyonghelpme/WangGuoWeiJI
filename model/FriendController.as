@@ -181,6 +181,7 @@ class FriendController
         {
             nei = copy(nei);
             nei["challengeYet"] = 0;
+            nei["heartYet"] = 0;
             nei["mineLevel"] = 0;
             neibors.append(nei);
             setNeiborCrystal();
@@ -210,6 +211,7 @@ class FriendController
             for(var i = 0; i < len(neibors); i++)
             {
                 neibors[i]["challengeYet"] = 0;
+                neibors[i]["heartYet"] = 0;
             }
     }
 
@@ -253,12 +255,24 @@ class FriendController
             neibors = [];
             for(var i = 0; i < len(temp); i++)
             {
-                neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]], ["mineLevel", temp[i][4]], ["challengeYet", temp[i][5]] ]));
+                neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]], ["mineLevel", temp[i][4]], ["challengeYet", temp[i][5]], ["heartYet", temp[i][6]] ]));
             }
             setNeiborCrystal();
             global.user.db.put("neibors", neibors);
             initNeiborYet = 1;
         }
+    }
+    function sendHeart(nid)
+    {
+        for(var i = 0; i < len(neibors); i++)
+        {
+            if(neibors[i]["uid"] == nid)
+            {
+                neibors[i]["heartYet"] = 1;
+                break;
+            }
+        }
+        global.user.db.put("neibors", neibors);
     }
     function challengeNeibor(nid)
     {

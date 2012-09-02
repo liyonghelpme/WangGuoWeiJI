@@ -516,7 +516,7 @@ class BusiSoldier extends MyNode
         //根据映射检测冲突
 
         var col = map.checkPosCollision(cmap[2], cmap[3], bg.pos(), this);
-        trace("setSolColor", curP, cmap, col);
+        //trace("setSolColor", curP, cmap, col);
 
         if(col != null)
         {
@@ -778,7 +778,7 @@ class BusiSoldier extends MyNode
         if(showMenuYet == 1)//显示全局菜单停止移动 
             return;
         //到达目的地之后 进入等待状态
-        if(inGame == 1)//正在游戏中
+        if(inGame == 1 || state == SOL_POS)//正在游戏中 或者正在移动结束
         {
             if(state == SOL_POS)
             {

@@ -110,6 +110,12 @@ class CastlePage extends MyNode
             global.user.setValue("loginDays", loginDays);
             //if(silver != 0 || crystal != 0)
             dialogController.addCmd(dict([["cmd", "login"], ["loginDays", loginDays]]));
+
+            if(global.user.week == 0)//每周第一次登录
+            {
+                dialogController.addCmd(dict([["cmd", "update"]]));
+                dialogController.addCmd(dict([["cmd", "heart"]]));
+            }
         }
     }
 
@@ -147,7 +153,8 @@ class CastlePage extends MyNode
 
             reward = getLoginReward(day);
             global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
-
+            
+            //每周第一次登录
 
         }
 //        trace("loginReward", day, reward);
@@ -230,7 +237,7 @@ class CastlePage extends MyNode
                 global.director.pushView(new MyWarningDialog(getStr("noNeibor", null), getStr("noNeiborCon", null), null), 1, 0);
                 return;
             }
-            lastVisit %= neibors;
+            lastVisit %= len(neibors);
             //papayaId
             friendScene = new FriendScene(neibors[lastVisit].get("id"), lastVisit, VISIT_NEIBOR, neibors[lastVisit].get("crystal"), neibors[lastVisit]);
             global.director.pushScene(friendScene);

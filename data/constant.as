@@ -44,6 +44,7 @@ const LOCK_Z = 2;
 
 const MAX_BUILD_ZORD = 100000;
 
+//buildFunc
 const FARM_BUILD = 0;
 const HOUSE_BUILD = 1;
 const DECOR_BUILD = 2;
@@ -55,6 +56,7 @@ const BUSI_SOL = 7;
 //木牌 不可移动 不再allBuildings 中 
 const STATIC_BOARD = 8;
 const MINE_KIND = 9;
+const LOVE_TREE = 10;
 
 
 const GRAY = m_color(
@@ -208,6 +210,7 @@ var buildFunc = dict([
 [DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
 [MINE_KIND, [["photo"], ["upgrade"]]],
+[LOVE_TREE, [["photo"], ["love", "loveRank"]]],
 ]);
 
 
@@ -702,3 +705,5 @@ const GATHER_STATUS = 9;
 
 const SOL_GAME = 1;
 const MONEY_GAME = 2;
+
+const LOVE_TREE_ID = 208;//等级提升 则 ID 变化

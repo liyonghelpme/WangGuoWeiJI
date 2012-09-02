@@ -22,4 +22,8 @@ global.director.pushView(new Loading(), 1, 0);//DarkNod
 //初始化场景数据 数据初始化结束之后 取出loading页面
 global.user.initData();
 
+//var b = new Building(null, getData(BUILD, 208), null);
+//global.director.pushView(new LoveDialog(b), 1, 0);
+
+//global.director.pushView(new UpdateDialog(BUILD, 0), 1, 0);
 

@@ -56,6 +56,7 @@ class MapDefense extends MyNode
         health += add;
         if(health <= 0)
         {
+            trace("defenseBreak", health);
             health = 0;
             state = MAP_SOL_DEAD;
             map.defenseBreak(this);
