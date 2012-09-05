@@ -145,7 +145,7 @@ class MakeDrug extends MyNode
             var but1;
             if(needLev == 0)
             {
-                var words = colorWords(getStr("needLev",  ["[LEV]", str(level)]));
+                var words = colorWords(getStr("needLev",  ["[LEV]", str(level+1)]));
 //                trace("needLev words", words);
                 panel.addlabel(words[0], null, 25).pos(555, 33).anchor(0, 50).color(97, 3, 3);
                 panel.addlabel(words[1], null, 25).pos(555+words[2]*25, 33).color(13, 78, 13).anchor(0, 50);

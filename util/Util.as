@@ -20,7 +20,11 @@ function getStr(key, rep)
 {
     var s = strings.get(key);
     if(s == null)
-        return "";
+    {
+        s = SolNames.get(key);
+        if(s == null)
+            return "";
+    }
     if(type(s) == type([]))
     {
         s = s[LANGUAGE];
@@ -247,7 +251,8 @@ function getTimeStr(t)
         res += str(hour)+"h";
     if(min != 0)
         res += str(min)+"m";
-    if(sec != 0)
+    //没有小时或者分钟则显示秒
+    if((hour == 0 || min == 0) && sec != 0)
         res += str(sec)+"s";
     return res;
 }
@@ -576,11 +581,11 @@ function colorWordsNode(str, si, nc, sc)
     var n = node();
     var end = str.split("]");
     var begin = end[0].split("[");
-    var l1 = label(begin[0], null, si).color(nc);
+    var l1 = label(begin[0], null, si, FONT_BOLD).color(nc);
     var l1s = l1.prepare().size();
     n.add(l1);
 
-    var l2 = label(begin[1], null, si).color(sc);
+    var l2 = label(begin[1], null, si, FONT_BOLD).color(sc);
     var l2s = l2.prepare().size();
     l2.pos(l1s[0], 0);
     n.add(l2);
@@ -844,3 +849,39 @@ function stringLines(s, sz, lineHeight, color)
     return n;
 }
 
+//"-"+str(num)
+//"+"+str(num)+"xp"
+//"+"+str(num)+""
+var fetchPlist = 0;
+//const YELLOW = 0;
+//const BLUE = 1;
+function altasWord(c, s)
+{
+    var n = node();
+    var plist = c+".plist";
+    if(fetchPlist == 0)
+    {
+        fetchPlist = 1;
+        load_sprite_sheet("yellow.plist"); 
+        load_sprite_sheet("blue.plist");
+    }
+
+    var offX = 0;
+    var hei = 0;
+    for(var i = 0; i < len(s); i++)
+    {
+        var w = s[i];
+        if(s[i] == "+")
+            w = "plus";
+        else if(s[i] == "-")
+            w = "minus";
+
+        var png = sprite(plist+"/"+w+".png").pos(offX, 0);
+        n.add(png);
+        var si = png.prepare().size();
+        offX += si[0]
+        hei = si[1];
+    }
+    n.size(offX, hei);
+    return n;
+}

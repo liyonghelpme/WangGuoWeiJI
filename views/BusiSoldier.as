@@ -306,9 +306,9 @@ class BusiSoldier extends MyNode
             bloodScaX = 139*100/139;
         }
 
-        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
-            
+        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY).visible(0);
         bloodBanner = backBanner.addsprite("mapSolBlood.png").pos(2, 2);
+
         initHealth();
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

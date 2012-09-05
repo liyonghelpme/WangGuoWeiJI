@@ -44,8 +44,8 @@ class UpgradeSkillDialog extends MyNode
             var posi = possible[min(skillLevel, len(possible)-1)];
 
 
-            var pan = bg.addsprite("chooseStone.png").pos(initX+offX*i, initY).anchor(50, 50).setevent(EVENT_TOUCH, setChoose, i);
-            pan.addsprite(replaceStr(KindsPre[MAGIC_STONE], ["[ID]", str(i)])).pos(54, 82).anchor(50, 50);
+            var pan = bg.addsprite("chooseStone.png", ARGB_8888).pos(initX+offX*i, initY).anchor(50, 50).setevent(EVENT_TOUCH, setChoose, i);
+            pan.addsprite(replaceStr(KindsPre[MAGIC_STONE], ["[ID]", str(i)]), ARGB_8888).pos(54, 82).anchor(50, 50);
 
             pan.addlabel(getStr("sucPos", ["[POS]", str(posi)]), null, 18).pos(57, 20).anchor(50, 50).color(31, 17, 5);
 
@@ -87,7 +87,7 @@ class UpgradeSkillDialog extends MyNode
         var possible = sdata.get("possible");
         var posi = possible[min(level, len(possible)-1)];
 
-        words.text(getStr("magicStoneLevel", ["[NAME]", sdata.get("name"), "[LEV0]", str(level+1), 
+        words.text(getStr("magicStoneLevel", ["[NAME]", sdata.get("name"), "[LEV0]", str(level+1+1), 
                                 "[POS0]", str(posi)]) );
 
         var num = global.user.getGoodsNum(MAGIC_STONE, curChoose);

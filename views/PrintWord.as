@@ -67,7 +67,6 @@ class PrintWord extends MyNode
 
         bg = node();
         init();
-        //lab = bg.addlabel("", null, siz, FONT_NORMAL, width, height, ALIGN_LEFT).color(col);
         lab = bg.addnode();
     }
     override function enterScene()
@@ -75,7 +74,7 @@ class PrintWord extends MyNode
         super.enterScene();
         global.myAction.addAct(this);
         //player = sound.play(-1, 100, 100, 0, 100);
-        sound.play(-1);
+        //sound.play(-1);
     }
     /*
     ord() <= 128 ascii 字符 > 128 汉字
@@ -85,15 +84,20 @@ class PrintWord extends MyNode
     记录当前的字节长度
     []访问的是字节位置
 
-
     访问+1 字符
     +1 +3 字节
     */
+    var startYet = 0;
     function update(diff)
     {
         accTick += 1;
         if(accTick == tick)
         {
+            if(startYet == 0)
+            {
+                startYet = 1;
+                sound.play(-1);
+            }
             accTick = 0;
             if(curLine < len(word))//当前行小于总行数
             {
@@ -151,8 +155,6 @@ class PrintWord extends MyNode
             }
             else//结束弹出场景 压入新的战斗场景
             {
-                //global.director.popScene();
-                //global.director.pushScene();
                 callback();
             }
         }

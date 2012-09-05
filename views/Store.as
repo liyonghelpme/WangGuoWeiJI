@@ -94,11 +94,21 @@ class Store extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        global.user.addListener(this);
+        //global.user.addListener(this);
+        global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
+    }
+    function receiveMsg(param)
+    {
+        var msgId = param[0];
+        if(msgId == UPDATE_RESOURCE)
+        {
+            updateValue(global.user.resource);
+        }
     }
     override function exitScene()
     {
-        global.user.removeListener(this);
+        global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
+        //global.user.removeListener(this);
         super.exitScene();
     }
 
@@ -136,7 +146,7 @@ class Store extends MyNode
                 var ret = checkFarmNum(); 
                 if(ret == 0)
                 {
-                    global.director.pushView(new MyWarningDialog(getStr("farmTooTitle", null), getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1)]), null), 1, 0);
+                    global.director.pushView(new MyWarningDialog(getStr("farmTooTitle", null), getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1+1)]), null), 1, 0);
                     return;
                 }
             }

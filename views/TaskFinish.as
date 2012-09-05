@@ -18,13 +18,13 @@ class TaskFinish extends MyNode
         bg = node().pos(94, 328).size(WIDTH, HEIGHT).clipping(1);
         init();
 
-        right = bg.addsprite("taskBack.png").pos(INITX, 0).addaction(sequence(moveto(600, ENDX, 0), delaytime(1500), fadeout(600)));
+        right = bg.addsprite("taskBack.png").pos(INITX, 0).addaction(sequence(moveto(1200, ENDX, 0), delaytime(2500), fadeout(600)));
         bg.addsprite("taskLeft.png");
 
-        right.addlabel(words, null, 22).pos(35, 15).color(39, 23, 23);
-        right.addlabel(getStr("finishTask", null), null, 22).pos(297, 15).color(17, 71, 18).anchor(100, 0);
+        right.addlabel(words, null, 22).pos(35, 33).color(39, 23, 23).anchor(0, 50);
+        right.addlabel(getStr("finishTask", null), null, 22).pos(297, 33).color(17, 71, 18).anchor(100, 50);
     }
-    const FINISH_TIME = 2600;
+    const FINISH_TIME = 5000;
     var passTime = 0;
     function update(diff)
     {

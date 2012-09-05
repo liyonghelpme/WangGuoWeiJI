@@ -38,6 +38,8 @@ const INSPIRE = 1;
 const ISLAND_LAYER = 1; 
 const CLOUD_LAYER = 2; 
 const FLY_LAYER = 3;
+const MAX_MAP_LAYER = 1000;
+
 
 const FLAG_Z = 1;
 const LOCK_Z = 2;
@@ -192,10 +194,12 @@ var skillAnimate = dict([
     [11, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png", "skill10.plist/skill10a9.png"], 1500, "skill10.plist"]] ,
 
     [16, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png", "skill10.plist/skill10a9.png"], 1500, "skill10.plist"]] ,
-    [15, [
-["skill15a0.png", "skill15a1.png", "skill15a2.png", "skill15a3.png", "skill15a4.png", "skill15a5.png", "skill15a6.png", "skill15a7.png", "skill15a8.png", "skill15a9.png", "skill15a10.png", "skill15a11.png", "skill15a12.png", "skill15a13.png", "skill15a14.png"]
 
-    , 1500]],
+
+    [12, [["skill12.plist/skill12a0.png", "skill12.plist/skill12a1.png", "skill12.plist/skill12a2.png", "skill12.plist/skill12a3.png", "skill12.plist/skill12a4.png", "skill12.plist/skill12a5.png", "skill12.plist/skill12a6.png", "skill12.plist/skill12a7.png"], 1500, "skill12.plist"]] ,
+    [13, [["skill13.plist/skill13a0.png", "skill13.plist/skill13a1.png", "skill13.plist/skill13a2.png", "skill13.plist/skill13a3.png", "skill13.plist/skill13a4.png", "skill13.plist/skill13a5.png", "skill13.plist/skill13a6.png", "skill13.plist/skill13a7.png", "skill13.plist/skill13a8.png", "skill13.plist/skill13a9.png", "skill13.plist/skill13a10.png", "skill13.plist/skill13a11.png", "skill13.plist/skill13a12.png", "skill13.plist/skill13a13.png", "skill13.plist/skill13a14.png"], 1500, "skill13.plist"]] ,
+    [14, [["skill14.plist/skill14a0.png", "skill14.plist/skill14a1.png", "skill14.plist/skill14a2.png", "skill14.plist/skill14a3.png", "skill14.plist/skill14a4.png", "skill14.plist/skill14a5.png", "skill14.plist/skill14a6.png", "skill14.plist/skill14a7.png", "skill14.plist/skill14a8.png", "skill14.plist/skill14a9.png", "skill14.plist/skill14a10.png", "skill14.plist/skill14a11.png"], 1500, "skill14.plist"]] ,
+    [15, [["skill15.plist/skill15a0.png", "skill15.plist/skill15a1.png", "skill15.plist/skill15a2.png", "skill15.plist/skill15a3.png", "skill15.plist/skill15a4.png", "skill15.plist/skill15a5.png", "skill15.plist/skill15a6.png", "skill15.plist/skill15a7.png", "skill15.plist/skill15a8.png", "skill15.plist/skill15a9.png", "skill15.plist/skill15a10.png", "skill15.plist/skill15a11.png"], 1500, "skill15.plist"]] ,
 
 
 ]);
@@ -362,6 +366,7 @@ const TREASURE_STONE = 15;
 const MAGIC_STONE = 16;
 const SKILL = 17;
 const STATUS = 18;
+const MAP_INFO = 19;
 
 
 
@@ -385,6 +390,7 @@ var Keys = [
     magicStoneKey,
     skillsKey,
     statusPossibleKey,
+    mapBloodKey,
 ];
 var CostData = [
     buildingData,
@@ -406,6 +412,7 @@ var CostData = [
     magicStoneData,
     skillsData,
     statusPossibleData,
+    mapBloodData,
 ];
 
 /*
@@ -450,6 +457,7 @@ var KindsPre = [
     "magicStone[ID].png",
     "skill[ID].png",
     "status[ID].png",
+    null,
 ];
 
 //260048  木牌位置
@@ -512,6 +520,9 @@ const UPDATE_TREASURE = 9; //更新宝石数量
 const UPDATE_SKILL = 10;
 const UPDATE_MAGIC_STONE = 11;
 const UPDATE_SKILL_STATE = 12; //战斗地图更新 技能状态  开始释放 确定目标 结束释放
+const UPDATE_RESOURCE = 13;
+const UPDATE_TASK = 14;
+const UPDATE_SOL = 15;
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
@@ -622,10 +633,16 @@ const DARK_BACK = 4;
 
 
 const HeroPos = dict([
-    [480, [576, 355]],
-    [590, [496, 454]],
-    [550, [867, 427]],
-    [440, [550, 574]],
+    [480, [564, 370]],
+    [590, [474, 454]],
+    [550, [579, 558]],
+    [440, [814, 438]],
+]);
+const HeroDir = dict([
+    [480, -100],
+    [590, -100],
+    [550, -100],
+    [440, 100],
 ]);
 
 const WEAPON_SOL = 0;
@@ -707,3 +724,8 @@ const SOL_GAME = 1;
 const MONEY_GAME = 2;
 
 const LOVE_TREE_ID = 208;//等级提升 则 ID 变化
+
+const CHALLENGE_RANK = 0;
+const HEART_RANK = 1;
+
+var CAREER_TIT = ["career0", "career1", "career2", "career3"];

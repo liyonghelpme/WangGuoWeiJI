@@ -119,7 +119,7 @@ class SkillFlowBanner extends MyNode
                                         "[SPEED]", str(soldier.attSpeed),
                                         "[EXP]", str(soldier.exp),
                                         "[NEEDEXP]", str(getLevelUpExp(soldier.id, soldier.level)),
-                                        "[LEV]", str(soldier.level),
+                                        "[LEV]", str(soldier.level+1),
                                         ]), 
                                         18, 20, [0, 0, 0]);
             attributeList.pos(50, 140);

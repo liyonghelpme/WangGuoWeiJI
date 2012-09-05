@@ -11,7 +11,7 @@ class SoldierMenu extends MyNode
         //banner.addlabel(, null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
 
         banner.addsprite("dialogSolLev.png").pos(38, 30).anchor(0, 50);
-        banner.addlabel(str(soldier.level+1), null, 18).anchor(0, 50).pos(101, 30).color(100, 100, 100);
+        banner.addlabel(str(soldier.level+1+1), null, 18).anchor(0, 50).pos(101, 30).color(100, 100, 100);
         banner.addsprite("dialogSolHealth.png").pos(161, 30).anchor(0, 50);
         banner.addlabel(str(soldier.health)+"/"+str(soldier.healthBoundary), null, 18).anchor(0, 50).pos(201, 30).color(100, 100, 100);
         banner.addsprite("dialogSolAtt.png").pos(298, 30).anchor(0, 50);
@@ -29,7 +29,9 @@ class SoldierMenu extends MyNode
         var nameBanner = sprite("soldierMenu.png").pos(12, -33);
         banner.add(nameBanner, -1);
 
-        nameBanner.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", soldier.data.get("name")]) , null, 18).pos(18, 19).anchor(0, 50).color(38, 86, 93, 100);
+        var career = getCareerLev(soldier.id); 
+        var totalName = getStr(CAREER_TIT[career], null)+soldier.data.get("name");
+        nameBanner.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", totalName]) , null, 18).pos(18, 19).anchor(0, 50).color(38, 86, 93, 100);
 
         var tranLevel = getTransferLevel(soldier);
         var w;

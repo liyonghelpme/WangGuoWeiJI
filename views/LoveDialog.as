@@ -17,7 +17,7 @@ class LoveDialog extends MyNode
         init();
         var level = tree.id-LOVE_TREE_ID;
         var data = tree.data;
-        var tit = getStr("loveTree", ["[LEV]", str(level), "[NAME]", data.get("name")]);
+        var tit = getStr("loveTree", ["[LEV]", str(level+1), "[NAME]", data.get("name")]);
         bg.addlabel(tit, null, 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
 
         var w = getStr("moreHeart", null);
@@ -38,7 +38,7 @@ class LoveDialog extends MyNode
         {
             var leftNum = loveTreeHeart[level]-global.user.getValue("accNum");
             w = stringLines(
-                getStr("heartNum", ["[WEEKNUM]", str(global.user.getValue("weekNum")), "[ACCNUM]", str(global.user.getValue("accNum")), "[LEV]", str(level+1), "[LEFTNUM]", str(leftNum)]),
+                getStr("heartNum", ["[WEEKNUM]", str(global.user.getValue("weekNum")), "[ACCNUM]", str(global.user.getValue("accNum")), "[LEV]", str(level+1+1), "[LEFTNUM]", str(leftNum)]),
                 19, 35, [28, 16, 4]);
             
         }
@@ -61,7 +61,8 @@ class LoveDialog extends MyNode
     function onRank()
     {
         global.director.popView();
-        global.director.pushView(new HeartRankDialog(), 1, 0);
+        //global.director.pushView(new HeartRankDialog(), 1, 0);
+        global.director.pushView(new RankDialog(HEART_RANK), 1, 0);
     }
 
     function closeDialog()

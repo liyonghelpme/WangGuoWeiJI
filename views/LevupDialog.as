@@ -33,7 +33,7 @@ class LevupDialog extends MyNode
         //dia.addsprite("soldier1.png").pos(377, 186).anchor(50, 50).size(109, 108);
         //dia.addlabel("name", null, 17).pos(377, 250).anchor(50, 50).color(0, 0, 0);
 
-        dia.addlabel(str(global.user.getValue("level")), null, 35).pos(502, 60).anchor(50, 50).color(100, 100, 100);
+        dia.addlabel(str(global.user.getValue("level")+1), null, 35).pos(502, 60).anchor(50, 50).color(100, 100, 100);
 
         showCastleDialog();
     }

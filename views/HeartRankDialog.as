@@ -44,7 +44,7 @@ class HeartRankDialog extends MyNode
         var clPos = [66, 117];
         var clSize = [665, 338];
 
-        upArrow = sprite("upArrow.png").pos(735, 371);
+        upArrow = sprite("upArrow.png").pos(720, 371).anchor(0, 50);
         bg.add(upArrow, 1);
         showView = new HeartRankBase(clPos, clSize, this);
 

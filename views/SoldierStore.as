@@ -14,7 +14,8 @@ class SoldierStore extends MyNode
 
     //kind id
 
-    var data = [0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 22, 23, 30, 31, 32, 33, 40, 41, 42, 43, 50, 51, 52, 53, 60, 61, 62, 63, 70, 71, 72, 73, 80, 81, 82, 83, 90, 91, 92, 93, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190];
+    //var data = [0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 22, 23, 30, 31, 32, 33, 40, 41, 42, 43, 50, 51, 52, 53, 60, 61, 62, 63, 70, 71, 72, 73, 80, 81, 82, 83, 90, 91, 92, 93, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190];
+    var data;
 
 
     var silverText;
@@ -27,16 +28,22 @@ class SoldierStore extends MyNode
     负责在不同的view 之间进行协调
 
     flowNode 移动的距离 条目数量需要变动
+
+
+    等级满足----> 英雄数量少于上限 可以购买英雄
     */
-    function initSoldierList()
+
+    //全局数据应该拷贝
+    function initData()
     {
+        data = copy(storeSoldier); 
     }
     function SoldierStore(s)
     {
         scene = s;
         bg = sprite("soldierBack.png");
         init();
-        initSoldierList();
+        initData();
 
         cl = bg.addnode().pos(102, 86).size(591, 354).clipping(1);
 
@@ -47,7 +54,7 @@ class SoldierStore extends MyNode
         roleLeft = bg.addsprite("roleArr.png").anchor(50, 50).pos(40, 254).scale(-100, 100).size(40, 60);
         new Button(roleLeft, moveFlow, 1);
         updateTab();
-        initData();
+        initText();
 
         cl.setevent(EVENT_TOUCH, touchBegan);
         //cl.setevent(EVENT_MOVE, touchMoved);
@@ -79,7 +86,7 @@ class SoldierStore extends MyNode
     {
         global.director.popView();
     }
-    function initData()
+    function initText()
     {
         silverText = bg.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(324, 40).color(100, 100, 100);
         goldText = bg.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(481, 40).color(100, 100, 100);
@@ -89,11 +96,13 @@ class SoldierStore extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        global.user.addListener(this);
+        //global.user.addListener(this);
+        global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
     }
     override function exitScene()
     {
-        global.user.removeListener(this);
+        global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
+        //global.user.removeListener(this);
         super.exitScene();
     }
     //MAX 0 MIN 
@@ -108,6 +117,14 @@ class SoldierStore extends MyNode
         var pageNum = (len(data)+ITEM_NUM*ROW_NUM-1)/(ITEM_NUM*ROW_NUM);
         var colNum = pageNum*ITEM_NUM;
         return [max(0, lowCol-1), min(colNum, upCol+1)];
+    }
+    function receiveMsg(param)
+    {
+        var msgId = param[0];
+        if(msgId == UPDATE_RESOURCE)
+        {
+            updateValue(global.user.resource);
+        }
     }
     function updateValue(res)
     {
@@ -217,7 +234,17 @@ class SoldierStore extends MyNode
                     
                 /*
                 canBuy 只表示等级是否足够
+                不显示士兵的初级等职业文字
+                但是怪兽没有这个名字
+
+                头两个字符 去掉
+                但是英文不能这样做 
+
+                显示转职名字需要士兵位置
                 */
+                //if(data.get("solOrMon") == 0)
+                //    panel.addlabel(data.get("name").substr(2), null, 20).pos(pSize[0]/2, 25).anchor(50, 50).color(0, 0, 0);
+                //else
                 panel.addlabel(data.get("name"), null, 20).pos(pSize[0]/2, 25).anchor(50, 50).color(0, 0, 0);
                 panel.put([id, canBuy]);
             }

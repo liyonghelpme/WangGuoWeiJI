@@ -184,6 +184,10 @@ function initAttackAndDefense(sol)
 */
 
 
+function getCareerLev(id)
+{
+    return id%10;
+}
 
 function getTransferLevel(sol)
 {

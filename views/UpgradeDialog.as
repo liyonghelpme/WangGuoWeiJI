@@ -92,7 +92,7 @@ class UpgradeDialog extends MyNode
             pos1 = possible[ed.get("level")][1];
         }
 
-        words.text(getStr("stoneLevel", ["[NAME]", sdata.get("name"), "[LEV0]", str(ed.get("level")+1), 
+        words.text(getStr("stoneLevel", ["[NAME]", sdata.get("name"), "[LEV0]", str(ed.get("level")+1+1), 
                                 "[POS0]", str(pos0), "[POS1]", str(pos1)]) );
         var num = global.user.getGoodsNum(TREASURE_STONE, curChoose);
         if(num == 0)

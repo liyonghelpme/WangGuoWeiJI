@@ -16,11 +16,14 @@
     bg.size()*150/100;
 
     不是800 480 大小的图片 不适合做scene
+
+
+    场景 --->map ----> 士兵 ---> 黑色图层--->士兵位置
 */
 
 class SelectHero extends MyNode
 {
-    var touchDelegate;
+    //var touchDelegate;
     var dia0;
     var dia1;
     var cmd = [];
@@ -28,40 +31,56 @@ class SelectHero extends MyNode
     var initYet = 0;
     var menuLayer = null;
     var heros = [440, 480, 550, 590];
-    var dirs = [-100, -100, 100, -100];
+    //var dirs = [-100, -100, 100, -100];
     var heroPic = [];
+    var mapNode;
+    var map;
+    function getMapNormalScale()
+    {
+        return 810*100/1200;
+    }
     function SelectHero()
     {
-        bg = sprite("battleEnd.jpg");
+        //bg = sprite("battleEnd.jpg");
+        bg = node();
         init();
+
+        mapNode = new MyNode();
+        map = sprite("battleEnd.jpg", ARGB_8888);
+        mapNode.bg = map;
+        //bg.add(map, 1);
+        addChildZ(mapNode, 1);
         for(var i = 0; i < len(heros); i++)
         {
             var hid = heros[i];
-            var h = bg.addsprite("hero"+str(hid)+"n.png", ARGB_8888).pos(HeroPos.get(hid)).anchor(50, 100).scale(dirs[i], 100);
+            //var h = map.addsprite("hero"+str(hid)+"n.png", ARGB_8888).pos(HeroPos.get(hid)).anchor(50, 100).scale(dirs[i], 100);
+            var h = map.addsprite("hero"+str(hid)+"l.png", ARGB_8888).pos(HeroPos.get(hid)).scale(HeroDir.get(hid), 100).anchor(50, 100);
             heroPic.append(h);
 
         }
-        dia0 = bg.addsprite("dialogBack0.png").pos(592, 138).visible(0);
-        dia1 = bg.addsprite("dialogBack1.png").pos(637, 243).visible(0);
+        dia0 = map.addsprite("dialogBack0.png").pos(592, 138).visible(0);
+        dia1 = map.addsprite("dialogBack1.png").pos(637, 243).visible(0);
         
         //dia0.addlabel(getStr("dearKing", null), null, 21, FONT_BOLD, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
         //dia1.addlabel(getStr("dearSuo", null), null, 21, FONT_BOLD, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
 
-        touchDelegate = new StandardTouchHandler();
+        //touchDelegate = new StandardTouchHandler();
         setCommand();
     }
     //0 1 dialogPanel
     function setCommand()
     {
-        cmd.append([SETPOS, [600, 360]]);
+        var NORMAL = getMapNormalScale();
+        //cmd.append([SETPOS, [600, 360]]);
+        cmd.append([CLOSEUP, [0, [0, 0], NORMAL]]);
         cmd.append([WAIT, 2000]);
-        cmd.append([CLOSEUP, [2000, [476, 228], 150]]);
+        cmd.append([CLOSEUP, [2000, [237, 64], 100]]);
         cmd.append([SPEAK_NOW, [2000, "kingWeBack", 0]]);
 
-        cmd.append([CLOSEUP, [1000, [200, 120], 100]]);
-        cmd.append([CLOSEUP, [1000, [688, 310], 150]]);
+        cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
+        cmd.append([CLOSEUP, [1000, [285, 141], 100]]);
         cmd.append([SPEAK_NOW, [2000, "rebuildHome", 1]]);
-        cmd.append([CLOSEUP, [1000, [200, 120], 100]]);
+        cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
         cmd.append([DARK_BACK]);
         initYet = 1;
     }
@@ -78,9 +97,9 @@ class SelectHero extends MyNode
     //将p点至于屏幕中心
     function setpos(p)
     {
-        var px = global.director.disSize[0]/2-p[0];
-        var py = global.director.disSize[1]/2-p[1];
-        bg.pos(px, py);
+        //var px = global.director.disSize[0]/2-p[0];
+        //var py = global.director.disSize[1]/2-p[1];
+        //bg.pos(px, py);
     }
     //当前位置 特写到莫个位置 
     //镜头拉近 12 215 位置 在 1.5倍后的位置
@@ -89,18 +108,8 @@ class SelectHero extends MyNode
 
     function closeUp(t, p, rate)
     {
-        bg.addaction(moveto(t, -p[0], -p[1]));
-        bg.addaction(scaleto(t, rate, rate));
-        /*
-        var bSize = bg.size();
-        bSize[0] *= rate;
-        bSize[0] /= 100;
-
-        bSize[1] *= rate;
-        bSize[1] /= 100;
-        
-        var curPos = global.directorbg.pos()
-        */
+        map.addaction(moveto(t, -p[0], -p[1]));
+        map.addaction(scaleto(t, rate, rate));
     }
     var w;
     var passTime = 0;
@@ -187,7 +196,7 @@ class SelectHero extends MyNode
                         heroPic[i].removefromparent();
                     }
                     menuLayer = new SelectMenu(this, curStep);
-                    addChild(menuLayer);
+                    addChildZ(menuLayer, 2);
                     curCmd++;
                 }
             }

@@ -714,4 +714,24 @@ class Building extends MyNode
             lockAni = null;
         }
     }
+
+    function beginPlant(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            var cost = param[0];
+            var id = param[1];
+
+            global.user.doCost(cost);
+            trace("removeLock");
+            removeLock();
+            funcBuild.beginPlant(id); 
+
+            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [PLANT, id]);
+        }
+        else
+        {
+            removeLock();
+        }
+    }   
 }

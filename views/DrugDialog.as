@@ -332,11 +332,14 @@ class DrugDialog extends MyNode
         {
             updateTab(); 
         }
+        else if(msgId == UPDATE_SOL)
+            updateSoldier(para[1]);
     }
     override function enterScene()
     {
         super.enterScene();
-        global.user.addSoldierListener(this);
+        //global.user.addSoldierListener(this);
+        global.msgCenter.registerCallback(UPDATE_SOL, this);
         updateSoldier(soldier);
 
         if(kind == EQUIP)
@@ -347,7 +350,8 @@ class DrugDialog extends MyNode
         if(kind == EQUIP)
             global.msgCenter.removeCallback(UPDATE_EQUIP, this);
 
-        global.user.removeSoldierListener(this);
+        //global.user.removeSoldierListener(this);
+        global.msgCenter.removeCallback(UPDATE_SOL, this);
         super.exitScene();
     }
 

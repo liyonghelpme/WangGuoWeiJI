@@ -19,7 +19,10 @@ class Flag extends MyNode
         showArr = sA;
 //        trace("showArr", showArr);
         if(showArr == 1)
+        {
             flag.addsprite("mapArrow.png").anchor(50, 100).pos(FLAG_SX/2, -20).addaction( repeat(moveby(500, 0, -20), moveby(500, 0, 20)) );
+            global.director.curScene.addChildZ(new UpgradeBanner(getStr("onFlag", null), [100, 100, 100]), MAX_MAP_LAYER);
+        }
     }
     /*
     function update(diff)
@@ -96,9 +99,13 @@ class LevelSelectLayer extends MyNode
             new Button(b.bg, onSmall, i);
         }
         for(; i < len(flagPos[index]); i++){
-            var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29);
+            var b2 = sprite("map_flag_notcomplete.png").pos(flagPos[index][i]).size(20, 29).setevent(EVENT_TOUCH, onNotOpen);
             islandLayer.add(b2, FLAG_Z);
         }
+    }
+    function onNotOpen()
+    {
+        global.director.curScene.addChildZ(new UpgradeBanner(getStr("onNotOpen", null), [100, 100, 100]), MAX_MAP_LAYER);
     }
     //大关  
     function LevelSelectLayer(param, s){
@@ -198,8 +205,7 @@ class LevelSelectLayer extends MyNode
             mon, CHALLENGE_MON, null, null
 
         ));
-        if(global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
-            global.director.pushView(new NoTipDialog(), 1, 0);
+
     }
     function selectDiff(param)
     {

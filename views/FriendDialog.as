@@ -110,7 +110,7 @@ class FriendList extends MyNode
                     panel.addlabel(name, null, 20).pos(66, 53).anchor(50, 50).color(0, 0, 0);
                     panel.addsprite("roleLevel.png").pos(96, 80).anchor(50, 50).size(40, 40);
 
-                    panel.addlabel(str(level), null, 15).pos(96, 80).anchor(50, 50).color(0, 0, 0);
+                    panel.addlabel(str(level+1), null, 15).pos(96, 80).anchor(50, 50).color(0, 0, 0);
 
 
                     //访问好友 清除其士兵的状态可以得到水晶 但是邻居

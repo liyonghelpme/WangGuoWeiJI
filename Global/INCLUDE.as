@@ -49,6 +49,7 @@ import views.DialogController;
 import views.UpdateDialog;
 //菜单
 import views.MenuLayer;
+import views.ShadowWords;
 
 
 //商店
@@ -85,8 +86,10 @@ import views.SkillDialog;
 import views.UpgradeSkillDialog;
 import views.TrainDialog;
 import views.LoveDialog;
-import views.HeartRankDialog;
-import views.HeartRankBase;
+
+//import views.HeartRankDialog;
+//import views.HeartRankBase;
+
 import views.LiveHeartDialog;
 
 import views.TrainScene;

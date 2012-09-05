@@ -35,11 +35,6 @@ class HeartRankBase extends MyNode
     var preMin;
     var curRank;
 
-    function getUserRow()
-    {
-        var rowBegin = curRank/ITEM_NUM;
-        return rowBegin;
-    }
     var lock = null;
 
     function update(diff)
@@ -542,21 +537,18 @@ class HeartRankBase extends MyNode
         if(uid == global.user.uid)
             return;
 
-        var shadow = sprite("dialogRankShadow.png").pos(PANEL_WIDTH/2, PANEL_HEIGHT/2).anchor(50, 50);
-//        trace("child", child, shadow);
+        var pSize = child.prepare().size();
+        var shadow = sprite("dialogRankShadow.png").pos(pSize[0]/2, pSize[1]/2).anchor(50, 50).size(pSize[0], pSize[1]);
         child.add(shadow, 100, 1);
 
-
-        var but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit, curNum);
+        var but0 = shadow.addsprite("greenButton.png").pos(66, 59).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit, curNum);
         but0.addlabel(getStr("visit", null), null, 21).pos(47, 19).anchor(50, 50);
-
-        //but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+40+16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeHero, curNum);
-        //but0.addlabel(getStr("challengeHero", null), null, 21).pos(47, 19).anchor(50, 50);
 
         //未挑战过 且不是自身
         if(global.user.checkChallengeYet(uid) == 0 )//挑战自身显示按钮 || uid == global.user.uid
         {
-            but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+56+56).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
+
+            but0 = shadow.addsprite("greenButton.png").pos(66, 106).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
             but0.addlabel(getStr("challengeGroup", null), null, 21).pos(47, 19).anchor(50, 50);
             
         }

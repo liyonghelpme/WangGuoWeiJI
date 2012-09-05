@@ -11,6 +11,8 @@ class UpgradeBanner extends MyNode
 {
     function UpgradeBanner(w, col)
     {
+        if(col == null)
+            col = [100, 100, 100];
         bg = sprite("storeBlack.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         var word = bg.addlabel(w, null, 23).pos(154, 25).anchor(50, 50).color(col);
 
@@ -24,6 +26,6 @@ class UpgradeBanner extends MyNode
         var nBsize = bg.size();
         word.pos(nBsize[0]/2, nBsize[1]/2);
 
-        bg.addaction(sequence(delaytime(2000), callfunc(removeSelf)));
+        bg.addaction(sequence(delaytime(3000), callfunc(removeSelf)));
     }
 }

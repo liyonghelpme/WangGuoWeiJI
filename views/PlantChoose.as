@@ -63,10 +63,14 @@ class PlantChoose extends MyNode
             panel.addsprite(key+".png").pos(31, 24).anchor(50, 50).size(30, 30);
             panel.addlabel(str(val), null, 18).anchor(0, 50).pos(51, 24).color(cl[0], 0, 0);
 
-            panel.addlabel(getTimeStr(planting.get("time")), null, 18).anchor(0, 50).pos(7, 50).color(0, 0, 0);
 
-            panel.addsprite("exp.png").size(30, 30).pos(80, 50).anchor(100, 50);
-            panel.addlabel(str(planting.get("exp")), null, 18).pos(83, 50).color(0, 0, 0).anchor(0, 50);
+
+            var tStr = panel.addlabel(getTimeStr(planting.get("time")), null, 15).anchor(0, 50).pos(8, 50).color(0, 0, 0);
+            var tSize = tStr.prepare().size();
+            
+            panel.addsprite("exp.png").size(30, 30).pos(89, 50).anchor(100, 50);
+            panel.addlabel(str(planting.get("exp")), null, 15).pos(92, 50).color(0, 0, 0).anchor(0, 50);
+
 
             panel.addsprite("silver.png").pos(31, 76).anchor(50, 50).size(30, 30);
             panel.addlabel(str(planting.get("gainsilver")), null, 18).anchor(0, 50).pos(51, 76).color(0, 0, 0);
@@ -142,9 +146,11 @@ class PlantChoose extends MyNode
                     global.director.pushView(
                         new MyWarningDialog(getStr("resNot", null), getStr("resLack", ["[NAME]", getStr(key, null),  "[NUM]", str(buyable[key])]),  null), 1, 0);
                 }
+                //回调函数的上下文可能已经失去 
                 else
                 {
-                    global.httpController.addRequest("buildingC/beginPlant", dict([["uid", global.user.uid], ["bid", building.bid], ["objectId", child.get()]]), beginPlant, [cost, child.get()]);
+                    var callback = building.beginPlant;
+                    global.httpController.addRequest("buildingC/beginPlant", dict([["uid", global.user.uid], ["bid", building.bid], ["objectId", child.get()]]), callback, [cost, child.get()]);
                     building.waitLock("feeding");
                     closeCastleDialog();
                 }
@@ -156,12 +162,14 @@ class PlantChoose extends MyNode
         oldPos[1] = sel*Height;
         flowNode.pos(oldPos[0], oldPos[1]);
     }
+    /*
     function beginPlant(rid, rcode, con, param)
     {
         if(rcode != 0)
         {
             var cost = param[0];
             var id = param[1];
+            var building = param[2];
 
             global.user.doCost(cost);
             building.removeLock();
@@ -169,5 +177,6 @@ class PlantChoose extends MyNode
 
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [PLANT, id]);
         }
-    }   
+    } 
+    */
 }

@@ -24,7 +24,7 @@ class MenuLayer extends MyNode
     */
     var gloryLevText;
     //var sensor = null;
-    
+    var levelLabel;
     function MenuLayer(s) {
         scene = s;
 //        trace("pushMenuLayer");
@@ -34,13 +34,18 @@ class MenuLayer extends MyNode
         init();
 
 
-
         taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(50,50).pos(61, 78).rotate(0).setevent(EVENT_TOUCH, onTask);
         taskFin = taskbutton.addsprite("taskFin.png").pos(75, 19).anchor(50, 50).visible(0);
-        finNum = taskFin.addlabel("", null, 15).pos(17, 17).anchor(50, 50).color(0, 0, 0);
+        finNum = taskFin.addlabel("", null, 20).pos(17, 17).anchor(50, 50).color(0, 0, 0);
 
         expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
         expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(50, 50).pos(144,60).rotate(0);
+        
+        //levelLabel = banner.addlabel("0", null, 15).anchor(0, 50).pos(114, 65).color(76, 97, 34);
+        levelLabel = new ShadowWords("0", 18, [76, 97, 34]);
+        levelLabel.bg.anchor(0, 50).pos(114, 63);
+        banner.add(levelLabel.bg);
+
         collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(50,50).pos(253, 100).rotate(0).setevent(EVENT_TOUCH, openGlory);
 
         rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,98).rotate(0).setevent(EVENT_TOUCH, openCharge);
@@ -110,20 +115,28 @@ class MenuLayer extends MyNode
     {
         super.enterScene();
 //        trace("menuLayer enterScene");
-        global.user.addListener(this);
-        global.user.addTaskListener(this);
+        //global.user.addListener(this);
+        //global.user.addTaskListener(this);
+
+        global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
+        global.msgCenter.registerCallback(UPDATE_TASK, this);
+
+
         updateValue(global.user.resource);
         updateTaskState();
         //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
     }
-    /*
-    function menuDisappear(stype, ax, ay, az)
-    {
-        var acc = sqrt(ax*ax+ay*ay+az*az);
-//        trace("accelemeter", acc);
 
+    function receiveMsg(param)
+    {
+        var msgId = param[0];
+        if(msgId == UPDATE_RESOURCE)
+        {
+            updateValue(global.user.resource);
+        }
+        else if(msgId == UPDATE_TASK )
+            updateTaskState();
     }
-    */
     function updateTaskState()
     {
         var num = global.user.getCurFinTaskNum();
@@ -135,8 +148,11 @@ class MenuLayer extends MyNode
     }
     override function exitScene()
     {
-        global.user.removeListener(this);
-        global.user.removeTaskListener(this);
+        global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
+        global.msgCenter.removeCallback(UPDATE_TASK, this);
+        //global.user.removeListener(this);
+
+        //global.user.removeTaskListener(this);
         super.exitScene();
     }
     /*
@@ -153,6 +169,7 @@ class MenuLayer extends MyNode
         //var needExp = global.user.getNeedExp(level);
         var needExp = getLevelUpNeedExp(level);
         expfiller.size(exp*108/needExp, 12);
+        levelLabel.setWords(str(level+1));
     }
     function updateValue(res)
     {
@@ -165,7 +182,18 @@ class MenuLayer extends MyNode
         //var needExp = global.user.getNeedExp(level);
         var needExp = getLevelUpNeedExp(level);
 //        trace("needExp", needExp, exp);
-        expfiller.size(exp*108/needExp, 12);
+
+        var lastExpSize = expfiller.prepare().size()[0];
+        var nowSize = exp*108/needExp;
+        if(nowSize > lastExpSize)
+        {
+            expfiller.addaction(sizeto(500, nowSize, 12));
+            //expfiller.size(exp*108/needExp, 12);
+        }
+        else 
+            expfiller.size(nowSize, 12);
+
+        levelLabel.setWords(str(level+1));
     }
     /*
     管理菜单的显示和隐藏

@@ -14,6 +14,29 @@ class FlyObject extends MyNode
     */
     const FLY_WIDTH = 30;
     const FLY_HEIGHT = 30;
+    //回调函数避免在callfunction 中调用
+    function update(diff)
+    {   
+        if(num == 0)
+        {
+            removeSelf();
+            global.user.doAdd(cost);
+            if(callback != null)
+                callback();       
+        }
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.myAction.addAct(this);
+    }
+
+    override function exitScene()
+    {
+        global.myAction.removeAct(this);
+        super.exitScene();
+    }
+
     function FlyObject(obj, c, cb)
     {
         trace("FlyObject", obj, c, cb);
@@ -81,12 +104,5 @@ class FlyObject extends MyNode
         n.removefromparent();
         trace("flyOver", num);
         num--;
-        if(num == 0)
-        {
-            removeSelf();
-            global.user.doAdd(cost);
-            if(callback != null)
-                callback();       
-        }
     }
 }

@@ -162,9 +162,6 @@ class Farm extends FuncBuild
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
         }
     }
-    override function setPos()
-    {
-    }
     override function initWorking(data)
     {
 //        trace("planting", data);
@@ -197,12 +194,20 @@ class Farm extends FuncBuild
     */
     function beginPlant(id)
     {
+        trace("beginPlant0");
         baseBuild.setState(Working);
 
+        trace("beginPlant1");
         var plant = getData(PLANT, id);//getPlant(id);
+
+        trace("beginPlant2");
         planting = new Plant(baseBuild, plant, null);
+
+        trace("beginPlant3");
         baseBuild.addChild(planting);
         //建筑状态也需要改变
+
+        trace("beginPlant4");
         global.user.updateBuilding(baseBuild);
         trace("planting", id);
     }

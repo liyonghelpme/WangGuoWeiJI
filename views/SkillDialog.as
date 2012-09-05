@@ -36,8 +36,11 @@ class SkillDialog extends MyNode
     }
     function initData()
     {
-        var skillId = soldier.data.get("skillId");
-        data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, skillId];
+        var skillId = heroSkill.get(soldier.id);
+        //var skillId = soldier.data.get("skillId");
+        data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        if(skillId != null)
+            data.append(skillId);
     }
     //s 操作士兵对象 k 药品或者 武器 复活药水
     //0 1 2 3 stoneNum
@@ -154,7 +157,7 @@ class SkillDialog extends MyNode
             else 
             {
                 panel.addsprite("skillLevel.png").pos(84, 53).anchor(50, 50);
-                panel.addlabel(getStr("skillLevel", ["[LEV]", str(level)]), null, 15).pos(84, 53).anchor(50, 50).color(0, 100, 0);
+                panel.addlabel(getStr("skillLevel", ["[LEV]", str(level+1)]), null, 15).pos(84, 53).anchor(50, 50).color(0, 100, 0);
 
                 if(objData.get("kind") == MAKEUP_SKILL)//变身技能只能升级
                 {

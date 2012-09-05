@@ -74,7 +74,9 @@ class LiveHeartDialog extends MyNode
     function onRank()
     {
         global.director.popView();
-        global.director.pushView(new HeartRankDialog(), 1, 0);
+        //global.director.pushView(new HeartRankDialog(), 1, 0);
+        global.director.pushView(new RankDialog(HEART_RANK), 1, 0);
+
     }
 
     function closeDialog()

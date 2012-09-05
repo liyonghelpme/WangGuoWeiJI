@@ -25,12 +25,13 @@ class BattleScene extends MyNode
     var big;
     var small;
 
-    var state = MAP_FINISH_SKILL;
+    var state = MAP_ARRANGE;
 
     var skillSoldier;
     var skillId;
     var sceneSlowTimer;
     var drugId;
+    var dialogController;
     function cancelSkill()
     {
         skillSoldier = null;
@@ -88,7 +89,10 @@ class BattleScene extends MyNode
     {
         sceneSlowTimer = new Timer(200);
         super.enterScene();
-        global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100]));
+
+        bg.setevent(EVENT_KEYDOWN, quitMap);
+        bg.focus(1);
+        //global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100]));
     }
     override function exitScene()
     {
@@ -117,10 +121,21 @@ class BattleScene extends MyNode
     //uid, papayaId, score rank cityDefense
     function BattleScene(k, sm, s, ki, par, eq)
     {
+
         param = par;
         kind = ki;
         bg = node();
         init();
+        dialogController = new DialogController();
+        addChild(dialogController);
+
+        if(global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
+        {
+            //global.director.pushView(new NoTipDialog(), 1, 0);
+            dialogController.addCmd(dict([["cmd", "noTip"]]));
+        }
+        dialogController.addCmd(dict([["cmd", "chooseSol"]]));
+
         big = k;
         small = sm;
         map = new Map(k, sm, s, this, eq);
@@ -140,6 +155,7 @@ class BattleScene extends MyNode
             return param[4];
         return 0;
     }
+    //var inArrange = 1;
     function finishArrange()
     {
         banner.removeSelf();
@@ -147,6 +163,8 @@ class BattleScene extends MyNode
         map.finishArrange();
         pausePage = new MapPause(this);
         addChild(pausePage);
+        //inArrange = 0;
+        state = MAP_FINISH_SKILL;
     }
     function setSkillSoldier(sol)
     {
@@ -170,6 +188,16 @@ class BattleScene extends MyNode
         sceneSlowTimer.gameRestart();
     }
 
+    function quitMap(n, e, p, kc)
+    {
+        if(kc == KEYCODE_BACK)
+        {
+            if(state == MAP_ARRANGE) 
+                global.director.popScene();
+            else 
+                pausePage.onPause();
+        }
+    }
     function clearSoldier(so)
     {
         banner.clearSoldier(so);

@@ -1,5 +1,3 @@
-
-
 //default left
 /*
 布局的时候 拖出 0-24 的范围就认为是归还给系统
@@ -76,7 +74,10 @@ class Soldier extends MyNode
     var sid;
 
     //[color kindId] 只有在受到攻击的时候才会显示血条 一会接着消失
-    var bloodBanner;
+    //blu
+    var redBlood;
+    //var bloodBanner;
+    var greenBlood;
 
     var bloodTotalLen = 134;
     var bloodHeight = 9;
@@ -300,11 +301,25 @@ class Soldier extends MyNode
         }
 
         backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
+        bloodTotalLen = backBanner.prepare().size()[0];
+        bloodHeight = backBanner.prepare().size()[1];
+        if(color == ENECOLOR)
+            backBanner.visible(0);//初始敌人血条不显示
         //var filter = WHITE;
         //if(color == 0)
         //    filter = BLUE;
-            
-        bloodBanner = backBanner.addsprite("mapSolBlood.png").pos(2, 2);
+        var mInfo = getData(MAP_INFO, map.kind);
+
+        redBlood = backBanner.addsprite("mapSolBloodRed.png");
+        if(color == MYCOLOR)
+        {
+            if(mInfo["blood"] == 0)
+                greenBlood = backBanner.addsprite("mapSolBloodBlue.png");
+            else if(mInfo["blood"] == 1)
+                greenBlood = backBanner.addsprite("mapSolBloodGreen.png");
+        }
+        else
+            greenBlood = backBanner.addsprite("mapSolBloodYellow.png");
 
         /*
         if(color == 0)//nameBanner
@@ -370,6 +385,7 @@ class Soldier extends MyNode
         addExp += e;
         exp += e; 
         
+        /*
         //为了游戏流畅 在中间过程可以不写数据库 在结算经验的 被攻击方处 更新所有士兵状态
         if(state != MAP_SOL_DEAD)
         {
@@ -378,11 +394,34 @@ class Soldier extends MyNode
             temp.addlabel("+"+str(e), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
         }
+        //bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
+        */
+        if(state != MAP_SOL_DEAD)
+        {
+            var expPng = altasWord("blue", "+"+str(e)+"xp");
+            bg.add(expPng);
+            expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
+        }
     }
     function initHealth()
     {
-        var sx = bloodTotalLen*health/healthBoundary;
-        bloodBanner.size(sx, bloodHeight);
+        var oldSize = greenBlood.prepare().size();
+        var sx = max(bloodTotalLen*health/healthBoundary, 0);
+
+        redBlood.stop();
+        if(sx < oldSize[0])
+        {
+            var difX = oldSize[0]-sx;
+            var spe = bloodTotalLen/2;//speed /s
+            var t = max(difX*1000/spe, 400);//ms
+            redBlood.addaction(sizeto(t, sx, bloodHeight));
+        }
+        else
+        {
+            redBlood.size(sx, bloodHeight);
+        }
+       
+        greenBlood.size(sx, bloodHeight);
     }
 
     //不能在callfunc中调用
@@ -397,11 +436,12 @@ class Soldier extends MyNode
 
         health += add;
 
-        var sx = bloodTotalLen*max(health, 0)/healthBoundary;
-        bloodBanner.size(sx, bloodHeight);
+        //var sx = bloodTotalLen*max(health, 0)/healthBoundary;
+        //bloodBanner.size(sx, bloodHeight);
+        initHealth();
         
         var cs = changeDirNode.size();
-        if(sol.kind == 0 || sol.kind == 1)//近战远程 物理溅血
+        if(sol.kind == CLOSE_FIGHTING || sol.kind == LONG_DISTANCE)//近战远程 物理溅血
         {
             var bl = sprite().pos(50, 50).pos(cs[0]/2, cs[1]/2).addaction(sequence(animate(700, "hurt0.png", "hurt1.png","hurt2.png","hurt3.png","hurt4.png","hurt5.png","hurt6.png", UPDATE_SIZE), callfunc(removeTempNode)));
             changeDirNode.add(bl, 10);
@@ -412,7 +452,22 @@ class Soldier extends MyNode
         }
         var bSize = bg.size();
         //bg 的size和图片的size大小相同
-        bg.addlabel(str(add), null, 30).pos(bSize[0]/2, -5).color(100, 0, 0).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), callfunc(removeTempNode)));
+        var bWord;
+        if(add < 0)
+            bWord = altasWord("yellow", str(add));
+        else
+            bWord = altasWord("blue", "+"+str(add));
+        //var wS = bWord.size()[1];
+        //bWord.scale()
+        //bg.addlabel(str(add), null, 30).pos(bSize[0]/2, -5).color(100, 0, 0).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), callfunc(removeTempNode)));
+        bg.add(bWord);
+        bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
+
+
+        if(health < healthBoundary)
+            backBanner.visible(1);
+        else
+            backBanner.visible(0);
     }
 
 
@@ -462,6 +517,7 @@ class Soldier extends MyNode
             map.moveGrid(this);
             setZord(MAX_SOL_ZORD);
             map.clearMap(this);
+            map.scene.banner.setCurChooseSol(this);
         }
         else
         {
@@ -658,6 +714,11 @@ class Soldier extends MyNode
             nameBanner.removeSelf();
             nameBanner = null;
         }
+        //生命值小于上限则显示血条
+        if(health < healthBoundary)
+            backBanner.visible(1);
+        else 
+            backBanner.visible(0);
     }
     function getDir()
     {

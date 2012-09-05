@@ -11,6 +11,7 @@ import Global.INCLUDE;
 //global.director.pushScene(new SelectHero());
 
 //global.director.pushScene(new WelcomeDialog());
+//global.director.pushScene(new SelectHero());
 //global.director.pushScene(new NewBattle());
 
 

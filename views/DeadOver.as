@@ -10,7 +10,7 @@ class DeadOver extends MyNode
 {
     var soldier;
     var cs;
-    const FALL_TIME = 700;
+    const FALL_TIME = 1500;
     var changeDirNode;
     function DeadOver(sol)
     {
@@ -37,16 +37,39 @@ class DeadOver extends MyNode
                 itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
                 irotateby(-dir),
                 fadeout(1000)) 
-        );
 
-        var blood = sprite("blood.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
+                tintto(200, 100, 100, 100, 0),
+                tintto(200, 100, 100, 100, 100),
+                tintto(200, 100, 100, 100, 0),
+                tintto(200, 100, 100, 100, 100),
+                tintto(200, 100, 100, 100, 0)
+        );
+        /*
+        changeDirNode.addaction(
+            sequence(
+                delaytime(500),
+                moveby(500, 0, -15), 
+                spawn(rotateby(1000, dir), moveby(1000, 0, 5+cs[1]/2)), 
+                itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
+                irotateby(-dir),
+                tintto(200, 100, 100, 100, 0),
+                tintto(200, 100, 100, 100, 100),
+                tintto(200, 100, 100, 100, 0),
+                tintto(200, 100, 100, 100, 100),
+                tintto(200, 100, 100, 100, 0)
+            )
+        );
+        */
+        //横向调整 血液位置
+        var blood = sprite("blood.png").anchor(50, 50).pos(cs[0]/2, cs[1]/2);
         soldier.bg.add(blood, -1);
         blood.addaction( 
             sequence(
                 itintto(0, 0, 0, 0), 
-                delaytime(FALL_TIME), 
+                delaytime(FALL_TIME),
                 itintto(100, 100, 100, 100), 
-                fadeout(2000))
+                fadeout(1000+1000)
+            )
         );
     }
 }

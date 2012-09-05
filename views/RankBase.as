@@ -24,12 +24,16 @@ class RankBase extends MyNode
     var preMax;
     var preMin;
 
+    var curRank;
+
+    /*
     function getUserRow()
     {
         var rankOrder = global.user.rankOrder;
         var rowBegin = rankOrder/ITEM_NUM;
         return rowBegin;
     }
+    */
     var lock = null;
 
     function update(diff)
@@ -68,13 +72,25 @@ class RankBase extends MyNode
 
     var scene;
     var flowLayer;
+    var URL_API;
     function RankBase(p, s, sc)
     {
         scene = sc;
+        if(scene.kind == CHALLENGE_RANK)
+        {
+            curRank = global.user.rankOrder; 
+            URL_API = "challengeC/getRank";
+        }
+        else if(scene.kind == HEART_RANK)
+        {
+            curRank = global.user.heartRank;
+            URL_API = "friendC/getHeartRank";
+        }
+
         bg = node().pos(p).size(s).clipping(1);
         init();
 
-        var row = global.user.rankOrder/ITEM_NUM;
+        var row = curRank/ITEM_NUM;
         flowNode = bg.addnode().pos(0, -row*OFFY); 
 
 
@@ -290,7 +306,7 @@ class RankBase extends MyNode
         if(initYet == 1)
         {
             //data = [];
-            var rowBegin = global.user.rankOrder/ITEM_NUM;   
+            var rowBegin = curRank/ITEM_NUM;   
             flowNode.pos(0, -rowBegin*OFFY);
             updateTab();
         }
@@ -308,7 +324,7 @@ class RankBase extends MyNode
         var upRow = min((-curPos[1]+HEIGHT+OFFY-1)/OFFY, (maxRank+ITEM_NUM-1)/ITEM_NUM);
         var rowNum = (maxRank+ITEM_NUM-1)/ITEM_NUM;
 
-        var myRow = global.user.rankOrder/ITEM_NUM;
+        var myRow = curRank/ITEM_NUM;
         if(lowRow < myRow)
         {
             scene.upArrow.scale(100, -100).setevent(EVENT_TOUCH, onDown);
@@ -357,7 +373,7 @@ class RankBase extends MyNode
                 preMax = endRank;
                 preMin = beginRank;
                 //考虑最小最大范围
-                global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 2);
+                global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 2);
 
 
             }
@@ -371,7 +387,7 @@ class RankBase extends MyNode
                     limit = beginItem-beginRank;
                     fetchData = 1;
                     preMin = beginRank;
-                    global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 0);
+                    global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 0);
                 }
                 else if((endRank-1) > endItem && endItem < maxRank)//下部缓存数据不足 且下部没有到达最后
                 {
@@ -380,7 +396,7 @@ class RankBase extends MyNode
                     fetchData = 1;
                     preMax = endRank;
                     // 当前数据中的 >= endItem 
-                    global.httpController.addRequest("challengeC/getRank", dict([["uid", global.user.uid], ["offset", endItem+1], ["limit", limit]]), getRankOver, 1);
+                    global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", endItem+1], ["limit", limit]]), getRankOver, 1);
                 }
             }
         }
@@ -426,11 +442,11 @@ class RankBase extends MyNode
                 panel.scale(sca);
 
                 panel.addsprite("dialogRankCup.png").anchor(50, 50).pos(35, 23);
-                panel.addlabel(str(data[diff][3]), null, 20).anchor(50, 50).pos(88, 23).color(0, 0, 0);
+                panel.addlabel(str(data[diff][3]), null, 23, FONT_BOLD).anchor(50, 50).pos(66, 23).color(0, 0, 0);
                 
                 var papayaId = data[diff][1];
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(69, 105);
-                panel.addlabel(data[diff][4], null, 20).anchor(50, 50).pos(66, 53).color(0, 0, 0);
+                panel.addlabel(data[diff][4], null, 23, FONT_BOLD).anchor(50, 50).pos(66, 53).color(0, 0, 0);
 
                 panel.put(curNum);
                 if(curNum == selectNum)
@@ -527,25 +543,23 @@ class RankBase extends MyNode
         var rank = data[diff][3];
         /*
         挑战自己 则进入 服务器获取怪兽数据模式
+        访问自己 阻止 
         */
-        //if(uid == global.user.uid)
-        //    return;
+        if(uid == global.user.uid)
+            return;
 
-        var shadow = sprite("dialogRankShadow.png").pos(PANEL_WIDTH/2, PANEL_HEIGHT/2).anchor(50, 50);
-//        trace("child", child, shadow);
+        var pSize = child.prepare().size();
+        var shadow = sprite("dialogRankShadow.png").pos(pSize[0]/2, pSize[1]/2).anchor(50, 50).size(pSize[0], pSize[1]);
         child.add(shadow, 100, 1);
 
-
-        var but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit, curNum);
+        var but0 = shadow.addsprite("greenButton.png").pos(66, 50).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit, curNum);
         but0.addlabel(getStr("visit", null), null, 21).pos(47, 19).anchor(50, 50);
 
-        //but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+40+16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeHero, curNum);
-        //but0.addlabel(getStr("challengeHero", null), null, 21).pos(47, 19).anchor(50, 50);
 
         //未挑战过 且不是自身
-        if(global.user.checkChallengeYet(uid) == 0 || uid == global.user.uid)//挑战自身显示按钮
+        if(global.user.checkChallengeYet(uid) == 0)//挑战自身显示按钮 || uid == global.user.uid
         {
-            but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+56+56).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
+            but0 = shadow.addsprite("greenButton.png").pos(66, 100).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
             but0.addlabel(getStr("challengeGroup", null), null, 21).pos(47, 19).anchor(50, 50);
             
         }

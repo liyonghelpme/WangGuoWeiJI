@@ -86,8 +86,8 @@ class Map extends MyNode
         //curStar = global.user.getCurStar(kind, small);
 
         bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
-        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1).color(100, 100, 100, 30);
-        grid.addsprite("mapGrid.png").color(100, 100, 100, 50);
+        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
+        grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
 
         bg.prepare();
         init();
@@ -692,21 +692,12 @@ class Map extends MyNode
         }
         return null;
     }
-    /*
-    function addSoldier(sid)
-    {
-        var sdata = global.user.getSoldierData(sid);
-        var so = new Soldier(this, [MYCOLOR, sdata.get("id")], sid, null);
-        addChild(so);
-        return so;
-    }
-    */
     function randomAllSoldier(data)
     {
         var removed = [];
         for(var i = 0; i < len(data); i++)
         {
-            var sid = data[i];
+            var sid = data[i][0];
             var sdata = global.user.getSoldierData(sid);
             var so = new Soldier(this, [MYCOLOR, sdata.get("id")], sid, null);
             var nPos = getInitPos(so);
@@ -716,7 +707,7 @@ class Map extends MyNode
             so.setPos(nPos);
             setMap(so);
             
-            removed.append(sid);
+            removed.append(i);
         }
         return removed;
     }
@@ -962,11 +953,7 @@ class Map extends MyNode
     function update(diff)
     {
     }
-    function quitMap(n, e, p, kc)
-    {
-        if(kc == KEYCODE_BACK)
-            global.director.popScene();
-    }
+    
     function stopGame()
     {
         myTimer.gameStop();
@@ -996,8 +983,7 @@ class Map extends MyNode
 //        trace("enterScene map");
         myTimer = new Timer(100);
         super.enterScene();
-        bg.setevent(EVENT_KEYDOWN, quitMap);
-        bg.focus(1);
+        
     }
     override function exitScene()
     {

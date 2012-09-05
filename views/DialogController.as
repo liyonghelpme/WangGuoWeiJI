@@ -42,6 +42,14 @@ class DialogController extends MyNode
                 {
                     global.director.pushView(new LiveHeartDialog(), 1, 0);
                 }
+                else if(curCmd.get("cmd") == "noTip")
+                {
+                    global.director.pushView(new NoTipDialog(), 1, 0);
+                }
+                else if(curCmd.get("cmd") == "chooseSol")
+                {
+                    global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100]));
+                }
             }
         }
     }

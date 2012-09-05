@@ -21,10 +21,12 @@ class MapBanner extends MyNode
     //sid inMap
     function cmp(a, b)
     {
-        var sa = global.user.getSoldierData(a);
-        var sb = global.user.getSoldierData(b);
+        var sa = global.user.getSoldierData(a[0]);
+        var sb = global.user.getSoldierData(b[0]);
         return sb.get("level")-sa.get("level");
     }
+    //[士兵sid,  0/1] 是否放置 
+    //所有
     //sid not dead 
     function initData()
     {
@@ -35,7 +37,7 @@ class MapBanner extends MyNode
             var sdata = sols[i][1];
             if(sdata.get("dead", 0) == 0)//soldierId
             {
-                data.append(sols[i][0]);//是否已经放置
+                data.append([sols[i][0], 0]);//是否已经放置
             }
         }
         bubbleSort(data, cmp);
@@ -57,7 +59,6 @@ class MapBanner extends MyNode
         initData();
         
         //117
-
         if(scene.kind != CHALLENGE_TRAIN)
         {
             bg.addsprite("mapMenuOk.png").pos(440, 19).setevent(EVENT_TOUCH, onOk);
@@ -98,12 +99,11 @@ class MapBanner extends MyNode
         var removed = scene.map.randomAllSoldier(data);
         for(var i = 0; i < len(removed); i++)
         {
-            data.remove(removed[i]);
+            //data.remove(removed[i]);
+            data[removed[i]][1] = 1;
         }
         updateTab();
     }
-    //var lastPoints;
-    //var accMove;
     /*
     点击某个士兵 之后士兵出现在场景中 
     点击士兵的头上的取消按钮 则士兵消失
@@ -115,7 +115,16 @@ class MapBanner extends MyNode
         var sid = so.sid;
 //        trace("soldier clear", sid);
 
-        insertArr(data, sid, cmp);
+        //insertArr(data, sid, cmp);
+        for(var i = 0; i < len(data); i++)
+        {
+            if(data[i][0] == sid)
+            {
+                data[i][1] = 0;
+                break;
+            }
+        }
+        setCurChooseSol(null);
         updateTab();
     }
 
@@ -140,43 +149,66 @@ class MapBanner extends MyNode
         var rg = getRange();
         for(var i = rg[0]; i < rg[1]; i++)
         {
-            var panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX, 0).anchor(0, 100);
+            var panel;
+            if(data[i][1] == 0)
+                panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX, 0).anchor(0, 100);
+            else
+                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(i*OFFX, 0).anchor(0, 100);
+                
+            if(data[i][1] == 0)
+            {
+                panel.setevent(EVENT_TOUCH, touchBegan, i);
+                panel.setevent(EVENT_MOVE, touchMoved);
+                panel.setevent(EVENT_UNTOUCH, touchEnded);
+            }
 
-            panel.setevent(EVENT_TOUCH, touchBegan, data[i]);
-            panel.setevent(EVENT_MOVE, touchMoved);
-            panel.setevent(EVENT_UNTOUCH, touchEnded);
-
-            var sdata = global.user.getSoldierData(data[i]);
+            var sdata = global.user.getSoldierData(data[i][0]);
 //            trace("soldierData", sdata, data[i], i);
             //0 30 60 90
             var id = sdata.get("id");
             var solPic;
-            //同动画使用 spritesheet图片
-            if(id == 0 || id == 30 || id == 60 || id == 90)
-                solPic = panel.addsprite("solAva"+str(sdata.get("id"))+".png").pos(45, 45).anchor(50, 50);
+            if(data[i][1] == 0)
+            {
+                //同动画使用 spritesheet图片
+                //使用士兵头像
+                if(id == 0 || id == 30 || id == 60 || id == 90)
+                    solPic = panel.addsprite("solAva"+str(sdata.get("id"))+".png").pos(45, 45).anchor(50, 50);
+                else
+                    solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(45, 45).anchor(50, 50);
+            }
             else
-                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(45, 45).anchor(50, 50);
+            {
+                if(id == 0 || id == 30 || id == 60 || id == 90)
+                    solPic = panel.addsprite("solAva"+str(sdata.get("id"))+".png", GRAY).pos(45, 45).anchor(50, 50);
+                else
+                    solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", GRAY).pos(45, 45).anchor(50, 50);
+            }
 
             var sca = getSca(solPic, [80, 80]);
             solPic.scale(-sca, sca);
 
             //panel.addlabel(sdata.get("name"), null, 18).pos(61, 40).color(0, 0, 0);
-            panel.put(data[i]);
+            panel.put(i);
             
-            panel.addsprite("skillLevel.png").pos(53, 66).anchor(50, 50);
-            panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level"))]), null, 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
+            panel.addsprite("skillLevel.png").pos(57, 79).anchor(50, 50);
+            panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level")+1)]), null, 15).pos(57, 79).anchor(50, 50).color(100, 100, 100);
         }
     }
 
+    //data[p] sid isInMap data[p][1] == 0
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
-        var sid = p;
+        var sid = data[p][0];
+
         controlSoldier = scene.map.addSoldier(sid);
         if(controlSoldier == null)
             return;
 
-        var solData = global.user.getSoldierData(sid);
+        //var solData = global.user.getSoldierData(sid);
+
+        setCurChooseSol(controlSoldier);
+        /*
         var w = getStr("dragSol", ["[NAME]", solData.get("name")]);
         words = shadowWord.addlabel(w, null, 25);
         var wSize = words.prepare().size();
@@ -185,14 +217,17 @@ class MapBanner extends MyNode
         shadowWord.size(sSize);
         words.anchor(50, 50).pos(sSize[0]/2, sSize[1]/2);
         shadowWord.visible(1);
+        */
 
         var nPos = n.node2world(x, y);
         var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
         controlSoldier.setPos(mPos);
         
         controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
-        data.remove(sid);
+        //data.remove(sid);
+        data[p][1] = 1;
         //n.visible(0);//背景变蓝色
+
         n.texture("mapSel.png");
     }
     function touchMoved(n, e, p, x, y, points)
@@ -215,9 +250,11 @@ class MapBanner extends MyNode
         flowNode.pos(curPos);
         updateTab();
 
+        /*
         shadowWord.visible(0);
         words.removefromparent();
         words = null;
+        */
 
         if(controlSoldier != null)
         {
@@ -227,6 +264,34 @@ class MapBanner extends MyNode
             controlSoldier.touchWorldEnded(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
         }
         controlSoldier = null;
+    }
+
+    //点击banner set
+    //地图点击士兵 选择
+    function setCurChooseSol(sol)
+    {
+        if(words != null)
+        {
+            words.removefromparent();
+            words = null;
+        }
+        if(sol == null)
+        {
+            shadowWord.visible(0);
+        }
+        else
+        {
+
+            shadowWord.visible(1);
+            var w = getStr("dragSol", ["[NAME]", sol.myName]);
+            words = shadowWord.addlabel(w, null, 25);
+            var wSize = words.prepare().size();
+            var sSize = shadowWord.prepare().size();
+            sSize[0] = max(wSize[0], sSize[0]);
+            shadowWord.size(sSize);
+            words.anchor(50, 50).pos(sSize[0]/2, sSize[1]/2);
+            shadowWord.visible(1);
+        }
     }
 
     //-1 0 1

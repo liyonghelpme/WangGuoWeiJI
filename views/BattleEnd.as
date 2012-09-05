@@ -5,7 +5,7 @@ class BattleEnd extends MyNode
     {
         bg = node();
         init();
-        var prW = new PrintWord(this, getStr("battleEnd", null), 22, 5, [100, 100, 100], 640, 0, 6, closeDialog);
+        var prW = new PrintWord(this, getStr("battleEnd", null), 22, 5, [100, 100, 100], 640, 0, 4, closeDialog);
         prW.setPos([100, 120]);
         addChild(prW);//tick = 50ms 2tick = 100ms
     }

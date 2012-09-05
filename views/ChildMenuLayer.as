@@ -57,12 +57,13 @@ class ChildMenuLayer extends MyNode
     function onLove()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new LoveDialog(scene));
+        global.director.pushView(new LoveDialog(scene), 1, 0);
     }
     function onLoveRank()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new HeartRankDialog());
+        //global.director.pushView(new HeartRankDialog());
+        global.director.pushView(new RankDialog(HEART_RANK), 1, 0);
     }
     function onBlood()
     {
@@ -352,7 +353,7 @@ class ChildMenuLayer extends MyNode
     function onRank()
     {
         scene.ml.cancelAllMenu();
-        global.director.pushView(new RankDialog(), 1, 0);
+        global.director.pushView(new RankDialog(CHALLENGE_RANK), 1, 0);
     }
     function onRole()
     {

@@ -74,7 +74,7 @@ class TaskDialog extends MyNode
         bg.addlabel(getStr("level", null), null, 18).pos(118, 102).anchor(50, 50).color(0, 0, 0);
         bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level))]), null, 18).anchor(50, 50).pos(118, 195).color(0, 0, 0);
 
-        bg.addlabel(str(level), null, 25).anchor(50, 50).pos(INITX, 154).color(76, 97, 34);
+        bg.addlabel(str(level+1), null, 25).anchor(50, 50).pos(INITX, 154).color(76, 97, 34);
 //        trace("init star");
 
 
@@ -92,7 +92,7 @@ class TaskDialog extends MyNode
 
         block.addsprite("roleLock.png").pos(12, 56).anchor(50, 50).size(20, 21);
         block.addsprite("dialogTaskShadow.png").anchor(50, 50).pos(49, 56);
-        block.addlabel(str(level+1), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
+        block.addlabel(str(level+1+1), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
 //        trace("init block 1");
 
 
@@ -104,7 +104,7 @@ class TaskDialog extends MyNode
 
         block.addsprite("roleLock.png").pos(12, 56).anchor(50, 50).size(20, 21);
         block.addsprite("dialogTaskShadow.png").anchor(50, 50).pos(49, 56);
-        block.addlabel(str(level+2), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
+        block.addlabel(str(level+2+1), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
 //        trace("init block 2");
 
         cl = bg.addnode().pos(85, 210).size(629, 226).clipping(1);
@@ -180,11 +180,22 @@ class TaskDialog extends MyNode
     {
         super.enterScene();
         updateValue(global.user.resource);
-        global.user.addListener(this);
+        //global.user.addListener(this);
+        global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
+    }
+
+    function receiveMsg(param)
+    {
+        var msgId = param[0];
+        if(msgId == UPDATE_RESOURCE)
+        {
+            updateValue(global.user.resource);
+        }
     }
     override function exitScene()
     {
-        global.user.removeListener(this);
+        global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
+        //global.user.removeListener(this);
         super.exitScene();
     }
 

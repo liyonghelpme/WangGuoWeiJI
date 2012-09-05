@@ -34,35 +34,50 @@ class RankDialog extends MyNode
     //var views;
     var switchTab;
     var upArrow;
-    function RankDialog()
+
+    var kind;
+    function RankDialog(k)
     {
+        kind = k;
+
         bg = sprite("dialogFriend.png");
         init();
-        bg.addsprite("dialogRankTitle.png").pos(69, 7);
+        if(kind == CHALLENGE_RANK)
+            bg.addsprite("dialogRankTitle.png").pos(69, 7);
+        else if(kind == HEART_RANK)
+            bg.addsprite("heartRank.png").pos(172,47).anchor(50, 50);
+            
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
-        var challengeNum = global.user.getValue("challengeNum");
-//        trace("challengeNum", challengeNum);
-        if(challengeNum >= 10)
-        {
-            switchTab = 0;
-            var but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37);
-            but0.addlabel(getStr("groupRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
-        }
-        else
-        {
-            switchTab = 1;
-            but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37);
-            but0.addlabel(getStr("newRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
-        }
 
-        showLabel = bg.addsprite(labelPng[switchTab]).pos(395, 96).anchor(50, 50);
 
+        if(kind == CHALLENGE_RANK)
+        {
+            var challengeNum = global.user.getValue("challengeNum");
+            if(challengeNum >= 10)
+            {
+                switchTab = 0;
+                //var but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37);
+                //but0.addlabel(getStr("groupRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+            }
+            else
+            {
+                switchTab = 1;
+                //but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37);
+                //but0.addlabel(getStr("newRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+            }
+
+            showLabel = bg.addsprite(labelPng[switchTab]).pos(395, 96).anchor(50, 50);
+        }
+        else if(kind == HEART_RANK)
+        {
+            
+        }
 
         var clPos = [66, 117];
         var clSize = [665, 338];
 
-        upArrow = sprite("upArrow.png").pos(735, 371);
+        upArrow = sprite("upArrow.png").pos(741, 409).anchor(50, 50);
         bg.add(upArrow, 1);
         showView = new RankBase(clPos, clSize, this);
 

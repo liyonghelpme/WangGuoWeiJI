@@ -234,7 +234,8 @@ class CastlePage extends MyNode
         {
             if(len(neibors) == 0)
             {
-                global.director.pushView(new MyWarningDialog(getStr("noNeibor", null), getStr("noNeiborCon", null), null), 1, 0);
+                //global.director.pushView(new MyWarningDialog(getStr("noNeibor", null), getStr("noNeiborCon", null), null), 1, 0);
+                global.director.curScene.addChild(new UpgradeBanner(getStr("noNeiborCon", null), [100, 100, 100]));
                 return;
             }
             lastVisit %= len(neibors);
@@ -251,7 +252,8 @@ class CastlePage extends MyNode
     function goFlow(n, e, p, x, y, points)
     {
         //global.director.pushScene(new FlowScene(p));
-        global.director.pushView(new MyWarningDialog(getStr("notOpen", null), getStr("comeSoon", null), null), 1, 0);
+        //global.director.pushView(new MyWarningDialog(getStr("notOpen", null), getStr("comeSoon", null), null), 1, 0);
+        global.director.curScene.addChild(new UpgradeBanner(getStr("comeSoon", null), [100, 100, 100]));
     }
     function onMap()
     {

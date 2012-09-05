@@ -31,6 +31,8 @@ class MapLayer extends MyNode
         //big 0 1 2 3 4 5 
         //0 村落
         //1-5 其它岛屿
+        //等级不足 不能开启
+        //未击败不能开启
         var openBig = getOpenBig();
         for(;i <= curDif[0] && i <= ROUND_MAP_NUM && i <= openBig; i++){
             island[i].color(100,100,100,100);
@@ -92,6 +94,7 @@ class MapLayer extends MyNode
         var bsize = island[0].size();
         var bpos = island[0].pos();
         arrow = bg.addsprite("mapArrow.png").pos(bpos[0]+bsize[0]/2+14, bpos[1]-10).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20)));
+        global.director.curScene.addChildZ(new UpgradeBanner(getStr("onVillage", null), [100, 100, 100]), MAX_MAP_LAYER);
     }
     function removeArrow()
     {
@@ -121,6 +124,13 @@ class MapLayer extends MyNode
         else{
             inSmall = 1;
             scene.gotoIsland(param);
+
+            var curDif = getCurEnableDif(); 
+            var openBig = getOpenBig();
+            if(param > curDif[0] || param > openBig)
+            {
+                global.director.curScene.addChildZ(new UpgradeBanner(getStr("onNotOpen", null), [100, 100, 100]), MAX_MAP_LAYER);
+            }
         }
     }
     

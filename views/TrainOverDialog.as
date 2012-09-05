@@ -37,9 +37,9 @@ class TrainOverDialog extends MyNode
             var level = sol[i].level;
             var transferLev = getTransferLevel(sol[i]);
             if(level >= transferLev && transferLev != -1)
-                l.addlabel(getStr("solTrainOver1", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level)]), null, 18).color(0, 0, 0).pos(0, offY*i);
+                l.addlabel(getStr("solTrainOver1", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level+1)]), null, 18).color(0, 0, 0).pos(0, offY*i);
             else
-                l.addlabel(getStr("solTrainOver0", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level)]), null, 18).color(0, 0, 0).pos(0, offY*i);
+                l.addlabel(getStr("solTrainOver0", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level+1)]), null, 18).color(0, 0, 0).pos(0, offY*i);
             
         }
 

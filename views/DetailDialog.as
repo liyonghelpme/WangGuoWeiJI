@@ -76,14 +76,16 @@ class DetailDialog extends MyNode
 
         var ne = getLevelUpExp(sol.id, sol.level);
 
-        contentNode.addlabel(getStr("levVal", ["[LEV1]", str(sol.level+1), "[EXP]", str(ne-sol.exp), "[LEV2]", str(sol.level+1)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+        contentNode.addlabel(getStr("levVal", ["[LEV1]", str(sol.level+1+1), "[EXP]", str(ne-sol.exp), "[LEV2]", str(sol.level+1+1)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
 
         var tranLevel = getTransferLevel(sol);
+        var career = getCareerLev(soldier.id); 
+        var totalName = getStr(CAREER_TIT[career], null)+soldier.data.get("name");
         if(tranLevel > 0)
-            contentNode.addlabel(getStr("nextTrans", ["[CAREER]", soldier.data.get("name"), "[LEV]", str(tranLevel)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+            contentNode.addlabel(getStr("nextTrans", ["[CAREER]", totalName, "[LEV]", str(tranLevel)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
         else
-            contentNode.addlabel(getStr("noTransfer", ["[CAREER]", soldier.data.get("name")]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+            contentNode.addlabel(getStr("noTransfer", ["[CAREER]", totalName]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
 //        trace("soldierpng", soldier.id);
         var solPic = bg.addsprite("soldier"+str(soldier.id)+".png").pos(460, 283).anchor(50, 50);

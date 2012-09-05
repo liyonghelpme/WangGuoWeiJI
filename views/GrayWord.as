@@ -37,7 +37,7 @@ class GrayWord extends MyNode
 
     //var totalWord;
     var totalNum;
-    //var sound;
+    var sound;
     
     //音效存在问题 不能 有效播放
     //var player;
@@ -47,7 +47,7 @@ class GrayWord extends MyNode
     function GrayWord(sc, w, sz, h, c, wid, hei, n, cb, step)
     {
         curLine = step;
-        //sound = createaudio("print.mp3");
+        sound = createaudio("print.mp3");
         accTick = 0;
         tick = n;
         curPos = 0;
@@ -107,6 +107,7 @@ class GrayWord extends MyNode
     +1 +3 字节
     */
     //var playing = 0;
+    var startPrint = 0;
     function update(diff)
     {
         accTick += 1;
@@ -121,8 +122,14 @@ class GrayWord extends MyNode
                     curPos++;
                     curWordPos++;
                 }
+                //打当前行字
                 if(curPos < len(line))
                 {
+                    if(startPrint == 0)
+                    {
+                        startPrint = 1;
+                        sound.play(-1);
+                    }
                     var o = ord(line[curPos]);
                     if(o < 128)
                     {
@@ -144,7 +151,7 @@ class GrayWord extends MyNode
                     //之前段落
                     for(var i = 0; i < curLine; i++)
                     {
-                        var w1 = lab.addlabel(word[i], null, siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color([70, 70, 70]);
+                        var w1 = lab.addlabel(word[i], null, siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color([80, 80, 80]);
                         var wSize = w1.prepare().size();
                         w1.pos(0, curSize[1]);
                         curSize[0] = max(wSize[0], curSize[0]);
@@ -161,6 +168,11 @@ class GrayWord extends MyNode
                 }
                 else
                 {
+                    if(startPrint == 1)
+                    {
+                        startPrint = 0;
+                        sound.stop();
+                    }
                     //curPos = 0;
                     //curWordPos = 0;
                     //curLine++; //不换行
@@ -170,6 +182,11 @@ class GrayWord extends MyNode
             }
             else//结束弹出场景 压入新的战斗场景
             {
+                if(startPrint == 1)
+                {
+                    startPrint = 0;
+                    sound.stop();
+                }
                 //global.director.popScene();
                 //global.director.pushScene();
                 //if(callback != null)
@@ -180,7 +197,7 @@ class GrayWord extends MyNode
     override function exitScene()
     {
         //player.stop();
-        //sound.stop();
+        sound.stop();
         //sound.destory();
         //sound.destory();
 

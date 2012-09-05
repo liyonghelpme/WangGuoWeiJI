@@ -9,7 +9,7 @@ class User
     var papayaName;
 
     var resource;
-    var updateList;
+    //var updateList;
     
     //建筑物的view 实体
 
@@ -47,7 +47,7 @@ class User
     var maxEid;
     var tasks;
 
-    var taskListener = [];
+    //var taskListener = [];
 
     var herbs;
     var serverTime;
@@ -73,26 +73,6 @@ class User
             }
         }
         return res;
-    }
-    function addTaskListener(obj)
-    {
-        for(var i = 0; i < len(taskListener); i++)
-        {
-            if(taskListener[i][0] == obj)
-            {
-                taskListener[i][1] = 0;
-                return;
-            }
-        }
-        taskListener.append([obj, 0]);
-    }
-    function removeTaskListener(obj)
-    {
-        for(var i = 0; i < len(taskListener); i++)
-        {
-            if(taskListener[i][0] == obj)
-                taskListener[i][1] = 1;
-        }
     }
     /*
     可以做一个1000ms的timer 定时清理已经退出的对象
@@ -142,6 +122,7 @@ class User
 
         //global.httpController.addRequest("taskC/updateTask", dict([["uid", uid], ["tid", id], ["num", num], ["fin", fin], ["stage", val[2]]]), null, null);
 
+        /*
         for(var i = 0; i < len(taskListener);)
         {
             if(taskListener[i][1] == 1)
@@ -154,6 +135,8 @@ class User
                 i++;
             }
         }
+        */
+        global.msgCenter.sendMsg(UPDATE_TASK, null);
     }
     //buildingKind 1
     function getAllBuildingKinds()
@@ -566,30 +549,6 @@ class User
     {
         return tasks.get(id, [0, 0]);
     }
-    var soldierListener = [];
-    function addSoldierListener(obj)
-    {
-        for(var i = 0; i < len(soldierListener); i++)
-        {
-            if(soldierListener[i][0] == obj)
-            {
-                soldierListener[i][1] = 0;
-                return;
-            }
-        }
-        soldierListener.append([obj, 0]);
-    }
-        
-    function removeSoldierListener(obj)
-    {
-        for(var i = 0; i < len(soldierListener); i++)
-        {
-            if(soldierListener[i][0] == obj)
-            {
-                soldierListener[i][1] = 1;
-            }
-        }
-    }
 
     //士兵数据实体
     //updateSoldiers 修改士兵本地数据
@@ -626,7 +585,7 @@ class User
         db = c_opendb();
 
         tempSetData();
-        updateList = [];
+        //updateList = [];
     }
     function getPeopleNum()
     {
@@ -792,6 +751,9 @@ class User
         if(build.sid == MINE_BID)
             return;
 
+        //trace(build.bid);
+        //trace(dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
+
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
         db.put("buildings", buildings);
     }
@@ -801,8 +763,10 @@ class User
     function setValue(key, value)
     {
         resource.update(key, value);
-        db.put("resource", resource);
+        //db.put("resource", resource);
 
+        global.msgCenter.sendMsg(UPDATE_RESOURCE, null);
+        /*
         for(var i = 0; i < len(updateList); )
         {
             if(updateList[i][1] == 1)
@@ -815,6 +779,7 @@ class User
                 i++;
             }
         }
+        */
     }
     function getNewSid()
     {
@@ -838,19 +803,7 @@ class User
         soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level], ["addAttack", soldier.addAttack], ["addDefense", soldier.addDefense], ["addAttackTime", soldier.addAttackTime], ["addDefenseTime", soldier.addDefenseTime], ["addHealthBoundary", soldier.addHealthBoundary], ["addHealthBoundaryTime", soldier.addHealthBoundaryTime] ]));
         //updateSoldierDB();
         db.put("soldiers", soldiers);
-        for(var i = 0; i < len(soldierListener);)
-        {
-            if(soldierListener[i][1] == 1)
-            {
-                soldierListener.pop(i);
-            }
-            else
-            {
-                //监听器判断士兵的sid是否相等 因为有busisoldier 和 soldier两个对象需要处理
-                soldierListener[i][0].updateSoldier(soldier);
-                i++;
-            }
-        }
+        global.msgCenter.sendMsg(UPDATE_SOL, soldier);
     }
     /*
     如果该士兵显示出来则更新状态
@@ -1235,32 +1188,10 @@ class User
     /*
     所有异步的数据 需要同步的处理 因为 可能删除操作 在 更新的时候进行 可能导致部分不能被更新
     */
-    function addListener(obj)
-    {
-        for(var i = 0; i < len(updateList); i++)
-        {
-            if(updateList[i][0] == obj)
-            {
-                updateList[i][1] = 0;
-                return;
-            }
-        }
-        updateList.append([obj, 0]); 
-    }
     /*
     需要确保对象被合理的删除 
     遍历所有的监听对象 全部删除
     */
-    function removeListener(obj)
-    {
-        for(var i = 0; i < len(updateList); i++)
-        {
-            if(updateList[i][0] == obj)
-            {
-                updateList[i][1] = 1;
-            }
-        }
-    }
     /*
     参数：建筑
     得到建筑左上角第一块的中心所在的网格编号
