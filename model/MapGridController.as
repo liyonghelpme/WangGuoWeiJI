@@ -110,7 +110,7 @@ class MapGridController
     function updatePosMap(sizePos)
     {
         var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
-        var kind = sizePos[4].funcs;
+        //var kind = sizePos[4].funcs;
 
         var sx = map[0];
         var sy = map[1];

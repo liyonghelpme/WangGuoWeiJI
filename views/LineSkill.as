@@ -8,6 +8,7 @@ class LineSkill extends MyNode
     var rowY;
     var map;
     var skillId;
+    var skillLevel;
 
     var cus = null;
     //计算攻击直线上第一个敌方单位
@@ -74,17 +75,20 @@ class LineSkill extends MyNode
         }
         return near;
     }
-    function LineSkill(m, a, t, sk)
+    function LineSkill(m, a, t, sk, l)
     {
         var p;
         sol = a;
         tar = t;
         map = m;
         skillId = sk;
+        skillLevel = l;
         
         p = sol.getPos();
 
         tar = getTar();
+
+        tar.inSkill = 1;
 
 
         var id = sol.id;
@@ -150,9 +154,10 @@ class LineSkill extends MyNode
     {
         if(tar != null)//攻击对象没有死亡
         {
-            var damage = getTotalSkillDamage(sol, skillId);
+            var damage = getTotalSkillDamage(sol, skillId, skillLevel);
             var hurt = calSkillHurt(damage, tar);
             tar.changeHealth(sol, -hurt);
+            tar.inSkill = 0;
         }
         removeSelf();
     }

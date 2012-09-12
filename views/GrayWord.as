@@ -166,18 +166,21 @@ class GrayWord extends MyNode
                     //lab.removefromparent();
                     //lab = bg.addlabel(showWord, null, siz, FONT_NORMAL, width, height, ALIGN_LEFT).color(col);
                 }
-                else
+                else//结束本行
                 {
                     if(startPrint == 1)
                     {
                         startPrint = 0;
-                        sound.stop();
+                        sound.pause();
                     }
                     //curPos = 0;
                     //curWordPos = 0;
                     //curLine++; //不换行
                     //totalNum += 2;//换行符号\n
                     //curLine = len(word);
+
+                    if(callback != null)
+                        callback();
                 }
             }
             else//结束弹出场景 压入新的战斗场景
@@ -185,21 +188,18 @@ class GrayWord extends MyNode
                 if(startPrint == 1)
                 {
                     startPrint = 0;
-                    sound.stop();
+                    sound.pause();
                 }
                 //global.director.popScene();
                 //global.director.pushScene();
-                //if(callback != null)
-                //    callback();
+                if(callback != null)
+                    callback();
             }
         }
     }
     override function exitScene()
     {
-        //player.stop();
         sound.stop();
-        //sound.destory();
-        //sound.destory();
 
         global.myAction.removeAct(this);
         super.exitScene();

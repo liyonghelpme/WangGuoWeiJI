@@ -25,6 +25,8 @@ class MenuLayer extends MyNode
     var gloryLevText;
     //var sensor = null;
     var levelLabel;
+    var expBanner;
+    var expWord;
     function MenuLayer(s) {
         scene = s;
 //        trace("pushMenuLayer");
@@ -35,16 +37,28 @@ class MenuLayer extends MyNode
 
 
         taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(50,50).pos(61, 78).rotate(0).setevent(EVENT_TOUCH, onTask);
-        taskFin = taskbutton.addsprite("taskFin.png").pos(75, 19).anchor(50, 50).visible(0);
-        finNum = taskFin.addlabel("", null, 20).pos(17, 17).anchor(50, 50).color(0, 0, 0);
+        taskFin = taskbutton.addsprite("taskFin0.png").pos(75, 19).anchor(50, 50).visible(0);
+        finNum = taskFin.addlabel("", null, 18, FONT_BOLD).pos(17, 17).anchor(50, 50).color(100, 100, 100);
 
         expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
-        expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(50, 50).pos(144,60).rotate(0);
+        //expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(50, 50).pos(144,60).rotate(0);
+        expback = banner.addsprite("level.png").scale(100,100).anchor(50, 50).pos(144,60);
+        //16+144 = 160+5 = 165
+        //165 - 143 = 22
         
         //levelLabel = banner.addlabel("0", null, 15).anchor(0, 50).pos(114, 65).color(76, 97, 34);
-        levelLabel = new ShadowWords("0", 18, [76, 97, 34]);
-        levelLabel.bg.anchor(0, 50).pos(114, 63);
-        banner.add(levelLabel.bg);
+        //levelLabel = new ShadowWords("0", 18, [76, 97, 34]);
+        //levelLabel.bg.anchor(0, 50).pos(114, 63);
+        var expSize = expback.prepare().size();
+        levelLabel = expback.addnode().anchor(50, 50).pos(expSize[0]/2, expSize[1]/2);
+
+        expBanner = sprite("expBanner.png").pos(127, 71).visible(0);
+        banner.add(expBanner, MENU_EXP_LAYER);
+        expWord = ShadowWords(getStr("expToLev", null), 17, [100, 100, 100], "arial", FONT_BOLD);
+        expWord.bg.anchor(50, 50).pos(75, 28);
+        expBanner.add(expWord.bg);
+
+        //banner.add(levelLabel.bg);
 
         collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(50,50).pos(253, 100).rotate(0).setevent(EVENT_TOUCH, openGlory);
 
@@ -120,13 +134,54 @@ class MenuLayer extends MyNode
 
         global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
         global.msgCenter.registerCallback(UPDATE_TASK, this);
+        global.msgCenter.registerCallback(UPDATE_EXP, this);
 
 
         updateValue(global.user.resource);
+        updateExp(0);
         updateTaskState();
         //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
     }
 
+    function updateExp(add)
+    {
+        var level = global.user.getValue("level");
+        var exp = global.user.getValue("exp");
+        var needExp = getLevelUpNeedExp(level);
+
+        
+        var lastExpSize = expfiller.prepare().size()[0];
+        var nowSize = exp*EXP_LEN/needExp+BASE_LEN;
+        var leftExp = needExp-exp;
+        if(nowSize > lastExpSize)
+        {
+            expfiller.addaction(sizeto(500, nowSize, 12));
+        }
+        else 
+            expfiller.size(nowSize, 12);
+
+        if(add > 0)
+        {
+            expWord.setWords(getStr("expToLev", ["[EXP]", str(leftExp), "[LEV]", str(level+2)]));
+            expBanner.stop();
+            expBanner.visible(1);
+            expBanner.addaction(sequence(itintto(100, 100, 100, 100), delaytime(3000), fadeout(1000)));
+        }
+
+        var temp = altasWord("white", str(level+1));
+        temp.anchor(50, 50).pos(levelLabel.pos());
+        levelLabel.removefromparent();
+        expback.add(temp);
+        levelLabel = temp;
+
+        var lSize = levelLabel.size();
+        var bSize = expback.prepare().size();
+        
+        //背景宽度 图片自身宽度 图片高度
+        var sca = getNodeSca(levelLabel, [min(lSize[0], bSize[0]), lSize[1]]);
+        //if(level >= 100)
+        levelLabel.scale(sca);
+    }
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -136,6 +191,8 @@ class MenuLayer extends MyNode
         }
         else if(msgId == UPDATE_TASK )
             updateTaskState();
+        else if(msgId == UPDATE_EXP)
+            updateExp(param[1]);
     }
     function updateTaskState()
     {
@@ -148,6 +205,7 @@ class MenuLayer extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(UPDATE_EXP, this);
         global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
         global.msgCenter.removeCallback(UPDATE_TASK, this);
         //global.user.removeListener(this);
@@ -159,8 +217,14 @@ class MenuLayer extends MyNode
     用户更新数据的显示接口
     expfiller 108 11
     */
+    const EXP_LEN = 108-22;
+    const BASE_LEN = 22;
     function initDataOver()
     {
+        updateValue(global.user.resource);
+        updateExp(0);
+
+        /*
         silverText.text(str(global.user.resource.get("silver", 0)));
         goldText.text(str(global.user.resource.get("gold", 0)));
         
@@ -168,8 +232,18 @@ class MenuLayer extends MyNode
         var exp = global.user.getValue("exp");
         //var needExp = global.user.getNeedExp(level);
         var needExp = getLevelUpNeedExp(level);
-        expfiller.size(exp*108/needExp, 12);
-        levelLabel.setWords(str(level+1));
+
+        expfiller.size(exp*EXP_LEN/needExp+BASE_LEN, 12);
+        //levelLabel.setWords(str(level+1));
+
+        var temp = altasWord("white", str(level));
+        temp.anchor(50, 50).pos(levelLabel.pos());
+        levelLabel.removefromparent();
+        expback.add(temp);
+        levelLabel = temp;
+        if(level >= 100)
+            levelLabel.scale(85);
+        */
     }
     function updateValue(res)
     {
@@ -177,23 +251,7 @@ class MenuLayer extends MyNode
         silverText.text(str(res.get("silver", 0)));
         goldText.text(str(res.get("gold", 0)));
 
-        var level = global.user.getValue("level");
-        var exp = global.user.getValue("exp");
-        //var needExp = global.user.getNeedExp(level);
-        var needExp = getLevelUpNeedExp(level);
-//        trace("needExp", needExp, exp);
 
-        var lastExpSize = expfiller.prepare().size()[0];
-        var nowSize = exp*108/needExp;
-        if(nowSize > lastExpSize)
-        {
-            expfiller.addaction(sizeto(500, nowSize, 12));
-            //expfiller.size(exp*108/needExp, 12);
-        }
-        else 
-            expfiller.size(nowSize, 12);
-
-        levelLabel.setWords(str(level+1));
     }
     /*
     管理菜单的显示和隐藏

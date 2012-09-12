@@ -10,8 +10,13 @@ class DeadOver extends MyNode
 {
     var soldier;
     var cs;
-    const FALL_TIME = 1500;
+
     var changeDirNode;
+    //var deadTime = 
+
+    const WAIT_TIME = 500;
+    const ROTATE_TIME = 700;
+    const FALL_TIME = ROTATE_TIME+WAIT_TIME;
     function DeadOver(sol)
     {
         soldier = sol;
@@ -30,45 +35,47 @@ class DeadOver extends MyNode
 //        trace("changeDirNode", cs, curPos, dir, "soldier"+str(soldier.id)+"dead.png");
         changeDirNode.anchor(50, 50).pos(curPos[0], curPos[1]-cs[1]/2);
 
+        /*
         changeDirNode.addaction(
             sequence(
                 moveby(200, 0, -30), 
                 spawn(rotateby(500, dir), moveby(500, 0, 20+cs[1]/2)), 
                 itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
                 irotateby(-dir),
-                fadeout(1000)) 
-
-                tintto(200, 100, 100, 100, 0),
+                //fadeout(1000)), 
+                tintto(200, 0, 0, 0, 0),
                 tintto(200, 100, 100, 100, 100),
-                tintto(200, 100, 100, 100, 0),
+                tintto(200, 0, 0, 0, 0),
                 tintto(200, 100, 100, 100, 100),
-                tintto(200, 100, 100, 100, 0)
-        );
-        /*
-        changeDirNode.addaction(
-            sequence(
-                delaytime(500),
-                moveby(500, 0, -15), 
-                spawn(rotateby(1000, dir), moveby(1000, 0, 5+cs[1]/2)), 
-                itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
-                irotateby(-dir),
-                tintto(200, 100, 100, 100, 0),
-                tintto(200, 100, 100, 100, 100),
-                tintto(200, 100, 100, 100, 0),
-                tintto(200, 100, 100, 100, 100),
-                tintto(200, 100, 100, 100, 0)
-            )
+                tintto(200, 0, 0, 0, 0)
         );
         */
+        changeDirNode.addaction(
+            sequence(
+                delaytime(WAIT_TIME),
+                moveby(100, 0, -15), 
+                spawn(rotateby(ROTATE_TIME, dir), moveby(ROTATE_TIME, 0, 5+cs[1]/2)), 
+                itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
+                irotateby(-dir),
+                tintto(200, 0, 0, 0, 0),
+                tintto(200, 100, 100, 100, 100),
+                tintto(200, 0, 0, 0, 0),
+                tintto(200, 100, 100, 100, 100),
+                tintto(200, 0, 0, 0, 0)
+            )
+        );
         //横向调整 血液位置
-        var blood = sprite("blood.png").anchor(50, 50).pos(cs[0]/2, cs[1]/2);
+        var blood = sprite("blood0.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
+        //var sca = getSca(blood, [cs[0]/2, cs[1]/2]);
+        //blood.scale(sca);
         soldier.bg.add(blood, -1);
         blood.addaction( 
             sequence(
                 itintto(0, 0, 0, 0), 
                 delaytime(FALL_TIME),
                 itintto(100, 100, 100, 100), 
-                fadeout(1000+1000)
+                delaytime(1000),
+                fadeout(1000)
             )
         );
     }

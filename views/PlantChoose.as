@@ -39,14 +39,6 @@ class PlantChoose extends MyNode
             var panel = flowNode.addsprite("plantPanel.png").pos(0, i*Height);
             panel.addsprite("Wplant"+str(i)+".png").pos(169, 48).anchor(50, 50);
 
-            
-            /*
-            var cost = planting.get("silver");
-            var cur = global.user.getValue("silver");
-            var cl = [0, 0, 0];
-            if(cur < cost)
-                cl = [100, 0, 0];
-            */
 
             var cost = getCost(PLANT, i);
             var buyable = global.user.checkCost(cost);
@@ -65,11 +57,12 @@ class PlantChoose extends MyNode
 
 
 
-            var tStr = panel.addlabel(getTimeStr(planting.get("time")), null, 15).anchor(0, 50).pos(8, 50).color(0, 0, 0);
+            //8 + 62/2 = 31+8 = 39 = 40 8+62 = 70 
+            var tStr = panel.addlabel(getTimeStr(planting.get("time")), null, 15).anchor(50, 50).pos(40, 50).color(0, 0, 0);
             var tSize = tStr.prepare().size();
-            
-            panel.addsprite("exp.png").size(30, 30).pos(89, 50).anchor(100, 50);
-            panel.addlabel(str(planting.get("exp")), null, 15).pos(92, 50).color(0, 0, 0).anchor(0, 50);
+            //94 - 30 = 64  +6
+            panel.addsprite("exp.png").size(30, 30).pos(100, 50).anchor(100, 50);
+            panel.addlabel(str(planting.get("exp")), null, 15).pos(103, 50).color(0, 0, 0).anchor(0, 50);
 
 
             panel.addsprite("silver.png").pos(31, 76).anchor(50, 50).size(30, 30);

@@ -664,6 +664,14 @@ function getCurLevelAllTask(level)
 //    trace("curLevelAllTask", level, res);
     return res;
 }
+
+function getNodeSca(n, box)
+{
+    var nSize = n.size();
+    var sca = min(box[0]*100/nSize[0], box[1]*100/nSize[1]);
+    sca = max(min(150, sca), 50);
+    return sca;
+}
 function getSca(n, box)
 {
     var nSize = n.prepare().size();
@@ -833,14 +841,14 @@ function insertArr(arr, obj, cmp)
 //返回node
 //font sz
 //lineHeight
-function stringLines(s, sz, lineHeight, color)
+function stringLines(s, sz, lineHeight, color, ft)
 {
     var n = node();
     s = s.split("\n");
     var nSize = [0, 0];
     for(var i = 0; i < len(s); i++)
     {
-        var lab = n.addlabel(s[i], null, sz).pos(0, lineHeight*i).color(color);
+        var lab = n.addlabel(s[i], null, sz, ft).pos(0, lineHeight*i).color(color);
         var lSize = lab.prepare().size();
         nSize[0] = max(lSize[0], nSize[0]);
         nSize[1] += lineHeight;
@@ -864,6 +872,7 @@ function altasWord(c, s)
         fetchPlist = 1;
         load_sprite_sheet("yellow.plist"); 
         load_sprite_sheet("blue.plist");
+        load_sprite_sheet("white.plist");
     }
 
     var offX = 0;
@@ -884,4 +893,53 @@ function altasWord(c, s)
     }
     n.size(offX, hei);
     return n;
+}
+//忽略换行符
+//只计算实际字符个数 或者换行符 作为两个字符记录 
+//totalWord 是实际的单词 包含换行
+//而 curWordPos 是 每行单词
+//curPos 每行位置
+function getWordLen(w)
+{
+    var l = 0;
+    for(var i = 0; i < len(w);)
+    {
+        var o = ord(w[i]);
+        if(o < 128)
+            i++;
+        else 
+            i += 3;
+        l++;
+    }
+    return l;
+}
+//得到某行 字符的长度
+function getLineWordNum(w)
+{
+    var l = 0;
+    for(var i = 0; i < len(w);)
+    {
+        var o = ord(w[i]);
+        if(o < 128)
+        {
+            i++;
+        }
+        else
+            i += 3;
+        l++;
+    }
+    return l;
+}
+function multiScalar(d, s)
+{
+    var res = dict();
+    var its = d.items();
+    for(var i = 0; i < len(its); i++)
+    {
+        if(its[i][1] > 0)
+        {
+            res.update(its[i][0], its[i][1]*s/100);
+        }
+    }
+    return res;
 }

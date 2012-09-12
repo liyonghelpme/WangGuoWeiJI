@@ -209,7 +209,7 @@ class CastlePage extends MyNode
         touchDelegate = new StandardTouchHandler();
         touchDelegate.bg = bg;
 
-        dialogController = new DialogController();
+        dialogController = new DialogController(this);
         addChild(dialogController);
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

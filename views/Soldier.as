@@ -117,6 +117,9 @@ class Soldier extends MyNode
 
     var skillList;
 
+    //处于攻击魔法的范围中 单体攻击 或者行攻击
+    var inSkill = 0;
+
     //攻击速度 
     //skId level coldTime ready
     /*
@@ -127,17 +130,37 @@ class Soldier extends MyNode
     {
         leftMonNum = (5+level)*diff/100;
     }
+    //skillId level time ready
     var genEneYet = 0;
+    //怪兽装备
+    var myEquips = [];
+    var ai;
     function initData()
     {
-        //leftMonNum = 5+level;
-
+        var i;
         //初始化技能列表 等级 冷却时间
-        skillList = global.user.getSolSkills(sid).items();//skillId level
-        for(var i = 0; i < len(skillList); i++)
+        if(sid == ENEMY)
         {
-            skillList[i].append(0);//累计的 冷却时间
-            skillList[i].append(1);//ready 是否准备好
+            if(monsterData != null && map.scene.skills != null)
+            {
+                skillList = map.scene.skills.get(monsterData.get("sid"), dict()).items(); 
+                for(i = 0; i < len(skillList); i++)
+                {
+                    skillList[i].append(0);//累计的 冷却时间
+                    skillList[i].append(1);//ready 是否准备好
+                }
+            }
+            else
+                skillList = [];
+        }
+        else
+        {
+            skillList = global.user.getSolSkills(sid).items();//skillId level
+            for(i = 0; i < len(skillList); i++)
+            {
+                skillList[i].append(0);//累计的 冷却时间
+                skillList[i].append(1);//ready 是否准备好
+            }
         }
 
         sx = data.get("sx");
@@ -154,6 +177,11 @@ class Soldier extends MyNode
         //trace("soldierData", monsterData, map.monEquips);
 
     
+        //CHALLENGE_MON
+        //CHALLENGE_FRI
+        //CHALLENGE_NEIBOR
+        //CHALLENGE_TRAIN
+        //怪兽没有装备
         if(sid == ENEMY)//敌对方士兵 地图怪兽 
         {
             if(monsterData != null)
@@ -165,6 +193,7 @@ class Soldier extends MyNode
                 addDefenseTime = monsterData.get("addDefenseTime", 0);
                 addHealthBoundary = monsterData.get("addHealthBoundary", 0);
                 addHealthBoundaryTime = monsterData.get("addHealthBoundaryTime", 0);
+                myEquips = map.getEnemyEquips(monsterData.get("sid"));
             }
 
             attRange = data.get("range");
@@ -172,7 +201,12 @@ class Soldier extends MyNode
             health = 0;
             initAttackAndDefense(this);
 
-            setEquipAttribute(this, map.monEquips);
+            //根据士兵myEquips 来初始化装备附加属性
+            //setEquipAttribute(this, map.monEquips);//设定地图怪兽我方装备
+            //根据敌人sid 得到获取敌人的装备
+            //初始化士兵状态 设定装备属性需要
+            //setEquipAttribute(this, map.getEnemyEquips(monsterData.get("sid")));
+
             health = healthBoundary;
 
             myName = null;
@@ -181,6 +215,9 @@ class Soldier extends MyNode
         //初始化额外攻击力 和 额外 防御力 以及 额外 生命值上限
         else
         {
+            //从用户数据得到装备数据
+            myEquips = global.user.getSoldierEquipData(sid);
+
             var privateData = global.user.getSoldierData(sid);
             level = privateData.get("level", 0);
             
@@ -213,6 +250,7 @@ class Soldier extends MyNode
     var fea;
     function Soldier(m, d, s, md)
     {
+        ai = new SoldierAI(this);
         monsterData = md;
         sid = s;
         map = m;
@@ -300,26 +338,23 @@ class Soldier extends MyNode
             bloodScaX = 139*100/139;
         }
 
-        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
+        backBanner = bg.addsprite("mapSolBloodBan0.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
         bloodTotalLen = backBanner.prepare().size()[0];
         bloodHeight = backBanner.prepare().size()[1];
         if(color == ENECOLOR)
             backBanner.visible(0);//初始敌人血条不显示
-        //var filter = WHITE;
-        //if(color == 0)
-        //    filter = BLUE;
         var mInfo = getData(MAP_INFO, map.kind);
 
-        redBlood = backBanner.addsprite("mapSolBloodRed.png");
+        redBlood = backBanner.addsprite("mapSolBloodRed.png").pos(2, 0);
         if(color == MYCOLOR)
         {
             if(mInfo["blood"] == 0)
-                greenBlood = backBanner.addsprite("mapSolBloodBlue.png");
+                greenBlood = backBanner.addsprite("mapSolBloodBlue2.png").pos(2, 0);
             else if(mInfo["blood"] == 1)
-                greenBlood = backBanner.addsprite("mapSolBloodGreen.png");
+                greenBlood = backBanner.addsprite("mapSolBloodGreen2.png").pos(2, 0);
         }
         else
-            greenBlood = backBanner.addsprite("mapSolBloodYellow.png");
+            greenBlood = backBanner.addsprite("mapSolBloodYellow2.png").pos(2, 0);
 
         /*
         if(color == 0)//nameBanner
@@ -382,6 +417,8 @@ class Soldier extends MyNode
     function changeExp(e)
     {
 //        trace("changeExp", e);
+        if(color == ENECOLOR)//敌方不增加经验
+            return;
         addExp += e;
         exp += e; 
         
@@ -403,6 +440,7 @@ class Soldier extends MyNode
             expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
         }
     }
+    const BLOOD_SPEED = 3;
     function initHealth()
     {
         var oldSize = greenBlood.prepare().size();
@@ -412,8 +450,8 @@ class Soldier extends MyNode
         if(sx < oldSize[0])
         {
             var difX = oldSize[0]-sx;
-            var spe = bloodTotalLen/2;//speed /s
-            var t = max(difX*1000/spe, 400);//ms
+            var spe = bloodTotalLen/BLOOD_SPEED;//speed /s
+            var t = max(difX*1000/spe, 800);//ms
             redBlood.addaction(sizeto(t, sx, bloodHeight));
         }
         else
@@ -517,7 +555,7 @@ class Soldier extends MyNode
             map.moveGrid(this);
             setZord(MAX_SOL_ZORD);
             map.clearMap(this);
-            map.scene.banner.setCurChooseSol(this);
+            //map.scene.banner.setCurChooseSol(this);
         }
         else
         {
@@ -846,6 +884,12 @@ class Soldier extends MyNode
         }
         return 0;
     }
+    /*
+    敌方士兵的AI周期---> 技能冷却释放技能
+    AI 周期大于动画周期
+    */
+    var aiTime = 0;
+    const AI_PERIOD = 5000;
     function update(diff)
     {
         //trace("update soldier", diff, state, tar);
@@ -877,15 +921,19 @@ class Soldier extends MyNode
         //倒地的时间需要控制 1 s 0-90 4frame 3 time 300ms 
         //血液在倒地 之后显示
         //id level coldTime ready
-        if(state != MAP_SOL_DEAD)
+        aiTime += diff;
+        var i;
+        var sk;
+
+        if(state != MAP_SOL_DEAD && state != MAP_SOL_ARRANGE)
         {
-            for(var i = 0; i < len(skillList); i++)
+            for(i = 0; i < len(skillList); i++)
             {
-                var sk = skillList[i];
+                sk = skillList[i];
                 if(sk[3] == 0)
                 {
                     sk[2] += diff;
-                    var coldTime = getSkillColdTime(sid, sk[0]);
+                    var coldTime = getSkillColdTime(sid, sk[0], sk[1]);
                     if(sk[2] >= coldTime)
                     {
                         trace("skillReady", sk);
@@ -893,12 +941,17 @@ class Soldier extends MyNode
                     }
                 }
             }
+            if(aiTime >= AI_PERIOD && color == ENECOLOR)
+            {
+                aiTime = 0;
+                ai.releaseSkill();
+            }
         }
         //变身时间到解除变身状态 重新计算属性值
         if(makeUpState)
         {
             makeUpTime += diff;
-            var totalMT = getMakeUpTime(sid, makeUpSkillId);
+            var totalMT = getMakeUpTime(sid, makeUpSkillId, makeUpLevel);
             if(makeUpTime >= totalMT)
             {
                 makeUpState = 0;
@@ -1172,6 +1225,7 @@ class Soldier extends MyNode
     var makeUpState = 0;
     
     var makeUpTime = 0;
+    var makeUpLevel = 0;
 
     var makeUpRate = 100;
     var makeUpSkillId = -1;
@@ -1186,14 +1240,15 @@ class Soldier extends MyNode
     
     //变身状态无敌
     //变身动画播放
-    function doMakeUp(skillId)
+    function doMakeUp(skillId, skillLevel)
     {
         if(makeUpState == 0)
         {
             makeUpSkillId = skillId;
+            makeUpLevel = skillLevel;
             makeUpState = 1;
             makeUpTime = 0;
-            makeUpRate = getMakeUpRate(sid); 
+            makeUpRate = getMakeUpRate(id); 
             initMakeUpData();
             initHealth();
         }
@@ -1221,13 +1276,13 @@ class Soldier extends MyNode
         health /= 100;
         health = min(health, healthBoundary);
 
-        attSpeed *= getAttSpeedRate(sid);
+        attSpeed *= getAttSpeedRate(id);
         attSpeed /= 100;
         
         attAni.duration = attSpeed;//修正攻击速度
 
         if(kind == LONG_DISTANCE || kind == MAGIC )
-            attRange += getRangeAdd(sid); 
+            attRange += getRangeAdd(id); 
     }
 
     var greenStar = null;//当前技能释放者

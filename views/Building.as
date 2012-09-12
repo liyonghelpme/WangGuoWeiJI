@@ -146,6 +146,10 @@ class Building extends MyNode
                 privateData["state"] = Free;
             buildLevel = privateData.get("level");
         }
+        else if(funcs == RING_FIGHTING)
+        {
+            funcBuild = new RingFighting(this); 
+        }
         /*
         else if(funcs == LOVE_TREE)
         {
@@ -365,6 +369,7 @@ class Building extends MyNode
     {
         map.mapGridController.clearMap(this);//清理map 之后 再设置map
         setPos(oldPos);
+        map.mapGridController.updateMap(this);//重新设定map
         finishPlan();
     }
     /*
@@ -562,7 +567,6 @@ class Building extends MyNode
                 //finishBottom();
             }
                 
-            //global.user.updateMap(this);
             map.mapGridController.updateMap(this);
         }
         /*
@@ -638,10 +642,12 @@ class Building extends MyNode
             //funcBuild.doAcc();
         }
     }
+    /*
     function getAccCost()
     {
         return funcBuild.getAccCost();
     }
+    */
     function sureToAcc()
     {
 //        trace("doAcc state", state);

@@ -33,12 +33,6 @@ class Plant extends MyNode
         bg = sprite("p0.png").anchor(50, 100).pos((sx+sy)/2*SIZEX, (sx+sy)*SIZEY);
         init();
 
-        /*
-        if(privateData != null)
-            passTime = privateData.get("passTime"); 
-        else 
-            passTime = 0;
-        */
         curState = 0;
     }
 
@@ -62,7 +56,7 @@ class Plant extends MyNode
     {
         //LeftTime s
         var leftTime = (data.get("time")*1000-passTime)/1000;
-        return leftTime; 
+        return max(leftTime/3600, 1); 
     }
     function getState()
     {
@@ -262,13 +256,14 @@ class Farm extends FuncBuild
             return planting.getStartTime();
         return 0;
     }
-    /*
     override function doAcc()
     {
+        var cost = dict([["gold", planting.getAccCost()]]);
+        global.user.doCost(cost);
+        global.httpController.addRequest("buildingC/accPlant", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["gold", planting.getAccCost()]]), null, null);
         planting.finish();
         global.user.updateBuilding(baseBuild);
     }
-    */
 }
 
 

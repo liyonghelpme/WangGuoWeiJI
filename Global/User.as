@@ -764,22 +764,7 @@ class User
     {
         resource.update(key, value);
         //db.put("resource", resource);
-
         global.msgCenter.sendMsg(UPDATE_RESOURCE, null);
-        /*
-        for(var i = 0; i < len(updateList); )
-        {
-            if(updateList[i][1] == 1)
-            {
-                updateList.pop(i);
-            }
-            else
-            {
-                updateList[i][0].updateValue(resource);
-                i++;
-            }
-        }
-        */
     }
     function getNewSid()
     {
@@ -1131,6 +1116,7 @@ class User
         v += add;
         if(key == "exp")
         {
+            var addV = add;
             var level = getValue("level");
             var oldLevel = level;
             var addCityDefense = 0;
@@ -1162,19 +1148,26 @@ class User
             {
                 var ret = global.msgCenter.checkCallback(LEVEL_UP);
                 //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
+                //不能计算升级奖励 因为post方法传送的dict存在问题不能正确解析key
                 if(ret == 0)
                 {
 //                    trace("not in business page!");
-                    var rew = getLevelUpReward();//生成奖励时已经增加
-                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", rew], ["cityDefense", addCityDefense]]), null, null);
+                    //var rew = getLevelUpReward();//生成奖励时已经增加
+                    global.msgCenter.sendMsg(LEVEL_UP, null);
+                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
                 }
                 //经验界面掉落 5 6 7 8 9 奖励
                 else
                 {
                     global.msgCenter.sendMsg(LEVEL_UP, null);
-                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
+                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
                 }
+
+                addV = 0;
             }
+            //增加经验没有升级
+            global.msgCenter.sendMsg(UPDATE_EXP, addV);
+
         }
         setValue(key, v);
     }

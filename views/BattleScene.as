@@ -29,13 +29,17 @@ class BattleScene extends MyNode
 
     var skillSoldier;
     var skillId;
+    var skillLevel;
     var sceneSlowTimer;
     var drugId;
     var dialogController;
+
+    var skills = null;
     function cancelSkill()
     {
         skillSoldier = null;
         skillId = -1;
+        skillLevel = 0;
         state = MAP_FINISH_SKILL;
     }
     //使用药品技能---》 USE_DRUG_SKILL ---> 单体治疗技能---》增加属性
@@ -43,15 +47,17 @@ class BattleScene extends MyNode
     {
         skillSoldier = sol;
         skillId = DRUG_SKILL_ID;
+        skillLevel = 0;
         drugId = did;
 
         state = MAP_START_SKILL;
     }
-    function selectSkill(sol, skId)
+    function selectSkill(sol, skId, skLevel)
     {
         trace("selectSkill", sol, skId);
         skillSoldier = sol;
         skillId = skId;
+        skillLevel = skLevel;
 
         state = MAP_START_SKILL;
 
@@ -68,7 +74,7 @@ class BattleScene extends MyNode
                     trace("healSol", healSol.color, healSol.state);
                     if(sol.color == healSol.color && healSol.state != MAP_SOL_DEAD && healSol.state != MAP_SOL_DEFENSE)//治疗效果 我方未阵亡士兵
                     {
-                        map.doSkillEffect(skillSoldier, healSol, skillId);
+                        map.doSkillEffect(skillSoldier, healSol, skillId, skillLevel);
                     }
                 }
             }
@@ -79,7 +85,7 @@ class BattleScene extends MyNode
         else if(skillKind == MAKEUP_SKILL)
         {
             //skillSoldier.doMakeUp(skillId);
-            map.doSkillEffect(skillSoldier, skillSoldier, skillId);
+            map.doSkillEffect(skillSoldier, skillSoldier, skillId, skillLevel);
             state = MAP_FINISH_SKILL;
             pausePage.skillFlowBanner.finishSkill(sol);
         }
@@ -87,15 +93,18 @@ class BattleScene extends MyNode
     }
     override function enterScene()
     {
-        sceneSlowTimer = new Timer(200);
+        sceneSlowTimer = new Timer(500);
         super.enterScene();
+        
+        sceneSlowTimer.addTimer(this);
+
 
         bg.setevent(EVENT_KEYDOWN, quitMap);
         bg.focus(1);
-        //global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100]));
     }
     override function exitScene()
     {
+        sceneSlowTimer.removeTimer(this);
         super.exitScene();
         sceneSlowTimer.stop();
         sceneSlowTimer = null;
@@ -111,37 +120,73 @@ class BattleScene extends MyNode
         //单体技能确定 攻击目标
         //群体技能确定 攻击位置 左上角
         if(sol != null)
-            map.doSkillEffect(skillSoldier, sol, skillId);
+            map.doSkillEffect(skillSoldier, sol, skillId, skillLevel);
         
         skillSoldier = null;
         skillId = -1;
         drugId = -1;
+        skillLevel = 0;
     }
 
+    var double;
+    var difficult;
     //uid, papayaId, score rank cityDefense
+    
+    //big small soldiers kind double difficult
+    //big small soldiers kind param equips
     function BattleScene(k, sm, s, ki, par, eq)
     {
+        difficult = eq;
+        double = par;
 
         param = par;
         kind = ki;
+        //soldierId ---> {skillId, level}
+        if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR)
+        {
+            skills = dict();
+            var sk = param[5];
+            for(var i = 0; i < len(sk); i++)
+            {
+                var solSk = sk[i];
+                var skLev = skills.get(solSk[0], dict());
+                skLev.update(solSk[1], solSk[2]);
+                skills.update(solSk[0], skLev);
+            }
+        }
+
         bg = node();
         init();
-        dialogController = new DialogController();
+        dialogController = new DialogController(this);
         addChild(dialogController);
 
-        if(global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
+        if(kind == CHALLENGE_MON && global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
         {
             //global.director.pushView(new NoTipDialog(), 1, 0);
             dialogController.addCmd(dict([["cmd", "noTip"]]));
         }
+        if(kind == CHALLENGE_TRAIN)
+        {
+            var tip = global.user.db.get("trainTip");
+            if(tip == null)
+                dialogController.addCmd(dict([["cmd", "trainTip"]]));
+        }
+
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));
 
         big = k;
         small = sm;
-        map = new Map(k, sm, s, this, eq);
+        if(kind == CHALLENGE_TRAIN)
+            map = new Map(k, sm, s, this, null);
+        else
+            map = new Map(k, sm, s, this, eq);
+
         addChild(map);
         banner = new MapBanner(this);
         addChild(banner);
+
+
+
     }
     //防御力的key = 10*big+small 
     function getEneDefense()
@@ -155,15 +200,16 @@ class BattleScene extends MyNode
             return param[4];
         return 0;
     }
-    //var inArrange = 1;
     function finishArrange()
     {
         banner.removeSelf();
         banner = null;
         map.finishArrange();
+        if(kind == CHALLENGE_TRAIN)
+            map.finishTrainArrange();
+
         pausePage = new MapPause(this);
         addChild(pausePage);
-        //inArrange = 0;
         state = MAP_FINISH_SKILL;
     }
     function setSkillSoldier(sol)
@@ -205,5 +251,74 @@ class BattleScene extends MyNode
     function getDefense(id)
     {
         return map.getDefense(id);
+    }
+
+
+    //定时每行刷新怪兽
+    //该行还有士兵
+    //该行还有怪兽剩余量
+    //
+    function update(diff)
+    {
+        if(kind == CHALLENGE_TRAIN)
+        {
+            if(state != MAP_ARRANGE)//布局完成进入 游戏状态 停止刷新怪兽
+            {
+                var eachRow = map.soldiers.items();//rowId ----> soldiers notDead 
+                var i;
+                var j;
+                var row;
+                var sol;
+                //多行士兵可能 不能生成多个怪兽
+                for(i = 0; i < len(eachRow); i++)
+                {
+                    row = eachRow[i];
+                    for(j = 0; j < len(row[1]); j++)
+                    {
+                        sol = row[1][j];
+                        sol.genMonYet = 0;
+                    }
+                }
+                //如果所有我方士兵 存在的 都没有了敌人 则游戏结束
+                var hasLiveMon = 0;//mySol leftNum
+                for(i = 0; i < len(eachRow); i++)
+                {
+                    row = eachRow[i];
+                    var mySol = null;
+                    var eneSol = null;
+                    //所在行士兵我方 敌方士兵
+                    for(j = 0; j < len(row[1]); j++)
+                    {
+                        sol = row[1][j]; 
+                        if(sol.color ==  ENECOLOR)
+                            eneSol = sol; 
+                        else if(sol.color == MYCOLOR)
+                            mySol = sol;
+                    }
+                    if(mySol != null && mySol.state != MAP_SOL_DEAD && mySol.state != MAP_SOL_SAVE)//未死亡
+                    {
+                        if(eneSol != null || mySol.leftMonNum > 0)//存在敌人 或者 存在剩余怪兽数量
+                            hasLiveMon = 1;
+                    }
+
+                    if(mySol != null && mySol.genMonYet == 0 && mySol.leftMonNum > 0 && mySol.state != MAP_SOL_DEAD && mySol.state != MAP_SOL_SAVE)
+                    {
+                        if(eneSol == null)
+                        {
+                            var newMon = map.genNewMonster(mySol);
+                            if(newMon != null)//有位置放置新的怪兽
+                                mySol.leftMonNum--;
+                        }
+                        mySol.genMonYet = 1;
+                    }
+                }
+                if(!hasLiveMon)//没有存在敌人的我方士兵
+                {
+                    map.trainOver();  
+                    sceneSlowTimer.removeTimer(this);//停止怪兽数量刷新
+                }
+                map.showLeftNum();
+            }
+        }
     }
 }

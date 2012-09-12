@@ -3,6 +3,7 @@ class MultiSkill extends MyNode
     var sol;
     var map;
     var skillId;
+    var skillLevel;
     
     var data;
     var sx;
@@ -17,12 +18,16 @@ class MultiSkill extends MyNode
 
     var leftUp;
 
-    function MultiSkill(m, a, t, sk)
+    var startPos;
+    var skillRange;
+
+    function MultiSkill(m, a, t, sk, l)
     {
         map = m;
         sol = a;
         skillId = sk;
         leftUp = t;
+        skillLevel = l;
         //sx sy p 左上角位置
         data = getData(SKILL, skillId);
         sx = data.get("sx");
@@ -30,6 +35,10 @@ class MultiSkill extends MyNode
         effectTime = data.get("effectTime");
     
         attackTime = attackPeriod;//初次释放 需要立即造成伤害？ 或者需要吟唱时间？
+
+        startPos = getSkillPos(leftUp[0], leftUp[1], 1, 1, 0, 0);
+        skillRange = [sx*MAP_OFFX, sy*MAP_OFFY];
+
 
         bg = sprite().pos(getSkillPos(leftUp[0], leftUp[1], sx, sy, data["offX"], data["offY"])).anchor(0, 0);
         //var ani = skillAnimate.get(skillId);
@@ -67,9 +76,12 @@ class MultiSkill extends MyNode
     function doHarm()
     {
         //总伤害
-        var damage = getTotalSkillDamage(sol, skillId);
+        var damage = getTotalSkillDamage(sol, skillId, skillLevel);
         var allEnemies = map.soldiers;
         var hurtEne = [];
+
+
+        //计算列范围 和 行范围
         for(var i = 0; i < sy; i++)
         {
             var row = allEnemies.get(leftUp[1]+i);
@@ -80,7 +92,13 @@ class MultiSkill extends MyNode
                     //敌对方非我方 未死亡
                     if(row[j].state != MAP_SOL_DEFENSE && row[j].state != MAP_SOL_DEAD && row[j].color != sol.color)
                     {
-                        hurtEne.append(row[j]);
+                        var ene = row[j];
+                        var ePos = ene.getPos();
+                        var difx = ePos[0] - startPos[0]; 
+                        var dify = ePos[1] - startPos[1];
+                        //可能一个士兵多次被加入到燃烧伤害计算中
+                        if(difx >= 0 && difx <= skillRange[0] && dify >= 0 && dify <= skillRange[1])
+                            hurtEne.append(ene);
                     }
                 }
             }

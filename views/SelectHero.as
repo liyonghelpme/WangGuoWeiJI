@@ -37,16 +37,16 @@ class SelectHero extends MyNode
     var map;
     function getMapNormalScale()
     {
-        return 810*100/1200;
+        //return 810*100/1200;
+        return 100;
     }
     function SelectHero()
     {
-        //bg = sprite("battleEnd.jpg");
         bg = node();
         init();
 
         mapNode = new MyNode();
-        map = sprite("battleEnd.jpg", ARGB_8888);
+        map = sprite("battleEnd0.jpg", ARGB_8888);
         mapNode.bg = map;
         //bg.add(map, 1);
         addChildZ(mapNode, 1);
@@ -58,13 +58,12 @@ class SelectHero extends MyNode
             heroPic.append(h);
 
         }
-        dia0 = map.addsprite("dialogBack0.png").pos(592, 138).visible(0);
-        dia1 = map.addsprite("dialogBack1.png").pos(637, 243).visible(0);
+        dia0 = sprite("dialogBack0.png").pos(404, 81).visible(0).size(224, 85);//.scale(60*100/90);
+        bg.add(dia0, 2);
+        dia1 = bg.addsprite("dialogBack1.png").pos(416, 154).visible(0).size(228, 91);
+        //.scale(60*100/90);
+        bg.add(dia1, 2);
         
-        //dia0.addlabel(getStr("dearKing", null), null, 21, FONT_BOLD, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
-        //dia1.addlabel(getStr("dearSuo", null), null, 21, FONT_BOLD, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
-
-        //touchDelegate = new StandardTouchHandler();
         setCommand();
     }
     //0 1 dialogPanel
@@ -74,13 +73,14 @@ class SelectHero extends MyNode
         //cmd.append([SETPOS, [600, 360]]);
         cmd.append([CLOSEUP, [0, [0, 0], NORMAL]]);
         cmd.append([WAIT, 2000]);
-        cmd.append([CLOSEUP, [2000, [237, 64], 100]]);
-        cmd.append([SPEAK_NOW, [2000, "kingWeBack", 0]]);
+        //cmd.append([CLOSEUP, [2000, [237, 64], 100]]);
+        cmd.append([SPEAK_NOW, [3000, "kingWeBack", 0]]);
 
-        cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
-        cmd.append([CLOSEUP, [1000, [285, 141], 100]]);
-        cmd.append([SPEAK_NOW, [2000, "rebuildHome", 1]]);
-        cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
+        //cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
+        //cmd.append([CLOSEUP, [1000, [285, 141], 100]]);
+        cmd.append([SPEAK_NOW, [3000, "rebuildHome", 1]]);
+        //cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
+
         cmd.append([DARK_BACK]);
         initYet = 1;
     }
@@ -113,15 +113,10 @@ class SelectHero extends MyNode
     }
     var w;
     var passTime = 0;
-   
-
-
-
     var curStep = 0;
     function updateMenu()
     {
     }
-
 
     //命令结束时 将计时器清0
     function update(diff)
@@ -168,12 +163,16 @@ class SelectHero extends MyNode
                         if(c[1][2] == 0)
                         {
                             dia0.visible(1);
-                            w = dia0.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
+                            w = dia0.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 190, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 31);
+                            dia0.stop();
+                            dia0.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }
                         else if(c[1][2] == 1)
                         {
                             dia1.visible(1);
-                            w = dia1.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 256, 0, ALIGN_LEFT).color(0, 0, 0).pos(20, 17);
+                            w = dia1.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 256, 0, ALIGN_LEFT).color(0, 0, 0).pos(17, 29);
+                            dia1.stop();
+                            dia1.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }
                     }
                     passTime += diff;

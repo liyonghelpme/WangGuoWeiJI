@@ -28,3 +28,4 @@ global.user.initData();
 
 //global.director.pushView(new UpdateDialog(BUILD, 0), 1, 0);
 
+//global.director.pushScene(new BattleEnd());

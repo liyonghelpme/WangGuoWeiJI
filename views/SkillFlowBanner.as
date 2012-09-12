@@ -121,7 +121,7 @@ class SkillFlowBanner extends MyNode
                                         "[NEEDEXP]", str(getLevelUpExp(soldier.id, soldier.level)),
                                         "[LEV]", str(soldier.level+1),
                                         ]), 
-                                        18, 20, [0, 0, 0]);
+                                        18, 20, [0, 0, 0], FONT_NORMAL);
             attributeList.pos(50, 140);
             bg.add(attributeList);
         }
@@ -193,7 +193,7 @@ class SkillFlowBanner extends MyNode
                     //拯救技能 升级减少冷却时间
                     //单体攻击 群体攻击 直线攻击
                     //冷却时间是由 士兵timer决定的
-                    coldTime = getSkillColdTime(soldier.sid, skillId);
+                    coldTime = getSkillColdTime(soldier.sid, skillId, skillList[i][1]);
                     rate = max((coldTime-skTime), 0)*100/coldTime;//leftTime
                     //trace("rate", rate, coldTime, skillList[i]);
                 }
@@ -276,6 +276,10 @@ class SkillFlowBanner extends MyNode
             accMove = 0;
             lastPoints = n.node2world(x, y);
 
+            if(soldier != null && soldier.color == ENECOLOR)
+            {
+                return;
+            }
             var child = checkInChild(flowNode, lastPoints);
             if(child != null)
             {
@@ -382,7 +386,7 @@ class SkillFlowBanner extends MyNode
             shadowWord.visible(1);
             
             if(kind == SKILL)
-                pausePage.scene.selectSkill(soldier, skillList[selectNum][0]);
+                pausePage.scene.selectSkill(soldier, skillList[selectNum][0], skillList[selectNum][1]);
             else if(kind == DRUG)
                 pausePage.scene.selectDrug(soldier, drugData[selectNum][0]);
         }

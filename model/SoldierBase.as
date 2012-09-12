@@ -168,7 +168,12 @@ function initAttackAndDefense(sol)
     }
 
 
-    setEquipAttribute(sol, global.user.getSoldierEquipData(sol.sid));
+    //setEquipAttribute(sol, global.user.getSoldierEquipData(sol.sid));
+    if(sol.sid == ENEMY)
+        setEquipAttribute(sol, sol.myEquips);
+    else
+        setEquipAttribute(sol, global.user.getSoldierEquipData(sol.sid));
+        
 
     sol.health = min(sol.health, sol.healthBoundary);
 
@@ -254,12 +259,15 @@ function getLevelUpExp(id, level)
 技能等级 基础伤害
 
 敌方士兵的技能攻击力
+
+技能等级由skill类控制
 */
 const BASE_SOLDIER = 70;
-function getTotalSkillDamage(sol, skillId)
+function getTotalSkillDamage(sol, skillId, skillLevel)
 {
     var sdata = getData(SKILL, skillId);
-    var level =  global.user.getSolSkillLevel(sol.sid, skillId);
+    //var level =  global.user.getSolSkillLevel(sol.sid, skillId);
+    var level = skillLevel;
     level += sdata.get("startLevel");
 
     var pureData = getSolPureData(BASE_SOLDIER, level);
@@ -286,18 +294,20 @@ function calHurt(src, tar)
     return hurt;
 }
 
-function getSkillColdTime(soldierId, skillId)
+function getSkillColdTime(soldierId, skillId, skillLevel)
 {
     var sdata = getData(SKILL, skillId);
     var skillKind = sdata.get("kind");
-    var skillLevel = global.user.getSolSkillLevel(soldierId, skillId);
+    //var skillLevel = global.user.getSolSkillLevel(soldierId, skillId);
     var coldTime = sdata.get("coldTime");
     //ms 单位
     coldTime = max(coldTime-sdata.get("coldMinusTime")*skillLevel, SKILL_MIN_COLDTIME);//最少时间5s 拯救技能 最少5s时间
     return coldTime;
 }
 
-//得到转职等级
+//得到转职等级 我方士兵得到转职等级
+//敌方士兵 得到转职等级 敌方怪兽得到转职等级
+/*
 function getProLevel(sid)
 {
     var sdata = global.user.getSoldierData(sid);
@@ -305,26 +315,30 @@ function getProLevel(sid)
     var proLevel = kind%10;
     return proLevel;
 }
+*/
 
-function getMakeUpRate(sid)
+function getMakeUpRate(id)
 {
-    var proLevel = getProLevel(sid);
-    return 110+20*proLevel;
+    //var proLevel = getProLevel(sid);
+    var careerLev = getCareerLev(id);
+    return 110+20*careerLev;
 }
-function getAttSpeedRate(sid)
+function getAttSpeedRate(id)
 {
-    var proLevel = getProLevel(sid);
-    return 95-proLevel*5;
+    //var proLevel = getProLevel(sid);
+    var careerLev = getCareerLev(id);
+    return 95-careerLev*5;
 }
-function getRangeAdd(sid)
+function getRangeAdd(id)
 {
-    var proLevel = getProLevel(sid);
-    return proLevel*MAP_OFFX;
+    //var proLevel = getProLevel(sid);
+    var careerLev = getCareerLev(id);
+    return careerLev*MAP_OFFX;
 }
 
-function getMakeUpTime(sid, skillId)
+function getMakeUpTime(sid, skillId, skLevel)
 {
-    var skLevel = global.user.getSolSkillLevel(sid, skillId);
+    //var skLevel = global.user.getSolSkillLevel(sid, skillId);
     var skData = getData(SKILL, skillId);
 
     return skData.get("effectTime")+skLevel*skData.get("addTime");

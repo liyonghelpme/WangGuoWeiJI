@@ -6,16 +6,19 @@ class HealSkill extends MyNode
     var sol;
     var tar;
     var skillId;
+    var skillLevel;
+
     var cus;
     var passTime = 0;
     var attackTime;
 
-    function HealSkill(m, a, t, sk)
+    function HealSkill(m, a, t, sk, l)
     {
         map = m;
         sol = a;
         tar = t;
         skillId = sk;
+        skillLevel = l;
 
         var tSize = tar.bg.size();
         bg = sprite().pos(tSize[0]/2, tSize[1]).anchor(50, 100);//技能和人物居中对齐
@@ -32,8 +35,9 @@ class HealSkill extends MyNode
         if(passTime >= attackTime)//超过眩晕时间 技能结束 
         {
             var sData = getData(SKILL, skillId);
-            var sLevel = global.user.getSolSkillLevel(sol.sid, skillId);
-            var healEffect = sData.get("effectTime")+sData.get("addTime")*sLevel;
+            //var sLevel = global.user.getSolSkillLevel(sol.sid, skillId);
+            //var sLevel = skillLevel;
+            var healEffect = sData.get("effectTime")+sData.get("addTime")*skillLevel;
             tar.doHeal(healEffect);
 
             removeSelf();

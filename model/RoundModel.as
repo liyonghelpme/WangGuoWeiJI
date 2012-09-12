@@ -68,16 +68,31 @@ y 0 - 4
 
 士兵是50 100
 群体技能 是 50 50 位置
+
+偏移半个格子
 */
 function getSolMap(p, sx, sy, offY)
 {
-    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
+    var ix = p[0]+MAP_OFFX/2-MAP_INITX-MAP_OFFX/2*sx;
     var xk = ix/MAP_OFFX;
-    var iy = p[1]-MAP_INITY-MAP_OFFY*sy-offY;
+    var iy = p[1]+MAP_OFFY/2-MAP_INITY-MAP_OFFY*sy-offY;
     var yk = iy/MAP_OFFY;
 
     return [xk, yk];
 }
+/*
+得到 sx = 0 sy = 0 点击位置 对应网格
+function getTouchMap(p, sx, sy, offY)
+{
+    var ix = p[0]-MAP_INITX;
+    var xk = ix/MAP_OFFX;
+    var iy = p[1]-MAP_INITY-offY;
+    var yk = iy/MAP_OFFY;
+
+    return [xk, yk];
+}
+*/
+
 //skill Map ---> 50 50 heart 
 
 //根据手指 50 50 计算 技能网格的左上角位置

@@ -102,7 +102,7 @@ class TrainDialog extends MyNode
 
                 var curDifLevel = getCurEnableDif();
                 global.director.pushScene(
-                    new TrainScene(curDifLevel[0]-1, 0, 
+                    new BattleScene(curDifLevel[0]-1, 0, 
                         null, CHALLENGE_TRAIN, 1, curChoose
                     )
                 );
@@ -114,7 +114,7 @@ class TrainDialog extends MyNode
         global.director.popView();
         var curDifLevel = getCurEnableDif();
         global.director.pushScene(
-            new TrainScene(curDifLevel[0]-1, 0, 
+            new BattleScene(curDifLevel[0]-1, 0, 
                 null, CHALLENGE_TRAIN, 0, curChoose
             )
         );

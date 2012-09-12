@@ -50,7 +50,7 @@ class MapPause extends MyNode
     const HEAD_WID = 75;
     const HEAD_HEI = 70;
     const BLOOD_X = 73;
-    const BLOOD_Y = 15;
+    const BLOOD_Y = 20;
     const BL_OFFX = 2;
     const BL_OFFY = 4;
 
@@ -61,7 +61,7 @@ class MapPause extends MyNode
     const HH = 60;
 
     const NX = 72;
-    const NY = 48;
+    const NY = 53;
 
     var defBlood;
     var redBlood;
@@ -94,7 +94,11 @@ class MapPause extends MyNode
             //var banSize = banner.prepare().size();
 
             leftRed = banner.addsprite("mapDefenseRed.png").pos(BL_OFFX, BL_OFFY).anchor(0, 0);
-            leftDef = banner.addsprite("mapDefenseBlue.png").pos(BL_OFFX, BL_OFFY).anchor(0, 0);
+            var mInfo = getData(MAP_INFO, scene.big);
+            if(mInfo["blood"] == 0)
+                leftDef = banner.addsprite("mapDefenseBlue.png").pos(BL_OFFX, BL_OFFY).anchor(0, 0);
+            else if(mInfo["blood"] == 1)
+                leftDef = banner.addsprite("mapDefenseGreen.png").pos(BL_OFFX, BL_OFFY).anchor(0, 0);
             leftText = banner.addlabel("", null, 28, FONT_BOLD).anchor(0, 50).pos(DEF_T_X, DEF_T_Y).color(0, 0, 0);
 
             //214 29
@@ -111,7 +115,7 @@ class MapPause extends MyNode
             //右侧位置
             banner = bg.addsprite("mapNewCastleBanner.png").pos(disSize[0]-BLOOD_X, BLOOD_Y).anchor(100, 0);
             rightRed = banner.addsprite("mapDefenseRed.png").pos(banSize[0]-BL_OFFX, BL_OFFY).anchor(100, 0);
-            rightDef = banner.addsprite("mapDefenseGreen.png").pos(banSize[0]-BL_OFFX, BL_OFFY).anchor(100, 0);
+            rightDef = banner.addsprite("mapDefenseYellow.png").pos(banSize[0]-BL_OFFX, BL_OFFY).anchor(100, 0);
             rightText = banner.addlabel("", null, 28, FONT_BOLD).anchor(100, 50).pos(banSize[0]-DEF_T_X, DEF_T_Y).color(0, 0, 0);
 
 

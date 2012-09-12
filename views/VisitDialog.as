@@ -16,13 +16,17 @@ class VisitDialog extends MyNode
     }
     /*
     访问好友或者挑战好友 获取数据成功之后关闭对话框
+    等待界面 如果没有用则由场景主动控制关闭
+    但是要避免弹出其它对话框
     */
     function update(diff)
     {
-        if(friendScene.initOver == 1)
+        if(friendScene != null)
         {
-//            trace("popVisit");
-            global.director.popView();
+            if(friendScene.initOver == 1)
+            {
+                global.director.popView();
+            }
         }
     }
     override function exitScene()

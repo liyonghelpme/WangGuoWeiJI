@@ -92,7 +92,7 @@ import views.LoveDialog;
 
 import views.LiveHeartDialog;
 
-import views.TrainScene;
+//import views.TrainScene; 统一使用battleScene
 import views.TrainTip;
 
 import views.BreakDialog;
@@ -107,15 +107,24 @@ import views.CastleScene;
 import views.Building;
 import views.BuildMenu;
 import views.BuildWorkMenu;
+import views.RingFightingScene;
+import views.FightMap;
+import views.FightMenu;
+
+import views.FightSoldier;
+import views.MoveMap;
+import views.MoveSoldier;
 
 import views.SellDialog;
 import views.AccDialog;
 import views.FriendDialog;
+import views.FriendList;
 import views.GiftDialog;
 
 import views.FlowScene;
 import views.FlowMenu;
 import views.FlowIsland;
+
 
 
 import views.ResourceWarningDialog;
@@ -145,6 +154,7 @@ import views.NoTipDialog;
 import views.Map;
 import views.TrainOverDialog;
 import views.Soldier;
+import model.SoldierAI;
 import views.MonSmoke;
 import views.DeadOver;
 //import views.SkillEffect;
@@ -186,6 +196,7 @@ import views.SelectHero;
 import views.SelectMenu;
 
 import views.BattleEnd;
+import views.BackWord;
 import views.NewBattle;
 import views.WelcomeDialog;
 import views.PrintWord;

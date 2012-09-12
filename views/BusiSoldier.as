@@ -83,6 +83,7 @@ class BusiSoldier extends MyNode
     var bloodScaX = 72*100/139;//根据怪兽的体积计算血条长度 
     var bloodScaY = 9*100/12;
     var firstBuy = 0;
+    //var myEquips;
     function initData(privateData)
     {
         if(privateData == null)
@@ -90,6 +91,7 @@ class BusiSoldier extends MyNode
             firstBuy = 1;
             privateData = dict();
         }
+        //myEquips = global.user.getSoldierEquipData(sid);
 
         level = privateData.get("level", 0);
 
@@ -760,17 +762,6 @@ class BusiSoldier extends MyNode
 
         }
 
-        /*
-        if(inspire == 0)
-        {
-            inspireTime += diff;
-            if(inspireTime >= 10000)
-            {
-                inspire = 1;
-                showInspire();
-            }
-        }
-        */
 
         if(Planing)//规划中停止移动
             return;

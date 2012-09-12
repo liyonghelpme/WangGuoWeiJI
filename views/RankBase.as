@@ -191,21 +191,31 @@ class RankBase extends MyNode
         var k;
 
 //        trace("getRankOver", rid, rcode, con, param);
+        //返回数据长度为0 则已经到达最大或者最小
         if(rcode != 0)
         {
             con = json_loads(con);
             //同时考虑 最大最小 数据为空
-            if(param == 2)
+            if(param == RANK_INIT)
             {
                 newData = adjustData(con.get("res"));
                 data = newData;
-
-//                trace("param1", data, len(data));
-                if(data[0][3] > preMin)
-                    minRank = data[0][3];
-                if(data[len(data)-1][3] < (preMax-1))
+                if(len(data) == 0)
                 {
-                    maxRank = data[len(data)-1][3];   
+                    trace("noData return");
+                    minRank = 0;
+                    maxRank = 0;
+                }
+                else
+                {
+
+    //                trace("param1", data, len(data));
+                    if(data[0][3] > preMin)
+                        minRank = data[0][3];
+                    if(data[len(data)-1][3] < (preMax-1))
+                    {
+                        maxRank = data[len(data)-1][3];   
+                    }
                 }
                 //获取的数据过多丢弃一半
                 if(len(data) > MAX_BUFFER)
@@ -215,9 +225,8 @@ class RankBase extends MyNode
                         temp.append(data[i]);
                     data = temp;
                 }
-                
             }
-            else if(param == 1)
+            else if(param == RANK_END)
             {
                 newData = adjustData(con.get("res"));
                 //判断data 和 newData 之间是否存在 间隙
@@ -251,7 +260,7 @@ class RankBase extends MyNode
                     data = temp;
                 }
             }
-            else if(param == 0)
+            else if(param == RANK_BEGIN)
             {
                 newData = adjustData(con.get("res"));
 
@@ -373,9 +382,8 @@ class RankBase extends MyNode
                 preMax = endRank;
                 preMin = beginRank;
                 //考虑最小最大范围
-                global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 2);
-
-
+                if(limit > 0)
+                    global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, RANK_INIT);
             }
             //获取缓存数据 判定显示数据足够则继续显示 否则停止显示更新
             else
@@ -387,7 +395,8 @@ class RankBase extends MyNode
                     limit = beginItem-beginRank;
                     fetchData = 1;
                     preMin = beginRank;
-                    global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, 0);
+                    if(limit > 0)
+                        global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", beginRank], ["limit", limit]]), getRankOver, RANK_BEGIN);
                 }
                 else if((endRank-1) > endItem && endItem < maxRank)//下部缓存数据不足 且下部没有到达最后
                 {
@@ -396,7 +405,8 @@ class RankBase extends MyNode
                     fetchData = 1;
                     preMax = endRank;
                     // 当前数据中的 >= endItem 
-                    global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", endItem+1], ["limit", limit]]), getRankOver, 1);
+                    if(limit > 0)
+                        global.httpController.addRequest(URL_API, dict([["uid", global.user.uid], ["offset", endItem+1], ["limit", limit]]), getRankOver, RANK_END);
                 }
             }
         }

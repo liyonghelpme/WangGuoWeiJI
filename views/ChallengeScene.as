@@ -61,13 +61,14 @@ class ChallengeScene extends MyNode
                 equips = con.get("equips");
                 global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_SELF, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
             }
+            //挑战好友 挑战邻居获得技能
             else if(kind == CHALLENGE_FRI){
                 global.user.addChallengeRecord(oid);
                 enemies = con.get("soldiers");
                 equips = con.get("equips");
                 //initOver = 1;
                 //战胜 失败于对方 需要知道对方
-                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills")], equips));
             }
             else if(kind == CHALLENGE_NEIBOR)
             //根据邻居的uid 得到邻居的数据 getNeiborData
@@ -77,7 +78,7 @@ class ChallengeScene extends MyNode
                 equips = con.get("equips");
                 //initOver = 1;
                 //战胜 失败于对方 需要知道对方
-                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills")], equips));
             }
         }
     }

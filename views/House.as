@@ -41,6 +41,19 @@ class Castle extends FuncBuild
         baseBuild = b;
     }
 }
+
+class RingFighting extends FuncBuild
+{
+    function RingFighting(b)
+    {
+        baseBuild = b;
+    }
+    override function whenFree()
+    {
+        global.director.pushScene(new RingFightingScene());
+        return 1;
+    }
+}
 class StaticBuild extends FuncBuild
 {
     var solNum;

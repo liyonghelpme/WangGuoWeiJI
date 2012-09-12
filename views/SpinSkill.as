@@ -4,16 +4,20 @@ class SpinSkill extends MyNode
     var sol;
     var tar;
     var skillId;
+    var skillLevel;
     var cus;
-    function SpinSkill(m, a, t, sk)
+    function SpinSkill(m, a, t, sk, l)
     {
         map = m;
         sol = a;
         tar = t;
         skillId = sk;
+        skillLevel = l;
+
         var sData = getData(SKILL, skillId);
-        var sLevel = global.user.getSolSkillLevel(sol.sid, skillId);
-        var effectTime = sData.get("effectTime")+sData.get("addTime")*sLevel;
+        //var sLevel = global.user.getSolSkillLevel(sol.sid, skillId);
+
+        var effectTime = sData.get("effectTime")+sData.get("addTime")*skillLevel;
 
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
         init();

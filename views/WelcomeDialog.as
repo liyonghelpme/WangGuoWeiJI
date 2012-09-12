@@ -11,8 +11,10 @@ class WelcomeDialog extends MyNode
     {
         bg = node();
         init();
-        var prW = new PrintWord(this, getStr("welcomeWord", null), 22, 5, [100, 100, 100], 640, 0, 4, closeDialog);//100ms 打字速度
-        prW.setPos([100, 120]);
+        var prW = new BackWord(this, getStr("welcomeWord", null), 30, 15, [100, 100, 100], 800, 0, 4, closeDialog, FONT_BOLD);//100ms 打字速度
+        prW.setPos([39, 174]);
+        //得到字符串包括换行符号 的总字符长度 totalNum 打印
+        prW.setCommand([[PRINT, getWordLen(getStr("welcomeWord", null))]]);
         addChild(prW);//tick = 50ms 2tick = 100ms
     }
     function closeDialog()

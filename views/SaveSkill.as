@@ -11,13 +11,15 @@ class SaveSkill extends MyNode
     var cus;
     var passTime = 0;
     var attackTime;
+    var skillLevel;
 
-    function SaveSkill(m, a, t, sk)
+    function SaveSkill(m, a, t, sk, l)
     {
         map = m;
         sol = a;
         tar = t;
         skillId = sk;
+        skillLevel = l;
 
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
          

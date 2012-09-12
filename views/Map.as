@@ -77,6 +77,19 @@ class Map extends MyNode
         gridCol.pos(gp[0], MAP_INITY);
     }
     var monEquips;
+    function getEnemyEquips(sid)
+    {
+        var res = [];
+        if(monEquips != null)
+        {
+            for(var i = 0; i < len(monEquips); i++)
+            {
+                if(monEquips[i]["owner"] == sid)
+                    res.append(monEquips[i]);
+            }
+        }
+        return res;
+    }
     function Map(k, sm, s, sc, eq)
     {
         monEquips = eq;
@@ -86,6 +99,10 @@ class Map extends MyNode
         //curStar = global.user.getCurStar(kind, small);
 
         bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
+        var mapSize = bg.prepare().size();
+        var offY = global.director.disSize[1]-mapSize[1];
+        bg.pos(MAP_INITX, offY);
+
         grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
         grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
 
@@ -498,7 +515,7 @@ class Map extends MyNode
     //设定怪兽数量
     function finishTrainArrange()
     {
-        finishArrange();
+        //finishArrange();
         for(var i = 0; i < len(mySoldiers); i++)
         {
             mySoldiers[i].setLeftMonNum(MONNUM[scene.difficult]);
@@ -777,7 +794,7 @@ class Map extends MyNode
                     break;
                 }
             }
-            i = min(i, len(challengeReward));
+            i = min(i, len(challengeReward)-1);
             if(win == 1)
             {
                 crystal = challengeReward[i][1];
@@ -1176,7 +1193,7 @@ class Map extends MyNode
 
     //单体技能设定 目标士兵
     //群体技能设定 范围网格
-    function doSkillEffect(attacker, target, skillId)
+    function doSkillEffect(attacker, target, skillId, skillLevel)
     {
         var data = getData(SKILL, skillId);
         var skill = null;
@@ -1184,33 +1201,33 @@ class Map extends MyNode
         //单体攻击在 士兵身上 但是相对位置不同
         if(data["kind"] == LINE_SKILL)
         {
-            skill = new LineSkill(this, attacker, target, skillId); 
+            skill = new LineSkill(this, attacker, target, skillId, skillLevel); 
             addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == SINGLE_ATTACK_SKILL)
         {
-            skill = new SingleSkill(this, attacker, target, skillId);
+            skill = new SingleSkill(this, attacker, target, skillId, skillLevel);
             addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == MULTI_ATTACK_SKILL)
         {
-            skill = new MultiSkill(this, attacker, target, skillId);
+            skill = new MultiSkill(this, attacker, target, skillId, skillLevel);
             addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == SPIN_SKILL)
         {
-            skill = new SpinSkill(this, attacker, target, skillId);
+            skill = new SpinSkill(this, attacker, target, skillId, skillLevel);
             addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == HEAL_SKILL || data["kind"] == MULTI_HEAL_SKILL)
         {
-            skill = new HealSkill(this, attacker, target, skillId);//显示的图片是默认的治疗图片
+            skill = new HealSkill(this, attacker, target, skillId, skillLevel);//显示的图片是默认的治疗图片
             target.addChildZ(skill, MAX_BUILD_ZORD);
         }
         //单体技能加在士兵身上
         else if(data["kind"] == SAVE_SKILL)
         {
-            skill = new SaveSkill(this, attacker, target, skillId);
+            skill = new SaveSkill(this, attacker, target, skillId, skillLevel);
             addChildZ(skill, MAX_BUILD_ZORD);
         }
         else if(data["kind"] == USE_DRUG_SKILL)
@@ -1220,7 +1237,7 @@ class Map extends MyNode
         }
         else if(data["kind"] == MAKEUP_SKILL)//变身技能
         {
-            attacker.doMakeUp(skillId);
+            attacker.doMakeUp(skillId, skillLevel);
         }
 
         //addChildZ(skill, MAX_BUILD_ZORD);

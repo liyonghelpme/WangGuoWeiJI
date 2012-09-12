@@ -32,14 +32,14 @@ class LoveDialog extends MyNode
         {
             w = stringLines(
                 getStr("topHeartNum", ["[WEEKNUM]", str(global.user.getValue("weekNum")), "[ACCNUM]", str(global.user.getValue("accNum"))]), 
-                19, 35, [28, 16, 4]);
+                19, 35, [28, 16, 4], FONT_NORMAL);
         }
         else
         {
             var leftNum = loveTreeHeart[level]-global.user.getValue("accNum");
             w = stringLines(
                 getStr("heartNum", ["[WEEKNUM]", str(global.user.getValue("weekNum")), "[ACCNUM]", str(global.user.getValue("accNum")), "[LEV]", str(level+1+1), "[LEFTNUM]", str(leftNum)]),
-                19, 35, [28, 16, 4]);
+                19, 35, [28, 16, 4], FONT_NORMAL);
             
         }
         w.pos(74, 124);

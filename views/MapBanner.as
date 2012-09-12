@@ -73,13 +73,14 @@ class MapBanner extends MyNode
             bg.addsprite("mapMenuCancel.png").pos(674, 19).setevent(EVENT_TOUCH, onCancel);
         }
 
-        cl = bg.addnode().pos(103, 451).size(CLIP_WIDTH, CLIP_HEIGHT).clipping(1).anchor(0, 100);
+        cl = bg.addnode().pos(103, 461).size(CLIP_WIDTH, CLIP_HEIGHT).clipping(1).anchor(0, 100);
         flowNode = cl.addnode().pos(0, CLIP_HEIGHT);
 
         leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(57, 411).scale(-100, 100).setevent(EVENT_TOUCH, onMove, 1);
         rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(754, 411).setevent(EVENT_TOUCH, onMove, -1);
 
-        shadowWord = bg.addsprite("storeBlack.png").pos(10, 323).visible(0);
+        shadowWord = bg.addsprite("storeBlack.png").pos(10, 313);//.visible(0);
+        shadowWord.addaction(itintto(0, 0, 0, 0));
         words = null;
 
         /*
@@ -195,6 +196,7 @@ class MapBanner extends MyNode
         }
     }
 
+    var touchPos = null;
     //data[p] sid isInMap data[p][1] == 0
     function touchBegan(n, e, p, x, y, points)
     {
@@ -207,23 +209,15 @@ class MapBanner extends MyNode
 
         //var solData = global.user.getSoldierData(sid);
 
+        touchPos = bg.world2node(newPos[0], newPos[1]); 
         setCurChooseSol(controlSoldier);
-        /*
-        var w = getStr("dragSol", ["[NAME]", solData.get("name")]);
-        words = shadowWord.addlabel(w, null, 25);
-        var wSize = words.prepare().size();
-        var sSize = shadowWord.prepare().size();
-        sSize[0] = max(wSize[0], sSize[0]);
-        shadowWord.size(sSize);
-        words.anchor(50, 50).pos(sSize[0]/2, sSize[1]/2);
-        shadowWord.visible(1);
-        */
 
-        var nPos = n.node2world(x, y);
-        var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
+
+        //var nPos = n.node2world(x, y);
+        var mPos = scene.map.bg.world2node(newPos[0], newPos[1]);
         controlSoldier.setPos(mPos);
         
-        controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+        controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, newPos[0], newPos[1], points);
         //data.remove(sid);
         data[p][1] = 1;
         //n.visible(0);//背景变蓝色
@@ -250,11 +244,6 @@ class MapBanner extends MyNode
         flowNode.pos(curPos);
         updateTab();
 
-        /*
-        shadowWord.visible(0);
-        words.removefromparent();
-        words = null;
-        */
 
         if(controlSoldier != null)
         {
@@ -277,20 +266,30 @@ class MapBanner extends MyNode
         }
         if(sol == null)
         {
-            shadowWord.visible(0);
+            //shadowWord.visible(0);
         }
         else
         {
-
-            shadowWord.visible(1);
+            //shadowWord.visible(1);
+            shadowWord.stop();
+            shadowWord.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
             var w = getStr("dragSol", ["[NAME]", sol.myName]);
-            words = shadowWord.addlabel(w, null, 25);
+            words = shadowWord.addlabel(w, null, 20);
             var wSize = words.prepare().size();
             var sSize = shadowWord.prepare().size();
-            sSize[0] = max(wSize[0], sSize[0]);
+            sSize[0] = max(wSize[0]+40, sSize[0]);
             shadowWord.size(sSize);
             words.anchor(50, 50).pos(sSize[0]/2, sSize[1]/2);
-            shadowWord.visible(1);
+            //shadowWord.visible(1);
+
+            var oldPos = shadowWord.pos();
+            //左右屏幕限制
+            //按钮和士兵中心对齐
+            if(touchPos != null)
+            {
+                var x = min(max(touchPos[0]-sSize[0]/2, 0), global.director.disSize[0]-sSize[0]);
+                shadowWord.pos(x, oldPos[1]);
+            }
         }
     }
 

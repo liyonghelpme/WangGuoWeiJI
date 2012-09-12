@@ -43,8 +43,10 @@ class PrintWord extends MyNode
     //var player;
     //段落停顿时间
     var callback;
-    function PrintWord(sc, w, sz, h, c, wid, hei, n, cb)
+    var font;
+    function PrintWord(sc, w, sz, h, c, wid, hei, n, cb, ft)
     {
+        font = ft;
         sound = createaudio("print.mp3");
         accTick = 0;
         tick = n;
@@ -130,7 +132,7 @@ class PrintWord extends MyNode
                     //之前段落
                     for(var i = 0; i < curLine; i++)
                     {
-                        var w1 = lab.addlabel(word[i], null, siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color(col);
+                        var w1 = lab.addlabel(word[i], null, siz, font, width, 0, ALIGN_LEFT).color(col);
                         var wSize = w1.prepare().size();
                         w1.pos(0, curSize[1]);
                         curSize[0] = max(wSize[0], curSize[0]);
@@ -138,12 +140,8 @@ class PrintWord extends MyNode
                     }
                     //当前段落位置
                     showWord = line.substr(0, curWordPos);
-                    var w2 = lab.addlabel(showWord, null, siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color(col);
+                    var w2 = lab.addlabel(showWord, null, siz, font, width, 0, ALIGN_LEFT).color(col);
                     w2.pos(0, curSize[1]);
-
-                    //showWord = totalWord.substr(0, totalNum);
-                    //lab.removefromparent();
-                    //lab = bg.addlabel(showWord, null, siz, FONT_NORMAL, width, height, ALIGN_LEFT).color(col);
                 }
                 else
                 {

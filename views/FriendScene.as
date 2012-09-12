@@ -1,15 +1,22 @@
-class MovLayer extends MyNode
-{
+/*
     var scene;
     var solTimer;
     var mapDict = dict();
+*/
+class MovLayer extends MoveMap
+{
     var kind;
+    const FlowZone = [[136, 242, 605, 300], [306, 116, 372, 169]];
     function MovLayer(sc, k)
     {
         kind = k;
         scene = sc;
         bg = node();
         init();
+        moveZone = FlowZone;
+        gridLayer = bg.addnode();
+        solTimer = new Timer(200);
+        mapGridController = new MapGridController(this);
     }
     //代理来自士兵的touch事件
     //坐标需要首先针对n 转化成 世界坐标
@@ -30,61 +37,8 @@ class MovLayer extends MyNode
         scene.island.touchEnded(n, e, p, x, y, points);
     }
 
-    function clearMap(build)
-    {
-        var map = getBuildMap(build);
-        var sx = map[0];
-        var sy = map[1];
-        var initX = map[2];
-        var initY = map[3];
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var key = curX*10000+curY;
-                var v = mapDict.get(key, []);
-                if(len(v) == 0)
-                    continue;
-                removeMapEle(v, build);
-                if(len(v) == 0)
-                    mapDict.pop(key);
-                curX -= 1;
-                curY += 1;
-            }
-        }
-    }
-
-    function updatePosMap(sizePos)
-    {
-        var map = getPosMap(sizePos[0], sizePos[1], sizePos[2], sizePos[3]);
-        var sx = map[0];
-        var sy = map[1];
-        var initX = map[2];
-        var initY = map[3];
-
-        for(var i = 0; i < sx; i++)
-        {
-            var curX = initX+i;
-            var curY = initY+i;
-            for(var j = 0; j < sy; j++)
-            {
-                var key = curX*10000+curY;
-                var v = mapDict.get(key, []);
-                v.append([sizePos[4], 1, 1]);
-                mapDict.update(key, v);
-
-                curX -= 1;
-                curY += 1;
-            }
-        }
-        return [initX, initY];
-    }
-
     override function enterScene()
     {
-        solTimer = new Timer(200);
         super.enterScene();
         initSoldiers();
         if(kind == VISIT_NEIBOR)
@@ -141,46 +95,8 @@ class MovLayer extends MyNode
             allSoldiers[i].removeSelf();
         allSoldiers = [];
     }
-    const FlowZone = [[136, 242, 605, 300], [306, 116, 372, 169]];
 
-    function checkInFlow(p)
-    {   
-        trace("checkInFlow", p, FlowZone);
-        for(var i = 0; i < len(FlowZone); i++)
-        {
-            var difx = p[0] - FlowZone[i][0];
-            var dify = p[1] - FlowZone[i][1];
-            if(difx > 0 && difx < FlowZone[i][2] && dify > 0 && dify < FlowZone[i][3])
-                return 1;
-        }
-        return 0;
-    }
 
-    function checkPosCollision(mx, my, ps)
-    {
-        var inZ = checkInFlow(ps);
-        /*
-        限制上下边界
-        */
-        if(inZ == 0)
-        {
-            return 1;//not In zone
-        }
-        var key = mx*10000+my;
-        /*
-        限制不与其它建筑冲突
-        */
-        var v = mapDict.get(key, []);
-        if(len(v) > 0)
-        {
-            for(var i = 0; i < len(v); i++)
-            {
-                if(v[i][2] == 1)//不可行走区域
-                    return v[0];
-            }
-        }
-        return null;
-    }
 }
 /*
 邻居：访问消除装天 可以挑战 赠送礼物

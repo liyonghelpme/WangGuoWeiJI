@@ -4,14 +4,16 @@ class SingleSkill extends MyNode
     var sol;
     var tar;
     var skillId;
+    var skillLevel;
 
     var cus;
-    function SingleSkill(m, a, t, sk)
+    function SingleSkill(m, a, t, sk, l)
     {
         map = m;
         sol = a;
         tar = t;
         skillId = sk;
+        skillLevel = l;
 
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
         init();
@@ -19,6 +21,7 @@ class SingleSkill extends MyNode
         var ani = getSkillAnimate(skillId);
         attackTime = ani[1];
         cus = new MyAnimate(ani[1], ani[0], bg);
+        tar.inSkill = 1;
     }
 
     var passTime = 0;
@@ -39,9 +42,10 @@ class SingleSkill extends MyNode
     {
         if(tar != null)//攻击对象没有死亡
         {
-            var damage = getTotalSkillDamage(sol, skillId);
+            var damage = getTotalSkillDamage(sol, skillId, skillLevel);
             var hurt = calSkillHurt(damage, tar);
             tar.changeHealth(sol, -hurt);
+            tar.inSkill = 0;
         }
         removeSelf();
     }

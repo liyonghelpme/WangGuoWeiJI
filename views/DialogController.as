@@ -1,8 +1,10 @@
 class DialogController extends MyNode
 {
     var cmds = [];
-    function DialogController()
+    var scene;
+    function DialogController(sc)
     {
+        scene = sc;
         bg = node();
         init();
     }
@@ -49,6 +51,14 @@ class DialogController extends MyNode
                 else if(curCmd.get("cmd") == "chooseSol")
                 {
                     global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100]));
+                }
+                else if(curCmd.get("cmd") == "trainTip")
+                {
+                    global.director.pushView(new TrainTip(), 1, 0);
+                }
+                else if(curCmd.get("cmd") == "loading")
+                {
+                    global.director.pushView(new VisitDialog(scene), 1, 0);
                 }
             }
         }

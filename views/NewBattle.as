@@ -14,9 +14,72 @@
     bg.size()*150/100;
 
     场景背景 和 map背景是不同的两个node
+
+
+SPEAK_NOW waitTime 动作并行处理
+ATTACK---->soldierId soldierId soldierId soldiers = [0, 1, 2, 3, 4 ,5 ,6]
+SHOW_WORD---> time
+WAIT 
+SHOW_WORD which pos
+WAIT
+SHOW_WORD
+
 */
+
+class SpeakSoldier extends MyNode
+{
+    const SOL_DIR = dict([
+        [190, -1],
+        [30, 1],
+        [2, 1],
+    ]);
+    const SOL_SCALE = dict([
+        [190, 60*100/90],
+        [30, 75*100/90],
+        [2, 70*100/90],
+    ]);
+    const SOL_POS = dict([
+        [190, 
+            [[277, 257],
+            [277, 291],
+            [277, 340]]],
+        [30, 
+            [[650, 192],
+            [650, 213],
+            [650, 248],
+            [650, 281]]],
+
+        [2,
+            [[650, 345],
+            [650, 379],
+            [650, 412],
+            [650, 451]]],
+    ]);
+    var id;
+    var attAni;
+    function SpeakSoldier(k, p)
+    {
+        id = k;
+        load_sprite_sheet("soldiera"+str(id)+".plist");
+        load_sprite_sheet("soldiera"+str(id)+".plist");
+        var sca = SOL_SCALE.get(id);
+        var dir = SOL_DIR.get(id);
+        var po = SOL_POS.get(id)[p];
+
+        bg = sprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100).scale(sca*dir, sca).pos(po);
+        init();
+
+        attAni = animate(1500, "soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+".plist/ss"+str(id)+"a6.png", "soldiera"+str(id)+".plist/ss"+str(id)+"a0.png",  UPDATE_SIZE);
+
+    }
+    function showAttack()
+    {
+        bg.addaction(attAni);
+    }
+}
 class NewBattle extends MyNode
 {
+    var soldiers = dict();
     //var touchDelegate;
     var dia0;
     var dia1;
@@ -24,37 +87,105 @@ class NewBattle extends MyNode
     var curCmd = 0;
     var initYet = 0;
     var map;
+    var words = dict();
+    const SOL_KIND = [
+        [190, 0],
+        [190, 1],
+        [190, 2],
+
+        [30, 0],
+        [30, 1],
+        [30, 2],
+        [30, 3],
+
+        [2, 0],
+        [2, 1],
+        [2, 2],
+        [2, 3],
+    ];
+
+    const WORD_POS = [
+        [250, 239, "wu.png"],
+        [241, 140, "haha.png"],
+        [170, 362, "soc.png"],
+        [733, 302, "kill0.png"],
+        [711, 210, "kill1.png"],
+        [603, 331, "kill2.png"],
+        [596, 187, "kill3.png"],
+        [315, 351, "question.png"],
+    ];
+
     function NewBattle()
     {
         //bg = sprite("battleBegin.jpg");
         bg = node();
         init();
-        map = bg.addsprite("battleBegin.jpg");
+        map = bg.addsprite("battleBegin0.jpg");
 
-        dia0 = map.addsprite("dialogBack0.png").pos(115, 157).visible(0);
-        dia1 = map.addsprite("dialogBack1.png").pos(793, 232).visible(0);
+        dia0 = bg.addsprite("dialogBack0.png").pos(100, 107).visible(0).scale(67);
+        dia1 = bg.addsprite("dialogBack1.png").pos(508, 138).visible(0).scale(67);
 
         
-        //dia0.addlabel(getStr("dearKing", null), null, 21, FONT_BOLD, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
-        //dia1.addlabel(getStr("dearSuo", null), null, 21, FONT_BOLD, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
-
-        //touchDelegate = new StandardTouchHandler();
+        for(var i = 0; i < len(SOL_KIND); i++)
+        {
+            var so = new SpeakSoldier(SOL_KIND[i][0], SOL_KIND[i][1]);
+            soldiers.update(i, so);
+            //addChildZ(so, so.getPos()[1]);
+            map.add(so.bg, so.getPos()[1]);
+        }
+        for(i = 0; i < len(WORD_POS); i++)
+        {
+            var w = sprite(WORD_POS[i][2]).pos(WORD_POS[i][0], WORD_POS[i][1]).visible(0);
+            bg.add(w, MAX_BUILD_ZORD);
+            words.update(i, w);
+        }
         setCommand();
     }
     //0 1 dialogPanel
     //1200 720 --> 800 480
     function setCommand()
     {
-        var NORMAL = 810*100/1200;
+        //var NORMAL = 810*100/1200;
+        var NORMAL = 100;
         //cmd.append([SETPOS, [600, 360]]);
         cmd.append([CLOSEUP, [0, [0, 0], NORMAL]]);//缩放到正常大小 屏幕中心对齐背景中心
         cmd.append([WAIT, 3000]);
-        cmd.append([CLOSEUP, [2000, [7, 150], 100]]);
-        cmd.append([SPEAK_NOW, [2000, "dearKing", 0]]);
-        cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
-        cmd.append([CLOSEUP, [1000, [388, 141], 100]]);
-        cmd.append([SPEAK_NOW, [2000, "dearSuo", 1]]);
-        cmd.append([SPEAK_NOW, [2000, "fightNow", 1]]);
+        //cmd.append([CLOSEUP, [2000, [7, 150], 100]]);
+        cmd.append([SPEAK_NOW, [3000, "dearKing", 0]]);
+        cmd.append([MON_ATTACK, 0]);
+        cmd.append([MON_ATTACK, 1]);
+        cmd.append([MON_ATTACK, 2]);
+        cmd.append([WAIT, 1500]);
+        cmd.append([MON_SPEAK, 0]);
+        cmd.append([WAIT, 2000]);
+        cmd.append([MON_SPEAK, 1]);
+        cmd.append([WAIT, 1000]);
+        cmd.append([MON_SPEAK, 2]);
+        cmd.append([WAIT, 1000]);
+        cmd.append([MON_SPEAK, 7]);
+
+        //cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
+        //cmd.append([CLOSEUP, [1000, [388, 141], 100]]);
+        cmd.append([SPEAK_NOW, [3000, "dearSuo", 1]]);
+        cmd.append([SPEAK_NOW, [3000, "fightNow", 1]]);
+        cmd.append([MON_ATTACK, 3]);
+        cmd.append([MON_ATTACK, 4]);
+        cmd.append([MON_ATTACK, 5]);
+        cmd.append([MON_ATTACK, 6]);
+        cmd.append([MON_ATTACK, 7]);
+        cmd.append([MON_ATTACK, 8]);
+        cmd.append([MON_ATTACK, 9]);
+        cmd.append([MON_ATTACK, 10]);
+        cmd.append([WAIT, 1500]);
+
+        cmd.append([MON_SPEAK, 3]);
+        cmd.append([WAIT, 2000]);
+        cmd.append([MON_SPEAK, 4]);
+        cmd.append([WAIT, 1000]);
+        cmd.append([MON_SPEAK, 5]);
+        cmd.append([WAIT, 1000]);
+        cmd.append([MON_SPEAK, 6]);
+
         initYet = 1;
     }
     override function enterScene()
@@ -132,11 +263,15 @@ class NewBattle extends MyNode
                         {
                             dia0.visible(1);
                             w = dia0.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
+                            dia0.stop();
+                            dia0.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }
                         else if(c[1][2] == 1)
                         {
                             dia1.visible(1);
                             w = dia1.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
+                            dia1.stop();
+                            dia1.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }
                     }
                     passTime += diff;
@@ -151,6 +286,19 @@ class NewBattle extends MyNode
                         passTime = 0;
                         curCmd++;
                     }
+                }
+                else if(c[0] == MON_ATTACK)
+                {
+                    var so = soldiers.get(c[1]);
+                    so.showAttack();
+                    curCmd++;
+                }
+                else if(c[0] == MON_SPEAK)
+                {
+                    var w1 = words.get(c[1]);
+                    w1.visible(1);
+                    w1.addaction(sequence(delaytime(2000), fadeout(1000)));
+                    curCmd++;
                 }
             }
             else
