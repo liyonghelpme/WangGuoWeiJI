@@ -828,8 +828,18 @@ class Map extends MyNode
                 cry = 0;
             global.user.changeValue("crystal", cry);
         }
+        else if(scene.kind == CHALLENGE_FIGHT || scene.kind == CHALLENGE_DEFENSE)
+        {
+            if(win == 1)//攻击其它人擂台 奖励为attackReward
+            {
+
+            }
+        }
 
         trace("sceneKind", scene.kind, CHALLENGE_FRI);
+        var arenaKind;
+        var fData;
+        var cost;
         if(scene.kind == CHALLENGE_MON)
         {
             global.director.pushView(new BreakDialog(win, star, reward, this, levelUpSol), 1, 0);
@@ -844,6 +854,39 @@ class Map extends MyNode
         {
             global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, levelUpSol), 1, 0);
             global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.param[0]], ["sols", updateSoldierData], ["crystal", cry]]), null, null);
+        }
+        //奖励 金币 水晶 升级士兵 挑战擂台
+        else if(scene.kind == CHALLENGE_FIGHT)
+        {
+            if(win == 1)
+            {
+                arenaKind = scene.user.get("kind"); 
+                fData = getData(FIGHT_COST, arenaKind);
+                cost = getCost(FIGHT_COST, arenaKind);
+                cost = multiScalar(cost, fData.get("attackReward"));
+                global.user.doAdd(cost);
+            }
+            else
+                cost = dict();
+            global.director.pushView(new ChallengeFight(win, star, cost, 0, this, levelUpSol), 1, 0);
+
+            global.httpController.addRequest("fightC/attackOver", dict([["uid", global.user.uid], ["oid", scene.user.get("uid")], ["sols", updateSoldierData], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)], ["win", win]]), null, null);
+        }
+        else if(scene.kind == CHALLENGE_DEFENSE)
+        {
+            if(win == 1)
+            {
+                arenaKind = scene.user.get("kind"); 
+                fData = getData(FIGHT_COST, arenaKind);
+                cost = getCost(FIGHT_COST, arenaKind);
+                cost = multiScalar(cost, fData.get("defenseReward"));
+                global.user.doAdd(cost);
+            }
+            else
+                cost = dict();
+            global.director.pushView(new ChallengeFight(win, star, cost, 0, this, levelUpSol), 1, 0);
+
+            global.httpController.addRequest("fightC/defenseOver", dict([["uid", global.user.uid], ["oid", scene.user.get("uid")], ["sols", updateSoldierData], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)], ["win", win]]), null, null);
         }
     }
     

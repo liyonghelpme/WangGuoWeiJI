@@ -26,7 +26,11 @@ class FightSoldier extends MoveSoldier
 
         var bSize = changeDirNode.prepare().size();
 
-        bg.size(bSize).anchor(50, 100).pos(571, 356);
+        var rx = rand(map.moveZone[0][2]-100)+map.moveZone[0][0]+50;
+        var ry = rand(map.moveZone[0][3]-100)+map.moveZone[0][1]+50;
+
+        bg.size(bSize).anchor(50, 100).pos(rx, ry);
+        
 
         changeDirNode.pos(bSize[0]/2, bSize[1]);
         shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
@@ -39,7 +43,7 @@ class FightSoldier extends MoveSoldier
         state = SOL_FREE;
         
 
-        nameBanner = bg.addnode().pos(bsize[0]/2, -5).anchor(50, 100);
+        nameBanner = bg.addnode().pos(bSize[0]/2, -5).anchor(50, 100);
         var col;
         if(isArena)
             col = [0, 0, 100];
@@ -60,9 +64,11 @@ class FightSoldier extends MoveSoldier
         super.enterScene();
         map.solTimer.addTimer(this);
     }
+    //如果场景已经退出 再更新士兵数据 则存在问题
     override function exitScene()
     {
-        map.solTimer.removeTimer(this);
+        if(map.solTimer != null)
+            map.solTimer.removeTimer(this);
         super.exitScene();
     }
     
@@ -85,8 +91,8 @@ class FightSoldier extends MoveSoldier
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        if(accMove < 10)
-            map.menu.setCurChooseSol(this);
+        if(accMove < 20)
+            map.scene.menu.setCurChooseSol(this);
         else
             map.touchEnded(n, e, p, x, y, points);
     }
@@ -96,7 +102,7 @@ class FightSoldier extends MoveSoldier
     {
         if(chooseStar == null)
         {
-            bSize = bg.size();
+            var bSize = bg.size();
             chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
             if(isArena)//挑战其它擂主
                 chooseStar.addaction(repeat(animate(1500, 

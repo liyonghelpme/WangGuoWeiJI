@@ -19,34 +19,44 @@ class FightMenu extends MyNode
     var accInfo;
 
 
-    var black;
+    var blacks;
     var curBlack = -1;
+    
     function onRefresh()
     {
+        scene.getOtherArena();
     }
     function onRank()
     {
+        global.director.pushView(new RankDialog(FIGHT_RANK), 1, 0);//数据需要从全局中获取
     }
     function onMakeArena()
     {
+        global.director.pushView(new MakeArenaDialog(scene), 1, 0); 
     }
 
+
+    var arenaNum;
+    var chaNum;
     function FightMenu(sc)
     {
         scene = sc;
         bg = node();
         init();
 
+        bg.addsprite("pageFriendReturn.png").pos(0, 480).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
+
         black0 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
         black0.addsprite("fightBlue.jpg").pos(13, 8);
         black0.addsprite("fightRed.jpg").pos(13, 33);
-        black0.addlabel(getStr("arenaNum", null), null, 18, FONT_BOLD).pos(43, 7);
-        black0.addlabel(getStr("chaNum", null), null, 18, FONT_BOLD).pos(43, 30);
+        arenaNum = black0.addlabel(getStr("arenaNum", null), null, 18, FONT_BOLD).pos(43, 7);
+        chaNum = black0.addlabel(getStr("chaNum", null), null, 18, FONT_BOLD).pos(43, 30);
         var but0 = black0.addsprite("roleNameBut0.png").pos(201, 22).size(91, 42).setevent(EVENT_TOUCH, onRank);
-        but0.addlabel(getStr("rank", null), null, 20).anchor(50, 50).pos(45, 42);
+        but0.addlabel(getStr("rank", null), null, 20).anchor(50, 50).pos(45, 21);
+
         makeBut = black0.addsprite("blueButton.png").pos(303, 22).size(91, 42).setevent(EVENT_TOUCH, onMakeArena);
         //如果守擂中 则灰色按钮
-        makeArenaWord = but0.addlabel(getStr("makeArena", null), null, 20).anchor(50, 50).pos(45, 42);
+        makeArenaWord = makeBut.addlabel(getStr("makeArena", null), null, 20).anchor(50, 50).pos(45, 21);
 
         var refresh = black0.addsprite("fightRefresh.png").pos(410, 23).setevent(EVENT_TOUCH, onRefresh);
         //如果没有摆擂台则fightGold
@@ -71,18 +81,58 @@ class FightMenu extends MyNode
         blacks = [black0, black1, black2];
         curBlack = -1;
     }
+    function returnHome()
+    {
+        global.director.popScene(); 
+    }
+    
+    //挑战擂台 资源不足提示黑框
     function onArena()
     {
+        var kind = soldier.privateData.get("kind");
+        var fData = getData(FIGHT_COST, kind);
+        var cost = getCost(FIGHT_COST, kind);
+
+        cost = multiScalar(cost, fData.get("attackCost"));//攻击花费
+        var buyable = global.user.checkCost(cost);
+        if(buyable.get("ok") == 0)
+        {
+            var key = cost.keys()[0];
+            global.director.curScene.addChild(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100]));
+        }
+        else
+        {
+            global.user.doCost(cost);
+            global.fightModel.addRecord(soldier.privateData.get("uid"));
+
+            var cs = new ChallengeScene(soldier.privateData.get("uid"), null, 0, 0, CHALLENGE_FIGHT, soldier.privateData);
+            global.director.pushScene(cs);
+            cs.initData();
+
+            setCurChooseSol(null);
+            scene.map.updateData();//清理显示的士兵
+            //增加挑战记录  删除挑战士兵 全局控制挑战数据 消息传递更新挑战士兵
+        }
     }
     function onCancelArena()
     {
+        setCurChooseSol(null);
     }
 
     function onDefense()
     {
+        global.fightModel.removeChallenger(soldier.privateData.get("uid")); 
+
+        var cs = new ChallengeScene(soldier.privateData.get("uid"), null, 0, 0, CHALLENGE_DEFENSE, soldier.privateData);
+        global.director.pushScene(cs);
+        cs.initData();
+
+        setCurChooseSol(null);//无论胜负 挑战者都消失
+        scene.map.updateData();
     }
     function onCancelDefense()
     {
+        setCurChooseSol(null);
     }
 
     /*
@@ -93,17 +143,19 @@ class FightMenu extends MyNode
     function updateData()
     {
         if(curBlack != -1)
-            black[curBlack].removefromparent();
+            blacks[curBlack].removefromparent();
         var fData;
         var cost;
         var kind;
         var rk;
         var rv;
+        var total;
+        var suc;
         if(soldier == null)
         {
             bg.add(black0);
             //没有擂台
-            if(scene.myArena == null)
+            if(global.fightModel.myArena == null)
             {
                 makeBut.texture("blueButton.png");
                 makeBut.setevent(EVENT_TOUCH, onMakeArena);
@@ -113,8 +165,11 @@ class FightMenu extends MyNode
             {
                 makeBut.texture("blueButton.png", GRAY);
                 makeBut.setevent(EVENT_TOUCH, null);
-                failWord.text(getStr("failNum", ["[NUM]", str(scene.myArena.get("failNum"))]));
+                var leftNum = PARAMS.get("maxFailNum")-global.fightModel.myArena.get("failNum");
+                failWord.text(getStr("failNum", ["[NUM]", str(leftNum)]));
             }
+            arenaNum.text(getStr("arenaNum", ["[N0]", str(len(global.fightModel.otherArenas))]));
+            chaNum.text(getStr("chaNum", ["[N0]", str(len(global.fightModel.challengers))]));
             curBlack = 0;
         }
         //防守
@@ -134,8 +189,17 @@ class FightMenu extends MyNode
             var reward = multiScalar(cost, fData.get("attackReward"));
             rk = reward.items()[0][0];
             rv = reward.items()[0][1];
+            total = soldier.privateData.get("total");
+            suc = soldier.privateData["suc"];
+            var r;
+            if(total == 0)
+                r = 0;
+            else 
+                r = suc*100/total;
+                
             chaInfo.text(getStr("chaInfo", 
                         ["[NAME]", soldier.privateData.get("name"), 
+                        "[N0]", str(r),
                          "[N1]", str(value), 
                          "[KIND]", getStr(key, null), 
                          "[N2]", str(rv),
@@ -149,16 +213,18 @@ class FightMenu extends MyNode
         {
             bg.add(black2);
             var now = time()/1000;
-            var diff = now - scene.mostEarlyTime;
+            now = client2Server(now);
+            var diff = now - global.fightModel.mostEarlyTime;
             var leftTime = PARAMS.get("failTime")-diff;
-            var leftFail = PARAMS.get("maxFailNum")-scene.myArena.get("failNum");
+            var leftFail = PARAMS.get("maxFailNum")-global.fightModel.myArena.get("failNum");
 
-            kind = scene.myArena.get("kind");
+            kind = global.fightModel.myArena.get("kind");
             fData = getData(FIGHT_COST, kind);
             cost = getCost(FIGHT_COST, kind);
-            var defenseReward = multiScalar(cost, data.get("defenseReward"));
+            var defenseReward = multiScalar(cost, fData.get("defenseReward"));
             rk = defenseReward.items()[0][0];
             rv = defenseReward.items()[0][1];
+
             accInfo.text(getStr("accInfo", 
                 ["[TIME]", getWorkTime(leftTime), 
                  "[NAME]", soldier.privateData.get("name"),
@@ -171,7 +237,7 @@ class FightMenu extends MyNode
     }
     function update(diff)
     {
-        if(curBlack == 2)
+        if(curBlack == 2)//更新 挑战剩余时间
         {
             updateData();
         }
@@ -180,6 +246,8 @@ class FightMenu extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
+        if(scene.initOver == 1)//从挑战场景重新进入 需要更新数据
+            updateData();
     }
     override function exitScene()
     {
@@ -195,5 +263,6 @@ class FightMenu extends MyNode
         soldier = sol;
         if(soldier != null)
             soldier.setCurSolFinish();
+        updateData();
     }
 }

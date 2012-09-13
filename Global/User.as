@@ -1166,10 +1166,10 @@ class User
                 addV = 0;
             }
             //增加经验没有升级
-            global.msgCenter.sendMsg(UPDATE_EXP, addV);
-
         }
         setValue(key, v);
+        if(key == "exp")
+            global.msgCenter.sendMsg(UPDATE_EXP, addV);
     }
 
     //获取任何物品首先获得 相应类别 再 获取 对应id的值

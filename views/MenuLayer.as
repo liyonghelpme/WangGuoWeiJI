@@ -150,16 +150,27 @@ class MenuLayer extends MyNode
         var needExp = getLevelUpNeedExp(level);
 
         
-        var lastExpSize = expfiller.prepare().size()[0];
+        //var lastExpSize = expfiller.prepare().size()[0];
         var nowSize = exp*EXP_LEN/needExp+BASE_LEN;
-        var leftExp = needExp-exp;
-        if(nowSize > lastExpSize)
+
+
+        if(add > 0)
         {
+            expfiller.stop();
             expfiller.addaction(sizeto(500, nowSize, 12));
         }
-        else 
+        else
             expfiller.size(nowSize, 12);
 
+        //if(nowSize > lastExpSize)
+        //{
+
+        //}
+        //else 
+        //    expfiller.size(nowSize, 12);
+        //}
+
+        var leftExp = needExp-exp;
         if(add > 0)
         {
             expWord.setWords(getStr("expToLev", ["[EXP]", str(leftExp), "[LEV]", str(level+2)]));
@@ -223,27 +234,6 @@ class MenuLayer extends MyNode
     {
         updateValue(global.user.resource);
         updateExp(0);
-
-        /*
-        silverText.text(str(global.user.resource.get("silver", 0)));
-        goldText.text(str(global.user.resource.get("gold", 0)));
-        
-        var level = global.user.getValue("level");
-        var exp = global.user.getValue("exp");
-        //var needExp = global.user.getNeedExp(level);
-        var needExp = getLevelUpNeedExp(level);
-
-        expfiller.size(exp*EXP_LEN/needExp+BASE_LEN, 12);
-        //levelLabel.setWords(str(level+1));
-
-        var temp = altasWord("white", str(level));
-        temp.anchor(50, 50).pos(levelLabel.pos());
-        levelLabel.removefromparent();
-        expback.add(temp);
-        levelLabel = temp;
-        if(level >= 100)
-            levelLabel.scale(85);
-        */
     }
     function updateValue(res)
     {

@@ -9,7 +9,7 @@ class MoveSoldier extends MyNode
     var changeDirNode;
     var shadow;
     var id;
-    var privateData;
+    //var privateData;
     var movAni;
     var shiftAni;
     var state;

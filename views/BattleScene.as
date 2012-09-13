@@ -15,6 +15,7 @@ class BattleScene extends MyNode
     var map;
     var banner;
     var kind;//0 闯关 1 挑战
+    var user;
 
     //oid papayaId score rank cityDefense
     var param;
@@ -141,8 +142,10 @@ class BattleScene extends MyNode
 
         param = par;
         kind = ki;
+        if(kind == CHALLENGE_FIGHT)
+            user = param[6];
         //soldierId ---> {skillId, level}
-        if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR)
+        if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR || kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
         {
             skills = dict();
             var sk = param[5];
@@ -194,7 +197,7 @@ class BattleScene extends MyNode
         trace("getEneDefense", big, small);
         if(kind == CHALLENGE_MON)
             return mapDefense.get(big*10+small);
-        else if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR)
+        else if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR || kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
             return param[4];
         else if(kind == CHALLENGE_SELF)
             return param[4];

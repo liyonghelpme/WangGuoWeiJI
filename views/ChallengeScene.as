@@ -30,13 +30,26 @@ class ChallengeScene extends MyNode
     }
     function initData()
     {
-        if(oid == global.user.uid)
-            global.httpController.addRequest("challengeC/challengeSelf", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
-        else if(kind == CHALLENGE_FRI)
+        //if(oid == global.user.uid)
+        //    global.httpController.addRequest("challengeC/challengeSelf", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
+        if(kind == CHALLENGE_FRI)
             global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
         else if(kind == CHALLENGE_NEIBOR)
             global.httpController.addRequest("friendC/challengeNeibor", dict([["uid", global.user.uid], ["fid", oid]]), getDataOver, null); 
+        else if(kind == CHALLENGE_FIGHT)
+        {
+            var arenaKind = user.get("kind");
+            var fData = getData(FIGHT_COST, arenaKind);
+            var cost = getCost(FIGHT_COST, arenaKind);
+            trace("challengeFight", arenaKind, fData, cost);
+            cost = multiScalar(cost, fData.get("attackCost"));//攻击花费
 
+            global.httpController.addRequest("fightC/attackArena", dict([["uid", global.user.uid], ["oid", oid], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)]]), getDataOver, null); 
+        }
+        else if(kind == CHALLENGE_DEFENSE)
+        {
+            global.httpController.addRequest("fightC/defenseOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null); 
+        }
     }
     /*
     生成随机的布局
@@ -55,12 +68,14 @@ class ChallengeScene extends MyNode
             con = json_loads(con);
             if(con.get("id") == 0)
                 global.director.popScene();
+            /*
             else if(oid == global.user.uid)
             {
                 enemies = con.get("soldiers");
                 equips = con.get("equips");
                 global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_SELF, [oid, papayaId, score, rank, con.get("cityDefense")], equips));
             }
+            */
             //挑战好友 挑战邻居获得技能
             else if(kind == CHALLENGE_FRI){
                 global.user.addChallengeRecord(oid);
@@ -68,7 +83,7 @@ class ChallengeScene extends MyNode
                 equips = con.get("equips");
                 //initOver = 1;
                 //战胜 失败于对方 需要知道对方
-                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills")], equips));
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills"), null], equips));
             }
             else if(kind == CHALLENGE_NEIBOR)
             //根据邻居的uid 得到邻居的数据 getNeiborData
@@ -78,7 +93,20 @@ class ChallengeScene extends MyNode
                 equips = con.get("equips");
                 //initOver = 1;
                 //战胜 失败于对方 需要知道对方
-                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills")], equips));
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills"), null], equips));
+            }
+            //需要修改 挑战数据 数据 存储在 场景中
+            else if(kind == CHALLENGE_FIGHT)//挑战敌方士兵 类似于 挑战邻居 但是奖励不同
+            {
+                enemies = con.get("soldiers");
+                equips = con.get("equips");
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FIGHT, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills"), user], equips));
+            }
+            else if(kind == CHALLENGE_DEFENSE)
+            {
+                enemies = con.get("soldiers");
+                equips = con.get("equips");
+                global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_DEFENSE, [oid, papayaId, score, rank, con.get("cityDefense"), con.get("skills"), user], equips));
             }
         }
     }

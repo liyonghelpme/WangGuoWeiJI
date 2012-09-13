@@ -73,18 +73,31 @@ class RankBase extends MyNode
     var scene;
     var flowLayer;
     var URL_API;
-    function RankBase(p, s, sc)
+    var rankKind;
+    function RankBase(p, s, sc, k)
     {
         scene = sc;
-        if(scene.kind == CHALLENGE_RANK)
+        rankKind = k;
+
+        if(rankKind == CHALLENGE_RANK)
         {
             curRank = global.user.rankOrder; 
             URL_API = "challengeC/getRank";
         }
-        else if(scene.kind == HEART_RANK)
+        else if(rankKind == HEART_RANK)
         {
             curRank = global.user.heartRank;
             URL_API = "friendC/getHeartRank";
+        }
+        else if(rankKind == ATTACK_RANK)
+        {
+            curRank = 0;
+            URL_API = "fightC/getAttackRank";
+        }
+        else if(rankKind == DEFENSE_RANK)
+        {
+            curRank = 0;
+            URL_API = "fightC/getDefenseRank";
         }
 
         bg = node().pos(p).size(s).clipping(1);

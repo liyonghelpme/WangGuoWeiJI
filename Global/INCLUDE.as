@@ -110,10 +110,13 @@ import views.BuildWorkMenu;
 import views.RingFightingScene;
 import views.FightMap;
 import views.FightMenu;
+import views.MakeArenaDialog;
 
 import views.FightSoldier;
 import views.MoveMap;
 import views.MoveSoldier;
+
+
 
 import views.SellDialog;
 import views.AccDialog;
@@ -152,6 +155,7 @@ import views.NoTipDialog;
 
 //闯关地图
 import views.Map;
+import views.ChallengeFight;
 import views.TrainOverDialog;
 import views.Soldier;
 import model.SoldierAI;
@@ -227,6 +231,8 @@ import views.Dark;
 import views.StandardTouchHandler;
 import Global.MyAnimate;
 
+import model.FightModel;
+
 import Global.TouchManager;
 import model.TaskModel;
 import views.TaskFinish;
@@ -262,6 +268,7 @@ global.sensorController = new SensorController();
 global.friendController = new FriendController();
 global.taskModel = new TaskModel();
 global.mailController = new MailController();
+global.fightModel = new FightModel();
 
 
 

@@ -14,6 +14,7 @@ class GlobalController
     var friendController;
     var taskModel;
     var mailController;
+    var fightModel;
     function Global()
     {
     }

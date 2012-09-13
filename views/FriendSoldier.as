@@ -27,6 +27,7 @@ updatePosMap
 */
 class FriendSoldier extends MoveSoldier
 {
+    var privateData;
     var hasCry;
     var negtiveState = null;
     function FriendSoldier(d, m, hasC)

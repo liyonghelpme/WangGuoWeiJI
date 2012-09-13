@@ -936,6 +936,7 @@ function multiScalar(d, s)
     var its = d.items();
     for(var i = 0; i < len(its); i++)
     {
+        trace(its[i], s);
         if(its[i][1] > 0)
         {
             res.update(its[i][0], its[i][1]*s/100);

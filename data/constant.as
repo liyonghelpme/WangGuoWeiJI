@@ -392,7 +392,7 @@ var Keys = [
     skillsKey,
     statusPossibleKey,
     mapBloodKey,
-    fightingCostKey;
+    fightingCostKey,
 ];
 var CostData = [
     buildingData,
@@ -415,7 +415,7 @@ var CostData = [
     skillsData,
     statusPossibleData,
     mapBloodData,
-    fightingCostData;
+    fightingCostData,
 ];
 
 var KindsPre = [
@@ -526,6 +526,8 @@ const CHALLENGE_FRI = 1;
 const CHALLENGE_SELF = 2;//怪兽布局 由数据库monX monY 决定
 const CHALLENGE_NEIBOR = 3;
 const CHALLENGE_TRAIN = 4;
+const CHALLENGE_FIGHT = 5;//挑战擂台
+const CHALLENGE_DEFENSE = 6;//防守擂台
 
 
 const ENEMY = -1;
@@ -710,8 +712,14 @@ const MONEY_GAME = 2;
 
 const LOVE_TREE_ID = 208;//等级提升 则 ID 变化
 
+//RankDialog
 const CHALLENGE_RANK = 0;
 const HEART_RANK = 1;
+const FIGHT_RANK = 2;//attackRank defenseRank
+
+//RankBase
+const ATTACK_RANK = 3;
+const DEFENSE_RANK = 4;
 
 var CAREER_TIT = ["career0", "career1", "career2", "career3"];
 

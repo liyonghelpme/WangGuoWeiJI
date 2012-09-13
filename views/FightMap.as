@@ -16,6 +16,7 @@ checkInFlow
 class FightMap extends MoveMap
 {
     var arena = [];
+    var challengers = [];
 
     function FightMap(sc)
     {
@@ -42,23 +43,28 @@ class FightMap extends MoveMap
 
         mapGridController = new MapGridController(this);
 
-        solTimer = new Timer(200);
+
     }
 
     /*
     在进入场景之后 初始化士兵 所以 timer 在 进入场景之后 初始化
     或者在场景构造中 初始化 那么需要在退出场景中 销毁
+
+    场景退出 再进入 需要保证solTimer 存在
     */
     override function enterScene()
     {
+        solTimer = new Timer(200);
         super.enterScene();
     }
     override function exitScene()
     {
         super.exitScene();
+
         solTimer.stop();
         solTimer = null;
     }
+
     function touchBegan(n, e, p, x, y, points)
     {
         touchDelegate.tBegan(n, e, p, x, y, points);
@@ -71,22 +77,45 @@ class FightMap extends MoveMap
     {
         touchDelegate.tEnded(n, e, p, x, y, points);
     }
+    //重新规划地形
     function updateData()
     {
         var i;
+        var so;
+        mapGridController = new MapGridController(this);
         for(i = 0; i < len(arena); i++)
         {
             arena[i].removeSelf();
         }
         arena = [];
-        var others = scene.otherArenas;
+        var others = global.fightModel.otherArenas;
         for(i = 0; i < len(others); i++)
         {
-            var so = new FightSoldier(this, others[i], 1); 
-            arena.append(so);
-            addChild(so);
+            if(others[i].get("uid") != global.user.uid && global.fightModel.checkRecord(others[i].get("uid")) == null)//没有挑战过
+            {
+                so = new FightSoldier(this, others[i], 1); 
+                arena.append(so);
+                addChild(so);
+            }
+        }
+
+
+
+        for(i = 0; i < len(challengers); i++)
+        {
+            challengers.removeSelf();
+        }
+        challengers = [];
+        var cha = global.fightModel.challengers;
+        for(i = 0; i < len(cha); i++)
+        {
+            if(cha[i].get("uid") != global.user.uid)
+            {
+                so = new FightSoldier(this, cha[i], 0); 
+                challengers.append(so);
+                addChild(so);
+            }
         }
     }
-
 
 }
