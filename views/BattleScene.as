@@ -142,7 +142,8 @@ class BattleScene extends MyNode
 
         param = par;
         kind = ki;
-        if(kind == CHALLENGE_FIGHT)
+        //进攻或者防守擂台
+        if(kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
             user = param[6];
         //soldierId ---> {skillId, level}
         if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR || kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)

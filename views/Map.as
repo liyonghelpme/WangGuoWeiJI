@@ -876,7 +876,7 @@ class Map extends MyNode
         {
             if(win == 1)
             {
-                arenaKind = scene.user.get("kind"); 
+                arenaKind = global.fightModel.getArenaKind(); 
                 fData = getData(FIGHT_COST, arenaKind);
                 cost = getCost(FIGHT_COST, arenaKind);
                 cost = multiScalar(cost, fData.get("defenseReward"));

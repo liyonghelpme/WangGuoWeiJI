@@ -25,7 +25,7 @@ class FightMap extends MoveMap
         init();
 
         moveZone = [
-        [63, 203, 1000, 337],
+        [120, 203, 900, 337],
         ];
         gridLayer = bg.addnode();
         touchDelegate = new StandardTouchHandler();
@@ -100,13 +100,17 @@ class FightMap extends MoveMap
         }
 
 
+        /*
+        调用内部类型没有的函数 
+        */
 
         for(i = 0; i < len(challengers); i++)
         {
-            challengers.removeSelf();
+            challengers[i].removeSelf();
         }
         challengers = [];
         var cha = global.fightModel.challengers;
+        //trace("challengers", len(cha), len(challengers));
         for(i = 0; i < len(cha); i++)
         {
             if(cha[i].get("uid") != global.user.uid)

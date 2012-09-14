@@ -128,7 +128,7 @@ class MoveSoldier extends MyNode
             if(tar != null)
             {
                 state = SOL_MOVE; 
-                map.mapGridController.clearMap(this);
+                map.mapGridController.clearSolMap(this);
                 curMap = map.mapGridController.updatePosMap([sx, sy, tar[0], tar[1], this]);
                 changeDirNode.stop();
                 changeDirNode.addaction(movAni);

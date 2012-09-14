@@ -142,6 +142,7 @@ class FightModel
     //挑战过不能再挑战
     function addRecord(oid)
     {
+        trace("addRecord", oid);
         var now = time()/1000;
         now = client2Server(now);
         myRecords.update(oid, now);
@@ -149,7 +150,7 @@ class FightModel
         {
             if(otherArenas[i].get("uid") == oid)
             {
-                otherArenas[i].pop(i);
+                otherArenas.pop(i);
                 break;
             }
         }
@@ -162,8 +163,10 @@ class FightModel
     }
     function removeChallenger(oid)
     {
+        trace("removeChallenger", oid, len(challengers));
         for(var i = 0; i < len(challengers); i++)
         {
+            trace("challengersUid", challengers[i].get("uid"));
             if(challengers[i].get("uid") == oid)
             {
                 challengers.pop(i);
@@ -185,6 +188,15 @@ class FightModel
     没有擂台
         有挑战者
     */
+    function getArenaKind()
+    {
+        if(myArena == null)
+        {
+            trace("error No Arena");
+            return 0;
+        }
+        return myArena.get("kind");
+    }
     function checkFail()
     {
         if(myArena != null)

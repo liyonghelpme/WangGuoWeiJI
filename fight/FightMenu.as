@@ -64,7 +64,7 @@ class FightMenu extends MyNode
 
 
         black1 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
-        chaInfo = black1.addlabel(getStr("chaInfo", null), null, 18, FONT_NORMAL, 260, 0).pos(13, 24);
+        chaInfo = black1.addlabel(getStr("chaInfo", null), null, 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(13, 24);
         but0 = black1.addsprite("roleNameBut0.png").pos(286, 21).size(73, 42).setevent(EVENT_TOUCH, onArena);
         but0.addlabel(getStr("challenge", null), null, 20).pos(36, 21).anchor(50, 50);
         but0 = black1.addsprite("blueButton.png").pos(375, 21).size(73, 42).setevent(EVENT_TOUCH, onCancelArena);
@@ -72,7 +72,7 @@ class FightMenu extends MyNode
 
 
         black2 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
-        accInfo = black2.addlabel(getStr("accInfo", null), null, 18, FONT_NORMAL, 260, 0).pos(9, 14);
+        accInfo = black2.addlabel(getStr("accInfo", null), null, 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(9, 14);
         but0 = black2.addsprite("roleNameBut0.png").pos(279, 20).size(91, 42).setevent(EVENT_TOUCH, onDefense);
         but0.addlabel(getStr("accChallenge", null), null, 20).pos(45, 21).anchor(50, 50); 
         but0 = black2.addsprite("blueButton.png").pos(379, 20).size(72, 42).setevent(EVENT_TOUCH, onCancelDefense);
@@ -102,13 +102,14 @@ class FightMenu extends MyNode
         }
         else
         {
-            global.user.doCost(cost);
-            global.fightModel.addRecord(soldier.privateData.get("uid"));
-
             var cs = new ChallengeScene(soldier.privateData.get("uid"), null, 0, 0, CHALLENGE_FIGHT, soldier.privateData);
             global.director.pushScene(cs);
+            global.director.pushView(new VisitDialog(cs), 1, 0);
             cs.initData();
 
+
+            global.user.doCost(cost);
+            global.fightModel.addRecord(soldier.privateData.get("uid"));
             setCurChooseSol(null);
             scene.map.updateData();//清理显示的士兵
             //增加挑战记录  删除挑战士兵 全局控制挑战数据 消息传递更新挑战士兵
@@ -121,12 +122,13 @@ class FightMenu extends MyNode
 
     function onDefense()
     {
-        global.fightModel.removeChallenger(soldier.privateData.get("uid")); 
 
         var cs = new ChallengeScene(soldier.privateData.get("uid"), null, 0, 0, CHALLENGE_DEFENSE, soldier.privateData);
         global.director.pushScene(cs);
+        global.director.pushView(new VisitDialog(cs), 1, 0);
         cs.initData();
 
+        global.fightModel.removeChallenger(soldier.privateData.get("uid")); 
         setCurChooseSol(null);//无论胜负 挑战者都消失
         scene.map.updateData();
     }

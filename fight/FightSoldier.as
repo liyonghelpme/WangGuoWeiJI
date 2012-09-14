@@ -124,7 +124,7 @@ class FightSoldier extends MoveSoldier
             if(tar != null)
             {
                 state = SOL_MOVE; 
-                map.mapGridController.clearMap(this);
+                map.mapGridController.clearSolMap(this);
                 curMap = map.mapGridController.updatePosMap([sx, sy, tar[0], tar[1], this]);
                 //停止移动动画 接着重新开始移动动画
                 changeDirNode.stop();

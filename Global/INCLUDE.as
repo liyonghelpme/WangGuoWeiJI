@@ -107,12 +107,13 @@ import views.CastleScene;
 import views.Building;
 import views.BuildMenu;
 import views.BuildWorkMenu;
-import views.RingFightingScene;
-import views.FightMap;
-import views.FightMenu;
-import views.MakeArenaDialog;
 
-import views.FightSoldier;
+import fight.RingFightingScene;
+import fight.FightMap;
+import fight.FightMenu;
+import fight.MakeArenaDialog;
+import fight.FightSoldier;
+
 import views.MoveMap;
 import views.MoveSoldier;
 
