@@ -345,7 +345,7 @@ class Soldier extends MyNode
             backBanner.visible(0);//初始敌人血条不显示
         var mInfo = getData(MAP_INFO, map.kind);
 
-        redBlood = backBanner.addsprite("mapSolBloodRed.png").pos(2, 0);
+        redBlood = backBanner.addsprite("mapSolBloodRed1.png").pos(2, 0);
         if(color == MYCOLOR)
         {
             if(mInfo["blood"] == 0)
@@ -451,7 +451,7 @@ class Soldier extends MyNode
         {
             var difX = oldSize[0]-sx;
             var spe = bloodTotalLen/BLOOD_SPEED;//speed /s
-            var t = max(difX*1000/spe, 800);//ms
+            var t = max(difX*1000/spe, 1000);//ms
             redBlood.addaction(sizeto(t, sx, bloodHeight));
         }
         else

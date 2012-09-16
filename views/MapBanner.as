@@ -47,6 +47,8 @@ class MapBanner extends MyNode
     var shadowWord;
     var words;
 
+    var okBut;
+
     /*
     将剩余士兵尽量全部放置到地面上
     每行一个逐个放置直到没有
@@ -61,15 +63,14 @@ class MapBanner extends MyNode
         //117
         if(scene.kind != CHALLENGE_TRAIN)
         {
-            bg.addsprite("mapMenuOk.png").pos(440, 19).setevent(EVENT_TOUCH, onOk);
+            okBut = bg.addsprite("mapMenuOk.png", GRAY).pos(440, 19).setevent(EVENT_TOUCH, onOk);
             bg.addsprite("mapMenuCancel.png").pos(557, 19).setevent(EVENT_TOUCH, onCancel);
             //练级没有随机放置功能
-
             bg.addsprite("random.png").pos(674, 19).setevent(EVENT_TOUCH, onRandom);
         }
         else
         {
-            bg.addsprite("mapMenuOk.png").pos(557, 19).setevent(EVENT_TOUCH, onOk);
+            okBut = bg.addsprite("mapMenuOk.png", GRAY).pos(557, 19).setevent(EVENT_TOUCH, onOk);
             bg.addsprite("mapMenuCancel.png").pos(674, 19).setevent(EVENT_TOUCH, onCancel);
         }
 
@@ -143,6 +144,16 @@ class MapBanner extends MyNode
     //因为人物会突然重新出现
     function updateTab()
     {
+        var ret = scene.map.checkMySoldier();
+        if(ret)
+        {
+            okBut.texture("mapMenuOk.png");
+        }
+        else
+        {
+            okBut.texture("mapMenuOk.png", GRAY);
+        }
+
         var oldPos = flowNode.pos();
         flowNode.removefromparent();
         flowNode = cl.addnode().pos(oldPos);
@@ -159,8 +170,8 @@ class MapBanner extends MyNode
             if(data[i][1] == 0)
             {
                 panel.setevent(EVENT_TOUCH, touchBegan, i);
-                panel.setevent(EVENT_MOVE, touchMoved);
-                panel.setevent(EVENT_UNTOUCH, touchEnded);
+                panel.setevent(EVENT_MOVE, touchMoved, i);
+                panel.setevent(EVENT_UNTOUCH, touchEnded, i);
             }
 
             var sdata = global.user.getSoldierData(data[i][0]);
@@ -197,39 +208,73 @@ class MapBanner extends MyNode
     }
 
     var touchPos = null;
+    var accMove = 0;
+    var lastPoints;
     //data[p] sid isInMap data[p][1] == 0
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
-        var sid = data[p][0];
+        //var sid = data[p][0];
 
+        lastPoints = newPos;
+        accMove = 0;
+
+        //touchPos = bg.world2node(newPos[0], newPos[1]); 
+
+        touchPos = n.node2world(0, 0);
+        touchPos = bg.world2node(touchPos[0], touchPos[1]);//x 位置
+
+        bg.world2node()
+
+        n.texture("mapSel.png");
+
+        /*
+        //不能添加士兵 需要accMove
         controlSoldier = scene.map.addSoldier(sid);
         if(controlSoldier == null)
             return;
 
-        //var solData = global.user.getSoldierData(sid);
 
-        touchPos = bg.world2node(newPos[0], newPos[1]); 
+
         setCurChooseSol(controlSoldier);
 
-
-        //var nPos = n.node2world(x, y);
         var mPos = scene.map.bg.world2node(newPos[0], newPos[1]);
         controlSoldier.setPos(mPos);
         
         controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, newPos[0], newPos[1], points);
-        //data.remove(sid);
         data[p][1] = 1;
-        //n.visible(0);//背景变蓝色
 
-        n.texture("mapSel.png");
+        */
+
     }
     function touchMoved(n, e, p, x, y, points)
     {
+        var nPos = n.node2world(x, y);
+        var oldPos = lastPoints;
+        lastPoints = nPos;
+        var difx = lastPoints[0]-oldPos[0];
+        var dify = lastPoints[1]-oldPos[1];
+        accMove += abs(difx)+abs(dify);
+
         if(controlSoldier != null)
         {
-            var nPos = n.node2world(x, y);
             controlSoldier.touchWorldMoved(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+        }
+        else if(accMove > 20)
+        {
+            var sid = data[p][0];
+            controlSoldier = scene.map.addSoldier(sid);
+            if(controlSoldier == null)
+                return;
+
+            setCurChooseSol(controlSoldier);
+
+            var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
+            controlSoldier.setPos(mPos);
+            
+            controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+            data[p][1] = 1;
+            //n.texture("mapSel.png");
         }
     }
     //点击士兵结束
@@ -242,34 +287,35 @@ class MapBanner extends MyNode
         var cols = -len(data)*OFFX+WIDTH;
         curPos[0] = min(0, max(cols, curPos[0]));
         flowNode.pos(curPos);
-        updateTab();
 
 
         if(controlSoldier != null)
         {
             var nPos = n.node2world(x, y);
-            //nPos = controlSoldier.bg.world2node(nPos[0], nPos[1]);
-//            trace("sol node end", nPos);
             controlSoldier.touchWorldEnded(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
         }
+        //有我方士兵 没有我方士兵
         controlSoldier = null;
+
+        updateTab();
     }
 
     //点击banner set
     //地图点击士兵 选择
     function setCurChooseSol(sol)
     {
-        if(words != null)
-        {
-            words.removefromparent();
-            words = null;
-        }
         if(sol == null)
         {
             //shadowWord.visible(0);
         }
         else
         {
+            if(words != null)
+            {
+                words.removefromparent();
+                words = null;
+            }
+
             //shadowWord.visible(1);
             shadowWord.stop();
             shadowWord.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
@@ -287,7 +333,8 @@ class MapBanner extends MyNode
             //按钮和士兵中心对齐
             if(touchPos != null)
             {
-                var x = min(max(touchPos[0]-sSize[0]/2, 0), global.director.disSize[0]-sSize[0]);
+                //var x = min(max(touchPos[0]-sSize[0]/2, 0), global.director.disSize[0]-sSize[0]);
+                var x = min(max(touchPos[0], 0), global.director.disSize[0]-sSize[0]);
                 shadowWord.pos(x, oldPos[1]);
             }
         }
@@ -315,6 +362,12 @@ class MapBanner extends MyNode
     }
     function onOk()
     {
+        var ret = scene.map.checkMySoldier();
+        if(ret == 0)
+        {
+            global.director.curScene.addChild(new UpgradeBanner(getStr("noSol", null), [100, 100, 100]));
+            return;
+        }
         scene.finishArrange();
     }
     function onCancel()

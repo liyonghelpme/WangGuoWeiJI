@@ -18,6 +18,7 @@ class BattleEnd extends MyNode
         cmd.append([BACK_PRINT, 17]);
         cmd.append([SET_WORD, "battleEnd1"]);
         cmd.append([PRINT, 28]);
+        cmd.append([WAIT_PRINT, 1000]);
 
         prW.setCommand(cmd);
         addChild(prW);//tick = 50ms 2tick = 100ms

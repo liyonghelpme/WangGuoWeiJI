@@ -97,7 +97,7 @@ class BackWord extends MyNode
         callback = cb;
 
         siz = sz;
-        paraHei = h;
+        paraHei = h;//段落高度10
         col = c;
         width = wid;
         height = hei;
@@ -290,10 +290,11 @@ class BackWord extends MyNode
         {
             accTick = 0;
             startYet = 0;
-            sound.stop();
+            sound.pause();
             curCmd++;
         }
     }
+    var passTime = 0;
     function update(diff)
     {
         if(initYet == 1)
@@ -321,6 +322,15 @@ class BackWord extends MyNode
                 {
                     word = getStr(par, null).split("\n");
                     curCmd++;
+                }
+                else if(op == WAIT_PRINT)
+                {
+                    passTime += diff;
+                    if(passTime >= par)
+                    {
+                        passTime = 0;
+                        curCmd++;
+                    }
                 }
             }
             else

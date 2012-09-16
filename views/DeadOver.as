@@ -14,7 +14,7 @@ class DeadOver extends MyNode
     var changeDirNode;
     //var deadTime = 
 
-    const WAIT_TIME = 500;
+    const WAIT_TIME = 300;
     const ROTATE_TIME = 700;
     const FALL_TIME = ROTATE_TIME+WAIT_TIME;
     function DeadOver(sol)

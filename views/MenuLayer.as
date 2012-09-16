@@ -41,20 +41,16 @@ class MenuLayer extends MyNode
         finNum = taskFin.addlabel("", null, 18, FONT_BOLD).pos(17, 17).anchor(50, 50).color(100, 100, 100);
 
         expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
-        //expback = banner.addsprite("exp_star.png").scale(100,100).size(37,35).anchor(50, 50).pos(144,60).rotate(0);
         expback = banner.addsprite("level.png").scale(100,100).anchor(50, 50).pos(144,60);
         //16+144 = 160+5 = 165
         //165 - 143 = 22
         
-        //levelLabel = banner.addlabel("0", null, 15).anchor(0, 50).pos(114, 65).color(76, 97, 34);
-        //levelLabel = new ShadowWords("0", 18, [76, 97, 34]);
-        //levelLabel.bg.anchor(0, 50).pos(114, 63);
         var expSize = expback.prepare().size();
         levelLabel = expback.addnode().anchor(50, 50).pos(expSize[0]/2, expSize[1]/2);
 
         expBanner = sprite("expBanner.png").pos(127, 71).visible(0);
         banner.add(expBanner, MENU_EXP_LAYER);
-        expWord = ShadowWords(getStr("expToLev", null), 17, [100, 100, 100], "arial", FONT_BOLD);
+        expWord = ShadowWords(getStr("expToLev", null), "arial", 17, FONT_BOLD, [100, 100, 100]);
         expWord.bg.anchor(50, 50).pos(75, 28);
         expBanner.add(expWord.bg);
 
@@ -176,7 +172,7 @@ class MenuLayer extends MyNode
             expWord.setWords(getStr("expToLev", ["[EXP]", str(leftExp), "[LEV]", str(level+2)]));
             expBanner.stop();
             expBanner.visible(1);
-            expBanner.addaction(sequence(itintto(100, 100, 100, 100), delaytime(3000), fadeout(1000)));
+            expBanner.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
         }
 
         var temp = altasWord("white", str(level+1));

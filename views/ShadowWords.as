@@ -1,11 +1,11 @@
 class ShadowWords extends MyNode
 {
     var shadow;
-    function ShadowWords(w, sz, col, ty, bo)
+    function ShadowWords(w, ty, sz, bo, col)
     {
         bg = label(w, ty, sz, bo).color(col);
         init();
-        shadow = label(w, ty, sz, bo).color(25, 24, 24).pos(1, 2);
+        shadow = label(w, ty, sz, bo).color(0, 0, 0).pos(1, 2);
         bg.add(shadow, -1);
     }
     function setWords(w)

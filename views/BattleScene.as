@@ -167,13 +167,13 @@ class BattleScene extends MyNode
         if(kind == CHALLENGE_MON && global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
         {
             //global.director.pushView(new NoTipDialog(), 1, 0);
-            dialogController.addCmd(dict([["cmd", "noTip"]]));
+            dialogController.addCmd(dict([["cmd", "noTip"], ["word", getStr("noTip", null)], ["kind", CHALLENGE_TIP]]));
         }
         if(kind == CHALLENGE_TRAIN)
         {
             var tip = global.user.db.get("trainTip");
             if(tip == null)
-                dialogController.addCmd(dict([["cmd", "trainTip"]]));
+                dialogController.addCmd(dict([["cmd", "noTip"], ["word", getStr("trainTipLine", null)], ["kind", TRAIN_TIP]]));
         }
 
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));

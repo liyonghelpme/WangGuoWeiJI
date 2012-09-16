@@ -104,6 +104,12 @@ const WHITE = m_color(
 0, 0, 100, 0, 0,
 0, 0, 0, 100, 0
 );
+const RBINV = m_color(
+0, 0, 100, 0, 0,
+0, 100, 0, 0, 0,
+100, 0, 0, 0, 0,
+0, 0, 0, 100, 0
+);
 
 
 /*
@@ -737,3 +743,10 @@ const PRINT = 0;
 const SET_TIME = 1;
 const BACK_PRINT = 2;
 const SET_WORD = 3;
+const WAIT_PRINT = 4;
+
+
+//NOTIP 类型
+const CHALLENGE_TIP = 0;
+const TRAIN_TIP = 1;
+const FIGHT_TIP = 2;

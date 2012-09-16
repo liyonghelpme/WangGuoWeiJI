@@ -149,15 +149,18 @@ class NewBattle extends MyNode
         var NORMAL = 100;
         //cmd.append([SETPOS, [600, 360]]);
         cmd.append([CLOSEUP, [0, [0, 0], NORMAL]]);//缩放到正常大小 屏幕中心对齐背景中心
-        cmd.append([WAIT, 3000]);
+        cmd.append([WAIT, 2000]);
         //cmd.append([CLOSEUP, [2000, [7, 150], 100]]);
         cmd.append([SPEAK_NOW, [3000, "dearKing", 0]]);
+
         cmd.append([MON_ATTACK, 0]);
         cmd.append([MON_ATTACK, 1]);
         cmd.append([MON_ATTACK, 2]);
-        cmd.append([WAIT, 1500]);
         cmd.append([MON_SPEAK, 0]);
-        cmd.append([WAIT, 2000]);
+        cmd.append([WAIT, 1000]);
+
+        //cmd.append([WAIT, 1500]);
+
         cmd.append([MON_SPEAK, 1]);
         cmd.append([WAIT, 1000]);
         cmd.append([MON_SPEAK, 2]);
@@ -166,7 +169,7 @@ class NewBattle extends MyNode
 
         //cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
         //cmd.append([CLOSEUP, [1000, [388, 141], 100]]);
-        cmd.append([SPEAK_NOW, [3000, "dearSuo", 1]]);
+        //cmd.append([SPEAK_NOW, [3000, "dearSuo", 1]]);
         cmd.append([SPEAK_NOW, [3000, "fightNow", 1]]);
         cmd.append([MON_ATTACK, 3]);
         cmd.append([MON_ATTACK, 4]);
@@ -178,13 +181,14 @@ class NewBattle extends MyNode
         cmd.append([MON_ATTACK, 10]);
         cmd.append([WAIT, 1500]);
 
-        cmd.append([MON_SPEAK, 3]);
-        cmd.append([WAIT, 2000]);
-        cmd.append([MON_SPEAK, 4]);
-        cmd.append([WAIT, 1000]);
         cmd.append([MON_SPEAK, 5]);
         cmd.append([WAIT, 1000]);
         cmd.append([MON_SPEAK, 6]);
+        cmd.append([WAIT, 1000]);
+        cmd.append([MON_SPEAK, 4]);
+        cmd.append([WAIT, 1000]);
+        cmd.append([MON_SPEAK, 3]);
+        cmd.append([WAIT, 1000]);
 
         initYet = 1;
     }

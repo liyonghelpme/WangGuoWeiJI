@@ -46,12 +46,20 @@ class FightSoldier extends MoveSoldier
         nameBanner = bg.addnode().pos(bSize[0]/2, -5).anchor(50, 100);
         var col;
         if(isArena)
-            col = [0, 0, 100];
+            col = [11, 14, 89];
         else
-            col = [100, 0, 0];
+            col = [94, 16, 9];
 
-        var pic = nameBanner.addlabel(getStr("nameLev", ["[NAME]", privateData.get("name"), "[LEV]", str(privateData.get("level"))]), null, 18).color(col);
-        var lSize = pic.prepare().size();
+        var pic = new ShadowWords(
+                getStr("nameLev", ["[NAME]", privateData.get("name"), "[LEV]", str(privateData.get("level"))]),
+                null,
+                18,
+                FONT_NORMAL,
+                col
+                );
+        nameBanner.add(pic.bg);
+        //var pic = nameBanner.addlabel(getStr("nameLev", ["[NAME]", privateData.get("name"), "[LEV]", str(privateData.get("level"))]), null, 18).color(col);
+        var lSize = pic.bg.prepare().size();
         nameBanner.size(lSize);
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -98,6 +106,12 @@ class FightSoldier extends MoveSoldier
     }
     var chooseStar = null;
     //成功设定当前士兵为 选择士兵
+
+/*
+                chooseStar.addaction(repeat(animate(1500, 
+                    "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", "greenStar11.png", "greenStar12.png", "greenStar13.png", "greenStar14.png", "greenStar15.png", "greenStar16.png", "greenStar17.png", "greenStar18.png"
+                    , UPDATE_SIZE)));
+*/
     function setCurSolFinish()
     {
         if(chooseStar == null)
@@ -105,9 +119,7 @@ class FightSoldier extends MoveSoldier
             var bSize = bg.size();
             chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
             if(isArena)//挑战其它擂主
-                chooseStar.addaction(repeat(animate(1500, 
-                    "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", "greenStar11.png", "greenStar12.png", "greenStar13.png", "greenStar14.png", "greenStar15.png", "greenStar16.png", "greenStar17.png", "greenStar18.png"
-                    , UPDATE_SIZE)));
+                chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE, RBINV)));
             else//防守我方擂台
                 chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
             bg.add(chooseStar, -1);

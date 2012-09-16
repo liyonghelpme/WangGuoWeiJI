@@ -748,12 +748,13 @@ class User
     */
     function updateBuilding(build)
     {
-        if(build.sid == MINE_BID)
+        if(build.bid == MINE_BID)
             return;
 
         //trace(build.bid);
         //trace(dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
 
+        trace("updateBuilding", build, build.id, build.bid, build.getPos(), build.state, build.dir, build.getObjectId(), build.getStartTime());
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
         db.put("buildings", buildings);
     }

@@ -248,9 +248,9 @@ function getTimeStr(t)
     var hour = t / 60;
     var res = "";
     if(hour != 0)
-        res += str(hour)+"h";
+        res += str(hour)+"h ";
     if(min != 0)
-        res += str(min)+"m";
+        res += str(min)+"m ";
     //没有小时或者分钟则显示秒
     if((hour == 0 || min == 0) && sec != 0)
         res += str(sec)+"s";

@@ -117,6 +117,8 @@ import fight.FightSoldier;
 import views.MoveMap;
 import views.MoveSoldier;
 
+import views.NewButton;
+
 
 
 import views.SellDialog;
@@ -138,6 +140,7 @@ import views.ResourceWarningDialog;
 import views.GloryDialog;
 
 import views.Farm;
+import views.Plant;
 import views.PlantChoose;
 import views.House;
 import views.FuncBuild;
@@ -145,10 +148,10 @@ import views.FuncBuild;
 //经营页面场景飞行的银币
 import views.FlyObject;
 
-import views.MapScene;
-import views.MapLayer;
-import views.FlyLayer;
-import views.LevelSelectLayer;
+import battle.MapScene;
+import battle.MapLayer;
+import battle.FlyLayer;
+import battle.LevelSelectLayer;
 
 import views.BattleScene;
 import views.MapBanner;
@@ -197,16 +200,17 @@ import views.Button;
 
 //新手剧情对话框 依赖于CastlePageScene
 //如果使用消息机制就能避免显示的依赖关系
-import views.SelectHero;
-import views.SelectMenu;
+import welcome.SelectHero;
+import welcome.SelectMenu;
 
-import views.BattleEnd;
-import views.BackWord;
-import views.NewBattle;
-import views.WelcomeDialog;
-import views.PrintWord;
-import views.GrayWord;
+import welcome.BattleEnd;
+import welcome.BackWord;
+import welcome.NewBattle;
+import welcome.WelcomeDialog;
 
+import welcome.GrayWord;
+
+//import views.PrintWord;
 
 
 import model.BusinessModel;

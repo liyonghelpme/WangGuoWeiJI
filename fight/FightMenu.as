@@ -6,7 +6,7 @@ class FightMenu extends MyNode
 
     //摆擂台
     var black0;
-    var makeArenaWord;
+    //var makeArenaWord;
     var makeBut;
     var failWord;
 
@@ -32,7 +32,10 @@ class FightMenu extends MyNode
     }
     function onMakeArena()
     {
-        global.director.pushView(new MakeArenaDialog(scene), 1, 0); 
+        if(global.fightModel.myArena == null)
+            global.director.pushView(new MakeArenaDialog(scene), 1, 0); 
+        else
+            global.director.curScene.addChild(new UpgradeBanner(getStr("inDefNow", null), [100, 100, 100]));
     }
 
 
@@ -44,19 +47,25 @@ class FightMenu extends MyNode
         bg = node();
         init();
 
-        bg.addsprite("pageFriendReturn.png").pos(0, 480).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
+        bg.addsprite("map_back.png", RBINV).size(91, 59).pos(38, 399).anchor(0, 0).setevent(EVENT_TOUCH, returnHome);
 
         black0 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
         black0.addsprite("fightBlue.jpg").pos(13, 8);
         black0.addsprite("fightRed.jpg").pos(13, 33);
+
         arenaNum = black0.addlabel(getStr("arenaNum", null), null, 18, FONT_BOLD).pos(43, 7);
         chaNum = black0.addlabel(getStr("chaNum", null), null, 18, FONT_BOLD).pos(43, 30);
-        var but0 = black0.addsprite("roleNameBut0.png").pos(201, 22).size(91, 42).setevent(EVENT_TOUCH, onRank);
-        but0.addlabel(getStr("rank", null), null, 20).anchor(50, 50).pos(45, 21);
 
-        makeBut = black0.addsprite("blueButton.png").pos(303, 22).size(91, 42).setevent(EVENT_TOUCH, onMakeArena);
-        //如果守擂中 则灰色按钮
-        makeArenaWord = makeBut.addlabel(getStr("makeArena", null), null, 20).anchor(50, 50).pos(45, 21);
+
+        var but0 = new NewButton("roleNameBut0.png", [91, 42], getStr("rank", null), null, 20, FONT_BOLD, [100, 100, 100], onRank, null);
+        but0.bg.pos([201+45, 22+21]).anchor(50, 50);
+        black0.add(but0.bg);
+
+
+        but0 = new NewButton("blueButton.png", [91, 42], getStr("makeArena", null), null, 20, FONT_BOLD, [100, 100, 100], onMakeArena, null);
+        but0.bg.pos([303+45, 22+21]).anchor(50, 50);
+        black0.add(but0.bg);
+        makeBut = but0;
 
         var refresh = black0.addsprite("fightRefresh.png").pos(410, 23).setevent(EVENT_TOUCH, onRefresh);
         //如果没有摆擂台则fightGold
@@ -65,18 +74,26 @@ class FightMenu extends MyNode
 
         black1 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
         chaInfo = black1.addlabel(getStr("chaInfo", null), null, 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(13, 24);
-        but0 = black1.addsprite("roleNameBut0.png").pos(286, 21).size(73, 42).setevent(EVENT_TOUCH, onArena);
-        but0.addlabel(getStr("challenge", null), null, 20).pos(36, 21).anchor(50, 50);
-        but0 = black1.addsprite("blueButton.png").pos(375, 21).size(73, 42).setevent(EVENT_TOUCH, onCancelArena);
-        but0.addlabel(getStr("cancel", null), null, 20).pos(36, 21).anchor(50, 50);
+        but0 = new NewButton("roleNameBut0.png", [73, 42], getStr("challenge", null), null, 20, FONT_BOLD, [100, 100, 100], onArena, null);
+        but0.bg.pos([286+36, 21+21]).anchor(50, 50);
+        black1.add(but0.bg);
+
+        but0 = new NewButton("blueButton.png", [73, 42], getStr("cancel", null), null, 20, FONT_BOLD, [100, 100, 100], onCancelArena, null);
+        but0.bg.pos([375+36, 21+21]).anchor(50, 50);
+        black1.add(but0.bg);
 
 
         black2 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
         accInfo = black2.addlabel(getStr("accInfo", null), null, 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(9, 14);
-        but0 = black2.addsprite("roleNameBut0.png").pos(279, 20).size(91, 42).setevent(EVENT_TOUCH, onDefense);
-        but0.addlabel(getStr("accChallenge", null), null, 20).pos(45, 21).anchor(50, 50); 
-        but0 = black2.addsprite("blueButton.png").pos(379, 20).size(72, 42).setevent(EVENT_TOUCH, onCancelDefense);
-        but0.addlabel(getStr("cancel", null), null, 20).pos(36, 21).anchor(50, 50);
+
+        but0 = new NewButton("roleNameBut0.png", [91, 42], getStr("accChallenge", null), null, 20, FONT_BOLD, [100, 100, 100], onDefense, null);
+        but0.bg.pos([279+45, 20+21]).anchor(50, 50);
+        black2.add(but0.bg);
+
+        but0 = new NewButton("blueButton.png", [72, 42], getStr("cancel", null), null, 20, FONT_BOLD, [100, 100, 100], onCancelDefense, null);
+        but0.bg.pos([379+36, 20+21]).anchor(50, 50);
+        black2.add(but0.bg);
+
         
         blacks = [black0, black1, black2];
         curBlack = -1;
@@ -159,14 +176,18 @@ class FightMenu extends MyNode
             //没有擂台
             if(global.fightModel.myArena == null)
             {
-                makeBut.texture("blueButton.png");
-                makeBut.setevent(EVENT_TOUCH, onMakeArena);
+                makeBut.bg.texture("blueButton.png");
+                //makeBut.setevent(EVENT_TOUCH, onMakeArena);
+                //makeBut.setCallback(onMakeArena);
+                makeBut.word.setWords(getStr("makeArena", null));
                 failWord.text(getStr("fightGold", null));
             }
             else 
             {
-                makeBut.texture("blueButton.png", GRAY);
-                makeBut.setevent(EVENT_TOUCH, null);
+                makeBut.bg.texture("blueButton.png", GRAY);
+                //makeBut.setevent(EVENT_TOUCH, null);
+                //makeBut.setCallback(null);
+                makeBut.word.setWords(getStr("inDefense", null));
                 var leftNum = PARAMS.get("maxFailNum")-global.fightModel.myArena.get("failNum");
                 failWord.text(getStr("failNum", ["[NUM]", str(leftNum)]));
             }

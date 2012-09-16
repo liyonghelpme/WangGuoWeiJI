@@ -11,6 +11,7 @@ class TaskFinish extends MyNode
     const WIDTH = 327;
     const HEIGHT = 66;
     
+    const WAIT_T = 100;
     const MOVE_T = 1200;
     const DELAY_T = 2500;
     const FADE_T = 600;
@@ -23,9 +24,9 @@ class TaskFinish extends MyNode
         init();
 
         cli = bg.addnode().size(WIDTH, HEIGHT).pos(10, 0).clipping(1);
-        right = cli.addsprite("taskBack.png").pos(INITX, 0).addaction(sequence(moveto(MOVE_T, ENDX, 0), delaytime(DELAY_T), fadeout(FADE_T)));
+        right = cli.addsprite("taskBack.png").pos(INITX, 0).addaction(sequence(delaytime(WAIT_T), moveto(MOVE_T, ENDX, 0), delaytime(DELAY_T), fadeout(FADE_T)));
 
-        bg.addsprite("taskLeft.png").addaction(sequence(delaytime(MOVE_T+DELAY_T), fadeout(FADE_T)));
+        bg.addsprite("taskLeft.png").addaction(sequence(delaytime(WAIT_T+MOVE_T+DELAY_T), fadeout(FADE_T)));
 
         right.addlabel(words, null, 22).pos(35, 33).color(39, 23, 23).anchor(0, 50);
         right.addlabel(getStr("finishTask", null), null, 22).pos(297, 33).color(17, 71, 18).anchor(100, 50);

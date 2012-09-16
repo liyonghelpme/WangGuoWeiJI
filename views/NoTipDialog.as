@@ -4,13 +4,19 @@
 */
 class NoTipDialog extends MyNode
 {
-    function NoTipDialog()
+
+    var kind;
+    function NoTipDialog(w, k)
     {
+        kind = k;
+
         bg = sprite("noTipDialog.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
-        bg.addlabel(getStr("roundTip", null), null, 30, FONT_BOLD).anchor(50, 50).pos(253, 34).color(100, 100, 100);
+        bg.addlabel(getStr("tips", null), null, 30, FONT_BOLD).anchor(50, 50).pos(253, 34).color(100, 100, 100);
+
+
         bg.addsprite("noTip.png").setevent(EVENT_TOUCH, closeDialog).pos(423, 282).anchor(50, 50);
-        var word = stringLines(getStr("noTip", null), 18, 32, [0, 0, 0], FONT_NORMAL);
+        var word = stringLines(w, 18, 32, [0, 0, 0], FONT_NORMAL);
         word.pos(53, 140);
         bg.add(word);
         bg.addsprite("close2.png").anchor(50, 50).pos(470, 84).setevent(EVENT_TOUCH, closeNoTip);
@@ -21,7 +27,13 @@ class NoTipDialog extends MyNode
     }
     function closeDialog()
     {
-        global.user.db.put("readYet", 1);
+        if(kind == CHALLENGE_TIP)
+            global.user.db.put("readYet", 1);
+        else if(kind == TRAIN_TIP)
+            global.user.db.put("trainTip", 1);
+        else if(kind == FIGHT_TIP)
+            global.user.db.put("fightTip", 1);
+
         global.director.popView();
     }
 }

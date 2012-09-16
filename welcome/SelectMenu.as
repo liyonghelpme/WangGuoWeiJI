@@ -91,6 +91,14 @@ class SelectMenu extends MyNode
 
     var word;
     var heros = dict();
+    const H0 = 1;
+    const H1 = 2;
+    const H2 = 3;
+    const H3 = 4;
+
+    const BLACK2 = 5;
+    const MENU = 6;
+    const ENTER = 10;
     function SelectMenu(s, cur)
     {
         scene = s;
@@ -104,28 +112,28 @@ class SelectMenu extends MyNode
         bg.addsprite("black.png", ARGB_8888).color(0, 0, 0, 30).size(global.director.disSize);
 
         var hero = new Hero(this, 480);
-        addChildZ(hero, 1);
+        addChildZ(hero, H0);
         heros.update(480, hero);
 
         hero = new Hero(this, 590);
-        addChildZ(hero, 2);
+        addChildZ(hero, H1);
         heros.update(590, hero);
 
         hero = new Hero(this, 550);
-        addChildZ(hero, 3);
+        addChildZ(hero, H2);
         heros.update(550, hero);
 
         hero = new Hero(this, 440);
-        addChildZ(hero, 4);
+        addChildZ(hero, H3);
         heros.update(440, hero);
 
 
         menuNode = node();
-        bg.add(menuNode, 5);
+        bg.add(menuNode, MENU);
         
         stepTip = new GrayWord(this, getStr("selectHero", null), 22, 5, [100, 100, 100], 800, 0, 6, printOver, curStep);//passLine 70 70 70
         stepTip.setPos([37, 50])
-        addChildZ(stepTip, 10);
+        addChildZ(stepTip, ENTER);
 
         selectHero(-1);
         //updateMenu();
@@ -152,8 +160,11 @@ class SelectMenu extends MyNode
                     hero.showNormal();
                 }
                 curSelHero = p;
-                hero = heros.get(curSelHero);
-                hero.showMakeUp();
+                if(curSelHero != -1)//没有选择英雄则不更新
+                {
+                    hero = heros.get(curSelHero);
+                    hero.showMakeUp();
+                }
                 //新的选择英雄显示变身动画
                 updateMenu();
             }
@@ -236,24 +247,15 @@ class SelectMenu extends MyNode
             {
                 checkName = 1;
                 curStep++;
-                updateMenu();
+                var b2 = sprite("black.png", ARGB_8888).color(0, 0, 0, 30).size(global.director.disSize);
+                bg.add(b2, BLACK2);
 
-                /*
-                trace("finishName");//等待文字打印完callback printFinish 
-                if(inGame != null)
-                {
-                    inGame.setevent(EVENT_TOUCH, enterGame);
-                }
-                else 
-                    enterGame();
-                */
+                updateMenu();
             }
             else//名字重复 退回到上一步 显示名字冲突
             {
                 tooLong = 0; 
                 col = 1;
-                //curStep--;
-                //onInput();
                 updateMenu();
             }
         }
@@ -270,6 +272,10 @@ class SelectMenu extends MyNode
     const INPUT_X = 21;
     const INPUT_Y = 51;
 
+    function cancelHero()
+    {
+        selectHero(-1);
+    }
     function updateMenu()
     {
         menuNode.removefromparent();
@@ -283,17 +289,21 @@ class SelectMenu extends MyNode
 
         if(curStep == 0)//第一步不能back
         {
-            //heroDes = menuNode.addsprite("heroDes"+str(curSelHero)+".png").pos(517, 12); 
-            heroDes = menuNode.addsprite("storeBlack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
-            //var heroData = getData(SOLDIER, curSelHero);
-            //var heroName = heroDes.addlabel(str(heroData.get("name")), null, 28, FONT_BOLD).pos(22, 15);
-            var heroName = heroDes.addsprite("nHeroDes"+str(curSelHero)+".png").pos(22, 15);
-            var desc = stringLines(getStr("heroDes"+str(curSelHero), null), 20, 26, [100, 100, 100], FONT_BOLD);
-            desc.pos(26, 65);
-            heroDes.add(desc);
+            if(curSelHero != -1)
+            {
+                //heroDes = menuNode.addsprite("heroDes"+str(curSelHero)+".png").pos(517, 12); 
+                heroDes = menuNode.addsprite("storeBlack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
+                //var heroData = getData(SOLDIER, curSelHero);
+                //var heroName = heroDes.addlabel(str(heroData.get("name")), null, 28, FONT_BOLD).pos(22, 15);
+                var heroName = heroDes.addsprite("nHeroDes"+str(curSelHero)+".png").pos(22, 15);
+                var desc = stringLines(getStr("heroDes"+str(curSelHero), null), 20, 26, [100, 100, 100], FONT_BOLD);
+                desc.pos(26, 65);
+                heroDes.add(desc);
 
-            //-40
-            sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 50).pos(24, 135).setevent(EVENT_TOUCH, onSure);
+                //-40
+                sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 50).pos(24, 135).setevent(EVENT_TOUCH, onSure);
+                backBut = heroDes.addsprite("heroBack0.png").anchor(0, 50).pos(98, 135).setevent(EVENT_TOUCH, cancelHero);
+            }
         }
         else if(curStep == 1)
         {
@@ -307,6 +317,8 @@ class SelectMenu extends MyNode
             warnLabel = heroDes.addlabel(getStr("nameLen", null), null, 18).color(100, 0, 0).pos(22, 100).visible(0);
             if(name != null)
                 inputView.text(name);
+            else
+                inputView.text(global.user.papayaName);
             if(tooLong)
             {
                 warnLabel.text(getStr("nameLen", null));
@@ -340,7 +352,7 @@ class SelectMenu extends MyNode
     {
         if(printFinish && checkName && inGame == null)//打字结束 且 检测名字无误 进入游戏
         {
-            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1000, "in0.png", "in1.png","in2.png","in3.png","in4.png",UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
+            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1000, "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
         }
     }
     override function exitScene()

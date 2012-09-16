@@ -70,10 +70,10 @@ class Map extends MyNode
         //newMap[0] = max(1, min(6-sx, newMap[0]));
         //newMap[1] = max(0, min(5-sy, newMap[1]));
         if(gridRow == null)
-            gridRow = bg.addsprite("occGrid.png").pos(MAP_INITX, gp[1]).size(MAP_OFFX*6, MAP_OFFY*sol.sy);
+            gridRow = bg.addsprite("occGrid0.png").pos(MAP_INITX, gp[1]).size(MAP_OFFX*6, MAP_OFFY*sol.sy);
         gridRow.pos(MAP_INITX, gp[1]);
         if(gridCol == null)
-            gridCol = bg.addsprite("occGrid.png").pos(gp[0], MAP_INITY).size(MAP_OFFX*sol.sx, MAP_OFFY*5);
+            gridCol = bg.addsprite("occGrid0.png").pos(gp[0], MAP_INITY).size(MAP_OFFX*sol.sx, MAP_OFFY*5);
         gridCol.pos(gp[0], MAP_INITY);
     }
     var monEquips;
@@ -510,6 +510,22 @@ class Map extends MyNode
             }
         }
 
+    }
+    function checkMySoldier()
+    {
+        var it = soldiers.values();
+        for(var i = 0; i < len(it); i++)
+        {
+            for(var j = 0; j < len(it[i]); j++)
+            {
+                var so = it[i][j];
+                if(so.color == MYCOLOR && so.state != MAP_SOL_DEFENSE)//我方士兵且 不为防御装置 且没有加入我方士兵列表 多行士兵可能被多次加入列表中应该避免
+                {
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
     var leftNum = [];
     //设定怪兽数量
@@ -1069,18 +1085,18 @@ class Map extends MyNode
             
         if(skillGrid == null)
         {
-            skillGrid = bg.addsprite("occGrid.png").size(MAP_OFFX*sx, MAP_OFFY*sy);
+            skillGrid = bg.addsprite("occGrid0.png").size(MAP_OFFX*sx, MAP_OFFY*sy);
             //bg.add(grid);
             //grid.clipping(0);
         }
 
         if(ret == 0)
         {
-            skillGrid.texture("occGrid.png", RED);        
+            skillGrid.texture("occGrid0.png", RED);        
         }
         else
         {
-            skillGrid.texture("occGrid.png", WHITE);
+            skillGrid.texture("occGrid0.png", WHITE);
         }
 
         var gp = getGridPos(oldMap);

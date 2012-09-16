@@ -47,6 +47,7 @@ class MyNode
     function setPos(p)
     {
         bg.pos(p);
+        return this;
     }
     
     function getPos()

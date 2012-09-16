@@ -49,6 +49,8 @@ class RingFightingScene extends MyNode
         addChild(dialogController);
 
         dialogController.addCmd(dict([["cmd", "loading"]]));//但是要保证
+        if(global.user.db.get("fightTip") == null)
+            dialogController.addCmd(dict([["cmd", "noTip"], ["word", getStr("fightTip", null)], ["kind", FIGHT_TIP]]));
 
         if(global.fightModel.initOver == 0)
         {
