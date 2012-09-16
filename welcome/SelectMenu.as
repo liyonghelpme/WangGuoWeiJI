@@ -231,8 +231,8 @@ class SelectMenu extends MyNode
         //初始化场景数据 数据初始化结束之后 取出loading页面
         global.user.initData();
     }
-    const BLOCK_W = 276;
-    const BLOCK_H = 175;
+    const BLOCK_W = 273;
+    const BLOCK_H = 172;
     const BLOCK_X = 504;
     const BLOCK_Y = 14;
 
@@ -292,7 +292,7 @@ class SelectMenu extends MyNode
             if(curSelHero != -1)
             {
                 //heroDes = menuNode.addsprite("heroDes"+str(curSelHero)+".png").pos(517, 12); 
-                heroDes = menuNode.addsprite("storeBlack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
+                heroDes = menuNode.addsprite("heroDesBack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
                 //var heroData = getData(SOLDIER, curSelHero);
                 //var heroName = heroDes.addlabel(str(heroData.get("name")), null, 28, FONT_BOLD).pos(22, 15);
                 var heroName = heroDes.addsprite("nHeroDes"+str(curSelHero)+".png").pos(22, 15);
@@ -301,16 +301,16 @@ class SelectMenu extends MyNode
                 heroDes.add(desc);
 
                 //-40
-                sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 50).pos(24, 135).setevent(EVENT_TOUCH, onSure);
-                backBut = heroDes.addsprite("heroBack0.png").anchor(0, 50).pos(98, 135).setevent(EVENT_TOUCH, cancelHero);
+                sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onSure);
+                backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(98, 135).setevent(EVENT_TOUCH, cancelHero);
             }
         }
         else if(curStep == 1)
         {
-            heroDes = menuNode.addsprite("storeBlack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H); 
+            heroDes = menuNode.addsprite("heroDesBack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H); 
             heroDes.addsprite("heroName0.png").pos(22, 19);
-            sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 50).pos(24, 135).setevent(EVENT_TOUCH, onInput);
-            backBut = heroDes.addsprite("heroBack0.png").anchor(0, 50).pos(98, 135).setevent(EVENT_TOUCH, onBack);
+            sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onInput);
+            backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(98, 135).setevent(EVENT_TOUCH, onBack);
             //723 165 - 200 120 = 523 45
             inputView = v_create(V_INPUT_VIEW, BLOCK_X+INPUT_X, BLOCK_Y+INPUT_Y, 233, 50);
             v_root().addview(inputView);
