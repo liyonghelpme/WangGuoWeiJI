@@ -173,6 +173,8 @@ function getSolPos(mx, my, sx, sy, offY)
     return [mx, my];
 }
 
+
+/*
 //<= bigNum
 function getOpenBig()
 {
@@ -187,3 +189,94 @@ function getOpenBig()
         return 4;
     return 5;
 }
+
+function getCurEnableDif()
+{
+    var star = global.user.starNum;
+    if(star == null)
+        return [1, 0];
+        
+    var i;
+    var j;
+    var find = 0;
+//    trace("curEnable ", star);
+    for(i = 0; i < len(star); i++)
+    {
+        for(j = 0; j < len(star[i]); j++)
+            if(star[i][j] == 0)
+            {
+                find = 1;
+                break;
+            }
+        if(find == 1)
+            break;
+    }
+    //enable big=i
+    //enable small = j
+    return [i+1, j];
+}
+*/
+
+function getTotalStar(big)
+{
+    if(big < 0)
+        return 0;
+
+    var star = global.user.starNum;
+    var total = 0;
+    for(var i = 0; i < len(star[big]); i++)
+    {
+        total += star[big][i];
+    }
+    return total;
+}
+//检测应该开启 等级
+//0 1 2 3 4
+function checkBigEnable(big)
+{
+    if(big < 0)
+        return 1;
+
+    var star = global.user.starNum;
+    var unlockLevel = global.user.unlockLevel;
+    //已经解锁
+    if(unlockLevel.count(big) > 0)
+        return 1;
+
+    //满足等级 和 星星需求
+    var mData = getData(MAP_INFO, big);
+    if(mData.get("needLevel") <= global.user.getValue("level") && mData.get("needStar") <= getTotalStar(big-1))
+        return 1;
+
+    return 0;
+}
+function checkBigSmallEnable(big, small)
+{
+    var star = global.user.starNum;
+    //第一小关 检测当前大关是否开启
+    if(small == 0)
+    {
+        return checkBigEnable(big);
+    }
+    //检测上一小关是否开启
+    else
+    {
+        return star[big][small-1] > 0;
+    }
+}
+
+function getMaxBigEnable()
+{
+    for(var i = PARAMS.get("bigNum")-1; i >= 0; i--)
+    {
+        var ena = checkBigEnable(i);
+        if(ena)
+            return i;
+    }
+    return 0;
+}
+
+
+//check enable
+//level starNum curStar --->enable
+//enable = 0 -----> condition satisfy--->enable 

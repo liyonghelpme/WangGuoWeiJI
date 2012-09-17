@@ -21,6 +21,7 @@ class User
     var maxBid;
     var maxSid;
     var starNum;
+    var unlockLevel = [];
 
     //所有修改db的行为都对应修改 服务器数据
     var db;
@@ -229,7 +230,8 @@ class User
     function initStarNum()
     {
         starNum = db.get("starNum");
-        if(starNum == null)
+        unlockLevel = db.get("unlockLevel");
+        if(starNum == null || unlockLevel == null)
         {
             global.httpController.addRequest("getStars", dict([["uid", global.user.uid]]), getStarOver, null);
         }
@@ -243,6 +245,7 @@ class User
         {
             con = json_loads(con);
             starNum = con.get("res");
+            unlockLevel = con.get("unlockLevel");//0-4
             trace("getStarOver", starNum);
             db.put("starNum", starNum);
         }
@@ -386,7 +389,8 @@ class User
             var newState = con.get("newState");
             if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
             {
-                global.director.replaceScene(new WelcomeDialog());
+                //global.director.replaceScene(new WelcomeDialog());
+                global.msgCenter.sendMsg(NEW_USER, null);
                 return;
             }
             registerTime = con.get("registerTime");
@@ -515,7 +519,9 @@ class User
         tasks = dict();
         mine = null;
         treasureStone = dict();
-        starNum = null;
+        //starNum = null;
+        starNum = [[3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3]];
+ 
         maxGiftId = 0;
         skills = null;
 
@@ -1371,5 +1377,10 @@ class User
         var l = getValue("liveNum");
         changeValue("crystal", l);
         changeValue("liveNum", -l);
+    }
+    function enableLevel(big)
+    {
+        unlockLevel.append(big);
+        db.put("unlockLevel", unlockLevel);
     }
 }

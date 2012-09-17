@@ -432,46 +432,9 @@ function normalizePos(p, sx, sy)
 返回big+1 small
 1 2 3 4 5
 */
-function getCurEnableDif()
-{
-    var star = global.user.starNum;
-    if(star == null)
-        return [1, 0];
-        
-    var i;
-    var j;
-    var find = 0;
-//    trace("curEnable ", star);
-    for(i = 0; i < len(star); i++)
-    {
-        for(j = 0; j < len(star[i]); j++)
-            if(star[i][j] == 0)
-            {
-                find = 1;
-                break;
-            }
-        if(find == 1)
-            break;
-    }
-    //enable big=i
-    //enable small = j
-    return [i+1, j];
-}
+
 /*
 得到某个小关卡 难度的得分
-*/
-/*
-function getStar(big, small, dif)
-{
-    var star = global.user.starNum;
-    return star[big-1][small][dif]; 
-}
-*/
-/*
-function checkPosSame(p1, p2)
-{
-    return p1[0]==p2[0] && p1[1]==p2[1];
-}
 */
 
 /*
@@ -873,6 +836,7 @@ function altasWord(c, s)
         load_sprite_sheet("yellow.plist"); 
         load_sprite_sheet("blue.plist");
         load_sprite_sheet("white.plist");
+        load_sprite_sheet("bold.plist");
     }
 
     var offX = 0;

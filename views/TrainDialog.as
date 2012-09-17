@@ -16,8 +16,10 @@ class TrainDialog extends MyNode
     function TrainDialog()
     {
 
-        var curDifLevel = getCurEnableDif();
-        var bigLevel = curDifLevel[0]; 
+        //var curDifLevel = getCurEnableDif();
+        //var bigLevel = curDifLevel[0]; 
+        var bigLevel = getMaxBigEnable();
+
         var posMon = monsterAppear.get(bigLevel);
         var small = posMon[0];
         var mid = posMon[0];
@@ -100,9 +102,10 @@ class TrainDialog extends MyNode
                 global.user.doCost(cost);
                 global.httpController.addRequest("soldierC/trainDouble", dict([["uid", global.user.uid], ["gold", gold]]), null, null);
 
-                var curDifLevel = getCurEnableDif();
+                //var curDifLevel = getCurEnableDif();
+                var bigLevel = getMaxBigEnable();
                 global.director.pushScene(
-                    new BattleScene(curDifLevel[0]-1, 0, 
+                    new BattleScene(bigLevel, 0, 
                         null, CHALLENGE_TRAIN, 1, curChoose
                     )
                 );
@@ -112,9 +115,10 @@ class TrainDialog extends MyNode
     function onTrain()
     {
         global.director.popView();
-        var curDifLevel = getCurEnableDif();
+        //var curDifLevel = getCurEnableDif();
+        var bigLevel = getMaxBigEnable();
         global.director.pushScene(
-            new BattleScene(curDifLevel[0]-1, 0, 
+            new BattleScene(bigLevel, 0, 
                 null, CHALLENGE_TRAIN, 0, curChoose
             )
         );

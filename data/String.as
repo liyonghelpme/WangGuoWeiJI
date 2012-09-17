@@ -1043,7 +1043,10 @@ var strings = dict([
 ["defenseRank", "守擂榜"],
 ["fightTip", "1.点击左上摆擂台按钮\n2.点击蓝色名字用户攻击其它擂台\n3.点击红色名字用户防守自己擂台"],
 ["noSol", "没有放置士兵"],
-["", ""],
+["totalStar", "Total [NUM]"],
+["condition", "解锁条件:"],
+["starLevel", "-             [STAR]\n-需要等级[LEV]"],
+["unlock", "提前解锁     [gold]"],
 ]);
 
 

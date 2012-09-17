@@ -512,6 +512,7 @@ const UPDATE_RESOURCE = 13;
 const UPDATE_TASK = 14;
 const UPDATE_SOL = 15;
 const UPDATE_EXP = 16;
+const NEW_USER = 17;
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
@@ -581,7 +582,7 @@ const PLAN_SOLDIER = 1;
 
 const MAX_EQUIP_LEVEL = 12;
 
-const ROUND_MAP_NUM = 5;//闯关地图的数量 每关旗帜的数量由 LevelSelect 中旗帜的数量决定
+//const ROUND_MAP_NUM = 5;//闯关地图的数量 每关旗帜的数量由 LevelSelect 中旗帜的数量决定
 
 const LINE_SKILL = 0;
 const SINGLE_ATTACK_SKILL = 1;
