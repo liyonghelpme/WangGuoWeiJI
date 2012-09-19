@@ -55,9 +55,7 @@ class ResourceWarningDialog extends MyNode
 
         for(var i = 0; i < len(item); i++)
         {
-            bg.addlabel(getStr("resList", 
-                ["[NAME]", getStr(item[i][0], null), "[VAL]", str(item[i][1])]), 
-                null, 18, FONT_NORMAL).pos(177, initY).color(fil[0], fil[1], fil[2]);
+            bg.addlabel(getStr("resList", ["[NAME]", getStr(item[i][0], null), "[VAL]", str(item[i][1])]), null, 18, FONT_NORMAL).pos(177, initY).color(fil[0], fil[1], fil[2]);
             initY += 20;
         }
 

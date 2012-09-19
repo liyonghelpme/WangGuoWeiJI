@@ -91,7 +91,7 @@ class MenuLayer extends MyNode
     function initText()
     {
         silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(336, 99).color(100, 100, 100);
-        goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(591, 99).color(100, 100, 100)
+        goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(591, 99).color(100, 100, 100);
         gloryText = banner.addlabel(getStr("glory", null), null, 18).anchor(50, 50).pos(167, 99).color(100, 100, 100);
         gloryLevText = collectionbutton.addlabel(str("B+"), null, 20, FONT_BOLD).anchor(50, 50).pos(23, 17).color(100, 100, 100);
 

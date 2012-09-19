@@ -17,15 +17,17 @@ class NewButton extends MyNode
         word = new ShadowWords(w, ty, sz, bo, col);
         word.bg.pos(bs[0]/2, bs[1]/2).anchor(50, 50);
         addChild(word);
-        bg.anchor(50, 50);
+
 
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
 
+    var player = null;
     function touchBegan(n, e, p, x, y, points)
     {
+        player = global.controller.butMusic.play(0, 80, 80, 0, 100);
         oldSca = bg.scale();
         bg.scale(oldSca[0]*80/100, oldSca[1]*80/100);
     }
@@ -34,9 +36,17 @@ class NewButton extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
+        var po = n.node2world(x, y);
+        var ret = checkIn(bg, po);
+
+        player.stop();
         bg.scale(oldSca);
-        if(callback != null)
-            callback(param);
+
+        if(ret)
+        {
+            if(callback != null)
+                callback(param);
+        }
     }
     function setCallback(cb)
     {
