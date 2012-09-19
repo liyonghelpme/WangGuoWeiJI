@@ -17,6 +17,7 @@ class NewButton extends MyNode
         word = new ShadowWords(w, ty, sz, bo, col);
         word.bg.pos(bs[0]/2, bs[1]/2).anchor(50, 50);
         addChild(word);
+        bg.anchor(50, 50);
 
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
