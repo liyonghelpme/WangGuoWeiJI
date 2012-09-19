@@ -40,6 +40,8 @@ const CLOUD_LAYER = 2;
 const FLY_LAYER = 3;
 const MAX_MAP_LAYER = 1000;
 
+const BANNER_LAYER = 10000;
+
 
 const FLAG_Z = 1;
 const LOCK_Z = 2;

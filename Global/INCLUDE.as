@@ -244,7 +244,7 @@ import Global.MessageCenter;
 import Global.SensorController;
 import Global.Director;
 import Global.Controller;
-import views.QuitBanner;
+//import views.QuitBanner;
 import Global.Timer;
 import views.Dark;
 import views.StandardTouchHandler;

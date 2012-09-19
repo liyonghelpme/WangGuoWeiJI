@@ -1334,7 +1334,7 @@ class Map extends MyNode
         if(curMovSol == null && scene.kind == CHALLENGE_TRAIN)
         {
             curMovSol = sol;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("selTarPos", null), [100, 100, 100]));
+            global.director.curScene.addChild(new UpgradeBanner(getStr("selTarPos", null), [100, 100, 100], null));
         }
     }
     function clearMoveSol()

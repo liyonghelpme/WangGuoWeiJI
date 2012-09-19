@@ -6,7 +6,7 @@ class BattleEnd extends MyNode
         bg = node();
         init();
         var prW = new BackWord(this, getStr("battleEnd0", null), 30, 15, [100, 100, 100], 800, 0, 4, closeDialog, FONT_BOLD);
-        prW.setPos([41, 212]);
+        prW.setPos([69, 223]);
         var cmd = [];
         cmd.append([SET_TIME, 4]);
         cmd.append([PRINT, 25]);

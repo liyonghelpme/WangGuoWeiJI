@@ -51,7 +51,7 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "chooseSol")
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100]));
+                    global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100], null));
                 }
                 /*
                 else if(curCmd.get("cmd") == "trainTip")

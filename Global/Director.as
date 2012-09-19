@@ -61,7 +61,8 @@ class Director
             if(kc == KEYCODE_BACK)
             {
                 quitState = 1;
-                pushView(new QuitBanner(), 0, 0);
+                //pushView(new QuitBanner(), 0, 0);
+                curScene.addChildZ(new UpgradeBanner(getStr("quitNow", null), [100, 100, 100], clearQuitState), BANNER_LAYER);
             }
         }
         else if(quitState == 1)

@@ -124,7 +124,7 @@ class MakeArenaDialog extends MyNode
         {
             var key = cost.keys()[0];
             var val = cost.values()[0];
-            global.director.curScene.addChild(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100]));
+            global.director.curScene.addChild(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100], null));
             return;
         }
 

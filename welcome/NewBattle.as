@@ -107,7 +107,7 @@ class NewBattle extends MyNode
     const WORD_POS = [
         [250, 239, "wu.png"],
         [241, 140, "haha.png"],
-        [170, 362, "soc.png"],
+        [170, 362, "sok.png"],
         [733, 302, "kill0.png"],
         [711, 210, "kill1.png"],
         [603, 331, "kill2.png"],
@@ -115,6 +115,7 @@ class NewBattle extends MyNode
         [315, 351, "question.png"],
     ];
 
+    const WORD_TIME = 500;
     function NewBattle()
     {
         //bg = sprite("battleBegin.jpg");
@@ -157,20 +158,22 @@ class NewBattle extends MyNode
         cmd.append([MON_ATTACK, 1]);
         cmd.append([MON_ATTACK, 2]);
         cmd.append([MON_SPEAK, 0]);
-        cmd.append([WAIT, 1000]);
+        cmd.append([WAIT, WORD_TIME]);
 
         //cmd.append([WAIT, 1500]);
 
         cmd.append([MON_SPEAK, 1]);
-        cmd.append([WAIT, 1000]);
+        cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 2]);
-        cmd.append([WAIT, 1000]);
+        cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 7]);
 
         //cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
         //cmd.append([CLOSEUP, [1000, [388, 141], 100]]);
         //cmd.append([SPEAK_NOW, [3000, "dearSuo", 1]]);
         cmd.append([SPEAK_NOW, [3000, "fightNow", 1]]);
+
+        cmd.append([MON_SPEAK, 5]);
         cmd.append([MON_ATTACK, 3]);
         cmd.append([MON_ATTACK, 4]);
         cmd.append([MON_ATTACK, 5]);
@@ -179,19 +182,19 @@ class NewBattle extends MyNode
         cmd.append([MON_ATTACK, 8]);
         cmd.append([MON_ATTACK, 9]);
         cmd.append([MON_ATTACK, 10]);
-        cmd.append([WAIT, 1500]);
+        cmd.append([WAIT, WORD_TIME]);
+        //cmd.append([WAIT, WORD_TIME]);
 
-        cmd.append([MON_SPEAK, 5]);
-        cmd.append([WAIT, 1000]);
         cmd.append([MON_SPEAK, 6]);
-        cmd.append([WAIT, 1000]);
+        cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 4]);
-        cmd.append([WAIT, 1000]);
+        cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 3]);
-        cmd.append([WAIT, 1000]);
+        cmd.append([WAIT, WORD_TIME]);
 
         initYet = 1;
     }
+
     override function enterScene()
     {
         super.enterScene();
@@ -266,14 +269,14 @@ class NewBattle extends MyNode
                         if(c[1][2] == 0)
                         {
                             dia0.visible(1);
-                            w = dia0.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
+                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_NORMAL, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
                             dia0.stop();
                             dia0.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }
                         else if(c[1][2] == 1)
                         {
                             dia1.visible(1);
-                            w = dia1.addlabel(getStr(c[1][1], null), null, 21, FONT_BOLD, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
+                            w = dia1.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_NORMAL, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
                             dia1.stop();
                             dia1.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }

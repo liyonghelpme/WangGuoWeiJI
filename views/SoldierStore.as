@@ -332,9 +332,10 @@ class SoldierStore extends MyNode
 
         scene.buySoldier(id);
 
-        var sucB = new SucBanner();
-        sucB.setPos([412, 255]);
-        addChildZ(sucB, 1);
+        //var sucB = new SucBanner();
+        //sucB.setPos([412, 255]);
+        //addChildZ(sucB, 1);
+        global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
 
         var curPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;

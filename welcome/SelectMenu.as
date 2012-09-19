@@ -109,7 +109,7 @@ class SelectMenu extends MyNode
         init();
 
         //黑色不需要
-        bg.addsprite("black.png", ARGB_8888).color(0, 0, 0, 30).size(global.director.disSize);
+        bg.addsprite("black.png", ARGB_8888).color(0, 0, 0, 50).size(global.director.disSize);
 
         var hero = new Hero(this, 480);
         addChildZ(hero, H0);
@@ -314,7 +314,7 @@ class SelectMenu extends MyNode
             //723 165 - 200 120 = 523 45
             inputView = v_create(V_INPUT_VIEW, BLOCK_X+INPUT_X, BLOCK_Y+INPUT_Y, 233, 50);
             v_root().addview(inputView);
-            warnLabel = heroDes.addlabel(getStr("nameLen", null), null, 18).color(100, 0, 0).pos(22, 100).visible(0);
+            warnLabel = heroDes.addlabel(getStr("nameLen", null), null, 18).color(100, 100, 100).pos(22, 100);//.visible(0);
             if(name != null)
                 inputView.text(name);
             else
@@ -333,7 +333,6 @@ class SelectMenu extends MyNode
         //打完字才出现 是否进入游戏对话框 首先确认名字是否重复
         else if(curStep == 2)
         {
-            //inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1000, "in0.png", "in1.png","in2.png","in3.png","in4.png",UPDATE_SIZE, ARGB_8888)));
             stepTip.setWord(getStr("selectHero", ["[NAME]", name]));
             //设定英雄类型
             //设定英雄名字
@@ -352,7 +351,7 @@ class SelectMenu extends MyNode
     {
         if(printFinish && checkName && inGame == null)//打字结束 且 检测名字无误 进入游戏
         {
-            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1000, "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
+            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1200, "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
         }
     }
     override function exitScene()

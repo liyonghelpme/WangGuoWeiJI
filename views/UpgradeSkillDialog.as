@@ -137,11 +137,11 @@ class UpgradeSkillDialog extends MyNode
                 if(con.get("suc") == 1)
                 {
                     global.user.upgradeSkill(soldierId, skillId);
-                    scene.addChild(new UpgradeBanner(getStr("sucUpgradeSkill", null), [0, 100, 0]));
+                    scene.addChild(new UpgradeBanner(getStr("sucUpgradeSkill", null), [0, 100, 0], null));
                 }
                 else
                 {
-                    scene.addChild(new UpgradeBanner(getStr("failUpgradeSkill", null), [100, 0, 0]));
+                    scene.addChild(new UpgradeBanner(getStr("failUpgradeSkill", null), [100, 0, 0], null));
                 }
             }
         }

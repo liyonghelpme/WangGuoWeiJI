@@ -164,7 +164,8 @@ class Store extends MyNode
             刷新当前购买页面
             */
             setTab(curSel);
-            addChildZ(new SucBanner(), 1);
+            //addChildZ(new SucBanner(), 1);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
 
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [DRUG, id]);
         }
@@ -176,27 +177,31 @@ class Store extends MyNode
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [EQUIP, id]);
 
             setTab(curSel);
-            addChildZ(new SucBanner(), 1);
+            //addChildZ(new SucBanner(), 1);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
         }
         else if(kind == GOLD || kind == SILVER || kind == CRYSTAL)
         {
             global.user.buyResource(kind, id, cost, getGain(kind, id)); 
             setTab(curSel);
-            addChildZ(new SucBanner(), 1);
+            //addChildZ(new SucBanner(), 1);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
         }
         else if(kind == TREASURE_STONE)
         {
             global.httpController.addRequest("goodsC/buyTreasureStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
             global.user.buyTreasureStone(id);
             setTab(curSel);
-            addChildZ(new SucBanner(), 1);
+            //addChildZ(new SucBanner(), 1);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
         }
         else if(kind == MAGIC_STONE)
         {
             global.httpController.addRequest("goodsC/buyMagicStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
             global.user.buyMagicStone(id);
             setTab(curSel);
-            addChildZ(new SucBanner(), 1);
+            //addChildZ(new SucBanner(), 1);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
         }
     }
     /*

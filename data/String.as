@@ -970,8 +970,8 @@ var strings = dict([
 
 ["kingWeBack", "陛下，我们回来了！"],
 ["rebuildHome", "英雄们！救出公主..."],
-["selectHero", "1.点击选择英雄\n2.为英雄取名\n3.[NAME]，召集勇士，救出公主，重建王国吧！"],
-["nameLen", "最多输入4个汉字或12个字母"],
+["selectHero", "1.点击选择英雄\n2.为英雄取名\n3.[NAME]，召集勇士，救出公主！"],
+["nameLen", "(最多输入4个汉字或12个字母)"],
 ["nameRepeat", "该姓名已经存在"],
 ["solNameCareer", "[NAME]([CAREER])"],
 ["trainSol", "士兵练级"],
@@ -1046,7 +1046,7 @@ var strings = dict([
 ["totalStar", "Total [NUM]"],
 ["condition", "解锁条件:"],
 ["starLevel", "-             [STAR]\n-需要等级[LEV]"],
-["unlock", "提前解锁     [gold]"],
+["unlock", "    [gold] 提前解锁"],
 ]);
 
 
