@@ -130,24 +130,24 @@ class GiftDialog extends MyNode
                     data[i][2] = 0;
                     co = [99, 42, 47];
                 }
-                panel.addlabel(str(num), null, 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
+panel.addlabel(str(num), "fonts/heiti.ttf", 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
                 if(num > 0 )
                 {
-                    panel.addlabel(getStr("moreThings", null), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+panel.addlabel(getStr("moreThings", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
 
                     if(data[i][2] == 0)
                     {
                         but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onView, i);
-                        but1.addlabel(getStr("viewAll", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("viewAll", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     }
                     else
                     {
                         but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onClose, i);
-                        but1.addlabel(getStr("closeAll", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("closeAll", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     }
                 }
                 else
-                    panel.addlabel(getStr("noThing", null), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+panel.addlabel(getStr("noThing", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
 
             }
             //Detail objects 
@@ -166,14 +166,14 @@ class GiftDialog extends MyNode
                     {
                         var solData = global.user.getSoldierData(ed.get("owner"));
                         var solName = solData.get("name");
-                        panel.addlabel(solName, null, 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
+panel.addlabel(solName, "fonts/heiti.ttf", 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
                     }
                     
                     var eqLevel = ed.get("level");
-                    panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), null, 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
+panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), "fonts/heiti.ttf", 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
 
                     but0 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onSend, i);
-                    but0.addlabel(getStr("sendIt", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("sendIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                 }
                 //只显示数量非零的物品
                 else
@@ -187,15 +187,15 @@ class GiftDialog extends MyNode
                     co = [14, 64, 26];
                     if(num == 0)
                         co = [99, 42, 47];
-                    panel.addlabel(str(num), null, 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
+panel.addlabel(str(num), "fonts/heiti.ttf", 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
                     if(num > 0)
                     {
                         but0 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onSend, i);
-                        but0.addlabel(getStr("sendIt", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("sendIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     }
                 }
                 
-                panel.addlabel(objData.get("name")+" "+objData.get("des"), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+panel.addlabel((objData.get("name") + " ") + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
             }
 
             var sca = getSca(obj, [64, 60]);

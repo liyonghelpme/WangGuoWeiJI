@@ -56,7 +56,7 @@ class FloatPanelTemplate extends MyNode
                     break;
                 var panel = flowNode.addsprite("dialogFriendPanel.png").size(PANEL_WIDTH, PANEL_HEIGHT).pos(j*OFFX, i*OFFY);
                 panel.addsprite("dialogRankCup.png").anchor(50, 50).pos(35, 23);
-                panel.addlabel(str(data[curNum][1]), null, 20).anchor(50, 50).pos(88, 23).color(0, 0, 0);
+panel.addlabel(str(data[curNum][1]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(88, 23).color(0, 0, 0);
                 panel.put(curNum);
                 if(curNum == selectNum)
                 {
@@ -122,11 +122,11 @@ class FloatPanelTemplate extends MyNode
 //        trace("child", child, shadow);
         child.add(shadow, 100, 1);
         var but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit);
-        but0.addlabel(getStr("visit", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("visit", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
         but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+40+16).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeHero);
-        but0.addlabel(getStr("challengeHero", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("challengeHero", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
         but0 = shadow.addsprite("greenButton.png").pos(PANEL_WIDTH/2, 16+56+56).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup);
-        but0.addlabel(getStr("challengeGroup", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
         //selectedChild = child;
     }
 

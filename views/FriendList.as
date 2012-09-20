@@ -107,10 +107,10 @@ class FriendList extends MyNode
                     var level = data[curNum].get("level");
                     var name = data[curNum].get("name");
 
-                    panel.addlabel(name, null, 20).pos(66, 53).anchor(50, 50).color(0, 0, 0);
+panel.addlabel(name, "fonts/heiti.ttf", 20).pos(66, 53).anchor(50, 50).color(0, 0, 0);
                     panel.addsprite("roleLevel.png").pos(96, 80).anchor(50, 50).size(40, 40);
 
-                    panel.addlabel(str(level+1), null, 15).pos(96, 80).anchor(50, 50).color(0, 0, 0);
+panel.addlabel(str(level + 1), "fonts/heiti.ttf", 15).pos(96, 80).anchor(50, 50).color(0, 0, 0);
 
 
                     //访问好友 清除其士兵的状态可以得到水晶 但是邻居
@@ -118,9 +118,9 @@ class FriendList extends MyNode
                     //数据有水晶可以
                     if(data[curNum].get("crystal") != null)
                     {
-                        panel.addlabel(getStr("get", null), null, 20, FONT_BOLD).pos(32, 22).anchor(0, 50).color(0, 0, 0);
+panel.addlabel(getStr("get", null), "fonts/heiti.ttf", 20, FONT_BOLD).pos(32, 22).anchor(0, 50).color(0, 0, 0);
                         panel.addsprite("crystal.png").pos(85, 22).anchor(50, 50).size(30, 30);
-                        panel.addlabel(str(data[curNum].get("crystal")), null, 20).pos(100, 22).anchor(0, 50).color(0, 0, 0);
+panel.addlabel(str(data[curNum].get("crystal")), "fonts/heiti.ttf", 20).pos(100, 22).anchor(0, 50).color(0, 0, 0);
                     }
                 }
 
@@ -232,10 +232,10 @@ class FriendList extends MyNode
             //shadow.put(curNum);
 
             but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT0_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onAddNeiborMax, curNum);
-            but0.addlabel(getStr("addNeiborMax", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("addNeiborMax", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
 
             but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT1_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onHelp);
-            but0.addlabel(getStr("help", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("help", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
             return;
         }
 
@@ -245,7 +245,7 @@ class FriendList extends MyNode
 
         //visit
         but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT0_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onVisit, curNum);
-        but0.addlabel(getStr("visit", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("visit", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
 
         //不是自己的邻居 则 添加邻居 
         //是自己的邻居 则 解除邻居
@@ -261,7 +261,7 @@ class FriendList extends MyNode
         if(friendKind == VISIT_NEIBOR)
         {
             but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT1_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onSend, curNum);
-            but0.addlabel(getStr("sendGift", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("sendGift", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
         }
         /*
         if(friendKind == VISIT_RECOMMAND)
@@ -270,7 +270,7 @@ class FriendList extends MyNode
             if(global.user.checkChallengeYet(uid) == 0)//挑战自身显示按钮 || uid == global.user.uid
             {
                 but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT1_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onChallenge, curNum);
-                but0.addlabel(getStr("sendGift", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("sendGift", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
             }
         }
         */
@@ -282,7 +282,7 @@ class FriendList extends MyNode
             if(global.friendController.checkRequest(uid) == null)
             {
                 but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT2_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onAddNeibor, curNum);
-                but0.addlabel(getStr("addNeibor", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("addNeibor", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
             }
         }
         else//已经是邻居 没有发送过请求
@@ -290,7 +290,7 @@ class FriendList extends MyNode
             if(global.friendController.checkRequest(uid) == null)
             {
                 but0 = shadow.addsprite("greenButton.png").pos(SHADOW_WIDTH, BUT2_Y).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, onRemoveNeibor, curNum);
-                but0.addlabel(getStr("removeNeibor", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("removeNeibor", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
             }
         }
     }

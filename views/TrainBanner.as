@@ -7,7 +7,7 @@ class TrainBanner extends MyNode
         init();
         bg.addaction(sequence(delaytime(2000), callfunc(removeSelf)));
         //var flowExp = global.director.curScene.addsprite("exp.png").pos(nPos).anchor(50, 100).addaction(delaytime(1000), callfunc(flowRemove)).size(30, 30);
-        bg.addlabel(str(exp), null, 25).anchor(0, 50).pos(50, 15).color(0, 0, 0);
+bg.addlabel(str(exp), "fonts/heiti.ttf", 25).anchor(0, 50).pos(50, 15).color(0, 0, 0);
     }
 
 }

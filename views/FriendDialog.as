@@ -188,13 +188,13 @@ class FriendDialog extends MyNode
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         var but1 = bg.addsprite("roleNameBut0.png").pos(350, 43).anchor(50, 50).size(129, 41).setevent(EVENT_TOUCH, switchView, 0);
-        but1.addlabel(getStr("showNeibor", null), null, 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("showNeibor", null), "fonts/heiti.ttf", 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);
 
         but1 = bg.addsprite("roleNameBut0.png").pos(500, 43).anchor(50, 50).size(129, 41).setevent(EVENT_TOUCH, switchView, 1);
-        but1.addlabel(getStr("showPapaya", null), null, 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("showPapaya", null), "fonts/heiti.ttf", 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);
 
         var but0 = bg.addsprite("roleNameBut0.png").pos(650, 43).anchor(50, 50).size(129, 41).setevent(EVENT_TOUCH, switchView, 2);
-        but0.addlabel(getStr("recFriend", null), null, 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);
+but0.addlabel(getStr("recFriend", null), "fonts/heiti.ttf", 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);
 
         showTitle = bg.addsprite("dialogNeibor.png").pos(396, 95).anchor(50, 50);
         

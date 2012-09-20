@@ -38,7 +38,7 @@ class MenuLayer extends MyNode
 
         taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(50,50).pos(61, 78).rotate(0).setevent(EVENT_TOUCH, onTask);
         taskFin = taskbutton.addsprite("taskFin0.png").pos(75, 19).anchor(50, 50).visible(0);
-        finNum = taskFin.addlabel("", null, 18, FONT_BOLD).pos(17, 17).anchor(50, 50).color(100, 100, 100);
+finNum = taskFin.addlabel("", "fonts/heiti.ttf", 18, FONT_BOLD).pos(17, 17).anchor(50, 50).color(100, 100, 100);
 
         expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
         expback = banner.addsprite("level.png").scale(100,100).anchor(50, 50).pos(144,60);
@@ -90,10 +90,10 @@ class MenuLayer extends MyNode
     */
     function initText()
     {
-        silverText = banner.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(336, 99).color(100, 100, 100);
-        goldText = banner.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(591, 99).color(100, 100, 100);
-        gloryText = banner.addlabel(getStr("glory", null), null, 18).anchor(50, 50).pos(167, 99).color(100, 100, 100);
-        gloryLevText = collectionbutton.addlabel(str("B+"), null, 20, FONT_BOLD).anchor(50, 50).pos(23, 17).color(100, 100, 100);
+silverText = banner.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(336, 99).color(100, 100, 100);
+goldText = banner.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(591, 99).color(100, 100, 100);
+gloryText = banner.addlabel(getStr("glory", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(167, 99).color(100, 100, 100);
+gloryLevText = collectionbutton.addlabel(str("B+"), "fonts/heiti.ttf", 20, FONT_BOLD).anchor(50, 50).pos(23, 17).color(100, 100, 100);
 
     }
     //var building = 0;

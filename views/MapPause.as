@@ -99,12 +99,12 @@ class MapPause extends MyNode
                 leftDef = banner.addsprite("mapDefenseBlue.png").pos(BL_OFFX, BL_OFFY).anchor(0, 0);
             else if(mInfo["blood"] == 1)
                 leftDef = banner.addsprite("mapDefenseGreen.png").pos(BL_OFFX, BL_OFFY).anchor(0, 0);
-            leftText = banner.addlabel("", null, 28, FONT_BOLD).anchor(0, 50).pos(DEF_T_X, DEF_T_Y).color(0, 0, 0);
+leftText = banner.addlabel("", "fonts/heiti.ttf", 28, FONT_BOLD).anchor(0, 50).pos(DEF_T_X, DEF_T_Y).color(0, 0, 0);
 
             //214 29
             var nameBlock = bg.addsprite("mapNameBlock.png").pos(NX, NY).anchor(0, 0);
             //var nameSize = nameBlock.prepare().size();
-            nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(DEF_NAME_X, DEF_NAME_Y).color(0, 0, 0).anchor(0, 50);
+nameBlock.addlabel("name1", "fonts/heiti.ttf", 20, FONT_BOLD).pos(DEF_NAME_X, DEF_NAME_Y).color(0, 0, 0).anchor(0, 50);
 
             var head = bg.addsprite("mapMenuHead.png").pos(HX, HY).anchor(0, 0).size(HEAD_WID, HEAD_HEI);
             var solH = head.addsprite("soldier0.png").pos(HEAD_WID/2, HEAD_HEI/2).anchor(50, 50).scale(100, 100);
@@ -116,11 +116,11 @@ class MapPause extends MyNode
             banner = bg.addsprite("mapNewCastleBanner.png").pos(disSize[0]-BLOOD_X, BLOOD_Y).anchor(100, 0);
             rightRed = banner.addsprite("mapDefenseRed.png").pos(banSize[0]-BL_OFFX, BL_OFFY).anchor(100, 0);
             rightDef = banner.addsprite("mapDefenseYellow.png").pos(banSize[0]-BL_OFFX, BL_OFFY).anchor(100, 0);
-            rightText = banner.addlabel("", null, 28, FONT_BOLD).anchor(100, 50).pos(banSize[0]-DEF_T_X, DEF_T_Y).color(0, 0, 0);
+rightText = banner.addlabel("", "fonts/heiti.ttf", 28, FONT_BOLD).anchor(100, 50).pos(banSize[0] - DEF_T_X, DEF_T_Y).color(0, 0, 0);
 
 
             nameBlock = bg.addsprite("mapNameBlock.png").pos(disSize[0]-NX, NY).anchor(100, 0);
-            nameBlock.addlabel("name1", null, 20, FONT_BOLD).pos(nameSize[0]-DEF_NAME_X, DEF_NAME_Y).color(0, 0, 0).anchor(100, 50);
+nameBlock.addlabel("name1", "fonts/heiti.ttf", 20, FONT_BOLD).pos(nameSize[0] - DEF_NAME_X, DEF_NAME_Y).color(0, 0, 0).anchor(100, 50);
 
             head = bg.addsprite("mapMenuHead.png").pos(disSize[0]-HX, HY).anchor(100, 0).size(HEAD_WID, HEAD_HEI);
             solH = head.addsprite("soldier0.png").pos(HEAD_WID/2, HEAD_HEI/2).anchor(50, 50).scale(100, 100);

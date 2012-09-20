@@ -53,8 +53,8 @@ class FightMenu extends MyNode
         black0.addsprite("fightBlue.jpg").pos(13, 8);
         black0.addsprite("fightRed.jpg").pos(13, 33);
 
-        arenaNum = black0.addlabel(getStr("arenaNum", null), null, 18, FONT_BOLD).pos(43, 7);
-        chaNum = black0.addlabel(getStr("chaNum", null), null, 18, FONT_BOLD).pos(43, 30);
+arenaNum = black0.addlabel(getStr("arenaNum", null), "fonts/heiti.ttf", 18, FONT_BOLD).pos(43, 7);
+chaNum = black0.addlabel(getStr("chaNum", null), "fonts/heiti.ttf", 18, FONT_BOLD).pos(43, 30);
 
 
         var but0 = new NewButton("roleNameBut0.png", [91, 42], getStr("rank", null), null, 20, FONT_BOLD, [100, 100, 100], onRank, null);
@@ -69,11 +69,11 @@ class FightMenu extends MyNode
 
         var refresh = black0.addsprite("fightRefresh.png").pos(410, 23).setevent(EVENT_TOUCH, onRefresh);
         //如果没有摆擂台则fightGold
-        failWord = black0.addlabel(getStr("failNum", null), null, 16).pos(12, 55).color(55, 94, 49);
+failWord = black0.addlabel(getStr("failNum", null), "fonts/heiti.ttf", 16).pos(12, 55).color(55, 94, 49);
 
 
         black1 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
-        chaInfo = black1.addlabel(getStr("chaInfo", null), null, 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(13, 24);
+chaInfo = black1.addlabel(getStr("chaInfo", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(13, 24);
         but0 = new NewButton("roleNameBut0.png", [73, 42], getStr("challenge", null), null, 20, FONT_BOLD, [100, 100, 100], onArena, null);
         but0.bg.pos([286+36, 21+21]).anchor(50, 50);
         black1.add(but0.bg);
@@ -84,7 +84,7 @@ class FightMenu extends MyNode
 
 
         black2 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
-        accInfo = black2.addlabel(getStr("accInfo", null), null, 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(9, 14);
+accInfo = black2.addlabel(getStr("accInfo", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 260, 0, ALIGN_LEFT).pos(9, 14);
 
         but0 = new NewButton("roleNameBut0.png", [91, 42], getStr("accChallenge", null), null, 20, FONT_BOLD, [100, 100, 100], onDefense, null);
         but0.bg.pos([279+45, 20+21]).anchor(50, 50);

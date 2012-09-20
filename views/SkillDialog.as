@@ -71,19 +71,19 @@ class SkillDialog extends MyNode
         var curSkillNum = global.user.getCurSkillNum(soldier.sid);
         var maxSkillNum = getMaxSkillNum(getCareer(soldier.id));
         trace("maxSkillNum", maxSkillNum, curSkillNum, sol.sid, sol.id);
-        skillText = bg.addlabel(getStr("heroSkillNum", ["[MAXNUM]", str(maxSkillNum), "[LEFTNUM]", str(maxSkillNum-curSkillNum)]), null, 20).anchor(50, 50).pos(400, 104).color(26, 2, 2);
+skillText = bg.addlabel(getStr("heroSkillNum", ["[MAXNUM]", str(maxSkillNum), "[LEFTNUM]", str(maxSkillNum - curSkillNum)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(400, 104).color(26, 2, 2);
         var stoneNum = bg.addsprite("magicNum.png").pos(280, 28);
 
-        var s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(45, 18).anchor(0, 50);
+var s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(45, 18).anchor(0, 50);
         nums.append(s);
 
-        s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(154, 18).anchor(0, 50);
+s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(154, 18).anchor(0, 50);
         nums.append(s);
 
-        s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(273, 18).anchor(0, 50);
+s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(273, 18).anchor(0, 50);
         nums.append(s);
 
-        s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(380, 18).anchor(0, 50);
+s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(380, 18).anchor(0, 50);
         nums.append(s);
 
         setStoneNum();
@@ -137,7 +137,7 @@ class SkillDialog extends MyNode
             obj.scale(sca, sca);
 
             var objData = getData(SKILL, id);
-            panel.addlabel(objData.get("name")+" "+objData.get("des"), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+panel.addlabel((objData.get("name") + " ") + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
             
 
             var but0;
@@ -152,25 +152,25 @@ class SkillDialog extends MyNode
                 //panel.color(70, 70, 70);//灰色 会把整个panel 上所有元素color 变低
 
                 but0 = panel.addsprite("greenButton.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onBuyIt, i);
-                but0.addlabel(getStr("buyIt", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
             }
             else 
             {
                 panel.addsprite("skillLevel.png").pos(84, 53).anchor(50, 50);
-                panel.addlabel(getStr("skillLevel", ["[LEV]", str(level+1)]), null, 15).pos(84, 53).anchor(50, 50).color(0, 100, 0);
+panel.addlabel(getStr("skillLevel", ["[LEV]", str(level + 1)]), "fonts/heiti.ttf", 15).pos(84, 53).anchor(50, 50).color(0, 100, 0);
 
                 if(objData.get("kind") == MAKEUP_SKILL)//变身技能只能升级
                 {
                     but0 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
-                    but0.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                 }
                 else//已经学习的技能可以放弃 和 升级
                 {
                     but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
-                    but0.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
 
                     but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onGiveup, i);
-                    but1.addlabel(getStr("giveup", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("giveup", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                 }        
             }
         }

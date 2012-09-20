@@ -47,7 +47,7 @@ class ChallengeFight extends MyNode
             }
 
             but1 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(275, 399).size(209, 61).setevent(EVENT_TOUCH, onOk);
-            but1.addlabel(getStr("ok", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
 
             var levelupStr = getStr("noLevelUp", null);
             if(len(levelUpSol) > 0)
@@ -60,25 +60,25 @@ class ChallengeFight extends MyNode
                 levelupStr += levelUpSol[i].myName;
             }
 
-            bg.addlabel(levelupStr, null, 18).pos(83, 212).color(0, 0, 0);
+bg.addlabel(levelupStr, "fonts/heiti.ttf", 18).pos(83, 212).color(0, 0, 0);
             if(fightReward.get("crystal", 0) > 0)
-                bg.addlabel(getStr("rewardCry", ["[NUM]", str(fightReward.get("crystal"))]), null, 18).pos(83, 256).color(0, 0, 0);
+bg.addlabel(getStr("rewardCry", ["[NUM]", str(fightReward.get("crystal"))]), "fonts/heiti.ttf", 18).pos(83, 256).color(0, 0, 0);
             else if(fightReward.get("gold", 0) > 0)
-                bg.addlabel(getStr("rewardGold", ["[NUM]", str(fightReward.get("gold"))]), null, 18).pos(83, 256).color(0, 0, 0);
+bg.addlabel(getStr("rewardGold", ["[NUM]", str(fightReward.get("gold"))]), "fonts/heiti.ttf", 18).pos(83, 256).color(0, 0, 0);
         }
         //失败显示 丢失的得分
         else
         {
             bg.addsprite("dialogFail.png").anchor(50, 50).pos(271, 46);
             bg.addsprite("dialogBreakTip.png").pos(56, 111);
-            bg.addlabel("Tip: It is better to fight with enough soldiers than fight with nothing!", null, 18, FONT_NORMAL, 300, 76, ALIGN_LEFT).pos(115, 170).color(0, 0, 0);
+bg.addlabel("Tip: It is better to fight with enough soldiers than fight with nothing!", "fonts/heiti.ttf", 18, FONT_NORMAL, 300, 76, ALIGN_LEFT).pos(115, 170).color(0, 0, 0);
             if(score != 0)
             {
-                bg.addlabel(getStr("lostScore", ["[NUM]", str(-score)]), null, 18).pos(115, 300).color(0, 0, 0);
+bg.addlabel(getStr("lostScore", ["[NUM]", str(-score)]), "fonts/heiti.ttf", 18).pos(115, 300).color(0, 0, 0);
             }
 
             but1 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(275, 399).size(209, 61).setevent(EVENT_TOUCH, onOk);
-            but1.addlabel(getStr("ok", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
         }
 
     }

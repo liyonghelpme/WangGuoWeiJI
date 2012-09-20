@@ -377,7 +377,7 @@ class SkillFlowBanner extends MyNode
             {
                 w = getStr("selOurSol", null);
             }
-            words = shadowWord.addlabel(w, null, 25);
+words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             var wSize = words.prepare().size();
             var sSize = shadowWord.prepare().size();
             sSize[0] = max(wSize[0], sSize[0]);
@@ -431,7 +431,7 @@ class SkillFlowBanner extends MyNode
             skillPic.scale(sca);
 
             panel.addsprite("skillLevel.png").pos(53, 66).anchor(50, 50);
-            panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), null, 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
+panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), "fonts/heiti.ttf", 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
 
             ready = skillList[i][3];
 
@@ -455,7 +455,7 @@ class SkillFlowBanner extends MyNode
             drugPic.scale(sca);
             
             panel.addsprite("skillLevel.png").pos(53, 66).anchor(50, 50);
-            panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), null, 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
+panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
 
             ready = drugData[i][3];
             if(!ready)//技能ID 与众不同

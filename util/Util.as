@@ -544,11 +544,11 @@ function colorWordsNode(str, si, nc, sc)
     var n = node();
     var end = str.split("]");
     var begin = end[0].split("[");
-    var l1 = label(begin[0], null, si, FONT_BOLD).color(nc);
+var l1 = label(begin[0], "fonts/heiti.ttf", si, FONT_BOLD).color(nc);
     var l1s = l1.prepare().size();
     n.add(l1);
 
-    var l2 = label(begin[1], null, si, FONT_BOLD).color(sc);
+var l2 = label(begin[1], "fonts/heiti.ttf", si, FONT_BOLD).color(sc);
     var l2s = l2.prepare().size();
     l2.pos(l1s[0], 0);
     n.add(l2);
@@ -811,7 +811,7 @@ function stringLines(s, sz, lineHeight, color, ft)
     var nSize = [0, 0];
     for(var i = 0; i < len(s); i++)
     {
-        var lab = n.addlabel(s[i], null, sz, ft).pos(0, lineHeight*i).color(color);
+var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, ft).pos(0, lineHeight * i).color(color);
         var lSize = lab.prepare().size();
         nSize[0] = max(lSize[0], nSize[0]);
         nSize[1] += lineHeight;

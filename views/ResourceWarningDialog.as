@@ -16,8 +16,8 @@ class ResourceWarningDialog extends MyNode
 
         bg = sprite("roleName.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
-        bg.addlabel(t, null, 30, FONT_BOLD).pos(243, 29).anchor(50, 50).color(0, 0, 0);
-        var con = bg.addlabel(c, null, 20, FONT_NORMAL, 263, 0, ALIGN_LEFT).pos(177, 86).color(0, 0, 0);
+bg.addlabel(t, "fonts/heiti.ttf", 30, FONT_BOLD).pos(243, 29).anchor(50, 50).color(0, 0, 0);
+var con = bg.addlabel(c, "fonts/heiti.ttf", 20, FONT_NORMAL, 263, 0, ALIGN_LEFT).pos(177, 86).color(0, 0, 0);
         var conSize = con.prepare().size();
 
 
@@ -32,9 +32,9 @@ class ResourceWarningDialog extends MyNode
         if(buyable.get("ok") == 1)
         {
             but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(152, 265).anchor(50, 50).setevent(EVENT_TOUCH, onOk);
-            but.addlabel(getStr("ok", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
+but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
             but = bg.addsprite("roleNameBut1.png").size(145, 46).pos(350, 265).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
-            but.addlabel(getStr("cancel", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
+but.addlabel(getStr("cancel", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
 
         }
         else
@@ -44,9 +44,9 @@ class ResourceWarningDialog extends MyNode
             buyable.pop("ok");
 
             but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(152, 265).anchor(50, 50).setevent(EVENT_TOUCH, onBuy);//资源不足显示
-            but.addlabel(getStr("buyIt", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
+but.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
             but = bg.addsprite("roleNameBut1.png").size(145, 46).pos(350, 265).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
-            but.addlabel(getStr("cancel", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
+but.addlabel(getStr("cancel", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
         }
         
         var item = showData.items();
@@ -55,7 +55,7 @@ class ResourceWarningDialog extends MyNode
 
         for(var i = 0; i < len(item); i++)
         {
-            bg.addlabel(getStr("resList", ["[NAME]", getStr(item[i][0], null), "[VAL]", str(item[i][1])]), null, 18, FONT_NORMAL).pos(177, initY).color(fil[0], fil[1], fil[2]);
+bg.addlabel(getStr("resList", ["[NAME]", getStr(item[i][0], null), "[VAL]", str(item[i][1])]), "fonts/heiti.ttf", 18, FONT_NORMAL).pos(177, initY).color(fil[0], fil[1], fil[2]);
             initY += 20;
         }
 

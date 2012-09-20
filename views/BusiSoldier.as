@@ -367,7 +367,7 @@ class BusiSoldier extends MyNode
         {
             var g = it[i];
             temp.addsprite(g[0]+".png").anchor(0, 50).pos(0, curY).size(30, 30);
-            temp.addlabel("+"+str(g[1]), null, 25).anchor(0, 50).pos(35, curY).color(0, 0, 0);
+temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY).color(0, 0, 0);
             curY -= 30;
         }
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
@@ -400,7 +400,7 @@ class BusiSoldier extends MyNode
 
         var temp = bg.addnode();
         temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
-        temp.addlabel("+"+str(add), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
     function changeHealth(add)
@@ -412,7 +412,7 @@ class BusiSoldier extends MyNode
 
         var temp = bg.addnode();
         temp.addsprite("drug0.png").anchor(0, 50).pos(0, -30).size(30, 30);
-        temp.addlabel("+"+str(add), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
     /*

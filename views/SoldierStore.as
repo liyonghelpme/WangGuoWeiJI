@@ -88,9 +88,9 @@ class SoldierStore extends MyNode
     }
     function initText()
     {
-        silverText = bg.addlabel(str(global.user.getValue("silver")), null, 18).anchor(0, 50).pos(324, 40).color(100, 100, 100);
-        goldText = bg.addlabel(str(global.user.getValue("gold")), null, 18).anchor(0, 50).pos(481, 40).color(100, 100, 100);
-        cryText = bg.addlabel(str(global.user.getValue("crystal")), null, 18).anchor(0, 50).pos(625, 40).color(100, 100, 100);
+silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(324, 40).color(100, 100, 100);
+goldText = bg.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(481, 40).color(100, 100, 100);
+cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(625, 40).color(100, 100, 100);
         updateValue(global.user.resource);
     }
     override function enterScene()
@@ -200,7 +200,7 @@ class SoldierStore extends MyNode
                 {
                     sol = panel.addsprite("soldier"+str(id)+".png", BLACK).pos(83, 110).anchor(50, 50);
                     panel.addsprite("roleLevel.png").pos(18, 39).anchor(50, 50);
-                    panel.addlabel(str(needLevel), null, 18).pos(18, 39).anchor(50, 50).color(0, 0, 0);
+panel.addlabel(str(needLevel), "fonts/heiti.ttf", 18).pos(18, 39).anchor(50, 50).color(0, 0, 0);
                     panel.addsprite("roleLock.png", 1).pos(14, 127).anchor(50, 50);
                 }
                 else
@@ -228,7 +228,7 @@ class SoldierStore extends MyNode
                     消耗数值 
                     */
                     var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50).size(30, 30);  
-                    var cNum = panel.addlabel(str(valNum), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
 
                 }
                     
@@ -245,7 +245,7 @@ class SoldierStore extends MyNode
                 //if(data.get("solOrMon") == 0)
                 //    panel.addlabel(data.get("name").substr(2), null, 20).pos(pSize[0]/2, 25).anchor(50, 50).color(0, 0, 0);
                 //else
-                panel.addlabel(data.get("name"), null, 20).pos(pSize[0]/2, 25).anchor(50, 50).color(0, 0, 0);
+panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(pSize[0] / 2, 25).anchor(50, 50).color(0, 0, 0);
                 panel.put([id, canBuy]);
             }
         }

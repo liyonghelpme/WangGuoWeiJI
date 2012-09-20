@@ -110,7 +110,7 @@ class MakeDrug extends MyNode
             panel.addsprite(picName).pos(87, 28).anchor(50, 50).size(45, 45);
             var tarData = getData(kind, id);
 
-            panel.addlabel(tarData.get("name"), null, 15).anchor(50, 50).pos(87, 57).color(0, 0, 0);
+panel.addlabel(tarData.get("name"), "fonts/heiti.ttf", 15).anchor(50, 50).pos(87, 57).color(0, 0, 0);
             panel.addsprite("dialogMakeDrugEqual.png").pos(170, 36).anchor(50, 50);
 
             var needs = data.get("needs");
@@ -125,7 +125,7 @@ class MakeDrug extends MyNode
                 var hData = getData(HERB, hid);
 
                 panel.addsprite(replaceStr(KindsPre[HERB], ["[ID]", str(hid)])).pos(INITX, INITY).anchor(50, 50).size(46, 44);
-                panel.addlabel(hData.get("name"), null, 15).pos(INITX, 57).color(0, 0, 0).anchor(50, 50);
+panel.addlabel(hData.get("name"), "fonts/heiti.ttf", 15).pos(INITX, 57).color(0, 0, 0).anchor(50, 50);
                 var ownNum = global.user.getGoodsNum(HERB, hid);
                 var co = [14, 64, 26];
                 if(ownNum < hNum)
@@ -134,7 +134,7 @@ class MakeDrug extends MyNode
                     makable = 0;
                 }
                 if(needLev == 1)
-                    panel.addlabel(str(hNum), null, 15).pos(INITX+23, 46).anchor(0, 50).color(co[0], co[1], co[2]);
+panel.addlabel(str(hNum), "fonts/heiti.ttf", 15).pos(INITX + 23, 46).anchor(0, 50).color(co[0], co[1], co[2]);
                 if(j != (len(needs)-1))
                 {
                     panel.addsprite("dialogMakeDrugPlus.png").pos(INITX+72, 35).anchor(50, 50);
@@ -147,24 +147,24 @@ class MakeDrug extends MyNode
             {
                 var words = colorWords(getStr("needLev",  ["[LEV]", str(level+1)]));
 //                trace("needLev words", words);
-                panel.addlabel(words[0], null, 25).pos(555, 33).anchor(0, 50).color(97, 3, 3);
-                panel.addlabel(words[1], null, 25).pos(555+words[2]*25, 33).color(13, 78, 13).anchor(0, 50);
+panel.addlabel(words[0], "fonts/heiti.ttf", 25).pos(555, 33).anchor(0, 50).color(97, 3, 3);
+panel.addlabel(words[1], "fonts/heiti.ttf", 25).pos(555 + (words[2] * 25), 33).color(13, 78, 13).anchor(0, 50);
             }
             else if(makable == 0)
             {
                 but1 = panel.addsprite("roleNameBut0.png").pos(618, 33).anchor(50, 50).size(129, 37);
                 if(MakeWhat == MAKE_DRUG)
-                    but1.addlabel(getStr("herbNot", null), null, 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
+but1.addlabel(getStr("herbNot", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
                 else if(MakeWhat == MAKE_EQUIP) 
-                    but1.addlabel(getStr("oreNot", null), null, 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
+but1.addlabel(getStr("oreNot", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(64, 18).color(97, 3, 3);
             }
             else
             {
                 but1 = panel.addsprite("roleNameBut0.png").pos(618, 33).anchor(50, 50).size(129, 37).setevent(EVENT_TOUCH, makeDrug, prescriptions[i]);
                 if(MakeWhat == MAKE_DRUG)
-                    but1.addlabel(getStr("makeDrug", null), null, 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
+but1.addlabel(getStr("makeDrug", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
                 else if(MakeWhat == MAKE_EQUIP) 
-                    but1.addlabel(getStr("makeEquip", null), null, 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
+but1.addlabel(getStr("makeEquip", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(64, 18).color(100, 100, 100);
             }
 //            trace("finish Init MakeDrug");
 
@@ -273,14 +273,14 @@ class Herb extends MyNode
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i);
             panel.addsprite("herb"+str(herbs[i])+".png").pos(60, 26).anchor(50, 50).size(54, 40);
             var data = getData(HERB, herbs[i]);
-            panel.addlabel(data.get("name"), null, 15).anchor(50, 50).pos(60, 52).color(0, 0, 0);
+panel.addlabel(data.get("name"), "fonts/heiti.ttf", 15).anchor(50, 50).pos(60, 52).color(0, 0, 0);
             var num = global.user.getGoodsNum(HERB, herbs[i]);
 //            trace("herbNum", num, data);
             var co = [14, 64, 26];
             if(num == 0)
                 co = [99, 42, 47];
-            panel.addlabel(str(num), null, 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
-            panel.addlabel(data.get("des"), null, 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
+panel.addlabel(str(num), "fonts/heiti.ttf", 15).pos(86, 37).anchor(0, 50).color(co[0], co[1], co[2]);
+panel.addlabel(data.get("des"), "fonts/heiti.ttf", 20, FONT_NORMAL, 514, 41, ALIGN_LEFT).pos(133, 18).color(59, 56, 56);
 //            trace("initHerb", num);
         }
     }
@@ -329,13 +329,13 @@ class MakeDrugDialog extends MyNode
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         var but0 = bg.addsprite("roleNameBut0.png").pos(400, 23).size(126, 40).setevent(EVENT_TOUCH, switchView, 0);
-        but0.addlabel(getStr("makeDrugPage", null), null, 22).anchor(50, 50).pos(63, 20);
+but0.addlabel(getStr("makeDrugPage", null), "fonts/heiti.ttf", 22).anchor(50, 50).pos(63, 20);
 
         but0 = bg.addsprite("roleNameBut0.png").pos(560, 23).size(126, 40).setevent(EVENT_TOUCH, switchView, 1);
         if(MakeWhat == MAKE_DRUG)
-            but0.addlabel(getStr("drugs", null), null, 22).anchor(50, 50).pos(63, 20);
+but0.addlabel(getStr("drugs", null), "fonts/heiti.ttf", 22).anchor(50, 50).pos(63, 20);
         else if(MakeWhat == MAKE_EQUIP)
-            but0.addlabel(getStr("allOres", null), null, 22).anchor(50, 50).pos(63, 20);
+but0.addlabel(getStr("allOres", null), "fonts/heiti.ttf", 22).anchor(50, 50).pos(63, 20);
         //cl = bg.addnode().pos(46, 90).size(703, 357).clipping(1);
         //flowNode = cl.addnode();
         

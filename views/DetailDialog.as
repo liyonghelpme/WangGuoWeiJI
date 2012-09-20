@@ -50,42 +50,42 @@ class DetailDialog extends MyNode
         soldier = sol;
         bg = sprite("dialogDetail.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
-        bg.addlabel(soldier.myName, null, 30).anchor(50, 50).pos(264, 26).color(0, 0, 0);
+bg.addlabel(soldier.myName, "fonts/heiti.ttf", 30).anchor(50, 50).pos(264, 26).color(0, 0, 0);
         bg.addsprite("roleNameClose.png").pos(499, 9).setevent(EVENT_TOUCH, closeDialog);
         var contentNode = bg.addnode().pos(36, 88);
         var offY = 0;
         var OFFSET = 25;
         var WORD_SIZE = 18;
-        contentNode.addlabel(getStr("phyAtt", ["[NUM]", str(sol.physicAttack)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
-        contentNode.addlabel(getStr("magAtt", ["[NUM]", str(sol.magicAttack)]), null, WORD_SIZE).pos(150, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("phyAtt", ["[NUM]", str(sol.physicAttack)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("magAtt", ["[NUM]", str(sol.magicAttack)]), "fonts/heiti.ttf", WORD_SIZE).pos(150, offY).color(0, 0, 0);
         offY += OFFSET;
 
-        contentNode.addlabel(getStr("phyDef", ["[NUM]", str(sol.physicDefense)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
-        contentNode.addlabel(getStr("magDef", ["[NUM]", str(sol.magicDefense)]), null, WORD_SIZE).pos(150, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("phyDef", ["[NUM]", str(sol.physicDefense)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("magDef", ["[NUM]", str(sol.magicDefense)]), "fonts/heiti.ttf", WORD_SIZE).pos(150, offY).color(0, 0, 0);
         offY += OFFSET;
 
-        contentNode.addlabel(getStr("healthAndBoundary", ["[HEALTH]", str(sol.health), "[BOUND]", str(sol.healthBoundary)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("healthAndBoundary", ["[HEALTH]", str(sol.health), "[BOUND]", str(sol.healthBoundary)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
-        contentNode.addlabel(getStr("attSpeed", ["[LEV]", getAttSpeedLev(sol.attSpeed)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("attSpeed", ["[LEV]", getAttSpeedLev(sol.attSpeed)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
 
-        contentNode.addlabel(getStr("attRange", ["[LEV]", getAttRangeLev(sol.attRange)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("attRange", ["[LEV]", getAttRangeLev(sol.attRange)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
-        contentNode.addlabel(getStr("recLife", ["[LEV]", getRecoverLev(sol.recoverTime)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("recLife", ["[LEV]", getRecoverLev(sol.recoverTime)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
 
         var ne = getLevelUpExp(sol.id, sol.level);
 
-        contentNode.addlabel(getStr("levVal", ["[LEV1]", str(sol.level+1+1), "[EXP]", str(ne-sol.exp), "[LEV2]", str(sol.level+1+1)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("levVal", ["[LEV1]", str((sol.level + 1) + 1), "[EXP]", str(ne - sol.exp), "[LEV2]", str((sol.level + 1) + 1)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
 
         var tranLevel = getTransferLevel(sol);
         var career = getCareerLev(soldier.id); 
         var totalName = getStr(CAREER_TIT[career], null)+soldier.data.get("name");
         if(tranLevel > 0)
-            contentNode.addlabel(getStr("nextTrans", ["[CAREER]", totalName, "[LEV]", str(tranLevel)]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("nextTrans", ["[CAREER]", totalName, "[LEV]", str(tranLevel)]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         else
-            contentNode.addlabel(getStr("noTransfer", ["[CAREER]", totalName]), null, WORD_SIZE).pos(0, offY).color(0, 0, 0);
+contentNode.addlabel(getStr("noTransfer", ["[CAREER]", totalName]), "fonts/heiti.ttf", WORD_SIZE).pos(0, offY).color(0, 0, 0);
         offY += OFFSET;
 //        trace("soldierpng", soldier.id);
         var solPic = bg.addsprite("soldier"+str(soldier.id)+".png").pos(460, 283).anchor(50, 50);

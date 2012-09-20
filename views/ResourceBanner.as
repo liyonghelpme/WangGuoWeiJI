@@ -18,7 +18,7 @@ class ResourceBanner extends MyNode
             if(it[i][0] != "ok")
             {
                 var banner = bg.addsprite("storeBlack.png").pos(initX, initY).anchor(50, 50);
-                banner.addlabel(getStr("resLack", ["[NAME]", getStr(it[i][0], null), "[NUM]", str(it[i][1])]), null, 25).pos(154, 25).anchor(50, 50).color(100, 100, 100);
+banner.addlabel(getStr("resLack", ["[NAME]", getStr(it[i][0], null), "[NUM]", str(it[i][1])]), "fonts/heiti.ttf", 25).pos(154, 25).anchor(50, 50).color(100, 100, 100);
                 initY += 53;
             } 
         }

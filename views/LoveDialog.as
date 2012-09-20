@@ -18,7 +18,7 @@ class LoveDialog extends MyNode
         var level = tree.id-LOVE_TREE_ID;
         var data = tree.data;
         var tit = getStr("loveTree", ["[LEV]", str(level+1), "[NAME]", data.get("name")]);
-        bg.addlabel(tit, null, 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
+bg.addlabel(tit, "fonts/heiti.ttf", 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
 
         var w = getStr("moreHeart", null);
 
@@ -26,7 +26,7 @@ class LoveDialog extends MyNode
         var sca = getSca(pic, [170, 220]);
         pic.scale(sca);
 
-        bg.addlabel(w, null, 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
+bg.addlabel(w, "fonts/heiti.ttf", 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
 
         if(level >= len(loveTreeHeart))
         {
@@ -45,15 +45,15 @@ class LoveDialog extends MyNode
         w.pos(74, 124);
         bg.add(w);
 
-        bg.addlabel(getStr("heartTip", null), null, 15, FONT_NORMAL, 302, 0, ALIGN_LEFT).pos(74, 124+w.size()[1]).color(50, 50, 50);
+bg.addlabel(getStr("heartTip", null), "fonts/heiti.ttf", 15, FONT_NORMAL, 302, 0, ALIGN_LEFT).pos(74, 124 + w.size()[1]).color(50, 50, 50);
 
         bg.addsprite("close2.png").pos(513, 34).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
             
         var but0 = bg.addsprite("blueButton.png").anchor(50, 50).pos(123, 342).setevent(EVENT_TOUCH, onInvite);
-        but0.addlabel(getStr("inviteFri", null), null, 26).anchor(50, 50).pos(65, 23);
+but0.addlabel(getStr("inviteFri", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
 
         but0 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(280, 342).size(130, 47).setevent(EVENT_TOUCH, onRank);
-        but0.addlabel(getStr("rank", null), null, 26).anchor(50, 50).pos(65, 23);
+but0.addlabel(getStr("rank", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
     }
     function onInvite()
     {

@@ -67,10 +67,10 @@ class BreakDialog extends MyNode
                 bg.addsprite("dialogStar.png", GRAY).pos(ps[i]).scale(sca[i]).anchor(50, 50);
             }
             but0 = bg.addsprite("roleNameBut1.png").anchor(50, 50).pos(162, 399).size(209, 61).setevent(EVENT_TOUCH, onRestart);
-            but0.addlabel(getStr("restart", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but0.addlabel(getStr("restart", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
 
             but1 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(387, 399).size(209, 61).setevent(EVENT_TOUCH, onContinue);
-            but1.addlabel(getStr("continue", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("continue", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
 
             //var goods = reward.get("goods");
             var offY = 32;
@@ -86,7 +86,7 @@ class BreakDialog extends MyNode
             }
             
 
-            bg.addlabel(getStr("breakReward", ["[GOOD]", res]), null, 18).pos(83, 180).color(0, 0, 0);
+bg.addlabel(getStr("breakReward", ["[GOOD]", res]), "fonts/heiti.ttf", 18).pos(83, 180).color(0, 0, 0);
 
 
             var levelupStr = getStr("noLevelUp", null);
@@ -100,11 +100,11 @@ class BreakDialog extends MyNode
                 levelupStr += levelUpSol[i].myName;
             }
 
-            bg.addlabel(levelupStr, null, 18).pos(83, 212).color(0, 0, 0);
+bg.addlabel(levelupStr, "fonts/heiti.ttf", 18).pos(83, 212).color(0, 0, 0);
             if(newLevel == 1)
-                bg.addlabel(getStr("newRecord", ["[NUM]",str(star) ]), null, 18).pos(83, 234).color(0, 0, 0);
+bg.addlabel(getStr("newRecord", ["[NUM]", str(star)]), "fonts/heiti.ttf", 18).pos(83, 234).color(0, 0, 0);
             if(rewardCry > 0)
-                bg.addlabel(getStr("rewardCry", ["[NUM]",str(rewardCry) ]), null, 18).pos(83, 256).color(0, 0, 0);
+bg.addlabel(getStr("rewardCry", ["[NUM]", str(rewardCry)]), "fonts/heiti.ttf", 18).pos(83, 256).color(0, 0, 0);
 
             //bg.addlabel("升级:liyong, xiaoxu", null, 18).pos(83, 244).color(0, 0, 0);
             //bg.addlabel("可以转职:liyong, xiaoxu", null, 18).pos(83, 276).color(0, 0, 0);
@@ -114,13 +114,13 @@ class BreakDialog extends MyNode
         {
             bg.addsprite("dialogFail.png").anchor(50, 50).pos(271, 46);
             bg.addsprite("dialogBreakTip.png").pos(56, 111);
-            bg.addlabel("Tip: It is better to fight with enough soldiers than fight with nothing!", null, 18, FONT_NORMAL, 300, 76, ALIGN_LEFT).pos(115, 170).color(0, 0, 0);
+bg.addlabel("Tip: It is better to fight with enough soldiers than fight with nothing!", "fonts/heiti.ttf", 18, FONT_NORMAL, 300, 76, ALIGN_LEFT).pos(115, 170).color(0, 0, 0);
 
             but0 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(162, 399).size(209, 61).setevent(EVENT_TOUCH, onTryAgain);
-            but0.addlabel(getStr("tryAgain", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but0.addlabel(getStr("tryAgain", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
 
             but1 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(387, 399).size(209, 61).setevent(EVENT_TOUCH, onQuit);
-            but1.addlabel(getStr("quit", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("quit", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
         }
 
     }

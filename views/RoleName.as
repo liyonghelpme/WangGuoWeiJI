@@ -14,7 +14,7 @@ class RoleName extends MyNode
         male = soldier.data.get("maleOrFemale");
 
         bg = sprite("roleName.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
-        bg.addlabel(getStr("nameSol", null), null, 25).pos(243, 29).anchor(50, 50).color(0, 0, 0);
+bg.addlabel(getStr("nameSol", null), "fonts/heiti.ttf", 25).pos(243, 29).anchor(50, 50).color(0, 0, 0);
 
         var solPng = bg.addsprite("soldier"+str(sol.id)+".png").pos(109, 137).anchor(50, 50);
         var bsize = solPng.prepare().size(); 
@@ -33,12 +33,12 @@ class RoleName extends MyNode
 
 
         inputView = v_create(V_INPUT_VIEW, 327, 214, 220, 50);
-        warnText = bg.addlabel(getStr("nameNotNull", null), null, 20).anchor(0, 0).pos(165, 150).color(100, 0, 0).visible(0);
+warnText = bg.addlabel(getStr("nameNotNull", null), "fonts/heiti.ttf", 20).anchor(0, 0).pos(165, 150).color(100, 0, 0).visible(0);
 
         var but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(152, 265).anchor(50, 50).setevent(EVENT_TOUCH, randomName);
-        but.addlabel(getStr("rand", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
+but.addlabel(getStr("rand", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
         but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(350, 265).anchor(50, 50).setevent(EVENT_TOUCH, nameIt);
-        but.addlabel(getStr("ok", null), null, 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
+but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
         
         var solVal = global.user.soldiers.values();
         for(var j = 0; j < len(solVal); j++)

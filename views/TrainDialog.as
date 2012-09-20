@@ -46,14 +46,14 @@ class TrainDialog extends MyNode
 
         bg = sprite("dialogDetail.png").anchor(50, 50).pos(global.director.disSize[0]/2, global.director.disSize[1]/2);
         init();
-        bg.addlabel(getStr("trainSol", null), null, 30).anchor(50, 50).pos(264, 26).color(33, 34, 40);
+bg.addlabel(getStr("trainSol", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(264, 26).color(33, 34, 40);
 
         bg.addsprite("roleNameClose.png").pos(499, 9).setevent(EVENT_TOUCH, closeDialog);
-        words = bg.addlabel(getStr("equipDrugFast", null), null, 18).pos(264, 122).anchor(50, 50).color(0, 0, 0);
-        bg.addlabel(getStr("doubleExp", null), null, 18).pos(264, 303).anchor(50, 50).color(100, 0, 0);
+words = bg.addlabel(getStr("equipDrugFast", null), "fonts/heiti.ttf", 18).pos(264, 122).anchor(50, 50).color(0, 0, 0);
+bg.addlabel(getStr("doubleExp", null), "fonts/heiti.ttf", 18).pos(264, 303).anchor(50, 50).color(100, 0, 0);
 
         var scroll = bg.addsprite("dialogScroll.png").anchor(50, 50).pos(264, 81);
-        scroll.addlabel(getStr("trainSolFast", null), null, 22).pos(252, 32).anchor(50, 50).color(27, 15, 4);
+scroll.addlabel(getStr("trainSolFast", null), "fonts/heiti.ttf", 22).pos(252, 32).anchor(50, 50).color(27, 15, 4);
 
 
         var difW = [getStr("easy", null), getStr("mid", null), getStr("difficult", null), getStr("abnormal", null)];
@@ -62,15 +62,15 @@ class TrainDialog extends MyNode
             var pan = bg.addsprite("chooseStone.png").pos(initX+offX*i, initY).anchor(50, 50).setevent(EVENT_TOUCH, setChoose, i);
             pan.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(solIds[i])])).pos(54, 82).anchor(50, 50);
 
-            pan.addlabel(difW[i], null, 18).pos(57, 20).anchor(50, 50).color(31, 17, 5);
+pan.addlabel(difW[i], "fonts/heiti.ttf", 18).pos(57, 20).anchor(50, 50).color(31, 17, 5);
 
         }
 
         but0 = bg.addsprite("roleNameBut0.png").pos(147, 347).anchor(50, 50).size(214, 65).setevent(EVENT_TOUCH, onDouble);
-        buyWord = but0.addlabel(getStr("doubleExpNow", null), null, 35).pos(107, 32).anchor(50, 50).color(100, 100, 100);
+buyWord = but0.addlabel(getStr("doubleExpNow", null), "fonts/heiti.ttf", 35).pos(107, 32).anchor(50, 50).color(100, 100, 100);
 
         but1 = bg.addsprite("roleNameBut0.png").pos(377, 347).anchor(50, 50).size(214, 65).setevent(EVENT_TOUCH, onTrain);
-        but1.addlabel(getStr("generalExp", null), null, 35).pos(107, 32).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("generalExp", null), "fonts/heiti.ttf", 35).pos(107, 32).anchor(50, 50).color(100, 100, 100);
 
         setChoose(null, null, 0, null, null, null);
 

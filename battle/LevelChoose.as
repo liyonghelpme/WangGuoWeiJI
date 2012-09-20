@@ -74,7 +74,7 @@ class LevelChoose extends MyNode
             //nums = new ShadowWords("0/0", null, 22, FONT_NORMAL, [100, 100, 100]);
             //tot.add(nums.bg);
             //nums.bg.pos(57, 14);
-            nums = tot.addlabel("0/0", "heiti.ttf", 25).pos(57, 14);
+nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         }
         else
         {
@@ -83,7 +83,7 @@ class LevelChoose extends MyNode
             //nums = new ShadowWords("0/0", null, 22, FONT_NORMAL, [100, 100, 100]);
             //tot.add(nums.bg);
             //nums.bg.pos(57, 14);
-            nums = tot.addlabel("0/0", "heiti.ttf", 25).pos(57, 14);
+nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         }
 
 
@@ -225,7 +225,7 @@ class LevelChoose extends MyNode
                 panel = flowNode.addsprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
 
                 panel.addsprite("lock0.png").pos(26, 28).anchor(50, 50).size(25, 30);
-                panel.addlabel(getStr("condition", null), null, 20).pos(48, 21);
+panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
                 panel.addsprite("star.png").anchor(50, 50).pos(62, 70).size(33, 31);
                 var starLevel = stringLines(getStr("starLevel", ["[STAR]", str(mData.get("needStar")), "[LEV]", str(mData.get("needLevel"))]), 18, 21, [100, 100, 100], FONT_NORMAL);
                 panel.add(starLevel);

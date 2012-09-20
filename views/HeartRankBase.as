@@ -432,11 +432,11 @@ class HeartRankBase extends MyNode
                 panel.scale(sca);
 
                 panel.addsprite("dialogRankCup.png").anchor(50, 50).pos(35, 23);
-                panel.addlabel(str(data[diff][3]), null, 20).anchor(50, 50).pos(88, 23).color(0, 0, 0);
+panel.addlabel(str(data[diff][3]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(88, 23).color(0, 0, 0);
                 
                 var papayaId = data[diff][1];
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(69, 105);
-                panel.addlabel(data[diff][4], null, 20).anchor(50, 50).pos(66, 53).color(0, 0, 0);
+panel.addlabel(data[diff][4], "fonts/heiti.ttf", 20).anchor(50, 50).pos(66, 53).color(0, 0, 0);
 
                 panel.put(curNum);
                 if(curNum == selectNum)
@@ -542,14 +542,14 @@ class HeartRankBase extends MyNode
         child.add(shadow, 100, 1);
 
         var but0 = shadow.addsprite("greenButton.png").pos(66, 59).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit, curNum);
-        but0.addlabel(getStr("visit", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("visit", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
 
         //未挑战过 且不是自身
         if(global.user.checkChallengeYet(uid) == 0 )//挑战自身显示按钮 || uid == global.user.uid
         {
 
             but0 = shadow.addsprite("greenButton.png").pos(66, 106).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
-            but0.addlabel(getStr("challengeGroup", null), null, 21).pos(47, 19).anchor(50, 50);
+but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
             
         }
 

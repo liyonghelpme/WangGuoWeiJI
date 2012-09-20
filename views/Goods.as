@@ -56,15 +56,15 @@ class Goods extends MyNode
             buildPic.texture(buildPicName, BLACK);
             panel.addsprite("storeNotLev.png");
             var words = colorWords(getStr("levelNot", ["[LEVEL]", str(needLevel)]));
-            panel.addlabel(words[0], null, 20).pos(110-20*words[2], 99).anchor(0, 50).color(100, 100, 100);
-            panel.addlabel(words[1], null, 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
+panel.addlabel(words[0], "fonts/heiti.ttf", 20).pos(110 - (20 * words[2]), 99).anchor(0, 50).color(100, 100, 100);
+panel.addlabel(words[1], "fonts/heiti.ttf", 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
             //panel.addlabel(getStr("levelNot", ["[LEVEL]", str(needLevel)]), null, 20).pos(84, 99).anchor(50, 50).color(100, 100, 100);
             canBuy = 0;
         }
         //物品属性
         else
         {
-            panel.addlabel(data.get("name"), null, 25).pos(79, 28).anchor(50, 50).color(0, 0, 0);
+panel.addlabel(data.get("name"), "fonts/heiti.ttf", 25).pos(79, 28).anchor(50, 50).color(0, 0, 0);
             var picCost = cost.items();
 //            trace("buildCost", cost);
             if(len(picCost) > 0)
@@ -72,7 +72,7 @@ class Goods extends MyNode
                 var c = [100, 100, 100];
                 if(picCost[0][0] == "free")//免费物品只显示免费
                 {
-                    panel.addlabel(getStr("free", null), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+panel.addlabel(getStr("free", null), "fonts/heiti.ttf", 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
                 else
                 {
@@ -86,7 +86,7 @@ class Goods extends MyNode
                     消耗数值 
                     */
                     var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50).size(30, 30);  
-                    var cNum = panel.addlabel(str(valNum), null, 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
             }
 
@@ -116,7 +116,7 @@ class Goods extends MyNode
                         k = k + getStr("unlimit", null);
                     else
                         k = k + str(v);
-                    panel.addlabel(k, null, 18).pos(79, 152).anchor(50, 50).color(0, 0, 0);
+panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0, 0);
                 }
             }
         }

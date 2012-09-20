@@ -10,7 +10,7 @@ class RewardBanner extends MyNode
         for(var i = 0; i < len(it); i++)
         {
             var pic = bg.addsprite(it[i][0]+".png").pos(initX, initY).anchor(0, 50).size(30, 30);
-            var num = bg.addlabel(str(it[i][1]), null, 25).pos(initX+30, initY).anchor(0, 50);
+var num = bg.addlabel(str(it[i][1]), "fonts/heiti.ttf", 25).pos(initX + 30, initY).anchor(0, 50);
 //            trace("label size", num.prepare().size());
             initX += 112;
         }
@@ -71,40 +71,40 @@ class TaskDialog extends MyNode
 
         var star = bg.addsprite("dialogTaskStar.png").anchor(50, 50).pos(INITX, 150);
 
-        bg.addlabel(getStr("level", null), null, 18).pos(118, 102).anchor(50, 50).color(0, 0, 0);
-        bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level))]), null, 18).anchor(50, 50).pos(118, 195).color(0, 0, 0);
+bg.addlabel(getStr("level", null), "fonts/heiti.ttf", 18).pos(118, 102).anchor(50, 50).color(0, 0, 0);
+bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level))]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(118, 195).color(0, 0, 0);
 
-        bg.addlabel(str(level+1), null, 25).anchor(50, 50).pos(INITX, 154).color(76, 97, 34);
+bg.addlabel(str(level + 1), "fonts/heiti.ttf", 25).anchor(50, 50).pos(INITX, 154).color(76, 97, 34);
 //        trace("init star");
 
 
         //70 67
         var block = bg.addsprite("dialogTaskBlock.png").anchor(50, 50).pos(INITX+OFFX, 154);
         block.addsprite("soldier0.png").pos(35, 33).anchor(50, 50).size(60, 60);
-        bg.addlabel("name", null, 18).pos(INITX+OFFX, 102).anchor(50, 50).color(0, 0, 0);
+bg.addlabel("name", "fonts/heiti.ttf", 18).pos(INITX + OFFX, 102).anchor(50, 50).color(0, 0, 0);
 
 
         block = bg.addsprite("dialogTaskBlock.png").anchor(50, 50).pos(INITX+OFFX*2, 154);
         block.addsprite("soldier1.png", BLACK).pos(35, 33).anchor(50, 50).size(60, 60);
 
-        bg.addlabel("name", null, 18).pos(INITX+OFFX*2, 102).anchor(50, 50).color(0, 0, 0);
-        bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level+1))]), null, 18).anchor(50, 50).pos(INITX+OFFX*2, 195).color(0, 0, 0);
+bg.addlabel("name", "fonts/heiti.ttf", 18).pos(INITX + (OFFX * 2), 102).anchor(50, 50).color(0, 0, 0);
+bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level + 1))]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(INITX + (OFFX * 2), 195).color(0, 0, 0);
 
         block.addsprite("roleLock.png").pos(12, 56).anchor(50, 50).size(20, 21);
         block.addsprite("dialogTaskShadow.png").anchor(50, 50).pos(49, 56);
-        block.addlabel(str(level+1+1), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
+block.addlabel(str((level + 1) + 1), "fonts/heiti.ttf", 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
 //        trace("init block 1");
 
 
         block = bg.addsprite("dialogTaskBlock.png").anchor(50, 50).pos(INITX+OFFX*3, 154);
         block.addsprite("soldier2.png", BLACK).pos(35, 33).anchor(50, 50).size(60, 60);
 
-        bg.addlabel("name", null, 18).pos(INITX+OFFX*3, 102).anchor(50, 50).color(0, 0, 0);
-        bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level+2))]), null, 18).anchor(50, 50).pos(INITX+OFFX*3, 195).color(0, 0, 0);
+bg.addlabel("name", "fonts/heiti.ttf", 18).pos(INITX + (OFFX * 3), 102).anchor(50, 50).color(0, 0, 0);
+bg.addlabel(getStr("needExp", ["[EXP]", str(getExp(level + 2))]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(INITX + (OFFX * 3), 195).color(0, 0, 0);
 
         block.addsprite("roleLock.png").pos(12, 56).anchor(50, 50).size(20, 21);
         block.addsprite("dialogTaskShadow.png").anchor(50, 50).pos(49, 56);
-        block.addlabel(str(level+2+1), null, 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
+block.addlabel(str((level + 2) + 1), "fonts/heiti.ttf", 15).anchor(50, 50).pos(49, 56).color(76, 97, 34);
 //        trace("init block 2");
 
         cl = bg.addnode().pos(85, 210).size(629, 226).clipping(1);
@@ -142,19 +142,19 @@ class TaskDialog extends MyNode
             if(t[1] < need)
             {
                 panel.addsprite("exp_star.png").pos(55, 30).anchor(50, 50).size(30, 30);
-                panel.addlabel(getStr("needExp", ["[EXP]", str(data.get("exp"))]), null, 15).pos(55, 55).anchor(50, 50).color(13, 72, 14); 
-                panel.addlabel(getStr("finTask", ["[DO]", str(t[1]), "[NEED]", str(data.get("need"))]), null, 20).color(96, 62, 22).pos(430, 20).anchor(50, 50);
+panel.addlabel(getStr("needExp", ["[EXP]", str(data.get("exp"))]), "fonts/heiti.ttf", 15).pos(55, 55).anchor(50, 50).color(13, 72, 14);
+panel.addlabel(getStr("finTask", ["[DO]", str(t[1]), "[NEED]", str(data.get("need"))]), "fonts/heiti.ttf", 20).color(96, 62, 22).pos(430, 20).anchor(50, 50);
             }
             else
             {
                 panel.addsprite("dialogTaskFinish.png").pos(55, 30).anchor(50, 50).size(30, 30);
-                panel.addlabel(getStr("finTask", ["[DO]", str(t[1]), "[NEED]", str(data.get("need"))]), null, 15).pos(55, 55).anchor(50, 50).color(13, 72, 14);
+panel.addlabel(getStr("finTask", ["[DO]", str(t[1]), "[NEED]", str(data.get("need"))]), "fonts/heiti.ttf", 15).pos(55, 55).anchor(50, 50).color(13, 72, 14);
                 panel.addsprite("greenButton.png").size(102, 39).pos(434, 45).anchor(50, 50).setevent(EVENT_TOUCH, finishTask, tasks[i][0]);
-                panel.addlabel(getStr("finishTask", null), null, 25).pos(434, 45).anchor(50, 50).color(100, 100, 100);
+panel.addlabel(getStr("finishTask", null), "fonts/heiti.ttf", 25).pos(434, 45).anchor(50, 50).color(100, 100, 100);
 
             }
-            panel.addlabel(data.get("title"), null, 25).pos(100, 21).anchor(0, 50).color(0, 0, 0);
-            panel.addlabel(data.get("des"), null, 17, FONT_NORMAL, 259, 34, ALIGN_LEFT).pos(100, 39).color(56, 54, 54);
+panel.addlabel(data.get("title"), "fonts/heiti.ttf", 25).pos(100, 21).anchor(0, 50).color(0, 0, 0);
+panel.addlabel(data.get("des"), "fonts/heiti.ttf", 17, FONT_NORMAL, 259, 34, ALIGN_LEFT).pos(100, 39).color(56, 54, 54);
             var gain = getGain(TASK, t[0]);
 //            trace("init task gain", gain);
             var offY = 38;
@@ -169,7 +169,7 @@ class TaskDialog extends MyNode
                 if(it[j][0] != "exp")
                 {
                     panel.addsprite(it[j][0]+".png").pos(541, initY).anchor(50, 50).size(30, 30);
-                    panel.addlabel(str(it[j][1]), null, 20).pos(541+20, initY).anchor(0, 50).color(96, 62, 22);
+panel.addlabel(str(it[j][1]), "fonts/heiti.ttf", 20).pos(541 + 20, initY).anchor(0, 50).color(96, 62, 22);
                     initY += offY;
                 }
             }

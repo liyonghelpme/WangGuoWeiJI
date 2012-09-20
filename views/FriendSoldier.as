@@ -113,7 +113,7 @@ class FriendSoldier extends MoveSoldier
 
             var temp = bg.addnode();
             temp.addsprite("crystal.png").anchor(0, 50).pos(0, -30).size(30, 30);
-            temp.addlabel("+"+str(1), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+temp.addlabel("+" + str(1), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
         }
         //map.touchEnded(n, e, p, x, y, points);

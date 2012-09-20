@@ -72,7 +72,7 @@ class BuildMenu extends MyNode
             if(setYet == 1)//改变了建筑物状态 所以需要ok
                 buttonNode.addsprite("buildOk.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
             buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-            buttonNode.addlabel(getStr("chooseBuild", null), null, 30).pos(20, 37).anchor(0, 50).color(100, 100, 100);
+buttonNode.addlabel(getStr("chooseBuild", null), "fonts/heiti.ttf", 30).pos(20, 37).anchor(0, 50).color(100, 100, 100);
             return;
         }
 
@@ -93,7 +93,7 @@ class BuildMenu extends MyNode
         {
             buttonNode.addsprite("buildOk.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
             buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-            buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
+buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
         }
         else if(opKind == PLAN_BUILDING)
         {
@@ -105,7 +105,7 @@ class BuildMenu extends MyNode
                     
                 buttonNode.addsprite("buildOk.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
                 buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-                buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
+buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
             }
             else
             {
@@ -115,7 +115,7 @@ class BuildMenu extends MyNode
                 buttonNode.addsprite("buildOk.png").pos(633, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
                 buttonNode.addsprite("buildSwitch.png").pos(687, 37).anchor(50, 50).setevent(EVENT_TOUCH, onSwitch);
                 buttonNode.addsprite("buildCancel.png").pos(744, 37).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-                buttonNode.addlabel(getStr("dragBuild", null), null, 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
+buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", 30).anchor(0, 50).pos(20, 37).color(100, 100, 100);
             }
         }
     }

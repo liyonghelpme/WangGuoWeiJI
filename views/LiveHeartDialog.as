@@ -33,7 +33,7 @@ class LiveHeartDialog extends MyNode
         var weekNum = (global.user.serverTime - global.user.registerTime)/(24*3600*7);//7天1周
 
         var tit = getStr("liveHeart", ["[NUM]", str(weekNum), "[NUM1]", str(global.user.getValue("liveNum"))]);
-        bg.addlabel(tit, null, 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
+bg.addlabel(tit, "fonts/heiti.ttf", 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
 
         var w = getStr("moreHeart", null);
 
@@ -41,7 +41,7 @@ class LiveHeartDialog extends MyNode
         var sca = getSca(pic, [170, 220]);
         pic.scale(sca);
 
-        bg.addlabel(w, null, 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
+bg.addlabel(w, "fonts/heiti.ttf", 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
 
         var liveNum = global.user.getValue("liveNum");
 
@@ -55,15 +55,15 @@ class LiveHeartDialog extends MyNode
             w = getStr("heartReward1", ["[N0]", str(liveNum), "[N1]", str(liveNum), "[N2]", str(leftNum)]);
         }
 
-        bg.addlabel(w, null, 19, FONT_NORMAL, 302, 0, ALIGN_LEFT).pos(74, 124).color(28, 16, 4);
+bg.addlabel(w, "fonts/heiti.ttf", 19, FONT_NORMAL, 302, 0, ALIGN_LEFT).pos(74, 124).color(28, 16, 4);
 
         bg.addsprite("close2.png").pos(513, 34).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
             
         var but0 = bg.addsprite("blueButton.png").anchor(50, 50).pos(123, 342).setevent(EVENT_TOUCH, onInvite);
-        but0.addlabel(getStr("inviteFri", null), null, 26).anchor(50, 50).pos(65, 23);
+but0.addlabel(getStr("inviteFri", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
 
         but0 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(280, 342).size(130, 47).setevent(EVENT_TOUCH, onRank);
-        but0.addlabel(getStr("rank", null), null, 26).anchor(50, 50).pos(65, 23);
+but0.addlabel(getStr("rank", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
 
         global.httpController.addRequest("friendC/collectHeart", dict([["uid", global.user.uid]]), null, null);
         global.user.collectHeart();

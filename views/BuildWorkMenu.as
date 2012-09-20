@@ -16,23 +16,23 @@ class BuildWorkMenu extends MyNode
         var banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
         init();
         //build.data.get("name")
-        banner.addlabel( build.getName(), null, 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
+banner.addlabel(build.getName(), "fonts/heiti.ttf", 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
         var state = build.state;
         if(state == Working)
         {
-            banner.addlabel(getStr("working", null), null, 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
-            timeLabel = banner.addlabel("", null, 18).pos(660, 30).color(100, 100, 100, 100).anchor(0, 50);
+banner.addlabel(getStr("working", null), "fonts/heiti.ttf", 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
+timeLabel = banner.addlabel("", "fonts/heiti.ttf", 18).pos(660, 30).color(100, 100, 100, 100).anchor(0, 50);
         }
         else
         {
             var kind = build.kind;
             if(kind == HOUSE_BUILD)
             {
-                banner.addlabel(getStr("peopleCapacity", ["[NUM]", str(build.data.get("people"))]), null, 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
+banner.addlabel(getStr("peopleCapacity", ["[NUM]", str(build.data.get("people"))]), "fonts/heiti.ttf", 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
             }
             else if(kind == CASTLE_BUILD)
             {
-                banner.addlabel(getStr("viliDefense", ["[NUM]", str(global.user.getValue("cityDefense"))]), null, 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
+banner.addlabel(getStr("viliDefense", ["[NUM]", str(global.user.getValue("cityDefense"))]), "fonts/heiti.ttf", 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
             }
         }
 

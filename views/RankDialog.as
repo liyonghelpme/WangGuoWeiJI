@@ -83,10 +83,10 @@ class RankDialog extends MyNode
         {
             switchTab = -1;
             but0 = bg.addsprite("roleNameBut0.png").pos(388, 24).size(96, 37).setevent(EVENT_TOUCH, onView, 0);
-            but0.addlabel(getStr("attackRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+but0.addlabel(getStr("attackRank", null), "fonts/heiti.ttf", 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
             
             but0 = bg.addsprite("roleNameBut0.png").pos(500, 24).size(96, 37).setevent(EVENT_TOUCH, onView, 1);
-            but0.addlabel(getStr("defenseRank", null), null, 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
+but0.addlabel(getStr("defenseRank", null), "fonts/heiti.ttf", 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
         }
 
         var clPos = [66, 117];

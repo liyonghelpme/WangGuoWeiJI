@@ -14,11 +14,11 @@ class SoldierDialog extends MyNode
         title = bg.addsprite("dialogSoldierTitle.png").pos(336, 85);
 
         var but0 = bg.addsprite("roleNameBut0.png").pos(440, 41).size(99, 37).anchor(50, 50).setevent(EVENT_TOUCH, switchView, 0);
-        but0.addlabel(getStr("allSoldier", null), null, 25).pos(50, 18).anchor(50, 50);
+but0.addlabel(getStr("allSoldier", null), "fonts/heiti.ttf", 25).pos(50, 18).anchor(50, 50);
         but0 = bg.addsprite("roleNameBut0.png").pos(555, 41).size(99, 37).anchor(50, 50).setevent(EVENT_TOUCH, switchView, 1);
-        but0.addlabel(getStr("dead", null), null, 25).pos(50, 18).anchor(50, 50);
+but0.addlabel(getStr("dead", null), "fonts/heiti.ttf", 25).pos(50, 18).anchor(50, 50);
         but0 = bg.addsprite("roleNameBut0.png").pos(670, 41).size(99, 37).anchor(50, 50).setevent(EVENT_TOUCH, switchView, 2);
-        but0.addlabel(getStr("transfer", null), null, 25).pos(50, 18).anchor(50, 50);
+but0.addlabel(getStr("transfer", null), "fonts/heiti.ttf", 25).pos(50, 18).anchor(50, 50);
         switchView(null, null, viewId, null, null, null);
     }
     //0 all

@@ -79,16 +79,16 @@ class AllGoods extends MyNode
             bg.addsprite("allEquip.png").anchor(50, 50).pos(169, 41);
             var stoneNum = bg.addsprite("stoneNum.png").pos(280, 28);
 
-            var s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(45, 18).anchor(0, 50);
+var s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(45, 18).anchor(0, 50);
             nums.append(s);
 
-            s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(154, 18).anchor(0, 50);
+s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(154, 18).anchor(0, 50);
             nums.append(s);
 
-            s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(273, 18).anchor(0, 50);
+s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(273, 18).anchor(0, 50);
             nums.append(s);
 
-            s = stoneNum.addlabel("", null, 20).color(100, 100, 100).pos(380, 18).anchor(0, 50);
+s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(380, 18).anchor(0, 50);
             nums.append(s);
 
             setStoneNum();
@@ -156,7 +156,7 @@ class AllGoods extends MyNode
                 if(num == 0)
                     co = [99, 42, 47];
 
-                panel.addlabel(str(num), null, 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
+panel.addlabel(str(num), "fonts/heiti.ttf", 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
             }
             else if(data[i][0] == DETAIL_EQUIP)
             {
@@ -164,13 +164,13 @@ class AllGoods extends MyNode
                 {
                     var solData = global.user.getSoldierData(ed.get("owner"));
                     var solName = solData.get("name");
-                    panel.addlabel(solName, null, 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
+panel.addlabel(solName, "fonts/heiti.ttf", 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
                 }
                 var eqLevel = ed.get("level");
-                panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), null, 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
+panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), "fonts/heiti.ttf", 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
             }
                 
-            panel.addlabel(objData.get("name")+" "+objData.get("des"), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+panel.addlabel((objData.get("name") + " ") + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
             var butWidth = 69;
             var butHeight = 36;
 
@@ -183,11 +183,11 @@ class AllGoods extends MyNode
             if(kind == DRUG)
             {
                 but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, buyIt, i);
-                but0.addlabel(getStr("buyIt", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                 if(num > 0)
                 {
                     but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onSell, i);
-                    but1.addlabel(getStr("sell", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("sell", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                 }
             }
             else if(kind == EQUIP)
@@ -195,7 +195,7 @@ class AllGoods extends MyNode
                 if(data[i][0] == EQUIP_KIND)
                 {
                     but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, buyIt, i);
-                    but0.addlabel(getStr("buyIt", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     if(num == 0)
                         data[i][2] = 0;//没有物品则状态为关闭
                     if(num > 0)
@@ -203,12 +203,12 @@ class AllGoods extends MyNode
                         if(data[i][2] == 0)
                         {
                             but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onView, i);
-                            but1.addlabel(getStr("viewAll", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("viewAll", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                         }
                         else
                         {
                             but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onClose, i);
-                            but1.addlabel(getStr("closeAll", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("closeAll", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
 
                         }
                     }
@@ -219,11 +219,11 @@ class AllGoods extends MyNode
                     if(ed.get("level") < MAX_EQUIP_LEVEL)//未升级到最高级
                     {
                         but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
-                        but0.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     }
 
                     but1 = panel.addsprite("roleNameBut0.png").pos(650, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onSell, i);
-                    but1.addlabel(getStr("sell", null), null , 18).pos(34, 18).anchor(50, 50);
+but1.addlabel(getStr("sell", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
 
                 }
             }

@@ -37,17 +37,17 @@ class TrainOverDialog extends MyNode
             var level = sol[i].level;
             var transferLev = getTransferLevel(sol[i]);
             if(level >= transferLev && transferLev != -1)
-                l.addlabel(getStr("solTrainOver1", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level+1)]), null, 18).color(0, 0, 0).pos(0, offY*i);
+l.addlabel(getStr("solTrainOver1", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level + 1)]), "fonts/heiti.ttf", 18).color(0, 0, 0).pos(0, offY * i);
             else
-                l.addlabel(getStr("solTrainOver0", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level+1)]), null, 18).color(0, 0, 0).pos(0, offY*i);
+l.addlabel(getStr("solTrainOver0", ["[NAME]", name, "[EXP]", str(exp), "[LEV]", str(level + 1)]), "fonts/heiti.ttf", 18).color(0, 0, 0).pos(0, offY * i);
             
         }
 
         but0 = bg.addsprite("roleNameBut1.png").anchor(50, 50).pos(162, 399).size(209, 61).setevent(EVENT_TOUCH, onOk);
-        but0.addlabel(getStr("ok", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but0.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
 
         but1 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(387, 399).size(209, 61).setevent(EVENT_TOUCH, onShare);
-        but1.addlabel(getStr("share", null), null, 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
+but1.addlabel(getStr("share", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50).color(100, 100, 100);
 
     }
 

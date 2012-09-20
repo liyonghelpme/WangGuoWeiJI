@@ -27,7 +27,7 @@ class UpdateDialog extends MyNode
         bg = sprite("dialogUpdate.png").anchor(50, 50).pos(global.director.disSize[0]/2, global.director.disSize[1]/2);
         init();
         var data = getData(kind, id);
-        bg.addlabel(data.get("name"), null, 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
+bg.addlabel(data.get("name"), "fonts/heiti.ttf", 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
         var w;
         if(kind == SOLDIER)
             w = getStr("buySol", ["[NAME]", data.get("name")]);
@@ -40,17 +40,17 @@ class UpdateDialog extends MyNode
         var sca = getSca(pic, [170, 220]);
         pic.scale(sca);
 
-        bg.addlabel(w, null, 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
-        var word = bg.addlabel(getStr("richThing", null), null, 19, FONT_NORMAL, 273, 0, ALIGN_LEFT).color(28, 16, 4).pos(74, 124); 
+bg.addlabel(w, "fonts/heiti.ttf", 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
+var word = bg.addlabel(getStr("richThing", null), "fonts/heiti.ttf", 19, FONT_NORMAL, 273, 0, ALIGN_LEFT).color(28, 16, 4).pos(74, 124);
         var wSize = word.prepare().size();
 
         bg.addsprite("heartPlus.png").pos(74, 124+wSize[1]+5).anchor(0, 0).scale(50);
             
         var but0 = bg.addsprite("blueButton.png").anchor(50, 50).pos(123, 342).setevent(EVENT_TOUCH, onBuy);
-        but0.addlabel(getStr("buyIt", null), null, 26).anchor(50, 50).pos(65, 23);
+but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
 
         but0 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(280, 342).size(130, 47).setevent(EVENT_TOUCH, onOk);
-        but0.addlabel(getStr("ok", null), null, 26).anchor(50, 50).pos(65, 23);
+but0.addlabel(getStr("ok", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
     }
     function onBuy()
     {

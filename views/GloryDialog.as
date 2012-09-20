@@ -71,8 +71,8 @@ class GloryDialog extends MyNode
         bg = sprite("dialogGlory.jpg");
         init();
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
-        bg.addlabel("B+", null, 40).pos(85, 98).anchor(50, 50).color(43, 24, 11);
-        bg.addlabel(getStr("collectRole", null), null, 30).pos(389, 106).anchor(50, 50).color(43, 24, 11);
+bg.addlabel("B+", "fonts/heiti.ttf", 40).pos(85, 98).anchor(50, 50).color(43, 24, 11);
+bg.addlabel(getStr("collectRole", null), "fonts/heiti.ttf", 30).pos(389, 106).anchor(50, 50).color(43, 24, 11);
 
         cl = bg.addnode().pos(97, 152).size(630, 298).clipping(1);
         flowNode = cl.addnode();

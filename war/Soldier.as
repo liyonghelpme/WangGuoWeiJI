@@ -428,7 +428,7 @@ class Soldier extends MyNode
         {
             var temp = bg.addnode();
             temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
-            temp.addlabel("+"+str(e), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
         }
         //bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));

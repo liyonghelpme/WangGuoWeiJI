@@ -203,7 +203,7 @@ class MapBanner extends MyNode
             panel.put(i);
             
             panel.addsprite("skillLevel.png").pos(57, 79).anchor(50, 50);
-            panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level")+1)]), null, 15).pos(57, 79).anchor(50, 50).color(100, 100, 100);
+panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fonts/heiti.ttf", 15).pos(57, 79).anchor(50, 50).color(100, 100, 100);
         }
     }
 
@@ -320,7 +320,7 @@ class MapBanner extends MyNode
             shadowWord.stop();
             shadowWord.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
             var w = getStr("dragSol", ["[NAME]", sol.myName]);
-            words = shadowWord.addlabel(w, null, 20);
+words = shadowWord.addlabel(w, "fonts/heiti.ttf", 20);
             var wSize = words.prepare().size();
             var sSize = shadowWord.prepare().size();
             sSize[0] = max(wSize[0]+40, sSize[0]);

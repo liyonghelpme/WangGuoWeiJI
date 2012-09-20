@@ -91,7 +91,7 @@ class SpeakDialog extends MyNode
         soldier = s;
         randWord = [getStr("myNameIs", ["[NAME]", soldier.myName]), getStr("letFight", null)];
         bg = sprite("speakBack.png").anchor(50, 100);
-        words = bg.addlabel(randWord[curWord], null, 20).anchor(50, 50).pos(79, 25).color(0, 0, 0);
+words = bg.addlabel(randWord[curWord], "fonts/heiti.ttf", 20).anchor(50, 50).pos(79, 25).color(0, 0, 0);
         init();
     }
     override function enterScene()

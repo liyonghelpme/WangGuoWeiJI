@@ -132,7 +132,7 @@ class Mine extends FuncBuild
         var bSize = baseBuild.bg.size();
 
         var pic = temp.addsprite(it[0][0]+".png").anchor(0, 50).pos(0, -30).size(30, 30);
-        var word = temp.addlabel("-"+str(it[0][1]), null, 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
         var wSize = word.prepare().size();
 
         var offX = bSize[0]/2-(35+wSize[0])/2;

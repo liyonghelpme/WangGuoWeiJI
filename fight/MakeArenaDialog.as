@@ -25,10 +25,10 @@ class MakeArenaDialog extends MyNode
         bg.add(tit.bg);
 
         var scroll = bg.addsprite("dialogScroll.png").anchor(50, 50).pos(317, 92);
-        bg.addlabel(getStr("arenaHigh", null), null, 22).pos(317, 92).anchor(50, 50).color(27, 15, 4);
+bg.addlabel(getStr("arenaHigh", null), "fonts/heiti.ttf", 22).pos(317, 92).anchor(50, 50).color(27, 15, 4);
 
-        words = bg.addlabel(getStr("arenaReward", null), null, 18).pos(317, 135).anchor(50, 50).color(0, 0, 0);
-        bg.addlabel(getStr("arenaTip", null), null, 18).pos(317, 335).anchor(50, 50).color(23, 54, 24);
+words = bg.addlabel(getStr("arenaReward", null), "fonts/heiti.ttf", 18).pos(317, 135).anchor(50, 50).color(0, 0, 0);
+bg.addlabel(getStr("arenaTip", null), "fonts/heiti.ttf", 18).pos(317, 335).anchor(50, 50).color(23, 54, 24);
 
 
 
@@ -44,9 +44,9 @@ class MakeArenaDialog extends MyNode
             var pan = bg.addsprite("chooseStone.png", ARGB_8888).pos(initX+offX*i, initY).anchor(50, 50).setevent(EVENT_TOUCH, setChoose, i);
             pan.addsprite(key+"Big.png", ARGB_8888).pos(54, 82).anchor(50, 50);
 
-            pan.addlabel(getStr("arena"+str(i), null), null, 18).pos(57, 20).anchor(50, 50).color(31, 17, 5);
+pan.addlabel(getStr("arena" + str(i), null), "fonts/heiti.ttf", 18).pos(57, 20).anchor(50, 50).color(31, 17, 5);
 
-            pan.addlabel(getStr("costNum", ["[KIND]", getStr(key, null), "[NUM]", str(val)]), null, 18).pos(57, 144).anchor(50, 50).color(0, 0, 0);
+pan.addlabel(getStr("costNum", ["[KIND]", getStr(key, null), "[NUM]", str(val)]), "fonts/heiti.ttf", 18).pos(57, 144).anchor(50, 50).color(0, 0, 0);
         }
 
 

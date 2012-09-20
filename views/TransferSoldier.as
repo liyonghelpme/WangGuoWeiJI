@@ -135,7 +135,7 @@ class TransferSoldier extends MyNode
                 var level = id%10;
 
                 panel.addsprite("soldier"+str(id)+".png").pos(83, 110).anchor(50, 50);
-                panel.addlabel(name, null, 30).pos(83, 26).color(0, 0, 0).anchor(50, 50);
+panel.addlabel(name, "fonts/heiti.ttf", 30).pos(83, 26).color(0, 0, 0).anchor(50, 50);
 
                 var initX = 33;
                 var initY = 186;

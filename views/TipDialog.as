@@ -6,8 +6,8 @@ class TipDialog extends MyNode
         init();
         bg.addsprite("dialogTipNext.png").pos(549, 388).anchor(50, 50);
         bg.addsprite("close2.png").pos(632, 108).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
-        bg.addlabel("tip", null, 30, FONT_NORMAL, 486, 236, ALIGN_LEFT).pos(89, 131).color(0, 0, 0);
-        bg.addlabel(getStr("pageNO", ["[NUM]", str(0)]), null, 30).pos(68, 389).anchor(0, 50).color(0, 0, 0);
+bg.addlabel("tip", "fonts/heiti.ttf", 30, FONT_NORMAL, 486, 236, ALIGN_LEFT).pos(89, 131).color(0, 0, 0);
+bg.addlabel(getStr("pageNO", ["[NUM]", str(0)]), "fonts/heiti.ttf", 30).pos(68, 389).anchor(0, 50).color(0, 0, 0);
         showCastleDialog();
     }
 

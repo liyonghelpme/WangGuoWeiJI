@@ -85,15 +85,15 @@ class DrugDialog extends MyNode
         init();
         initData();
         im = bg.addsprite("soldier"+str(soldier.id)+".png").pos(104, 40).anchor(50, 50).size(71, 67);
-        nameText = bg.addlabel(soldier.myName, null, 24).pos(181, 44).anchor(0, 50).color(0, 0, 0);
+nameText = bg.addlabel(soldier.myName, "fonts/heiti.ttf", 24).pos(181, 44).anchor(0, 50).color(0, 0, 0);
 
 
 
         var banner = bg.addsprite("dialogDrugInfo.png").pos(275, 28);
 
-        healthText = bg.addlabel("1000", null, 24).pos(321, 44).anchor(0, 50).color(100, 100, 100);
-        attText = bg.addlabel("1000", null, 24).pos(474, 44).anchor(0, 50).color(100, 100, 100);
-        defText = bg.addlabel("1000", null, 24).pos(623, 44).anchor(0, 50).color(100, 100, 100);
+healthText = bg.addlabel("1000", "fonts/heiti.ttf", 24).pos(321, 44).anchor(0, 50).color(100, 100, 100);
+attText = bg.addlabel("1000", "fonts/heiti.ttf", 24).pos(474, 44).anchor(0, 50).color(100, 100, 100);
+defText = bg.addlabel("1000", "fonts/heiti.ttf", 24).pos(623, 44).anchor(0, 50).color(100, 100, 100);
 
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
@@ -165,20 +165,20 @@ class DrugDialog extends MyNode
                 co = [99, 42, 47];
 
             if(kind == DRUG)
-                panel.addlabel(str(num), null, 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
+panel.addlabel(str(num), "fonts/heiti.ttf", 20).pos(69, 65).anchor(0, 100).color(co[0], co[1], co[2]);
             else if(kind == EQUIP)
             {
                 if(ifUse == 1)
                 {
                     var solData = global.user.getSoldierData(useData.get("owner"));
                     var solName = solData.get("name");
-                    panel.addlabel(solName, null, 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
+panel.addlabel(solName, "fonts/heiti.ttf", 15).pos(69, 35).anchor(0, 100).color(0, 100, 0);
                 }
                 var eqLevel = useData.get("level");
-                panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), null, 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
+panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), "fonts/heiti.ttf", 15).pos(69, 65).anchor(0, 100).color(0, 100, 0);
             }
                 
-            panel.addlabel(objData.get("name")+" "+objData.get("des"), null, 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
+panel.addlabel((objData.get("name") + " ") + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 390, 55, ALIGN_LEFT).pos(135, 10).color(59, 56, 56);
             var butWidth = 69;
             var butHeight = 36;
 
@@ -190,12 +190,12 @@ class DrugDialog extends MyNode
             {
                 if(num == 0)
                 {
-                    but0.addlabel(getStr("buyIt", null), null , 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, buyIt, i);
                 }
                 else
                 {
-                    but0.addlabel(getStr("useIt", null), null , 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("useIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, useIt, data[i][1]);
                 }
             }
@@ -203,12 +203,12 @@ class DrugDialog extends MyNode
             {
                 if(ifUse == 0)
                 {
-                    but0.addlabel(getStr("useIt", null), null , 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("useIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, buyIt, i);
                 }
                 else
                 {
-                    but0.addlabel(getStr("unloadIt", null), null , 18).pos(34, 18).anchor(50, 50);
+but0.addlabel(getStr("unloadIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, unloadIt, data[i][1]);
                     
                 }
@@ -216,7 +216,7 @@ class DrugDialog extends MyNode
                 if(useData.get("level") < MAX_EQUIP_LEVEL)
                 {
                     var but1 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50);
-                    but1.addlabel(getStr("upgrade", null), null, 18).pos(34, 18).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, data[i][1]);
+but1.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, data[i][1]);
                 }
             }
         }

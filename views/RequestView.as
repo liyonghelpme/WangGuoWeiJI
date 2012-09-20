@@ -25,10 +25,10 @@ class RequestView extends MyNode
         flowNode = cl.addnode();
         initData();
 
-        giftNum = bg.addlabel(getStr("howManyGift", null), null, 25).color(100, 100, 100).pos(26, 103);
+giftNum = bg.addlabel(getStr("howManyGift", null), "fonts/heiti.ttf", 25).color(100, 100, 100).pos(26, 103);
 
         recAllBut = bg.addsprite("greenButton.png").pos(623, 87).size(148, 53).setevent(EVENT_TOUCH, receiveAll);
-        recAllBut.addlabel(getStr("recAll", null), null, 25).color(0, 0, 0).anchor(50, 50).pos(74, 26);
+recAllBut.addlabel(getStr("recAll", null), "fonts/heiti.ttf", 25).color(0, 0, 0).anchor(50, 50).pos(74, 26);
 
         setGiftNum();
 
@@ -156,13 +156,13 @@ class RequestView extends MyNode
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i).size(PANEL_WIDTH, PANEL_HEIGHT);
             if(data[i][0] == NEIBOR_REQ)
             {
-                panel.addlabel(getStr("neiborRequest", ["[NAME]", data[i][1][2]]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+panel.addlabel(getStr("neiborRequest", ["[NAME]", data[i][1][2]]), "fonts/heiti.ttf", 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
 
                 var but0 = panel.addsprite("greenButton.png").pos(500, 8).size(119, 42).setevent(EVENT_TOUCH, onReceive, i);
-                but0.addlabel(getStr("receive", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+but0.addlabel(getStr("receive", null), "fonts/heiti.ttf", 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
 
                 but0 = panel.addsprite("greenButton.png").pos(640, 8).size(119, 42).setevent(EVENT_TOUCH, onRefuse, i);
-                but0.addlabel(getStr("refuse", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+but0.addlabel(getStr("refuse", null), "fonts/heiti.ttf", 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
             }
             //uid name kind tid level time
             else if(data[i][0] == GIFT_REQ)
@@ -174,16 +174,16 @@ class RequestView extends MyNode
                 var objData = getData(gKind, gId);
                 if(gKind == EQUIP)
                 {
-                    panel.addlabel(getStr("friSendEquip", ["[NAME]", uName, "[ENAME]", objData.get("name"), "[LEVEL]", str(gLevel)]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+panel.addlabel(getStr("friSendEquip", ["[NAME]", uName, "[ENAME]", objData.get("name"), "[LEVEL]", str(gLevel)]), "fonts/heiti.ttf", 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
                 }
                 else
                 {
-                    panel.addlabel(getStr("friSendOthers", ["[NAME]", uName, "[ONAME]", objData.get("name")]), null, 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+panel.addlabel(getStr("friSendOthers", ["[NAME]", uName, "[ONAME]", objData.get("name")]), "fonts/heiti.ttf", 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
                 }
                 panel.addsprite(replaceStr(KindsPre[gKind], ["[ID]", gId])).pos(556, 13).size(30, 30);
 
                 but0 = panel.addsprite("greenButton.png").pos(640, 8).size(119, 42).setevent(EVENT_TOUCH, onGift, i);
-                but0.addlabel(getStr("receive", null), null, 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+but0.addlabel(getStr("receive", null), "fonts/heiti.ttf", 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
             }
         }
     }

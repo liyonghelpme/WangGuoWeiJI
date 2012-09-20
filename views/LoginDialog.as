@@ -25,9 +25,9 @@ class LoginDialog extends MyNode
         var dia = bg.addsprite("dialogLogin.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);  
         dia.addsprite("roleNameClose.png").pos(590, 31).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         var but0 = dia.addsprite("roleNameBut1.png").pos(61, 354).size(209, 61).setevent(EVENT_TOUCH, closeDialog);
-        but0.addlabel(getStr("nextTime", null), null, 25).pos(104, 30).anchor(50, 50);
+but0.addlabel(getStr("nextTime", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50);
         but0 = dia.addsprite("roleNameBut0.png").pos(323, 354).size(209, 61).setevent(EVENT_TOUCH, shareGift);
-        but0.addlabel(getStr("shareGift", null), null, 25).pos(104, 30).anchor(50, 50);
+but0.addlabel(getStr("shareGift", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50);
 
         var loginDays = curCmd.get("loginDays");//global.user.getValue("loginDays");
 
@@ -38,7 +38,7 @@ class LoginDialog extends MyNode
 
         for(var i = 0; i < 3; i++)
         {
-            dia.addlabel(str(now), null, 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);        
+dia.addlabel(str(now), "fonts/heiti.ttf", 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);
             var rewardKind;
             var rewardNum;
             var re;
@@ -61,12 +61,12 @@ class LoginDialog extends MyNode
             }
 
             dia.addsprite(PICS.get(rewardKind)).pos(POS[i]).anchor(50, 50).size(57, 53);
-            dia.addlabel(str(rewardNum), null, 25).color(68, 4, 7).anchor(50, 50).pos(REWARD[i]);
+dia.addlabel(str(rewardNum), "fonts/heiti.ttf", 25).color(68, 4, 7).anchor(50, 50).pos(REWARD[i]);
             //loginDays += 1;
             //loginDays %= len(reward);
             now += 1;
         }
-        dia.addlabel(str(now), null, 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);        
+dia.addlabel(str(now), "fonts/heiti.ttf", 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);
         dia.addsprite("loginQuestionMark.png").pos(495, 203).anchor(50, 0);
 
         showCastleDialog();

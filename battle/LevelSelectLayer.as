@@ -119,7 +119,7 @@ class LevelSelectLayer extends MyNode
         levelNode = null;
 
         var jz=bg.addsprite("map_label_big.png").size(150,45).anchor(0,0).pos(615,27).rotate(0);
-        jz.addlabel(getStr("mapIsland"+str(index), null),null,33).anchor(50,50).pos(75,22).color(0,0,0,100);
+jz.addlabel(getStr("mapIsland" + str(index), null), "fonts/heiti.ttf", 33).anchor(50, 50).pos(75, 22).color(0, 0, 0, 100);
         var back=bg.addsprite("map_back.png").pos(50,360);
         new Button(back, goBack, 0);
         var i;

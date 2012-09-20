@@ -12,7 +12,7 @@ class NoTipDialog extends MyNode
 
         bg = sprite("noTipDialog.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
-        bg.addlabel(getStr("tips", null), null, 30, FONT_BOLD).anchor(50, 50).pos(253, 34).color(100, 100, 100);
+bg.addlabel(getStr("tips", null), "fonts/heiti.ttf", 30, FONT_BOLD).anchor(50, 50).pos(253, 34).color(100, 100, 100);
 
 
         bg.addsprite("noTip.png").setevent(EVENT_TOUCH, closeDialog).pos(423, 282).anchor(50, 50);
