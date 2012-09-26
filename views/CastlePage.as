@@ -196,7 +196,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         //py - (1+1)*16 = pYN / 16 = 48
         //260048 特殊的固定建筑 不能移动 也不能任意的点击 由客户端确定的建筑
         banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner).scale(50);
-solNum = banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+        solNum = banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
 
         buildLayer = new BuildLayer(this);
         addChild(buildLayer);
@@ -278,6 +278,8 @@ solNum = banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anc
         moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
         return curBuild;
     }
+    /*
+    //直接构造士兵 接着更新士兵数据
     function buySoldier(id)
     {
         var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id), null, global.user.getNewSid());
@@ -288,9 +290,13 @@ solNum = banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anc
         global.user.updateSoldiers(newSol);
         return newSol;
     }
+    */
+
     /*
     先缩放再移动 保留旧的缩放比例
     屏幕中心移动到建筑物 或者士兵
+
+    根据建筑 还是 士兵 类型 确定 缩放比例
     */
     var oldScale = null;
     var oldPos = null;
@@ -398,17 +404,32 @@ solNum = banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anc
         solNum.text(str(global.user.getSolNum()));
     }
 
+    //购买士兵 只是增加士兵数量
+    //购买士兵 添加一个新的士兵
+    //士兵卖出 也更新士兵状态
     function receiveMsg(msg)
     {
 //        trace("receiveMsg", msg);
         if(msg[0] == BUYSOL)
         {
             solNum.text(str(global.user.getSolNum()));
+            var sid = msg[1];
+            if(sid != null)//不是卖出士兵
+            {
+                var sdata = global.user.getSoldierData(sid);
+                var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, sdata.get("id")), sdata, sid);
+                buildLayer.addSoldier(newSol);
+
+                newSol.setSmoke();
+                moveToBuild(newSol);
+                dialogController.addCmd(dict([["cmd", "waitTime"], ["time", 1500]]));
+                dialogController.addCmd(dict([["cmd", "roleName"], ["sol", newSol]]));
+                //global.director.pushView(new RoleName(null, newSol), 1, 0);
+            }
         }
         else if(msg[0] == LEVEL_UP)
         {
             dialogController.addCmd(dict([["cmd", "levup"], ["castlePage", this]]));
-            //fallGoods.genLevelUpFallGoods();
         }
     }
     function remove(c)

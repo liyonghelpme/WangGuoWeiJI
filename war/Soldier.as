@@ -1320,7 +1320,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     
     function doAppearAni()
     {
-        map.addChildZ(new MonSmoke(map, null, this, SMOKE_SKILL_ID), MAX_BUILD_ZORD);
+        map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], null), MAX_BUILD_ZORD);
     }
     function setAttackCofficient(sol, dif)
     {

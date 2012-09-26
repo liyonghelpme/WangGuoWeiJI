@@ -98,6 +98,7 @@ class BuildLayer extends MyNode
         return 0;
     }
 
+    //检测建筑物位置冲突
     function checkCollision(build)
     {
         var map = getBuildMap(build);
@@ -287,10 +288,13 @@ class BuildLayer extends MyNode
 
     function addSoldier(sol)
     {
-        addChildZ(sol, MAX_BUILD_ZORD);
-        sol.setPos(sol.getPos());
-        //global.user.addSoldier(sol);
-        mapGridController.allSoldiers.update(sol.sid, sol);
+        //士兵第一次添加
+        if(mapGridController.allSoldiers.get(sol.sid) == null)
+        {
+            addChildZ(sol, MAX_BUILD_ZORD);
+            sol.setPos(sol.getPos());
+            mapGridController.allSoldiers.update(sol.sid, sol);
+        }
     }
     function removeSoldier(sol)
     {

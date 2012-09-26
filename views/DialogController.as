@@ -63,6 +63,14 @@ class DialogController extends MyNode
                 {
                     global.director.pushView(new VisitDialog(scene), 1, 0);
                 }
+                else if(curCmd.get("cmd") == "waitTime")
+                {
+                    global.director.pushView(new Mask(curCmd["time"]), 0, 0);
+                }
+                else if(curCmd.get("cmd") == "roleName")
+                {
+                    global.director.pushView(new RoleName(null, curCmd["sol"]), 1, 0);
+                }
             }
         }
     }

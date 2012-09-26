@@ -157,7 +157,7 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     //工作时间长度
     override function initWorking(data)
     {
-        if(baseBuild.state == Working)
+        if(baseBuild.state == PARAMS["buildWork"])
         {
             var startTime = data.get("objectTime");//serverTime 秒为单位
             startTime = server2Client(startTime); 

@@ -16,8 +16,8 @@ class MenuLayer extends MyNode
 
     var banner;
     var MainMenuFunc = dict([
-    [0,["map","rank","plan","setting"]],
-    [1,["role","store","friend","mail"]],
+    [0, ["map","rank","plan","setting"]],
+    [1, ["role", "store","friend","mail"]],
     ]);
     /*
     不要设定图片的size属性否则图片会被缩放
@@ -41,7 +41,7 @@ class MenuLayer extends MyNode
 finNum = taskFin.addlabel("", "fonts/heiti.ttf", 18, FONT_BOLD).pos(17, 17).anchor(50, 50).color(100, 100, 100);
 
         expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
-        expback = banner.addsprite("level.png").scale(100,100).anchor(50, 50).pos(144,60);
+        expback = banner.addsprite("level0.png").scale(100,100).anchor(50, 50).pos(144,60);
         //16+144 = 160+5 = 165
         //165 - 143 = 22
         

@@ -47,7 +47,7 @@ class FightMenu extends MyNode
         bg = node();
         init();
 
-        bg.addsprite("map_back.png", RBINV).size(91, 59).pos(38, 399).anchor(0, 0).setevent(EVENT_TOUCH, returnHome);
+        bg.addsprite("map_back0.png", RBINV).size(91, 59).pos(38, 399).anchor(0, 0).setevent(EVENT_TOUCH, returnHome);
 
         black0 = sprite("storeBlack.png").pos(26, 9).size(463, 82);
         black0.addsprite("fightBlue.jpg").pos(13, 8);

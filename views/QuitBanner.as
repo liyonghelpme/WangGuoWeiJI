@@ -4,7 +4,7 @@ class QuitBanner extends MyNode
     var accTime = 0;
     function QuitBanner()
     {
-        bg = sprite("storeBlack2.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
+        bg = sprite("storeBlack.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         init();
 var word = bg.addlabel(getStr("quitNow", null), "fonts/heiti.ttf", 25).pos(154, 25).anchor(50, 50).color(100, 100, 100);
 

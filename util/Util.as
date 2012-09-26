@@ -538,23 +538,67 @@ function colorWords(str)
 }
 /*
 根据文字中格式标号决定颜色
+字符串 大小 正常颜色 加重颜色
 */
-function colorWordsNode(str, si, nc, sc)
+function colorWordsNode(s, si, nc, sc)
 {
     var n = node();
-    var end = str.split("]");
+    var end = s.split("]");
+
+    var curX = 0;
+    var height = 0;
+    for(var i = 0; i < len(end); i++)
+    {
+        if(end[i].find("[") != -1)//包含有特殊文字
+        {
+            var p = end[i].split("[");
+            if(len(p[0]) > 0)
+            {
+                var l = label(p[0], "fonts/heiti.ttf", si).color(nc).pos(curX, 0);
+                n.add(l);
+                var lSize = l.prepare().size();
+                curX += lSize[0];
+                height = lSize[1];
+            }
+
+            if(len(p[1]) > 0)
+            {
+                l = label(p[1], "fonts/heiti.ttf", si).color(sc).pos(curX, 0);
+                n.add(l);
+                lSize = l.prepare().size();
+                curX += lSize[0];
+                height = lSize[1];
+            }
+        }
+        else
+        {
+            if(len(end[i]) > 0)
+            {
+                l = label(end[i], "fonts/heiti.ttf", si).color(nc).pos(curX, 0);
+                n.add(l);
+                lSize = l.prepare().size();
+                curX += lSize[0];
+                height = lSize[1];
+            }
+        }
+    }
+    n.size(curX, height);
+    return n;
+
+    /*
     var begin = end[0].split("[");
-var l1 = label(begin[0], "fonts/heiti.ttf", si, FONT_BOLD).color(nc);
+    var l1 = label(begin[0], "fonts/heiti.ttf", si, FONT_BOLD).color(nc);
     var l1s = l1.prepare().size();
     n.add(l1);
 
-var l2 = label(begin[1], "fonts/heiti.ttf", si, FONT_BOLD).color(sc);
+    var l2 = label(begin[1], "fonts/heiti.ttf", si, FONT_BOLD).color(sc);
     var l2s = l2.prepare().size();
     l2.pos(l1s[0], 0);
     n.add(l2);
 
     n.size(l1s[0]+l2s[0], l1s[1]);
     return n;
+    */
 }
 
 function getMagicAnimate(id)
@@ -804,6 +848,7 @@ function insertArr(arr, obj, cmp)
 //返回node
 //font sz
 //lineHeight
+//size = 20 height 25
 function stringLines(s, sz, lineHeight, color, ft)
 {
     var n = node();
@@ -811,7 +856,7 @@ function stringLines(s, sz, lineHeight, color, ft)
     var nSize = [0, 0];
     for(var i = 0; i < len(s); i++)
     {
-var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, ft).pos(0, lineHeight * i).color(color);
+        var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, ft).pos(0, lineHeight * i).color(color);
         var lSize = lab.prepare().size();
         nSize[0] = max(lSize[0], nSize[0]);
         nSize[1] += lineHeight;
@@ -907,4 +952,47 @@ function multiScalar(d, s)
         }
     }
     return res;
+}
+function getColor(deg)
+{
+    deg = (deg+360)%360;
+    if(deg < 120)
+        return [(120-deg)*100/120,  0, deg*100/120];
+    if(deg < 240)
+    {
+        deg -= 120;
+        return [0, deg*100/120, (120-deg)*100/120];
+    }
+    deg -= 240;
+    return [deg*100/120, (120-deg)*100/120, 0];
+}
+
+//-180 180  120-- 对应100 偏移量
+//+30 R-G 
+function getHue(v)
+{
+    var r = getColor(-v);
+    var b = getColor(-v+120);
+    var g = getColor(-v+240);
+    
+    return m_color(
+        r[0], r[1], r[2], 0, 0,
+        g[0], g[1], g[2], 0, 0, 
+        b[0], b[1], b[2], 0, 0, 
+        0, 0, 0, 100, 0
+    );
+}
+
+function getClientNow()
+{
+    return time()/1000;
+}
+function getServerNow()
+{
+    var now = time()/1000;
+    return client2Server(now);
+}
+
+function doNothing()
+{
 }

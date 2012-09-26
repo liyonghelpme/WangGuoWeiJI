@@ -34,8 +34,8 @@ class ChildMenuLayer extends MyNode
     ["train", ["menu_button_train.png", onTrain]],
     ["upgrade", ["menu_button_upgrade.png", onUpgrade]],
 
-    ["allDrug", ["menu_button_drug.png", onAllDrug]],
-    ["allEquip", ["menu_button_equip.png", onAllEquip]],
+    ["allDrug", ["menu_button_allDrug.png", onAllDrug]],
+    ["allEquip", ["menu_button_allEquip.png", onAllEquip]],
     ["skill", ["menu_button_skill.png", onSkill]],
 
     //士兵状态
@@ -52,8 +52,21 @@ class ChildMenuLayer extends MyNode
     //爱心树
     ["love", ["menu1.png", onLove]],
     ["loveRank", ["menuLoveRank.png", onLoveRank]],
+
+    ["singleTrain", ["menu_button_train.png", onSingleTrain]],
+    ["upgradeBuild", ["menu_button_upgrade_build.png", onUpgrade]],
+
+    ["call", ["menu_button_call.png", onCall]],
     
     ]);
+    function onCall()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new CallSoldier(scene), 1, 0);
+    }
+    function onSingleTrain()
+    {
+    }
     function onLove()
     {
         global.director.curScene.closeGlobalMenu(this);
@@ -154,6 +167,7 @@ class ChildMenuLayer extends MyNode
     }
 
     //矿 升级
+    //民居升级
     function onUpgrade()
     {
         //建筑物关闭全局菜单
@@ -237,7 +251,7 @@ class ChildMenuLayer extends MyNode
         var h2 = len(otherFunc)*OFFY;
         var mH = max(height, h2);
         var offset = MIDY-mH/2;
-        bg=sprite("dark.png").scale(100,100).size(DARK_WIDTH, height);
+        bg=sprite("dark0.png").scale(100,100).size(DARK_WIDTH, height);
         if(index == 0){
             bg.anchor(0, 0).pos(0, offset);
         }
@@ -249,7 +263,6 @@ class ChildMenuLayer extends MyNode
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
-//            trace("funcs", funcs[i]);
             var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(DARK_WIDTH/2, OFFY/2+OFFY*i);
             new Button(button, model[1], null);
         }
@@ -287,10 +300,12 @@ class ChildMenuLayer extends MyNode
     两个步骤：
         建筑物产生功能
         全局关闭菜单
+
+    加速需要点击两次 才能 关闭菜单 因此由 建筑物 或者 士兵控制关闭
     */
     function onAcc()
     {
-        global.director.curScene.closeGlobalMenu(this);
+        //global.director.curScene.closeGlobalMenu(this);
         scene.doAcc();
     }
     function onForge()
@@ -312,7 +327,7 @@ class ChildMenuLayer extends MyNode
     */
     function onSell()
     {
-        global.director.curScene.closeGlobalMenu(this);
+        //global.director.curScene.closeGlobalMenu(this);
         scene.doSell();
     }
 

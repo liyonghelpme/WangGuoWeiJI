@@ -255,6 +255,25 @@ class BusiSoldier extends MyNode
         var bx = bloodTotalLen*health/healthBoundary;
         bloodBanner.size(bx, bloodHeight);
     }
+    //购买士兵 以烟雾显示
+    //烟雾显示 一定时间
+    //控制士兵不能乱跑 命名结束 之后 才可以
+    var oldState = null;
+    function setSmoke()
+    {
+        oldState = state;
+        state = SOL_NAME;
+        clearMoveState();//停止移动
+        map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], null), MAX_BUILD_ZORD);
+    }
+    function finishName()
+    {
+        if(oldState != null)
+        {
+            state = oldState;
+            oldState = null;
+        }
+    }
     function BusiSoldier(m, d, privateData, s)
     {
         sid = s;
@@ -271,7 +290,7 @@ class BusiSoldier extends MyNode
         var bSize = changeDirNode.prepare().size();
 
         var oldPos = global.user.getOldPos(sid);
-        if(oldPos == null)
+        if(oldPos == null)//默认出现位置 中心
             oldPos = [465, 720];
 
         bg.size(bSize).anchor(50, 100).pos(oldPos);
@@ -332,10 +351,8 @@ class BusiSoldier extends MyNode
         cost = changeToSilver(cost);
         global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
         //修改view
-        //map.removeChild(this); 
         map.sellSoldier(this);
         //修改数据
-        //global.user.sellSoldier(this);//修改士兵的装备属性
         global.msgCenter.sendMsg(BUYSOL, null);
     }
     function sellOver()
@@ -540,21 +557,29 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         showMenuYet = 1;
         var func1;
         var solOrMon = data.get("solOrMon");
+        //怪兽没有装备
         if(solOrMon == 1)
             func1 = ["photo", "drug"];
+        //普通士兵装备
         else
             func1 = ["photo", "drug", "equip"];
             
         var func2;
-        //trace("curStatus", curStatus);
-        if(curStatus != NO_STATUS)
-            func2 = ["menu"+str(curStatus), "gather"];
-        else
-            func2 = ["gather"];
-            
         var isHero = data.get("isHero");
-        if(isHero)
-            func2.append("skill");
+        if(isHero == 0)
+        {
+            if(curStatus != NO_STATUS)
+                func2 = ["menu"+str(curStatus), "singleTrain", "gather"];
+            else
+                func2 = ["singleTrain", "gather"];
+        }
+        else
+        {
+            if(curStatus != NO_STATUS)
+                func2 = ["menu"+str(curStatus), "singleTrain", "skill", "gather"];
+            else
+                func2 = ["singleTrain", "skill", "gather"];
+        }
             
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
     }
@@ -586,21 +611,6 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         //if(curStatus == NO_STATUS)
         map.touchEnded(n, e, p, x, y, points);
         //没有规划
-        /*
-        if(!Planing)
-        {
-            if(curStatus == BLOOD_STATUS)
-            {
-                clearStatus();
-                global.director.pushView(new DrugDialog(this, DRUG), 1, 0);
-            }
-            else if(curStatus == HEART_STATUS)
-            {
-                clearStatus();
-
-            }
-        }
-        */
     }
 
     function setName(n)
@@ -769,6 +779,7 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         if(showMenuYet == 1)//显示全局菜单停止移动 
             return;
         //到达目的地之后 进入等待状态
+        //SOL_POS 状态 移动到目的地
         if(inGame == 1 || state == SOL_POS)//正在游戏中 或者正在移动结束
         {
             if(state == SOL_POS)
@@ -813,6 +824,10 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         else if(state == SOL_WAIT)
         {
         }
+        //正在命名 停止移动
+        else if(state == SOL_NAME)
+        {
+        }
     }
     /*
     一个对象清空map状态的时候需要清除相应地图块的士兵和建筑物
@@ -827,11 +842,14 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     function keepPos()
     {
         Planing = 1;
-        bg.stop();//停止所有移动
+        bg.stop();//停止所有移动 设定状态 为空闲 
 
         startPos = getPos();
         startMap = curMap;
+        state = SOL_FREE;
+        map.mapGridController.clearSolMap(this); //清理自身的map
     }
+
     function restorePos()
     {
         map.mapGridController.clearSolMap(this); 
@@ -912,10 +930,10 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             var rd = rand(100);
             if(health < healthBoundary*2/3) 
             {
-                if(rd < 50)
-                    curStatus = BLOOD_STATUS;
-                else
-                    curStatus = HEART_STATUS;
+                //if(rd < 50)
+                curStatus = BLOOD_STATUS;
+                //else
+                //    curStatus = HEART_STATUS;
             }
             else
             {

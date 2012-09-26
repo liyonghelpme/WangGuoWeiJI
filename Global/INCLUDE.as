@@ -116,6 +116,7 @@ import fight.FightSoldier;
 import views.MoveMap;
 import views.MoveSoldier;
 
+import views.Camp;
 
 
 
@@ -203,6 +204,7 @@ import views.MapDefense;
 
 
 import views.DialogController;
+import views.Mask;
 import views.LoginDialog;
 import views.ScoreDialog;
 import views.LevupDialog;
@@ -217,6 +219,11 @@ import views.TrainOverDialog;
 import views.ChallengeFight;
 import views.ChallengeNeibor;
 import views.BreakDialog;
+
+
+import views.CallSoldier;
+import views.SoldierGoods;
+
 
 //菜单使用的按钮对象
 import views.Button;

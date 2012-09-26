@@ -204,6 +204,7 @@ class SelectMenu extends MyNode
             col = 0;
             updateMenu();
         }
+        //第一个英雄sid = 0
         else if(colNames.get(name) == null)
         {
             tooLong = 0;
@@ -226,10 +227,13 @@ class SelectMenu extends MyNode
     }
     function enterGame()
     {
+        //替换场景
         global.director.replaceScene(new CastleScene());
         global.director.pushView(new Loading(), 1, 0);//DarkNod
         //初始化场景数据 数据初始化结束之后 取出loading页面
-        global.user.initData();
+        //global.user.initData();
+        
+        global.msgCenter.sendMsg(INITDATA_OVER, null);
     }
     const BLOCK_W = 273;
     const BLOCK_H = 172;
@@ -243,6 +247,7 @@ class SelectMenu extends MyNode
         if(rcode != 0)
         {
             con = json_loads(con);
+            //命名正确初始化英雄
             if(con.get("id") != 0)
             {
                 checkName = 1;
@@ -250,6 +255,14 @@ class SelectMenu extends MyNode
                 var b2 = sprite("black.png", ARGB_8888).color(0, 0, 0, 30).size(global.director.disSize);
                 bg.add(b2, BLACK2);
 
+                //var solId = global.user.getNewSid();
+                //构造新的士兵数据初始化士兵
+                //学习英雄技能
+                //id sid name
+                var newSol = new BusiSoldier(null, getData(SOLDIER, curSelHero), null, global.user.getNewSid());
+                newSol.setName(name);
+                global.user.updateSoldiers(newSol);
+                global.user.addNewSkill(newSol.sid, heroSkill.get(newSol.id));
                 updateMenu();
             }
             else//名字重复 退回到上一步 显示名字冲突

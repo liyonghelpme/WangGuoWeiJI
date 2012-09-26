@@ -45,7 +45,6 @@ class LevelChoose extends MyNode
         init();
         initData();
         bg.addsprite("title"+str(big)+".png").pos(34, 15);
-        //bg.addsprite("map_back0.png").pos(704, 9).size(79, 58).setevent(EVENT_TOUCH, goBack);
         var but0 = new NewButton("map_back0.png", [79, 58], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], goBack, null);
         but0.bg.anchor(50, 50).pos(745, 38);
         bg.add(but0.bg);

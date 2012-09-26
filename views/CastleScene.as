@@ -217,7 +217,7 @@ class CastleScene extends MyNode
             return;
 
         var p = curBuild.getPos();
-        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir]]), null, null);
+        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["color", curBuild.buildColor]]), null, null);
 
         var id = curBuild.id; //building.get("id");
 
@@ -319,6 +319,8 @@ class CastleScene extends MyNode
         ml.finishBuild();
         mc.closeGlobalMenu();//还原场景状态
     }
+    /*
+    //取消功能
     function buySoldier(id)
     {
         var cost = getCost(SOLDIER, id);
@@ -330,10 +332,13 @@ class CastleScene extends MyNode
         global.httpController.addRequest("soldierC/buySoldier", dict([["uid", global.user.uid], ["sid", sol.sid], ["kind", sol.id]]), null, null);
         global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, sol.id]);
     }
+    */
+    /*
     function nameSoldier(sol, name)
     {
         sol.setName(name);
     }
+    */
     /*
     关闭全局菜单的时候 可以删除
     全局菜单 可能是 建筑物的 也可以是 士兵的

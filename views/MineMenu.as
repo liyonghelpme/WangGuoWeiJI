@@ -6,7 +6,7 @@ class MineMenu extends MyNode
         scene = s;
         bg = node();
         init();
-        bg.addsprite("map_back.png").pos(20, 460).size(62, 40).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
+        bg.addsprite("map_back0.png").pos(20, 460).size(62, 40).anchor(0, 100).setevent(EVENT_TOUCH, returnHome);
 
         var title = bg.addsprite("pageFriendTitle.png").pos(17, 13);
 title.addlabel("name", "fonts/heiti.ttf", 20).pos(100, 22).anchor(0, 50);

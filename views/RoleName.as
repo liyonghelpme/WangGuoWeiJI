@@ -1,6 +1,6 @@
 class RoleName extends MyNode
 {
-    var scene;
+    //var scene;
     var soldier;
     var inputView;
     //var preName = ["李", "王", "赵", "张", "谢", "司马", "诸葛", "南宫", "东方", "西门", "相里"];
@@ -9,7 +9,7 @@ class RoleName extends MyNode
     var male;
     function RoleName(s, sol)
     {
-        scene = s;
+        //scene = s;
         soldier = sol;
         male = soldier.data.get("maleOrFemale");
 
@@ -33,7 +33,7 @@ bg.addlabel(getStr("nameSol", null), "fonts/heiti.ttf", 25).pos(243, 29).anchor(
 
 
         inputView = v_create(V_INPUT_VIEW, 327, 214, 220, 50);
-warnText = bg.addlabel(getStr("nameNotNull", null), "fonts/heiti.ttf", 20).anchor(0, 0).pos(165, 150).color(100, 0, 0).visible(0);
+        warnText = bg.addlabel(getStr("nameNotNull", null), "fonts/heiti.ttf", 20).anchor(0, 0).pos(165, 157).color(100, 0, 0).visible(0);
 
         var but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(152, 265).anchor(50, 50).setevent(EVENT_TOUCH, randomName);
 but.addlabel(getStr("rand", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
@@ -108,7 +108,9 @@ but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100
             }
         }
 
-        scene.nameSoldier(soldier, inputView.text());
+        //scene.nameSoldier(soldier, inputView.text());
+        soldier.setName(inputView.text());
+        soldier.finishName();//结束士兵的命名状态
         global.director.popView();
     }
 

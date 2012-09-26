@@ -13,11 +13,15 @@ const NotBigZone = 0;
 const InZone = 1;
 const NotSmallZone = 2;
 
+//需要与 PARAMS 中进行 数据进行同步
+/*
 const Moving = 0;
 const Free = 1;
 const Working = 2;
 const ShowMenuing = 4;
 const Wait_Lock = 5;
+*/
+
 
 //植物的生长状态
 const SOW = 0;
@@ -31,6 +35,7 @@ const SOL_FREE = 0;
 const SOL_MOVE = 1;
 const SOL_WAIT = 2;
 const SOL_POS = 3;
+const SOL_NAME = 4;
 
 const INSPIRE = 1; 
 
@@ -62,6 +67,7 @@ const STATIC_BOARD = 8;
 const MINE_KIND = 9;
 const LOVE_TREE = 10;
 const RING_FIGHTING = 11;
+const CAMP = 12;
 
 
 const GRAY = m_color(
@@ -214,15 +220,17 @@ var skillAnimate = dict([
 
 
 var buildFunc = dict([
-[FARM_BUILD, [["photo"], ["sell", "acc"]]],
-[HOUSE_BUILD, [["photo"], ["sell"]]],
-[DECOR_BUILD, [[], []]],
-[CASTLE_BUILD, [["photo", "tip"], ["story", "soldier", "collection"]]],
-[GOD_BUILD, [["photo", "train"], ["relive", "transfer"]]],
+[FARM_BUILD, [["photo", "sell"], ["acc"]]],
+[HOUSE_BUILD, [["photo"], [ "sell" ]]],//"upgradeBuild"
+[DECOR_BUILD, [["photo"], ["sell"]]],
+[CASTLE_BUILD, [["photo", "story"], ["tip", "collection"]]],
+[GOD_BUILD, [["photo",  "soldier"], ["relive", "train"]]],
 [DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
 [MINE_KIND, [["photo"], ["upgrade"]]],
-[LOVE_TREE, [["photo"], ["love", "loveRank"]]],
+[LOVE_TREE, [["photo"], ["love", "loveRank"]]],//, "upgradeBuild"
+[RING_FIGHTING, [[], []]],
+[CAMP, [["photo", "sell"], ["call"]]],//accSoldier
 ]);
 
 
@@ -282,6 +290,7 @@ const FARM_ZONE = 0;
 const HOUSE_ZONE = 1;
 const DECOR_ZONE = 2;
 const MAIN_ZONE = 3;
+
 var ZoneCenter = [
 [2526, 626],
 [1533, 726],
@@ -698,7 +707,7 @@ const LAKE_MAP = 2;
 const CAVE_MAP = 3;
 const SNOWFIELD_MAP = 4;
 
-const SMOKE_SKILL_ID = 9;
+//const SMOKE_SKILL_ID = 9;
 
 //需要特定条件状态
 const NO_STATUS = -1;
@@ -753,3 +762,14 @@ const WAIT_PRINT = 4;
 const CHALLENGE_TIP = 0;
 const TRAIN_TIP = 1;
 const FIGHT_TIP = 2;
+
+const COLOR_INDEX = dict([
+[1, 0],
+[2, -163],
+]);
+
+const SOL_CATEGORY = dict([
+[0, "closePhy"],
+[1, "farPhy"],
+[2, "farMagic"],
+]);

@@ -50,7 +50,7 @@ class Farm extends FuncBuild
 //        trace("planting", data);
         if(data == null)
             return;
-        if(baseBuild.state != Working)
+        if(baseBuild.state != PARAMS["buildWork"])
             return;
         var id = data.get("objectId"); 
         var plant = getData(PLANT, id);//getPlant(id);
@@ -78,7 +78,7 @@ class Farm extends FuncBuild
     function beginPlant(id)
     {
         trace("beginPlant0");
-        baseBuild.setState(Working);
+        baseBuild.setState(PARAMS["buildWork"]);
 
         trace("beginPlant1");
         var plant = getData(PLANT, id);//getPlant(id);
@@ -98,7 +98,7 @@ class Farm extends FuncBuild
     {
         baseBuild.removeLock();
 
-        baseBuild.state = Free;
+        baseBuild.state = PARAMS["buildFree"];
         planting.removeSelf();
 
         var rate = baseBuild.data.get("rate", 1);
@@ -133,7 +133,7 @@ class Farm extends FuncBuild
     }
     override function getLeftTime()
     {
-        if(baseBuild.state == Working && planting != null)
+        if(baseBuild.state == PARAMS["buildWork"] && planting != null)
         {
             return planting.getLeftTime(); 
         }

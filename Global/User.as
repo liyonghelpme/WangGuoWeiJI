@@ -60,6 +60,8 @@ class User
     var maxGiftId = 0;
     var skills;
 
+    var lastColor;
+
     function getCurFinTaskNum()
     {
         var res = 0;
@@ -373,6 +375,40 @@ class User
             skills.update(k[0], v);
         }
     }
+    function checkLoveTreeLevel()
+    {
+        var key = buildings.keys();
+        var loveLevel = 0;
+        var loveBid;
+        for(var i = 0; i < len(key); i++)
+        {
+            var k = key[i];
+            var v = buildings[k];
+            if(v["id"] == PARAMS["loveTreeId"])
+            {
+                loveBid = k;
+                loveLevel = v["level"];
+                break;
+            }
+        }
+        if(loveLevel < len(loveTreeHeart))
+        {
+            var accNum = getValue("accNum");
+            var expectedLevel = loveLevel;
+            var needHeart = loveTreeHeart[expectedLevel];
+            while(accNum >= needHeart)
+            {
+                expectedLevel++;
+                needHeart = loveTreeHeart[expectedLevel];
+            }
+            if(expectedLevel > loveLevel)
+            {
+                global.httpController.addRequest("friendC/upgradeLoveTree", dict([["uid", uid], ["bid", loveBid], ["level", expectedLevel]]), null, null);
+                buildings[loveBid]["level"] = expectedLevel;
+            }
+        }
+
+    }
     var treasureStone;
     var week;
     var updateState;
@@ -387,12 +423,7 @@ class User
 
             uid = con.get("uid");//记忆用户uid 新手任务选择英雄时使用
             var newState = con.get("newState");
-            if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
-            {
-                //global.director.replaceScene(new WelcomeDialog());
-                global.msgCenter.sendMsg(NEW_USER, null);
-                return;
-            }
+
             registerTime = con.get("registerTime");
 
             week = con.get("week");
@@ -410,6 +441,7 @@ class User
             resource.update("weekNum", heart["weekNum"]);
             resource.update("accNum", heart["accNum"]);
             resource.update("liveNum", heart["liveNum"]);
+            //resource.update("heartExp", heart["heartExp"]);
             heartRank = heart.get("rank");
             
             //con.get("starNum")
@@ -457,10 +489,22 @@ class User
             db.put("tasks", tasks);
             db.put("treasureStone", treasureStone);
             
+            checkLoveTreeLevel();//爱心足够升级爱心树
 
-            
             initYet = 1;        
-            global.msgCenter.sendMsg(INITDATA_OVER, null);
+            /*
+            新手初始化完数据 接着 进入欢迎页面
+            */
+            if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
+            {
+                //global.director.replaceScene(new WelcomeDialog());
+                global.msgCenter.sendMsg(NEW_USER, null);
+                return;
+            }
+            else
+            {
+                global.msgCenter.sendMsg(INITDATA_OVER, null);
+            }
         }
         else
         {
@@ -487,16 +531,16 @@ class User
         starNum = [[[3], [3], [3], [3], [3], [3]], [[3], [3], [3], [3], [3], [3]], [[3], [3], [3], [3], [3], [3]], [[3], [3], [3], [3], [3], [3]], [[0], [0], [0], [0], [0], [0]]]; 
         buildings = dict([
             [0, dict([
-            ["id", 200], ["px", 1504], ["py", 640], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ["id", 200], ["px", 1504], ["py", 640], ["state", PARAMS["buildFree"]], ["dir", 0], ["objectId", 0], ["objectTime", 0]
             ])],
             [1, dict([
-            ["id", 202], ["px", 1664], ["py", 656], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ["id", 202], ["px", 1664], ["py", 656], ["state", PARAMS["buildFree"] ], ["dir", 0], ["objectId", 0], ["objectTime", 0]
             ])],
             [2, dict([
-            ["id", 204], ["px", 1280], ["py", 720], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ["id", 204], ["px", 1280], ["py", 720], ["state", PARAMS["buildFree"] ], ["dir", 0], ["objectId", 0], ["objectTime", 0]
             ])],
             [3, dict([
-            ["id", 206], ["px", 1728], ["py", 848], ["state", Free], ["dir", 0], ["objectId", 0], ["objectTime", 0]
+            ["id", 206], ["px", 1728], ["py", 848], ["state", PARAMS["buildFree"] ], ["dir", 0], ["objectId", 0], ["objectTime", 0]
             ])],
 
             ]);
@@ -582,8 +626,15 @@ class User
     {
     }
     var oldPos = null;
+    function getLastColor()
+    {
+        lastColor += 1;
+        lastColor %= 3;
+        return lastColor;
+    }
     function User()
     {
+        lastColor = rand(3);//0 1 2 兵营随机颜色 0 本色 1 特征色本色 2 特征色变化色
         papayaId = ppy_userid();
         if(papayaId == null)
             return;
@@ -745,6 +796,7 @@ class User
         //allBuildings.remove(build);
         db.put("buildings", buildings);
     }
+    //历史修改
     function tempUpdateBuilding(build)
     {
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
@@ -761,7 +813,7 @@ class User
         //trace(dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
 
         trace("updateBuilding", build, build.id, build.bid, build.getPos(), build.state, build.dir, build.getObjectId(), build.getStartTime());
-        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
+        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor]]));
         db.put("buildings", buildings);
     }
     /*
@@ -1248,6 +1300,7 @@ class User
 
     function checkCost(cost)
     {
+        trace("checkCost", cost);
         var buyable = dict([["ok", 1]]);
         var its = cost.items();
         for(var i = 0; i < len(its); i++)
@@ -1356,14 +1409,17 @@ class User
 
         global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
     }
+    function addNewSkill(soldierId, skillId)
+    {
+        var v = skills.get(soldierId, dict());
+        v.update(skillId, 0);
+        skills.update(soldierId, v);
+    }
     function buySkill(soldierId, skillId)
     {
         var cost = getCost(SKILL, skillId);
         doCost(cost);
-        var v = skills.get(soldierId, dict());
-        v.update(skillId, 0);
-        skills.update(soldierId, v);
-
+        addNewSkill(soldierId, skillId);
         global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
     }
     function upgradeSkill(soldierId, skillId)

@@ -8,11 +8,13 @@ class NewButton extends MyNode
     var param;
     var word;
     var oldSca;
+    var pc;
     function NewButton(pic, bs, w, ty, sz, bo, col, cb, pa)
     {
+        pc = pic;
         callback = cb;
         param = pa;
-        bg = sprite(pic).size(bs);
+        bg = sprite(pic).size(bs).anchor(50, 50);
         init();
         word = new ShadowWords(w, ty, sz, bo, col);
         word.bg.pos(bs[0]/2, bs[1]/2).anchor(50, 50);
@@ -22,6 +24,10 @@ class NewButton extends MyNode
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+    function setGray()
+    {
+        bg.texture(pc, GRAY); 
     }
 
     var player = null;

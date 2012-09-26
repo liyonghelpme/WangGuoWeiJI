@@ -33,3 +33,4 @@ global.user.initData();
 
 //global.director.pushView(new LevelChoose(null, 0), 1, 0);
 //global.director.pushScene(new MapScene());
+//global.director.pushView(new CallSoldier(null), 1, 0);

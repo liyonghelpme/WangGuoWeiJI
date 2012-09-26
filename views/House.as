@@ -15,6 +15,50 @@ class House extends FuncBuild
     {
         baseBuild = b;
     }
+    /*
+    function sureToUpgrade()
+    {
+        var cost = getUpgradeCost();
+        var buyable = global.user.checkCost(cost);
+        var people = getAddPeople();
+        global.director.pushView(new ResourceWarningDialog(
+                        getStr("upgradeHouseTit", null), 
+                                getStr("upgradeHouseCon", 
+                                        ["[NUM0]", str(people), 
+                                        "[NUM1]", str(baseBuild.buildLevel),
+                                        "[NUM2]", str(baseBuild.buildLevel),
+                                        "[NUM3]", str(cost.values()[0]),
+                                        "[KIND]", getStr(cost.keys()[0], null)]), doUpgrade, buyable, cost, "build"+str(baseBuild.id)+".png ), 1, 0);
+    }
+    function doUpgrade()
+    {
+        var cost = getUpgradeCost();
+        var silver = cost.get("silver", 0);
+        var crystal = cost.get("crystal", 0);
+        var gold = cost.get("gold", 0);
+        var people = getAddPeople();
+
+        global.httpController.addRequest("buildingC/upgradeBuild", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["silver", silver], ["crystal", crystal], ["gold", gold], ["people", people]]), null, null);
+
+        global.user.doCost(cost);
+        global.user.doAdd(dict([["people", people]]));
+
+        baseBuild.buildLevel += 1;
+        global.user.updateBuilding(baseBuild);
+    }
+    function checkUpgradeYet()
+    {
+        return 1;
+    }
+    function getUpgradeCost()
+    {
+        return dict([["gold", 10]]);
+    }
+    function getAddPeople()
+    {
+        return 1;
+    }
+    */
 }
 class LoveTree extends FuncBuild
 {
@@ -22,6 +66,37 @@ class LoveTree extends FuncBuild
     {
         baseBuild = b;
     }
+    /*
+    function sureToUpgrade()
+    {
+        var cost = getUpgradeCost();
+        var silver = cost.get("silver", 0);
+        var crystal = cost.get("crystal", 0);
+        var gold = cost.get("gold", 0);
+        var people = getAddPeople();
+
+        global.httpController.addRequest("buildingC/upgradeBuild", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["silver", silver], ["crystal", crystal], ["gold", gold], ["people", people]]), null, null);
+
+        global.user.doCost(cost);
+        global.user.doAdd(dict([["people", people]]));
+
+        baseBuild.buildLevel += 1;
+        global.user.updateBuilding(baseBuild);
+    }
+
+    function checkUpgradeYet()
+    {
+        return 1;
+    }
+    function getUpgradeCost()
+    {
+        return dict([["gold", 10]]);
+    }
+    function getAddPeople()
+    {
+        return 1;
+    }
+    */
 }
 class Decor extends FuncBuild
 {
@@ -29,10 +104,12 @@ class Decor extends FuncBuild
     {
         baseBuild = b;
     }
+    /*
     override function whenFree()
     {
         return 1; 
     }
+    */
 }
 class Castle extends FuncBuild
 {
@@ -54,6 +131,7 @@ class RingFighting extends FuncBuild
         return 1;
     }
 }
+/*
 class StaticBuild extends FuncBuild
 {
     var solNum;
@@ -85,3 +163,4 @@ solNum = baseBuild.bg.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 2
         global.msgCenter.removeCallback(BUYSOL, this);
     }
 }
+*/

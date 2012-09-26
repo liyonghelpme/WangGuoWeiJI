@@ -114,9 +114,11 @@ class Building extends MyNode
     var aniNode = null;
 
     var changeDirNode;
-    //水晶矿需要等级信息
+    //水晶矿需要等级信息 民居也需要等级信息
     var buildLevel = 0;
+    var buildColor = 0;
 
+    var featureColor = null;
     function Building(m, d, privateData)
     {
         map = m;
@@ -127,41 +129,69 @@ class Building extends MyNode
         kind = data.get("kind");
         funcs = data.get("funcs");
 
+        //购买建筑 随机颜色
+        if(privateData == null)
+        {
+            privateData = dict();
+            buildColor = global.user.getLastColor();
+        }
+        else
+            buildColor = privateData.get("color", 0);
+            
+
+        buildLevel = privateData.get("level", 0);
+
+
         if(funcs == FARM_BUILD)
             funcBuild = new Farm(this);
         else if(funcs == HOUSE_BUILD)
             funcBuild = new House(this);
         else if(funcs == DECOR_BUILD)
             funcBuild = new Decor(this);
-        else if(funcs == STATIC_BOARD)
-            funcBuild = new StaticBuild(this); 
+        //取消static 木板建筑
+        //else if(funcs == STATIC_BOARD)
+        //    funcBuild = new StaticBuild(this); 
         else if(funcs == MINE_KIND)
         {
             funcBuild = new Mine(this);
             //等级大于6级水晶进入工作状态
             var level = global.user.getValue("level");
             if(level >= MINE_BEGIN_LEVEL)
-                privateData["state"] = Working;
+                privateData["state"] = PARAMS["buildWork"];
             else 
-                privateData["state"] = Free;
+                privateData["state"] = PARAMS["buildFree"];
             buildLevel = privateData.get("level");
         }
         else if(funcs == RING_FIGHTING)
         {
             funcBuild = new RingFighting(this); 
         }
-        /*
-        else if(funcs == LOVE_TREE)
+        else if(funcs == LOVE_TREE)//没有卖出 有升级
         {
-            funcBuild = new Decor(this);
+            funcBuild = new LoveTree(this);
         }
-        */
+        else if(funcs == CAMP)//类似于 Farm 招募 加速招募 卖出 招募士兵的类型ID
+        {
+            funcBuild = new Camp(this);
+        }
         else 
             funcBuild = new Castle(this);
 
         bg = node();
-        changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
+        if(funcs != LOVE_TREE)
+            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
+        else//爱心树图片和等级相关
+            changeDirNode = bg.addsprite("build"+str(id+buildLevel)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
         
+        //非本身颜色的建筑物颜色 根据编号设定颜色
+        //1 采用标准特征色
+        //2 采用其他特征色
+        if(buildColor != 0)
+        {
+            var fc = COLOR_INDEX[buildColor];
+            fc = getHue(fc);
+            featureColor = changeDirNode.addsprite("build"+str(id)+"_f.png", fc);
+        }
         var offY = 0;
         if(data.get("isoView") == 1)
         {
@@ -179,16 +209,20 @@ class Building extends MyNode
         //.pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
         
         init();
+
+        dir = privateData.get("dir", 0);
+        setState(privateData.get("state", PARAMS["buildMove"]));
+        /*
         if(privateData != null)//初始化数据建筑
         {
-            dir = privateData.get("dir", 0);
-            setState(privateData.get("state", Moving));
+
         }
         else//新建建筑
         {
             dir = 0;
-            setState(Moving);
+            setState(PARAMS["buildMove"]);
         }
+        */
         setDir(dir);
 
         var npos = normalizePos(bg.pos(), sx, sy);
@@ -290,7 +324,7 @@ class Building extends MyNode
     /*
     更新建筑物的zOrd 根据当前的y值进行排序
     每次设置新的坐标前 清楚旧的坐标map 构建新的坐标map
-    可以在移动开始的时候 清楚坐标映射 Moving 状态 和 Planing 状态
+    可以在移动开始的时候 清楚坐标映射 PARAMS["buildMove"] 状态 和 Planing 状态
     在放下的时候 重新映射
 
     
@@ -301,7 +335,7 @@ class Building extends MyNode
 //        trace("setPos", p);
         var curPos = p;
         var zOrd = curPos[1];
-        if(state == Moving || (Planing && global.director.curScene.curBuild == this))
+        if(state == PARAMS["buildMove"] || (Planing && global.director.curScene.curBuild == this))
             zOrd = MAX_BUILD_ZORD;
 //        trace("setZord", zOrd);
         bg.pos(p);
@@ -323,8 +357,9 @@ class Building extends MyNode
     function setColPos()
     {
         colNow = 0;
-        var z = buildCheckInZone();
-        if(z == NotBigZone)
+        //var z = buildCheckInZone();
+        var ret = checkInZone(bg.pos());
+        if(ret == 0)
         {
             setColor(NotBigZone);
             colNow = 1;
@@ -380,7 +415,7 @@ class Building extends MyNode
     function setState(s)
     {
         state = s;
-        if((state == Moving) || Planing == 1)
+        if((state == PARAMS["buildMove"]) || Planing == 1)
         {
             var bSize = bg.size();
             /*
@@ -394,6 +429,7 @@ class Building extends MyNode
 
     }
 
+    /*
     function buildCheckInZone()
     {
         var ret = checkInZone(bg.pos());
@@ -404,12 +440,13 @@ class Building extends MyNode
         }
         return InZone;
     }
+    */
     /*
     建造时，防止重叠， 将建筑物放在最高层，建造结束调整建筑物的位置
     */
     function finishBuild()
     {
-        setState(Free);
+        setState(PARAMS["buildFree"]);
         finishBottom();
         setZord(null);
         global.user.updateBuilding(this);
@@ -454,7 +491,7 @@ class Building extends MyNode
         /*
         规划状态 如果点击 则需要更新
         */
-        if(state == Moving || Planing)
+        if(state == PARAMS["buildMove"] || Planing)
         {
             dirty = 1;
             map.mapGridController.clearMap(this);
@@ -520,7 +557,7 @@ class Building extends MyNode
         lastPoints = n.node2world(x, y);
         var difx = lastPoints[0] - oldPos[0];
         var dify = lastPoints[1] - oldPos[1];
-        if(state == Moving || Planing)
+        if(state == PARAMS["buildMove"] || Planing)
         {
             if(global.director.curScene.curBuild != this)
                 return;
@@ -542,9 +579,23 @@ class Building extends MyNode
 
     function showGlobalMenu()
     {
+        acced = 0;
+        selled = 0;
         showMenuYet = 1;
         var func = getBuildFunc(funcs);
-//        trace("getFunc", func, funcs);
+        var temp = [0, 0];
+        temp[0] = copy(func[0]);
+        temp[1] = copy(func[1]);
+
+        func = temp;
+        
+        if(funcs == CAMP)
+        {
+            if(state == PARAMS["buildWork"])
+            {
+                func[1].append("acc");
+            }
+        }
         global.director.pushView(new BuildWorkMenu(this, func[0], func[1]), 0, 0);
     }
     var showMenuYet = 0;
@@ -557,11 +608,11 @@ class Building extends MyNode
     {
 
         var ret;
-        if((state == Moving) || Planing)
+        if((state == PARAMS["buildMove"]) || Planing)
         {
             if(global.director.curScene.curBuild != this)
                 return;
-            if(colNow == 0 && state != Moving)//无冲突规划状态 清除zord 和 底座
+            if(colNow == 0 && state != PARAMS["buildMove"])//无冲突规划状态 清除zord 和 底座
             {
                 setZord(null);
                 //finishBottom();
@@ -574,7 +625,7 @@ class Building extends MyNode
         建筑物私有对象如果没有处理改功能， 那就采用统一的弹出功能菜单的方案
         例如 城堡 民居 装饰物
         */
-        else if(state == Free && accMove < 20)
+        else if(state == PARAMS["buildFree"] && accMove < 20)
         {
             ret = funcBuild.whenFree();
             if(ret == 0)
@@ -588,7 +639,7 @@ class Building extends MyNode
         /*
         工作中的农田显示
         */
-        else if(state == Working)
+        else if(state == PARAMS["buildWork"])
         {
             if(showMenuYet == 0)
             {
@@ -617,10 +668,11 @@ class Building extends MyNode
 
     function getName()
     {
-        if(funcs != MINE_KIND)
-            return data.get("name");
-        return data.get("name")+"等级"+str(buildLevel);
+        //if(funcs != MINE_KIND)
+        return data.get("name");
+        //return getStr("buildLevel", ["[NAME]", data.get("name"), "[LEV]", str(buildLevel)]);
     }
+
     /*
     返回当前工作状态的剩余时间 和建筑物类型相关
     */
@@ -633,29 +685,45 @@ class Building extends MyNode
     建筑物加速
     只提供功能 但是不会操作 view
     */
+    var acced = 0;
     function doAcc()
     {
-//        trace("doAcc state", state);
-        if(state == Working)
+        var gold = funcBuild.getAccCost();
+        var cost = dict([["gold", gold]]);
+        var buyable = global.user.checkCost(cost);
+        if(buyable.get("ok") == 0)
         {
-            global.director.pushView(new AccDialog(this), 1, 0);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr("gold", null), "[NUM]", str(gold)]) , [100, 100, 100], null));
+            return;            
+        }
+
+        if(state == PARAMS["buildWork"])
+        {
+            //global.director.pushView(new AccDialog(this), 1, 0);
             //funcBuild.doAcc();
+            if(acced == 0)
+            {
+                acced += 1;
+                global.director.curScene.addChild(new UpgradeBanner(getStr("sureToGenAcc", ["[NUM]", str(gold)]) , [100, 100, 100], null));
+            }
+            else
+            {
+                acced = 0;
+                global.director.curScene.closeGlobalMenu(this);
+                funcBuild.doAcc();
+            }
         }
     }
     /*
-    function getAccCost()
-    {
-        return funcBuild.getAccCost();
-    }
-    */
     function sureToAcc()
     {
 //        trace("doAcc state", state);
-        if(state == Working)
+        if(state == PARAMS["buildWork"])
         {
             funcBuild.doAcc();
         }
     }
+    */
     /*
     当buildLayer 加入 和清楚建筑物的时候， 相应的处理建筑物的状态
     通过 点击子菜单的 sell按钮来卖出 子菜单 直接 调用 建筑物的卖出函数 子菜单 再关闭自己
@@ -663,18 +731,47 @@ class Building extends MyNode
 
     建筑的函数 只提供功能， 但是 不会 去操作view
     */
+    var selled = 0;
     function doSell()
     {
-        global.director.pushView(new SellDialog(this), 1, 0);
-    }
-    function sureToSell()
-    {
-        global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid]]), null, null);
         var cost = getCost(BUILD, id);
         cost = changeToSilver(cost);
+        if(funcs == DECOR_BUILD && data.get("exp") > 0)
+        {
+            cost.update("silver", 0);
+        }
+        if(selled == 0)
+        {
+            selled = 1;
+            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(cost.get("silver", 0))]) , [100, 100, 100], null));
+        }
+        else
+        {
+            selled = 0; 
+            global.director.curScene.closeGlobalMenu(this);
+            
+            global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid], ["silver", cost.get("silver", 0)]]), null, null);
+            global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
 
-//        trace("sureToSell", cost);
+            global.user.changeValue("people", -data.get("people"));//减去人口
+            global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
 
+            map.sellBuild(this);
+        }
+        //global.director.pushView(new SellDialog(this), 1, 0);
+    }
+    /*
+    //加经验建筑物 不会返还银币
+    function sureToSell()
+    {
+        var cost = getCost(BUILD, id);
+        cost = changeToSilver(cost);
+        if(funcs == DECOR_BUILD && data.get("exp") > 0)
+        {
+            cost.update("silver", 0);
+        }
+
+        global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid], ["silver", cost.get("silver", 0)]]), null, null);
         global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
 
         global.user.changeValue("people", -data.get("people"));//减去人口
@@ -684,6 +781,7 @@ class Building extends MyNode
         map.sellBuild(this);
         //global.user.sellBuild(this);
     }
+    */
 
     function sellOver()
     {
@@ -693,12 +791,12 @@ class Building extends MyNode
     {
         global.director.getPid(); 
     }
-    var oldState = Free;
+    var oldState = PARAMS["buildFree"];
     var lockAni = null;
     function waitLock(tar)
     {
         oldState = state;
-        state = Wait_Lock;
+        state = PARAMS["buildWait"];
         var bSize = bg.size();
         lockAni = bg.addnode();
         var HEI = -20;
