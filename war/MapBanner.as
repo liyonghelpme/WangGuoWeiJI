@@ -84,12 +84,6 @@ class MapBanner extends MyNode
         shadowWord.addaction(itintto(0, 0, 0, 0));
         words = null;
 
-        /*
-        cl.setevent(EVENT_TOUCH, touchBegan);
-        cl.setevent(EVENT_MOVE, touchMoved);
-        cl.setevent(EVENT_UNTOUCH, touchEnded);
-        */
-        //updateTab();
         onMove(null, null, 0, null, null, null);
     }
 
@@ -214,12 +208,9 @@ panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fo
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
-        //var sid = data[p][0];
 
         lastPoints = newPos;
         accMove = 0;
-
-        //touchPos = bg.world2node(newPos[0], newPos[1]); 
 
         touchPos = n.node2world(0, 0);
         touchPos = bg.world2node(touchPos[0], touchPos[1]);//x 位置
@@ -228,24 +219,32 @@ panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fo
 
         n.texture("mapSel.png");
 
-        /*
-        //不能添加士兵 需要accMove
-        controlSoldier = scene.map.addSoldier(sid);
-        if(controlSoldier == null)
+    }
+    //地图给出空闲位置
+    function putSoldierOnMap(sid)
+    {
+        var sol = scene.map.addSoldier(sid);
+        if(sol == null) 
             return;
-
-
-
-        setCurChooseSol(controlSoldier);
-
-        var mPos = scene.map.bg.world2node(newPos[0], newPos[1]);
-        controlSoldier.setPos(mPos);
-        
-        controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, newPos[0], newPos[1], points);
-        data[p][1] = 1;
-
-        */
-
+        var mPos = scene.map.getInitPos(sol);
+        if(mPos[0] != -1)
+        {
+            sol.setPos(mPos);
+            for(var i = 0; i < len(data); i++)
+            {
+                if(data[i][0] == sid)
+                {
+                    data[i][1] = 1;
+                    break;
+                }
+            }
+            scene.map.setMap(sol);
+            updateTab();
+        }
+        else
+        {
+            scene.map.removeSoldier(sol); 
+        }
     }
     function touchMoved(n, e, p, x, y, points)
     {

@@ -104,6 +104,7 @@ import views.CastleScene;
 //建筑物
 //采用组合的方式 将farm相关的行为 实现在farm中
 import views.Building;
+import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
 
@@ -240,6 +241,7 @@ import model.SoldierBase;
 import views.MyWarningDialog;
 import views.ShadowWords;
 import views.NewButton;
+import views.BannerController;
 
 
 
@@ -295,6 +297,7 @@ global.friendController = new FriendController();
 global.taskModel = new TaskModel();
 global.mailController = new MailController();
 global.fightModel = new FightModel();
+global.bannerController = new BannerController();
 
 
 

@@ -152,6 +152,9 @@ class Farm extends FuncBuild
         global.httpController.addRequest("buildingC/accPlant", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["gold", planting.getAccCost()]]), null, null);
         planting.finish();
         global.user.updateBuilding(baseBuild);
+
+        var showData = cost; 
+        global.director.curScene.addChild(new PopBanner(cost2Minus(showData)));//自己控制
     }
 }
 

@@ -304,8 +304,19 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
     {
         oldScale = bg.scale();
         var sm = 150;
-        if(build.isBuilding == 0)
+        if(build.isBuilding == 0)//士兵 缩放 200
             sm = 200;
+        touchDelegate.scaleToMax(sm);
+
+        oldPos = bg.pos();
+        var bSize = build.bg.size();
+        var bPos = build.getPos();
+        bPos[1] -= bSize[1]/2;
+        moveToPoint(bPos[0], bPos[1]);
+    }
+    function moveToNormal(build)
+    {
+        var sm = 100;
         touchDelegate.scaleToMax(sm);
 
         oldPos = bg.pos();
@@ -401,6 +412,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         global.timer.addTimer(this);
         global.msgCenter.registerCallback(BUYSOL, this);
         global.msgCenter.registerCallback(LEVEL_UP, this);
+        global.msgCenter.registerCallback(FINISH_NAME, this);
         solNum.text(str(global.user.getSolNum()));
     }
 
@@ -430,6 +442,10 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         else if(msg[0] == LEVEL_UP)
         {
             dialogController.addCmd(dict([["cmd", "levup"], ["castlePage", this]]));
+        }
+        else if(msg[0] == FINISH_NAME)
+        {
+            moveToNormal(msg[1]); 
         }
     }
     function remove(c)
@@ -464,6 +480,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(FINISH_NAME, this);
         global.msgCenter.removeCallback(LEVEL_UP, this);
         global.msgCenter.removeCallback(BUYSOL, this);
         global.timer.removeTimer(this);

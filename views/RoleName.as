@@ -111,6 +111,7 @@ but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100
         //scene.nameSoldier(soldier, inputView.text());
         soldier.setName(inputView.text());
         soldier.finishName();//结束士兵的命名状态
+        global.msgCenter.sendMsg(FINISH_NAME, soldier);
         global.director.popView();
     }
 

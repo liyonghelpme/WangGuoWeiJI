@@ -524,6 +524,7 @@ const UPDATE_TASK = 14;
 const UPDATE_SOL = 15;
 const UPDATE_EXP = 16;
 const NEW_USER = 17;
+const FINISH_NAME = 18;
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;

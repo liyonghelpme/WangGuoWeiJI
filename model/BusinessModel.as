@@ -98,6 +98,7 @@ function getLoginReward(day)
 
 
 
+/*
 function showCost(bg, cost)
 {
     var it = cost.items();
@@ -110,6 +111,7 @@ temp.addlabel("-" + str(it[i][1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, 
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
 }
+*/
 
 
 function getFarmEnableNum()

@@ -711,6 +711,7 @@ class Building extends MyNode
                 acced = 0;
                 global.director.curScene.closeGlobalMenu(this);
                 funcBuild.doAcc();
+
             }
         }
     }
@@ -730,16 +731,24 @@ class Building extends MyNode
     通过 点击规划菜单的按钮来卖出
 
     建筑的函数 只提供功能， 但是 不会 去操作view
+
+    卖出增加 银币
+    卖出减少 人口 城堡防御力
     */
     var selled = 0;
     function doSell()
     {
         var cost = getCost(BUILD, id);
+        trace("buildCost", cost);
         cost = changeToSilver(cost);
+        trace("buildCost", cost);
         if(funcs == DECOR_BUILD && data.get("exp") > 0)
         {
             cost.update("silver", 0);
         }
+        trace("buildCost", cost);
+
+
         if(selled == 0)
         {
             selled = 1;
@@ -751,11 +760,19 @@ class Building extends MyNode
             global.director.curScene.closeGlobalMenu(this);
             
             global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid], ["silver", cost.get("silver", 0)]]), null, null);
-            global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
 
-            global.user.changeValue("people", -data.get("people"));//减去人口
-            global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
+            //不使用飞行银币增加 使用黑色框 减去 人口 城堡防御力 增加银币
+            //global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
 
+
+            //逐渐调整 跳出 多个条目
+            var showData = dict([["silver", cost.get("silver")], ["people", -data.get("people")], ["cityDefense", -data.get("cityDefense") ]]);
+            global.user.doAdd(showData);
+            //global.user.changeValue("people", -data.get("people"));//减去人口
+            //global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
+
+            global.director.curScene.addChild(new PopBanner(showData));//自己控制
+             
             map.sellBuild(this);
         }
         //global.director.pushView(new SellDialog(this), 1, 0);

@@ -185,24 +185,25 @@ class SoldierGoods extends MyNode
             {
                 var idCan = child.get(); 
 
+                //士兵人数超出 50
+                //士兵人数超出 民居数量
                 if(idCan[1] == 1)//等级足够显示职业介绍
                 {
+                    /*
                     var curSolNum = global.user.getSolNum();
                     var peopleNum = global.user.getPeopleNum();
                     if(curSolNum >= MAX_BUSI_SOLNUM)
                     {
                         global.director.pushView(new MyWarningDialog(getStr("solTooMany", null), getStr("sorrySol", null), null), 1, 0);
                     }
-                    /*
                     else if(curSolNum < peopleNum)
                         global.director.pushView(new ProfessionIntroDialog(this, idCan[0]), 1, 0);
-                    else
-                    */
                     else if(curSolNum > peopleNum)
                         global.director.pushView(new MyWarningDialog(getStr("houseNot", null), getStr("buildHouse", null), solNotEnough), 1, 0);
                     else
                     {
                     }
+                    */
                 }
             }
         }

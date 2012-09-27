@@ -793,7 +793,6 @@ class User
     function sellBuild(build)
     {
         buildings.pop(build.bid);
-        //allBuildings.remove(build);
         db.put("buildings", buildings);
     }
     //历史修改
@@ -1300,7 +1299,7 @@ class User
 
     function checkCost(cost)
     {
-        trace("checkCost", cost);
+        //trace("checkCost", cost);
         var buyable = dict([["ok", 1]]);
         var its = cost.items();
         for(var i = 0; i < len(its); i++)

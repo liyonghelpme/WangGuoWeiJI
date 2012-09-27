@@ -64,9 +64,13 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.closeGlobalMenu(this);
         global.director.pushView(new CallSoldier(scene), 1, 0);
     }
+    //单人练级 传入当前人物
     function onSingleTrain()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new TrainDialog(scene.sid), 1, 0);
     }
+
     function onLove()
     {
         global.director.curScene.closeGlobalMenu(this);
@@ -180,7 +184,7 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.closeGlobalMenu(this);
         //scene.doTrain();
         //没有士兵则无法练级
-        global.director.pushView(new TrainDialog(), 1, 0);
+        global.director.pushView(new TrainDialog(null), 1, 0);
     }
     function onDrug()
     {

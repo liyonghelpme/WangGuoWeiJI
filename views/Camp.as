@@ -31,6 +31,14 @@ class CampWorkNode extends MyNode
         global.timer.removeTimer(this);
         super.exitScene();
     }
+    function clearFlowBanner()
+    {
+        if(flowBanner != null)
+        {
+            flowBanner.removefromparent();
+            flowBanner = null;
+        }
+    }
 }
 class Camp extends FuncBuild
 {
@@ -49,8 +57,7 @@ class Camp extends FuncBuild
         if(leftTime <= 0)//收获 但是更新士兵数据需要构造一个虚拟的士兵对象来调用 user接口来初始化士兵数据
         {
             workNode.removeSelf();
-            workNode.flowBanner.removefromparent();
-            workNode.flowBanner = null;
+            workNode.clearFlowBanner();
 
             var sid = global.user.getNewSid();
             var newSol = new BusiSoldier(null, getData(SOLDIER, objectId), null, sid);
@@ -59,7 +66,8 @@ class Camp extends FuncBuild
             global.httpController.addRequest("buildingC/finishCall", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["sid", sid]]), null, null);//收获之后 命名士兵
             
 
-            //newSol.setSmoke();
+            baseBuild.state = PARAMS["buildFree"];
+            global.user.updateBuilding(baseBuild);
 
             return 1;
         }
@@ -86,6 +94,9 @@ class Camp extends FuncBuild
         global.user.updateBuilding(baseBuild);
 
         global.httpController.addRequest("buildingC/accWork", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["objectKind", SOLDIER], ["gold", gold]]), null, null);
+
+        var showData = cost; 
+        global.director.curScene.addChild(new PopBanner(cost2Minus(showData)));//自己控制
     }
     override function getAccCost()
     {

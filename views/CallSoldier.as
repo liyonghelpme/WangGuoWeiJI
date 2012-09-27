@@ -68,6 +68,19 @@ class CallSoldier extends MyNode
     {
         if(curSelSol != null)
         {
+            var curSolNum = global.user.getSolNum();
+            var peopleNum = global.user.getPeopleNum();
+            if(curSolNum >= MAX_BUSI_SOLNUM)
+            {
+                global.director.curScene.addChild(new UpgradeBanner(getStr("sorrySol", null), [100, 100, 100], null));
+                return;
+            }
+            else if(curSolNum > peopleNum)
+            {
+                global.director.curScene.addChild(new UpgradeBanner(getStr("buildHouse", null), [100, 100, 100], null));
+                return;
+            }
+
             var id = curSelSol[0]; 
             var cost = getCost(SOLDIER, id);
             var buyable = global.user.checkCost(cost);
@@ -190,7 +203,6 @@ class CallSoldier extends MyNode
         else
         {
             accTime = 0;
-            //global.user.doCost(cost);
             scene.funcBuild.doAcc();
             global.director.popView();//加速结束后 应该显示收获图标
         }

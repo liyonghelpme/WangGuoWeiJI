@@ -132,17 +132,28 @@ class BattleScene extends MyNode
     var double;
     var difficult;
     //uid, papayaId, score rank cityDefense
-    
-    //big small soldiers kind double difficult
+    //训练 单人训练需要传入派出士兵的sid 多人训练
+    //big small soldiers kind [double, single] difficult
+    //普通挑战 闯关
     //big small soldiers kind param equips
+    
+    var singleSid = null;
+    /*
+    想要增加一个士兵到地图上需要MapBanner 和 Map 同时参与
+    */
     function BattleScene(k, sm, s, ki, par, eq)
     {
-        difficult = eq;
-        double = par;
-
-        param = par;
         kind = ki;
         //进攻或者防守擂台
+        if(kind == CHALLENGE_TRAIN)
+        {
+            double = par[0];
+            singleSid = par[1];
+            difficult = eq;
+        }
+        else
+            param = par;
+
         if(kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
             user = param[6];
         //soldierId ---> {skillId, level}
@@ -181,16 +192,17 @@ class BattleScene extends MyNode
         big = k;
         small = sm;
         if(kind == CHALLENGE_TRAIN)
-            map = new Map(k, sm, s, this, null);
+            map = new Map(k, sm, null, this, null);
         else
             map = new Map(k, sm, s, this, eq);
 
         addChild(map);
         banner = new MapBanner(this);
         addChild(banner);
-
-
-
+        if(singleSid != null)
+        {
+            banner.putSoldierOnMap(singleSid);
+        }
     }
     //防御力的key = 10*big+small 
     function getEneDefense()

@@ -88,8 +88,12 @@ class StandardTouchHandler
     {
         var oldScale = bg.scale();
 
-        if(oldScale[0]+sca >= scaMax || oldScale[0]+sca <= scaMin)
+        if(oldScale[0] >= scaMax && sca > 0)
             return;
+        if(oldScale[0] <= scaMin && sca < 0)
+            return;
+        //if(oldScale[0]+sca >= scaMax || oldScale[0]+sca <= scaMin)
+        //    return;
 
         bg.scale(oldScale[0]+sca, oldScale[1]+sca);
         var leftTop = bg.world2node(0, 0);

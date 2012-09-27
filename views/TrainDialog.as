@@ -13,11 +13,11 @@ class TrainDialog extends MyNode
     var but1;
     var but0;
     var buyWord;
-    function TrainDialog()
+    var soldier;
+    //如果是单人练级则把 人物放到地图上
+    function TrainDialog(s)
     {
-
-        //var curDifLevel = getCurEnableDif();
-        //var bigLevel = curDifLevel[0]; 
+        soldier = s;
         var bigLevel = getMaxBigEnable();
 
         var posMon = monsterAppear.get(bigLevel);
@@ -106,7 +106,7 @@ but1.addlabel(getStr("generalExp", null), "fonts/heiti.ttf", 35).pos(107, 32).an
                 var bigLevel = getMaxBigEnable();
                 global.director.pushScene(
                     new BattleScene(bigLevel, 0, 
-                        null, CHALLENGE_TRAIN, 1, curChoose
+                        null, CHALLENGE_TRAIN, [1, soldier], curChoose
                     )
                 );
             }
@@ -119,7 +119,7 @@ but1.addlabel(getStr("generalExp", null), "fonts/heiti.ttf", 35).pos(107, 32).an
         var bigLevel = getMaxBigEnable();
         global.director.pushScene(
             new BattleScene(bigLevel, 0, 
-                null, CHALLENGE_TRAIN, 0, curChoose
+                null, CHALLENGE_TRAIN, [0, soldier], curChoose
             )
         );
         

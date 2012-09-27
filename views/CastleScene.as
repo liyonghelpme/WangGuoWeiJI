@@ -222,10 +222,10 @@ class CastleScene extends MyNode
         var id = curBuild.id; //building.get("id");
 
         var cost = getCost(BUILD, id);
-        showCost(curBuild.bg, cost);
+        global.director.curScene.addChild(new PopBanner(cost2Minus(cost)));//自己控制
+        //showCost(curBuild.bg, cost);
 
         global.user.doCost(cost);
-        //var gain = getBuildGain(id);
         var gain = getGain(BUILD, id);
         
         //增加经验 防御力 人口显示奖励 消耗银币水晶金币 显示FlyObject 自动增加数值

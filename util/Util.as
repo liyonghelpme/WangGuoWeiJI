@@ -584,21 +584,6 @@ function colorWordsNode(s, si, nc, sc)
     }
     n.size(curX, height);
     return n;
-
-    /*
-    var begin = end[0].split("[");
-    var l1 = label(begin[0], "fonts/heiti.ttf", si, FONT_BOLD).color(nc);
-    var l1s = l1.prepare().size();
-    n.add(l1);
-
-    var l2 = label(begin[1], "fonts/heiti.ttf", si, FONT_BOLD).color(sc);
-    var l2s = l2.prepare().size();
-    l2.pos(l1s[0], 0);
-    n.add(l2);
-
-    n.size(l1s[0]+l2s[0], l1s[1]);
-    return n;
-    */
 }
 
 function getMagicAnimate(id)
@@ -738,16 +723,17 @@ function changeToSilver(data)
     var addSilver = 0;
     for(var i = 0; i < len(key); i++)
     {
-        var val = data.get(key[i]);
-        if(key == "gold")
+        var k = key[i];
+        var val = data.get(k);
+        if(k == "gold")
         {
-            addSilver += val*1000/SELL_RATE;
+            addSilver += val*PARAMS["gold2Silver"]/PARAMS["sellRate"];
         }
-        else if(key == "crystal")
+        else if(k == "crystal")
         {
-            addSilver += val*500/SELL_RATE;
+            addSilver += val*PARAMS["crystal2Silver"]/PARAMS["sellRate"];
         }
-        else if(key == "silver")
+        else if(k == "silver")
             addSilver += val/SELL_RATE;
     }
     data = dict([["silver", addSilver]]);
@@ -995,4 +981,17 @@ function getServerNow()
 
 function doNothing()
 {
+}
+
+function cost2Minus(cost)
+{
+    var it = cost.items();
+    var data = dict();
+    for(var i = 0; i < len(it); i++)
+    {
+        var k = it[i][0];
+        var v = it[i][1];
+        data.update(k, -v);
+    }
+    return data;
 }

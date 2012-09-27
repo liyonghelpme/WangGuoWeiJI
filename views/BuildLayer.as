@@ -138,10 +138,10 @@ class BuildLayer extends MyNode
         return null;
     }
 
+    //只是调整数据
     function sellBuild(build)
     {
         removeChild(build);
-        //allBuildings.remove(build);
         mapGridController.allBuildings.remove(build);
         global.user.sellBuild(build);
     }

@@ -1071,10 +1071,11 @@ var strings = dict([
 ["calling", "正在招募[NAME]\n剩余时间 [TIME]"],
 ["accCall", "   [NUM]  加速"],
 ["ok2", "    确定"],
-["sureToAcc", "再次点击确定加速招募 | 加速价格为[NUM]金币"],
-["sureToSell", "再次点击确定卖出 | 卖出价格[NUM]银币"],
-["sureToGenAcc", "再次点击确定加速 | 加速价格为[NUM]金币"],
+["sureToAcc", "再次点击确定加速招募 | 加速价格为[[NUM]金币]"],
+["sureToSell", "再次点击确定卖出 | 卖出价格[[NUM]银币]"],
+["sureToGenAcc", "再次点击确定加速 | 加速价格为[[NUM]金币]"],
 ["finishCall", "收获士兵"],
+["opSuc", "操作成功 | [[NUM][KIND]]"],
 ]);
 
 

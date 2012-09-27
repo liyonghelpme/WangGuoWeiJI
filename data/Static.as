@@ -188,4 +188,4 @@ var fightingCostKey = ["crystal", "defenseReward", "attackReward", "gold", "atta
 var fightingCostData = dict( [[0, [100, 10, 20, 0, 10, 0]], [1, [1000, 10, 20, 0, 10, 1]], [2, [0, 10, 20, 10, 10, 2]], [3, [0, 10, 20, 100, 10, 3]]] );
 
 
-var PARAMS = dict( [["bigNum", 5], ["buildMove", 0], ["loveTreeLevel", 15], ["buildShowMenu", 4], ["campId", 224], ["failTime", 86400], ["buildFree", 1], ["buildWork", 2], ["buildWaitLock", 5], ["maxFailNum", 10], ["smokeSkillId", 9], ["loveTreeId", 208], ["smallNum", 7]] );
+var PARAMS = dict( [["sellRate", 10], ["bigNum", 5], ["crystal2Silver", 10], ["loveTreeLevel", 15], ["buildWaitLock", 5], ["gold2Silver", 100], ["campId", 224], ["failTime", 86400], ["buildFree", 1], ["buildMove", 0], ["buildWork", 2], ["buildShowMenu", 4], ["maxFailNum", 10], ["smokeSkillId", 9], ["loveTreeId", 208], ["smallNum", 7]] );

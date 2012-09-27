@@ -261,6 +261,7 @@ class BusiSoldier extends MyNode
     var oldState = null;
     function setSmoke()
     {
+        bg.addaction(fadein(1000));
         oldState = state;
         state = SOL_NAME;
         clearMoveState();//停止移动
