@@ -49,7 +49,7 @@ class CallSoldier extends MyNode
 
         goods = new SoldierGoods(this);
         
-        blueButton = new NewButton("blueButton.png", [150, 44], getStr("callSol", null), null, 18, FONT_NORMAL, [100, 100, 100], onCall, null);
+        blueButton = new NewButton("blueButton.png", [150, 44], getStr("callSol", null), null, 25, FONT_NORMAL, [100, 100, 100], onCall, null);
         blueButton.bg.pos(130, 432).anchor(50, 50);
         addChild(blueButton);
 
@@ -139,16 +139,16 @@ class CallSoldier extends MyNode
                 //怪兽
                 if(soldier["solOrMon"] == 1)
                 {
-                    s = stringLines(getStr("monDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 20, 25, [100, 100, 100], FONT_NORMAL );
+                    s = stringLines(getStr("monDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 19, 23, [100, 100, 100], FONT_NORMAL );
                 }
                 //普通士兵
                 else if(soldier["isHero"] == 0)
                 {
-                    s = stringLines(getStr("solDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 20, 25, [100, 100, 100], FONT_NORMAL );
+                    s = stringLines(getStr("solDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 19, 23, [100, 100, 100], FONT_NORMAL );
                 }
                 else
                 {
-                    s = stringLines(getStr("heroDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 20, 25, [100, 100, 100], FONT_NORMAL );
+                    s = stringLines(getStr("heroDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 19, 23, [100, 100, 100], FONT_NORMAL );
                 }
 
                 infoLabel = s;
@@ -166,7 +166,7 @@ class CallSoldier extends MyNode
             
             if(scene.state != PARAMS["buildWork"])
             {
-                blueButton = new NewButton("blueButton.png", [150, 44], getStr("callSol", null), null, 18, FONT_NORMAL, [100, 100, 100], onCall, null);
+                blueButton = new NewButton("blueButton.png", [150, 44], getStr("callSol", null), null, 25, FONT_NORMAL, [100, 100, 100], onCall, null);
                 if(!can)
                 {
                     blueButton.setGray();
@@ -176,8 +176,8 @@ class CallSoldier extends MyNode
             else
             {
                 var gold = scene.funcBuild.getAccCost();
-                blueButton = new NewButton("violetBut.png", [150, 44], getStr("accCall", ["[NUM]", str(gold)]), null, 18, FONT_NORMAL, [100, 100, 100], onAcc, null);
-                blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(21, 25).size(36, 36);
+                blueButton = new NewButton("violetBut.png", [173, 53], getStr("accCall", ["[NUM]", str(gold)]), null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
+                blueButton.bg.addsprite("gold.png").anchor(0, 0).pos(5, 7).size(36, 36);
             }
             blueButton.bg.pos(130, 432).anchor(50, 50);
             addChild(blueButton);
@@ -243,9 +243,9 @@ class CallSoldier extends MyNode
     }
     function initText()
     {
-        silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(621, 37);
+        cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(621, 37);
         goldText = bg.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(474, 37);
-        cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(318, 36);
+        silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(318, 36);
 
     }
     function updateValue(res)

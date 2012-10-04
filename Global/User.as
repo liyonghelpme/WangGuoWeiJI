@@ -403,6 +403,7 @@ class User
             }
             if(expectedLevel > loveLevel)
             {
+                global.msgCenter.sendMsg(UPGRADE_LOVE_TREE, loveLevel);
                 global.httpController.addRequest("friendC/upgradeLoveTree", dict([["uid", uid], ["bid", loveBid], ["level", expectedLevel]]), null, null);
                 buildings[loveBid]["level"] = expectedLevel;
             }
@@ -414,6 +415,7 @@ class User
     var updateState;
     var registerTime;
     var heartRank;
+    var hour;
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
@@ -423,6 +425,7 @@ class User
 
             uid = con.get("uid");//记忆用户uid 新手任务选择英雄时使用
             var newState = con.get("newState");
+            hour = con.get("hour");
 
             registerTime = con.get("registerTime");
 

@@ -50,6 +50,7 @@ class ChildMenuLayer extends MyNode
     ["menu8", ["menu8.png", onMoon]],
 
     //爱心树
+    ["invite", ["menu_button_invite.png", onInvite]],
     ["love", ["menu1.png", onLove]],
     ["loveRank", ["menuLoveRank.png", onLoveRank]],
 
@@ -59,6 +60,9 @@ class ChildMenuLayer extends MyNode
     ["call", ["menu_button_call.png", onCall]],
     
     ]);
+    function onInvite()
+    {
+    }
     function onCall()
     {
         global.director.curScene.closeGlobalMenu(this);

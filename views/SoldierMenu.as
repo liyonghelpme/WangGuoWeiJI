@@ -7,7 +7,8 @@ class SoldierMenu extends MyNode
         bg = node();
         var banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
         init();
-        banner.addlabel(getStr("level", null), "fonts/heiti.ttf", 19).pos(37, 33).anchor(0, 50);
+        //banner.addlabel(getStr("level", null), "fonts/heiti.ttf", 19).pos(37, 33).anchor(0, 50);
+        banner.addsprite("menuLevel.png").pos(37, 33).anchor(0, 50);
 
         banner.addlabel(str((soldier.level + 1) + 1), "fonts/heiti.ttf", 19).anchor(0, 50).pos(98, 33).color(100, 100, 100);
         banner.addsprite("dialogSolHealth.png").pos(172, 33).anchor(50, 50);
@@ -27,31 +28,44 @@ class SoldierMenu extends MyNode
         var nameBanner = sprite("soldierMenu.png").pos(11, -29);
         banner.add(nameBanner, -1);
 
-        var career = getCareerLev(soldier.id); 
-        var totalName = getStr(CAREER_TIT[career], null)+soldier.data.get("name");
-        nameBanner.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", totalName]), "fonts/heiti.ttf", 18).pos(9, 15).anchor(0, 50).color(38, 86, 93, 100);
-
-        var tranLevel = getTransferLevel(soldier);
-        var w;
-        if(tranLevel > 0)
-            w = getStr("transferLev", ["[LEVEL]", str(tranLevel)]);
-        else
-            w = getStr("noTransfer", null);
-        nameBanner.addlabel(w, "fonts/heiti.ttf", 20).anchor(0, 50).pos(442, 15).color(0, 0, 0);
-
-        var level = soldier.id%10;
-        var initX = 300;
-        var initY = 15;
-        for(var i = 0; i < 4; i++)
+        
+        var solOrMon = soldier.data["solOrMon"];
+        if(solOrMon == 0)//普通士兵
         {
-            var filter = WHITE;
-            if(i > level)
-                filter = GRAY;
-            if(i < 3)
-                nameBanner.addsprite("soldierLev0.png", filter).pos(initX, initY).anchor(50, 50);
-            else
-                nameBanner.addsprite("soldierLev1.png", filter).pos(initX, initY).anchor(50, 50);
-            initX += 30;
+            var career = getCareerLev(soldier.id); 
+            var totalName = getStr(CAREER_TIT[career], null)+soldier.data.get("name");
+            nameBanner.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", totalName]), "fonts/heiti.ttf", 18).pos(9, 15).anchor(0, 50).color(38, 86, 93, 100);
+
+            var tranLevel = getTransferLevel(soldier);
+            var w;
+            if(tranLevel > 0)
+            {
+                w = getStr("transferLev", ["[LEVEL]", str(tranLevel)]);
+                nameBanner.addlabel(w, "fonts/heiti.ttf", 20).anchor(0, 50).pos(442, 15).color(0, 0, 0);
+            }
+            //else
+            //  w = getStr("noTransfer", null);
+
+
+            var level = soldier.id%10;
+            var initX = 300;
+            var initY = 15;
+            for(var i = 0; i < 4; i++)
+            {
+                var filter = WHITE;
+                if(i > level)
+                    filter = GRAY;
+                if(i < 3)
+                    nameBanner.addsprite("soldierLev0.png", filter).pos(initX, initY).anchor(50, 50);
+                else
+                    nameBanner.addsprite("soldierLev1.png", filter).pos(initX, initY).anchor(50, 50);
+                initX += 30;
+            }
+        }
+        else
+        {
+            nameBanner.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", soldier.data["name"]]), "fonts/heiti.ttf", 18).pos(9, 15).anchor(0, 50).color(38, 86, 93, 100);
+            
         }
         
         var left = new ChildMenuLayer(0, func1, soldier, func2);

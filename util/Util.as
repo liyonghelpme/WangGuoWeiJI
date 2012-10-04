@@ -187,10 +187,15 @@ function getBuildGain(id)
 */
 //KIND*100000+id = key --->data
 var dataPool = dict();
+function getObjKey(kind, id)
+{
+    return kind*10000+id;
+}
 function getData(kind, id)
 {
     //trace("getData", kind, id);
-    var key = kind*100000+id;
+    //var key = kind*100000+id;
+    var key = getObjKey(kind, id);
     var ret = dataPool.get(key, null);
     if(ret == null)
     {
@@ -536,6 +541,88 @@ function colorWords(str)
 //    trace("color", begin, lenBegin);
     return [begin[0], begin[1], lenBegin];
 }
+//多行文字
+//每行有多个颜色组成
+//每个区间前6个字符表示颜色
+//rrggbbxxxxx\nrrggbbxxxxxx\nrrggbbxxxxxxx]rrggbbxxxxx]
+//rrggbbxxxxx]rrggbbxxxx]rrggbbxxxxxx]
+/*
+function stringLines(s, sz, lineHeight, color, ft)
+{
+    var n = node();
+    s = s.split("\n");
+    var nSize = [0, 0];
+    for(var i = 0; i < len(s); i++)
+    {
+        var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, ft).pos(0, lineHeight * i).color(color);
+        var lSize = lab.prepare().size();
+        nSize[0] = max(lSize[0], nSize[0]);
+        nSize[1] += lineHeight;
+    }
+    n.size(nSize);
+    return n;
+}
+*/
+//hex xx--->0-255
+function hex2int(s)
+{
+    var temp = 0;
+    var zero = ord("0");
+    var aord = ord("a");
+    var v = ord(s[0]);
+    if((v-zero) < 10)
+        temp += v-zero;
+    else
+        temp += v-aord+10;
+    temp *= 16;
+    v = ord(s[1]);
+    if((v-zero) < 10)
+        temp += (v-zero);
+    else
+        temp += v-aord+10;
+    return temp;
+}
+function byte2Hundred(v)
+{
+    return v*100/255;
+}
+function colorLines(w, sz, lineHeight)
+{
+    var n = node();
+    w = w.split("\n");
+    var nSize = [0, 0];
+
+    var curY = 0;
+    var curX = 0;
+    for(var i = 0; i < len(w); i++)
+    {
+        var line = w[i];
+        var end = line.split("]");
+        for(var j = 0; j < len(end); j++)
+        {
+            var part = end[j];
+            if(len(part) > 0)
+            {
+                var r = byte2Hundred(hex2int(part.substr(0, 2)));
+                var g = byte2Hundred(hex2int(part.substr(2, 4)));
+                var b = byte2Hundred(hex2int(part.substr(4, 6)));
+                part = part.substr(6);
+                
+                var l = label(part, "fonts/heiti.ttf", sz).color(r, g, b).pos(curX, curY);
+                n.add(l);
+                var lSize = l.prepare().size();
+                curX += lSize[0];
+                if(curX > nSize[0])
+                    nSize[0] = curX;
+            }
+        }
+        curX = 0;
+        curY += lineHeight;
+    }
+    nSize[1] = curY;
+    n.size(nSize);
+    return n;
+}
 /*
 根据文字中格式标号决定颜色
 字符串 大小 正常颜色 加重颜色
@@ -667,8 +754,13 @@ function getNodeSca(n, box)
 function getSca(n, box)
 {
     var nSize = n.prepare().size();
-    var sca = min(box[0]*100/nSize[0], box[1]*100/nSize[1]);
-    sca = max(min(150, sca), 50);
+    if(nSize[0] > box[0] || nSize[1] > box[1])//只有超过最大尺寸的才缩放
+    {
+        var sca = min(box[0]*100/nSize[0], box[1]*100/nSize[1]);
+        //sca = max(min(150, sca), 50);
+    }
+    else
+        sca = 100;
     return sca;
 }
 function removeTempNode(n)
@@ -994,4 +1086,43 @@ function cost2Minus(cost)
         data.update(k, -v);
     }
     return data;
+}
+
+//从服务器获取serverTime时间 根据时间
+function showTimeColor()
+{
+    var hour = global.user.hour;
+    trace("curHour", hour);
+    if(hour >= 5 && hour < 11)
+        return getHue(-180);
+    if(hour <= 15 && hour >= 11)
+        return getHue(-100);
+    return getHue(0);
+}
+
+function checkTip(k)
+{
+    var readYet = global.user.db.get("readYet", dict());
+    if(type(readYet) != type(dict()))
+    {
+        readYet = dict();
+    }
+    return readYet.get(k, null);
+}
+
+function getLoveTreeLeftNum(treeLevel)
+{
+    var leftNum = 0;
+    if(treeLevel < len(loveTreeHeart))
+        leftNum = loveTreeHeart[treeLevel] - global.user.getValue("accNum");
+    return leftNum;
+}
+
+function showFullBack()
+{
+    var tc = showTimeColor();
+    trace("full", tc);
+    var temp = sprite("dialogLoginBack0.jpg", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, 80);
+    temp.addsprite("dialogLoginStar.png", ARGB_8888);
+    return temp;
 }

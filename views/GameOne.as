@@ -1,4 +1,5 @@
 //类似于 buildMenu 等全局菜单 隐藏菜单栏
+//士兵瞬间移动到 训练场中心
 class GameOne extends MyNode
 {
     var sol;

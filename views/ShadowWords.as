@@ -5,7 +5,7 @@ class ShadowWords extends MyNode
     {
 bg = label(w, "fonts/heiti.ttf", sz, bo).color(col);
         init();
-shadow = label(w, "fonts/heiti.ttf", sz, bo).color(0, 0, 0).pos(1, 2);
+shadow = label(w, "fonts/heiti.ttf", sz, bo).color(0, 0, 0).pos(1, 1);
         bg.add(shadow, -1);
     }
     function setWords(w)

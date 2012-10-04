@@ -140,7 +140,10 @@ class CastleScene extends MyNode
     function finishPlan()
     {
         if(curBuild != null && curBuild.colNow == 1)
+        {
+            trace("collision now", curBuild.colNow);
             return;
+        }
 
         mc.buildLayer.finishPlan();
         closePlan();
@@ -159,7 +162,8 @@ class CastleScene extends MyNode
     {
         curBuild.doSell();
         //global.director.popView();
-        curBuild = null;
+        if(curBuild.selled == 0)//当前农田已经卖出了 需要设置当前建筑为空
+            curBuild = null;
     }
     function cancelPlan()
     {

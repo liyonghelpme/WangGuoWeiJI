@@ -20,7 +20,7 @@ class BuildMenu extends MyNode
         {
             inPlan = 1;
         }
-        bg = sprite("buildMenuBack.jpg").pos(0, global.director.disSize[1]).anchor(0, 100);
+        bg = sprite("buildMenuBack.png").pos(0, global.director.disSize[1]).anchor(0, 100);
 
 
         buttonNode = null;
@@ -73,9 +73,9 @@ class BuildMenu extends MyNode
         if(building == null)
         {
             if(setYet == 1)//改变了建筑物状态 所以需要ok
-                buttonNode.addsprite("buildOk0.png").pos(687, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
-            buttonNode.addsprite("buildCancel1.png").pos(744, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-buttonNode.addlabel(getStr("chooseBuild", null), "fonts/heiti.ttf", WORD_SZ).pos(W_X, BUT_Y).anchor(0, 50).color(100, 100, 100);
+                buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+            buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+            buttonNode.addlabel(getStr("chooseBuild", null), "fonts/heiti.ttf", WORD_SZ).pos(W_X, BUT_Y).anchor(0, 50).color(100, 100, 100);
             return;
         }
 
@@ -93,53 +93,66 @@ buttonNode.addlabel(getStr("chooseBuild", null), "fonts/heiti.ttf", WORD_SZ).pos
         /*
         士兵只有确认和取消按钮
         */
-        if(opKind == PLAN_SOLDIER)
+        if(opKind == PLAN_SOLDIER)//规划士兵
         {
-            buttonNode.addsprite("buildOk0.png").pos(687, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
-            buttonNode.addsprite("buildCancel1.png").pos(744, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
+            trace("SolbuildOk", buildOk);
+            buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+            buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+            buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
         }
-        else if(opKind == PLAN_BUILDING)
+        else if(opKind == PLAN_BUILDING)//规划建筑物
         {
             var kind = building.get("kind");
-            if(building.get("changeDir") == 0)
+
+            if(building.get("changeDir") == 0)//不能旋转
             {
-                if(kind == FARM_ZONE && inPlan == 1)
-                    buttonNode.addsprite("buildSell0.png").pos(687-OFFX*2, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
-                    
-                buttonNode.addsprite("buildOk0.png").pos(687, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
-                buttonNode.addsprite("buildCancel1.png").pos(744, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
+
+                if(kind == FARM_ZONE)//农田
+                {
+                    if(inPlan)
+                    {
+                        buttonNode.addsprite("buildSell0.png").anchor(0, 0).pos(726, 8).size(48, 48).setevent(EVENT_TOUCH, onSell);
+                    }
+                }
+                buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+                buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+
+                buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
             }
             else
             {
-                if(kind == FARM_ZONE && inPlan == 1)
-                    buttonNode.addsprite("buildSell0.png").pos(633-OFFX*2, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, onSell);
+                trace("buildOk", buildOk);
+                buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+                buttonNode.addsprite("buildSwitch0.png").anchor(0, 0).pos(668, 8).size(48, 48).setevent(EVENT_TOUCH, onSwitch);
+                buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
 
-                buttonNode.addsprite("buildOk0.png").pos(633, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildOk);
-                buttonNode.addsprite("buildSwitch0.png").pos(687, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, onSwitch);
-                buttonNode.addsprite("buildCancel1.png").pos(744, BUT_Y).anchor(50, 50).setevent(EVENT_TOUCH, buildCancel);
-buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
+                buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
             }
         }
     }
+    //农田建筑第一次卖出不设置为空 第二次卖出设置为空
+    //第一次卖出 不设置 为空选项
+    //第二次卖出才设置
     function onSell()
     {
+        if(scene.curBuild.selled == 1)
+            setBuilding(null);
         scene.onSell();   
         //卖出建筑成功后 清空当前控制条的显示
-        setBuilding(null);
     }
 
-    function finishPlan()
+    function finishPlan(n, e, p, x, y, points)
     {
+        trace("finishPlan");
         scene.finishPlan();
     }
-    function cancelPlan()
+    function cancelPlan(n, e, p, x, y, points)
     {
         scene.cancelPlan();
     }
     function onOk(n, e, p, x, y, points)
     {   
+        trace("finisBuilding");
         scene.finishBuild();
     }
     function onSwitch(n, e, p, x, y, points)

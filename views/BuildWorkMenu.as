@@ -51,7 +51,8 @@ class BuildWorkMenu extends MyNode
         }
         else if(bData.get("funcs") == LOVE_TREE)
         {
-            cw = colorWordsNode(getStr("loveInfo", ["[LEV]", str(build.buildLevel)]), 21, [100, 100, 100], [89, 72, 18]);
+            var leftNum = getLoveTreeLeftNum(build.buildLevel);
+            cw = colorWordsNode(getStr("loveInfo", ["[LEV]", str(build.buildLevel+1), "[NUM]", str(leftNum)]), 21, [100, 100, 100], [89, 72, 18]);
         }
         else if(bData.get("funcs") == HOUSE_BUILD)
         {
@@ -60,7 +61,9 @@ class BuildWorkMenu extends MyNode
         else if(bData.get("funcs") == CASTLE_BUILD)
         {
             cw = colorWordsNode(getStr("castleInfo", ["[LEV]", str(global.user.getValue("level")), "[NUM]", str(global.user.getValue("cityDefense"))]), 21, [100, 100, 100], [89, 72, 18]);
-            banner.addsprite("buildDefense.png").anchor(50, 50).pos(335, 34).setevent(EVENT_TOUCH, onDefense);
+            
+            //bg.addsprite("buildDefense.png").anchor(0, 0).pos(322, 21).size(27, 27);
+            banner.addsprite("buildDefense.png").anchor(0, 0).pos(322, 21).setevent(EVENT_TOUCH, onDefense);
         }
         else if(bData.get("funcs") == CAMP)
         {
@@ -84,29 +87,14 @@ class BuildWorkMenu extends MyNode
         cw.pos(31, 32).anchor(0, 50);
         banner.add(cw);
 
-        banner.addsprite("buildTip.png").pos(756, 32).anchor(50, 50).setevent(EVENT_TOUCH, onInfo);
-        //banner.addlabel(build.getName(), "fonts/heiti.ttf", 18).pos(44, 30).anchor(0, 50).color(100, 100, 100, 100);
+        //bg.addsprite("buildTip.png").anchor(0, 0).pos(737, 14).size(38, 36);
+
+        banner.addsprite("buildTip.png").pos(737, 14).anchor(0, 0).setevent(EVENT_TOUCH, onInfo);
 
 
         if(state == PARAMS["buildWork"])
         {
             timeLabel = cw;
-            //banner.addlabel(getStr("working", null), "fonts/heiti.ttf", 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
-            //timeLabel = banner.addlabel("", "fonts/heiti.ttf", 18).pos(660, 30).color(100, 100, 100, 100).anchor(0, 50);
-        }
-        else
-        {
-            /*
-            var kind = build.kind;
-            if(kind == HOUSE_BUILD)
-            {
-banner.addlabel(getStr("peopleCapacity", ["[NUM]", str(build.data.get("people"))]), "fonts/heiti.ttf", 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
-            }
-            else if(kind == CASTLE_BUILD)
-            {
-banner.addlabel(getStr("viliDefense", ["[NUM]", str(global.user.getValue("cityDefense"))]), "fonts/heiti.ttf", 18).color(100, 100, 100, 100).anchor(0, 50).pos(570, 30);
-            }
-            */
         }
 
         var left = new ChildMenuLayer(0, func1, build, func2);

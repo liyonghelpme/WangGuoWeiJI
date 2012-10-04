@@ -228,7 +228,7 @@ var buildFunc = dict([
 [DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
 [MINE_KIND, [["photo"], ["upgrade"]]],
-[LOVE_TREE, [["photo"], ["love", "loveRank"]]],//, "upgradeBuild"
+[LOVE_TREE, [["photo", "invite"], ["love", "loveRank"]]],//, "upgradeBuild"
 [RING_FIGHTING, [[], []]],
 [CAMP, [["photo", "sell"], ["call"]]],//accSoldier
 ]);
@@ -353,9 +353,9 @@ var addKey = ["people", "cityDefense", "attack", "defense", "health", "gainsilve
 var costKey = ["silver", "gold", "crystal", "papaya", "free"];
 
 //必须name 引用string中内容
-var freeKey = ["id", "name", "free"];
+var freeKey = ["id", "name", "free", "showGain"];
 var freeData = dict([
-[0, [0, "free0", 1]],
+[0, [0, "free0", 1, 0]],
 ]);
 
 
@@ -439,12 +439,12 @@ var KindsPre = [
     "build[ID].png",
     "equip[ID].png",
     "drug[ID].png",
-    "goldBig.png",
-    "silverBig.png",
-    "crystalBig.png",
+    "storeGold.png",
+    "storeSilver.png",
+    "storeCrystal.png",
     "Wplant[ID].png",
     "soldier[ID].png",
-    "goldBig.png",
+    "storeGold.png",
     "task",
     "herb[ID].png",
     "prescription",
@@ -525,6 +525,7 @@ const UPDATE_SOL = 15;
 const UPDATE_EXP = 16;
 const NEW_USER = 17;
 const FINISH_NAME = 18;
+const UPGRADE_LOVE_TREE = 19;
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
@@ -729,16 +730,9 @@ const GATHER_STATUS = 9;
 const SOL_GAME = 1;
 const MONEY_GAME = 2;
 
-const LOVE_TREE_ID = 208;//等级提升 则 ID 变化
+//const LOVE_TREE_ID = 208;//等级提升 则 ID 变化
 
-//RankDialog
-const CHALLENGE_RANK = 0;
-const HEART_RANK = 1;
-const FIGHT_RANK = 2;//attackRank defenseRank
 
-//RankBase
-const ATTACK_RANK = 3;
-const DEFENSE_RANK = 4;
 
 var CAREER_TIT = ["career0", "career1", "career2", "career3"];
 
@@ -759,10 +753,32 @@ const SET_WORD = 3;
 const WAIT_PRINT = 4;
 
 
-//NOTIP 类型
+/*
+const CHALLENGE_MON = 0;
+const CHALLENGE_FRI = 1;
+const CHALLENGE_SELF = 2;//怪兽布局 由数据库monX monY 决定
+const CHALLENGE_NEIBOR = 3;
+const CHALLENGE_TRAIN = 4;
+const CHALLENGE_FIGHT = 5;//挑战擂台
+const CHALLENGE_DEFENSE = 6;//防守擂台
+*/
+//NOTIP 类型 tip编号 以及对应的标题 内容 以及闯关地图对应的 NOTIP类型
 const CHALLENGE_TIP = 0;
 const TRAIN_TIP = 1;
 const FIGHT_TIP = 2;
+const HEART_TIP = 3;
+const TIP_WORD = ["tips", "tips", "tips", "heartTip"];
+const TIP_CON = ["noTip", "trainTipLine", "fightTip", "heartCon"];
+const MAP_KIND_TIP = dict([
+    [CHALLENGE_MON, CHALLENGE_TIP],
+    [CHALLENGE_FRI, CHALLENGE_TIP],
+    [CHALLENGE_SELF, CHALLENGE_TIP],
+    [CHALLENGE_NEIBOR, CHALLENGE_TIP],
+    [CHALLENGE_TRAIN, TRAIN_TIP],
+    [CHALLENGE_FIGHT, FIGHT_TIP],
+    [CHALLENGE_DEFENSE, FIGHT_TIP],
+]);
+
 
 const COLOR_INDEX = dict([
 [1, 0],
@@ -774,3 +790,33 @@ const SOL_CATEGORY = dict([
 [1, "farPhy"],
 [2, "farMagic"],
 ]);
+
+
+//res = [[i['uid'], i['papayaId'], i['score'], i['rank'], i['name']] for i in ret]
+//ret = [[i['uid'], i['papayaId'], i['score'], i['rank'], i['name']] for i in ret]
+//ret = [[i['uid'], i['papayaId'], i['suc'], i['rank'], i['name'], i['total']] for i in ret]
+var ChallengeRankKey = ["uid", "papayaId", "score", "rank", "name", "level"];
+var HeartRankKey = ["uid", "papayaId", "score", "rank", "name", "level"];
+var FightRankKey = ["uid", "papayaId", "suc", "rank", "name", "total", "level"]; 
+
+//RankDialog
+const CHALLENGE_RANK = 0;
+const HEART_RANK = 1;
+const FIGHT_RANK = 2;//attackRank defenseRank 大类型
+
+//RankBase
+const ATTACK_RANK = 3;
+const DEFENSE_RANK = 4;
+
+const RANK_KEY = [ChallengeRankKey, HeartRankKey, null, FightRankKey, FightRankKey];
+
+//宝石 魔法石 
+//物体类型 [物品ID ---> 语句]
+/*
+const STORE_WORDS = dict([
+    [TREASURE_STONE, dict([[0, "upgradeEquipStore"], [1, "upgradeEquipStore"], [2, "upgradeEquipStore"], [3, "upgradeEquipStore"]])],
+    [MAGIC_STONE, dict([[0,, "upgradeSkillStore"])],
+    [BUILD, [[PARAMS["MagicFarmId"]], "productDouble"]],
+]);
+*/
+

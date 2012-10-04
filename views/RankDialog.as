@@ -40,23 +40,41 @@ class RankDialog extends MyNode
     var fightLabel = ["", ""];//进攻榜 防守榜
 
     var views = [];
+    function onInfo()
+    {
+        global.director.pushView(new NoTipDialog(HEART_TIP), 1, 0);
+    }
     function RankDialog(k)
     {
         kind = k;
 
-        bg = sprite("dialogFriend.png");
+        bg = sprite("back.png");
         init();
+
+        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
+        bg.addsprite("titleBack.png").anchor(0, 0).pos(38, 8).size(707, 66);
+        bg.addsprite("rightBack.png").anchor(0, 0).pos(32, 78).size(747, 392);
+        upArrow = sprite("blueArrow.png").anchor(50, 50).pos(745, 403).size(32, 70);
+        bg.add(upArrow, 1);
+        var but0 = new NewButton("violetBut.png", [113, 42], getStr("rankInfo", null), null, 20, FONT_NORMAL, [100, 100, 100], onInfo, null);
+        but0.bg.pos(645, 42);
+        addChild(but0);
+        bg.addsprite("heartRank0.png").anchor(50, 50).pos(169, 41).size(174, 63);
+        but0 = new NewButton("closeBut.png", [42, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
+        but0.bg.pos(766, 25);
+        addChild(but0);
+
+        /*
         if(kind == CHALLENGE_RANK)
             bg.addsprite("dialogRankTitle.png").pos(69, 7);
         else if(kind == HEART_RANK)
             bg.addsprite("heartRank.png").pos(172,47).anchor(50, 50);
         else if(kind == FIGHT_RANK)
             bg.addsprite("dialogRankTitle.png").pos(69, 7);
-            
         bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        */
 
 
-        var but0;
         if(kind == CHALLENGE_RANK)
         {
             var challengeNum = global.user.getValue("challengeNum");
@@ -89,11 +107,12 @@ but0.addlabel(getStr("attackRank", null), "fonts/heiti.ttf", 25).pos(48, 18).anc
 but0.addlabel(getStr("defenseRank", null), "fonts/heiti.ttf", 25).pos(48, 18).anchor(50, 50).color(100, 100, 100);
         }
 
-        var clPos = [66, 117];
-        var clSize = [665, 338];
+        var clPos = [76, 104];
+        var clSize = [665, 342];
 
-        upArrow = sprite("upArrow.png").pos(741, 409).anchor(50, 50);
-        bg.add(upArrow, 1);
+        //upArrow = sprite("upArrow.png").pos(741, 409).anchor(50, 50);
+        //bg.add(upArrow, 1);
+
         if(kind == CHALLENGE_RANK || kind == HEART_RANK)
         {
             showView = new RankBase(clPos, clSize, this, kind);

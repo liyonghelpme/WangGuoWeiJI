@@ -9,31 +9,50 @@ class Goods extends MyNode
     var cl;
 
     const offX = 168;
-    const offY = 220;
-    const HEIGHT = 325;
+    const offY = 208;
+    const HEIGHT = 314;
     const PAN_PER_ROW = 3;
 
+    /*
+    背景通常只是一个位置00的node
+    其他元素的位置相对这个指定
+    在flowNode 上添加一个NewButton 
+    NewButton 没有enterScene exitScene
+    */
     function Goods(s)
     {
         store = s;
-        bg = node().pos(258, 129);
-        cl = bg.addnode().size(500, HEIGHT).clipping(1);
-        title = bg.addsprite().pos(offX/2+offX, 103-129).anchor(50, 50);
+        bg = node();//.pos(258, 129);
         init();
+        cl = bg.addnode().size(500, HEIGHT).clipping(1).pos(271, 145);
+        //title = bg.addsprite().pos(offX/2+offX, 103-129).anchor(50, 50);
+        title = bg.addsprite("buyDrug.png", UPDATE_SIZE).anchor(50, 50).pos(515, 112);
+
+
         goodNum = [];
         flowNode = cl.addnode();
         flowNode.size(0, 0);
         minPos = 0;
         selTab = -1;
 
+        cl.setevent(EVENT_TOUCH, touchBegan);
+        cl.setevent(EVENT_MOVE, touchMoved);
+        cl.setevent(EVENT_UNTOUCH, touchEnded);
+
     }
+    /*
+bg.addsprite("有文字最大尺寸.png").anchor(50, 50).pos(74, 88).size(121, 71);
+bg.addsprite("无文字最大尺寸.png").anchor(50, 50).pos(75, 97).size(121, 88);
+bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(78, 25).color(100, 100, 100);
+    */
     function initSameElement(buildData, panel)
     {
+        var objKind = buildData[0];
+        var objId = buildData[1];
         var cost = getCost(buildData[0], buildData[1]);
         var data = getData(buildData[0], buildData[1]);
         var needLevel = data.get("level", 0);
         var gain = getGain(buildData[0], buildData[1]);
-//        trace("initSameElement", cost, data, gain);
 
         /*
         采用字符串替换的方法，这样如果图片不需要ID的话可以直接返回
@@ -41,38 +60,52 @@ class Goods extends MyNode
         需要确保不存在
         */
         var buildPicName = replaceStr(KindsPre[buildData[0]], ["[ID]", str(buildData[1])]);
-        var buildPic = panel.addsprite(buildPicName).pos(83, 110).anchor(50, 50);
-        //storeScalePic(buildPic);
+        //不显示属性 位置 缩放
+        //显示属性位置 缩放
 
-        buildPic.prepare();
-        var bSize = buildPic.size();
-        var bl = min(120*100/bSize[0], 100*100/bSize[1]);
-        bl = min(120, max(40, bl));
-        buildPic.scale(bl);
+        var showGain = data.get("showGain", 1);
+        var buildPic = panel.addsprite(buildPicName).pos(74, 88).anchor(50, 50);
+        var sca;
+        //var buildPicSize = buildPic.prepare().size();
+        if(showGain == 0)
+        {
+            buildPic.pos(74, 97);
+            sca = getSca(buildPic, [121, 88]);
+            buildPic.scale(sca);
+        }
+        else
+        {
+            buildPic.pos(74, 88);
+            sca = getSca(buildPic, [121, 71]);
+            buildPic.scale(sca);
+        }
+        if(objKind == DRUG)
+            panel.addsprite("lev"+str(objId/10)+".png").anchor(0, 0).pos(96, 48).size(44, 32);
+        
 
         var canBuy = 1;
         if(global.user.getValue("level") < needLevel)
         {
             buildPic.texture(buildPicName, BLACK);
-            panel.addsprite("storeNotLev.png");
+            panel.addsprite("storeNotLev.png").size(panel.size());
             var words = colorWords(getStr("levelNot", ["[LEVEL]", str(needLevel)]));
-panel.addlabel(words[0], "fonts/heiti.ttf", 20).pos(110 - (20 * words[2]), 99).anchor(0, 50).color(100, 100, 100);
-panel.addlabel(words[1], "fonts/heiti.ttf", 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
-            //panel.addlabel(getStr("levelNot", ["[LEVEL]", str(needLevel)]), null, 20).pos(84, 99).anchor(50, 50).color(100, 100, 100);
+            panel.addlabel(words[0], "fonts/heiti.ttf", 20).pos(110 - (20 * words[2]), 99).anchor(0, 50).color(100, 100, 100);
+            panel.addlabel(words[1], "fonts/heiti.ttf", 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
             canBuy = 0;
         }
         //物品属性
         else
         {
-panel.addlabel(data.get("name"), "fonts/heiti.ttf", 25).pos(79, 28).anchor(50, 50).color(0, 0, 0);
+            //bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(78, 25).color(29, 16, 4);
+            panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
             var picCost = cost.items();
-//            trace("buildCost", cost);
+            //bg.addlabel(getStr("生命值＋10", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(78, 136).color(43, 25, 9);
             if(len(picCost) > 0)
             {
                 var c = [100, 100, 100];
                 if(picCost[0][0] == "free")//免费物品只显示免费
                 {
-panel.addlabel(getStr("free", null), "fonts/heiti.ttf", 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+                    panel.addlabel(getStr("free", null), "fonts/heiti.ttf", 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
                 else
                 {
@@ -84,9 +117,11 @@ panel.addlabel(getStr("free", null), "fonts/heiti.ttf", 18).pos(95, 188).anchor(
                     /*
                     消耗图片采用 消耗资源的名字
                     消耗数值 
+                    bg.addsprite("crystal.png").anchor(50, 50).pos(31, 170).size(31, 29);
+                    bg.addlabel(getStr("123456", null), "fonts/heiti.ttf", 16).anchor(50, 50).pos(83, 169).color(100, 100, 100);
                     */
-                    var cPic = panel.addsprite(picName).pos(35, 189).anchor(50, 50).size(30, 30);  
-var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(95, 188).anchor(50, 50).color(c[0], c[1], c[2]);
+                    var cPic = panel.addsprite(picName).pos(31, 170).anchor(50, 50).size(30, 30);  
+                    var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
             }
 
@@ -96,28 +131,46 @@ var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(95, 188).ancho
             showGain 默认没有 表示 显示 增加的数据
             对于 银币 金币 水晶 则不显示
             */
-            var showGain = data.get("showGain", 1);
+
+            //两步处理方法
+            //特殊例子自动处理
+            //一般物品普通处理
+            //获取物体的storeWords 如果没有则 按照普通方式处理
             if(showGain == 1)
             {
+                var w;
                 var labelGain = gain.items();
-                if(len(labelGain) != 0)
+                var objKey = getObjKey(objKind, objId);
+                if(StoreWords.get(objKey) != null)
                 {
-                    /*
-                    图片向上移动用于显示增加
-                    */
-                    buildPic.pos(83, 100);
-                    var sca = getSca(buildPic, [120, 90]);
-                    buildPic.scale(sca);
-
-                    //trace("labelGain", labelGain[0]);
-                    var k = getStr(labelGain[0][0], null);
-                    var v = labelGain[0][1];
-                    if(v < 0)
-                        k = k + getStr("unlimit", null);
-                    else
-                        k = k + str(v);
-panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0, 0);
+                    w = getStr(StoreWords.get(objKey), null);   
+                    panel.addlabel(w, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
+                else
+                {
+                    if(len(labelGain) > 0)
+                    {
+                        var v = labelGain[0][1];
+                        var k = getStr(StoreAttWords[labelGain[0][0]], ["[NUM]", str(v)]);
+                        /*
+                        var k = getStr(labelGain[0][0], null);
+
+                        if(v < 0)
+                            k = k + getStr("unlimit", null);
+                        else//显示的文字受类新控制所以最好将addKey 对应的dict结构写出来
+                        {
+                            k = k + "+"+str(v);
+                            if(labelGain[0][0].find("percent") != -1)
+                            {
+                                k += "%";
+                            }
+                        }
+                        */
+                        panel.addlabel(k, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
+                    }
+                }
+
+
             }
         }
         return canBuy;
@@ -138,12 +191,19 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
     /*
     两种思路， 每次移动结束更新状态
     移动过程中， 每次检测，对于溢出的进行删除，没有显示的进行补偿显示
+
+    bg.addsprite("goodPanel.png").anchor(0, 0).pos(0, 0).size(149, 188);
+    bg.addsprite("水晶 .png").anchor(0, 0).pos(16, 156).size(31, 29);
+    bg.addlabel(getStr("123456", null), "fonts/heiti.ttf", 16).anchor(0, 0).pos(54, 163).color(100, 100, 100);
+    bg.addlabel(getStr("生命值＋10", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(78, 136).color(100, 100, 100);
+    bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(0, 0).pos(37, 15).color(100, 100, 100);
+    bg.addsprite("生命药水.png").anchor(50, 50).pos(75, 93).size(53, 53);
+    bg.addsprite("holy.png").anchor(0, 0).pos(96, 48).size(44, 32);
     */
     function updateTab(rg)
     {
         var posX = 0;
         var posY = -offY+rg[0]*offY;
-//        trace("update Tab", posX, posY, rg, len(goodNum));
         
         var oldPos = flowNode.pos();
         flowNode.removefromparent();
@@ -162,15 +222,18 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
             {
                 posX += offX;
             }
-            var panel = sprite("goodPanel.png").pos(posX, posY);
+            var panel = sprite("goodPanel.png").pos(posX, posY).size(149, 188);
+
             var buildData = store.allGoods[selTab][i];
 
             var canBuy = initSameElement(buildData, panel);
-//            trace("canBuy", canBuy);
 
             panel.put([selTab, i, canBuy]);
             flowNode.add(panel, 0, i);
-
+            if(curSel != null && curSel[1] == i)
+            {
+                showGreenBut(panel);
+            }
         }
 
         var rows = (len(goodNum)+PAN_PER_ROW-1)/PAN_PER_ROW;
@@ -179,9 +242,6 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
         var bSize = cl.size();
         minPos = min(-(fSize[1]-bSize[1]), 0);
 
-        flowNode.setevent(EVENT_TOUCH, touchBegan);
-        flowNode.setevent(EVENT_MOVE, touchMoved);
-        flowNode.setevent(EVENT_UNTOUCH, touchEnded);
     }
     /*
     切换tab 更新面板 更新物品信息
@@ -190,7 +250,7 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
     {
         selTab = g;
         //trace(getStr(store.words[g], null));
-        title.texture(store.titles[g]);
+        title.texture(store.titles[g], UPDATE_SIZE);
 
         goodNum = store.allGoods[selTab]; 
 
@@ -205,6 +265,7 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
         var newPos = n.node2world(x, y);
         lastPoints = newPos;
         accMove = 0;
+        curSel = null;
     }
     function moveBack(dify)
     {
@@ -225,13 +286,40 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
     物品选择面板包含物品选择框类型和选择编号 以及物品需要的等级条件是否满足的信息
     移动结束更新面板数据
     */
+    function onBuy(param)
+    {
+        curSel = null;
+        store.buy(param); 
+        //可以多次购买
+        /*
+        if(greenBut != null)
+        {
+            greenBut.removeSelf();
+            greenBut = null;
+        }
+        */
+
+    }
+    var greenBut = null;
+    var curSel = null;
+    function showGreenBut(child)
+    {
+        if(greenBut != null)
+        {
+            greenBut.removeSelf();
+            greenBut = null;
+        }
+        greenBut = new NewButton("greenButton0.png", [130, 38], getStr("buyIt", null), null, 21, FONT_NORMAL, [100, 100, 100], onBuy, child.get());
+        greenBut.bg.pos(74, 170);
+        child.add(greenBut.bg); 
+    }
     function touchEnded(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
 //        trace("goods flownode", newPos, accMove);
         if(accMove < 10)
         {
-            var child = checkInChild(n, newPos);
+            var child = checkInChild(flowNode, newPos);
 //            trace("in which child", child);
             if(child != null)
             {
@@ -240,7 +328,10 @@ panel.addlabel(k, "fonts/heiti.ttf", 18).pos(79, 152).anchor(50, 50).color(0, 0,
                 条件满足可以购买
                 */
                 if(buildData[2] == 1)
-                    store.buy(child.get());            
+                {
+                    curSel = child.get();
+                    //store.buy(child.get());            
+                }
             }
         }
 

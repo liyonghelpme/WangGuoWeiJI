@@ -115,6 +115,7 @@ class CastlePage extends MyNode
             {
                 dialogController.addCmd(dict([["cmd", "update"]]));
                 dialogController.addCmd(dict([["cmd", "heart"]]));
+
             }
         }
     }
@@ -157,7 +158,10 @@ class CastlePage extends MyNode
             //每周第一次登录
 
         }
-//        trace("loginReward", day, reward);
+
+        dialogController.addCmd(dict([["cmd", "update"]]));
+        dialogController.addCmd(dict([["cmd", "heart"]]));
+        dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", 0]]));
     }
 
     function CastlePage(s)
@@ -215,6 +219,10 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
+
+
+
+
     }
     function onCryIsland()
     {
@@ -413,6 +421,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         global.msgCenter.registerCallback(BUYSOL, this);
         global.msgCenter.registerCallback(LEVEL_UP, this);
         global.msgCenter.registerCallback(FINISH_NAME, this);
+        global.msgCenter.registerCallback(UPGRADE_LOVE_TREE, this);
         solNum.text(str(global.user.getSolNum()));
     }
 
@@ -447,6 +456,10 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         {
             moveToNormal(msg[1]); 
         }
+        else if(msg[0] == UPGRADE_LOVE_TREE)
+        {
+            dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", msg[1]]]));
+        }
     }
     function remove(c)
     {
@@ -480,6 +493,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(UPGRADE_LOVE_TREE, this);
         global.msgCenter.removeCallback(FINISH_NAME, this);
         global.msgCenter.removeCallback(LEVEL_UP, this);
         global.msgCenter.removeCallback(BUYSOL, this);

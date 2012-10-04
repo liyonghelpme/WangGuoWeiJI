@@ -6,10 +6,10 @@ class RankBase extends MyNode
 
     const ITEM_NUM = 4;
     const ROW_NUM = 2;
-    const OFFX = 166;
-    const OFFY = 175;
-    const PANEL_WIDTH = 154;
-    const PANEL_HEIGHT = 160;
+    const OFFX = 171;
+    const OFFY = 184;
+    const PANEL_WIDTH = 136;
+    const PANEL_HEIGHT = 156;
     const HEIGHT = ROW_NUM*OFFY;
 
     var initYet = 0;
@@ -43,11 +43,16 @@ class RankBase extends MyNode
             if(lock == null)
             {
                 var sz = bg.size();
-                lock = sprite().pos(sz[0]/2, sz[1]/2).anchor(50, 50).addaction(
+                lock = node();
+                //bg.addsprite("heartLoading.png").anchor(0, 0).pos(396, 253).size(138, 19);
+                //bg.addsprite("heartLoad.png").anchor(0, 0).pos(310, 228).size(59, 65);
+
+                lock.addsprite().pos(310, 228).addaction(
                 repeat(
-                    animate(1000, "feed0.png", "feed1.png", "feed2.png", "feed3.png", "feed4.png", "feed5.png", "feed7.png" )
+                    animate(1000, "heartLoad0.png", "heartLoad1.png", "heartLoad2.png", "heartLoad3.png", "heartLoad4.png", "heartLoad5.png", "heartLoad6.png", "heartLoad7.png", "heartLoad8.png", "heartLoad9.png")
                 )); 
-                bg.add(lock, 10);
+                lock.addsprite("heartLoading.png").pos(396, 253);
+                bg.parent().add(lock, 10);
             }
         }
         else
@@ -74,6 +79,11 @@ class RankBase extends MyNode
     var flowLayer;
     var URL_API;
     var rankKind;
+    
+    //需要保持前后台数据格式一致 最简单的方式 是 后台直接返回 dict 而不是 数组
+    //挑战数据格式 转化成  dict 数据
+    //res = [[i['uid'], i['papayaId'], i['score'], i['rank'], i['name']] for i in ret]
+
     function RankBase(p, s, sc, k)
     {
         scene = sc;
@@ -121,6 +131,24 @@ class RankBase extends MyNode
 
     和原始data进行拼接的时候 确保 是连接在一起的 如果有空洞则补上空洞
     */
+    //不要考虑空洞问题 服务器在生成排行榜时 是连续的数据
+    //根据排行类型将数组数据转化成dict
+    function adjustData(newData)
+    {
+        var table = RANK_KEY[rankKind];
+        var temp = [];
+        for(var i = 0; i < len(newData); i++)
+        {
+            var d = dict();
+            for(var j = 0; j < len(table); j++)
+            {
+                d.update(table[j], newData[i][j]);
+            }
+            temp.append(d);
+        }
+        return temp;
+    }
+    /*
     function adjustData(newData)
     {
         var error = 0;
@@ -185,6 +213,7 @@ class RankBase extends MyNode
 //        trace("adjustData", newData);
         return newData;
     }
+    */
     /*
     排名是连续的
     根据当前位置计算排名
@@ -193,6 +222,7 @@ class RankBase extends MyNode
 
     拖动的数据返回的数据必须是连续的可以直接拼接
     */
+    //data 中数据 变成 dict形式
     const MAX_BUFFER = 100;
     function getRankOver(rid, rcode, con, param)
     {
@@ -208,10 +238,11 @@ class RankBase extends MyNode
         if(rcode != 0)
         {
             con = json_loads(con);
+            newData = adjustData(con.get("res"));
             //同时考虑 最大最小 数据为空
             if(param == RANK_INIT)
             {
-                newData = adjustData(con.get("res"));
+
                 data = newData;
                 if(len(data) == 0)
                 {
@@ -223,11 +254,11 @@ class RankBase extends MyNode
                 {
 
     //                trace("param1", data, len(data));
-                    if(data[0][3] > preMin)
-                        minRank = data[0][3];
-                    if(data[len(data)-1][3] < (preMax-1))
+                    if(data[0]["rank"] > preMin)
+                        minRank = data[0]["rank"];
+                    if(data[len(data)-1]["rank"] < (preMax-1))
                     {
-                        maxRank = data[len(data)-1][3];   
+                        maxRank = data[len(data)-1]["rank"];   
                     }
                 }
                 //获取的数据过多丢弃一半
@@ -241,28 +272,26 @@ class RankBase extends MyNode
             }
             else if(param == RANK_END)
             {
-                newData = adjustData(con.get("res"));
-                //判断data 和 newData 之间是否存在 间隙
+                //newData = adjustData(con.get("res"));
+                //判断data 和 newData 之间是否存在 间隙 则忽略数据uid -1 无效数据
                 if(len(data) > 0 && len(newData) > 0)
                 {
-                    beginRank = data[len(data)-1][3];
-                    endRank = newData[0][3];
+                    beginRank = data[len(data)-1]["rank"];
+                    endRank = newData[0]["rank"];
                     if((endRank-beginRank) > 1)
                     {
                         for(k=beginRank+1; k < endRank; k++)
                         {
-                            data.append([-1, 0, 0, k, "", 1]);
+                            data.append(dict([["uid", -1]]));//[-1, 0, 0, k, "", 1]);
                         }
                     }
                 }
 
                 data += newData;
 
-                //data += con.get("res");
-//                trace("param1", data, len(data));
-                if(data[len(data)-1][3] < (preMax-1))
+                if(data[len(data)-1]["rank"] < (preMax-1))
                 {
-                    maxRank = data[len(data)-1][3];   
+                    maxRank = data[len(data)-1]["rank"];   
                 }
                 //获取的数据过多丢弃一半
                 if(len(data) > MAX_BUFFER)
@@ -275,25 +304,26 @@ class RankBase extends MyNode
             }
             else if(param == RANK_BEGIN)
             {
-                newData = adjustData(con.get("res"));
+                //newData = adjustData(con.get("res"));
 
+                //数据头部存在空隙
                 if(len(data) > 0 && len(newData) > 0)
                 {
-                    beginRank = newData[len(newData)-1][3];
-                    endRank = data[0][3];
+                    beginRank = newData[len(newData)-1]["rank"];
+                    endRank = data[0]["rank"];
 
                     if((endRank-beginRank) > 1)
                     {
                         for(k=beginRank+1; k < endRank; k++)
                         {
-                            newData.append([-1, 0, 0, k, "", 1]);
+                            newData.append(dict([["uid", -1]]));//([-1, 0, 0, k, "", 1]);
                         }
                     }
                 }
 
                 data = newData+data;
-                if(data[0][3] > preMin)//没有小于某个某个数据的数据
-                    minRank = data[0][3];
+                if(data[0]["rank"] > preMin)//没有小于某个某个数据的数据
+                    minRank = data[0]["rank"];
 //                trace("param0", data, len(data));
                 if(len(data) > MAX_BUFFER)
                 {
@@ -306,8 +336,6 @@ class RankBase extends MyNode
             }
             initYet = 1;
             fetchData = 0;
-//            trace("getRankDataOver", data);
-//            trace("getRankDataOver", len(data));
             updateTab();
         }
     }
@@ -363,8 +391,8 @@ class RankBase extends MyNode
         if(len(data) > 0)
         {
             //判定显示范围是否足够 不足进入更新状态
-            var beginItem = data[0][3];
-            var endItem = data[len(data)-1][3];
+            var beginItem = data[0]["rank"];
+            var endItem = data[len(data)-1]["rank"];
             //数据区域是半开半闭区间[a, b)
             var showBegin = max(lowRow*ITEM_NUM, minRank);
             var showEnd = min(upRow*ITEM_NUM, maxRank)
@@ -446,8 +474,8 @@ class RankBase extends MyNode
         flowNode.removefromparent();
         flowNode = bg.addnode().pos(oldPos);
 
-        var begin = data[0][3];
-        var end = data[len(data)-1][3]+1;
+        var begin = data[0]["rank"];
+        var end = data[len(data)-1]["rank"]+1;
         //curNum 就是rank排名
         //uid papayaId score rank name
         for(var i = rg[0]; i < rg[1]; i++)
@@ -460,16 +488,38 @@ class RankBase extends MyNode
                 var diff = curNum-begin;
                 if(diff < 0)
                     continue;
-                var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY);
-                var sca = getSca(panel, [PANEL_WIDTH, PANEL_HEIGHT]);
-                panel.scale(sca);
 
-                panel.addsprite("dialogRankCup.png").anchor(50, 50).pos(35, 23);
-panel.addlabel(str(data[diff][3]), "fonts/heiti.ttf", 23, FONT_BOLD).anchor(50, 50).pos(66, 23).color(0, 0, 0);
+                //采用size的机制 这样panel上图片采用相对psd坐标
+                //排行榜数据格式: 挑战排行 爱心排行 擂台排行 更多排行显示的数据view 是不同的
+                //但是都是在显示人 数据的内容是类似的
+                //排行的量是一致的
+                var panel = flowNode.addsprite("rankPanel.png").pos(j*OFFX, i*OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
+                //var sca = getSca(panel, [PANEL_WIDTH, PANEL_HEIGHT]);
+                //panel.scale(sca);
+
+                panel.addsprite("dialogRankCup.png").anchor(0, 0).pos(16, 7).size(35, 32);
+                panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"])]), "fonts/heiti.ttf", 19).anchor(0, 0).pos(57, 16).color(29, 16, 4);
+
+                panel.addsprite("headBlock.png").anchor(50, 50).pos(68, 82).size(55, 55);
+                var papayaId = data[diff]["papayaId"];
+                panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(68, 82).size(55, 55);
+
+                panel.addsprite("levelStar.png").anchor(50, 50).pos(94, 56).size(27, 27);
+                panel.addlabel(str(data[diff]["level"]), "fonts/heiti.ttf", 14).anchor(50, 50).pos(94, 56).color(0, 0, 0);
+
+
+                panel.addlabel(data[diff]["name"], "fonts/heiti.ttf", 17).anchor(50, 50).pos(68, 126).color(43, 25, 9);
+                panel.addlabel(getStr("loveNum", ["[NUM]", str(data[diff]["score"])]), "fonts/heiti.ttf", 17).anchor(50, 50).pos(68, 143).color(43, 25, 9);
+
+
+
+                /*
+                //panel.addlabel(str(data[diff][3]), "fonts/heiti.ttf", 23, FONT_BOLD).anchor(50, 50).pos(66, 23).color(0, 0, 0);
                 
                 var papayaId = data[diff][1];
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(69, 105);
-panel.addlabel(data[diff][4], "fonts/heiti.ttf", 23, FONT_BOLD).anchor(50, 50).pos(66, 53).color(0, 0, 0);
+                panel.addlabel(data[diff][4], "fonts/heiti.ttf", 23, FONT_BOLD).anchor(50, 50).pos(66, 53).color(0, 0, 0);
+                */
 
                 panel.put(curNum);
                 if(curNum == selectNum)
@@ -549,21 +599,21 @@ panel.addlabel(data[diff][4], "fonts/heiti.ttf", 23, FONT_BOLD).anchor(50, 50).p
     function showShadow(child)
     {
         var curNum = child.get();
-        var beginRank = data[0][3];
+        var beginRank = data[0]["rank"];
         var diff = curNum-beginRank;
         //访问的数据超出范围
         if(diff < 0 || diff >= len(data))
             return;
-        var uid = data[diff][0];
+        var uid = data[diff]["uid"];
         //数据漏洞补偿的数据 
         if(uid == -1)
         {   
             return;
         }
 
-        var papayaId = data[diff][1];
-        var score = data[diff][2];
-        var rank = data[diff][3];
+        var papayaId = data[diff]["papayaId"];
+        var score = data[diff]["score"];
+        var rank = data[diff]["rank"];
         /*
         挑战自己 则进入 服务器获取怪兽数据模式
         访问自己 阻止 
@@ -597,15 +647,15 @@ but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19)
     function challengeGroup(n, e, p, x, y, points)
     {
         var curNum = p;
-        var beginRank = data[0][3];
+        var beginRank = data[0]["rank"];
         var diff = curNum-beginRank;
         if(diff < 0 || diff >= len(data))
             return;
         global.director.popView();
-        var uid = data[diff][0];
-        var papayaId = data[diff][1];
-        var score = data[diff][2];
-        var rank = data[diff][3];
+        var uid = data[diff]["uid"];
+        var papayaId = data[diff]["papayaId"];
+        var score = data[diff]["score"];
+        var rank = data[diff]["rank"];
 
         var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, null);
         global.director.pushScene(cs);
@@ -618,9 +668,9 @@ but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19)
     {
         var userData = data[p];
         global.director.popView();
-        var papayaId = data[p][1];
+        var papayaId = data[p]["papayaId"];
         //排行榜不是好友 不能进行下一个
-        var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, dict([["uid", userData[0]], ["id", userData[1]], ["name", userData[4]]])); 
+        var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, dict([["uid", userData["uid"]], ["id", userData["papayaId"]], ["name", userData["name"]]])); 
         global.director.pushScene(friend);
         global.director.pushView(new VisitDialog(friend), 1, 0);
     }

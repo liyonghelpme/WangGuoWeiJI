@@ -17,6 +17,7 @@ class Plant extends MyNode
     //采用客户端计时
     function Plant(b, d, privateData)
     {
+        //客户端时间
         if(privateData != null)
             objectTime = privateData.get("objectTime");
         else
@@ -37,6 +38,13 @@ class Plant extends MyNode
 
     function getLeftTime()
     {
+        /*
+        //秒 客户端 需要时间 开始时间 
+        var needTime = data["time"];
+        var now = time()/1000;
+        var passTime = now-objectTime;
+        return needTime-passTime;
+        */
         return (data.get("time")*1000-passTime)/1000;
     }
     //计算开始工作的服务器时间单位秒
@@ -95,6 +103,7 @@ class Plant extends MyNode
         passTime += diff;
         setState();
     }
+    //每次重新进入场景 会 重新计算 过去的时间
     override function enterScene()
     {
         super.enterScene();

@@ -142,6 +142,7 @@ class BuildLayer extends MyNode
     function sellBuild(build)
     {
         removeChild(build);
+        mapGridController.clearMap(build);
         mapGridController.allBuildings.remove(build);
         global.user.sellBuild(build);
     }
@@ -149,7 +150,7 @@ class BuildLayer extends MyNode
     function sellSoldier(soldier)
     {
         removeChild(soldier);
-        //allSoldiers.pop(soldier.sid);
+        mapGridController.clearSolMap(soldier);
         mapGridController.allSoldiers.pop(soldier.sid);
         global.user.sellSoldier(soldier);
     }
@@ -434,7 +435,7 @@ class BuildLayer extends MyNode
     //关闭士兵自动位置保存功能
     function soldierKeepPos()
     {
-        var allSoldiers = mapGridController.allSoldiers;
+        var allSoldiers = mapGridController.allSoldiers.values();
         for(var i = 0; i < len(allSoldiers); i++)
             allSoldiers[i].keepPos();
     }
@@ -458,7 +459,7 @@ class BuildLayer extends MyNode
     }
     function restoreSoldierPos()
     {
-        var allSoldiers = mapGridController.allSoldiers;
+        var allSoldiers = mapGridController.allSoldiers.values();
         for(var i = 0; i < len(allSoldiers); i++)
         {
             allSoldiers[i].restorePos();
@@ -483,7 +484,7 @@ class BuildLayer extends MyNode
         if(len(changedBuilding) > 0)
             global.httpController.addRequest("buildingC/finishPlan", dict([["uid", global.user.uid], ["builds", changedBuilding]]), null, null);
 
-        var allSoldiers = mapGridController.allSoldiers;
+        var allSoldiers = mapGridController.allSoldiers.values();
         for(i = 0; i < len(allSoldiers); i++)
         {
             allSoldiers[i].finishPlan();

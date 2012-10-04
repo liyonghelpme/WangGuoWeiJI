@@ -4,8 +4,8 @@ class LoginDialog extends MyNode
     //const reward = [[SILVER, 1000], [GOLD, 1000], [CRYSTAL, 100], [SILVER, 2000]];
     /*
     根据用户当前连续登录的数据得到需要得到的奖励
-
     */
+
     const PICS = dict([
     [SILVER, "silverBig.png"],
     [GOLD, "goldBig.png"],
@@ -20,56 +20,78 @@ class LoginDialog extends MyNode
     function LoginDialog(cc)
     {
         curCmd = cc;
-        bg = sprite("dialogLoginBack.png");//.size(global.director.disSize[0], global.director.disSize[1]);
+        bg = node();
+        bg.add(showFullBack());
         init();
-        var dia = bg.addsprite("dialogLogin.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);  
-        dia.addsprite("roleNameClose.png").pos(590, 31).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
-        var but0 = dia.addsprite("roleNameBut1.png").pos(61, 354).size(209, 61).setevent(EVENT_TOUCH, closeDialog);
-but0.addlabel(getStr("nextTime", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50);
-        but0 = dia.addsprite("roleNameBut0.png").pos(323, 354).size(209, 61).setevent(EVENT_TOUCH, shareGift);
-but0.addlabel(getStr("shareGift", null), "fonts/heiti.ttf", 25).pos(104, 30).anchor(50, 50);
 
         var loginDays = curCmd.get("loginDays");//global.user.getValue("loginDays");
-
-        //第0天登录怎么办?
         var now = loginDays-1;
-        //loginDays = (loginDays-1)%len(reward);
-//        trace("now", now, loginDays);
 
-        for(var i = 0; i < 3; i++)
-        {
-dia.addlabel(str(now), "fonts/heiti.ttf", 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);
-            var rewardKind;
-            var rewardNum;
-            var re;
-            if(now%2 == 0)
-            {
-                rewardKind = CRYSTAL;
-                re = getLoginReward(now);
-                rewardNum = re.get("crystal"); //curCmd.get("crystal");
-            }
-            else
-            {
-                rewardKind = SILVER;
-                re = getLoginReward(now);
-                rewardNum = re.get("silver"); //curCmd.get("silver");
-            }
-            if(now == 0)//第一天连续登录
-            {
-                rewardKind = SILVER;
-                rewardNum = 0;
-            }
+        bg.addsprite("back.png").anchor(0, 0).pos(99, 79).size(604, 344);
+        bg.addsprite("loginBack.png").anchor(0, 0).pos(122, 128).size(557, 277);
+        bg.addsprite("whiteBox.png").anchor(0, 0).pos(544, 192).size(109, 153);
+        bg.addsprite("loginQuestion.png").anchor(50, 50).pos(601, 260).size(62, 64);
 
-            dia.addsprite(PICS.get(rewardKind)).pos(POS[i]).anchor(50, 50).size(57, 53);
-dia.addlabel(str(rewardNum), "fonts/heiti.ttf", 25).color(68, 4, 7).anchor(50, 50).pos(REWARD[i]);
-            //loginDays += 1;
-            //loginDays %= len(reward);
-            now += 1;
-        }
-dia.addlabel(str(now), "fonts/heiti.ttf", 25).pos(WORDS[i]).anchor(0, 50).color(79, 44, 14);
-        dia.addsprite("loginQuestionMark.png").pos(495, 203).anchor(50, 0);
+        bg.addsprite("whiteBox.png").anchor(0, 0).pos(412, 192).size(109, 153);
 
-        showCastleDialog();
+
+        //bg.addsprite("白色框.png").anchor(0, 0).pos(0, 0).size(115, 159);
+        //bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(3, 3).size(109, 153);
+        bg.addsprite("whiteBox.png").anchor(0, 0).pos(279, 192).size(115, 153);
+        bg.addsprite("blueBox.png").anchor(0, 0).pos(279+3, 192+3).size(109, 147);
+
+
+        bg.addsprite("hook.png").anchor(0, 0).pos(258, 171).size(53, 42);
+        bg.addsprite("whiteBox.png").anchor(0, 0).pos(147, 192).size(109, 153);
+        bg.addsprite("hook.png").anchor(0, 0).pos(129, 171).size(53, 42);
+
+
+        bg.addlabel(getStr("infoFri", null), "fonts/heiti.ttf", 19).anchor(50, 50).pos(400, 370).color(66, 46, 28);
+        var but0 = new NewButton("roleNameBut0.png", [190, 60], getStr("share", null), null, 35, FONT_NORMAL, [100, 100, 100], shareGift, null);
+        but0.bg.pos(251, 420);
+        addChild(but0);
+        but0 = new NewButton("roleNameBut1.png", [190, 60], getStr("ok", null), null, 35, FONT_NORMAL, [100, 100, 100], closeDialog, null);
+        but0.bg.pos(545, 421);
+        addChild(but0);
+        bg.addsprite("scroll.png").anchor(0, 0).pos(130, 101).size(541, 67);
+        bg.addlabel(getStr("continLogin", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(395, 139).color(43, 25, 9);
+        bg.addsprite("smallBack.png").anchor(0, 0).pos(159, 49).size(484, 62);
+        bg.addlabel(getStr("loginReward", null), "fonts/heiti.ttf", 32).anchor(50, 50).pos(402, 82).color(32, 33, 40);
+
+        //bg.addsprite("rightBallon.png").anchor(0, 0).pos(696, 26).size(135, 381);
+        //bg.addsprite("leftBallon.png").anchor(0, 0).pos(-23, 43).size(152, 338);
+
+
+
+
+        var rew = getLoginReward(now);
+        var its = rew.items();
+        bg.addsprite(its[0][0]+".png").anchor(50, 50).pos(202, 265).size(60, 58);
+        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(205, 213).color(43, 25, 9);
+        bg.addlabel(str(its[0][1]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(201, 307).color(43, 25, 9);
+        
+        now += 1;
+        rew = getLoginReward(now);
+        its = rew.items();
+        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(334, 213).color(43, 25, 9);
+        bg.addsprite(its[0][0]+".png").anchor(50, 50).pos(334, 265).size(60, 58);
+        bg.addlabel(str(its[0][1]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(334, 307).color(43, 25, 9);
+        bg.addlabel(getStr("today", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(333, 332).color(43, 25, 9);
+
+
+        now += 1;
+        rew = getLoginReward(now);
+        its = rew.items();
+        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(466, 213).color(43, 25, 9);
+        bg.addlabel(str(its[0][1]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(467, 307).color(43, 25, 9);
+        bg.addsprite(its[0][0]+".png").anchor(50, 50).pos(467, 262).size(61, 57);
+        bg.addlabel(getStr("tomorrow", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(467, 332).color(43, 25, 9);
+
+        now += 1;
+        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(599, 213).color(43, 25, 9);
+
+        bg.addsprite("rightBalloon.png").anchor(0, 0).pos(698, 26).size(133, 380);
+        bg.addsprite("leftBalloon.png").anchor(0, 0).pos(-23, 46).size(150, 335);
 
     }
     function closeDialog()

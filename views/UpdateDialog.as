@@ -5,6 +5,30 @@
 >= 当前等级的 未购买的物品
 
 show update 
+
+bg.addsprite("haha.png").anchor(0, 0).pos(0, 0).size(800, 480);
+bg.addsprite("back.png").anchor(0, 0).pos(150, 91).size(520, 312);
+bg.addsprite("loginBack.png").anchor(0, 0).pos(169, 135).size(481, 252);
+bg.addsprite("whiteBoard.png").anchor(0, 0).pos(184, 175).size(314, 182);
+bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57);
+bg.addsprite("diaBack.png").anchor(0, 0).pos(201, 63).size(418, 57);
+bg.addlabel(getStr("objName", null), "fonts/heiti.ttf", 35).anchor(50, 50).pos(418, 92).color(32, 33, 40);
+bg.addlabel(getStr("richCon", null), "fonts/heiti.ttf", 93).anchor(0, 0).pos(212, 220).color(28, 15, 4);
+bg.addlabel(getStr("rich", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(415, 145).color(43, 25, 9);
+bg.addsprite("heartPlus.png").anchor(0, 0).pos(355, 267).size(37, 34);
+bg.addsprite("object.png").anchor(50, 50).pos(574, 266).size(133, 181);
+bg.addsprite("最小尺寸.png").anchor(0, 0).pos(538, 216).size(73, 101);
+bg.addsprite("绿巨人.png").anchor(50, 50).pos(575, 270).size(116, 163);
+var but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("buy", null), null, 18, FONT_NORMAL, [100, 100, 100], , null);
+but0.bg.pos(299, 402);
+addChild(but0);
+but0 = new NewButton("roleNameBut1.png", [174, 54], getStr("ok", null), null, 18, FONT_NORMAL, [100, 100, 100], , null);
+but0.bg.pos(519, 402);
+addChild(but0);
+bg.addlabel(getStr("招 募", null), "fonts/heiti.ttf", 34).anchor(0, 0).pos(267, 388).color(100, 100, 100);
+bg.addlabel(getStr("确 定", null), "fonts/heiti.ttf", 33).anchor(0, 0).pos(489, 389).color(100, 100, 100);
+
+
 */
 class UpdateDialog extends MyNode
 {
@@ -24,10 +48,21 @@ class UpdateDialog extends MyNode
         //转职等级
         //是否拥有
         //备选
-        bg = sprite("dialogUpdate.png").anchor(50, 50).pos(global.director.disSize[0]/2, global.director.disSize[1]/2);
+
+        bg = node();
+        bg.add(showFullBack());
         init();
+        bg.addsprite("back.png").anchor(0, 0).pos(150, 91).size(520, 312);
+        bg.addsprite("loginBack.png").anchor(0, 0).pos(169, 135).size(481, 252);
+        bg.addsprite("whiteBoard.png").anchor(0, 0).pos(184, 175).size(314, 182);
+        bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57);
+        bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57);
         var data = getData(kind, id);
-bg.addlabel(data.get("name"), "fonts/heiti.ttf", 25, FONT_BOLD).pos(267, 26).anchor(50, 50).color(33, 33, 40);
+        bg.addlabel(data["name"], "fonts/heiti.ttf", 35).anchor(50, 50).pos(418, 92).color(32, 33, 40);
+
+        bg.addsprite("leftBalloon.png").anchor(0, 0).pos(41, 73).size(136, 302);
+        bg.addsprite("rightBalloon.png").anchor(0, 0).pos(665, 40).size(120, 342);
+
         var w;
         if(kind == SOLDIER)
             w = getStr("buySol", ["[NAME]", data.get("name")]);
@@ -35,30 +70,66 @@ bg.addlabel(data.get("name"), "fonts/heiti.ttf", 25, FONT_BOLD).pos(267, 26).anc
             w = getStr("buyBuild", ["[NAME]", data.get("name")] );
         if(kind == EQUIP)
             w = getStr("buyEquip", ["[NAME]", data.get("name")] );
+        bg.addlabel(w, "fonts/heiti.ttf", 20).anchor(50, 50).pos(415, 145).color(43, 25, 9);
 
-        var pic = bg.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).anchor(50, 50).pos(435, 255);
-        var sca = getSca(pic, [170, 220]);
+        var pic = bg.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(575, 270);
+        var sca = getSca(pic, [116, 163]);
         pic.scale(sca);
 
-bg.addlabel(w, "fonts/heiti.ttf", 19, FONT_BOLD).anchor(50, 50).pos(267, 80).color(0, 0, 0);
-var word = bg.addlabel(getStr("richThing", null), "fonts/heiti.ttf", 19, FONT_NORMAL, 273, 0, ALIGN_LEFT).color(28, 16, 4).pos(74, 124);
+
+        var word = bg.addlabel(getStr("richThing", null), "fonts/heiti.ttf", 21, FONT_NORMAL, 260, 0, ALIGN_LEFT).anchor(0, 0).pos(212, 220).color(28, 15, 4);
         var wSize = word.prepare().size();
 
-        bg.addsprite("heartPlus.png").pos(74, 124+wSize[1]+5).anchor(0, 0).scale(50);
-            
-        var but0 = bg.addsprite("blueButton.png").anchor(50, 50).pos(123, 342).setevent(EVENT_TOUCH, onBuy);
-but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
+        bg.addsprite("heartPlus.png").anchor(0, 0).pos(212, 220+wSize[1]+5).size(37, 34);
 
-        but0 = bg.addsprite("roleNameBut0.png").anchor(50, 50).pos(280, 342).size(130, 47).setevent(EVENT_TOUCH, onOk);
-but0.addlabel(getStr("ok", null), "fonts/heiti.ttf", 26).anchor(50, 50).pos(65, 23);
+        var but0;
+        //士兵只有确定按钮
+        if(kind == SOLDIER)
+        {
+            but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("ok", null), null, 33, FONT_NORMAL, [100, 100, 100], onOk, null);
+            but0.bg.pos((299+519)/2, 402);
+            addChild(but0);
+        }
+        else
+        {
+            but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("buyIt", null), null, 33, FONT_NORMAL, [100, 100, 100], onBuy, null);
+            but0.bg.pos(299, 402);
+            addChild(but0);
+            but0 = new NewButton("roleNameBut1.png", [174, 54], getStr("ok", null), null, 33, FONT_NORMAL, [100, 100, 100], onOk, null);
+            but0.bg.pos(519, 402);
+            addChild(but0);
+        }
+            
     }
+    //如果没有这个建筑物 则 只是虚拟建筑物的数据
+    //从当前的buildLayer 中找到合适的兵营
+    //招募士兵 问题还是比较多 
     function onBuy()
     {
         global.director.popView();
         var st;
+        /*
         if(kind == SOLDIER)
-            global.director.pushView(new SoldierStore(global.director.curScene), 1, 0);
-        else if(kind == BUILD)
+        {
+            var allBuildings = global.user.buildingsi.items();
+            for(var i = 0; i < len(allBuildings); i++)
+            {
+                var k = allBuildings[i][0];
+                var v = allBuildings[i][1];
+                var bData = getData(BUILD, v["id"]);
+                if(bData["funcs"] == CAMP && v["state"] == PARAMS["buildFree"])
+                {
+                    var newB = new Building(null, bData, v); 
+                    newB.setBid(k);
+                    global.director.pushView(new CallSoldier(newB), 1, 0);
+                    return;
+                }
+            }
+            global.director.curScene.addChild(new UpgradeBanner(getStr("noCamp", null), [100, 100, 100]));
+            //global.director.pushView(new SoldierStore(global.director.curScene), 1, 0);
+        }
+        */
+        if(kind == BUILD)
         {
             st = new Store(global.director.curScene);
             st.changeTab(st.BUILD_PAGE);

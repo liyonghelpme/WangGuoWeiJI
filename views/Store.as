@@ -2,7 +2,7 @@ class Store extends MyNode
 {
     var stores;
     var tabs;
-    var choose;
+    //var choose;
     var goods;
 
     //curSel buy object
@@ -24,6 +24,12 @@ class Store extends MyNode
     const DECOR_PAGE = 5;
     const EQUIP_PAGE = 6;
     const DRUG_PAGE = 7;
+
+    const ObjKind_Page_Map = dict([
+        ["gold", GOLD_PAGE],
+        ["silver", SILVER_PAGE],
+        ["crystal", CRYSTAL_PAGE],
+    ]);
 
 
 
@@ -52,40 +58,92 @@ class Store extends MyNode
     var titles = [
     "buyNew.png", "buyGold.png", "buySilver.png", "buyCrystal.png", "buyBuild.png", "buyDecor.png", "buyWeapon.png", "buyDrug.png",
     ];
-    /*
-    var words = [
-        "buyNew", "buyGold", "buySilver", "buyCrystal", "buyBuild", "buyDecor", "buyWeapon", "buyDrug",
-    ];
-    */
     var silverText;
     var goldText;
     var cryText;
     var scene;
+    /*
+        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
+        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64);
+        bg.addsprite("closeBut.png").anchor(0, 0).pos(752, 7).size(41, 41);
+        bg.addsprite("rightBack.png").anchor(0, 0).pos(254, 79).size(514, 387);
+        bg.addsprite("leftBack.png").anchor(0, 0).pos(34, 79).size(197, 386);
+        bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(200, 396);
+        bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 388).size(198, 78);
+        bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 311).size(198, 78);
+        bg.addsprite("greenChoice.png").anchor(0, 0).pos(33, 233).size(198, 79);
+        bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 156).size(198, 78);
+        bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 79).size(198, 78);
+
+        bg.addsprite("instructArrow.png").anchor(0, 0).pos(22, 211).size(227, 117);
+        bg.addsprite("moneyBack.png").anchor(0, 0).pos(274, 28).size(450, 33);
+        bg.addsprite("水晶 .png").anchor(0, 0).pos(586, 30).size(31, 29);
+        bg.addsprite("gold.png").anchor(0, 0).pos(439, 28).size(31, 30);
+        bg.addsprite("silver.png").anchor(0, 0).pos(280, 27).size(32, 32);
+        bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(621, 37).color(100, 100, 100);
+        bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(318, 36).color(100, 100, 100);
+        bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(474, 37).color(100, 100, 100);
+        bg.addsprite("storeTit.png").anchor(0, 0).pos(76, 7).size(169, 63);
+
+bg.addsprite("leftBack.png").anchor(0, 0).pos(34, 79).size(197, 386);
+bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 388).size(198, 78);
+bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 311).size(198, 78);
+bg.addsprite("greenChoice.png").anchor(0, 0).pos(33, 233).size(198, 79);
+bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 156).size(198, 78);
+bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
+    */
     function Store(s)
     {
         //be care of cycle reference problem
         scene = s;
-        bg = sprite("goodBack.jpg");
+        //bg = sprite("goodBack.jpg");
+        bg = node();
         init();
+        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
+        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64);
+
+
+
+        bg.addsprite("rightBack.png").anchor(0, 0).pos(254, 79).size(514, 387);
+        bg.addsprite("storeLeft.png").anchor(0, 0).pos(34, 79).size(197, 386);
+
+        var choose = sprite("instructArrow.png").anchor(0, 0).pos(22, 211).size(227, 117);
+        bg.add(choose, 1);
+        bg.addsprite("moneyBack.png").anchor(0, 0).pos(274, 28).size(450, 33);
+        bg.addsprite("crystal.png").anchor(0, 0).pos(586, 30).size(31, 29);
+        bg.addsprite("gold.png").anchor(0, 0).pos(439, 28).size(31, 30);
+        bg.addsprite("silver.png").anchor(0, 0).pos(280, 27).size(32, 32);
+
+
+        bg.addsprite("storeTit.png").anchor(0, 0).pos(76, 7).size(169, 63);
+
+
 
         goods = new Goods(this);
         addChild(goods);
 
         tabs = new Choice(this);
         addChild(tabs);
-        choose = sprite("goodsChoice.png").pos(134, 266).anchor(50, 50);
-        bg.add(choose, 1, 1);
+        //board遮挡
+        bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
 
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        var but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
+        but0.bg.pos(772, 27);
+        addChild(but0);
+
         initData();
 
         changeTab(NEW_GOODS);
     }
     function initData()
     {
-silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(324, 40).color(100, 100, 100);
-goldText = bg.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(481, 40).color(100, 100, 100);
-cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(625, 40).color(100, 100, 100);
+        cryText = bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(621, 37).color(100, 100, 100);
+        silverText = bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(318, 36).color(100, 100, 100);
+        goldText = bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(474, 37).color(100, 100, 100);
+        
+        //silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(324, 40).color(100, 100, 100);
+        //goldText = bg.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(481, 40).color(100, 100, 100);
+        //cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(625, 40).color(100, 100, 100);
     }
     function updateValue(res)
     {
@@ -98,6 +156,7 @@ cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 1
         super.enterScene();
         //global.user.addListener(this);
         global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
+        updateValue(global.user.resource);
     }
     function receiveMsg(param)
     {
@@ -119,6 +178,11 @@ cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 1
         global.director.popView(); 
     }
     //allGoods item tab item
+    const BUY_RES = dict([
+        ["silver", "buySilver"],
+        ["crystal", "buyCrystal"],
+        ["gold", "buyGold"],
+    ]);
     function buy(gi)
     {
         var item = allGoods[gi[0]][gi[1]]; 
@@ -137,7 +201,8 @@ cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 1
             //addChildZ(new ResourceBanner(buyable, 506, 231), 1);
             buyable.pop("ok");
             var it = buyable.items();
-            global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+            //global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+            global.director.curScene.addChild(new ResLackBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], BUY_RES[it[0][0]], ObjKind_Page_Map[it[0][0]], this));
             return;
         }
 
@@ -151,7 +216,8 @@ cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 1
                 var ret = checkFarmNum(); 
                 if(ret == 0)
                 {
-                    global.director.pushView(new MyWarningDialog(getStr("farmTooTitle", null), getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1+1)]), null), 1, 0);
+                    global.director.curScene.addChild(new UpgradeBanner(getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1+1) ] ) , [100, 100, 100], null));
+
                     return;
                 }
             }
@@ -159,54 +225,64 @@ cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 1
             global.director.popView();
             scene.beginBuild(id);
         }
-        else if(kind == DRUG)
-        {
+        else{
             if(kind == DRUG)
+            {
+                //if(kind == DRUG)
                 global.httpController.addRequest("goodsC/buyDrug", dict([["uid", global.user.uid], ["drugKind", id]]), null, null);
+                global.user.buySomething(kind, id, cost);
+                /*
+                刷新当前购买页面
+                */
+                //setTab(curSel);
+                //addChildZ(new SucBanner(), 1);
+                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
 
-            global.user.buySomething(kind, id, cost);
-            /*
-            刷新当前购买页面
-            */
-            setTab(curSel);
-            //addChildZ(new SucBanner(), 1);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+                global.taskModel.finishTask(ONCE_TASK, "buy", 0, [DRUG, id]);
+            }
+            else if(kind == EQUIP)
+            {
+                var newEid = global.user.getNewEid();
+                global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
+                global.user.buyEquip(newEid, id, cost);
+                global.taskModel.finishTask(ONCE_TASK, "buy", 0, [EQUIP, id]);
 
-            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [DRUG, id]);
-        }
-        else if(kind == EQUIP)
-        {
-            var newEid = global.user.getNewEid();
-            global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
-            global.user.buyEquip(newEid, id, cost);
-            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [EQUIP, id]);
+                //setTab(curSel);
+                //addChildZ(new SucBanner(), 1);
+                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+            }
+            //购买金币 需要消耗木瓜币 有所不同
+            else if(kind == GOLD)
+            {
+            }
+            else if(kind == SILVER || kind == CRYSTAL)
+            {
+                global.httpController.addRequest("goodsC/buyResource", dict([["uid", global.user.uid], ["kind", kind], ["oid", id]]), null, null);
+                global.user.buyResource(kind, id, cost, getGain(kind, id)); 
 
+                //setTab(curSel);
+                //addChildZ(new SucBanner(), 1);
+                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+            }
+            else if(kind == TREASURE_STONE)
+            {
+                global.httpController.addRequest("goodsC/buyTreasureStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
+                global.user.buyTreasureStone(id);
+                //setTab(curSel);
+                //addChildZ(new SucBanner(), 1);
+                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+            }
+            else if(kind == MAGIC_STONE)
+            {
+                global.httpController.addRequest("goodsC/buyMagicStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
+                global.user.buyMagicStone(id);
+                //setTab(curSel);
+                //addChildZ(new SucBanner(), 1);
+                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+            }
+            trace("addPopBanner");
             setTab(curSel);
-            //addChildZ(new SucBanner(), 1);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
-        }
-        else if(kind == GOLD || kind == SILVER || kind == CRYSTAL)
-        {
-            global.user.buyResource(kind, id, cost, getGain(kind, id)); 
-            setTab(curSel);
-            //addChildZ(new SucBanner(), 1);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
-        }
-        else if(kind == TREASURE_STONE)
-        {
-            global.httpController.addRequest("goodsC/buyTreasureStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
-            global.user.buyTreasureStone(id);
-            setTab(curSel);
-            //addChildZ(new SucBanner(), 1);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
-        }
-        else if(kind == MAGIC_STONE)
-        {
-            global.httpController.addRequest("goodsC/buyMagicStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
-            global.user.buyMagicStone(id);
-            setTab(curSel);
-            //addChildZ(new SucBanner(), 1);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+            global.director.curScene.addChildZ(new PopBanner(cost2Minus(cost)), BANNER_LAYER);//自己控制
         }
     }
     /*

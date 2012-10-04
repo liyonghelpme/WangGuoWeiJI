@@ -7,22 +7,26 @@ class Choice extends MyNode
     var choose;
 
     var TabNum = 0;
-    const Height = 85;
-    const BackHei = 377; 
-    const Extra = 5;
-    const InitOff = 190;
+    const Height = 77;
+    const ROW_NUM = 5; 
+    const BackHei = Height*ROW_NUM; 
 
+    const Extra = 5;
+    const InitOff = BackHei/2;
+
+
+    //bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
     function Choice(s)
     {
         store = s;
         TabNum = len(store.allGoods);
-        bg = node().pos(26, 77).size(204, 377).clipping(1);
+        bg = node().pos(33, 78).size(198, BackHei).clipping(1);
         init();
         flowTab = node().pos(0, InitOff-Height*2);
         bg.add(flowTab);
 
-        var shadow = sprite("shadow.png", ARGB_8888);
-        bg.add(shadow, 2, 2);
+        //var shadow = sprite("shadow.png", ARGB_8888);
+        //bg.add(shadow, 2, 2);
 
         initTabs();
         getTabs();
@@ -63,14 +67,14 @@ class Choice extends MyNode
         {
             if(tabArray[i][1] == sel)
             {
-                tabArray[i][0].texture("goodGreen.png");
+                tabArray[i][0].texture("greenChoice.png");
             }
             else
             {
                 if(tabArray[i][1]%2 == 0)
-                    tabArray[i][0].texture("goodWhite.png");
+                    tabArray[i][0].texture("whiteChoice.png");
                 else
-                    tabArray[i][0].texture("goodYellow.png");
+                    tabArray[i][0].texture("yellowChoice.png");
             }
         }
             
@@ -92,14 +96,20 @@ class Choice extends MyNode
         getTabs();
     }
 
+    /*
+    bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 388).size(198, 78);
+    bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 311).size(198, 78);
+    bg.addsprite("greenChoice.png").anchor(0, 0).pos(33, 233).size(198, 79);
+    bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 156).size(198, 78);
+    */
     function initTabs()
     {
         tabArray = [];
         var t;
         for(var i = 0; i < TabNum; i++)
         {
-            t = sprite("goodWhite.png").pos(0, i*Height).anchor(0, 50);
-            t.addsprite(store.pics[i]).pos(100, 45).anchor(50, 50);
+            t = sprite("whiteChoice.png").pos(0, i*Height).anchor(0, 50).size(198, 78);
+            t.addsprite(store.pics[i]).pos(0, 0).anchor(0, 0);
             tabArray.append([t, i]); 
             flowTab.add(t);
         }

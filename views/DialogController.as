@@ -46,8 +46,8 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "noTip")
                 {
-                    var word = curCmd.get("word");
-                    global.director.pushView(new NoTipDialog(word, curCmd.get("kind")), 1, 0);
+                    //var word = curCmd.get("word");word,
+                    global.director.pushView(new NoTipDialog( curCmd.get("kind")), 1, 0);
                 }
                 else if(curCmd.get("cmd") == "chooseSol")
                 {
@@ -70,6 +70,16 @@ class DialogController extends MyNode
                 else if(curCmd.get("cmd") == "roleName")
                 {
                     global.director.pushView(new RoleName(null, curCmd["sol"]), 1, 0);
+                }
+                //测试爱心对话框使用
+                else if(curCmd.get("cmd") == "love")
+                {
+                    //var tree = global.user.buildings; 
+                    //global.director.pushView(new LoveDialog(), 1, 0);
+                }
+                else if(curCmd.get("cmd") == "loveUpgrade")
+                {
+                    global.director.pushView(new LoveUpgradeDialog(curCmd["level"]), 1, 0);
                 }
             }
         }

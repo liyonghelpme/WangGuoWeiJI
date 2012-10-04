@@ -8,16 +8,6 @@ import views.FriendMenu;
 import views.FriendSoldier;
 
 
-import views.RankDialog;
-//import views.HeroRank;
-//import views.GroupRank;
-//import views.NewRank;
-import views.RankBase;
-import views.ChallengeScene;
-
-
-
-
 import views.SettingDialog;
 import views.TaskDialog;
 import views.TipDialog;
@@ -51,10 +41,7 @@ import views.MenuLayer;
 
 
 
-//商店
-import views.Store;
-import views.Choice;
-import views.Goods;
+
 
 import views.RoleName;
 
@@ -84,7 +71,7 @@ import views.UpgradeDialog;
 import views.SkillDialog;
 import views.UpgradeSkillDialog;
 import views.TrainDialog;
-import views.LoveDialog;
+
 
 //import views.HeartRankDialog;
 //import views.HeartRankBase;
@@ -206,12 +193,12 @@ import views.MapDefense;
 
 import views.DialogController;
 import views.Mask;
-import views.LoginDialog;
+
 import views.ScoreDialog;
 import views.LevupDialog;
-import views.UpdateDialog;
-import views.LiveHeartDialog;
-import views.VisitDialog;
+
+
+
 import views.NoTipDialog;
 
 
@@ -225,10 +212,28 @@ import views.BreakDialog;
 import views.CallSoldier;
 import views.SoldierGoods;
 
+import views.RankDialog;
+import views.RankBase;
+import views.ChallengeScene;
+import views.VisitDialog;
+
+
+
+//商店
+import views.Store;
+import views.Choice;
+import views.Goods;
+import views.ResLackBanner;
+
+import views.UpdateDialog;
+import views.LoveUpgradeDialog;
+import views.LoveDialog;
+import views.LiveHeartDialog;
+import views.LoginDialog;
 
 //菜单使用的按钮对象
 import views.Button;
-import views.SucBanner;
+import views.UpgradeBanner;
 
 
 

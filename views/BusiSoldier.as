@@ -262,6 +262,7 @@ class BusiSoldier extends MyNode
     function setSmoke()
     {
         bg.addaction(fadein(1000));
+        bg.addaction(movAni);
         oldState = state;
         state = SOL_NAME;
         clearMoveState();//停止移动
@@ -275,6 +276,7 @@ class BusiSoldier extends MyNode
             oldState = null;
         }
     }
+    const TRAIN_CENTER = [465, 720];
     function BusiSoldier(m, d, privateData, s)
     {
         sid = s;
@@ -292,7 +294,7 @@ class BusiSoldier extends MyNode
 
         var oldPos = global.user.getOldPos(sid);
         if(oldPos == null)//默认出现位置 中心
-            oldPos = [465, 720];
+            oldPos = TRAIN_CENTER;
 
         bg.size(bSize).anchor(50, 100).pos(oldPos);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
@@ -994,9 +996,18 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     {
         inGame = 1;
         gameId = gId;
+        clearMoveState();
+        map.mapGridController.clearSolMap(this);
+        
+        bg.pos(TRAIN_CENTER);
+        var nPos = normalizePos(bg.pos(), sx, sy);
+        setPos(nPos);
+
+        map.map.moveToBuild(this);
     }
     function endGame()
     {
+        map.map.moveToNormal(this);
         inGame = 0;
         gameId = -1;
     }

@@ -773,7 +773,7 @@ class Building extends MyNode
 
             global.director.curScene.addChild(new PopBanner(showData));//自己控制
              
-            map.sellBuild(this);
+            map.sellBuild(this);//没有清除建筑物的底座
         }
         //global.director.pushView(new SellDialog(this), 1, 0);
     }

@@ -15,7 +15,6 @@ import Global.INCLUDE;
 //global.director.pushScene(new NewBattle());
 
 
-
 //显示场景
 global.director.replaceScene(new CastleScene());
 global.director.pushView(new Loading(), 1, 0);//DarkNod
@@ -33,4 +32,16 @@ global.user.initData();
 
 //global.director.pushView(new LevelChoose(null, 0), 1, 0);
 //global.director.pushScene(new MapScene());
-//global.director.pushView(new CallSoldier(null), 1, 0);
+
+//global.director.pushView(new LoginDialog(dict([["loginDays", 5]])), 1, 0);
+
+//global.director.pushView(new LiveHeartDialog(), 1, 0);
+//global.director.pushView(new LoveDialog(null), 1, 0);
+//global.director.pushView(new LoveUpgradeDialog(null), 1, 0);
+//global.director.pushView(new UpdateDialog(EQUIP, 0), 1, 0);
+
+
+
+//global.director.pushView(new Store(null), 1, 0);
+
+
