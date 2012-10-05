@@ -839,6 +839,7 @@ class User
     经营页面 和 闯关页面的士兵实体 都需要有以下属性
     */
     //士兵类型 名字 当前生命值 经验 等级
+    //修改士兵状态 通知
     function updateSoldiers(soldier)
     {
         //怪兽 敌方士兵 不更新数据
@@ -1060,6 +1061,14 @@ class User
 
         setValue(NOTIFY, 1);
     }
+    //使用装备 药品应该发送消息 而不是 直接更新士兵
+    //useDrug useEquip 内部函数
+    //消息只能发送给加入场景的对象 而 临时士兵对象没有加入场景所以无法更新数据
+
+    //行为分成两种：操作  更新状态
+    //操作采用计算的方式 得到新状态
+    //更新状态根据当前的数据  恢复状态
+    //updateState 函数更新士兵状态
     function useThing(kind, tid, soldier)
     {
 //        trace("useThing", kind, tid, soldier.id);
@@ -1070,8 +1079,11 @@ class User
 
 
             changeGoodsNum(DRUG, tid, -1);
-
+            //可能导致同一个士兵有两个代理个体 那么更新drug就存在问题
+            //一个个体更新状态
+            //其他个体同步状态
             soldier.useDrug(tid);
+            global.msgCenter.sendMsg(USE_DRUG, [soldier.sid, tid]);//士兵使用某种类型药水
         }
         else if(kind == EQUIP)
         {
@@ -1081,6 +1093,7 @@ class User
             edata["owner"] = soldier.sid;
             db.put("equips", equips);
             soldier.useEquip(tid);
+            global.msgCenter.sendMsg(UPDATE_EQUIP, tid);
             return 1;
         }
     }
@@ -1103,7 +1116,7 @@ class User
         db.put("equips", equips);
         soldiers.pop(soldier.sid);
         db.put("soldiers", soldiers);
-
+        global.msgCenter.sendMsg(UPDATE_SOL, soldier);//卖出士兵
     }
 
     function getLevelUpReward()

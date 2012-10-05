@@ -43,6 +43,11 @@ class ResLackBanner extends MyNode
         removeSelf();
         //var store = new Store(global.director.curScene);
         //global.director.pushView(store,  1, 0);
+        if(store == null)
+        {
+            store = new Store(global.director.curScene);
+            global.director.pushView(store, 1, 0);
+        }
         store.changeTab(param);
     }
     function removeNow()

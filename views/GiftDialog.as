@@ -51,7 +51,7 @@ class GiftDialog extends MyNode
         initData();
         bg.addsprite("sendGiftTitle.png").anchor(50, 50).pos(169, 41);
 
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         cl = bg.addnode().pos(46, 90).size(703, 357).clipping(1);
         flowNode = cl.addnode();

@@ -1,3 +1,6 @@
+/*
+因为MyNode bg 的put 已经被使用了所以需要判断 get得到的对象如果不是MyNode 则不处理exitScene
+*/
 class MyNode
 {
     var ins;

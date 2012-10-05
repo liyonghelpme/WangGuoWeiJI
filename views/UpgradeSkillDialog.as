@@ -112,7 +112,7 @@ but1.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 35).pos(107, 32).ancho
 
         var store = new Store(global.director.curScene);
         global.director.pushView(store,  1, 0);
-        store.changeTab(store.NEW_GOODS);
+        store.changeTab(NEW_GOODS);
     }
     //使用宝石等待服务器返回
     function onUpgrade(n, e, p, x, y, points)

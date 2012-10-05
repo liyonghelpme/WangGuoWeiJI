@@ -66,7 +66,7 @@ class TaskDialog extends MyNode
         moveExp = bg.addsprite("dialogTaskExp.png").pos(120+194, 140);
 //        trace("init Exp bar");
 
-        bg.addsprite("close2.png").anchor(50, 50).pos(764, 29).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").anchor(50, 50).pos(764, 29).setevent(EVENT_TOUCH, closeDialog);
 
 
         var star = bg.addsprite("dialogTaskStar.png").anchor(50, 50).pos(INITX, 150);

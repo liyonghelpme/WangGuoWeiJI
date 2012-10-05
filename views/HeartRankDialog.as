@@ -39,7 +39,7 @@ class HeartRankDialog extends MyNode
         bg = sprite("dialogFriend.png");
         init();
         bg.addsprite("heartRank.png").pos(172,47).anchor(50, 50);
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         var clPos = [66, 117];
         var clSize = [665, 338];

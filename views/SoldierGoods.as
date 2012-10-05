@@ -9,11 +9,11 @@ class SoldierGoods extends MyNode
     var data;
 
     const INIT_X = 271;
-    const INIT_Y = 143;
+    const INIT_Y = 147;
     const offX = 166;
     const offY = 206;
     const WIDTH = 479;
-    const HEIGHT = 318;
+    const HEIGHT = 319;
     const PAN_PER_ROW = 3;
     const ROW_NUM = 2;
 
@@ -72,7 +72,7 @@ class SoldierGoods extends MyNode
                 {
                     break;
                 }
-                panel = flowNode.addsprite("goodPanel.png").pos(j*offX, curY);
+                panel = flowNode.addsprite("goodPanel.png").pos(j*offX+PAN_WID/2, curY+PAN_HEI/2).anchor(50, 50);
                 var sca = getSca(panel, [PAN_WID, PAN_HEI]);
                 panel.scale(sca);
 
@@ -128,11 +128,24 @@ class SoldierGoods extends MyNode
     /*
     切换tab 更新面板 更新物品信息
     */
+    var curTouch = null;
+    var oldScale;
+    var player;
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
         lastPoints = newPos;
         accMove = 0;
+
+        curTouch = checkInChild(flowNode, lastPoints);
+        if(curTouch != null)
+        {
+            oldScale = curTouch.scale();
+            curTouch.scale(oldScale[0]*80/100, oldScale[1]*80/100);
+            player = global.controller.butMusic.play(0, 80, 80, 0, 100);
+        }
+
+        /*
         var child = checkInChild(flowNode, newPos);
         if(child != null)
         {
@@ -142,6 +155,7 @@ class SoldierGoods extends MyNode
             //else
             store.setSoldier(child.get());
         }
+        */
     }
     function moveBack(dify)
     {
@@ -166,17 +180,16 @@ class SoldierGoods extends MyNode
     function solNotEnough()
     {
     }
-    /*
-    function solNotEnough()
-    {
-        closeDialog();
-        var st = new Store(scene);
-        st.changeTab(st.BUILD_PAGE);
-        global.director.pushView(st, 1, 0);
-    }
-    */
     function touchEnded(n, e, p, x, y, points)
     {
+        if(curTouch != null)
+        {
+            curTouch.scale(oldScale);
+            curTouch = null;
+            player.stop();
+            player = null;
+        }
+
         var newPos = n.node2world(x, y);
         if(accMove < 10)
         {
@@ -184,11 +197,13 @@ class SoldierGoods extends MyNode
             if(child != null)
             {
                 var idCan = child.get(); 
+                store.setSoldier(idCan);
 
                 //士兵人数超出 50
                 //士兵人数超出 民居数量
                 if(idCan[1] == 1)//等级足够显示职业介绍
                 {
+
                     /*
                     var curSolNum = global.user.getSolNum();
                     var peopleNum = global.user.getPeopleNum();

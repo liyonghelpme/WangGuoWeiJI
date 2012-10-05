@@ -326,7 +326,7 @@ class MakeDrugDialog extends MyNode
         bg = sprite("dialogFriend.png");
         init();
         bg.addsprite("dialogMakeDrug.png").pos(150, 40).anchor(50, 50);
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         var but0 = bg.addsprite("roleNameBut0.png").pos(400, 23).size(126, 40).setevent(EVENT_TOUCH, switchView, 0);
 but0.addlabel(getStr("makeDrugPage", null), "fonts/heiti.ttf", 22).anchor(50, 50).pos(63, 20);

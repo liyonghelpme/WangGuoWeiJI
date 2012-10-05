@@ -89,7 +89,7 @@ s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(380, 1
         setStoneNum();
         
     
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         //90 357 127 330
         cl = bg.addnode().pos(46, 127).size(703, CLIP_HEIGHT).clipping(1);
@@ -275,9 +275,9 @@ but1.addlabel(getStr("giveup", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(
         var store = new Store(global.director.curScene);
         global.director.pushView(store,  1, 0);
         if(kind == DRUG)
-            store.changeTab(store.DRUG_PAGE);
+            store.changeTab(DRUG_PAGE);
         else if(kind == EQUIP)
-            store.changeTab(store.EQUIP_PAGE);
+            store.changeTab(EQUIP_PAGE);
     }
 
     //升级装备 降级装备

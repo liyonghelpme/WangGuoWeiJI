@@ -159,6 +159,8 @@ class Recommand extends FriendList
 /*
 ;首先获取所有好友的信息 friend 逐行显示
 当好友没有的时候再去显示所有其它的好友
+
+显示邻居数据的过程:
 */
 class FriendDialog extends MyNode
 {
@@ -185,7 +187,7 @@ class FriendDialog extends MyNode
         init();
         //initData();
         bg.addsprite("dialogFriendTitle.png").pos(60, 8);
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         var but1 = bg.addsprite("roleNameBut0.png").pos(350, 43).anchor(50, 50).size(129, 41).setevent(EVENT_TOUCH, switchView, 0);
 but1.addlabel(getStr("showNeibor", null), "fonts/heiti.ttf", 25).pos(64, 20).anchor(50, 50).color(100, 100, 100);

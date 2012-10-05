@@ -95,7 +95,7 @@ healthText = bg.addlabel("1000", "fonts/heiti.ttf", 24).pos(321, 44).anchor(0, 5
 attText = bg.addlabel("1000", "fonts/heiti.ttf", 24).pos(474, 44).anchor(0, 50).color(100, 100, 100);
 defText = bg.addlabel("1000", "fonts/heiti.ttf", 24).pos(623, 44).anchor(0, 50).color(100, 100, 100);
 
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         cl = bg.addnode().pos(46, 90).size(703, 357).clipping(1);
         flowNode = cl.addnode();
@@ -190,25 +190,25 @@ panel.addlabel((objData.get("name") + " ") + objData.get("des"), "fonts/heiti.tt
             {
                 if(num == 0)
                 {
-but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
+                    but0.addlabel(getStr("buyIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, buyIt, i);
                 }
                 else
                 {
-but0.addlabel(getStr("useIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
+                    but0.addlabel(getStr("useIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, useIt, data[i][1]);
                 }
             }
             else if(kind == EQUIP)
             {
-                if(ifUse == 0)
+                if(ifUse == 0)//未使用
                 {
-but0.addlabel(getStr("useIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
-                    but0.setevent(EVENT_TOUCH, buyIt, i);
+                    but0.addlabel(getStr("useIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
+                    but0.setevent(EVENT_TOUCH, useIt, i);
                 }
                 else
                 {
-but0.addlabel(getStr("unloadIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
+                    but0.addlabel(getStr("unloadIt", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
                     but0.setevent(EVENT_TOUCH, unloadIt, data[i][1]);
                     
                 }
@@ -279,9 +279,9 @@ but1.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor
         var store = new Store(global.director.curScene);
         global.director.pushView(store,  1, 0);
         if(kind == DRUG)
-            store.changeTab(store.DRUG_PAGE);
+            store.changeTab(DRUG_PAGE);
         else if(kind == EQUIP)
-            store.changeTab(store.EQUIP_PAGE);
+            store.changeTab(EQUIP_PAGE);
     }
 
     function useIt(n, e, p, x, y, points)
@@ -315,6 +315,7 @@ but1.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor
                 return;
             }
         }
+        trace("useThing", kind, p);
         global.user.useThing(kind, p, soldier);
         if(filterIs == RELIVE)//使用复活药水 则关闭对话框
             global.director.popView();
@@ -354,7 +355,8 @@ but1.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor
         global.msgCenter.removeCallback(UPDATE_SOL, this);
         super.exitScene();
     }
-
+    
+    //只保留当前引用的士兵的SID 而数据从最新的士兵实体获取
     function updateSoldier(sol)
     {
         if(sol.sid == soldier.sid)
@@ -363,13 +365,11 @@ but1.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor
             nameText.text(soldier.myName);
             healthText.text(str(soldier.health)+"/"+str(soldier.healthBoundary));
 
-            var attack = 0;
-            if(soldier.physicAttack > 0)
-                attack = soldier.physicAttack;
-            else 
-                attack = soldier.magicAttack;
+            var attack = max(soldier.physicAttack, soldier.magicAttack);
+            var defense = max(soldier.physicDefense, soldier.magicDefense);
+
             attText.text(str(attack));
-            defText.text(str(soldier.physicDefense));
+            defText.text(str(defense));
         }
     }
 }

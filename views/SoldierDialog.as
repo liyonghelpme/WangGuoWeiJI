@@ -10,7 +10,7 @@ class SoldierDialog extends MyNode
         bg = sprite("dialogFriend.png");
         init();
         bg.addsprite("dialogSoldier.png").anchor(50, 50).pos(163, 38);
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         title = bg.addsprite("dialogSoldierTitle.png").pos(336, 85);
 
         var but0 = bg.addsprite("roleNameBut0.png").pos(440, 41).size(99, 37).anchor(50, 50).setevent(EVENT_TOUCH, switchView, 0);

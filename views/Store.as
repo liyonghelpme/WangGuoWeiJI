@@ -15,21 +15,9 @@ class Store extends MyNode
     //5 crystal
     //6 plant
 
-    //页面ID
-    const NEW_GOODS = 0;
-    const GOLD_PAGE = 1;
-    const SILVER_PAGE = 2;
-    const CRYSTAL_PAGE = 3;
-    const BUILD_PAGE = 4;
-    const DECOR_PAGE = 5;
-    const EQUIP_PAGE = 6;
-    const DRUG_PAGE = 7;
 
-    const ObjKind_Page_Map = dict([
-        ["gold", GOLD_PAGE],
-        ["silver", SILVER_PAGE],
-        ["crystal", CRYSTAL_PAGE],
-    ]);
+
+
 
 
 
@@ -178,11 +166,7 @@ bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
         global.director.popView(); 
     }
     //allGoods item tab item
-    const BUY_RES = dict([
-        ["silver", "buySilver"],
-        ["crystal", "buyCrystal"],
-        ["gold", "buyGold"],
-    ]);
+
     function buy(gi)
     {
         var item = allGoods[gi[0]][gi[1]]; 

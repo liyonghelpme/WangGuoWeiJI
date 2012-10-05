@@ -574,7 +574,7 @@ var strings = dict([
 [ "herbNot" , ["药材不足", ""]],
 [ "makeDrug" , ["炼 药", ""]],
 [ "needLev" , ["需要等级[[LEV]]", ""]],
-[ "allSoldier" , ["所 有", ""]],
+//[ "allSoldier" , ["所 有", ""]],
 [ "dead" , ["阵 亡", ""]],
 [ "transfer" , ["转 职", ""]],
 [ "useIt" , ["使 用", ""]],
@@ -1142,6 +1142,16 @@ var strings = dict([
 ["buySilver", "购买银币"],
 ["buyCrystal", "购买水晶"],
 ["buyGold", "购买金币"],
+//检测如果数据库有该词条则存储否则新建词条
+["allSoldier", "所有士兵"],
+["deadSoldier", "已阵亡士兵"],
+["waitTransfer", "待转职士兵"],
+
+
+["allSolDes", "[NAME]([CAREER])\n[ATTKIND]\n等级:[LEV]\n攻击力:[ATT]\n防御力:[DEF]\n生命值:[HEALTH]"],
+["reliveBut", "[NUM] 复活"],
+["transferBut", "[NUM] 转职"],
+["conTrans", "恭喜！[NAME]升级为[LEV][CAREER]！"],
 
 ]);
 

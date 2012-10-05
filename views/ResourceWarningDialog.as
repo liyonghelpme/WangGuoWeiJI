@@ -75,15 +75,15 @@ bg.addlabel(getStr("resList", ["[NAME]", getStr(item[i][0], null), "[VAL]", str(
         var store = new Store(global.director.curScene);
         if(c[0] == "silver")
         {
-            store.changeTab(store.SILVER_PAGE);
+            store.changeTab(SILVER_PAGE);
         }
         else if(c[0] == "crystal")
         {
-            store.changeTab(store.CRYSTAL_PAGE);
+            store.changeTab(CRYSTAL_PAGE);
         }
         else if(c[0] == "gold")
         {
-            store.changeTab(store.GOLD_PAGE);
+            store.changeTab(GOLD_PAGE);
         }
         global.director.pushView(store);
     }

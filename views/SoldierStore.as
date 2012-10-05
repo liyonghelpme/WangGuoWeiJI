@@ -48,7 +48,7 @@ class SoldierStore extends MyNode
         cl = bg.addnode().pos(102, 86).size(591, 354).clipping(1);
 
         flowNode = cl.addnode();
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         roleRight = bg.addsprite("roleArr.png").anchor(50, 50).pos(760, 254).size(40, 60);
         new Button(roleRight, moveFlow, -1);
         roleLeft = bg.addsprite("roleArr.png").anchor(50, 50).pos(40, 254).scale(-100, 100).size(40, 60);
@@ -277,7 +277,7 @@ panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(pSize[0] / 2, 25).an
     {
         closeDialog();
         var st = new Store(scene);
-        st.changeTab(st.BUILD_PAGE);
+        st.changeTab(BUILD_PAGE);
         global.director.pushView(st, 1, 0);
     }
     function touchEnded(n, e, p, x, y, points)

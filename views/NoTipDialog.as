@@ -28,7 +28,7 @@ class NoTipDialog extends MyNode
         but0 = new NewButton("closeBut.png", [40, 39], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(474, 88);
         addChild(but0);
-        //bg.addsprite("close2.png").anchor(50, 50).pos(470, 84).setevent(EVENT_TOUCH, closeNoTip);
+        //bg.addsprite("closeBut.png").anchor(50, 50).pos(470, 84).setevent(EVENT_TOUCH, closeNoTip);
     }
     function closeNoTip()
     {

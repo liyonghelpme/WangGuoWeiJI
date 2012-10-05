@@ -34,7 +34,7 @@ but0.addlabel(getStr("moreGame", null), "fonts/heiti.ttf", 25).pos(64, 20).ancho
 
 
 
-        bg.addsprite("close2.png").pos(746, 18).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(746, 18).setevent(EVENT_TOUCH, closeDialog);
         
         //giftView = new GiftView([7, 154], [786, 310]);
         moreView = new MoreView([7, 85], [786, 385]);

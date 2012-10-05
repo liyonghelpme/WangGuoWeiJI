@@ -143,6 +143,7 @@ function setEquipAttribute(sol, equips)
     }
 }
 
+//根据士兵 类型 当前状态 计算士兵的各个属性
 function initAttackAndDefense(sol)
 {
     calculateStage(sol);
@@ -374,4 +375,29 @@ function getSkillAnimate(id)
 function getGradeKey(g)
 {
     return g/10;
+}
+
+function intCmp(a, b)
+{
+    return a-b;
+}
+//等级 类型决定复活花费
+function getReliveCost(sid)
+{
+    var sd = global.user.getSoldierData(sid);
+    var kindData = getData(SOLDIER, sd["id"]);
+    var gradeLev = kindData["grade"];
+    var sg = soldierGrade.keys();
+    bubbleSort(sg, intCmp);
+    var ind = sg.index(gradeLev);
+
+    var cry = (sd["level"]+1)*PARAMS["reliveA"]+(ind+1)*PARAMS["reliveB"];
+    return dict([["crystal", cry]]);
+}
+//转职等级
+//档次
+function getTransferCost(sid)
+{
+    
+    return dict([["crystal", 10]]);
 }

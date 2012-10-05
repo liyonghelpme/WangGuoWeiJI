@@ -132,13 +132,13 @@ class UpdateDialog extends MyNode
         if(kind == BUILD)
         {
             st = new Store(global.director.curScene);
-            st.changeTab(st.BUILD_PAGE);
+            st.changeTab(BUILD_PAGE);
             global.director.pushView(st, 1, 0);
         }
         else if(kind == EQUIP)
         {
             st = new Store(global.director.curScene);
-            st.changeTab(st.EQUIP_PAGE);
+            st.changeTab(EQUIP_PAGE);
             global.director.pushView(st, 1, 0);
         }
     }

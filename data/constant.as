@@ -526,6 +526,9 @@ const UPDATE_EXP = 16;
 const NEW_USER = 17;
 const FINISH_NAME = 18;
 const UPGRADE_LOVE_TREE = 19;
+const USE_DRUG = 20;
+const SELL_SOL = 21;
+const TRANSFER_SOL = 22;
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
@@ -812,11 +815,26 @@ const RANK_KEY = [ChallengeRankKey, HeartRankKey, null, FightRankKey, FightRankK
 
 //宝石 魔法石 
 //物体类型 [物品ID ---> 语句]
-/*
-const STORE_WORDS = dict([
-    [TREASURE_STONE, dict([[0, "upgradeEquipStore"], [1, "upgradeEquipStore"], [2, "upgradeEquipStore"], [3, "upgradeEquipStore"]])],
-    [MAGIC_STONE, dict([[0,, "upgradeSkillStore"])],
-    [BUILD, [[PARAMS["MagicFarmId"]], "productDouble"]],
-]);
-*/
 
+
+const BUY_RES = dict([
+    ["silver", "buySilver"],
+    ["crystal", "buyCrystal"],
+    ["gold", "buyGold"],
+]);
+
+//页面ID
+const NEW_GOODS = 0;
+const GOLD_PAGE = 1;
+const SILVER_PAGE = 2;
+const CRYSTAL_PAGE = 3;
+const BUILD_PAGE = 4;
+const DECOR_PAGE = 5;
+const EQUIP_PAGE = 6;
+const DRUG_PAGE = 7;
+
+const ObjKind_Page_Map = dict([
+    ["gold", GOLD_PAGE],
+    ["silver", SILVER_PAGE],
+    ["crystal", CRYSTAL_PAGE],
+]);

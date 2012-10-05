@@ -18,13 +18,15 @@ function replaceStr(s, rep)
 */
 function getStr(key, rep)
 {
-    var s = strings.get(key);
+    var s;
+    s = WORDS.get(key);
     if(s == null)
-    {
+        s = strings.get(key);
+    if(s == null)
         s = SolNames.get(key);
-        if(s == null)
-            return "";
-    }
+    if(s == null)
+        return "";
+
     if(type(s) == type([]))
     {
         s = s[LANGUAGE];

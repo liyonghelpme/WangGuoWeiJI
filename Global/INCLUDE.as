@@ -13,11 +13,15 @@ import views.TaskDialog;
 import views.TipDialog;
 import views.MakeDrugDialog;
 
+import busiViews.SoldierDialog;
+import busiViews.AllSoldier;
+import busiViews.DeadSoldier;
+import busiViews.TransferSoldier;
 
-import views.SoldierDialog;
-import views.AllSoldier;
-import views.DeadSoldier;
-import views.TransferSoldier;
+//import views.SoldierDialog;
+//import views.AllSoldier;
+//import views.DeadSoldier;
+//import views.TransferSoldier;
 import views.DrugDialog;
 
 
@@ -111,8 +115,14 @@ import views.Camp;
 
 import views.SellDialog;
 import views.AccDialog;
-import views.FriendDialog;
-import views.FriendList;
+
+import busiViews.FriendDialog;
+import busiViews.Neibor;
+import busiViews.FriendList;
+
+
+//import views.FriendDialog;
+//import views.FriendList;
 import views.GiftDialog;
 
 import views.FlowScene;
@@ -282,6 +292,7 @@ import Global.GlobalController;
 //import data.String;
 import data.constant;
 import data.Static;
+import data.words;
 
 
 import data.String;

@@ -188,8 +188,7 @@ var fightingCostKey = ["crystal", "defenseReward", "attackReward", "gold", "atta
 var fightingCostData = dict( [[0, [100, 10, 20, 0, 10, 0]], [1, [1000, 10, 20, 0, 10, 1]], [2, [0, 10, 20, 10, 10, 2]], [3, [0, 10, 20, 100, 10, 3]]] );
 
 
-var PARAMS = dict( [["sellRate", 10], ["bigNum", 5], ["crystal2Silver", 10], ["loveTreeLevel", 15], ["buildWaitLock", 5], ["gold2Silver", 100], ["campId", 224], ["failTime", 86400], ["buildFree", 1], ["buildMove", 0], ["buildWork", 2], ["buildShowMenu", 4], ["maxFailNum", 10], ["smokeSkillId", 9], ["loveTreeId", 208], ["smallNum", 7]] );
-
+var PARAMS = dict( [["sellRate", 10], ["bigNum", 5], ["crystal2Silver", 10], ["loveTreeLevel", 15], ["buildWaitLock", 5], ["gold2Silver", 100], ["reliveA", 1], ["campId", 224], ["failTime", 86400], ["buildFree", 1], ["loveTreeId", 208], ["reliveB", 10], ["buildWork", 2], ["buildShowMenu", 4], ["maxFailNum", 10], ["smokeSkillId", 9], ["MagicFarmId", 1], ["buildMove", 0], ["smallNum", 7]] );
 
 var StoreWords = dict( [[150000, "StoreWord150000"], [150001, "StoreWord150001"], [150002, "StoreWord150002"], [150003, "StoreWord150003"], [160000, "StoreWord160000"], [160001, "StoreWord160001"], [160002, "StoreWord160002"], [1, "StoreWord1"], [160003, "StoreWord160003"], [50002, "StoreWord50002"], [50012, "StoreWord50012"], [50022, "StoreWord50022"], [50032, "StoreWord50032"]] );
 

@@ -99,6 +99,7 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
     {
         scene.gotoIsland(0);//飞回 主界面
     }
+    /*
     function initData()
     {
         data = [];
@@ -124,6 +125,7 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
             }
         }
     }
+    */
     function updateStar()
     {
         var enable = checkBigEnable(big);
@@ -146,7 +148,6 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         }
     }
 
-    /*
     function initData()
     {
         data = [];
@@ -176,7 +177,6 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
             }
         }
     }
-    */
 
     function updatePage()
     {
@@ -208,8 +208,9 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         var mData = getData(MAP_INFO, big);
 
         var panel;
-        panel = flowNode.addsprite("unlockPanel.png");
+        panel = sprite("unlockPanel.png");
         var pSize = panel.prepare().size();
+
         for(i = 0; i < len(data); i++)
         {
             var page = i/(ITEM_NUM*ROW_NUM);
@@ -330,7 +331,7 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
         curTouch = checkInChild(flowNode, lastPoints);
         if(curTouch != null)
         {
-            oldScale = bg.scale();
+            oldScale = curTouch.scale();
             curTouch.scale(oldScale[0]*80/100, oldScale[1]*80/100);
             player = global.controller.butMusic.play(0, 80, 80, 0, 100);
         }

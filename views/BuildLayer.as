@@ -152,7 +152,7 @@ class BuildLayer extends MyNode
         removeChild(soldier);
         mapGridController.clearSolMap(soldier);
         mapGridController.allSoldiers.pop(soldier.sid);
-        global.user.sellSoldier(soldier);
+        //global.user.sellSoldier(soldier);
     }
     /*
     闯关页面士兵死亡 则 通知

@@ -133,6 +133,13 @@ class BusiSoldier extends MyNode
     //复活药水 复活士兵 增加 0 
     //取消增加经验药水
     //%生命 %攻击 %防御 加百分比的药水在 使用的时候将会转化成 增加数值
+    function doRelive()
+    {
+        dead = 0;
+        health = healthBoundary;
+        global.user.updateSoldiers(this);
+        global.msgCenter.sendMsg(RELIVE_SOL, [sid, global.user.getSoldierData(sid)]);
+    }
     function useDrug(tid)
     {
         var dd = getData(DRUG, tid);    
@@ -197,32 +204,45 @@ class BusiSoldier extends MyNode
         if(dd.get("relive") == 1)
             global.msgCenter.sendMsg(RELIVE_SOL, [sid, global.user.getSoldierData(sid)]);
     }
+
+    function updateState()
+    {
+        initAttackAndDefense(this);
+        initHealth();
+    }
     //参数  -1 表示去掉某件装备
     //其它表示 装备某个类型的装备
     //关闭装备菜单 士兵选择使用某个装备
     function useEquip(tid)
     {
-        initAttackAndDefense(this);
-        initHealth();
+        updateState();
+        //initAttackAndDefense(this);
+        //initHealth();
         global.user.updateSoldiers(this);
     }
-
-    function updateStaticData(d)
+    function updateTransData()
     {
-        data = d;
-        id = data.get("id");
+        data = getData(SOLDIER, id);
+        //id = data.get("id");
         //var colStr = "red";
         load_sprite_sheet("soldierm"+str(id)+".plist");
         changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png");
-        initAttackAndDefense(this);
-        initHealth();
+        //initAttackAndDefense(this);
+        //initHealth();
+        updateState();
         if(movAni != null)
         {
             movAni.stop();
         }
         movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
-
     }
+
+    function updateStaticData()
+    {
+        id = global.user.getSoldierData(sid)["id"];
+        updateTransData();
+    }
+
     //杀死该士兵后
     //view 消失 user 场景对象消失
     /*
@@ -352,32 +372,26 @@ class BusiSoldier extends MyNode
         global.httpController.addRequest("soldierC/sellSoldier", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
         var cost = getCost(SOLDIER, id);
         cost = changeToSilver(cost);
-        global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
+        global.user.doAdd(cost);
+        //global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
         //修改view
-        map.sellSoldier(this);
+        //map.sellSoldier(this);
         //修改数据
+        //global.msgCenter.sendMsg(BUYSOL, null);
+        clearSol();
+        global.msgCenter.sendMsg(SELL_SOL, sid);
+    }
+    //卖出士兵之后接受消息清除自身
+    function clearSol()
+    {
+        if(map != null) 
+            map.sellSoldier(this);
         global.msgCenter.sendMsg(BUYSOL, null);
+        global.user.sellSoldier(this);
     }
     function sellOver()
     {
     }
-    /*
-    //鼓励士兵 奖励经验
-    function inspireMe()
-    {
-        inspire = 0;
-        inspireTime = 0;
-        inspirePic.removefromparent();
-        inspirePic = null;
-        //exp += 100;
-        global.httpController.addRequest("soldierC/inspireMe", dict([["uid", global.user.uid], ["sid", sid], ["exp", 10]]), null, null);
-        changeExp(10);
-
-        global.user.updateSoldiers(this);
-        var nPos = bg.node2world(0, -10);
-        //global.director.curScene.addChild(new TrainBanner(nPos, 100));
-    }
-    */
     function changeMoney(gain)
     {
         var temp = bg.addnode();
@@ -444,17 +458,20 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     {
         //var proLevel = id%10;
         //var solOrMon = data.get("solOrMon");
-        var ret = checkTransfer(level, data);
+        //var ret = checkTransfer(level, data);
 
         //if(proLevel < 3 && (proLevel+1)*5 <= level && solOrMon == 0)//每5级可以转职一次
-        if(ret == 1)
+        //if(ret == 1)
         {
         //改变形象bg  改变数据 id 
-            global.httpController.addRequest("soldierC/doTransfer", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
+            //global.httpController.addRequest("soldierC/doTransfer", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
             id += 1;
-            var d = getData(SOLDIER, id);
-            updateStaticData(d);
-            global.user.updateSoldiers(this);
+            //global.user.updateSoldiers(this);//更新士兵类型
+            //var d = getData(SOLDIER, id);
+            //updateStaticData();
+            updateTransData();
+            global.user.updateSoldiers(this);//更新士兵类型
+            global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
         }
     }
     var accMove = 0;
@@ -622,20 +639,60 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         global.httpController.addRequest("soldierC/setName", dict([["uid", global.user.uid], ["sid", sid], ["name", myName]]), null, null);
         global.user.updateSoldiers(this);
     }
+    /*
+    更新装备调整实体状态
+    更新技能不用调整
+    */
     override function enterScene()
     {
         super.enterScene();
         map.solTimer.addTimer(this);
         global.msgCenter.registerCallback(UPDATE_EQUIP, this);
+        global.msgCenter.registerCallback(USE_DRUG, this);
+        global.msgCenter.registerCallback(SELL_SOL, this);
+        global.msgCenter.registerCallback(TRANSFER_SOL, this);
     }
     function receiveMsg(param)
     {
         var mid = param[0];
         if(mid == UPDATE_EQUIP)
         {
+            //更新装备状态
             var eid = param[1];
             if(global.user.getEquipData(eid).get("owner") == sid)
-                initAttackAndDefense(this);//升级装备之后 更新士兵属性
+            {
+                updateState();
+                //initAttackAndDefense(this);//升级装备之后 更新士兵属性
+                //initHealth();
+            }
+        }
+        else if(mid == USE_DRUG)
+        {
+            var useSid = param[1][0];
+            var tid = param[1][1];
+            if(useSid == sid)
+            {
+                updateState();
+            }
+        }
+        else if(mid == SELL_SOL)
+        {
+            var sellSid = param[1];
+            if(sid == sellSid)
+            {
+                clearSol();
+            }
+        }
+        else if(mid == TRANSFER_SOL)
+        {
+            var tranSid = param[1];
+            if(sid == tranSid)
+            {
+                //更新士兵id
+                //id = global.user.getSoldierData(sid)["id"]; 
+                //var d = getData(SOLDIER, id);
+                updateStaticData();
+            }
         }
     }
 
@@ -712,6 +769,7 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             var tmap = allPos[(start+i)%len(allPos)];
             return setBuildMap([sx, sy, tmap[0], tmap[1]]);
         }
+        //不可移动且不再训练场则自动移动到训练场
         return null;
     }
     /*
@@ -878,6 +936,8 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
 
     override function exitScene()
     {
+        global.msgCenter.removeCallback(SELL_SOL, this);
+        global.msgCenter.removeCallback(USE_DRUG, this);
         global.msgCenter.removeCallback(UPDATE_EQUIP, this);
         map.solTimer.removeTimer(this);
         super.exitScene();

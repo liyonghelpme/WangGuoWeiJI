@@ -95,7 +95,7 @@ s = stoneNum.addlabel("", "fonts/heiti.ttf", 20).color(100, 100, 100).pos(380, 1
         }
 
 
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
 
         cl = bg.addnode().pos(46, 90).size(703, 357).clipping(1);
         flowNode = cl.addnode();
@@ -359,9 +359,9 @@ but1.addlabel(getStr("sell", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50
         var store = new Store(global.director.curScene);
         global.director.pushView(store,  1, 0);
         if(kind == DRUG)
-            store.changeTab(store.DRUG_PAGE);
+            store.changeTab(DRUG_PAGE);
         else if(kind == EQUIP)
-            store.changeTab(store.EQUIP_PAGE);
+            store.changeTab(EQUIP_PAGE);
     }
 
     //升级装备 降级装备

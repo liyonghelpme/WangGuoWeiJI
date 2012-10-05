@@ -71,7 +71,7 @@ class RankDialog extends MyNode
             bg.addsprite("heartRank.png").pos(172,47).anchor(50, 50);
         else if(kind == FIGHT_RANK)
             bg.addsprite("dialogRankTitle.png").pos(69, 7);
-        bg.addsprite("close2.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
+        bg.addsprite("closeBut.png").pos(765, 27).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
         */
 
 

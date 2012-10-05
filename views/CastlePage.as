@@ -159,9 +159,11 @@ class CastlePage extends MyNode
 
         }
 
+        /*
         dialogController.addCmd(dict([["cmd", "update"]]));
         dialogController.addCmd(dict([["cmd", "heart"]]));
         dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", 0]]));
+        */
     }
 
     function CastlePage(s)

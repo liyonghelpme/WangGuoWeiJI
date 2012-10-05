@@ -13,7 +13,7 @@ bg.addlabel(getStr("trainTip", null), "fonts/heiti.ttf", 30, FONT_BOLD).anchor(5
         var word = stringLines(getStr("trainTipLine", null), 20, 32, [0, 0, 0], FONT_NORMAL);
         word.pos(67, 137);
         bg.add(word);
-        bg.addsprite("close2.png").anchor(50, 50).pos(461, 96).setevent(EVENT_TOUCH, closeNoTip);
+        bg.addsprite("closeBut.png").anchor(50, 50).pos(461, 96).setevent(EVENT_TOUCH, closeNoTip);
     }
     function closeNoTip()
     {

@@ -127,7 +127,7 @@ class CallSoldier extends MyNode
             monAni.addaction(act);
             
 
-            info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 263).size(201, 134);
+            info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 263).size(201, 134).color(100, 100, 100, 47);
             var s;
             var solPure = getSolPureData(id, 0);
             var att = max(solPure["physicAttack"], solPure["magicAttack"]);

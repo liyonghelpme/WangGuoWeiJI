@@ -113,7 +113,7 @@ bg.addlabel(getStr("29xp to level 4", null), "fonts/heiti.ttf", 17).anchor(50, 5
     function openCharge()
     {
         var st = new Store(scene);
-        st.changeTab(st.GOLD_PAGE);
+        st.changeTab(GOLD_PAGE);
         global.director.pushView(st, 1, 0);
     }
     var silverText;
