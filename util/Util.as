@@ -189,15 +189,21 @@ function getBuildGain(id)
 */
 //KIND*100000+id = key --->data
 var dataPool = dict();
+
+/*
 function getObjKey(kind, id)
 {
     return kind*10000+id;
 }
+function getObjKindId(v)
+{
+    return [v/10000, v%10000];
+}
+*/
 function getData(kind, id)
 {
-    //trace("getData", kind, id);
-    //var key = kind*100000+id;
-    var key = getObjKey(kind, id);
+    //var key = getObjKey(kind, id);
+    var key = getGoodsKey(kind, id);
     var ret = dataPool.get(key, null);
     if(ret == null)
     {
@@ -1127,4 +1133,16 @@ function showFullBack()
     var temp = sprite("dialogLoginBack0.jpg", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, 80);
     temp.addsprite("dialogLoginStar.png", ARGB_8888);
     return temp;
+}
+
+function checkFirstLogin()
+{
+    var loginTime = global.user.getValue("loginTime");
+    var serverTime = global.user.serverTime;
+    var lastDay = loginTime/(3600*24);
+    var today = serverTime/(3600*24);
+    var diff = today - lastDay;
+    
+    //连续两次登录相差:1天 多天
+    return diff;
 }

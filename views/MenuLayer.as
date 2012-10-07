@@ -105,7 +105,7 @@ bg.addlabel(getStr("29xp to level 4", null), "fonts/heiti.ttf", 17).anchor(50, 5
     }
     function openGlory()
     {
-        global.director.pushView(new GloryDialog(), 1, 0);
+        global.director.pushView(new CollectionDialog(), 1, 0);
     }
     /*
     显示商店充值页面

@@ -30,7 +30,10 @@ class FriendController
     var curPapOffset = 0;
     var showFriend = [];
     var sendRequestYet = dict();
-    //只在当前有效
+    var inviteList;
+
+    //只在当前有效 
+    //是否服务器返回请求数据拒绝再次请求
     function sendRequest(uid)
     {
         sendRequestYet.update(uid, 1);   
@@ -155,6 +158,10 @@ class FriendController
 
     function FriendController()
     {
+        inviteList = global.user.db.get("inviteList");
+        if(inviteList == null)
+            inviteList = dict();
+
         //getNeibors();
         getPapayaFriend();
         global.timer.addTimer(this);
@@ -205,6 +212,7 @@ class FriendController
         }
     }
     //每天第一次登录清空邻居信息
+    //清理好友数据 同步好友uid
     function firstLogin()
     {
         if(neibors != null)
@@ -213,6 +221,7 @@ class FriendController
                 neibors[i]["challengeYet"] = 0;
                 neibors[i]["heartYet"] = 0;
             }
+        //global.user.db.remove("friends");
     }
 
     function getNeiborData(nid)
@@ -292,8 +301,30 @@ class FriendController
         var msid = param[0];
         if(msid == INITDATA_OVER)
         {
+            var diff = checkFirstLogin();
+            if(diff >= 1)//每天第一次登录清理数据
+            {
+                firstLogin(); 
+            }
             getLocalFriend();
             getNeibors();
+            global.httpController.addRequest("friendC/getFriendUpdate", dict([["uid", global.user.uid]]), getUpdateOver, null);
+        }
+    }
+    //同步请求机制确保了 首先初始化inGameFriend好友数据 接着初始化updated数据
+    function getUpdateOver(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            if(con["id"])
+            {
+                var updated = con["updated"];
+                for(var i = 0; i < len(updated); i++)
+                {
+                    updateValue(updated[i][0], [updated[i][1], updated[i][2], updated[i][3]]);
+                }
+            }
         }
     }
 
@@ -365,6 +396,7 @@ class FriendController
 
 
     var initFriend = 0;
+    var initInvite = 0;
     var newFriendList = null;
     function update(diff)
     {
@@ -375,6 +407,7 @@ class FriendController
             var papaSet = set(papayaFriend.keys());
             var inGameSet = set(inGameFriend.keys());
             var newFriend = papaSet.difference(inGameSet);
+            //新的木瓜好友 更新服务器数据
             if(len(newFriend) > 0)
             {
                 var nf = [];
@@ -408,26 +441,11 @@ class FriendController
         }
     }
     /*
-    function getFid(papayaId, curNum)
-    {
-        if(inGameFriend.get(papayaId) != null)
-            return inGameFriend.get(papayaId).get("uid");
-        return recommandFriends[curNum].get("uid");
-
-    }
-    function getLevel(papayaId, curNum)
-    {
-        //木瓜好友页面
-        //if(inGameFriend.get(papayaId) != null)
-        //    return inGameFriend.get(papayaId).get("level");
-        //推荐好友页面
-        //return recommandFriends[curNum].get("level");
-    }
-    */
-    /*
     根据木瓜好友和我方服务器数据 获得好友的列表数据 等级 是否访问过
     只显示玩过我们游戏的对方好友
     id name avatar
+
+    初始话没有玩游戏的 未invite好友
     */
     function initFriendList()
     {
@@ -435,14 +453,30 @@ class FriendController
         for(var i = 0; i < len(key); i++)
         {
             var data = papayaFriend[key[i]];
-            if(data.get("isplayer") == 1)//玩家在我方游戏中
+            
+            //玩家在我方游戏中 根据我方服务器检测 是否在游戏中
+            //在我方服务器注册 且 在木瓜服务器注册的用户data.get("isplayer") == 1 && 
+            //用户的uid 不为-1
+            //何时更新用户的uid? 获取用户数据的时候判断该用户是否已经进入游戏
+            //所有用户注册的时候更新好友数据中papayaId == self  uid = self 服务器数据
+            //本地数据何时更新？
+            if(inGameFriend.get(key[i]) != null && inGameFriend[key[i]]["uid"] != -1)
             {
                 showFriend.append(inGameFriend.get(key[i]));            
+            }
+            else
+            {
+                //未邀请过的好友
+                if(inviteList.get(data["id"]) == null)
+                {
+                    notInviteFriend.append(data);
+                }
             }
         }
         setPapayaCrystal();
 
         initFriend = 1;
+        initInvite = 1;
     }
     function getPapayaList()
     {
@@ -451,6 +485,29 @@ class FriendController
             return null;
         }
         return showFriend;
+    }
+    //获取没有玩游戏的好友列表
+    //邀请结束---->添加本地记录
+    //不再显示已经invited的好友
+    var notInviteFriend = [];//papayaId papayaname -----> invitedYet ?
+    function getInviteList()
+    {
+        if(initInvite == 0)
+            return null;
+        return notInviteFriend;
+    }
+    function inviteFriend(ppyId)
+    {
+        inviteList[ppyId] = 1;
+        global.user.db.put("inviteList", inviteList);
+        for(var i = 0; i < len(notInviteFriend); i++)
+        {
+            if(notInviteFriend[i]["id"] == ppyId)
+            {
+                notInviteFriend.pop(i);
+                break;
+            }
+        }
     }
     //本地数据存储记录在远程服务器上的好友
     //如何从我们服务器 推送一个好友是否玩了游戏
@@ -502,7 +559,8 @@ class FriendController
     }
     //fid level
     //根新ingame 推荐和 邻居好友等级数据
-    //
+    //papayaId-----> [uid, level, name]
+    //服务器所有改变 uid 等级 姓名 的操作都需要通知客户端
     function updateValue(pid, param)
     {
         var fri = inGameFriend.get(pid);
@@ -556,10 +614,11 @@ class FriendController
             var res = con.get("res");
             for(var i = 0; i < len(res); i++)//inGameFriend 好友数据
             {
-                inGameFriend.update(res[0], dict([["uid", res[i][1]], ["level", res[i][2]], ["name", res[i][3]], ["id", res[i][0]]]));//papayaId -->fid lev
+                inGameFriend.update(res[i][0], dict([["uid", res[i][1]], ["level", res[i][2]], ["name", res[i][3]], ["id", res[i][0]]]));//papayaId -->fid lev
             }
             global.user.db.put("friends", inGameFriend);
             getInGame = 1;
         }
     }
+
 }

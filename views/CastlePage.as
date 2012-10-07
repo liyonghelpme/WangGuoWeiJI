@@ -129,13 +129,17 @@ class CastlePage extends MyNode
         传递奖励数据给后台
         */
         var conDays = global.user.getValue("loginDays");
+        /*
         var loginTime = global.user.getValue("loginTime");
         var serverTime = global.user.serverTime;
         var lastDay = loginTime/(3600*24);
         var today = serverTime/(3600*24);
         var diff = today - lastDay;
         var day = 0;
+        */
 
+        var diff = checkFirstLogin();
+        var day = 0;
         if(diff == 1)
         {
             day = conDays+1;
@@ -150,7 +154,7 @@ class CastlePage extends MyNode
         {
             //每天第一次登录清理推荐数据 
             global.user.db.remove("recommand");
-            global.friendController.firstLogin();
+            //global.friendController.firstLogin();
 
             reward = getLoginReward(day);
             global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);

@@ -25,6 +25,18 @@ class MessageCenter
             recs[i].receiveMsg([msgId, param]);
         }
     }
+
+    //消息只能被第一个对象接受后面的对象不处理
+    function sendOneMsg(msgId, param)
+    {
+        var recs = callbacks.get(msgId, []);
+        for(var i = 0; i < len(recs); i++)
+        {
+            recs[i].receiveMsg([msgId, param]);
+            break;
+        }
+    }
+
     function checkCallback(msgId)
     {
         var res = callbacks.get(msgId, null);

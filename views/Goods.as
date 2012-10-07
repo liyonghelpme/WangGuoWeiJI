@@ -140,7 +140,7 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
             {
                 var w;
                 var labelGain = gain.items();
-                var objKey = getObjKey(objKind, objId);
+                var objKey = getGoodsKey(objKind, objId);
                 if(StoreWords.get(objKey) != null)
                 {
                     w = getStr(StoreWords.get(objKey), null);   

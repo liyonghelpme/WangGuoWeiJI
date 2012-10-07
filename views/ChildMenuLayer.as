@@ -242,6 +242,8 @@ class ChildMenuLayer extends MyNode
     }
     function onCollection()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new CollectionDialog(), 1, 0);
     }
     const OFFY = 100;
     const MIDY = 200;

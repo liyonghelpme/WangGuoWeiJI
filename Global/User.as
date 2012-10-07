@@ -61,6 +61,7 @@ class User
     var skills;
 
     var lastColor;
+    
 
     function getCurFinTaskNum()
     {
@@ -422,6 +423,9 @@ class User
         if(rcode != 0)
         {
             con = json_loads(con);
+
+            //papayaId--->1
+
 
             uid = con.get("uid");//记忆用户uid 新手任务选择英雄时使用
             var newState = con.get("newState");

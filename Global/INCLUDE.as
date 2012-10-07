@@ -118,7 +118,13 @@ import views.AccDialog;
 
 import busiViews.FriendDialog;
 import busiViews.Neibor;
+import busiViews.OtherPlayer;
+
 import busiViews.FriendList;
+import busiViews.SearchDialog;
+import busiViews.InviteDialog;
+import busiViews.InviteList;
+
 
 
 //import views.FriendDialog;
@@ -135,7 +141,9 @@ import views.ResourceWarningDialog;
 
 
 
-import views.GloryDialog;
+//import views.GloryDialog;
+import busiViews.CollectionDialog;
+import busiViews.CollectionList;
 
 import views.Farm;
 import views.Plant;
@@ -222,8 +230,11 @@ import views.BreakDialog;
 import views.CallSoldier;
 import views.SoldierGoods;
 
-import views.RankDialog;
-import views.RankBase;
+//import views.RankDialog;
+//import views.RankBase;
+import busiViews.RankDialog;
+import busiViews.RankBase;
+
 import views.ChallengeScene;
 import views.VisitDialog;
 

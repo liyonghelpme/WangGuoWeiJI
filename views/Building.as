@@ -66,6 +66,7 @@ class BuildAnimate extends MyNode
         super.enterScene();
         if(cus != null)
             cus.enterScene();
+
     }
     override function exitScene()
     {
@@ -271,9 +272,30 @@ class Building extends MyNode
         funcBuild.enterScene();
         if(aniNode != null)
             aniNode.enterScene();
+
+        if(funcs == CAMP && state == PARAMS["buildFree"])
+        {
+            global.msgCenter.removeCallback(CALL_SOL, this);
+            global.msgCenter.registerCallback(CALL_SOL, this);
+        }
     }
+    //空闲建筑 则 工作
+    function receiveMsg(param)
+    {
+        var msgId = param[0];
+        var p = param[1];
+        if(msgId == CALL_SOL)
+        {
+            if(state == PARAMS["buildFree"])
+            {
+                global.director.pushView(new CallSoldier(this), 1, 0);
+            }
+        }
+    }
+
     override function exitScene()
     {
+        global.msgCenter.removeCallback(CALL_SOL, this);
         if(aniNode != null)
             aniNode.exitScene();
         funcBuild.exitScene();
@@ -411,10 +433,20 @@ class Building extends MyNode
     状态可以做成 位与的形式
     经营页面的建筑物
     水晶矿的建筑物 检测当前是否处于Planing状态
+
+    每次进入场景 以及变换状态
     */
     function setState(s)
     {
         state = s;
+        if(funcs == CAMP)
+        {
+            global.msgCenter.removeCallback(CALL_SOL, this);
+            if(state == PARAMS["buildFree"])
+            {
+                global.msgCenter.registerCallback(CALL_SOL, this);
+            }
+        }
         if((state == PARAMS["buildMove"]) || Planing == 1)
         {
             var bSize = bg.size();

@@ -435,6 +435,7 @@ var CostData = [
     fightingCostData,
 ];
 
+//更新商店load_sprite_sheet
 var KindsPre = [
     "build[ID].png",
     "equip[ID].png",
@@ -444,6 +445,7 @@ var KindsPre = [
     "storeCrystal.png",
     "Wplant[ID].png",
     "soldier[ID].png",
+    //"soldierm[ID].plist/ss[ID]m0.png",
     "storeGold.png",
     "task",
     "herb[ID].png",
@@ -529,6 +531,7 @@ const UPGRADE_LOVE_TREE = 19;
 const USE_DRUG = 20;
 const SELL_SOL = 21;
 const TRANSFER_SOL = 22;
+const CALL_SOL = 23;
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
@@ -578,10 +581,13 @@ const VISIT_PAPAYA = 0;
 const VISIT_NEIBOR = 1;
 const VISIT_RECOMMAND = 2;
 const VISIT_RANK = 3;
+const VISIT_OTHER = 4;
 
 const UNVISIT_FRIEND = -1;
 const EMPTY_SEAT = -2;
 const ADD_NEIBOR_MAX = -3;
+const INVITE_FRIEND = -4;
+
 
 const FRIEND_CRY = 15;
 const PAPAYA_CRY = 10;
@@ -800,7 +806,7 @@ const SOL_CATEGORY = dict([
 //ret = [[i['uid'], i['papayaId'], i['suc'], i['rank'], i['name'], i['total']] for i in ret]
 var ChallengeRankKey = ["uid", "papayaId", "score", "rank", "name", "level"];
 var HeartRankKey = ["uid", "papayaId", "score", "rank", "name", "level"];
-var FightRankKey = ["uid", "papayaId", "suc", "rank", "name", "total", "level"]; 
+var FightRankKey = ["uid", "papayaId", "score", "rank", "name", "total", "level"]; 
 
 //RankDialog
 const CHALLENGE_RANK = 0;
@@ -811,7 +817,7 @@ const FIGHT_RANK = 2;//attackRank defenseRank 大类型
 const ATTACK_RANK = 3;
 const DEFENSE_RANK = 4;
 
-const RANK_KEY = [ChallengeRankKey, HeartRankKey, null, FightRankKey, FightRankKey];
+const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, FightRankKey, FightRankKey];
 
 //宝石 魔法石 
 //物体类型 [物品ID ---> 语句]
@@ -837,4 +843,13 @@ const ObjKind_Page_Map = dict([
     ["gold", GOLD_PAGE],
     ["silver", SILVER_PAGE],
     ["crystal", CRYSTAL_PAGE],
+]);
+const GOODS_PAGE = dict([
+    [BUILD, BUILD_PAGE],
+    [EQUIP, EQUIP_PAGE],
+    [DRUG, DRUG_PAGE],
+]);
+
+const soldierDes = dict([
+    [0, "solDes0"],
 ]);
