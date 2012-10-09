@@ -594,6 +594,42 @@ function byte2Hundred(v)
 {
     return v*100/255;
 }
+
+//{27\crystal.png} 10 购买
+//{crystal.png} 10 购买
+function picNumWord(w, sz, col)
+{
+    var n = node();
+    var curX = 0;
+    var curY = 0;
+    var height = 0;
+    var end = w.split("}");
+    for(var i = 0; i < len(end); i++)
+    {
+        var begin = end[i].split("{");
+
+        if(len(begin[0]) > 0)
+        {
+            var l = label(begin[0], "fonts/heiti.ttf", sz).anchor(0, 50).color(col).pos(curX, curY);
+            n.add(l);
+            var lSize = l.prepare().size();
+            curX += lSize[0];
+            height = max(height, lSize[1]);
+            var shadow = label(begin[0], "fonts/heiti.ttf", sz).anchor(0, 0).color(0, 0, 0).pos(1, 1);
+            l.add(shadow, -1);
+        }
+        if(len(begin) > 1)
+        {
+            var s = sprite(begin[1]).size(27, 27).anchor(0, 50).pos(curX, curY);
+            n.add(s);
+            var sSize = s.prepare().size();
+            curX += sSize[0];
+            height = max(sSize[1], height);
+        }
+    }
+    n.size(curX, height);
+    return n;
+}
 function colorLines(w, sz, lineHeight)
 {
     var n = node();
@@ -1146,3 +1182,5 @@ function checkFirstLogin()
     //连续两次登录相差:1天 多天
     return diff;
 }
+
+

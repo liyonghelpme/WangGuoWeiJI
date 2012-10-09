@@ -140,6 +140,44 @@ class BusiSoldier extends MyNode
         global.user.updateSoldiers(this);
         global.msgCenter.sendMsg(RELIVE_SOL, [sid, global.user.getSoldierData(sid)]);
     }
+    //计算药水使用在 当前士兵身上的效果值
+    //dict({k:v})
+    function getDrugEffect(tid)
+    {
+        var pureData = getSolPureData(id, level);
+        var dd = getGain(DRUG, tid);
+        var it = dd.items()[0];
+        var k = it[0];
+        var v = it[1];
+        if(k.find("percent") != 0)
+            return dd;
+
+        var ret = dict();
+        if(dd.get("percentHealth") != null)
+            ret.update("health", pureData["healthBoundary"]*dd.get("percentHealth")/100);
+        if(dd.get("percentAttack") != null)
+        {
+            var purePhyAttack = pureData["physicAttack"];
+            var pureMagAttack = pureData["magicAttack"];
+            var attack = dd.get("percentAttack")*max(purePhyAttack, pureMagAttack)/100;
+            ret.update("attack", attack);
+        }
+        if(dd.get("percentDefense") != null)
+        {
+            var purePhyDef = pureData["physicDefense"];
+            var pureMagDef = pureData["magicDefense"];
+            var defense = dd.get("percentDefense")*max(purePhyDef, pureMagDef)/100;
+            ret.update("defense", defense);
+        }
+        if(dd.get("percentHealthBoundary") != null)
+        {
+            var pureHealthBoundary = pureData["healthBoundary"];
+            var healthBoundary = dd.get("percentHealth")*pureHealthBoundary/100;
+            ret.update("healthBoundary", healthBoundary); 
+        }
+        return ret;
+    }
+
     function useDrug(tid)
     {
         var dd = getData(DRUG, tid);    

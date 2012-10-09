@@ -1,6 +1,9 @@
 /*
 图片类型 size
 上面正中字体ShadowWords
+
+不能使用enterScene exitScene 功能
+因为 所在的 panel 不是 MyNode 类型 
 */
 class NewButton extends MyNode
 {
@@ -28,6 +31,10 @@ class NewButton extends MyNode
     function setGray()
     {
         bg.texture(pc, GRAY); 
+    }
+    function setWhite()
+    {
+        bg.texture(pc);
     }
 
     var player = null;

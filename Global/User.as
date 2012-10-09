@@ -745,10 +745,12 @@ class User
         if(kind == DRUG)
         {
             changeGoodsNum(DRUG, id, 1);
+            global.msgCenter.sendMsg(BUY_DRUG, id);
         }
 
         //通知所有监听器修改数据
         setValue(NOTIFY, 1);
+
 
     }
     function buyEquip(eid, id, cost)
@@ -757,6 +759,7 @@ class User
         equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
         db.put("equips", equips);
         setValue(NOTIFY, 1);
+        global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
     }
 
     function getNewEquip(eid, id, level)
@@ -997,35 +1000,55 @@ class User
 
     function getAllGoodsNum(kind)
     {
-        var key = treasureStone.keys();
-        var count = 0;
-        for(var i = 0; i < len(key); i++)
+        if(kind == TREASURE_STONE || kind == MAGIC_STONE)
         {
-            var k = key[i];
-            var gKind = getGoodsKindAndId(k);
-            if(gKind[0] == kind)
+            var key = treasureStone.keys();
+            var count = 0;
+            for(var i = 0; i < len(key); i++)
             {
-                count += treasureStone[k];
+                var k = key[i];
+                var gKind = getGoodsKindAndId(k);
+                if(gKind[0] == kind)
+                {
+                    count += treasureStone[k];
+                }
             }
+            return count;
         }
-        return count;
+        if(kind == EQUIP)
+            return getAllEquipNum();
+        if(kind == DRUG)
+            return getAllDrugNum();
+        if(kind == HERB)
+            return getAllHerbNum();
+        return 0;
     }
 
     function getAllGoods(kind)
     {
-        var key = treasureStone.keys();
-        var res = [];
-        for(var i = 0; i < len(key); i++)
+        if(kind == TREASURE_STONE || kind == MAGIC_STONE)
         {
-            var k = key[i];
-            var gKind = getGoodsKindAndId(k);
-            if(gKind[0] == kind)
+            var key = treasureStone.keys();
+            var res = [];
+            for(var i = 0; i < len(key); i++)
             {
-                if(treasureStone[k] > 0)
-                    res.append(gKind[1]);
+                var k = key[i];
+                var gKind = getGoodsKindAndId(k);
+                if(gKind[0] == kind)
+                {
+                    if(treasureStone[k] > 0)
+                        res.append(gKind[1]);
+                }
             }
+            return res;
         }
-        return res;
+        if(kind == EQUIP)
+            return getAllEquip();
+        if(kind == DRUG)
+            return getAllDrug();
+        if(kind == HERB)
+            return getAllHerb();
+        return [];
     }
 
     //usedEquip Id
@@ -1040,10 +1063,6 @@ class User
         db.put("equips", equips);
         
         global.msgCenter.sendMsg(SOL_UNLOADTHING, sid);
-        //var sol = allSoldiers.get(sid); 
-        //if(sol != null)
-        //    sol.useEquip(-1);
-        //global.director.curScene.unloadThing(sid);
     }
     //士兵必须是活的才可以转职
 
@@ -1055,6 +1074,7 @@ class User
         v += num;
         drugs[id] = v;
         db.put("drugs", drugs);
+        global.msgCenter.sendMsg(UPDATE_DRUG, id);
     }
     function changeHerbNum(id, num)
     {
@@ -1082,7 +1102,7 @@ class User
             global.httpController.addRequest("soldierC/useDrug", dict([["uid", uid], ["sid", soldier.sid], ["tid", tid]]), null, null);
 
 
-            changeGoodsNum(DRUG, tid, -1);
+            changeGoodsNum(DRUG, tid, -1);//UPDATE_DRUG 的信号 DrugDialog需要的是买入药品的信号
             //可能导致同一个士兵有两个代理个体 那么更新drug就存在问题
             //一个个体更新状态
             //其他个体同步状态

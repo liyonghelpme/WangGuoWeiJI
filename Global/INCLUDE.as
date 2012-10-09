@@ -11,7 +11,8 @@ import views.FriendSoldier;
 import views.SettingDialog;
 import views.TaskDialog;
 import views.TipDialog;
-import views.MakeDrugDialog;
+//import views.MakeDrugDialog;
+import busiViews.MakeDrugDialog;
 
 import busiViews.SoldierDialog;
 import busiViews.AllSoldier;
@@ -22,7 +23,9 @@ import busiViews.TransferSoldier;
 //import views.AllSoldier;
 //import views.DeadSoldier;
 //import views.TransferSoldier;
-import views.DrugDialog;
+//import views.DrugDialog;
+import busiViews.DrugDialog;
+import busiViews.DrugList;
 
 
 //经营页面
@@ -70,10 +73,16 @@ import views.GameOne;
 import views.MailDialog;
 import views.RequestView;
 import views.GiftView;
-import views.AllGoods;
-import views.UpgradeDialog;
-import views.SkillDialog;
-import views.UpgradeSkillDialog;
+//import views.AllGoods;
+import busiViews.AllGoods;
+
+//import views.UpgradeDialog;
+import busiViews.UpgradeDialog;
+//import views.SkillDialog;
+import busiViews.SkillDialog;
+
+//import views.UpgradeSkillDialog;
+import busiViews.UpgradeSkillDialog;
 import views.TrainDialog;
 
 
@@ -129,7 +138,8 @@ import busiViews.InviteList;
 
 //import views.FriendDialog;
 //import views.FriendList;
-import views.GiftDialog;
+//import views.GiftDialog;
+import busiViews.GiftDialog;
 
 import views.FlowScene;
 import views.FlowMenu;

@@ -532,6 +532,10 @@ const USE_DRUG = 20;
 const SELL_SOL = 21;
 const TRANSFER_SOL = 22;
 const CALL_SOL = 23;
+const UPDATE_DRUG = 24;
+const BUY_DRUG = 25;
+const BUY_EQUIP = 26;
+
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
@@ -602,7 +606,7 @@ const MINE_BEGIN_LEVEL = 6;
 const PLAN_BUILDING = 0;
 const PLAN_SOLDIER = 1;
 
-const MAX_EQUIP_LEVEL = 12;
+//const MAX_EQUIP_LEVEL = 12;
 
 //const ROUND_MAP_NUM = 5;//闯关地图的数量 每关旗帜的数量由 LevelSelect 中旗帜的数量决定
 
@@ -853,3 +857,13 @@ const GOODS_PAGE = dict([
 const soldierDes = dict([
     [0, "solDes0"],
 ]);
+
+
+const FREE_EQUIP = 0;
+const USE_EQUIP = 1;
+const EMPTY_PANEL = 2;
+
+
+const EQUIP_KIND = 0;
+const DETAIL_EQUIP = 1;
+const ALL_EMPTY = 2;

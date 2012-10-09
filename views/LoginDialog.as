@@ -37,8 +37,8 @@ class LoginDialog extends MyNode
 
         //bg.addsprite("白色框.png").anchor(0, 0).pos(0, 0).size(115, 159);
         //bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(3, 3).size(109, 153);
-        bg.addsprite("whiteBox.png").anchor(0, 0).pos(279, 192).size(115, 153);
-        bg.addsprite("blueBox.png").anchor(0, 0).pos(279+3, 192+3).size(109, 147);
+        //bg.addsprite("whiteBox.png").anchor(0, 0).pos(279, 192).size(115, 153);
+        bg.addsprite("blueBox.png").anchor(0, 0).pos(279, 192).size(115, 153);
 
 
         bg.addsprite("hook.png").anchor(0, 0).pos(258, 171).size(53, 42);

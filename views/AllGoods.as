@@ -216,7 +216,7 @@ but1.addlabel(getStr("closeAll", null), "fonts/heiti.ttf", 18).pos(34, 18).ancho
                 //升级 卖出传入 数据位置编号
                 else if(data[i][0] == DETAIL_EQUIP)
                 {
-                    if(ed.get("level") < MAX_EQUIP_LEVEL)//未升级到最高级
+                    if(ed.get("level") < PARAMS["maxEquipLevel"])//未升级到最高级
                     {
                         but0 = panel.addsprite("roleNameBut0.png").pos(570, 34).size(butWidth, butHeight).anchor(50, 50).setevent(EVENT_TOUCH, onUpgrade, i);
 but0.addlabel(getStr("upgrade", null), "fonts/heiti.ttf", 18).pos(34, 18).anchor(50, 50);
