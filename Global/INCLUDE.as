@@ -8,7 +8,9 @@ import views.FriendMenu;
 import views.FriendSoldier;
 
 
-import views.SettingDialog;
+//import views.SettingDialog;
+import busiViews.SettingDialog;
+
 import views.TaskDialog;
 import views.TipDialog;
 //import views.MakeDrugDialog;
@@ -50,7 +52,8 @@ import views.MenuLayer;
 
 
 
-import views.RoleName;
+//import views.RoleName;
+import busiViews.RoleName;
 
 
 //人物对话框
@@ -66,13 +69,17 @@ import views.ResourceBanner;
 
 
 import views.SoldierMenu;
-import views.DetailDialog;
+import busiViews.DetailDialog;
+
 import views.ChildMenuLayer;
 import views.GameTwo;
 import views.GameOne;
-import views.MailDialog;
-import views.RequestView;
-import views.GiftView;
+
+import busiViews.MailDialog;
+import busiViews.RequestView;
+import busiViews.MoreView;
+
+//import views.GiftView;
 //import views.AllGoods;
 import busiViews.AllGoods;
 
@@ -222,8 +229,10 @@ import views.MapDefense;
 import views.DialogController;
 import views.Mask;
 
-import views.ScoreDialog;
-import views.LevupDialog;
+//import views.ScoreDialog;
+//import views.LevupDialog;
+import busiViews.ScoreDialog;
+import busiViews.LevupDialog;
 
 
 

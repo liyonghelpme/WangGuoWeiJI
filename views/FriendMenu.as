@@ -52,7 +52,7 @@ title.addlabel("name", "fonts/heiti.ttf", 20).pos(100, 22).anchor(0, 50);
 
         var user = scene.user;
         global.friendController.sendHeart(user["uid"]);
-        global.httpController.addRequest("friendC/sendHeart", dict([["uid", global.user.uid], ["fid", user.get("uid")]]), null, null);
+        global.httpController.addRequest("friendC/sendHeart", dict([["uid", global.user.uid], ["fid", user.get("uid")], ["mid", global.user.getNewMsgId()]]), null, null);
     }
     //挑战结束返回好友页面
     //已经有一个 挑战排行榜

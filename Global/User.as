@@ -417,6 +417,11 @@ class User
     var registerTime;
     var heartRank;
     var hour;
+    var maxMessageId = 0;
+    function getNewMsgId()
+    {
+        return maxMessageId++;
+    }
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
@@ -437,6 +442,7 @@ class User
             updateState = con.get("updateState");
 
             maxGiftId = con.get("maxGiftId");
+            maxMessageId = con["maxMessageId"];
 
             var temp = con.get("skills");//soldierId  skillId level
             initSkill(temp);

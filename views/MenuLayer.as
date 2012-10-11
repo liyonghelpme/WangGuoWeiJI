@@ -45,6 +45,11 @@ bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 41
     var levelLabel;
     var expBanner;
     var expWord;
+    var scoreIcon;
+    function rateIt()
+    {
+        global.director.pushView(new ScoreDialog(), 1, 0);
+    }
     function MenuLayer(s) {
         scene = s;
 //        trace("pushMenuLayer");
@@ -52,6 +57,8 @@ bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 41
         bg = node();
         //banner = bg.addsprite("menu_back.png").scale(100,100).anchor(0,100).pos(0,480).rotate(0);
         init();
+        
+        scoreIcon = bg.addsprite("scoreIcon.png").anchor(0, 0).pos(716, 197).size(57, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, rateIt);
         banner = bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
 
         bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
@@ -166,18 +173,17 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     override function enterScene()
     {
         super.enterScene();
-//        trace("menuLayer enterScene");
-        //global.user.addListener(this);
-        //global.user.addTaskListener(this);
 
         global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
         global.msgCenter.registerCallback(UPDATE_TASK, this);
         global.msgCenter.registerCallback(UPDATE_EXP, this);
+        global.msgCenter.registerCallback(RATE_GAME, this);
 
 
         updateValue(global.user.resource);
         updateExp(0);
         updateTaskState();
+        updateRateIcon();
         //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
     }
 
@@ -231,6 +237,20 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         //if(level >= 100)
         levelLabel.scale(sca);
     }
+    function updateRateIcon()
+    {
+        //显示子菜单 隐藏 打分图标
+        if(showChildMenu == 1)
+        {
+            scoreIcon.visible(0);
+            return;
+        }
+        var rated = global.user.db.get("rated");
+        if(rated != 1)
+            scoreIcon.visible(1);
+        else
+            scoreIcon.visible(0);
+    }
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -242,18 +262,27 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
             updateTaskState();
         else if(msgId == UPDATE_EXP)
             updateExp(param[1]);
+        else if(msgId == RATE_GAME)
+            updateRateIcon();
     }
     function updateTaskState()
     {
         var num = global.user.getCurFinTaskNum();
         finNum.text(str(num));
         if(num == 0)
+        {
             taskFin.visible(0);
+            finNum.visible(0);
+        }
         else
+        {
             taskFin.visible(1);
+            finNum.visible(1);
+        }
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(RATE_GAME, this);
         global.msgCenter.removeCallback(UPDATE_EXP, this);
         global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
         global.msgCenter.removeCallback(UPDATE_TASK, this);
@@ -311,9 +340,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     */
     function draw_func(index, funcs){
         //unsupported param
-        if(index>=2||index<0||len(funcs) <= 0 || len(funcs)>4){
-            return;
-        }
+        updateRateIcon();
         if(menus[index] != null){
             removeChild(menus[index]);
         }
@@ -321,8 +348,17 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         addChildZ(menus[index],-1);
     }
     
+    function drawAllMenu()
+    {
+        showChildMenu = 1;
+        draw_func(0,["map","rank","plan","setting"]);
+        draw_func(1,["soldier","store","friend","mail"]);
+    }
+    var showChildMenu = 0;
     function cancelAllMenu()
     {
+        showChildMenu = 0;
+        updateRateIcon();
         cancel_func(0);
         cancel_func(1);
     }
@@ -336,12 +372,10 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     function onClicked(n, e, param, x, y, points){
         if(param==0){
             if(menus[0] == null){
-                draw_func(0,["map","rank","plan","setting"]);
-                draw_func(1,["role","store","friend","mail"]);
+                drawAllMenu();
             }
             else{
-                cancel_func(0);
-                cancel_func(1);
+                cancelAllMenu();
             }
         }
     }

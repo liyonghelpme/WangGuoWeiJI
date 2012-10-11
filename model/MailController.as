@@ -7,6 +7,7 @@ class MailController
     //kind = 0 好友请求
     //kind = 1 解除好友请求
     var initYet = null;
+    var mailId = 0;
 
     function MailController()
     {
@@ -14,6 +15,8 @@ class MailController
         global.msgCenter.registerCallback(INITDATA_OVER, this);
     }
 
+    //获取邻居信息
+    //获取好友赠送的礼物
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -22,13 +25,37 @@ class MailController
             initYet = 0;
             global.httpController.addRequest("friendC/getMessage", dict([["uid", global.user.uid]]), getNeiborRequestOver, null);
             global.httpController.addRequest("goodsC/getGift", dict([["uid", global.user.uid]]), getGiftOver, null);
+            global.httpController.addRequest("friendC/getUserMessage", dict([["uid", global.user.uid]]), getMessageOver, null);
         }
     }
+
 
     function getMail()
     {
         trace("mail", mail);
+        if(initYet != 1)
+            return null;
         return mail;
+    }
+    var initMessage = 0;
+    function getMessageOver(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            var msg = con["msg"];
+            for(var i = 0; i < len(msg); i++)
+            {
+                var d = dict();
+                for(var j = 0; j < len(MSG_KEY); j++)
+                {
+                    d.update(MSG_KEY[j], msg[i][j]);
+                }
+                d.update("mailId", mailId++);
+                mail.append([OTHER_MSG, d]);
+            }
+            initMessage = 1;
+        }
     }
     var initNeiborRequestYet = 0;
     //uid papayaId name level
@@ -40,7 +67,13 @@ class MailController
             var req = con.get("req");
             for(var i = 0; i < len(req); i++)
             {
-                mail.append([NEIBOR_REQ, req[i]]);
+                var d = dict();
+                for(var j = 0; j < len(NEIBOR_REQ_KEY); j++)
+                {
+                    d.update(NEIBOR_REQ_KEY[j], req[i][j]);
+                }
+                d.update("mailId", mailId++);
+                mail.append([NEIBOR_REQ, d]);
             }
             initNeiborRequestYet = 1;
         }
@@ -57,37 +90,42 @@ class MailController
             var gifts = con.get("gifts");
             for(var i = 0; i < len(gifts); i++)
             {
-                mail.append([GIFT_REQ, gifts[i]]);
+                var d = dict();
+                for(var j = 0; j < len(GIFT_KEY); j++)
+                {
+                    d.update(GIFT_KEY[j], gifts[i][j]);
+                }
+                d.update("mailId", mailId++);
+                mail.append([GIFT_REQ, d]);
             }
             initGiftYet = 1;
+        }
+    }
+    function readMail(mid)
+    {
+        for(var i = 0; i < len(mail); i++)
+        {
+            if(mail[i][1]["mailId"] == mid)
+            {
+                mail.pop(i);
+                break;
+            }
         }
     }
 
     //kind  
     //uid papayaId name level
-    /*
-    function getMessageOver(rid, rcode, con, param)
-    {
-        if(rcode != 0)
-        {
-            con = json_loads(con);
-            var req = con.get("req");
-            mail = [];
-            for(var i = 0; i < len(req); i++)
-            {
-                mail.append([NEIBOR_REQ, req[i]]);
-            }
-            getNeiborRequest = 1;
-            initYet = 1;
-        }
-    }
-    */
-
+    //每次读取mail 也要发送消息
     function update(diff)
     {
-        if(initNeiborRequestYet == 1 && initGiftYet == 1)
+        if(initNeiborRequestYet == 1 && initGiftYet == 1 && initMessage && initYet == 0)
         {
             initYet = 1;
+            global.msgCenter.sendMsg(UPDATE_MAIL, null);
         }
+    }
+    function getMailNum()
+    {
+        return len(mail);
     }
 }

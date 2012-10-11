@@ -869,7 +869,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         else if(scene.kind == CHALLENGE_NEIBOR)
         {
             global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, levelUpSol), 1, 0);
-            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.param[0]], ["sols", updateSoldierData], ["crystal", cry]]), null, null);
+            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.param[0]], ["sols", updateSoldierData], ["crystal", cry], ["mid", global.user.getNewMsgId()]]), null, null);
         }
         //奖励 金币 水晶 升级士兵 挑战擂台
         else if(scene.kind == CHALLENGE_FIGHT)

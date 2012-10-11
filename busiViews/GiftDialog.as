@@ -237,7 +237,7 @@ class GiftDialog extends MyNode
         {
             var ed = global.user.getEquipData(data[p][1]);
             objId = ed["kind"];
-            global.httpController.addRequest("goodsC/sendEquip", dict([["uid", global.user.uid], ["fid", neiborUid], ["eid", data[p][1]], ["ti", giftId]]), null, null);
+            global.httpController.addRequest("goodsC/sendEquip", dict([["uid", global.user.uid], ["fid", neiborUid], ["eid", data[p][1]], ["gid", giftId]]), null, null);
             global.user.sellEquip(data[p][1]);//只是删除用户装备数据
         }
         else 
@@ -245,19 +245,19 @@ class GiftDialog extends MyNode
 
             if(k == DRUG_ITEM)
             {
-                global.httpController.addRequest("goodsC/sendDrug", dict([["uid", global.user.uid], ["fid", neiborUid], ["did", data[p][1]], ["ti", giftId]]), null, null);
+                global.httpController.addRequest("goodsC/sendDrug", dict([["uid", global.user.uid], ["fid", neiborUid], ["did", data[p][1]], ["gid", giftId]]), null, null);
             }
             else if(k == HERB_ITEM)
             {
-                global.httpController.addRequest("goodsC/sendHerb", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
+                global.httpController.addRequest("goodsC/sendHerb", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["gid", giftId]]), null, null);
             }
             else if(k == TREASURE_ITEM)
             {
-                global.httpController.addRequest("goodsC/sendTreasureStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
+                global.httpController.addRequest("goodsC/sendTreasureStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["gid", giftId]]), null, null);
             }
             else if(k == MAGIC_ITEM)
             {
-                global.httpController.addRequest("goodsC/sendMagicStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["ti", giftId]]), null, null);
+                global.httpController.addRequest("goodsC/sendMagicStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["gid", giftId]]), null, null);
             }
 
             global.user.changeGoodsNum(map.get(k), data[p][1], -1);

@@ -58,10 +58,6 @@ class LoginDialog extends MyNode
         bg.addsprite("smallBack.png").anchor(0, 0).pos(159, 49).size(484, 62);
         bg.addlabel(getStr("loginReward", null), "fonts/heiti.ttf", 32).anchor(50, 50).pos(402, 82).color(32, 33, 40);
 
-        //bg.addsprite("rightBallon.png").anchor(0, 0).pos(696, 26).size(135, 381);
-        //bg.addsprite("leftBallon.png").anchor(0, 0).pos(-23, 43).size(152, 338);
-
-
 
 
         var rew = getLoginReward(now);

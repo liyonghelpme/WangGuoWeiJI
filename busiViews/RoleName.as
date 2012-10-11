@@ -1,44 +1,40 @@
 class RoleName extends MyNode
 {
-    //var scene;
     var soldier;
     var inputView;
-    //var preName = ["李", "王", "赵", "张", "谢", "司马", "诸葛", "南宫", "东方", "西门", "相里"];
-    //var midName = ["白", "天", "彩虹", "腾", "逊", "无极"];
     var warnText;
     var male;
+    function initView()
+    {
+        bg = node();
+        init();
+        var but0;
+        var line;
+        var temp;
+        var sca;
+        temp = bg.addsprite("back.png").anchor(0, 0).pos(186, 134).size(448, 237).color(100, 100, 100, 100);
+        temp = bg.addsprite("parchment.png").anchor(0, 0).pos(204, 163).size(413, 188).color(100, 100, 100, 100);
+        temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(264, 111).size(302, 51).color(100, 100, 100, 100);
+        inputView = v_create(V_INPUT_VIEW, 348, 211, 230, 50);
+                            
+        warnText = bg.addlabel(getStr("warnText", null), "fonts/heiti.ttf", 15).anchor(0, 50).pos(346, 276).color(43, 25, 9);
+        temp = bg.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(soldier.id)])).anchor(50, 50).pos(281, 256).color(100, 100, 100, 100);
+        sca = getSca(temp, [118, 139]);
+        temp.scale(sca);
+        bg.addlabel(getStr("solName", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(419, 137).color(32, 33, 40);
+        but0 = new NewButton("roleNameBut0.png", [138, 49], getStr("rand", null), null, 25, FONT_NORMAL, [100, 100, 100], randomName, null);
+        but0.bg.pos(302, 367);
+        addChild(but0);
+        but0 = new NewButton("roleNameBut1.png", [138, 49], getStr("ok", null), null, 25, FONT_NORMAL, [100, 100, 100], nameIt, null);
+        but0.bg.pos(513, 368);
+        addChild(but0);
+    }
     function RoleName(s, sol)
     {
         //scene = s;
         soldier = sol;
+        initView();
         male = soldier.data.get("maleOrFemale");
-
-        bg = sprite("roleName.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
-bg.addlabel(getStr("nameSol", null), "fonts/heiti.ttf", 25).pos(243, 29).anchor(50, 50).color(0, 0, 0);
-
-        var solPng = bg.addsprite("soldier"+str(sol.id)+".png").pos(109, 137).anchor(50, 50);
-        var bsize = solPng.prepare().size(); 
-        var sca = min(90*100/bsize[0], 90*100/bsize[1]);
-        solPng.scale(sca);
-
-        //526 34
-        init();
-
-        var bSize = bg.prepare().size();
-        //bg.addsprite("roleNameClose.png").pos(526, 34).anchor(50, 50).setevent(EVENT_TOUCH, closeDialog);
-        //bg.addsprite("roleNameDia.png").pos(141, 115);
-        var oriX = global.director.disSize[0]/2-bSize[0]/2+165;
-        var oriY = global.director.disSize[1]/2-bSize[1]/2+100;
-//        trace("inputView", oriX, oriY, 220, 29);
-
-
-        inputView = v_create(V_INPUT_VIEW, 327, 214, 220, 50);
-        warnText = bg.addlabel(getStr("nameNotNull", null), "fonts/heiti.ttf", 20).anchor(0, 0).pos(165, 157).color(100, 0, 0).visible(0);
-
-        var but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(152, 265).anchor(50, 50).setevent(EVENT_TOUCH, randomName);
-but.addlabel(getStr("rand", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
-        but = bg.addsprite("roleNameBut0.png").size(145, 46).pos(350, 265).anchor(50, 50).setevent(EVENT_TOUCH, nameIt);
-but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100, 100, 100).pos(72, 23);
         
         var solVal = global.user.soldiers.values();
         for(var j = 0; j < len(solVal); j++)
@@ -88,14 +84,6 @@ but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100
                 return;
             }
         }
-        else
-        {
-            if(len(n) > 15)
-            {
-                warnText.text(getStr("nameTooLong", null));
-                warnText.visible(1);
-            }
-        }
         var allSoldier = global.user.soldiers;
         var val = allSoldier.values();
         for(var i = 0; i < len(val); i++)
@@ -108,7 +96,6 @@ but.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).anchor(50, 50).color(100
             }
         }
 
-        //scene.nameSoldier(soldier, inputView.text());
         soldier.setName(inputView.text());
         soldier.finishName();//结束士兵的命名状态
         global.msgCenter.sendMsg(FINISH_NAME, soldier);

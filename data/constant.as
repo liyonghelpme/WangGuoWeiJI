@@ -535,6 +535,8 @@ const CALL_SOL = 23;
 const UPDATE_DRUG = 24;
 const BUY_DRUG = 25;
 const BUY_EQUIP = 26;
+const UPDATE_MAIL = 27;
+const RATE_GAME = 28;
 
 
 //开始技能选择目标 释放技能选择目标结束
@@ -580,6 +582,7 @@ const DAILY_TASK = 2;
 //邮件信息类型
 const NEIBOR_REQ = 0;
 const GIFT_REQ = 1;
+const OTHER_MSG = 2;
 
 const VISIT_PAPAYA = 0;
 const VISIT_NEIBOR = 1;
@@ -867,3 +870,9 @@ const EMPTY_PANEL = 2;
 const EQUIP_KIND = 0;
 const DETAIL_EQUIP = 1;
 const ALL_EMPTY = 2;
+
+//user Level
+const NEIBOR_REQ_KEY = ["uid", "papayaId", "name", "level", "time"];
+//equip Level
+const GIFT_KEY = ["uid", "name", "kind", "tid", "eqLevel", "time", "gid"];
+const MSG_KEY = ["uid", "kind", "param", "time", "name", "mid"];

@@ -31,7 +31,6 @@ class CloseAttackEffect extends MyNode
     var passTime = 0;
     function update(diff)
     {
-        
         accTime += diff;
         if(accTime > duration)
         {

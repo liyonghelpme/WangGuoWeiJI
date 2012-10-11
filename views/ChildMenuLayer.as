@@ -8,7 +8,7 @@ class ChildMenuLayer extends MyNode
     ["mail", ["menu_button_mail.png", onMail]],
     ["plan", ["menu_button_plan.png", onPlan]],
     ["rank", ["menu_button_rank.png", onRank]],
-    ["role", ["menu_button_role.png", onRole]],
+    //["role", ["menu_button_role.png", onRole]],
     ["setting", ["menu_button_setting.png", onSetting]],
     ["store", ["menu_button_store.png", onStore]],
 
@@ -254,6 +254,7 @@ class ChildMenuLayer extends MyNode
        建筑物 菜单
        士兵菜单
     */
+    var mailNum = null;
     function ChildMenuLayer(index, funcs, s, otherFunc){
         scene = s;
         functions = funcs;
@@ -275,8 +276,45 @@ class ChildMenuLayer extends MyNode
 
             var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(DARK_WIDTH/2, OFFY/2+OFFY*i);
             new Button(button, model[1], null);
+            if(funcs[i] == "mail")
+            {
+                var num = global.mailController.getMailNum();
+                mailNum = label(str(num), "fonts/heiti.ttf", 18).anchor(0, 50).color(14, 64, 26).pos(88, 66);
+                button.add(mailNum, 1, 1);//z tag 
+                if(num == 0)
+                    mailNum.visible(0);
+                else
+                    mailNum.visible(1);
+            }
         }
     }
+    function receiveMsg(param)
+    {
+        var msgId = param[0];
+        if(msgId == UPDATE_MAIL)
+        {
+            if(mailNum != null)
+            {
+                var num = global.mailController.getMailNum();
+                mailNum.text(str(num));
+                if(num == 0)
+                    mailNum.visible(0);
+                else
+                    mailNum.visible(1);
+            }
+        }
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.msgCenter.registerCallback(UPDATE_MAIL, this);
+    }
+    override function exitScene()
+    {   
+        global.msgCenter.removeCallback(UPDATE_MAIL, this);
+        super.exitScene();
+    }
+
     /*
     function touchMenu(callback)
     {
