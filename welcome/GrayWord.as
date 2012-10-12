@@ -162,9 +162,6 @@ var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, AL
 var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color(col);
                     w2.pos(0, curSize[1]);
 
-                    //showWord = totalWord.substr(0, totalNum);
-                    //lab.removefromparent();
-                    //lab = bg.addlabel(showWord, null, siz, FONT_NORMAL, width, height, ALIGN_LEFT).color(col);
                 }
                 else//结束本行
                 {
@@ -173,11 +170,6 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, A
                         startPrint = 0;
                         sound.pause();
                     }
-                    //curPos = 0;
-                    //curWordPos = 0;
-                    //curLine++; //不换行
-                    //totalNum += 2;//换行符号\n
-                    //curLine = len(word);
 
                     if(callback != null)
                         callback();
@@ -190,8 +182,6 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, A
                     startPrint = 0;
                     sound.pause();
                 }
-                //global.director.popScene();
-                //global.director.pushScene();
                 if(callback != null)
                     callback();
             }

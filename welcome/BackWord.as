@@ -25,7 +25,10 @@
     backPrint 17
     setLine 1
     print 28
-    over
+    over null
+ 
+所有指令 都必须有一个参数
+循环执行 BEGIN_REPEAT END_REPEAT  指定循环次数 和 循环跳转位置
 */
 class BackWord extends MyNode
 {
@@ -79,6 +82,16 @@ class BackWord extends MyNode
         cmd = c;
         //callback
         initYet = 1;
+    }
+    var toPlay = 1;
+    //父亲节点  字符串  字符大小 行高度  字符颜色  每行字符区域宽度 每行字符区域高度  打字tick*50ms 回调函数 粗体/斜体/正常体 
+    function closeSound()
+    {
+        toPlay = 0;
+    }
+    function openSound()
+    {
+        toPlay = 1;
     }
     function BackWord(sc, w, sz, h, c, wid, hei, n, cb, ft)
     {
@@ -151,7 +164,8 @@ class BackWord extends MyNode
                 if(startYet == 0)
                 {
                     startYet = 1;
-                    sound.play(-1);
+                    if(toPlay)
+                        sound.play(-1);
                 }
                 var line = word[curLine];
 
@@ -212,17 +226,50 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         {
             accTick = 0;
             startYet = 0;
-            sound.pause();
+            if(toPlay)
+                sound.pause();
             curCmd++;
         }
     }
+    //设定所在行
+    //设定当前所在行字符串 传入字符位置 设定当前位置
+    //只支持单行文字
+    function setCurPos(l, p)
+    {
+        trace("setCurPos", l, p);
+        totalNum = 0;
+        curLine = l;
+        for(var i = 0; i < curLine; i++)
+        {
+            totalNum += getWordLen(word[curLine]);
+            if(i < (curLine-1))
+                totalNum += 2;//增加\n换行符号长度
+        }
+
+        var line = word[curLine];
+        curPos = 0;
+        curWordPos = 0;
+
+        while(curPos < len(line) && curWordPos < p)
+        {
+            var o = ord(line[curPos]);
+            if(o < 128)
+                curPos++;
+            else
+                curPos += 3;
+            curWordPos++;
+            totalNum++;
+        }
+        trace("set", curLine, curPos, curWordPos, totalNum);
+    }
+    //打字到固定文字长度结束
     function executePrint()
     {
         var c = cmd[curCmd]; 
         var op = c[0];
         var par = c[1];
 
-        trace("print curWordPos par", curLine, curWordPos, totalNum, par);
+        //trace("print curWordPos par", curLine, curWordPos, totalNum, par);
         //if(curWordPos < par)//字符位置
         if(totalNum < par)
         {
@@ -233,7 +280,8 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                 if(startYet == 0)
                 {
                     startYet = 1;
-                    sound.play(-1);
+                    if(toPlay)
+                        sound.play(-1);
                 }
                 var line = word[curLine];
                 //通过curPos 判断空格 忽略行首空格
@@ -276,6 +324,7 @@ var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEF
 var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEFT).color(col);
                     w2.pos(0, curSize[1]);
                 }
+                //换行有两个字符 \ 和 n
                 else
                 {
                     curLine++;
@@ -290,13 +339,16 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         {
             accTick = 0;
             startYet = 0;
-            sound.pause();
+            if(toPlay)
+                sound.pause();
             curCmd++;
         }
     }
     var passTime = 0;
     function update(diff)
     {
+        var j;
+        var stack;
         if(initYet == 1)
         {   
             if(curCmd < len(cmd))
@@ -332,19 +384,77 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                         curCmd++;
                     }
                 }
+                else if(op == SET_CURPOS)
+                {
+                    setCurPos(par[0], par[1]);
+                    curCmd++;
+                }
+                else if(op == BEGIN_REPEAT)
+                {
+                    if(par[1] == -1)//循环结束 进入的下一条语句位置
+                    {
+                        stack = [];
+                        for(j = curCmd; j < len(cmd); j++)
+                        {
+                            if(cmd[j][0] == BEGIN_REPEAT)
+                                stack.append(j);
+                            else if(cmd[j][0] == END_REPEAT)
+                            {
+                                stack.pop();
+                                if(len(stack) == 0)
+                                {
+                                    break;
+                                }   
+                            }
+                        }
+                        par[1] = j+1;//结束END_REPEAT 位置
+                    }
+                    if(par[0] == 0)//循环执行结束
+                    {
+                        curCmd = par[1];
+                    }
+                    else//仍然执行循环
+                    {
+                        if(par[0] > 0)//不是无限循环
+                            par[0]--;
+                        curCmd++;
+                    }
+                }
+                else if(op == END_REPEAT)
+                {
+                    if(par == -1)//缓存 语句开始位置
+                    {
+                        stack = [];
+                        for(j = curCmd; j >= 0; j--)
+                        {
+                            if(cmd[j][0] == END_REPEAT)
+                            {
+                                stack.append(j)
+                            }
+                            else if(cmd[j][0] == BEGIN_REPEAT)
+                            {
+                                stack.pop();
+                                if(len(stack) == 0)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        par = j;
+                    }
+                    curCmd = par; 
+                }
             }
             else
             {
-                callback();
+                if(callback != null)
+                    callback();
             }
         }
     }
     override function exitScene()
     {
-        //player.stop();
         sound.stop();
-        //sound.destory();
-        //sound.destory();
 
         global.myAction.removeAct(this);
         super.exitScene();

@@ -20,6 +20,10 @@
 每天第一次登录:更新状态 访问状态
 访问用户时更新状态: 访问状态 等级
 
+
+inGameFriend.update(newFriendList[i], dict([["uid", friUidName[i][0]], ["level", friUidName[i][2]], ["name", friUidName[i][1]], ["id", newFriendList[i]]]));//Fid level
+inGameFriend = 所有进入我方游戏的木瓜好友 papayaId ----> uid,  level, name, papyaId
+
 */
 class FriendController 
 {
@@ -264,11 +268,18 @@ class FriendController
             neibors = [];
             for(var i = 0; i < len(temp); i++)
             {
-                neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]], ["mineLevel", temp[i][4]], ["challengeYet", temp[i][5]], ["heartYet", temp[i][6]] ]));
+                var d = dict();
+                for(var k = 0; k < len(NEIBOR_KEY); k++)
+                {
+                    d.update(NEIBOR_CRY[k], temp[i][k]);
+                }
+                neibors.append(d);
+                //neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]], ["mineLevel", temp[i][4]], ["challengeYet", temp[i][5]], ["heartYet", temp[i][6]] ]));
             }
             setNeiborCrystal();
             global.user.db.put("neibors", neibors);
             initNeiborYet = 1;
+            global.msgCenter.sendMsg(INIT_NEIBOR_OVER, null);
         }
     }
     function sendHeart(nid)
@@ -369,10 +380,17 @@ class FriendController
                 //推荐好友避免出现自己
                 if(temp[i][0] == global.user.uid)
                     continue;
-                recommandFriends.append(dict([["id", temp[i][3]], ["name", temp[i][2]], ["level", temp[i][1]], ["uid", temp[i][0]]]));
+                var d = dict();
+                for(var k = 0; k < len(RECOMMAND_KEY); k++)
+                {
+                    d.update(RECOMMAND_KEY[k], temp[i][k]);
+                }
+                recommandFriends.append(d);
+                //recommandFriends.append(dict([["id", temp[i][3]], ["name", temp[i][2]], ["level", temp[i][1]], ["uid", temp[i][0]]]));
             }
             setRecommandCrystal();
 
+            //冒泡按照等级排序 从大到小
             var flag = 1;
             for(i = len(recommandFriends); i> 0 && flag == 1; i--)
             {
@@ -433,7 +451,14 @@ class FriendController
             //新加的好友的等级和是否访问过 放置到本地数据库中
             for(var i = 0; i < len(newFriendList); i++)//papayaId
             {
-                inGameFriend.update(newFriendList[i], dict([["uid", friUidName[i][0]], ["level", friUidName[i][2]], ["name", friUidName[i][1]], ["id", newFriendList[i]]]));//Fid level
+                var d = dict();
+                for(var k = 0; k < len(ADD_FRIEND_KEY); k++)
+                {
+                    d.update(ADD_FRIEND_KEY[k], friUidName[i][k]);
+                }
+                d.update("id", newFriendList[i]);
+                inGameFriend.update(newFriendList[i], d);
+                //inGameFriend.update(newFriendList[i], dict([["uid", friUidName[i][0]], ["level", friUidName[i][2]], ["name", friUidName[i][1]], ["id", newFriendList[i]]]));//Fid level
             }
             global.user.db.put("friends", inGameFriend);
             newFriendList = null;

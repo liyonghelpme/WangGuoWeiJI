@@ -1484,4 +1484,13 @@ class User
         unlockLevel.append(big);
         db.put("unlockLevel", unlockLevel);
     }
+    function getNextTip()
+    {
+        var tid = db.get("tid");
+        if(tid == null)
+            tid = 0;
+        tid %= PARAMS["MAX_TIP_NUM"];
+        db.put("tid", tid+1);
+        return tid;
+    }
 }

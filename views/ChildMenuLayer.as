@@ -253,6 +253,8 @@ class ChildMenuLayer extends MyNode
        主菜单 场景
        建筑物 菜单
        士兵菜单
+
+    右键数量是特殊代码----> 应该要分离
     */
     var mailNum = null;
     function ChildMenuLayer(index, funcs, s, otherFunc){

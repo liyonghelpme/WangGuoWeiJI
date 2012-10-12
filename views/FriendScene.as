@@ -123,6 +123,14 @@ class FriendScene extends MyNode
         return user.get("uid");
     }
     //user 包含uid id name level 等数据
+    //好友的 姓名 头像等数据
+    //user 来自： 排行榜  访问好友 访问邻居
+    //至少包含数据： uid id name level 
+    //RankBase: uid PapayaId  name level
+    //FriendList: 
+    //        Neibor：   yet yet yet
+    //        PapayaFriend: uid name level papayaId
+    //        RecommandFriend: 
     function FriendScene(pid, c, k, cry, u)
     {
         kind = k;

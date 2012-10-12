@@ -96,7 +96,6 @@ bg.addlabel(getStr("29xp to level 4", null), "fonts/heiti.ttf", 17).anchor(50, 5
         //collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(50,50).pos(253, 100).rotate(0).setevent(EVENT_TOUCH, openGlory);
         collectionbutton = bg.addsprite("collection.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, openGlory);
 
-        //rechargebutton = banner.addsprite("recharge.png").scale(100,100).size(84,33).anchor(50,50).pos(477,98).rotate(0).setevent(EVENT_TOUCH, openCharge);
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
         //menubutton = banner.addsprite("menu_button.png").scale(100,100).anchor(0,100).pos(686,118);

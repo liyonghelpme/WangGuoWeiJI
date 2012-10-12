@@ -510,4 +510,11 @@ var WORDS = dict([
 ["solDetail", "[ATTKIND]：[ATTACK]\n魔法物理防御力：[MAGIC][PHYSIC]\n生命值：[HEALTH]/[HEALTH_BOUNDARY]\n攻击速度：[ATT_SPEED]\n攻击范围：[ATT_RANGE]\n回血速度：[HEAL_SPEED]\n等级：[LEV0]级，还需要[EXP]经验升到[LEV1]级\n[TRANS]"],
 ["physicAtt", "物理攻击力"],
 ["magicAtt", "魔法攻击力"],
+["tips0", "帮助好友清除士兵状态将能获得免费水晶"],
+["tips1", "访问木瓜社区或邀请好友来添加更多邻居！"],
+["tips2", "赠送邻居礼物将能获得免费爱心"],
+["tips3", "帮助好友开启宝箱将会获得免费爱心"],
+["tips4", "挑战邻居成功可以掠夺邻居水晶矿中部分水晶"],
+["flying", "飞行中..."],
+["fly", "飞行中"],
 ]);

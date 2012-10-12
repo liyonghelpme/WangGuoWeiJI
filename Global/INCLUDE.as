@@ -3,7 +3,9 @@
 //构造初始化的建筑物分布时，需要初始化一个河流相关的冲突图
 
 import views.FriendScene;
-import views.FriendMenu;
+//import views.FriendMenu;
+import busiViews.FriendMenu;
+import busiViews.FriendRightMenu;
 
 import views.FriendSoldier;
 
@@ -255,7 +257,8 @@ import busiViews.RankDialog;
 import busiViews.RankBase;
 
 import views.ChallengeScene;
-import views.VisitDialog;
+//import views.VisitDialog;
+import busiViews.VisitDialog;
 
 
 

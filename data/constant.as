@@ -537,6 +537,7 @@ const BUY_DRUG = 25;
 const BUY_EQUIP = 26;
 const UPDATE_MAIL = 27;
 const RATE_GAME = 28;
+const INIT_NEIBOR_OVER = 29;
 
 
 //开始技能选择目标 释放技能选择目标结束
@@ -767,6 +768,9 @@ const SET_TIME = 1;
 const BACK_PRINT = 2;
 const SET_WORD = 3;
 const WAIT_PRINT = 4;
+const SET_CURPOS = 5;
+const BEGIN_REPEAT = 6;
+const END_REPEAT = 7;
 
 
 /*
@@ -808,23 +812,7 @@ const SOL_CATEGORY = dict([
 ]);
 
 
-//res = [[i['uid'], i['papayaId'], i['score'], i['rank'], i['name']] for i in ret]
-//ret = [[i['uid'], i['papayaId'], i['score'], i['rank'], i['name']] for i in ret]
-//ret = [[i['uid'], i['papayaId'], i['suc'], i['rank'], i['name'], i['total']] for i in ret]
-var ChallengeRankKey = ["uid", "papayaId", "score", "rank", "name", "level"];
-var HeartRankKey = ["uid", "papayaId", "score", "rank", "name", "level"];
-var FightRankKey = ["uid", "papayaId", "score", "rank", "name", "total", "level"]; 
 
-//RankDialog
-const CHALLENGE_RANK = 0;
-const HEART_RANK = 1;
-const FIGHT_RANK = 2;//attackRank defenseRank 大类型
-
-//RankBase
-const ATTACK_RANK = 3;
-const DEFENSE_RANK = 4;
-
-const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, FightRankKey, FightRankKey];
 
 //宝石 魔法石 
 //物体类型 [物品ID ---> 语句]
@@ -871,8 +859,29 @@ const EQUIP_KIND = 0;
 const DETAIL_EQUIP = 1;
 const ALL_EMPTY = 2;
 
-//user Level
+
+var ChallengeRankKey = ["uid", "id", "score", "rank", "name", "level"];
+var HeartRankKey = ["uid", "id", "score", "rank", "name", "level"];
+var FightRankKey = ["uid", "id", "score", "rank", "name", "total", "level"]; 
+
+//RankDialog
+const CHALLENGE_RANK = 0;
+const HEART_RANK = 1;
+const FIGHT_RANK = 2;//attackRank defenseRank 大类型
+
+//RankBase
+const ATTACK_RANK = 3;
+const DEFENSE_RANK = 4;
+
+const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, FightRankKey, FightRankKey];
+
+
 const NEIBOR_REQ_KEY = ["uid", "papayaId", "name", "level", "time"];
-//equip Level
 const GIFT_KEY = ["uid", "name", "kind", "tid", "eqLevel", "time", "gid"];
 const MSG_KEY = ["uid", "kind", "param", "time", "name", "mid"];
+
+const NEIBOR_KEY = ["uid", "id", "name", "level", "mineLevel", "challengeYet", "heartYet"];
+const INGAME_FRIEND_KEY = ["uid", "name", "level", "id"];
+const RECOMMAND_KEY = ["uid", "level", "name", "id"]; 
+//更新好友的key 完全可以依赖于 服务器返回一批数据 及其对应的key
+const ADD_FRIEND_KEY = ["uid", "name", "level"];

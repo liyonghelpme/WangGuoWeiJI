@@ -32,14 +32,6 @@ class RankBase extends MyNode
 
     var curRank;
 
-    /*
-    function getUserRow()
-    {
-        var rankOrder = global.user.rankOrder;
-        var rowBegin = rankOrder/ITEM_NUM;
-        return rowBegin;
-    }
-    */
     var lock = null;
 
     function update(diff)
@@ -523,7 +515,7 @@ bg.addlabel(getStr("No.1", null), "fonts/heiti.ttf", 23).anchor(50, 50).pos(81, 
                 //排行榜数据格式: 挑战排行 爱心排行 擂台排行 更多排行显示的数据view 是不同的
                 //但是都是在显示人 数据的内容是类似的
                 //排行的量是一致的
-                var papayaId = data[diff]["papayaId"];
+                var papayaId = data[diff]["id"];
                 var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
                 panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
@@ -633,7 +625,7 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
             return;
         }
 
-        var papayaId = data[diff]["papayaId"];
+        var papayaId = data[diff]["id"];
         var score = data[diff]["score"];
         var rank = data[diff]["rank"];
         /*
@@ -671,23 +663,6 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
 
 
 
-/*
-        var pSize = child.prepare().size();
-        var shadow = sprite("dialogRankShadow.png").pos(pSize[0]/2, pSize[1]/2).anchor(50, 50).size(pSize[0], pSize[1]);
-        child.add(shadow, 100, 1);
-
-        var but0 = shadow.addsprite("greenButton.png").pos(66, 50).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, doVisit, curNum);
-        but0.addlabel(getStr("visit", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
-
-
-        //未挑战过 且不是自身
-        if(global.user.checkChallengeYet(uid) == 0)//挑战自身显示按钮 || uid == global.user.uid
-        {
-            but0 = shadow.addsprite("greenButton.png").pos(66, 100).anchor(50, 0).size(95, 40).setevent(EVENT_TOUCH, challengeGroup, curNum);
-but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19).anchor(50, 50);
-            
-        }
-*/
 
     }
 
@@ -700,7 +675,7 @@ but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19)
             return;
         global.director.popView();
         var uid = data[diff]["uid"];
-        var papayaId = data[diff]["papayaId"];
+        var papayaId = data[diff]["id"];
         var score = data[diff]["score"];
         var rank = data[diff]["rank"];
 
@@ -709,49 +684,15 @@ but0.addlabel(getStr("challengeGroup", null), "fonts/heiti.ttf", 21).pos(47, 19)
         global.director.pushView(new VisitDialog(cs), 1, 0);
         cs.initData();
     }
-    /*
-    function challengeGroup(n, e, p, x, y, points)
-    {
-        var curNum = p;
-        var beginRank = data[0]["rank"];
-        var diff = curNum-beginRank;
-        if(diff < 0 || diff >= len(data))
-            return;
-        global.director.popView();
-        var uid = data[diff]["uid"];
-        var papayaId = data[diff]["papayaId"];
-        var score = data[diff]["score"];
-        var rank = data[diff]["rank"];
-
-        var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, null);
-        global.director.pushScene(cs);
-        global.director.pushView(new VisitDialog(cs), 1, 0);
-        cs.initData();
-
-        //map 5 挑战页面
-    }
-    */
     function onVisit(curNum)
     {
         var userData = data[curNum];
         global.director.popView();
-        var papayaId = data[curNum]["papayaId"];
+        var papayaId = data[curNum]["id"];
         //排行榜不是好友 不能进行下一个
-        var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, dict([["uid", userData["uid"]], ["id", userData["papayaId"]], ["name", userData["name"]]])); 
+        var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, userData); 
         global.director.pushScene(friend);
         global.director.pushView(new VisitDialog(friend), 1, 0);
     }
-    /*
-    function doVisit(n, e, p, x, y, points)
-    {
-        var userData = data[p];
-        global.director.popView();
-        var papayaId = data[p]["papayaId"];
-        //排行榜不是好友 不能进行下一个
-        var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, dict([["uid", userData["uid"]], ["id", userData["papayaId"]], ["name", userData["name"]]])); 
-        global.director.pushScene(friend);
-        global.director.pushView(new VisitDialog(friend), 1, 0);
-    }
-    */
 
 }
