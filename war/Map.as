@@ -828,6 +828,10 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
         else if(scene.kind == CHALLENGE_NEIBOR)
         {
+            var cry = 0;
+            if(win)
+                cry = getChallengeNeiborCry(scene.param[0]);
+            /*
             var neibor = global.friendController.getNeiborData(scene.param[0]);
             var cry;
             if(win == 1)
@@ -842,6 +846,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             }
             else
                 cry = 0;
+            */
             global.user.changeValue("crystal", cry);
         }
         else if(scene.kind == CHALLENGE_FIGHT || scene.kind == CHALLENGE_DEFENSE)

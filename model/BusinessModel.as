@@ -31,6 +31,16 @@ function getFarmIncome(level)
         return 278;
     return 323;
 }
+
+function getTotalIncome(level)
+{
+    var num = getFarmNum(level);
+    var per = getFarmIncome(level);
+    var coff = getFarmCoff(level);
+//    trace("farmNum", num, per, coff);
+    return num*per*coff/100;
+}
+
 function getFarmExp(level)
 {
     //var level = global.user.getValue("level");
@@ -42,6 +52,8 @@ function getFarmExp(level)
         return 66;
     return 91;
 }
+
+
 /*
 服务器自动计算的升级需要经验
 客户端使用和服务器相同的数据
@@ -56,14 +68,7 @@ function getLevelUpNeedExp(level)
     return levelExp[min(len(levelExp)-1, level)];
 }
 
-function getTotalIncome(level)
-{
-    var num = getFarmNum(level);
-    var per = getFarmIncome(level);
-    var coff = getFarmCoff(level);
-//    trace("farmNum", num, per, coff);
-    return num*per*coff/100;
-}
+
 //掉落物品价值value/1000
 //0 - 9 编号
 function getFallObjValue(id)

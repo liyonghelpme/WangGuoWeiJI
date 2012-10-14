@@ -62,6 +62,8 @@ class ChildMenuLayer extends MyNode
     ]);
     function onInvite()
     {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.pushView(new InviteIntro(), 1, 0);
     }
     function onCall()
     {

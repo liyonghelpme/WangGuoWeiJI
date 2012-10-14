@@ -8,15 +8,19 @@ class FriendMenu extends MyNode
     */
     function onRecharge()
     {
-        /*
         var st = new Store(global.director.curScene);
         st.changeTab(GOLD_PAGE);
         global.director.pushView(st, 1, 0);
-        */
     }
+
     function onFriend()
     {
+        global.director.pushView(new FriendDialog(), 1, 0);
     }
+    var silverText;
+    var crystalText;
+    var goldText;
+
     var rightMenu = null;
     function initView()
     {
@@ -32,9 +36,9 @@ class FriendMenu extends MyNode
         addChild(but0);
         temp = bg.addsprite("recharge.png").anchor(0, 0).pos(441, 431).size(98, 39).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRecharge);
         temp = bg.addsprite("friendReturn.png").anchor(0, 0).pos(7, 360).size(130, 122).color(100, 100, 100, 100).setevent(EVENT_TOUCH, returnHome);
-        bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(592, 450).color(100, 100, 100);
-        bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(347, 451).color(100, 100, 100);
-        bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(197, 450).color(100, 100, 100);
+        goldText = bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(592, 450).color(100, 100, 100);
+        silverText = bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(347, 451).color(100, 100, 100);
+        crystalText = bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(197, 450).color(100, 100, 100);
 
 
         var friends = global.friendController.getFriends(scene.kind);
@@ -68,17 +72,45 @@ class FriendMenu extends MyNode
             rightMenu = null;
         }
 
+        //好友是否有宝箱
         var funcs;
         if(scene.kind == VISIT_NEIBOR)
         {
             var neibor = global.friendController.getNeiborData(scene.user["uid"]);
-            funcs = [["box", 0], ["heart", neibor["heartYet"]], ["challenge", neibor["challengeYet"]]];
+            funcs = [["heart", neibor["heartYet"]], ["challenge", neibor["challengeYet"]]];
         }
-        else
-            funcs = [["box", 0]];
+
+        if(scene.hasBox)
+            funcs.insert(0, ["box", 0]);
+
         rightMenu = new FriendRightMenu(this, funcs);
-        rightMenu.setPos([746, 277]);
+        rightMenu.setPos([746, 129]);
         addChild(rightMenu);
+    }
+    function receiveMsg(par)
+    {
+        var msgId = par[0];
+        if(msgId == UPDATE_RESOURCE)
+        {
+            updateDate();
+        }
+    }
+    function updateDate()
+    {
+        silverText.text(str(global.user.getValue("silver")));
+        goldText.text(str(global.user.getValue("gold")));
+        crystalText.text(str(global.user.getValue("crystal")));
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
+        updateDate();
+    }
+    override function exitScene()
+    {
+        global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
+        super.exitScene();
     }
     //好友场景的 邻居数据 是 拷贝得到的 不能通过本地修改来 修改全局的状态
     //需要访问全局接口来修改状态
@@ -96,21 +128,30 @@ class FriendMenu extends MyNode
         global.friendController.sendHeart(user["uid"]);
         global.httpController.addRequest("friendC/sendHeart", dict([["uid", global.user.uid], ["fid", user.get("uid")], ["mid", global.user.getNewMsgId()]]), null, null);
 
+        global.director.curScene.addChild(new UpgradeBanner(getStr("freeHeart", null) , [100, 100, 100], null));
+
         updateRightMenu();
     }
+    var challenged = 0;
     //挑战结束返回好友页面
     //已经有一个 挑战排行榜
     //挑战邻居有什么意义
     function onChallenge()
     {
-        /*
+        if(challenged == 0)
+        {
+            challenged += 1;
+            var cry = getChallengeNeiborCry(scene.user["uid"]);
+            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToChallenge", ["[NUM]", str(cry)]) , [100, 100, 100], null));
+            return;
+        }
+        challenged = 0;
         var user = scene.user;
         var cs = new ChallengeScene(user.get("uid"), user.get("id"), 0, 0, CHALLENGE_NEIBOR, user);
 
         global.director.pushScene(cs);
         global.director.pushView(new VisitDialog(cs), 1, 0);
         cs.initData();
-        */
         updateRightMenu();
     }
     function returnHome()
@@ -120,5 +161,10 @@ class FriendMenu extends MyNode
     function visitNext()
     {
         scene.visitNext(); 
+    }
+    //好友宝箱点击开启之后 
+    function onBox()
+    {   
+        global.director.pushView(new TreasureBox(BOX_FRIEND, scene), 1, 0);
     }
 }

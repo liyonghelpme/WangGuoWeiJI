@@ -1,4 +1,4 @@
-import test.INCLUDE;
+import Global.INCLUDE;
 
 
 //初始化经营页面
@@ -16,8 +16,8 @@ import test.INCLUDE;
 
 
 //显示场景
-//global.director.replaceScene(new CastleScene());
-//global.director.pushView(new Loading(), 1, 0);//DarkNod
+global.director.replaceScene(new CastleScene());
+global.director.pushView(new Loading(), 1, 0);//DarkNod
 
 //初始化场景数据 数据初始化结束之后 取出loading页面
 global.user.initData();
@@ -42,23 +42,6 @@ global.user.initData();
 
 
 
-//global.director.pushView(new VisitDialog(null), 1, 0);
-class TestNeiborScene
-{
-    function TestNeiborScene()
-    {
-        global.msgCenter.registerCallback(INIT_NEIBOR_OVER, this);
-    }
-    function receiveMsg(para)
-    {
-        var msgId = para[0];
-        if(msgId == INIT_NEIBOR_OVER)
-        {
-            var nei = global.friendController.neibors[0];
-            var fri = new FriendScene(nei["id"], 0, VISIT_NEIBOR, nei["crystal"], nei);
-            global.director.pushScene(fri);
-        }
-    }
-}
+//global.director.pushView(new Store(null), 1, 0);
 
 

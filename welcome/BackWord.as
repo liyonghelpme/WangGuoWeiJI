@@ -351,7 +351,9 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         var stack;
         if(initYet == 1)
         {   
-            if(curCmd < len(cmd))
+            //非瞬时命令 break
+            //瞬时命令  循环执行
+            while(curCmd < len(cmd))
             {
                 var c = cmd[curCmd]; 
                 var op = c[0];
@@ -359,7 +361,8 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                 //当前打印的位置 和目的打印的位置 检测
                 if(op == PRINT)
                 {
-                    executePrint();
+                    executePrint();//非瞬时
+                    break;
                 }
                 else if(op == SET_TIME)
                 {
@@ -368,14 +371,15 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                 }
                 else if(op == BACK_PRINT)
                 {
-                    executeBackPrint(); 
+                    executeBackPrint(); //非瞬时
+                    break;
                 }
                 else if(op == SET_WORD)
                 {
                     word = getStr(par, null).split("\n");
                     curCmd++;
                 }
-                else if(op == WAIT_PRINT)
+                else if(op == WAIT_PRINT)//非瞬时
                 {
                     passTime += diff;
                     if(passTime >= par)
@@ -383,6 +387,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                         passTime = 0;
                         curCmd++;
                     }
+                    break;
                 }
                 else if(op == SET_CURPOS)
                 {
@@ -444,8 +449,11 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                     }
                     curCmd = par; 
                 }
+                else
+                    break;
             }
-            else
+
+            if(curCmd >= len(cmd))
             {
                 if(callback != null)
                     callback();

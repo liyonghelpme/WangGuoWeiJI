@@ -138,10 +138,6 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
 
         silverText = bg.addlabel(getStr("1", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(333, 461).color(100, 100, 100);
         goldText =  bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461).color(100, 100, 100);
-        //silverText = banner.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(336, 99).color(100, 100, 100);
-        //goldText = banner.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(591, 99).color(100, 100, 100);
-        //gloryText = banner.addlabel(getStr("glory", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(167, 99).color(100, 100, 100);
-        //gloryLevText = collectionbutton.addlabel(str("B+"), "fonts/heiti.ttf", 20, FONT_BOLD).anchor(50, 50).pos(23, 17).color(100, 100, 100);
         gloryLevText = bg.addlabel("A-", "fonts/heiti.ttf", 25).anchor(50, 50).pos(253, 461).color(100, 100, 100);
     }
     //var building = 0;
@@ -303,11 +299,8 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     }
     function updateValue(res)
     {
-//        trace("update Value");
         silverText.text(str(res.get("silver", 0)));
         goldText.text(str(res.get("gold", 0)));
-
-
     }
     /*
     管理菜单的显示和隐藏

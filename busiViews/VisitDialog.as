@@ -19,6 +19,7 @@ class VisitDialog extends MyNode
         var prW = new BackWord(this, getStr("flying", null), 37, 15, [66, 46, 28], 800, 0, 4, null, FONT_BOLD);
         prW.setPos([342, 59]);
         addChild(prW);
+        //瞬时命令立即执行
         var cmd = [
             [SET_TIME, 4],
             [BEGIN_REPEAT, [-1, -1]],//循环次数 循环结束进入的下一条语句位置

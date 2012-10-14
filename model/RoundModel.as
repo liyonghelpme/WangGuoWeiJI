@@ -280,3 +280,17 @@ function getMaxBigEnable()
 //check enable
 //level starNum curStar --->enable
 //enable = 0 -----> condition satisfy--->enable 
+
+function getChallengeNeiborCry(nid)
+{
+    var neibor = global.friendController.getNeiborData(nid);
+    var cry;
+    cry = getProduction(neibor.get("mineLevel"));
+    if(neibor.get("level") < global.user.getValue("level"))
+        cry = cry/10;
+    else if(neibor.get("level") == global.user.getValue("level"))
+        cry = cry/5;
+    else
+        cry = cry/2;
+    return cry;
+}

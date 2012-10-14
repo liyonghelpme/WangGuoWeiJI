@@ -97,6 +97,7 @@ class CastlePage extends MyNode
 
     var dialogController;
     var solNum;
+    var box = null;//登录发现有宝箱  产生新的宝箱 宝箱已经被开启 
 
     function getLoginRewardOver(rid, rcode, con, param)
     {
@@ -163,6 +164,12 @@ class CastlePage extends MyNode
 
         }
 
+        if(global.user.hasBox)
+        {
+            box = new BoxOnMap();
+            addChild(box);
+        }
+
         /*
         dialogController.addCmd(dict([["cmd", "update"]]));
         dialogController.addCmd(dict([["cmd", "heart"]]));
@@ -222,12 +229,10 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         dialogController = new DialogController(this);
         addChild(dialogController);
 
+
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
-
-
-
 
     }
     function onCryIsland()
@@ -428,6 +433,8 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         global.msgCenter.registerCallback(LEVEL_UP, this);
         global.msgCenter.registerCallback(FINISH_NAME, this);
         global.msgCenter.registerCallback(UPGRADE_LOVE_TREE, this);
+        global.msgCenter.registerCallback(GEN_NEW_BOX, this);
+        global.msgCenter.registerCallback(OPEN_BOX, this);
         solNum.text(str(global.user.getSolNum()));
     }
 
@@ -466,6 +473,22 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         {
             dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", msg[1]]]));
         }
+        else if(msg[0] == GEN_NEW_BOX)
+        {
+            if(global.user.hasBox && box == null)
+            {
+                box = new BoxOnMap();
+                addChild(box);
+            }
+        }
+        else if(msg[0] == OPEN_BOX)
+        {
+            if(global.user.hasBox == 0 && box != null)
+            {
+                box.removeSelf();
+                box = null;
+            }
+        }
     }
     function remove(c)
     {
@@ -499,6 +522,8 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(OPEN_BOX, this);
+        global.msgCenter.removeCallback(GEN_NEW_BOX, this);
         global.msgCenter.removeCallback(UPGRADE_LOVE_TREE, this);
         global.msgCenter.removeCallback(FINISH_NAME, this);
         global.msgCenter.removeCallback(LEVEL_UP, this);

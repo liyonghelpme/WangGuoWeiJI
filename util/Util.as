@@ -1182,5 +1182,16 @@ function checkFirstLogin()
     //连续两次登录相差:1天 多天
     return diff;
 }
-
+//检测字符串是否整数
+function checkNum(s)
+{
+    var o0 = ord('0');
+    for(var i = 0; i < len(s); i++)
+    {
+        var o = ord(s[i]);
+        if((o-o0) > 9 || (o-o0)<0 )
+            return 0;
+    }
+    return 1;
+}
 

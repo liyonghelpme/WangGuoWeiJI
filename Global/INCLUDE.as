@@ -6,6 +6,8 @@ import views.FriendScene;
 //import views.FriendMenu;
 import busiViews.FriendMenu;
 import busiViews.FriendRightMenu;
+import busiViews.TreasureBox;
+import busiViews.BoxReward;
 
 import views.FriendSoldier;
 
@@ -34,6 +36,7 @@ import busiViews.DrugList;
 
 //经营页面
 import views.CastlePage;
+import busiViews.BoxOnMap;
 import views.BuildLayer;
 import views.BuildLand;
 import views.SoldierMax;
@@ -76,6 +79,8 @@ import busiViews.DetailDialog;
 import views.ChildMenuLayer;
 import views.GameTwo;
 import views.GameOne;
+import busiViews.InviteIntro;
+import busiViews.InviteInput;
 
 import busiViews.MailDialog;
 import busiViews.RequestView;
@@ -257,7 +262,6 @@ import busiViews.RankDialog;
 import busiViews.RankBase;
 
 import views.ChallengeScene;
-//import views.VisitDialog;
 import busiViews.VisitDialog;
 
 

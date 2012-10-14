@@ -53,6 +53,7 @@ class CastleScene extends MyNode
         global.msgCenter.registerCallback(SHOW_DIALOG, this);
         global.msgCenter.registerCallback(INITDATA_OVER, this);
         global.msgCenter.registerCallback(NEW_USER, this);
+        global.msgCenter.registerCallback(BEGIN_BUILD, this);
     }
     var realDisappear = 0;
     var inSen = 0;
@@ -109,6 +110,8 @@ class CastleScene extends MyNode
         }
         else if(msid == NEW_USER)
             global.director.replaceScene(new WelcomeDialog());
+        else if(msid == BEGIN_BUILD)
+            beginBuild(param[1]);
     }
     override function exitScene()
     {
@@ -118,6 +121,7 @@ class CastleScene extends MyNode
         //global.staticScene = null;
         global.timer.removeTimer(this);
 
+        global.msgCenter.removeCallback(BEGIN_BUILD, this);
         global.msgCenter.removeCallback(SHOW_DIALOG, this);
         global.msgCenter.removeCallback(INITDATA_OVER, this);
         global.msgCenter.removeCallback(NEW_USER, this);

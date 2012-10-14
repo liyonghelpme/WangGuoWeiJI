@@ -538,6 +538,10 @@ const BUY_EQUIP = 26;
 const UPDATE_MAIL = 27;
 const RATE_GAME = 28;
 const INIT_NEIBOR_OVER = 29;
+const BEGIN_BUILD = 30; //商店购买建筑物 发送建造请求 没有 接受者 将 提示不能建造
+const GEN_NEW_BOX = 31;
+const OPEN_BOX = 32;
+//const SELF_OPEN_BOX = 33;
 
 
 //开始技能选择目标 释放技能选择目标结束
@@ -603,6 +607,8 @@ const NEIBOR_CRY = 3;//3* neibornum
 
 const ADD_MAX_CAE = 10;
 const MINE_BUILD = 300;
+
+//用户自己的水晶矿的数据是分离于普通建筑的 因此不能通过updateBuilding 来更新 需要额外的更新机制
 const MINE_BID = -1;
 
 const MINE_BEGIN_LEVEL = 6;
@@ -880,8 +886,18 @@ const NEIBOR_REQ_KEY = ["uid", "papayaId", "name", "level", "time"];
 const GIFT_KEY = ["uid", "name", "kind", "tid", "eqLevel", "time", "gid"];
 const MSG_KEY = ["uid", "kind", "param", "time", "name", "mid"];
 
-const NEIBOR_KEY = ["uid", "id", "name", "level", "mineLevel", "challengeYet", "heartYet"];
+const NEIBOR_KEY = ["uid", "id", "name", "level", "mineLevel", "challengeYet", "heartYet", "heartLevel"];
 const INGAME_FRIEND_KEY = ["uid", "name", "level", "id"];
 const RECOMMAND_KEY = ["uid", "level", "name", "id"]; 
 //更新好友的key 完全可以依赖于 服务器返回一批数据 及其对应的key
 const ADD_FRIEND_KEY = ["uid", "name", "level"];
+
+//宝箱类型
+const BOX_SELF = 0;
+const BOX_FRIEND = 1;
+
+const KIND2STR = dict([
+[SILVER, "silver"],
+[CRYSTAL, "crystal"],
+[GOLD, "gold"],
+]);

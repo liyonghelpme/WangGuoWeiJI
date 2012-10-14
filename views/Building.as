@@ -122,6 +122,7 @@ class Building extends MyNode
     var featureColor = null;
     function Building(m, d, privateData)
     {
+        bid = -1;
         map = m;
         data = d;
         id = data.get("id");
@@ -213,17 +214,6 @@ class Building extends MyNode
 
         dir = privateData.get("dir", 0);
         setState(privateData.get("state", PARAMS["buildMove"]));
-        /*
-        if(privateData != null)//初始化数据建筑
-        {
-
-        }
-        else//新建建筑
-        {
-            dir = 0;
-            setState(PARAMS["buildMove"]);
-        }
-        */
         setDir(dir);
 
         var npos = normalizePos(bg.pos(), sx, sy);
@@ -731,8 +721,6 @@ class Building extends MyNode
 
         if(state == PARAMS["buildWork"])
         {
-            //global.director.pushView(new AccDialog(this), 1, 0);
-            //funcBuild.doAcc();
             if(acced == 0)
             {
                 acced += 1;
@@ -747,16 +735,6 @@ class Building extends MyNode
             }
         }
     }
-    /*
-    function sureToAcc()
-    {
-//        trace("doAcc state", state);
-        if(state == PARAMS["buildWork"])
-        {
-            funcBuild.doAcc();
-        }
-    }
-    */
     /*
     当buildLayer 加入 和清楚建筑物的时候， 相应的处理建筑物的状态
     通过 点击子菜单的 sell按钮来卖出 子菜单 直接 调用 建筑物的卖出函数 子菜单 再关闭自己
@@ -807,7 +785,6 @@ class Building extends MyNode
              
             map.sellBuild(this);//没有清除建筑物的底座
         }
-        //global.director.pushView(new SellDialog(this), 1, 0);
     }
     /*
     //加经验建筑物 不会返还银币

@@ -142,16 +142,18 @@ class BuildLayer extends MyNode
     function sellBuild(build)
     {
         removeChild(build);
-        mapGridController.clearMap(build);
-        mapGridController.allBuildings.remove(build);
+        //mapGridController.clearMap(build);
+        //mapGridController.allBuildings.remove(build);
+        mapGridController.removeBuilding(build);
         global.user.sellBuild(build);
     }
 
     function sellSoldier(soldier)
     {
         removeChild(soldier);
-        mapGridController.clearSolMap(soldier);
-        mapGridController.allSoldiers.pop(soldier.sid);
+        mapGridController.removeSoldier(soldier);
+        //mapGridController.clearSolMap(soldier);
+        //mapGridController.allSoldiers.pop(soldier.sid);
         //global.user.sellSoldier(soldier);
     }
     /*
@@ -233,7 +235,8 @@ class BuildLayer extends MyNode
             var soldier = new BusiSoldier(this, data, sdata[1], sdata[0]);
             addChildZ(soldier, MAX_BUILD_ZORD);
 
-            mapGridController.allSoldiers.update(soldier.sid, soldier);
+            //mapGridController.allSoldiers.update(soldier.sid, soldier);
+            mapGridController.addSoldier(soldier);
             
         }
         else if(msg[0] == SOL_TRANSFER)
@@ -274,16 +277,18 @@ class BuildLayer extends MyNode
     {
         addChildZ(chd, z);
         //allBuildings.append(chd);
-        mapGridController.allBuildings.append(chd);
-        mapGridController.updateMap(chd);
+        //mapGridController.allBuildings.append(chd);
+        //mapGridController.updateMap(chd);
+        mapGridController.addBuilding(chd);
         //global.user.addBuilding(chd);
     }
     function removeBuilding(chd)
     {
         removeChild(chd);
         //allBuildings.remove(build);
-        mapGridController.allBuildings.remove(chd);
-        mapGridController.clearMap(chd);
+        //mapGridController.allBuildings.remove(chd);
+        //mapGridController.clearMap(chd);
+        mapGridController.removeBuilding(chd);
         //global.user.removeBuilding(chd);
     }
 
@@ -294,13 +299,15 @@ class BuildLayer extends MyNode
         {
             addChildZ(sol, MAX_BUILD_ZORD);
             sol.setPos(sol.getPos());
-            mapGridController.allSoldiers.update(sol.sid, sol);
+            //mapGridController.allSoldiers.update(sol.sid, sol);
+            mapGridController.addSoldier(sol);
         }
     }
     function removeSoldier(sol)
     {
         removeChild(sol);
-        mapGridController.allSoldiers.pop(sol.sid);
+        //mapGridController.allSoldiers.pop(sol.sid);
+        mapGridController.removeSoldier(sol);
     }
 
     /*
@@ -357,8 +364,9 @@ class BuildLayer extends MyNode
             //global.user.addBuilding(build);
             //allBuildings.append(build);
 
-            mapGridController.allBuildings.append(build);
-            mapGridController.updateMap(build);
+            mapGridController.addBuilding(build);
+            //mapGridController.allBuildings.append(build);
+            //mapGridController.updateMap(build);
         }
     }
 
@@ -389,11 +397,15 @@ class BuildLayer extends MyNode
             var soldier = new BusiSoldier(this, data, sdata, sid);
             addChildZ(soldier, MAX_BUILD_ZORD);
             //global.user.addSoldier(soldier);
-            mapGridController.allSoldiers.update(soldier.sid, soldier);
+            //mapGridController.allSoldiers.update(soldier.sid, soldier);
+            mapGridController.addSoldier(soldier);
         }
     }
     function removeSoldiers()
     {
+        mapGridController.removeAllSoldiers();
+
+        /*
         var solArr = mapGridController.allSoldiers.values();
         for(var i = 0; i < len(solArr); i++)
         {
@@ -402,6 +414,7 @@ class BuildLayer extends MyNode
             sol.removeSelf();
         }
         mapGridController.allSoldiers = dict();
+        */
     }
         
 

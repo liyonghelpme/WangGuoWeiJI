@@ -61,6 +61,9 @@ class User
     var skills;
 
     var lastColor;
+    var name;
+    //var inviteCode;
+    var invite;
     
 
     function getCurFinTaskNum()
@@ -317,6 +320,18 @@ class User
         {
             changeHerbNum(id, num);
         }
+        else if(kind == SILVER)
+        {
+            changeValue("silver", num);
+        }
+        else if(kind == CRYSTAL)
+        {
+            changeValue("crystal", num);
+        }
+        else if(kind == GOLD)
+        {
+            changeValue("gold", num);
+        }
     }
     function getGoodsNum(kind , id)
     {
@@ -418,6 +433,10 @@ class User
     var heartRank;
     var hour;
     var maxMessageId = 0;
+    
+    var hasBox;
+    var helperList;
+    var papayaIdName;
     function getNewMsgId()
     {
         return maxMessageId++;
@@ -435,6 +454,14 @@ class User
             uid = con.get("uid");//记忆用户uid 新手任务选择英雄时使用
             var newState = con.get("newState");
             hour = con.get("hour");
+            name = con["name"];
+            //inviteCode = con["inviteCode"];
+            invite = con["invite"];
+
+            //在friendController 中 第一次登录初始化新的宝箱
+            hasBox = con["hasBox"];
+            helperList = con["helperList"];
+            papayaIdName = con["papayaIdName"];
 
             registerTime = con.get("registerTime");
 
@@ -518,6 +545,7 @@ class User
             {
                 global.msgCenter.sendMsg(INITDATA_OVER, null);
             }
+
         }
         else
         {
@@ -821,7 +849,7 @@ class User
     */
     function updateBuilding(build)
     {
-        if(build.bid == MINE_BID)
+        if(build.bid == -1)//好友页面建筑
             return;
 
         //trace(build.bid);
@@ -1492,5 +1520,29 @@ class User
         tid %= PARAMS["MAX_TIP_NUM"];
         db.put("tid", tid+1);
         return tid;
+    }
+    function genNewBox()
+    {
+        hasBox = 1;
+        helperList = [];
+        papayaIdName = [];
+        global.msgCenter.sendMsg(GEN_NEW_BOX, null);
+    }
+    function selfOpen()
+    {
+        helperList.append(-1);
+        papayaIdName.append([papayaId, name]);
+        //global.msgCenter.sendMsg(SELF_OPEN_BOX, null);//如果人员足够则经营页面提示可以开启
+    }
+    function openBox()
+    {
+        hasBox = 0;
+        helperList = [];
+        papayaIdName = [];
+        global.msgCenter.sendMsg(OPEN_BOX, null);
+    }
+    function getInviteCode()
+    {
+        return invite["inviteCode"];
     }
 }

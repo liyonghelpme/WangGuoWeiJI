@@ -24,14 +24,18 @@ update 可能和业务逻辑相关
 checkPosCollision
 clearMap
 updatePosMap
+
+好友页面士兵的sid 是好友的sid
 */
 class FriendSoldier extends MoveSoldier
 {
     var privateData;
     var hasCry;
     var negtiveState = null;
-    function FriendSoldier(d, m, hasC)
+    var sid;
+    function FriendSoldier(d, m, hasC, si)
     {
+        sid = si;
         hasCry = hasC;
         privateData = d;
         id = privateData.get("id");

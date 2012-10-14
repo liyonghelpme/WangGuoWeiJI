@@ -225,7 +225,16 @@ class FriendController
                 neibors[i]["challengeYet"] = 0;
                 neibors[i]["heartYet"] = 0;
             }
-        //global.user.db.remove("friends");
+        //每天第一次登录没有宝箱 则生成宝箱
+        if(global.user.hasBox == 0)
+            global.httpController.addRequest("friendC/genNewBox", dict([["uid", global.user.uid]]), genNewBoxOver, null);
+    }
+    function genNewBoxOver(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            global.user.genNewBox();
+        }
     }
 
     function getNeiborData(nid)
@@ -271,7 +280,7 @@ class FriendController
                 var d = dict();
                 for(var k = 0; k < len(NEIBOR_KEY); k++)
                 {
-                    d.update(NEIBOR_CRY[k], temp[i][k]);
+                    d.update(NEIBOR_KEY[k], temp[i][k]);
                 }
                 neibors.append(d);
                 //neibors.append(dict([["uid", temp[i][0]], ["id", temp[i][1]], ["name", temp[i][2]], ["level", temp[i][3]], ["mineLevel", temp[i][4]], ["challengeYet", temp[i][5]], ["heartYet", temp[i][6]] ]));

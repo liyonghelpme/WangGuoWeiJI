@@ -15,12 +15,6 @@ class Store extends MyNode
     //5 crystal
     //6 plant
 
-
-
-
-
-
-
     /*
     商店去除 编号 126木牌建筑物 数据库也可以删除
     */
@@ -47,42 +41,11 @@ class Store extends MyNode
     var silverText;
     var goldText;
     var cryText;
-    var scene;
-    /*
-        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
-        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64);
-        bg.addsprite("closeBut.png").anchor(0, 0).pos(752, 7).size(41, 41);
-        bg.addsprite("rightBack.png").anchor(0, 0).pos(254, 79).size(514, 387);
-        bg.addsprite("leftBack.png").anchor(0, 0).pos(34, 79).size(197, 386);
-        bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(200, 396);
-        bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 388).size(198, 78);
-        bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 311).size(198, 78);
-        bg.addsprite("greenChoice.png").anchor(0, 0).pos(33, 233).size(198, 79);
-        bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 156).size(198, 78);
-        bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 79).size(198, 78);
-
-        bg.addsprite("instructArrow.png").anchor(0, 0).pos(22, 211).size(227, 117);
-        bg.addsprite("moneyBack.png").anchor(0, 0).pos(274, 28).size(450, 33);
-        bg.addsprite("水晶 .png").anchor(0, 0).pos(586, 30).size(31, 29);
-        bg.addsprite("gold.png").anchor(0, 0).pos(439, 28).size(31, 30);
-        bg.addsprite("silver.png").anchor(0, 0).pos(280, 27).size(32, 32);
-        bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(621, 37).color(100, 100, 100);
-        bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(318, 36).color(100, 100, 100);
-        bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(474, 37).color(100, 100, 100);
-        bg.addsprite("storeTit.png").anchor(0, 0).pos(76, 7).size(169, 63);
-
-bg.addsprite("leftBack.png").anchor(0, 0).pos(34, 79).size(197, 386);
-bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 388).size(198, 78);
-bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 311).size(198, 78);
-bg.addsprite("greenChoice.png").anchor(0, 0).pos(33, 233).size(198, 79);
-bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 156).size(198, 78);
-bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
-    */
+    //var scene;
     function Store(s)
     {
         //be care of cycle reference problem
-        scene = s;
-        //bg = sprite("goodBack.jpg");
+        //scene = s;
         bg = node();
         init();
         bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
@@ -173,6 +136,7 @@ bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
         var id = item[1];
         var cost;
         var buyable;
+        var ret;
 
         cost = getCost(kind, id);
         buyable = global.user.checkCost(cost);
@@ -180,10 +144,8 @@ bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
 //        trace("buy Cost", cost, buyable);
         if(buyable.get("ok") == 0)
         {
-            //addChildZ(new ResourceBanner(buyable, 506, 231), 1);
             buyable.pop("ok");
             var it = buyable.items();
-            //global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
             global.director.curScene.addChild(new ResLackBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], BUY_RES[it[0][0]], ObjKind_Page_Map[it[0][0]], this));
             return;
         }
@@ -195,7 +157,7 @@ bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
             var data = getData(BUILD, id);
             if(data.get("funcs") == FARM_BUILD)//FARM 
             {
-                var ret = checkFarmNum(); 
+                ret = checkFarmNum(); 
                 if(ret == 0)
                 {
                     global.director.curScene.addChild(new UpgradeBanner(getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1+1) ] ) , [100, 100, 100], null));
@@ -204,8 +166,16 @@ bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
                 }
             }
 
+            //scene.beginBuild(id);
+            ret = global.msgCenter.checkCallback(BEGIN_BUILD);
+            if(!ret)
+            {
+                global.director.curScene.addChild(new UpgradeBanner(getStr("cantBuild", null) , [100, 100, 100], null));
+                return;
+            }
+
             global.director.popView();
-            scene.beginBuild(id);
+            global.msgCenter.sendMsg(BEGIN_BUILD, id);
         }
         else{
             if(kind == DRUG)

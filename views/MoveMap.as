@@ -19,6 +19,7 @@ class MoveMap extends MyNode
     var solTimer;
     var mapGridController;
     var gridLayer;
+    var blockBuilding = new MyNode();
 
     /*
     function MoveMap(sc)
@@ -120,6 +121,7 @@ class MoveMap extends MyNode
         }
         return 0;
     }
+    //只检测士兵冲突没有检测建筑物冲突
     function checkPosCollision(mx, my, ps)
     {
         var inZ = checkInFlow(ps);
@@ -141,6 +143,46 @@ class MoveMap extends MyNode
             {
                 if(v[i][2] == 1)//不可行走区域
                     return v[0];
+            }
+        }
+        return null;
+    }
+
+    //检测建筑物位置冲突
+    function checkCollision(build)
+    {
+        var map = getBuildMap(build);
+        var sx = map[0];
+        var sy = map[1];
+        var initX = map[2];
+        var initY = map[3];
+        for(var i = 0; i < sx; i++)
+        {
+            var curX = initX+i;
+            var curY = initY+i;
+            for(var j = 0; j < sy; j++)
+            {
+                //var key = curX*10000+curY;
+                var key = getMapKey(curX, curY);
+                var v = mapGridController.mapDict.get(key, []);
+                if(len(v) > 0)
+                {
+                    for(var k = 0; k < len(v); k++)
+                    {
+                        if(v[k][0] != build && v[k][1] == 1)//不可建造
+                        {
+                            return v[k];
+                        }
+                    }
+                }
+                //trace("col key", key);
+                if(obstacleBlock.get(key, null) != null)
+                {
+//                    trace("colWithRiver", key);
+                    return blockBuilding;
+                }
+                curX -= 1;
+                curY += 1;
             }
         }
         return null;

@@ -138,4 +138,15 @@ class MapGridController
         return [initX, initY];
     }
 
+    function removeBuilding(build)
+    {
+        clearMap(build);
+        allBuildings.remove(build);
+    }
+    function addBuilding(chd)
+    {
+        allBuildings.append(chd);
+        updateMap(chd);
+    }
+
 }

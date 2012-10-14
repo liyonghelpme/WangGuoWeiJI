@@ -1,10 +1,8 @@
 //注意这些文件是倒序编译的，所以其排序和依赖关系相反
 
 //构造初始化的建筑物分布时，需要初始化一个河流相关的冲突图
-/*
 
 import views.FriendScene;
-import views.FriendMenu;
 
 import views.FriendSoldier;
 
@@ -105,13 +103,11 @@ import views.TrainTip;
 
 
 
-
-
 //大地图
 import views.CastleScene;
 //建筑物
 //采用组合的方式 将farm相关的行为 实现在farm中
-import views.Building;
+
 import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
@@ -162,14 +158,10 @@ import views.ResourceWarningDialog;
 import busiViews.CollectionDialog;
 import busiViews.CollectionList;
 
-import views.Farm;
-import views.Plant;
-import views.PlantChoose;
-import views.House;
-import views.FuncBuild;
+
 
 //经营页面场景飞行的银币
-import views.FlyObject;
+
 
 
 import views.Loading;
@@ -258,8 +250,6 @@ import views.ChallengeScene;
 //import views.VisitDialog;
 
 
-
-
 //商店
 import views.Store;
 import views.Choice;
@@ -271,7 +261,15 @@ import views.LoveUpgradeDialog;
 import views.LoveDialog;
 import views.LiveHeartDialog;
 import views.LoginDialog;
-*/
+
+import views.Building;
+import views.FlyObject;
+
+import views.Farm;
+import views.Plant;
+import views.PlantChoose;
+import views.House;
+import views.FuncBuild;
 
 
 import views.FriendScene;
