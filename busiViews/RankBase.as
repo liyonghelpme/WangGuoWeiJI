@@ -687,9 +687,14 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
     }
     function onVisit(curNum)
     {
-        var userData = data[curNum];
+        var beginRank = data[0]["rank"];
+        var diff = curNum-beginRank;
+        if(diff < 0 || diff >= len(data))
+            return;
+
         global.director.popView();
-        var papayaId = data[curNum]["id"];
+        var userData = data[diff];
+        var papayaId = data[diff]["id"];
         //排行榜不是好友 不能进行下一个
         var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, userData); 
         global.director.pushScene(friend);

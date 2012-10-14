@@ -541,7 +541,8 @@ const INIT_NEIBOR_OVER = 29;
 const BEGIN_BUILD = 30; //商店购买建筑物 发送建造请求 没有 接受者 将 提示不能建造
 const GEN_NEW_BOX = 31;
 const OPEN_BOX = 32;
-//const SELF_OPEN_BOX = 33;
+const NEIBOR_RECORD = 33;
+
 
 
 //开始技能选择目标 释放技能选择目标结束
@@ -915,3 +916,7 @@ const KIND2STR = dict([
 [CRYSTAL, "crystal"],
 [GOLD, "gold"],
 ]);
+
+//主界面 访问 好友 还是 好友页面访问好友
+const FRIEND_DIA_HOME = 0;
+const FRIEND_DIA_INFRIEND = 1; 

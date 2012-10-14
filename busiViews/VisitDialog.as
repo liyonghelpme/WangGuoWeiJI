@@ -16,6 +16,9 @@ class VisitDialog extends MyNode
         var tid = global.user.getNextTip();
         tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
 
+        bg.addlabel(getStr("flying", null), "fonts/heiti.ttf", 37).anchor(50, 50).pos(410, 77).color(66, 46, 28);
+
+        /*
         var prW = new BackWord(this, getStr("flying", null), 37, 15, [66, 46, 28], 800, 0, 4, null, FONT_BOLD);
         prW.setPos([342, 59]);
         addChild(prW);
@@ -28,6 +31,7 @@ class VisitDialog extends MyNode
             [END_REPEAT, -1],//循环开始位置 
         ];
         prW.setCommand(cmd);
+        */
     }
     function VisitDialog(fc)
     {

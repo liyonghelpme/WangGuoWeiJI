@@ -17,7 +17,7 @@ class MovLayer extends MoveMap
         init();
         moveZone = FlowZone;
         gridLayer = bg.addnode();
-        solTimer = new Timer(200);
+
         mapGridController = new MapGridController(this);
     }
     //代理来自士兵的touch事件
@@ -39,10 +39,11 @@ class MovLayer extends MoveMap
         scene.island.touchEnded(n, e, p, x, y, points);
     }
 
-
+    //timer 初始化后 再初始化士兵
     override function enterScene()
     {
         super.enterScene();
+        solTimer = new Timer(200);
         initSoldiers();
         //initBuildings();
         /*
@@ -61,7 +62,6 @@ class MovLayer extends MoveMap
         if(kind == VISIT_NEIBOR)
             removeMine();
         */
-
         super.exitScene();
         solTimer.stop();
         solTimer = null;
@@ -276,6 +276,7 @@ class FriendScene extends MyNode
             movLayer = new MovLayer(this, kind);//连接的是FlowIsland
             movLayer.initBuildings();
             island.addChild(movLayer);
+            fm.updateState();//菜单更新状态
             initOver = 1;
         }
     }

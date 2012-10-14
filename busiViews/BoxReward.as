@@ -14,12 +14,12 @@ class BoxReward extends MyNode
         temp = bg.addsprite("nonFullWhiteBack.png").anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
         temp = bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
         temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
-        bg.addlabel(getStr("mysteriousGift", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(428, 93).color(32, 33, 40);
+        bg.addlabel(getStr("mysteriousGift", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(408, 93).color(32, 33, 40);
         bg.addlabel(getStr("nextBoxRich", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(417, 147).color(43, 25, 9);
         bg.addlabel(getStr("conForGift", null), "fonts/heiti.ttf", 18).anchor(0, 50).pos(212, 208).color(28, 15, 4);
 
         var INITX = 214;
-        var INITY = 268;
+        var INITY = 236;
         var OFFY = 25;
 
         for(var i = 0; i < len(rewards); i++)
@@ -29,11 +29,11 @@ class BoxReward extends MyNode
             var num = rewards[i][2];
 
             if(kind == SILVER || kind == CRYSTAL || kind == GOLD)
-                bg.addlabel(getStr("boxReward0", ["[NUM]", str(num), "[NAME]", getStr(KIND2STR[kind], null)]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
+                bg.addlabel(getStr("boxReward0", ["[NUM]", str(num), "[KIND]", getStr(KIND2STR[kind], null)]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
             else
             {
                 var objData = getData(kind, id);
-                bg.addlabel(getStr("boxReward1", ["[NUM]", str(num), "[NAME]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
+                bg.addlabel(getStr("boxReward1", ["[NUM]", str(num), "[KIND]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
             }
             INITY += OFFY;
         }

@@ -217,14 +217,17 @@ class FriendController
     }
     //每天第一次登录清空邻居信息
     //清理好友数据 同步好友uid
+    /*
+    if(neibors != null)
+        for(var i = 0; i < len(neibors); i++)
+        {
+            neibors[i]["challengeYet"] = 0;
+            neibors[i]["heartYet"] = 0;
+        }
+    */
     function firstLogin()
     {
-        if(neibors != null)
-            for(var i = 0; i < len(neibors); i++)
-            {
-                neibors[i]["challengeYet"] = 0;
-                neibors[i]["heartYet"] = 0;
-            }
+        global.httpController.addRequest("friendC/clearNeiborData", dict([["uid", global.user.uid]]), null, null);
         //每天第一次登录没有宝箱 则生成宝箱
         if(global.user.hasBox == 0)
             global.httpController.addRequest("friendC/genNewBox", dict([["uid", global.user.uid]]), genNewBoxOver, null);
@@ -313,15 +316,20 @@ class FriendController
                 break;
             }
         }
+        global.msgCenter.sendMsg(NEIBOR_RECORD, null);
         global.user.db.put("neibors", neibors);
     }
 
+    //初始化数据之后 好友首先清理 邻居数据但是邻居 还没有获取
+    //同时 CastlePage 的getLoginReward 在 getNeibor之后 处理 所以得到的是旧的邻居数据
+    //保证getLoginReward 在所有数据之前处理
     function receiveMsg(param)
     {
         var msid = param[0];
         if(msid == INITDATA_OVER)
         {
             var diff = checkFirstLogin();
+            //清理完服务器邻居数据 再 获取邻居数据
             if(diff >= 1)//每天第一次登录清理数据
             {
                 firstLogin(); 

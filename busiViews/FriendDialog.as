@@ -3,8 +3,11 @@ class FriendDialog extends MyNode
     var views = [];
     var titles = ["dialogNeibor.png", "dialogOtherFriend.png"];
     var showTitle;
-    function FriendDialog()
+    var kind;
+    //从邻居页面访问好友 删除旧的场景 再替换新的场景 replaceScene
+    function FriendDialog(k)
     {
+        kind = k;
         bg = node();
         init();
         bg.addsprite("haha.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);

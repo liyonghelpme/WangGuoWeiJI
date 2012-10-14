@@ -41,7 +41,7 @@ class TreasureBox extends MyNode
             else//没有人空位
             {
                 temp.addsprite("unkownFriendHead.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
-                temp.addlabel(getStr("unknown", null), "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(100, 100, 100);
+                temp.addlabel(getStr("unknown", null), "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
             }
 
             curX += OFFX; 

@@ -15,7 +15,7 @@ class FriendMenu extends MyNode
 
     function onFriend()
     {
-        global.director.pushView(new FriendDialog(), 1, 0);
+        global.director.pushView(new FriendDialog(FRIEND_DIA_INFRIEND), 1, 0);
     }
     var silverText;
     var crystalText;
@@ -72,8 +72,8 @@ class FriendMenu extends MyNode
             rightMenu = null;
         }
 
-        //好友是否有宝箱
-        var funcs;
+        //好友是否有宝箱 只能挑战邻居
+        var funcs = [];
         if(scene.kind == VISIT_NEIBOR)
         {
             var neibor = global.friendController.getNeiborData(scene.user["uid"]);
@@ -94,6 +94,13 @@ class FriendMenu extends MyNode
         {
             updateDate();
         }
+        else if(msgId == NEIBOR_RECORD)
+            updateState();
+    }
+    function updateState()
+    {
+        updateDate();
+        updateRightMenu();
     }
     function updateDate()
     {
@@ -105,10 +112,12 @@ class FriendMenu extends MyNode
     {
         super.enterScene();
         global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
-        updateDate();
+        global.msgCenter.registerCallback(NEIBOR_RECORD, this);
+        updateState();
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(NEIBOR_RECORD, this);
         global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
         super.exitScene();
     }

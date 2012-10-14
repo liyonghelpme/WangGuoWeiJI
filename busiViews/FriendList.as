@@ -241,7 +241,10 @@ class FriendList extends MyNode
         global.director.popView();
         var papayaId = data[curNum].get("id");
         var friendScene = new FriendScene(papayaId, curNum, friendKind, data[curNum].get("crystal"), data[curNum]);
-        global.director.pushScene(friendScene);
+        if(scene.kind == FRIEND_DIA_HOME)
+            global.director.pushScene(friendScene);
+        else if(scene.kind == FRIEND_DIA_INFRIEND)
+            global.director.replaceScene(friendScene);
         global.director.pushView(new VisitDialog(friendScene), 1, 0);
     }
 
