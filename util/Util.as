@@ -1185,7 +1185,7 @@ function checkFirstLogin()
 //检测字符串是否整数
 function checkNum(s)
 {
-    var o0 = ord('0');
+    var o0 = ord("0");
     for(var i = 0; i < len(s); i++)
     {
         var o = ord(s[i]);

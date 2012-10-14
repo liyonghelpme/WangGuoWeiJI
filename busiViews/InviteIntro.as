@@ -28,7 +28,7 @@ class InviteIntro extends MyNode
         line = stringLines(getStr("inviteContent", ["[GOLD]", str(PARAMS["inviteGold"]), "[CODE]", str(global.user.getInviteCode())]), 18, 23, [0, 0, 0], FONT_NORMAL );
         line.pos(212, 197);
         bg.add(line);
-        bg.addlabel(getStr("inviteFriend", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(418, 95).color(100, 100, 100);
+        bg.addlabel(getStr("inviteFriend", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(406, 95).color(100, 100, 100);
     }
     function onShareInvite()
     {
@@ -44,6 +44,8 @@ class InviteIntro extends MyNode
 
     function onInviteRank()
     {
+        global.director.popView();
+        global.director.pushView(new RankDialog(INVITE_RANK), 1, 0);
     }
 
     function closeDialog()

@@ -104,18 +104,25 @@ class RankBase extends MyNode
         if(rankKind == CHALLENGE_RANK)
         {
             curRank = global.user.rankOrder; 
-            URL_API = "challengeC/getRank";
+            //URL_API = "challengeC/getRank";
         }
         else if(rankKind == HEART_RANK)
         {
             curRank = global.user.heartRank;
-            URL_API = "friendC/getHeartRank";
+            //URL_API = "friendC/getHeartRank";
         }
         else if(rankKind == FIGHT_RANK)
         {
             curRank = 0;
-            URL_API = "fightC/getDefenseRank";
+            //URL_API = "fightC/getDefenseRank";
         }
+        else if(rankKind == INVITE_RANK)
+        {
+            curRank = global.user.invite["rank"];
+            //URL_API = "friendC/getInviteRank";
+        }
+        URL_API = RANK_API[rankKind];
+        /*
         else if(rankKind == ATTACK_RANK)
         {
             curRank = 0;
@@ -126,6 +133,7 @@ class RankBase extends MyNode
             curRank = 0;
             URL_API = "fightC/getDefenseRank";
         }
+        */
 
         initView();
         updateTab();
@@ -477,11 +485,7 @@ bg.addlabel(getStr(" 守擂成功:1234567", null), "fonts/heiti.ttf", 18).anchor
 bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(71, 129).color(43, 25, 9);
 bg.addlabel(getStr("No.1", null), "fonts/heiti.ttf", 23).anchor(50, 50).pos(81, 24).color(29, 16, 4);
     */
-    const kind2Num = dict([
-        [CHALLENGE_RANK, "score"],
-        [HEART_RANK, "loveNum"],
-        [FIGHT_RANK, "defenseNum"],
-    ]);
+    
     function updateTab()
     {
         //var rg = getRange();
@@ -533,7 +537,7 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
                 panel.addlabel(data[diff]["name"], "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 120).color(43, 25, 9);
 
                 var scoreLabel = panel.addlabel(getStr(" 守擂成功:1234567", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
-                scoreLabel.text(getStr(kind2Num[rankKind], ["[NUM]", str(data[diff]["score"])]));
+                scoreLabel.text(getStr(Kind2Num[rankKind], ["[NUM]", str(data[diff]["score"])]));
 
                 panel.put(curNum);
                 if(curNum == selectNum)
@@ -658,11 +662,8 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
         {
             but0 = new NewButton("violetBut.png", [92, 39], getStr("visit", null), null, 18, FONT_NORMAL, [100, 100, 100], onVisit, curNum);
             but0.bg.pos(75, 82);
-            addChild(but0);
+            shadow.add(but0.bg);
         }
-
-
-
 
     }
 

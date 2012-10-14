@@ -39,10 +39,12 @@ class RankDialog extends MyNode
         bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
         blueArrow = sprite("blueArrow.png").anchor(50, 50).pos(745, 403).size(32, 70).color(100, 100, 100, 100);
         bg.add(blueArrow, 1);
-        if(kind == HEART_RANK)
-            but0 = new NewButton("violetBut.png", [113, 42], getStr("rankInfo", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
+        //if(kind == HEART_RANK)
+        but0 = new NewButton(RANK_BUT[kind], [113, 42], getStr("rankInfo", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
+        /*
         else 
             but0 = new NewButton("blueButton.png", [113, 42], getStr("rankInfo", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
+        */
         but0.bg.pos(645, 43);
         addChild(but0);
         newRankTitle = bg.addsprite("newRankTitle.png").anchor(50, 50).pos(169, 43).size(174, 61).color(100, 100, 100, 100);
@@ -68,6 +70,11 @@ class RankDialog extends MyNode
                 newRankTitle.texture("newRankTitle.png", UPDATE_SIZE);
             }
         }
+        else
+        {
+            newRankTitle.texture(RANK_TITLE[kind], UPDATE_SIZE); 
+        }
+        /*
         else if(kind == HEART_RANK)
         {
             newRankTitle.texture("heartRankTitle.png", UPDATE_SIZE); 
@@ -76,6 +83,11 @@ class RankDialog extends MyNode
         {
             newRankTitle.texture("defenseRankTitle.png", UPDATE_SIZE); 
         }
+        else if(kind == INVITE_RANK)
+        {
+            
+        }
+        */
 
         showView = new RankBase(this, kind);
         addChild(showView);

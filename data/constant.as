@@ -866,20 +866,34 @@ const DETAIL_EQUIP = 1;
 const ALL_EMPTY = 2;
 
 
-var ChallengeRankKey = ["uid", "id", "score", "rank", "name", "level"];
-var HeartRankKey = ["uid", "id", "score", "rank", "name", "level"];
-var FightRankKey = ["uid", "id", "score", "rank", "name", "total", "level"]; 
+const ChallengeRankKey = ["uid", "id", "score", "rank", "name", "level"];
+const HeartRankKey = ["uid", "id", "score", "rank", "name", "level"];
+const FightRankKey = ["uid", "id", "score", "rank", "name", "total", "level"]; 
+const InviteRankKey = ["uid", "id", "score", "rank", "name", "level"];
 
 //RankDialog
 const CHALLENGE_RANK = 0;
 const HEART_RANK = 1;
 const FIGHT_RANK = 2;//attackRank defenseRank 大类型
+const INVITE_RANK = 3; 
 
+/*
 //RankBase
 const ATTACK_RANK = 3;
 const DEFENSE_RANK = 4;
+*/
 
-const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, FightRankKey, FightRankKey];
+const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, InviteRankKey];
+const RANK_BUT = ["blueButton.png", "violetBut.png", "blueButton.png","blueButton.png"];
+const RANK_TITLE = ["challengeRankTitle.png", "heartRankTitle.png", "defenseRankTitle.png", ""];
+const RANK_API = ["challengeC/getRank", "friendC/getHeartRank", "fightC/getDefenseRank",  "friendC/getInviteRank"];
+
+const Kind2Num = dict([
+    [CHALLENGE_RANK, "score"],
+    [HEART_RANK, "loveNum"],
+    [FIGHT_RANK, "defenseNum"],
+    [INVITE_RANK, "inviteNum"],
+]);
 
 
 const NEIBOR_REQ_KEY = ["uid", "papayaId", "name", "level", "time"];

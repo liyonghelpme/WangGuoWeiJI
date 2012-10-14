@@ -1,3 +1,4 @@
+//弹出任何黑框的时候 都需要关闭 input文本条 因为会遮盖冲突
 class InviteInput extends MyNode
 {
     function InviteInput()
@@ -31,7 +32,7 @@ class InviteInput extends MyNode
 
                             
         warnText = bg.addlabel(getStr("inputInvite", null), "fonts/heiti.ttf", 15).anchor(0, 50).pos(346, 276).color(43, 25, 9);
-        bg.addlabel(getStr("inviteFriend", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(418, 95).color(100, 100, 100);
+        bg.addlabel(getStr("inviteFriend", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(406, 95).color(100, 100, 100);
     }
     function onOk()
     {
@@ -39,26 +40,29 @@ class InviteInput extends MyNode
             return;
         if(global.user.invite["inputYet"] == 1)
         {
+            global.director.popView();
             global.director.curScene.addChild(new UpgradeBanner(getStr("inputYet", null) , [100, 100, 100], null));
             return;
         }
         if(global.user.getValue("level") >= PARAMS["inviteLevel"])
         {
+            global.director.popView();
             global.director.curScene.addChild(new UpgradeBanner(getStr("level3Input", ["[LEV]", str(PARAMS["inviteLevel"])]) , [100, 100, 100], null));
             return;
         }
-        if(int(inCode) == global.user.invite["inviteCode"])
-        {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("selfInvite", null) , [100, 100, 100], null));
-            return;
-        }
-
 
         var inCode = inputView.text();
-        if(len(inCode) == 0 || checkNum(s) == 0)
+        if(len(inCode) == 0 || checkNum(inCode) == 0)
         {
             warnText.text(getStr("inviteError", null));
             warnText.color(100, 9, 0);
+            return;
+        }
+
+        if(int(inCode) == global.user.invite["inviteCode"])
+        {
+            global.director.popView();
+            global.director.curScene.addChild(new UpgradeBanner(getStr("selfInvite", null) , [100, 100, 100], null));
             return;
         }
 
@@ -75,11 +79,13 @@ class InviteInput extends MyNode
                 var status = con["status"];
                 if(status == 2)
                 {
+                    global.director.popView();
                     global.director.curScene.addChild(new UpgradeBanner(getStr("noSuchUser", null) , [100, 100, 100], null));
                 }
             }
             else
             {
+                global.director.popView();
                 global.director.curScene.addChild(new UpgradeBanner(getStr("inviteSuc", null) , [100, 100, 100], null));
             }
         }
