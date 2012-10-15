@@ -182,20 +182,20 @@ class Store extends MyNode
             {
                 //if(kind == DRUG)
                 global.httpController.addRequest("goodsC/buyDrug", dict([["uid", global.user.uid], ["drugKind", id]]), null, null);
-                global.user.buySomething(kind, id, cost);
+                global.user.buySomething(kind, id, null);
                 /*
                 刷新当前购买页面
                 */
 
-                global.taskModel.finishTask(ONCE_TASK, "buy", 0, [DRUG, id]);
+                //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [DRUG, id]);
             }
             else if(kind == EQUIP)
             {
                 var newEid = global.user.getNewEid();
                 global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
-                global.user.buyEquip(newEid, id, cost);
-                global.taskModel.finishTask(ONCE_TASK, "buy", 0, [EQUIP, id]);
-
+                global.user.buySomething(kind, id, newEid);
+                //global.user.buyEquip(newEid, id, cost);
+                //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [EQUIP, id]);
             }
             //购买金币 需要消耗木瓜币 有所不同
             else if(kind == GOLD)
@@ -205,26 +205,18 @@ class Store extends MyNode
             {
                 global.httpController.addRequest("goodsC/buyResource", dict([["uid", global.user.uid], ["kind", kind], ["oid", id]]), null, null);
                 global.user.buyResource(kind, id, cost, getGain(kind, id)); 
-
-                //setTab(curSel);
-                //addChildZ(new SucBanner(), 1);
-                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
             }
             else if(kind == TREASURE_STONE)
             {
                 global.httpController.addRequest("goodsC/buyTreasureStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
-                global.user.buyTreasureStone(id);
-                //setTab(curSel);
-                //addChildZ(new SucBanner(), 1);
-                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+                global.user.buySomething(kind, id, null);
+                //global.user.buyTreasureStone(id);
             }
             else if(kind == MAGIC_STONE)
             {
                 global.httpController.addRequest("goodsC/buyMagicStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
-                global.user.buyMagicStone(id);
-                //setTab(curSel);
-                //addChildZ(new SucBanner(), 1);
-                //global.director.curScene.addChild(new UpgradeBanner(getStr("buySuc", null), [100, 100, 100], null));
+                //global.user.buyMagicStone(id);
+                global.user.buySomething(kind, id, null);
             }
             trace("addPopBanner");
             setTab(curSel);

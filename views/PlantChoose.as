@@ -155,21 +155,4 @@ panel.addlabel(str(planting.get("gainsilver")), "fonts/heiti.ttf", 18).anchor(0,
         oldPos[1] = sel*Height;
         flowNode.pos(oldPos[0], oldPos[1]);
     }
-    /*
-    function beginPlant(rid, rcode, con, param)
-    {
-        if(rcode != 0)
-        {
-            var cost = param[0];
-            var id = param[1];
-            var building = param[2];
-
-            global.user.doCost(cost);
-            building.removeLock();
-            building.funcBuild.beginPlant(id); 
-
-            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [PLANT, id]);
-        }
-    } 
-    */
 }

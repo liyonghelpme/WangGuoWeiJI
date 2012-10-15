@@ -98,6 +98,8 @@ class CallSoldier extends MyNode
             global.httpController.addRequest("buildingC/beginWork", dict([["uid", global.user.uid], ["bid", scene.bid], ["objectKind", SOLDIER], ["objectId", id]]));
             scene.funcBuild.beginWork(id);//进入工作状态
             setSoldier(curSelSol);//更新显示信息
+            
+            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, curSelSol[0]]);
         }
     }
     function setSoldier(idCan)

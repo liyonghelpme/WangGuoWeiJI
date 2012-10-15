@@ -262,7 +262,8 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     }
     function updateTaskState()
     {
-        var num = global.user.getCurFinTaskNum();
+        //var num = global.user.getCurFinTaskNum();
+        var num = global.taskModel.getFinishNum();
         finNum.text(str(num));
         if(num == 0)
         {

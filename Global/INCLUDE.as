@@ -15,7 +15,7 @@ import views.FriendSoldier;
 //import views.SettingDialog;
 import busiViews.SettingDialog;
 
-import views.TaskDialog;
+import busiViews.TaskDialog;
 import views.TipDialog;
 //import views.MakeDrugDialog;
 import busiViews.MakeDrugDialog;

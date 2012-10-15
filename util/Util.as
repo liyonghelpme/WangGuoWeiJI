@@ -885,6 +885,12 @@ function client2Server(t)
 {
     return t-global.user.clientTime+global.user.serverTime;
 }
+/*
+levelUpdate 数据中已经有了每级更新的数据
+没有必要再使用getAllData  getLevelupThing 来为某个等级生成数据
+
+levelUpdate 只有新种类士兵 没有 士兵转职
+*/
 //可以初始化时构造level更新数组
 function getAllData(kind)
 {
@@ -908,6 +914,19 @@ function getLevelupThing()
     var res1 = allSoldiers.get(lev, []);
     var res2 = allBuildings.get(lev, []);
     return res1+res2;
+}
+//得到特定某个等级所有的士兵
+function getLevelSoldier(lev)
+{
+    var curObj = levelUpdate.get(lev, []);
+    for(var i = 0; i < len(curObj); i++)
+    {
+        if(curObj[i][0] == SOLDIER)
+        {
+            return curObj[i][1];
+        }
+    }
+    return null;
 }
 //0 == 1 > -1  <
 //mid Element = first
@@ -1195,3 +1214,16 @@ function checkNum(s)
     return 1;
 }
 
+/*
+客户端存在bug:
+http post方法中的dict 中嵌套的dict 的键如果是 字符串会被转换成纯字符
+因此加上\"\" 来处理
+*/
+function dict2Http(d)
+{
+    var its = d.items();
+    var res = [];
+    for(var i = 0; i < len(its); i++)
+        res.append(["\""+its[i][0]+"\"", its[i][1]]);
+    return dict(res);
+}

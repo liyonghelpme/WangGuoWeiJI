@@ -46,7 +46,7 @@ class User
     //
     var equips;
     var maxEid;
-    var tasks;
+    //var tasks;
 
     //var taskListener = [];
 
@@ -66,6 +66,7 @@ class User
     var invite;
     
 
+    /*
     function getCurFinTaskNum()
     {
         var res = 0;
@@ -81,6 +82,7 @@ class User
         }
         return res;
     }
+    */
     /*
     可以做一个1000ms的timer 定时清理已经退出的对象
     更新任务状态:
@@ -88,6 +90,7 @@ class User
 
 
     */
+    /*
     //addTaskNum or just FinishIt
     function updateTask(id, num, fin, sta)
     {
@@ -106,16 +109,14 @@ class User
             val[0] += num;
             global.httpController.addRequest("taskC/doTask", dict([["uid", uid], ["tid", id], ["num", num]]), null, null);
         }
-        /*
+
         //完成某个任务 检测是否进入下一个阶段
         else if(fin != 0)
         {
             val[1] = fin;
             global.httpController.addRequest("taskC/finishTask", dict([["uid", uid], ["tid", id]]), null, null);
         }
-        */
 
-        /*
         //累计任务进入下一个阶段
         if(sta == 1)
         {
@@ -123,28 +124,15 @@ class User
             val[1] = 0;
             val[2]++;
         }
-        */
+
         tasks.update(id, val);
         db.put("tasks", tasks);
 
         //global.httpController.addRequest("taskC/updateTask", dict([["uid", uid], ["tid", id], ["num", num], ["fin", fin], ["stage", val[2]]]), null, null);
 
-        /*
-        for(var i = 0; i < len(taskListener);)
-        {
-            if(taskListener[i][1] == 1)
-            {
-                taskListener.pop(i);
-            }
-            else
-            {
-                taskListener[i][0].updateTaskState();
-                i++;
-            }
-        }
-        */
         global.msgCenter.sendMsg(UPDATE_TASK, null);
     }
+    */
     //buildingKind 1
     function getAllBuildingKinds()
     {
@@ -358,22 +346,21 @@ class User
     //所有装备页面 宝石数量更新数据
 
 
+    /*
     function buyTreasureStone(id)
     {
         var cost = getCost(TREASURE_STONE, id);
         doCost(cost);
-
         changeGoodsNum(TREASURE_STONE, id, 1);
-
     }
 
     function buyMagicStone(id)
     {
         var cost = getCost(MAGIC_STONE, id);
         doCost(cost);
-
         changeGoodsNum(MAGIC_STONE, id, 1); 
     }
+    */
 
     function getNewGiftId()
     {
@@ -493,7 +480,7 @@ class User
             initEquips(con.get("equips"));
 
             herbs = initThings(con.get("herbs"));
-            tasks = initThings(con.get("tasks"));
+            //tasks = initThings(con.get("tasks"));
 
             challengeRecord = con.get("challengeRecord");
             rankScore = con.get("rank")[0];
@@ -526,7 +513,7 @@ class User
             db.put("drugs", drugs);
             db.put("equips", equips);
             db.put("herbs", herbs);
-            db.put("tasks", tasks);
+            //db.put("tasks", tasks);
             db.put("treasureStone", treasureStone);
             
             checkLoveTreeLevel();//爱心足够升级爱心树
@@ -601,7 +588,7 @@ class User
         drugs = dict();
         equips = dict();
         herbs = dict();
-        tasks = dict();
+        //tasks = dict();
         mine = null;
         treasureStone = dict();
         //starNum = null;
@@ -636,10 +623,12 @@ class User
         db.put("lastVisitNeibor", lastVisitNeibor);
     }
 
+    /*
     function getTaskFinData(id)
     {
         return tasks.get(id, [0, 0]);
     }
+    */
 
     //士兵数据实体
     //updateSoldiers 修改士兵本地数据
@@ -770,9 +759,32 @@ class User
         db.put("equips", equips);
         setValue(NOTIFY, 1);
     }
-
-    function buySomething(kind, id, cost)
+    
+    //购买不同类型 发送不同类型购买信号
+    const BUY_MSG = dict([
+        [DRUG, BUY_DRUG],
+        [TREASURE_STONE, BUY_TREASURE_STONE],
+        [MAGIC_STONE, BUY_MAGIC_STONE],
+    ]);
+    //kind id num buySomeThing equip need eid
+    function buySomething(kind, id, eid)
     {
+        var cost = getCost(kind, id);
+        doCost(cost);
+        if(kind == EQUIP)
+        {
+            equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
+            db.put("equips", equips);
+            global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
+        }
+        else
+        {
+            changeGoodsNum(kind, id, 1);
+            global.msgCenter.sendMsg(BUY_MSG[kind], id);
+        }
+        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [kind, id]);
+
+        /*
         doCost(cost);
         var value;
 //        trace("buy Something", kind, id);
@@ -784,9 +796,19 @@ class User
 
         //通知所有监听器修改数据
         setValue(NOTIFY, 1);
-
-
+        */
     }
+    //建筑物对象实体
+    function buyBuilding(build)
+    {
+        var cost = getCost(BUILD, build.id);
+        doCost(cost);
+        var gain = getGain(BUILD, build.id);
+        doAdd(gain);
+        updateBuilding(build); 
+        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, build.id]);
+    }
+    /*
     function buyEquip(eid, id, cost)
     {
         doCost(cost);
@@ -795,6 +817,7 @@ class User
         setValue(NOTIFY, 1);
         global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
     }
+    */
 
     function getNewEquip(eid, id, level)
     {
@@ -861,6 +884,7 @@ class User
     }
     /*
     这些值是本地的 偶尔需要写回到远程数据库 
+    更新经验
     */
     function setValue(key, value)
     {

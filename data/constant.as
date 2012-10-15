@@ -398,7 +398,7 @@ var Keys = [
     plantKey,
     soldierKey,
     freeKey,
-    taskKey,
+    allTasksKey,
     herbKey,
     prescriptionKey,
     null,
@@ -421,7 +421,7 @@ var CostData = [
     plantData,
     soldierData,
     freeData,
-    taskData,
+    allTasksData,
     herbData,
     prescriptionData,
     null,
@@ -542,6 +542,8 @@ const BEGIN_BUILD = 30; //商店购买建筑物 发送建造请求 没有 接受
 const GEN_NEW_BOX = 31;
 const OPEN_BOX = 32;
 const NEIBOR_RECORD = 33;
+const BUY_TREASURE_STONE = 34;
+const BUY_MAGIC_STONE = 35;
 
 
 
@@ -886,7 +888,7 @@ const DEFENSE_RANK = 4;
 
 const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, InviteRankKey];
 const RANK_BUT = ["blueButton.png", "violetBut.png", "blueButton.png","blueButton.png"];
-const RANK_TITLE = ["challengeRankTitle.png", "heartRankTitle.png", "defenseRankTitle.png", ""];
+const RANK_TITLE = ["challengeRankTitle.png", "heartRankTitle.png", "defenseRankTitle.png", "inviteRankTitle.png"];
 const RANK_API = ["challengeC/getRank", "friendC/getHeartRank", "fightC/getDefenseRank",  "friendC/getInviteRank"];
 
 const Kind2Num = dict([

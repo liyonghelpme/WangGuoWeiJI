@@ -216,6 +216,9 @@ class CastleScene extends MyNode
     与beginBuild 是相对的函数
     移动需要将建筑物置于最高层
     重新调整建筑物的zOrd 用于显示
+
+
+    建造时： castleScene CastlePage 都有curBuild 用于防止其它操作发生
     */
     function finishBuild()
     {
@@ -230,24 +233,31 @@ class CastleScene extends MyNode
         var id = curBuild.id; //building.get("id");
 
         var cost = getCost(BUILD, id);
-        global.director.curScene.addChild(new PopBanner(cost2Minus(cost)));//自己控制
-        //showCost(curBuild.bg, cost);
-
-        global.user.doCost(cost);
         var gain = getGain(BUILD, id);
-        
+        var showData = cost2Minus(cost);
+
+        showData.update(gain);
+        global.director.curScene.addChild(new PopBanner(showData));//自己控制
+
+        global.user.buyBuilding(curBuild);
+
+        //showCost(curBuild.bg, cost);
+        //global.user.doCost(cost);
         //增加经验 防御力 人口显示奖励 消耗银币水晶金币 显示FlyObject 自动增加数值
+        /*
         if(len(gain) > 0)
         {
             global.director.curScene.addChild(new FlyObject(curBuild.bg, gain, null));
         }
-       
+        */
+
+
         var buildId = curBuild.id;
         mc.finishBuild();
         closeBuild();
 
         //在关闭 选择菜单之后再显示任务奖励菜单
-        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, buildId]);
+        //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, buildId]);
     }
 
     function cancelBuild()

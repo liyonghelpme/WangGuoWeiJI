@@ -471,7 +471,7 @@ class Building extends MyNode
         setState(PARAMS["buildFree"]);
         finishBottom();
         setZord(null);
-        global.user.updateBuilding(this);
+        //global.user.updateBuilding(this);
     }
     /*
     建造结束 或者 规划结束需要清理 底层图标

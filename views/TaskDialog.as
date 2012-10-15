@@ -53,7 +53,16 @@ class TaskDialog extends MyNode
     */
     function initData()
     {
-        tasks = getCurLevelAllTask(global.user.getValue("level"));
+        tasks = [];
+        if(global.taskModel.initYet)
+        {
+            var needFinishBuy = global.taskModel.needToFinishBuyTask;
+            for(var i = 0; i < len(needFinishBuy); i++)
+            {
+                tasks.append([ONCE_TASK, ["buy", needFinishBuy[i]]]);//显示购买任务 类型 key 参数
+            }
+        }
+        //tasks = getCurLevelAllTask(global.user.getValue("level"));
     }
     function TaskDialog()
     {
@@ -135,6 +144,16 @@ block.addlabel(str((level + 2) + 1), "fonts/heiti.ttf", 15).anchor(50, 50).pos(4
             var panel = flowNode.addnode().pos(0, OFFY*i);
             panel.addsprite("dialogTaskLine.png").pos(315, 75).anchor(50, 50);
             var t = tasks[i];
+            var kind = t[0];
+            if(kind == ONCE_TASK)
+            {
+                var key = t[1][0];
+                if(key == "buy")//购买类任务
+                {
+                   
+                }
+            }
+            /*
             var data = getData(TASK, t[0]);
 //            trace("init task Panel", data, t);
             var need = data.get("need");
@@ -173,6 +192,7 @@ panel.addlabel(str(it[j][1]), "fonts/heiti.ttf", 20).pos(541 + 20, initY).anchor
                     initY += offY;
                 }
             }
+            */
 
         }
     }

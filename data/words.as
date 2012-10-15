@@ -555,4 +555,11 @@ var WORDS = dict([
 ["selfInvite", "这是你自己的邀请码！"],
 ["inviteSuc", "操作成功｜对方获得10金币奖励"],
 ["inviteNum", "邀请数[NUM]"],
+["dayTask", "每日任务"],
+["taskTip", "任务须知"],
+["levelStr", "Level"],
+["buySth", "购买[NAME]"],
+["buyGoods", "购买物品，经营村庄！"],
+["buySoldier", "招募勇士，拯救公主！"],
+["buySolTitle", "招募[NAME]"],
 ]);
