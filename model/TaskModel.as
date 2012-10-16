@@ -268,7 +268,7 @@ class TaskModel
             {
                 task["showYet"] = 1;
                 var taskData = getData(TASK, tid);
-                global.director.curScene.addChild(new TaskFinish(getStr(taskData["title"], null)));
+                global.director.curScene.addChild(new TaskFinish(replaceStr(taskData["title"], ["[NUM]", str(getCycleStageNum(tid, task["stage"])) ])));
             }
 
             global.user.db.put("localCycleTask", localCycleTask);

@@ -1282,7 +1282,7 @@ function getCycleStageNum(tid, stage)
     var tData = getData(TASK, tid);
     if(tData["stageNum"] == -1 || tData["stageNum"] > stage )
     {
-        return tData["addNum"]*(stage+1);
+        return tData["num"]+tData["addNum"]*(stage+1);//base + addNum*stage
     }
     return -1; 
 }
