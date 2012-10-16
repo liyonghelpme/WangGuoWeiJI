@@ -269,6 +269,8 @@ class GiftDialog extends MyNode
         if(num == 0)
             data.pop(p);
         updateTab();
+
+        global.tashModel.doDayTaskByKey("sendGift", 1);
     }
     //查看所有装备
     function onView(n, e, p, x, y, points)

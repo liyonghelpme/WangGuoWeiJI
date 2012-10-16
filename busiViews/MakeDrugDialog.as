@@ -192,6 +192,11 @@ class MakeDrug extends MyNode
         global.director.curScene.addChild(new UpgradeBanner(getStr("makeSuc", null) , [100, 100, 100], null));
 
         updateTab();
+        
+        if(kind == DRUG)
+            global.taskModel.doDayTaskByKey("makeDrug", 1);
+        if(kind == EQUIP)
+            global.taskModel.doDayTaskByKey("forge", 1);
     }
 }
 class Herb extends MyNode

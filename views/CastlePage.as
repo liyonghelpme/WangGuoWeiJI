@@ -130,14 +130,6 @@ class CastlePage extends MyNode
         传递奖励数据给后台
         */
         var conDays = global.user.getValue("loginDays");
-        /*
-        var loginTime = global.user.getValue("loginTime");
-        var serverTime = global.user.serverTime;
-        var lastDay = loginTime/(3600*24);
-        var today = serverTime/(3600*24);
-        var diff = today - lastDay;
-        var day = 0;
-        */
 
         var diff = checkFirstLogin();
         var day = 0;
@@ -160,8 +152,7 @@ class CastlePage extends MyNode
             reward = getLoginReward(day);
             global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
             
-            //每周第一次登录
-
+            //每周第一次登录 发送登录每天任务完成提示
         }
 
         if(global.user.hasBox)

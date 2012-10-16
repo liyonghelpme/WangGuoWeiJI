@@ -87,6 +87,7 @@ class FallObj extends MyNode
         removeSelf();
         map.pickObj(this);
         //测试任务完成 更新任务状态 
-        global.user.updateTask(0, 10, 0, 0);
+        global.taskModel.doCycleTaskByKey("pick", 1);
+        global.taskModel.doDayTaskByKey("pick", 1);
     }
 }

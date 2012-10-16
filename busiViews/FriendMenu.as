@@ -140,6 +140,8 @@ class FriendMenu extends MyNode
         global.director.curScene.addChild(new UpgradeBanner(getStr("freeHeart", null) , [100, 100, 100], null));
 
         updateRightMenu();
+
+        global.tashModel.doDayTaskByKey("sendHeart", 1);
     }
     var challenged = 0;
     //挑战结束返回好友页面

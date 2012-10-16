@@ -10,6 +10,8 @@ class TreasureBox extends MyNode
         scene.helpOpen();
         updateState();
         global.director.curScene.addChild(new UpgradeBanner(getStr("helpSuc", null) , [100, 100, 100], null));
+
+        global.tashModel.doDayTaskByKey("helpOpenBox", 1);
     }
 //temp = bg.addsprite("friendBlock.png").anchor(0, 0).pos(196, 184).size(55, 55).color(100, 100, 100, 100);
     //帮助别人开启宝箱初始化头像
@@ -118,6 +120,8 @@ class TreasureBox extends MyNode
             return;
         inOpen = 1;
         global.httpController.addRequest("friendC/openBox", dict([["uid", global.user.uid]]), openBoxOver, null);
+        global.taskModel.doCycleTaskByKey("openBox", 1);
+
     }
     //物品
     //资源
@@ -168,7 +172,7 @@ class TreasureBox extends MyNode
     }
     function onFindFriend()
     {
-        ppy_postnewsfeed(getStr("shareBox", ["[NAME]", global.user.name]), null, null, null);
+        doShare(getStr("shareBox", ["[NAME]", global.user.name]), null, null, null, null);
     }
     var openBut;
     function initView()

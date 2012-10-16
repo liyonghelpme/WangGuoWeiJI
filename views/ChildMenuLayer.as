@@ -334,7 +334,7 @@ class ChildMenuLayer extends MyNode
     {
 //        trace("uploadContent", rid, rcode, con, param);
         var pid = con.get("pid");
-        ppy_postnewsfeed("just post a screenshot", null, pid, newsFeedResponse);
+        doShare(getStr("enjoyGame", ["[NAME]", global.user.papayaName]), null, pid, newsFeedResponse, null);
     }
     function photoFinish(node, bitmap, param)
     {

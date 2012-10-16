@@ -33,7 +33,7 @@ class InviteIntro extends MyNode
     function onShareInvite()
     {
         global.director.popView();
-        ppy_postnewsfeed(getStr("inviteShare", ["[NAME]", global.user.name, "[CODE]", str(global.user.getInviteCode())]), null, null, null);
+        doShare(getStr("inviteShare", ["[NAME]", global.user.name, "[CODE]", str(global.user.getInviteCode())]), null, null, null, null);
     }
 
     function onInputeInviteCode()

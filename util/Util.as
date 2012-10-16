@@ -762,6 +762,7 @@ res [id, curNum]
 升级更新任务列表
 完成任务更新数据
 */
+/*
 function getCurLevelAllTask(level)
 {
     var res;
@@ -787,6 +788,7 @@ function getCurLevelAllTask(level)
 //    trace("curLevelAllTask", level, res);
     return res;
 }
+*/
 
 function getNodeSca(n, box)
 {
@@ -891,6 +893,21 @@ levelUpdate 数据中已经有了每级更新的数据
 
 levelUpdate 只有新种类士兵 没有 士兵转职
 */
+//得到所有数据 某种类型的
+function getAllDataList(kind)
+{
+    var datas = [];
+    var key = CostData[kind].keys();
+
+    for(var i = 0; i < len(key); i++)
+    {
+        var d = getData(kind, key[i]);
+        datas.append(d);
+    }
+    return datas;
+}
+
+//按照等级来分类 数据
 //可以初始化时构造level更新数组
 function getAllData(kind)
 {
@@ -1080,6 +1097,9 @@ function getLineWordNum(w)
     }
     return l;
 }
+/*
+计算百分比的 标量乘法
+*/
 function multiScalar(d, s)
 {
     var res = dict();
@@ -1094,6 +1114,33 @@ function multiScalar(d, s)
     }
     return res;
 }
+function addDictValue(a, b)
+{
+    var ait = a.items();
+    var bit = b.items();
+    var res = dict();
+    var i;
+    var k;
+    var v;
+    for(i = 0; i < len(ait); i++)
+    {
+        k = ait[i][0];
+        v = res.setdefault(k, 0);
+        v += ait[i][1];
+        res.update(k, v);
+    }
+
+    for(i = 0; i < len(bit); i++)
+    {
+        k = bit[i][0];
+        v = res.setdefault(k, 0);
+        v += bit[i][1];
+        res.update(k, v);
+    }
+
+    return res;
+}
+
 function getColor(deg)
 {
     deg = (deg+360)%360;
@@ -1226,4 +1273,28 @@ function dict2Http(d)
     for(var i = 0; i < len(its); i++)
         res.append(["\""+its[i][0]+"\"", its[i][1]]);
     return dict(res);
+}
+//超过stage界限的返回0
+//stage界限 -1  则返回当前(stage+1)*addNum
+//奖励暂时不变 实际应该由客户端生成 传递给后台
+function getCycleStageNum(tid, stage)
+{
+    var tData = getData(TASK, tid);
+    if(tData["stageNum"] == -1 || tData["stageNum"] > stage )
+    {
+        return tData["addNum"]*(stage+1);
+    }
+    return -1; 
+}
+
+function getCycleReward(tid, stage)
+{
+    var tData = getGain(TASK, tid);
+    return multiScalar(tData, (stage+1)*100);
+}
+
+function doShare(w, link, pid, callback, param)
+{
+    ppy_postnewsfeed(w, link, pid, callback, param);
+    global.taskModel.doCycleTaskByKey("share", 1);
 }

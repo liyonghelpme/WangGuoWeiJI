@@ -985,6 +985,10 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
             //进入死亡状态 闯关结束时更新所有士兵状态
             global.user.updateSoldiers(this);
+
+            //杀死敌方怪兽
+            if(color == ENECOLOR && data["solOrMon"] == 1)
+                global.taskModel.doCycleTaskByKey("killMonster", 1);
         }
 
         if(state == MAP_SOL_ARRANGE)

@@ -235,6 +235,17 @@ class BattleScene extends MyNode
         pausePage = new MapPause(this);
         addChild(pausePage);
         state = MAP_FINISH_SKILL;
+
+        if(kind == CHALLENGE_MON)
+            global.taskModel.doDayTaskByKey("round", 1);
+        if(kind == CHALLENGE_TRAIN)
+            global.taskModel.doDayTaskByKey("train", 1);
+        if(kind == CHALLENGE_NEIBOR)
+            global.taskModel.doDayTaskByKey("neiborChallenge", 1);
+        if(kind == CHALLENGE_FRI)
+            global.taskModel.doDayTaskByKey("rankChallenge", 1);
+        if(kind == CHALLENGE_FIGHT)
+            global.taskModel.doDayTaskByKey("fightChallenge", 1);
     }
     function setSkillSoldier(sol)
     {

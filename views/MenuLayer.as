@@ -19,33 +19,13 @@ class MenuLayer extends MyNode
     [0, ["map","rank","plan","setting"]],
     [1, ["role", "store","friend","mail"]],
     ]);
-    /*
-    不要设定图片的size属性否则图片会被缩放
-bg.addsprite("haha.png").anchor(0, 0).pos(0, 0).size(800, 480);
-bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
-bg.addsprite("主信息栏经验条.png").anchor(0, 0).pos(133, 419).size(24, 10);
-bg.addsprite("menu_button.png").anchor(0, 0).pos(685, 380).size(112, 106);
-bg.addlabel(getStr("1", null), "fonts/heiti.ttf", 23).anchor(0, 0).pos(333, 454).color(100, 100, 100);
-bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 0).pos(588, 454).color(100, 100, 100);
-bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35);
-bg.addsprite("collection.png").anchor(0, 0).pos(229, 445).size(46, 34);
-bg.addlabel(getStr("A-", null), "fonts/heiti.ttf", 25).anchor(0, 0).pos(242, 453).color(100, 100, 100);
-bg.addsprite("menuFeather.png").anchor(0, 0).pos(107, 367).size(52, 59);
-bg.addsprite("level0.png").anchor(0, 0).pos(120, 406).size(33, 36);
-bg.addsprite("等级数字.png").anchor(50, 50).pos(136, 422).size(27, 13);
-bg.addsprite("expBanner.png").anchor(0, 0).pos(123, 432).size(150, 50);
-bg.addsprite("29xp to level 4.png").anchor(0, 0).pos(141, 456).size(116, 16);
-bg.addlabel(getStr("29xp to level 4", null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(198, 462).color(100, 100, 100);
-bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82);
-bg.addsprite("taskFin0.png").anchor(0, 0).pos(83, 402).size(27, 27);
-bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 416).color(100, 100, 100);
-    */
     var gloryLevText;
     //var sensor = null;
     var levelLabel;
     var expBanner;
     var expWord;
-    var scoreIcon;
+    //var scoreIcon;
+    var rightMenu;
     function rateIt()
     {
         global.director.pushView(new ScoreDialog(), 1, 0);
@@ -58,49 +38,33 @@ bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 41
         //banner = bg.addsprite("menu_back.png").scale(100,100).anchor(0,100).pos(0,480).rotate(0);
         init();
         
-        scoreIcon = bg.addsprite("scoreIcon.png").anchor(0, 0).pos(716, 197).size(57, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, rateIt);
+        //scoreIcon = bg.addsprite("scoreIcon.png").anchor(0, 0).pos(716, 197).size(57, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, rateIt);
         banner = bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
 
         bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
         taskFin = bg.addsprite("taskFin0.png").anchor(0, 0).pos(83, 402).size(27, 27);
         finNum = bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 416).color(100, 100, 100);
 
-        //taskbutton = banner.addsprite("task.png").scale(100,100).size(93,87).anchor(50,50).pos(61, 78).rotate(0).setevent(EVENT_TOUCH, onTask);
-        //taskFin = taskbutton.addsprite("taskFin0.png").pos(75, 19).anchor(50, 50).visible(0);
-        //finNum = taskFin.addlabel("", "fonts/heiti.ttf", 18, FONT_BOLD).pos(17, 17).anchor(50, 50).color(100, 100, 100);
-
         expfiller = bg.addsprite("exp_filler.png").anchor(0, 0).pos(133, 419);//.size(24, 10);
-        //expfiller = banner.addsprite("exp_filler.png").scale(100,100).anchor(0,0).pos(143,57).rotate(0).size(108, 12);
-        //expback = banner.addsprite("level0.png").scale(100,100).anchor(50, 50).pos(136, 56);
         expback = bg.addsprite("level0.png").anchor(0, 0).pos(120, 406).size(33, 36);
-        //16+144 = 160+5 = 165
-        //165 - 143 = 22
         
         var expSize = expback.prepare().size();
         levelLabel = expback.addnode().anchor(50, 50).pos(expSize[0]/2, expSize[1]/2);
 
-        //expBanner = sprite("expBanner.png").pos(127, 71).visible(0);
         expBanner = sprite("expBanner.png").anchor(0, 0).pos(123, 432).size(150, 50).visible(0);
         bg.add(expBanner, MENU_EXP_LAYER);
-/*
-bg.addsprite("expBanner.png").anchor(0, 0).pos(0, 0).size(150, 50);
-bg.addsprite("29xp to level 4.png").anchor(0, 0).pos(18, 24).size(116, 16);
-bg.addlabel(getStr("29xp to level 4", null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(75, 30).color(100, 100, 100);
-*/
+
         expWord = ShadowWords(getStr("expToLev", null), "fonts/heiti.ttf", 17, FONT_NORMAL, [100, 100, 100]);
         expWord.bg.anchor(50, 50).pos(75, 28);
         expBanner.add(expWord.bg);
 
-        //banner.add(levelLabel.bg);
-
-        //collectionbutton = banner.addsprite("collection.png").scale(100,100).size(46,34).anchor(50,50).pos(253, 100).rotate(0).setevent(EVENT_TOUCH, openGlory);
         collectionbutton = bg.addsprite("collection.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, openGlory);
 
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
-        //menubutton = banner.addsprite("menu_button.png").scale(100,100).anchor(0,100).pos(686,118);
         menubutton = bg.addsprite("menu_button.png").anchor(0, 0).pos(685, 380).size(112, 106).setevent(EVENT_TOUCH, onClicked, 0);
-        //new Button(menubutton, onClicked, 0);
+
+        rightMenu = new CastleRightMenu(this, []);
 
         initText();
 
@@ -178,7 +142,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         updateValue(global.user.resource);
         updateExp(0);
         updateTaskState();
-        updateRateIcon();
+        updateRightMenu();
         //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
     }
 
@@ -232,19 +196,41 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         //if(level >= 100)
         levelLabel.scale(sca);
     }
-    function updateRateIcon()
+    function updateRightMenu()
     {
+        if(rightMenu != null)
+        {
+            rightMenu.removeSelf();
+            rightMenu = null;
+        }
         //显示子菜单 隐藏 打分图标
         if(showChildMenu == 1)
         {
-            scoreIcon.visible(0);
+            //rightMenu.removeSelf();
+            //rightMenu.bg.visible(0);
+            //scoreIcon.visible(0);
             return;
         }
         var rated = global.user.db.get("rated");
+        var funcs = [];
         if(rated != 1)
-            scoreIcon.visible(1);
-        else
-            scoreIcon.visible(0);
+        {
+            funcs.append("rate");
+            //scoreIcon.visible(1);
+        }
+        if(global.taskModel.initYet)
+        {
+            if(len(global.taskModel.localDayTask) > 0)
+            {
+                funcs.append("dayTask");
+            }
+        }
+        if(len(funcs) > 0)
+        {
+            rightMenu = new CastleRightMenu(this, funcs);
+            rightMenu.setPos([753, 129]);
+            addChild(rightMenu);
+        }
     }
     function receiveMsg(param)
     {
@@ -254,11 +240,14 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
             updateValue(global.user.resource);
         }
         else if(msgId == UPDATE_TASK )
+        {
             updateTaskState();
+            updateRightMenu();
+        }
         else if(msgId == UPDATE_EXP)
             updateExp(param[1]);
         else if(msgId == RATE_GAME)
-            updateRateIcon();
+            updateRightMenu();
     }
     function updateTaskState()
     {
@@ -333,7 +322,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     */
     function draw_func(index, funcs){
         //unsupported param
-        updateRateIcon();
+        updateRightMenu();
         if(menus[index] != null){
             removeChild(menus[index]);
         }
@@ -351,7 +340,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     function cancelAllMenu()
     {
         showChildMenu = 0;
-        updateRateIcon();
+        updateRightMenu();
         cancel_func(0);
         cancel_func(1);
     }

@@ -858,6 +858,8 @@ class Building extends MyNode
             funcBuild.beginPlant(id); 
 
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [PLANT, id]);
+            global.taskModel.doCycleTaskByKey("plant", 1);
+            global.taskModel.doDayTaskByKey("plant", 1);
         }
         else
         {

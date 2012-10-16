@@ -51,7 +51,7 @@ class BoxReward extends MyNode
     }
     function onShare()
     {
-        ppy_postnewsfeed(getStr("shareOpenBox", ["[NAME]", global.user.name]), null, null, null);
+        doShare(getStr("shareOpenBox", ["[NAME]", global.user.name]), null, null, null, null);
     }
     function onOk()
     {

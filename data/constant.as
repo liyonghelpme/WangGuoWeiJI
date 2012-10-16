@@ -918,6 +918,11 @@ const KIND2STR = dict([
 [CRYSTAL, "crystal"],
 [GOLD, "gold"],
 ]);
+const STR2KIND = dict([
+["silver", SILVER],
+["crystal", CRYSTAL],
+["gold", GOLD],
+]);
 
 //主界面 访问 好友 还是 好友页面访问好友
 const FRIEND_DIA_HOME = 0;

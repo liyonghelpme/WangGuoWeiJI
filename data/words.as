@@ -562,4 +562,13 @@ var WORDS = dict([
 ["buyGoods", "购买物品，经营村庄！"],
 ["buySoldier", "招募勇士，拯救公主！"],
 ["buySolTitle", "招募[NAME]"],
+["taskNum", "[NUM0]/[NUM1]"],
+["enjoyGame", "[NAME]邀请你加入王国危机！"],
+["dailyReward", "完成每日任务能获得超级大奖哦！"],
+["updateDaily", "提示：每日凌晨更新每日任务，且只有当日内完成才有效"],
+["getReward", "领取奖励"],
+["dayTitle", "[TITLE]  [NUM0]/[NUM1]"],
+["dayRich", "明天的每日任务奖励更加丰盛哦！"],
+["dayReward", "每日任务奖励"],
+["shareDaily", "[NAME]完成了每日任务，得到大量奖励，快加入王国危机吧！"],
 ]);

@@ -1,7 +1,7 @@
 #coding:utf8
 import MySQLdb
 import json
-sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer', 'Strings', 'allTasks', 'mapDefense', 'mapMonster', 'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords']
+sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense', 'mapMonster', 'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
 sql = 'select * from prescriptionNum'
@@ -141,6 +141,9 @@ def hanData(name, data):
 
             
     if name == 'soldierName':
+        import codecs
+        newFile = codecs.open('../data/Name.as', 'w', 'utf8')
+
         res = []
         id = 0
         names = []
@@ -149,16 +152,19 @@ def hanData(name, data):
             names.append(['name'+str(id), [i['name'], i['engName']]])
             id += 1
         print 'var', name, '=', json.dumps(res), ';'
-        return []
-        """
-        print 'var', 'SolNames', '=', 'dict(['
+        #return []
+        
+        res =  'var SolNames = dict([\n'
         for n in names:
+            #print n
             #n[1][0] = n[1][0].encode('utf8')
             #print json.dumps(n)
-            #print '[', json.dumps(n[0]), ',','["'+n[1][0]+'",',  '"'+n[1][1]+'"]','],'
-            print '[','"'+n[0]+'"', ',', '['+'"'+ n[1][0].encode('utf8') + '", "'+ n[1][1].encode('utf8')+'"]'+'],'
-        print ']);'
-        """
+            #res += '[ '+ json.dumps(n[0])+' , ["'+n[1][0]+'",'+  ' "'+n[1][1]+'"] ],\n'
+            res += '["'+n[0]+'", [ "'+ n[1][0] + '", "'+ n[1][1]+'"]'+'],\n'
+        res +=  ']);'
+        
+        newFile.write(res)
+        newFile.close()
         return []
     if name == 'challengeReward':
         for i in f:
@@ -378,6 +384,9 @@ def hanData(name, data):
                 rewards.append([i['reward1'], i['reward1Pos']])
             res.append([i['id'], rewards])
 
+    #Words 存放对话框字符串
+    #strings 中存放物品名字 任务字符串 之类 来自其它数据表的字符串
+    """
     if name == 'Strings':
         res = []
 
@@ -388,6 +397,7 @@ def hanData(name, data):
             names.append([i['key'], [i['chinese'], i['english']]])
 
         return names
+    """
 
     
     #name list [name, [chinese, english]]
@@ -411,18 +421,24 @@ def hanData(name, data):
         print 'var', name+'Key', '=', json.dumps(key), ';'
         print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
         return names 
-    if name == 'allTask':
+    if name == 'allTasks':
+        res = []
         for i in f:
             i = dict(i)
+            i['title'] = 'title'+str(i['id'])
+            i['des'] = 'des'+str(i['id'])
+
             it = list(i.items())
             it = [list(k) for k in it]
             key = [k[0] for k in it]
             a = [k[1] for k in it]
             res.append([i['id'], a])
 
+        names = [['title'+str(i['id']), i['title']] for i in f]
+        names += [ ['des'+str(i['id']), i['des']] for i in f]
         print 'const', name+'Key', '=', json.dumps(key), ';'
         print 'const', name+'Data', '=', 'dict(', json.dumps(res), ');'
-        return []
+        return names
 
     if name == 'task':#任务的title 和desc 引用字符串中的titleid desid
         for i in f:
@@ -535,15 +551,16 @@ print 'var', 'storeSoldier', '=', json.dumps(showId), ';'
 
 
 
-
-"""
-print 'var', 'strings = dict(['
+import codecs
+strFile = codecs.open('../data/String.as', 'w', 'utf8')
+con = 'const LANGUAGE = 0;\n'
+con +=  'var strings = dict([\n'
 for n in allNames:
     if type(n[1]) == type([]):
-        print '[','"'+n[0]+'"', ',', '['+'"'+ n[1][0].encode('utf8') + '", "'+ n[1][1].encode('utf8')+'"]'+'],'
+        con +=  '["'+n[0]+'", ['+'"'+ n[1][0] + '", "'+ n[1][1]+'"]'+'],\n'
     else:
-        print '[','"'+n[0]+'"', ',','"'+ n[1].encode('utf8')+'"','],'
-print ']);'
-"""
-
+        con += '["'+n[0]+'", "'+ n[1]+'"],\n'
+con += ']);'
+strFile.write(con)
+strFile.close()
 

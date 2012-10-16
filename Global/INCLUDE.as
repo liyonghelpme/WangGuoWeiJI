@@ -48,13 +48,11 @@ import views.FallGoods;
 import views.FallObj;
 
 
-
-
 //菜单
 import views.MenuLayer;
-
-
-
+import busiViews.CastleRightMenu;
+import busiViews.DailyTask;
+import busiViews.DailyReward;
 
 
 //import views.RoleName;
@@ -331,8 +329,9 @@ import data.constant;
 import data.Static;
 import data.words;
 
-
+import data.Name;
 import data.String;
+
 
 
 global.timer = new Timer(1000);

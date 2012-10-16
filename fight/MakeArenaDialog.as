@@ -19,7 +19,6 @@ class MakeArenaDialog extends MyNode
 
         bg = sprite("dialogDetail.png").anchor(50, 50).size(614, 398).pos(global.director.disSize[0]/2, global.director.disSize[1]/2);
         init();
-        //bg.addlabel(getStr("makeArena", null), null, 30).anchor(50, 50).pos(264, 26).color(33, 34, 40);
         var tit = new ShadowWords(getStr("makeArena", null), null, 36, FONT_BOLD, [33, 33, 40]);
         tit.bg.pos(317, 31).anchor(50, 50);
         bg.add(tit.bg);
@@ -29,10 +28,6 @@ bg.addlabel(getStr("arenaHigh", null), "fonts/heiti.ttf", 22).pos(317, 92).ancho
 
 words = bg.addlabel(getStr("arenaReward", null), "fonts/heiti.ttf", 18).pos(317, 135).anchor(50, 50).color(0, 0, 0);
 bg.addlabel(getStr("arenaTip", null), "fonts/heiti.ttf", 18).pos(317, 335).anchor(50, 50).color(23, 54, 24);
-
-
-
-
 
         var i;
         for(i = 0; i < 4; i++)
@@ -54,15 +49,9 @@ pan.addlabel(getStr("costNum", ["[KIND]", getStr(key, null), "[NUM]", str(val)])
         but0.bg.pos(171, 389).anchor(50, 50);
         bg.add(but0.bg);
 
-        //but0 = bg.addsprite("roleNameBut0.png").pos(171, 389).anchor(50, 50).size(205, 65).setevent(EVENT_TOUCH, onOk);
-        //but0.addlabel(getStr("ok", null), null, 35).pos(107, 32).anchor(50, 50).color(100, 100, 100);
-
         but1 = new NewButton("roleNameBut1.png", [205, 65], getStr("cancel", null), null, 35, FONT_BOLD, [100, 100, 100], closeDialog, null);
         but1.bg.pos(437, 389).anchor(50, 50);
         bg.add(but1.bg);
-
-        //but1 = bg.addsprite("roleNameBut0.png").pos(437, 389).anchor(50, 50).size(205, 65).setevent(EVENT_TOUCH, closeDialog);
-        //but1.addlabel(getStr("cancel", null), null, 35).pos(107, 32).anchor(50, 50).color(100, 100, 100);
 
         setChoose(null, null, 0, null, null, null);
 
@@ -102,13 +91,10 @@ pan.addlabel(getStr("costNum", ["[KIND]", getStr(key, null), "[NUM]", str(val)])
         var buyable = global.user.checkCost(cost);
         if(buyable.get("ok") == 0)
         {
-            //but0.setCallback(null);//setevent(EVENT_TOUCH, null);
             but0.bg.texture("roleNameBut0.png", GRAY);
         }
         else
         {
-            //but0.setevent(EVENT_TOUCH, onOk);
-            //but0.setCallback(onOk);
             but0.bg.texture("roleNameBut0.png");
         }
     }
@@ -131,11 +117,11 @@ pan.addlabel(getStr("costNum", ["[KIND]", getStr(key, null), "[NUM]", str(val)])
 
         global.director.popView();
 
-        //var cost = getCost(FIGHT_COST, curChoose);
-        
         global.httpController.addRequest("fightC/makeFighting", dict([["uid", global.user.uid], ["kind", curChoose], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)]]), null, null);
         global.user.doCost(cost);
         scene.makeArena(curChoose);//建立擂台
+        
+        global.taskModel.doDayTaskByKey("makeArena", 1);
     }
 
 }

@@ -831,22 +831,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var cry = 0;
             if(win)
                 cry = getChallengeNeiborCry(scene.param[0]);
-            /*
-            var neibor = global.friendController.getNeiborData(scene.param[0]);
-            var cry;
-            if(win == 1)
-            {
-                cry = getProduction(neibor.get("mineLevel"));
-                if(neibor.get("level") < global.user.getValue("level"))
-                    cry = cry/10;
-                else if(neibor.get("level") == global.user.getValue("level"))
-                    cry = cry/5;
-                else
-                    cry = cry/2;
-            }
-            else
-                cry = 0;
-            */
             global.user.changeValue("crystal", cry);
         }
         else if(scene.kind == CHALLENGE_FIGHT || scene.kind == CHALLENGE_DEFENSE)

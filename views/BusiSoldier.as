@@ -1011,7 +1011,7 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     }
 
     //保证只有5 个士兵有状态
-    function clearStatus()
+    function realClearStatus()
     {
         if(status != null)
         {
@@ -1019,6 +1019,16 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             status.removefromparent();
             status = null;
         }
+    }
+    function clearStatus()
+    {
+        if(status != null)
+        {
+            //用户手动清除状态
+            global.tashModel.doCycleTaskByKey("eliminate", 1);
+            global.tashModel.doDayTaskByKey("eliminate", 1);
+            realClearStatus();
+        }   
     }
     //生命值少于2/3
     //返回是否有了状态
@@ -1084,7 +1094,7 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     //由士兵控制的状态
     function clearRandomStatus()
     {
-        clearStatus();
+        realClearStatus();
     }
     //游戏1 不动
     //游戏2 点击左右移动 点击移动的目的地 最近的方块区域
