@@ -1,3 +1,4 @@
+//import test.LoadInclude;
 import Global.INCLUDE;
 
 
@@ -17,10 +18,10 @@ import Global.INCLUDE;
 
 //显示场景
 global.director.replaceScene(new CastleScene());
-global.director.pushView(new Loading(), 1, 0);//DarkNod
-
+//global.director.pushView(new Loading(), 1, 0);//DarkNod
 //初始化场景数据 数据初始化结束之后 取出loading页面
-global.user.initData();
+//在loading页面开始初始化数据 保证view 先显示 再加载数据
+//global.user.initData();
 
 //var b = new Building(null, getData(BUILD, 208), null);
 //global.director.pushView(new LoveDialog(b), 1, 0);
@@ -42,6 +43,7 @@ global.user.initData();
 
 
 
-//global.director.pushView(new Store(null), 1, 0);
+//global.director.pushView(new Loading(), 1, 0);
+//global.director.pushView(new LoadChallenge(), 1, 0);
 
 

@@ -232,6 +232,7 @@ class TaskModel
         var task = localCycleTask.get(tid);
         task["number"] = 0;
         task["stage"] += 1;
+        task.pop("showYet");
         global.user.db.put("localCycleTask", localCycleTask);
         global.msgCenter.sendMsg(UPDATE_TASK, null);
     }

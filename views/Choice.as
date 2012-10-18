@@ -7,26 +7,25 @@ class Choice extends MyNode
     var choose;
 
     var TabNum = 0;
-    const Height = 77;
+    const INIT_X = 33;
+    const INIT_Y = 79;
+    const WIDTH = 198;
+    const Height = 78;
     const ROW_NUM = 5; 
-    const BackHei = Height*ROW_NUM; 
+    const BackHei = 385; 
 
     const Extra = 5;
     const InitOff = BackHei/2;
 
 
-    //bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
     function Choice(s)
     {
         store = s;
         TabNum = len(store.allGoods);
-        bg = node().pos(33, 78).size(198, BackHei).clipping(1);
+        bg = node().pos(INIT_X, INIT_Y).size(WIDTH, BackHei).clipping(1);
         init();
         flowTab = node().pos(0, InitOff-Height*2);
         bg.add(flowTab);
-
-        //var shadow = sprite("shadow.png", ARGB_8888);
-        //bg.add(shadow, 2, 2);
 
         initTabs();
         getTabs();
@@ -34,7 +33,6 @@ class Choice extends MyNode
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
-
     }
 
     function touchBegan(n, e, p, x, y, points)
@@ -96,12 +94,6 @@ class Choice extends MyNode
         getTabs();
     }
 
-    /*
-    bg.addsprite("yellowChoice.png").anchor(0, 0).pos(33, 388).size(198, 78);
-    bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 311).size(198, 78);
-    bg.addsprite("greenChoice.png").anchor(0, 0).pos(33, 233).size(198, 79);
-    bg.addsprite("whiteChoice.png").anchor(0, 0).pos(33, 156).size(198, 78);
-    */
     function initTabs()
     {
         tabArray = [];

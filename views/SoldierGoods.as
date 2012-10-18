@@ -91,9 +91,15 @@ class SoldierGoods extends MyNode
                 if(canBuy == 0)
                 {
                     sol = panel.addsprite("soldier"+str(id)+".png", BLACK).pos(83, 110).anchor(50, 50);
-                    panel.addsprite("roleLevel.png").pos(18, 39).anchor(50, 50);
-                    panel.addlabel(str(needLevel+1), "fonts/heiti.ttf", 18).pos(18, 39).anchor(50, 50).color(0, 0, 0);
-                    panel.addsprite("roleLock.png", 1).pos(14, 127).anchor(50, 50);
+                    //panel.addsprite("roleLevel.png").pos(18, 39).anchor(50, 50);
+                    //panel.addsprite("roleLock.png", 1).pos(14, 127).anchor(50, 50);
+
+                    panel.addsprite("storeShadow.png").anchor(0, 0).pos(0, 0).size(151, 191).color(100, 100, 100, 47);
+                    //panel.addlabel(str(needLevel+1), "fonts/heiti.ttf", 18).pos(18, 39).anchor(50, 50).color(0, 0, 0);
+
+                    var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
+                    cw.anchor(50, 50).pos(75, 97);
+                    panel.add(cw); 
                 }
                 else
                     sol = panel.addsprite("soldier"+str(id)+".png").pos(83, 110).anchor(50, 50);

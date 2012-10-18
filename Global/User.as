@@ -424,6 +424,7 @@ class User
     var hasBox;
     var helperList;
     var papayaIdName;
+    var loadTip = 0;
     function getNewMsgId()
     {
         return maxMessageId++;
@@ -433,6 +434,7 @@ class User
     {
         if(rcode != 0)
         {
+            global.msgCenter.sendMsg(LOAD_PROCESS, 30);
             con = json_loads(con);
 
             //papayaId--->1
@@ -522,9 +524,12 @@ class User
             /*
             新手初始化完数据 接着 进入欢迎页面
             */
+            global.msgCenter.sendMsg(LOAD_PROCESS, 50);
+            //分支路径-----> 新手
+            //正常： 初始任务 礼物 建筑物数据 
             if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
             {
-                //global.director.replaceScene(new WelcomeDialog());
+                global.msgCenter.sendMsg(LOAD_PROCESS, 80);
                 global.msgCenter.sendMsg(NEW_USER, null);
                 return;
             }
@@ -551,6 +556,7 @@ class User
 
     function initData()
     {
+        global.msgCenter.sendMsg(LOAD_PROCESS, 10);
         global.httpController.addRequest("login", dict([["papayaId", papayaId], ["papayaName", papayaName]]), initDataOver, null);
     }
     function useLocalDB()
@@ -580,8 +586,24 @@ class User
         mine["level"] = build.buildLevel;
         mine["objectTime"] = build.getStartTime();
     }
+    function getLoadTip()
+    {
+        loadTip += 1;
+        loadTip %= PARAMS["MAX_LOAD_TIP_NUM"];
+        db.put("loadTip", loadTip);
+        return loadTip;
+    }
+    /*
+    初始化本地数据
+    */
     function tempSetData()
     {
+        loadTip = db.get("loadTip");
+        if(loadTip == null)
+        {
+            loadTip = 0;
+            db.put("loadTip", loadTip);
+        }
         resource = dict();
         buildings = dict();
         soldiers = dict();

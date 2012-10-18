@@ -15,12 +15,6 @@ class ShadowWords extends MyNode
         bg.add(picWord);
         bg.size(picWord.size());
 
-        /*
-        bg = label(w, "fonts/heiti.ttf", sz, bo).color(col);
-        init();
-        shadow = label(w, "fonts/heiti.ttf", sz, bo).color(0, 0, 0).pos(1, 1);
-        bg.add(shadow, -1);
-        */
     }
     function setWords(w)
     {
@@ -30,7 +24,9 @@ class ShadowWords extends MyNode
         bg.add(picWord);
         bg.size(picWord.size());
 
-        //bg.text(w);
-        //shadow.text(w);
+    }
+    function setSize(n)
+    {
+        wSize = n; 
     }
 }

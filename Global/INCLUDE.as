@@ -270,11 +270,13 @@ import views.Choice;
 import views.Goods;
 import views.ResLackBanner;
 
+import busiViews.LoadChallenge;
 import views.UpdateDialog;
 import views.LoveUpgradeDialog;
 import views.LoveDialog;
 import views.LiveHeartDialog;
 import views.LoginDialog;
+import busiViews.LoadChallenge;
 
 //菜单使用的按钮对象
 import views.Button;
@@ -342,6 +344,8 @@ global.touchManager = new TouchManager();
 global.controller = new Controller();
 global.myAction = new MyAction();
 
+//friend  task mail fight  castleScene
+//不同途径相同归一目的地
 //global.staticScene = new CastleScene();
 global.user = new User();
 global.sensorController = new SensorController();

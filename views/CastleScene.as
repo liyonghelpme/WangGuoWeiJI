@@ -105,13 +105,22 @@ class CastleScene extends MyNode
         }
         else if(msid == INITDATA_OVER)
         {
+            global.msgCenter.sendMsg(LOAD_PROCESS, 70);
             mc.initDataOver();
+            global.msgCenter.sendMsg(LOAD_PROCESS, 85);
             ml.initDataOver();
+            global.msgCenter.sendMsg(LOAD_PROCESS, 100);
         }
+        //加载新手任务
         else if(msid == NEW_USER)
+        {
+            global.msgCenter.sendMsg(LOAD_PROCESS, 100);
             global.director.replaceScene(new WelcomeDialog());
+        }
         else if(msid == BEGIN_BUILD)
+        {
             beginBuild(param[1]);
+        }
     }
     override function exitScene()
     {

@@ -682,8 +682,10 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
 
         var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, null);
         global.director.pushScene(cs);
-        global.director.pushView(new VisitDialog(cs), 1, 0);
-        cs.initData();
+
+        //global.director.pushView(new VisitDialog(cs), 1, 0);
+        //global.director.pushView(new LoadChallenge(LOAD_CHALLENGE, cs), 1, 0);
+        //cs.initData();
     }
     function onVisit(curNum)
     {

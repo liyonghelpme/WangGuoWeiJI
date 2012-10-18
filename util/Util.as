@@ -213,7 +213,8 @@ function getData(kind, id)
 
         for(var i = 0; i < len(k); i++)
         {
-            if(k[i] == "name")
+            //药水商店名字不同
+            if(k[i] == "name" || k[i] == "storeName" || k[i] == "levelName")
                 ret.update(k[i], getStr(datas[i], null));
             else if(k[i] == "title" || k[i] == "des")//任务的描述字符串 配方的描述字符串 药材矿石的描述字符串
                 ret.update(k[i], getStr(datas[i], null));
@@ -540,6 +541,7 @@ function getAttAnimate(id)
 }
 */
 
+//功能完全被colorWordsNode 取代
 function colorWords(str)
 {
 //    trace("colorWords", str);
@@ -597,6 +599,8 @@ function byte2Hundred(v)
 
 //{27\crystal.png} 10 购买
 //{crystal.png} 10 购买
+//{[KIND]} [NUM] 购买
+//costBuy
 function picNumWord(w, sz, col)
 {
     var n = node();
@@ -1040,6 +1044,7 @@ function altasWord(c, s)
         load_sprite_sheet("blue.plist");
         load_sprite_sheet("white.plist");
         load_sprite_sheet("bold.plist");
+        load_sprite_sheet("red.plist");
     }
 
     var offX = 0;
@@ -1051,6 +1056,8 @@ function altasWord(c, s)
             w = "plus";
         else if(s[i] == "-")
             w = "minus";
+        else if(s[i] == "%")
+            w = "percent";
 
         var png = sprite(plist+"/"+w+".png").pos(offX, 0);
         n.add(png);

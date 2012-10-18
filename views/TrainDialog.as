@@ -104,11 +104,17 @@ but1.addlabel(getStr("generalExp", null), "fonts/heiti.ttf", 35).pos(107, 32).an
 
                 //var curDifLevel = getCurEnableDif();
                 var bigLevel = getMaxBigEnable();
+                //由visit 
+                global.director.pushScene(
+                    new ChallengeScene(null, null, null, null, CHALLENGE_TRAIN, dict([["bigLevel", bigLevel], ["doubleExp", 1], ["soldier", soldier], ["difficult", curChoose]]))
+                );
+                /*
                 global.director.pushScene(
                     new BattleScene(bigLevel, 0, 
                         null, CHALLENGE_TRAIN, [1, soldier], curChoose
                     )
                 );
+                */
             }
         }
     }
@@ -117,12 +123,19 @@ but1.addlabel(getStr("generalExp", null), "fonts/heiti.ttf", 35).pos(107, 32).an
         global.director.popView();
         //var curDifLevel = getCurEnableDif();
         var bigLevel = getMaxBigEnable();
+        //显示loading页面
+        global.director.pushScene(
+            new ChallengeScene(null, null, null, null, CHALLENGE_TRAIN, dict([["bigLevel", bigLevel], ["doubleExp", 0], ["soldier", soldier], ["difficult", curChoose]])
+            )
+        );
+
+        /*
         global.director.pushScene(
             new BattleScene(bigLevel, 0, 
                 null, CHALLENGE_TRAIN, [0, soldier], curChoose
             )
         );
-        
+        */
     }
     //检测石头是否可用
 

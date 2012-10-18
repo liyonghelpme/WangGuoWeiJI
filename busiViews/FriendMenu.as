@@ -159,10 +159,9 @@ class FriendMenu extends MyNode
         challenged = 0;
         var user = scene.user;
         var cs = new ChallengeScene(user.get("uid"), user.get("id"), 0, 0, CHALLENGE_NEIBOR, user);
-
         global.director.pushScene(cs);
-        global.director.pushView(new VisitDialog(cs), 1, 0);
-        cs.initData();
+        //global.director.pushView(new VisitDialog(cs), 1, 0);
+        //cs.initData();
         updateRightMenu();
     }
     function returnHome()

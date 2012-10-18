@@ -40,11 +40,6 @@ class Goods extends MyNode
         cl.setevent(EVENT_UNTOUCH, touchEnded);
 
     }
-    /*
-bg.addsprite("有文字最大尺寸.png").anchor(50, 50).pos(74, 88).size(121, 71);
-bg.addsprite("无文字最大尺寸.png").anchor(50, 50).pos(75, 97).size(121, 88);
-bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(78, 25).color(100, 100, 100);
-    */
     function initSameElement(buildData, panel)
     {
         var objKind = buildData[0];
@@ -79,27 +74,36 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
             sca = getSca(buildPic, [121, 71]);
             buildPic.scale(sca);
         }
+        /*
         if(objKind == DRUG)
             panel.addsprite("lev"+str(objId/10)+".png").anchor(0, 0).pos(96, 48).size(44, 32);
+        */
         
 
         var canBuy = 1;
         if(global.user.getValue("level") < needLevel)
         {
             buildPic.texture(buildPicName, BLACK);
-            panel.addsprite("storeNotLev.png").size(panel.size());
-            var words = colorWords(getStr("levelNot", ["[LEVEL]", str(needLevel)]));
-            panel.addlabel(words[0], "fonts/heiti.ttf", 20).pos(110 - (20 * words[2]), 99).anchor(0, 50).color(100, 100, 100);
-            panel.addlabel(words[1], "fonts/heiti.ttf", 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
+            panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
+            
+            //var words = colorWords(getStr("levelNot", ["[LEVEL]", str(needLevel)]));
+            //panel.addlabel(words[0], "fonts/heiti.ttf", 20).pos(110 - (20 * words[2]), 99).anchor(0, 50).color(100, 100, 100);
+            //panel.addlabel(words[1], "fonts/heiti.ttf", 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
+
+            var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
+            cw.anchor(50, 50).pos(75, 97);
+            panel.add(cw); 
+
             canBuy = 0;
         }
         //物品属性
         else
         {
-            //bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).pos(78, 25).color(29, 16, 4);
-            panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
+            if(objKind == DRUG)
+                panel.addlabel(data.get("storeName"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
+            else
+                panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
             var picCost = cost.items();
-            //bg.addlabel(getStr("生命值＋10", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(78, 136).color(43, 25, 9);
             if(len(picCost) > 0)
             {
                 var c = [100, 100, 100];
@@ -117,8 +121,6 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
                     /*
                     消耗图片采用 消耗资源的名字
                     消耗数值 
-                    bg.addsprite("crystal.png").anchor(50, 50).pos(31, 170).size(31, 29);
-                    bg.addlabel(getStr("123456", null), "fonts/heiti.ttf", 16).anchor(50, 50).pos(83, 169).color(100, 100, 100);
                     */
                     var cPic = panel.addsprite(picName).pos(31, 170).anchor(50, 50).size(30, 30);  
                     var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
@@ -144,6 +146,10 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
                 if(StoreWords.get(objKey) != null)
                 {
                     w = getStr(StoreWords.get(objKey), null);   
+                    if(objKind == DRUG)
+                    {
+                        w = getStr("drugAttWord", ["[LEVEL]", data["levelName"], "[ATT]", w]);
+                    }
                     panel.addlabel(w, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
                 else
@@ -152,20 +158,11 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
                     {
                         var v = labelGain[0][1];
                         var k = getStr(StoreAttWords[labelGain[0][0]], ["[NUM]", str(v)]);
-                        /*
-                        var k = getStr(labelGain[0][0], null);
 
-                        if(v < 0)
-                            k = k + getStr("unlimit", null);
-                        else//显示的文字受类新控制所以最好将addKey 对应的dict结构写出来
+                        if(objKind == DRUG)
                         {
-                            k = k + "+"+str(v);
-                            if(labelGain[0][0].find("percent") != -1)
-                            {
-                                k += "%";
-                            }
+                            k = getStr("drugAttWord", ["[LEVEL]", data["levelName"], "[ATT]", k]);
                         }
-                        */
                         panel.addlabel(k, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                     }
                 }
@@ -188,18 +185,6 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
         return [max(0, upRow-1), min(lowRow+1, rows)];
     }
     var selTab = -1;
-    /*
-    两种思路， 每次移动结束更新状态
-    移动过程中， 每次检测，对于溢出的进行删除，没有显示的进行补偿显示
-
-    bg.addsprite("goodPanel.png").anchor(0, 0).pos(0, 0).size(149, 188);
-    bg.addsprite("水晶 .png").anchor(0, 0).pos(16, 156).size(31, 29);
-    bg.addlabel(getStr("123456", null), "fonts/heiti.ttf", 16).anchor(0, 0).pos(54, 163).color(100, 100, 100);
-    bg.addlabel(getStr("生命值＋10", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(78, 136).color(100, 100, 100);
-    bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(0, 0).pos(37, 15).color(100, 100, 100);
-    bg.addsprite("生命药水.png").anchor(50, 50).pos(75, 93).size(53, 53);
-    bg.addsprite("holy.png").anchor(0, 0).pos(96, 48).size(44, 32);
-    */
     function updateTab(rg)
     {
         var posX = 0;
@@ -223,9 +208,7 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
                 posX += offX;
             }
             var panel = sprite("goodPanel.png").pos(posX, posY).size(149, 188);
-
             var buildData = store.allGoods[selTab][i];
-
             var canBuy = initSameElement(buildData, panel);
 
             panel.put([selTab, i, canBuy]);
@@ -300,10 +283,12 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
         */
 
     }
-    var greenBut = null;
+    //var greenBut = null;
     var curSel = null;
+    var shadow = null;
     function showGreenBut(child)
     {
+        /*
         if(greenBut != null)
         {
             greenBut.removeSelf();
@@ -312,6 +297,13 @@ bg.addlabel(getStr("生命药水", null), "fonts/heiti.ttf", 25).anchor(50, 50).
         greenBut = new NewButton("greenButton0.png", [130, 38], getStr("buyIt", null), null, 21, FONT_NORMAL, [100, 100, 100], onBuy, child.get());
         greenBut.bg.pos(74, 170);
         child.add(greenBut.bg); 
+        */
+
+        shadow = child.addnode();
+        shadow.addsprite("storeShadow.png").anchor(0, 0).pos(0, 0).size(151, 191).color(100, 100, 100, 47);
+        var but0 = new NewButton("greenButton0.png", [128, 39], getStr("sureToBuy", null), null, 20, FONT_NORMAL, [100, 100, 100], onBuy, child.get());
+        but0.bg.pos(75, 97);
+        shadow.add(but0.bg);
     }
     function touchEnded(n, e, p, x, y, points)
     {

@@ -81,6 +81,14 @@ class DialogController extends MyNode
                 {
                     global.director.pushView(new LoveUpgradeDialog(curCmd["level"]), 1, 0);
                 }
+                else if(curCmd["cmd"] == "challengeLoading")
+                {
+                    global.director.pushView(new LoadChallenge(curCmd["kind"], scene), 1, 0);
+                }
+                else if(curCmd["cmd"] == "initLoading")
+                {
+                    global.director.pushView(new Loading(), 1, 0);
+                }
             }
         }
     }

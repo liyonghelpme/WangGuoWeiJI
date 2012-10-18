@@ -219,6 +219,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
 
         dialogController = new DialogController(this);
         addChild(dialogController);
+        dialogController.addCmd(dict([["cmd", "initLoading"]]));
 
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

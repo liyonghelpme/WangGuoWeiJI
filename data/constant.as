@@ -203,7 +203,9 @@ var skillAnimate = dict([
     [6, [["skill6.plist/skill6a0.png", "skill6.plist/skill6a1.png", "skill6.plist/skill6a2.png", "skill6.plist/skill6a3.png", "skill6.plist/skill6a4.png", "skill6.plist/skill6a5.png", "skill6.plist/skill6a6.png", "skill6.plist/skill6a7.png", "skill6.plist/skill6a8.png", "skill6.plist/skill6a9.png"], 1500, "skill6.plist"]] ,
     [7, [["skill7.plist/skill7a0.png", "skill7.plist/skill7a1.png", "skill7.plist/skill7a2.png", "skill7.plist/skill7a3.png", "skill7.plist/skill7a4.png", "skill7.plist/skill7a5.png", "skill7.plist/skill7a6.png", "skill7.plist/skill7a7.png", "skill7.plist/skill7a8.png", "skill7.plist/skill7a9.png"], 1500, "skill7.plist"]] ,
     [8, [["skill8.plist/skill8a0.png", "skill8.plist/skill8a1.png", "skill8.plist/skill8a2.png", "skill8.plist/skill8a3.png", "skill8.plist/skill8a4.png", "skill8.plist/skill8a5.png", "skill8.plist/skill8a6.png", "skill8.plist/skill8a7.png", "skill8.plist/skill8a8.png", "skill8.plist/skill8a9.png"], 1500, "skill8.plist"]] ,
-    [9, [["skill9.plist/skill9a0.png", "skill9.plist/skill9a1.png", "skill9.plist/skill9a2.png", "skill9.plist/skill9a3.png", "skill9.plist/skill9a4.png", "skill9.plist/skill9a5.png", "skill9.plist/skill9a6.png", "skill9.plist/skill9a7.png", "skill9.plist/skill9a8.png", "skill9.plist/skill9a9.png"], 1500, "skill9.plist"]] ,
+
+    [9, [["skill9.plist/skill9a0.png", "skill9.plist/skill9a1.png", "skill9.plist/skill9a2.png", "skill9.plist/skill9a3.png", "skill9.plist/skill9a4.png", "skill9.plist/skill9a5.png", "skill9.plist/skill9a6.png", "skill9.plist/skill9a7.png", "skill9.plist/skill9a8.png", "skill9.plist/skill9a9.png", "skill9.plist/skill9a10.png", "skill9.plist/skill9a11.png", "skill9.plist/skill9a12.png", "skill9.plist/skill9a13.png", "skill9.plist/skill9a14.png", "skill9.plist/skill9a15.png"], 1500, "skill9.plist"]] ,
+
     [10, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png"], 1500, "skill10.plist"]] ,
 
     [11, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png"], 1500, "skill10.plist"]] ,
@@ -544,6 +546,9 @@ const OPEN_BOX = 32;
 const NEIBOR_RECORD = 33;
 const BUY_TREASURE_STONE = 34;
 const BUY_MAGIC_STONE = 35;
+// 调整进度数字 param = number   每次调整之后 不是立即移动到目标而是有一个过程知道curProcess 速度由距离决定 
+const LOAD_PROCESS = 36;
+
 
 
 
@@ -927,3 +932,7 @@ const STR2KIND = dict([
 //主界面 访问 好友 还是 好友页面访问好友
 const FRIEND_DIA_HOME = 0;
 const FRIEND_DIA_INFRIEND = 1; 
+
+const LOAD_CHALLENGE = 0;
+const LOAD_ROUND = 1;
+const LOAD_TRAIN = 2;

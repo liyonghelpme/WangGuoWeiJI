@@ -250,11 +250,21 @@ def hanData(name, data):
         res = []
         keys = []
         names = []
+        #药品有商店名字和全名
+        hasStoreName = False
+        hasLevelName = False
         for i in f:
             i = dict(i)
             i['name'] = name+str(i['id'])
             i['des'] = name+'Des'+str(i['id'])
             i.pop('engName')
+            if i.get('storeName') != None:
+                hasStoreName = True
+                i['storeName'] = name+'StoreName'+str(i['id'])
+            if i.get('levelName') != None:
+                hasLevelName = True
+                i['levelName'] = name+'LevelName'+str(i['id'])
+
             it = list(i.items())
             it = [list(k) for k in it]
             key = [k[0] for k in it]
@@ -263,6 +273,11 @@ def hanData(name, data):
 
         names = [[name+str(i['id']), [i['name'], i['engName']]] for i in f]
         names += [[name+'Des'+str(i['id']), i['des']] for i in f ]
+        if hasStoreName:
+            names += [[name+'StoreName'+str(i['id']), i['storeName']] for i in f]
+        if hasLevelName:
+            names += [[name+'LevelName'+str(i['id']), i['levelName']] for i in f]
+        
         print 'var', name+'Key', '=', json.dumps(key), ';'
         print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
         return names

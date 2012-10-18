@@ -59,7 +59,7 @@ class FightSoldier extends MoveSoldier
                 );
         nameBanner.add(pic.bg);
         //var pic = nameBanner.addlabel(getStr("nameLev", ["[NAME]", privateData.get("name"), "[LEV]", str(privateData.get("level"))]), null, 18).color(col);
-        var lSize = pic.bg.prepare().size();
+        var lSize = pic.bg.size();
         nameBanner.size(lSize);
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

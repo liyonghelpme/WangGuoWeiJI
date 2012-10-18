@@ -121,8 +121,8 @@ accInfo = black2.addlabel(getStr("accInfo", null), "fonts/heiti.ttf", 18, FONT_N
         {
             var cs = new ChallengeScene(soldier.privateData.get("uid"), null, 0, 0, CHALLENGE_FIGHT, soldier.privateData);
             global.director.pushScene(cs);
-            global.director.pushView(new VisitDialog(cs), 1, 0);
-            cs.initData();
+            //global.director.pushView(new LoadChallenge(cs), 1, 0);
+            //cs.initData();
 
 
             global.user.doCost(cost);
@@ -142,8 +142,8 @@ accInfo = black2.addlabel(getStr("accInfo", null), "fonts/heiti.ttf", 18, FONT_N
 
         var cs = new ChallengeScene(soldier.privateData.get("uid"), null, 0, 0, CHALLENGE_DEFENSE, soldier.privateData);
         global.director.pushScene(cs);
-        global.director.pushView(new VisitDialog(cs), 1, 0);
-        cs.initData();
+        //global.director.pushView(new VisitDialog(cs), 1, 0);
+        //cs.initData();
 
         global.fightModel.removeChallenger(soldier.privateData.get("uid")); 
         setCurChooseSol(null);//无论胜负 挑战者都消失

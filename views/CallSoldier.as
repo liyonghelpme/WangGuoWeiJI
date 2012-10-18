@@ -177,9 +177,13 @@ class CallSoldier extends MyNode
             }
             else
             {
+
+    //but0 = new NewButton("violetBut.png", [113, 35], getStr("costBuy", ["[KIND]", its[0]+".png", "[NUM]", str(its[1])]), null, 18, FONT_NORMAL, [100, 100, 100], onBuyIt, i);
+
                 var gold = scene.funcBuild.getAccCost();
-                blueButton = new NewButton("violetBut.png", [173, 53], getStr("accCall", ["[NUM]", str(gold)]), null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
-                blueButton.bg.addsprite("gold.png").anchor(0, 0).pos(5, 7).size(36, 36);
+                blueButton = new NewButton("violetBut.png", [173, 53], getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]), null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
+
+                //blueButton.bg.addsprite("gold.png").anchor(0, 0).pos(5, 7).size(36, 36);
             }
             blueButton.bg.pos(130, 432).anchor(50, 50);
             addChild(blueButton);
@@ -200,7 +204,7 @@ class CallSoldier extends MyNode
         {
             accTime += 1;
             global.director.curScene.addChild(new UpgradeBanner(getStr("sureToAcc", ["[NUM]", str(gold)]) , [100, 100, 100], null));
-            blueButton.word.setWords(getStr("ok2", null));
+            blueButton.word.setWords(getStr("ok2", ["[KIND]", "gold.png", "[NUM]", str(gold)]));
         }
         else
         {
@@ -231,13 +235,22 @@ class CallSoldier extends MyNode
 
                 if(leftTime <= 0)//可以收获 
                 {
+                    blueButton.word.setSize(25);
                     blueButton.word.setWords(getStr("finishCall", null));
                     blueButton.setCallback(onFinishCall);
                 }
                 else
                 {
                     var gold = scene.funcBuild.getAccCost();
-                    blueButton.word.setWords(getStr("accCall", ["[NUM]", str(gold)]));
+                    if(accTime == 0)
+                    {
+                        blueButton.word.setWords(getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]));
+                    }
+                    else
+                    {
+                        blueButton.word.setWords(getStr("ok2", ["[KIND]", "gold.png", "[NUM]", str(gold)]));
+                    }
+
                 }
             }
         }

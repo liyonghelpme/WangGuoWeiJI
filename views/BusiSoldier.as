@@ -1022,11 +1022,11 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     }
     function clearStatus()
     {
+        //用户手动清除状态 可能系统已经清除状态了
+        global.taskModel.doCycleTaskByKey("eliminate", 1);
+        global.taskModel.doDayTaskByKey("eliminate", 1);
         if(status != null)
         {
-            //用户手动清除状态
-            global.tashModel.doCycleTaskByKey("eliminate", 1);
-            global.tashModel.doDayTaskByKey("eliminate", 1);
             realClearStatus();
         }   
     }

@@ -401,10 +401,14 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
 
         var mon = getRoundMonster(big, small); 
         global.director.pushScene(
-        new BattleScene(big, small, 
-            mon, CHALLENGE_MON, null, null
+            new ChallengeScene(null, null, null, null, CHALLENGE_MON, dict([["big", big], ["small", small], ["mon", mon]]))
+        );
+        /*
+            global.director.pushScene(
+            new BattleScene(big, small, 
+                mon, CHALLENGE_MON, null, null
 
-        ));
-
+            ));
+        */
     }
 }
