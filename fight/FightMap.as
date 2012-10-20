@@ -42,8 +42,6 @@ class FightMap extends MoveMap
 
 
         mapGridController = new MapGridController(this);
-
-
     }
 
     /*

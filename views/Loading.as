@@ -104,10 +104,10 @@ class Loading extends MyNode
             hopeProcess = p;
             if(hopeProcess > (curProcess+20))
             {
-                speed = 50;
+                speed = 25;
             }
             else
-                speed = 100;
+                speed = 50;
         }
     }
     override function enterScene()

@@ -325,6 +325,17 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         bPos[1] -= bSize[1]/2;
         moveToPoint(bPos[0], bPos[1]);
     }
+    //结束后不调整尺寸和 位置
+    function moveToCertainPos(s, p)
+    {
+        //oldScale = bg.scale();
+        //oldPos = bg.pos();
+        oldScale = s;
+        oldPos = p;
+
+        touchDelegate.scaleToMax(s);
+        moveToPoint(p[0], p[1]);
+    }
     function moveToNormal(build)
     {
         var sm = 100;

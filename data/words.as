@@ -576,4 +576,7 @@ var WORDS = dict([
 ["tip1", "Tips: 装备可以极大提升士兵属性"],
 ["tip2", "Tips: 练级时能佩戴回血药水"],
 ["tip3", "Tips: 英雄可以使用技能，技能具有极大杀伤力哦！"],
+["lastTime", "倒计时：[NUM]"],
+["sureToGather", "再次点击确定花费[[NUM]]个[金币]，进入集合游戏！"],
+["leftNum", "剩余个数：[NUM]"],
 ]);

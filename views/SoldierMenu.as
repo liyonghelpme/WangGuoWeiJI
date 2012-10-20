@@ -1,5 +1,9 @@
 class SoldierMenu extends MyNode
 {
+    //传递模型给 childMenu 去处理
+    const MODELS = dict([
+         
+    ]);
     var soldier;
     function SoldierMenu(s, func1, func2)
     {

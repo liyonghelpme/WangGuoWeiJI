@@ -2,7 +2,15 @@ class ChildMenuLayer extends MyNode
 {
     var functions;
     var scene;
+    //公有的模型 和 私有的模型
+    //拼凑在一起 是 全部模型
+
     var buts = dict([
+    //public  
+    ["photo", ["menu_button_photo.png", onPhoto]],
+    ["drug", ["menu_button_drug.png", onDrug]],
+
+
     ["map", ["menu_button_map.png", onMap]],
     ["friend", ["menu_button_friend.png", onFriend]],
     ["mail", ["menu_button_mail.png", onMail]],
@@ -12,7 +20,7 @@ class ChildMenuLayer extends MyNode
     ["setting", ["menu_button_setting.png", onSetting]],
     ["store", ["menu_button_store.png", onStore]],
 
-    ["photo", ["menu_button_photo.png", onPhoto]],
+
     ["acc", ["menu_button_acc.png", onAcc]],
     ["sell", ["menu_button_sell.png", onSell]],
 
@@ -27,7 +35,7 @@ class ChildMenuLayer extends MyNode
     ["forge", ["menu_button_forge.png", onForge]],
     ["makeDrug", ["menu_button_makeDrug.png", onMakeDrug]],
 
-    ["drug", ["menu_button_drug.png", onDrug]],
+
     //["inspire", ["menu_button_inspire.png", onInspire]],
     ["equip", ["menu_button_equip.png", onEquip]],
     ["gather", ["menu_button_gather.png", onGather]],
@@ -39,15 +47,21 @@ class ChildMenuLayer extends MyNode
     ["skill", ["menu_button_skill.png", onSkill]],
 
     //士兵状态
-    ["menu0", ["menu0.png", onBlood]],
+    //["menu0", ["menu0.png", onBlood]],
     ["menu1", ["menu1.png", onHeart]],
     ["menu2", ["menu2.png", onTranStatus]],
+    
+    /*
     ["menu3", ["menu3.png", onInspire]],
     ["menu4", ["menu4.png", onSunFlower]],
     ["menu5", ["menu5.png", onSun]],
     ["menu6", ["menu6.png", onFlower]],
     ["menu7", ["menu7.png", onStar]],
     ["menu8", ["menu8.png", onMoon]],
+    */
+
+    ["menu10", ["menu_button_game0.png", onInspire]],
+    ["menu11", ["menu_button_game1.png", onMoney]],
 
     //爱心树
     ["invite", ["menu_button_invite.png", onInvite]],
@@ -94,13 +108,16 @@ class ChildMenuLayer extends MyNode
         scene.clearStatus();
         global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
     }
+    //显示药店
     function onHeart()
     {
         global.director.curScene.closeGlobalMenu(this);
         scene.clearStatus();
         //隐藏菜单栏 游戏结束显示菜单栏
-        global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
-        global.director.pushView(new GameOne(scene, HEART_STATUS), 0, 0);
+        //global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
+        //global.director.pushView(new GameOne(scene, HEART_STATUS), 0, 0);
+
+        global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
     }
     function onTranStatus()
     {
@@ -108,15 +125,56 @@ class ChildMenuLayer extends MyNode
         scene.clearStatus();
         global.director.pushView(new SoldierDialog(2), 1, 0);
     }
+
+    var playGatherNow = 0;
+    function onGather()
+    {
+        var cost = dict([["gold", PARAMS["gatherGold"]]]);
+        var buyable = global.user.checkCost(cost);
+        if(buyable.get("ok") == 0)
+        {
+            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToGather", ["[NUM]", str(PARAMS["gatherGold"])]) , [100, 100, 100], null));
+
+            buyable.pop("ok");
+            var it = buyable.items();
+            global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+
+            return;
+        }
+        if(playGatherNow == 0)
+        {
+            playGatherNow = 1;
+            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToGather", ["[NUM]", str(PARAMS["gatherGold"])]) , [100, 100, 100], null));
+            return;
+        }
+        playGatherNow = 0;
+        global.user.doCost(cost);
+        global.httpController.addRequest("soldierC/playGame4", dict([["uid", global.user.uid], ["cost", json_dumps(cost)]]), null, null);
+
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+        global.director.curScene.showGame(scene, GATHER_GAME);
+        global.director.pushView(new GameFour(), 0, 0);
+    }
+    function onMoney()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        scene.clearStatus();
+
+        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏
+        global.director.pushView(new GameTwo(scene, PICK_GAME), 0, 0);
+    }
     function onInspire()
     {
         global.director.curScene.closeGlobalMenu(this);
         scene.clearStatus();
 
         global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
-        global.director.pushView(new GameOne(scene, INSPIRE_STATUS), 0, 0);
+        //global.director.pushView(new GameOne(scene, INSPIRE_STATUS), 0, 0);
+        global.director.pushView(new GameThree(scene), 0, 0);
     }
 
+    /*
     function onSunFlower()
     {
         global.director.curScene.closeGlobalMenu(this);//这个会显示菜单
@@ -157,6 +215,7 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
         global.director.pushView(new GameTwo(scene, MOON_STATUS), 0, 0);
     }
+    */
     
 
     //soldier skill
@@ -220,9 +279,7 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.closeGlobalMenu(this);
         global.director.pushView(new DrugDialog(scene, EQUIP), 1, 0);
     }
-    function onGather()
-    {
-    }
+
     function onRelive()
     {
         global.director.curScene.closeGlobalMenu(this);

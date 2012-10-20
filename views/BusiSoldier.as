@@ -52,7 +52,7 @@ class BusiSoldier extends MyNode
     var exp;
     var dead;
     var level;
-    const showSize = 50;
+    //const showSize = 50;
 
     var recoverSpeed;
     //当前只有士兵才有特征色
@@ -334,17 +334,18 @@ class BusiSoldier extends MyNode
             oldState = null;
         }
     }
-    const TRAIN_CENTER = [465, 720];
+
     function BusiSoldier(m, d, privateData, s)
     {
         sid = s;
         data = d;
         map = m;
+        speed = getParam("busiSoldierSpeed");
         id = data.get("id");
         //var colStr = "red";
         load_sprite_sheet("soldierm"+str(id)+".plist");
 
-        bg = node().scale(showSize);
+        bg = node().scale(PARAMS["SOL_SHOW_SIZE"]);
         init();
         changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
@@ -401,10 +402,12 @@ class BusiSoldier extends MyNode
     {
         sid = s;
     }
+    /*
     function doSell()
     {
         global.director.pushView(new SellDialog(this), 1, 0);
     }
+    */
     function sureToSell()
     {
         global.httpController.addRequest("soldierC/sellSoldier", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
@@ -470,9 +473,9 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
                 health = healthBoundary;
         }
 
-        var temp = bg.addnode();
+        var temp = bg.addnode().scale(100*100/PARAMS["SOL_SHOW_SIZE"]);
         temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
-temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+        temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(6, 26, 46);
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
     function changeHealth(add)
@@ -482,9 +485,9 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         health += add;
         health = min(healthBoundary, health);
 
-        var temp = bg.addnode();
+        var temp = bg.addnode().scale(100*100/PARAMS["SOL_SHOW_SIZE"]);
         temp.addsprite("drug0.png").anchor(0, 50).pos(0, -30).size(30, 30);
-temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+        temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(6, 26, 46);
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
     /*
@@ -627,7 +630,9 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         if(isHero == 0)
         {
             if(curStatus != NO_STATUS)
+            {
                 func2 = ["menu"+str(curStatus), "singleTrain", "gather"];
+            }
             else
                 func2 = ["singleTrain", "gather"];
         }
@@ -638,7 +643,8 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             else
                 func2 = ["singleTrain", "skill", "gather"];
         }
-            
+          
+        //快速编译解决依赖关系
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
     }
     function closeGlobalMenu()
@@ -800,6 +806,12 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
                 break;   
             }
         }
+        if(!moveable)
+        {
+            clearMoveState();
+            map.mapGridController.clearSolMap(this);
+            bg.pos(TRAIN_CENTER);
+        }
         //trace("move TarGetPos", start+i);
         //trace("getTar", moveable);
         if(moveable == 1)
@@ -848,7 +860,7 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             state = SOL_FREE;
             return;
         }
-        var t = dist*100/speed;
+        var t = dist*1000/speed;
         shiftAni = moveto(t, tar[0], tar[1]);
         bg.addaction(shiftAni);
     }
@@ -893,7 +905,7 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
                     state = SOL_FREE;
                     return;
                 }
-                var t = dist*100/speed;
+                var t = dist*1000/speed;
                 shiftAni = moveto(t, newTar[0], newTar[1]);
                 bg.addaction(shiftAni);
             }
@@ -1004,9 +1016,24 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         }
 
         var bsize = bg.size();
+        var pic;
+        var rd;
         status = bg.addsprite("soldierStatus.png").pos(bsize[0]/2, -5).anchor(50, 100);
-        var pic = status.addsprite("status"+str(curStatus)+".png").anchor(50, 50).pos(26, 19);
-        var sca = getSca(pic, [39, 31]);
+        if(curStatus == EXP_GAME)
+        {
+            rd = rand(PARAMS["ExpGameNum"]);
+            pic = status.addsprite("drum"+str(rd)+".png").anchor(50, 50).pos(34, 24);
+        }
+        else if(curStatus == PICK_GAME)
+        {
+            rd = rand(PARAMS["MoneyGameNum"]); 
+            pic = status.addsprite("goods"+str(rd)+".png").anchor(50, 50).pos(34, 24);
+        }
+        else
+        {
+            pic = status.addsprite("status"+str(curStatus)+".png").anchor(50, 50).pos(34, 24);
+        }
+        var sca = getSca(pic, [45, 45]);
         pic.scale(sca);
     }
 
@@ -1042,7 +1069,8 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             if(health < healthBoundary*2/3) 
             {
                 //if(rd < 50)
-                curStatus = BLOOD_STATUS;
+                //curStatus = BLOOD_STATUS;
+                curStatus = HEART_STATUS;
                 //else
                 //    curStatus = HEART_STATUS;
             }
@@ -1069,6 +1097,10 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
             possible.append(statusPossible[i][1]+possible[i-1]);
         }
     }
+    /*
+    生成加经验游戏 和 捡银币游戏
+    30 70 概率
+    */
     function genNewStatus()
     {
         if(inGame)
@@ -1076,6 +1108,13 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
         if(curStatus == NO_STATUS)
         {
             var rd = rand(100);
+            if(rd < 30)
+            {
+                curStatus = EXP_GAME;  
+            }
+            else 
+                curStatus = PICK_GAME;
+            /*
             if(possible == null)
                 initPossible();
             for(var i = 0; i < len(possible); i++)
@@ -1085,7 +1124,8 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
                     break;
                 }
             }
-            curStatus = statusPossible[min(i, len(statusPossible)-1)][0];
+            */
+            //curStatus = statusPossible[min(i, len(statusPossible)-1)][0];
             showCurStatus();
         }
     }
@@ -1102,12 +1142,15 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     var gameId = -1;
     function beginGame(gId)
     {
+        /*
         inGame = 1;
         gameId = gId;
         clearMoveState();
         map.mapGridController.clearSolMap(this);
+        */
+        realBeginGame(gId);
         
-        bg.pos(TRAIN_CENTER);
+        bg.pos(PARAMS["GAME_X"], PARAMS["GAME_Y"]);
         var nPos = normalizePos(bg.pos(), sx, sy);
         setPos(nPos);
 
@@ -1116,7 +1159,24 @@ temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).
     function endGame()
     {
         map.map.moveToNormal(this);
+        realEndGame();
+        //inGame = 0;
+        //gameId = -1;
+    }
+
+    //game 1 3 4 共用的 去除特定游戏的代码
+    function realBeginGame(gId)
+    {
+        inGame = 1;
+        gameId = gId;
+        clearMoveState();
+        map.mapGridController.clearSolMap(this);
+    }
+    //游戏结束 需要重新显示没有参与游戏的士兵
+    function realEndGame()
+    {
         inGame = 0;
         gameId = -1;
+        bg.visible(1);
     }
 }

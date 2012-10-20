@@ -75,8 +75,11 @@ import views.SoldierMenu;
 import busiViews.DetailDialog;
 
 import views.ChildMenuLayer;
+import views.GameFour;
 import views.GameTwo;
-import views.GameOne;
+import views.GameThree;
+import views.FlowReward;
+//import views.GameOne;
 import busiViews.InviteIntro;
 import busiViews.InviteInput;
 
@@ -120,7 +123,7 @@ import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
 
-import fight.RingFightingScene;
+import fight.FightingScene;
 import fight.FightMap;
 import fight.FightMenu;
 import fight.MakeArenaDialog;
@@ -171,6 +174,7 @@ import views.Farm;
 import views.Plant;
 import views.PlantChoose;
 import views.House;
+import views.LoveTree;
 import views.FuncBuild;
 
 //经营页面场景飞行的银币
@@ -320,11 +324,13 @@ import model.MailController;
 
 import Global.MyNode;
 
+import model.ParamController;
 import model.FriendController;
 import model.HttpController;
 import util.Util;
 
 import Global.GlobalController;
+
 
 //import data.String;
 import data.constant;
@@ -343,6 +349,7 @@ global.director = new Director();
 global.touchManager = new TouchManager();
 global.controller = new Controller();
 global.myAction = new MyAction();
+global.paramController = new ParamController();
 
 //friend  task mail fight  castleScene
 //不同途径相同归一目的地
@@ -354,6 +361,7 @@ global.taskModel = new TaskModel();
 global.mailController = new MailController();
 global.fightModel = new FightModel();
 global.bannerController = new BannerController();
+
 
 
 

@@ -1305,3 +1305,24 @@ function doShare(w, link, pid, callback, param)
     ppy_postnewsfeed(w, link, pid, callback, param);
     global.taskModel.doCycleTaskByKey("share", 1);
 }
+
+function getPosIds(possible)
+{
+    var rd = rand(sum(possible));
+    var kind = len(possible)-1;
+    for(var i = 1; i < len(possible); i++)
+    {
+        var s = Sum(possible, i);
+        if(rd <= s)
+        {
+            kind = i-1;
+            break;
+        }
+    }
+    return kind;
+}
+
+function getParam(k)
+{
+    return global.paramController.AnimateParams.get(k);
+}

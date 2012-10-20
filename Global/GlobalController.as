@@ -16,6 +16,7 @@ class GlobalController
     var mailController;
     var fightModel;
     var bannerController;
+    var paramController;
     function Global()
     {
     }

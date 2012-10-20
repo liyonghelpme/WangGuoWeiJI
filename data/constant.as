@@ -387,6 +387,8 @@ const SKILL = 17;
 const STATUS = 18;
 const MAP_INFO = 19;
 const FIGHT_COST = 20;
+const MONEY_GAME_GOODS = 21;
+const EXP_GAME_GOODS = 22;
 
 
 
@@ -412,6 +414,8 @@ var Keys = [
     statusPossibleKey,
     mapBloodKey,
     fightingCostKey,
+    MoneyGameGoodsKey,
+    ExpGameGoodsKey,
 ];
 var CostData = [
     buildingData,
@@ -435,6 +439,8 @@ var CostData = [
     statusPossibleData,
     mapBloodData,
     fightingCostData,
+    MoneyGameGoodsData,
+    ExpGameGoodsData,
 ];
 
 //更新商店load_sprite_sheet
@@ -548,6 +554,8 @@ const BUY_TREASURE_STONE = 34;
 const BUY_MAGIC_STONE = 35;
 // 调整进度数字 param = number   每次调整之后 不是立即移动到目标而是有一个过程知道curProcess 速度由距离决定 
 const LOAD_PROCESS = 36;
+const SQUARE_SOL = 37;//通知buildLayer 将士兵组成方阵 以[x, y] 为中心点 同时启动所有士兵的游戏模式 可以将Game实体传递给buildLayer 调用回调函数即可
+const ALL_ACTIVE_SOL = 38;//buildLayer 建立完方阵 返回士兵队列供游戏处理 
 
 
 
@@ -757,9 +765,13 @@ const FLOWER_STATUS = 6;
 const STAR_STATUS = 7;
 const MOON_STATUS = 8;
 const GATHER_STATUS = 9;
+const EXP_GAME = 10;
+const PICK_GAME = 11;
+
 
 const SOL_GAME = 1;
 const MONEY_GAME = 2;
+const GATHER_GAME = 3;
 
 //const LOVE_TREE_ID = 208;//等级提升 则 ID 变化
 
@@ -936,3 +948,5 @@ const FRIEND_DIA_INFRIEND = 1;
 const LOAD_CHALLENGE = 0;
 const LOAD_ROUND = 1;
 const LOAD_TRAIN = 2;
+
+const TRAIN_CENTER = [465, 720];

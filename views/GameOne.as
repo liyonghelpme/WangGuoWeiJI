@@ -1,5 +1,8 @@
 //类似于 buildMenu 等全局菜单 隐藏菜单栏
 //士兵瞬间移动到 训练场中心
+//drum保持稳定
+
+//只有鼓 有 touch事件
 class GameOne extends MyNode
 {
     var sol;
@@ -20,6 +23,7 @@ class GameOne extends MyNode
         banner = bg.addsprite("drumBack.png").pos(0, global.director.disSize[1]).anchor(0, 100);
         drum = banner.addsprite("drum.png").pos(752, 66).anchor(50, 50);
         basePx = drum.pos();
+        maxTime = PARAMS["EXP_GAME_TIME"]*1000;
 
         drum.setevent(EVENT_TOUCH, touchBegan);
         drum.setevent(EVENT_MOVE, touchMoved);

@@ -1,5 +1,5 @@
-//import test.LoadInclude;
 import Global.INCLUDE;
+//import test.GameInclude;
 
 
 //初始化经营页面
@@ -44,6 +44,9 @@ global.director.replaceScene(new CastleScene());
 
 
 //global.director.pushView(new Loading(), 1, 0);
-//global.director.pushView(new LoadChallenge(), 1, 0);
+//var scene = new Scene();
+//global.replaceScene(scene);
+//var soldier = new BusiSoldier(scene, getData(SOLDIER, 0), null, 0);
+//global.director.pushView(new GameThree(soldier), 1, 0);
 
 

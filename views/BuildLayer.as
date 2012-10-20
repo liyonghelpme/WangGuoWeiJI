@@ -187,7 +187,7 @@ class BuildLayer extends MyNode
         global.msgCenter.registerCallback(RELIVE_SOL, this);
         global.msgCenter.registerCallback(SOL_TRANSFER, this);
         global.msgCenter.registerCallback(SOL_UNLOADTHING, this);
-
+        global.msgCenter.registerCallback(SQUARE_SOL, this);
         global.timer.addTimer(this); 
     }
     const UPDATE_STATUS_TIME = 10000;
@@ -247,6 +247,51 @@ class BuildLayer extends MyNode
         {
             unloadThing(msg[1]);
         }
+        //方阵内士兵可见 其它士兵不可见
+        else if(msg[0] == SQUARE_SOL)
+        {
+            //sid--->soldier
+            var allSol = mapGridController.allSoldiers.values();
+            var totalNum = len(allSol);
+            var width = sqrt(totalNum);
+            if(width*width < totalNum)
+                width++;
+            if(width > 5)
+                width = 5;
+            var showNum = width*width;
+            var offX = 80;
+            var offY = 80;
+            var midX = PARAMS["GAME_X"];
+            var midY = PARAMS["GAME_Y"];
+            var curX = -width/2*offX + midX;
+            var curY = -width/2*offY + midY;
+
+            var retSol;
+            var showSol = [];
+            var unShowSol = [];
+            var i;
+            for(i = 0; i < len(allSol) && i < showNum; i++)
+            {
+                var row = i / width;
+                var col = i % width;
+
+                var sol = allSol[i];
+                sol.realBeginGame(4);
+                sol.bg.pos(curX+col*offX, curY+row*offY);
+                showSol.append(sol);
+            }
+            
+            for(; i < len(allSol); i++)
+            {
+                unShowSol.append(allSol[i]);
+                allSol[i].realBeginGame(4);
+                allSol[i].bg.visible(0);
+            }
+            retSol = dict([["showSol", showSol], ["unShowSol", unShowSol]]);
+            map.moveToCertainPos(100, [midX, midY]);
+
+            msg[1].finishArray(retSol);
+        }   
     }
     override function exitScene()
     {
@@ -255,6 +300,7 @@ class BuildLayer extends MyNode
         global.msgCenter.removeCallback(RELIVE_SOL, this);
         global.msgCenter.removeCallback(SOL_TRANSFER, this);
         global.msgCenter.removeCallback(SOL_UNLOADTHING, this);
+        global.msgCenter.removeCallback(SQUARE_SOL, this);
         removeSoldiers();
 
         super.exitScene();
