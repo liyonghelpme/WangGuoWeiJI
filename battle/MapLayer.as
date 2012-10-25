@@ -28,20 +28,25 @@ class MapLayer extends MyNode
         //等级不足 不能开启
         //未击败不能开启
 
+        var dx = rand(getParam("IslandDiffBase"))+getParam("IslandDiff");
+        var dy = rand(getParam("IslandDiffBase"))+getParam("IslandDiff");
+        var dir = rand(2);
+        if(dir == 0)
+            dir = -1;
+        dy *= dir;
+        dir = rand(2);
+        if(dir == 0)
+            dir = -1;
+        dx *= dir;
+        islandLayer.addaction(repeat(moveby(getParam("IslandTime"), dx, dy), moveby(getParam("IslandTime"), -dx, -dy)));
+
+        /*
         for(i = 1; i < len(island); i++)
         {
-            var dx = rand(10)+10;
-            var dy = rand(10)+10;
-            var dir = rand(2);
-            if(dir == 0)
-                dir = -1;
-            dy *= dir;
-            dir = rand(2)-1;
-            if(dir == 0)
-                dir = -1;
-            dx *= dir;
             island[i].addaction(repeat(moveby(5000, dx, dy), moveby(5000, -dx, -dy)));
         }
+        */
+
         for(i = 0; i <= PARAMS.get("bigNum"); i++)
         {
             var enable = checkBigEnable(i-1);

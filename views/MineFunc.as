@@ -86,6 +86,7 @@ class Mine extends FuncBuild
     //空闲状态 水晶矿没有开启
     override function whenFree()
     {
+        global.director.curScene.addChild(new UpgradeBanner(getStr("notOpenMine", ["[LEV]", str(PARAMS["MineMinLevel"])]) , [100, 100, 100], null));
         return 1;
     }
     /*
@@ -100,7 +101,7 @@ class Mine extends FuncBuild
         if(planting.curState == 1)//成熟则收获
         {
             var crystal = getProduction(baseBuild.buildLevel);
-            global.httpController.addRequest("mineC/harvest", dict([["uid", global.user.uid], ["crystal", crystal]]), null, null);
+            global.httpController.addRequest("mineC/harvest", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["crystal", crystal]]), null, null);
             flowBanner.removefromparent();
             flowBanner = null;
             planting.removeSelf();
@@ -112,19 +113,22 @@ class Mine extends FuncBuild
             planting = new MinePlant(baseBuild, dict([["objectTime", time()/1000]]));
             baseBuild.addChild(planting);
 
-            global.user.updateMine(baseBuild);
+            //global.user.updateMine(baseBuild);
+            global.user.updateBuilding(baseBuild);
 
             return 1;
         }
         return 0;
     }
 
-    function doUpgrade(cost)
+    function doUpgrade()
     {
-        global.httpController.addRequest("mineC/upgradeMine", dict([["uid", global.user.uid]]), null, null); 
+        var cost = dict([["colorCrystal", PARAMS["UpgradeMineColorCost"]]]);
+        global.httpController.addRequest("mineC/upgradeMine", dict([["uid", global.user.uid], ["bid", baseBuild.bid]]), null, null); 
         global.user.doCost(cost);
         baseBuild.buildLevel += 1;
-        global.user.updateMine(baseBuild);
+        //global.user.updateMine(baseBuild);
+        global.user.updateBuilding(baseBuild);
 
         
         var it = cost.items();
@@ -143,7 +147,9 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     }
     function sureToUpgrade()
     {
-        var cost = dict([["colorCrystal", mineProduction.get("colorCrystal")]]);
+        global.director.pushView(new UpgradeMine(baseBuild), 1, 0);
+        /*
+        var cost = dict([["colorCrystal", PARAMS["UpgradeMineColorCost"]]]);
         var buyable = global.user.checkCost(cost);
         var crystal = getProduction(baseBuild.buildLevel);
         global.director.pushView(new ResourceWarningDialog(
@@ -153,12 +159,17 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
                                         "[NUM1]", str(global.user.getValue("colorCrystal")),
                                         "[NUM2]", str(mineProduction.get("colorCrystal")),
                                         "[NUM3]", str(getProduction(baseBuild.buildLevel+1))]), doUpgrade, buyable, cost, "colorCrystal.png"), 1, 0);
+        */
     }
     //工作时间长度
+    //
     override function initWorking(data)
     {
-        if(baseBuild.state == PARAMS["buildWork"])
+        var userLevel = global.user.getValue("level");
+        //等级足够开启建筑物
+        if(userLevel >= PARAMS["MineMinLevel"] && baseBuild.state != PARAMS["buildMove"])//非移动状态
         {
+            baseBuild.setState(PARAMS["buildWork"]);
             var startTime = data.get("objectTime");//serverTime 秒为单位
             startTime = server2Client(startTime); 
             //trace("startTime", data.get("objectTime"), startTime);//objectTime 
@@ -173,5 +184,18 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
         if(planting != null)
             return client2Server(planting.objectTime);
         return 0;
+    }
+    override function finishBuild()
+    {
+        var userLevel = global.user.getValue("level");
+        //等级足够开启建筑物
+        if(userLevel >= PARAMS["MineMinLevel"] && baseBuild.state != PARAMS["buildMove"])//非移动状态
+        {
+            baseBuild.setState(PARAMS["buildWork"]);
+            var startTime = time()/1000; 
+            var privateData = dict([["objectTime", startTime]]);//客户端时间 
+            planting = new MinePlant(baseBuild, privateData);
+            baseBuild.addChild(planting);
+        }
     }
 }

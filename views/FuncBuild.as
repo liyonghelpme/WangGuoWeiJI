@@ -40,5 +40,8 @@ class FuncBuild
     function setPos()
     {
     }
+    function finishBuild()
+    {
+    }
 }
 

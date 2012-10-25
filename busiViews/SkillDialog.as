@@ -64,7 +64,6 @@ class SkillDialog extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("haha.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         temp = bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         temp = bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);

@@ -271,6 +271,7 @@ function getTimeStr(t)
     return res;
 }
 
+/*
 function checkInZone(position)
 {
     for(var i = 0; i < len(FullZone); i++)
@@ -283,6 +284,7 @@ function checkInZone(position)
     }
     return 0;
 }
+*/
 
 function checkInTrain(p)
 {   
@@ -1027,12 +1029,29 @@ function stringLines(s, sz, lineHeight, color, ft)
     return n;
 }
 
+function maxWidthLine(s, sz, lineDiffY, color, width)
+{
+    var n = node();
+    s = s.split("\n");
+    var nSize = [0, 0];
+    for(var i = 0; i < len(s); i++)
+    {
+        var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, FONT_NORMAL, width, 0, ALIGN_LEFT).pos(0, nSize[1]).color(color);
+        var lSize = lab.prepare().size();
+        nSize[0] = max(lSize[0], nSize[0]);
+        nSize[1] += lSize[1]+lineDiffY;
+    }
+    n.size(nSize);
+    return n;
+}
+
 //"-"+str(num)
 //"+"+str(num)+"xp"
 //"+"+str(num)+""
 var fetchPlist = 0;
 //const YELLOW = 0;
 //const BLUE = 1;
+//默认高度40 缩放到 目标高度
 function altasWord(c, s)
 {
     var n = node();
@@ -1325,4 +1344,18 @@ function getPosIds(possible)
 function getParam(k)
 {
     return global.paramController.AnimateParams.get(k);
+}
+
+function checkResLack(cost)
+{
+    var ret = 1;
+    var buyable = global.user.checkCost(cost);
+    if(buyable["ok"] == 0)
+    {
+        buyable.pop("ok");
+        var it = buyable.items();
+        global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+        ret = 0;
+    }
+    return ret;    
 }

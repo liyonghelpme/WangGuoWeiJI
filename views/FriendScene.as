@@ -13,9 +13,11 @@ class MovLayer extends MoveMap
     {
         kind = k;
         scene = sc;
+        staticObstacle = dict();
         bg = node();
         init();
         moveZone = FlowZone;
+        buildZone = FlowZone;
         gridLayer = bg.addnode();
 
         mapGridController = new MapGridController(this);

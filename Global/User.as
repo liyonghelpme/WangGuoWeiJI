@@ -55,7 +55,8 @@ class User
     var clientTime;
 
     var lastVisitNeibor = 0;
-    var mine;
+    //多个水晶矿都在 buildings
+    //var mine;
 
     var maxGiftId = 0;
     var skills;
@@ -490,9 +491,9 @@ class User
                 rankScore = MAX_SCORE;
             rankOrder = con.get("rank")[1];
 
-            mine = con.get("mine");
-            mine["id"] = MINE_BUILD; 
-            mine["bid"] = MINE_BID;
+            //mine = con.get("mine");
+            //mine["id"] = MINE_BUILD; 
+            //mine["bid"] = MINE_BID;
 
             rated = db.get("rated");
             if(rated == null)
@@ -581,11 +582,13 @@ class User
         soldiers = dict([[0, dict([["id", 0], ["name", "liyong"], ["level", 0]])]]); 
     }
 
+    /*
     function updateMine(build)
     {
         mine["level"] = build.buildLevel;
         mine["objectTime"] = build.getStartTime();
     }
+    */
     function getLoadTip()
     {
         loadTip += 1;
@@ -611,7 +614,7 @@ class User
         equips = dict();
         herbs = dict();
         //tasks = dict();
-        mine = null;
+        //mine = null;
         treasureStone = dict();
         //starNum = null;
         starNum = [[3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3], [3, 3, 3, 3, 3, 3, 3]];
@@ -1590,5 +1593,23 @@ class User
     function getInviteCode()
     {
         return invite["inviteCode"];
+    }
+    //英雄类型 heroSid == 0 FirstHero
+    function getFirstHero()
+    {
+        return 0;
+        /*
+        var sid = soldiers.keys();
+        var alSol = soldiers.values();
+        for(var i = 0; i < len(alSol); i++)
+        {
+            var sdata = getData(SOLDER, alSol[i]["id"]);
+            if(sdata["isHero"])
+            {
+                return sid[i];
+            }
+        }
+        return -1;
+        */
     }
 }

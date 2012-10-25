@@ -183,6 +183,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         }
 
         var temp = altasWord("white", str(level+1));
+        //temp.scale(25*100/temp.size()[1]);
         temp.anchor(50, 50).pos(levelLabel.pos());
         levelLabel.removefromparent();
         expback.add(temp);
@@ -192,7 +193,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         var bSize = expback.prepare().size();
         
         //背景宽度 图片自身宽度 图片高度
-        var sca = getNodeSca(levelLabel, [min(lSize[0], bSize[0]), lSize[1]]);
+        var sca = getNodeSca(levelLabel, [min(lSize[0], bSize[0]), min(lSize[1], 25)]);
         //if(level >= 100)
         levelLabel.scale(sca);
     }

@@ -21,12 +21,16 @@ class FightMap extends MoveMap
     function FightMap(sc)
     {
         scene = sc;
+        staticObstacle = dict();
+
         bg = sprite("map5.jpg");
         init();
 
         moveZone = [
         [120, 203, 900, 337],
         ];
+        buildZone = moveZone;
+
         gridLayer = bg.addnode();
         touchDelegate = new StandardTouchHandler();
         touchDelegate.bg = bg;

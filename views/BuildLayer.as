@@ -81,6 +81,7 @@ class BuildLayer extends MyNode
         return null;
     }
 
+    //建筑物的Zone 和 士兵的Zone不同
     function checkFallGoodCol(rx, ry)
     {
         var inZ = checkInZone([rx*SIZEX, ry*SIZEY]);
@@ -293,6 +294,25 @@ class BuildLayer extends MyNode
             msg[1].finishArray(retSol);
         }   
     }
+    //单人游戏隐藏除此之外的其它士兵
+    function hideSoldier(sol)
+    {
+        var allSol = mapGridController.allSoldiers.values();
+        for(var i = 0; i < len(allSol); i++)
+        {
+            if(allSol[i] != sol)
+                allSol[i].bg.visible(0);
+        }
+    }
+    function showSoldier(sol)
+    {
+        var allSol = mapGridController.allSoldiers.values();
+        for(var i = 0; i < len(allSol); i++)
+        {
+            allSol[i].bg.visible(1);
+        }
+    }
+
     override function exitScene()
     {
         global.timer.removeTimer(this);
@@ -394,6 +414,10 @@ class BuildLayer extends MyNode
         var item = global.user.buildings.items();
         for(var i = 0; i < len(item); i++)
         {
+            //水晶框不在经营页面显示
+            if(item[i][1]["id"] == PARAMS["MineKind"])
+                continue;
+
             var bid = item[i][0];
             var bdata = item[i][1];
 

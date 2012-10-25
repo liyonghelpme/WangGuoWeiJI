@@ -20,6 +20,10 @@ class MoveMap extends MyNode
     var mapGridController;
     var gridLayer;
     var blockBuilding = new MyNode();
+    //静止障碍物
+    var staticObstacle;// = dict();
+    var moveZone;//士兵移动范围
+    var buildZone;//建筑物范围
 
     /*
     function MoveMap(sc)
@@ -107,16 +111,15 @@ class MoveMap extends MyNode
     }
     */
 
-    var moveZone = [
-    [63, 203, 1000, 337],
-    ];
-    function checkInFlow(p)
+
+    
+    function checkInFlow(zone, p)
     {   
-        for(var i = 0; i < len(moveZone); i++)
+        for(var i = 0; i < len(zone); i++)
         {
-            var difx = p[0] - moveZone[i][0];
-            var dify = p[1] - moveZone[i][1];
-            if(difx > 0 && difx < moveZone[i][2] && dify > 0 && dify < moveZone[i][3])
+            var difx = p[0] - zone[i][0];
+            var dify = p[1] - zone[i][1];
+            if(difx > 0 && difx < zone[i][2] && dify > 0 && dify < zone[i][3])
                 return 1;
         }
         return 0;
@@ -124,7 +127,7 @@ class MoveMap extends MyNode
     //只检测士兵冲突没有检测建筑物冲突
     function checkPosCollision(mx, my, ps)
     {
-        var inZ = checkInFlow(ps);
+        var inZ = checkInFlow(moveZone, ps);
         /*
         限制上下边界
         */
@@ -145,12 +148,55 @@ class MoveMap extends MyNode
                     return v[0];
             }
         }
+
+        if(staticObstacle.get(key, null) != null)
+        {
+            return blockBuilding;
+        }
         return null;
     }
 
-    //检测建筑物位置冲突
+    //检测掉落物品的 冲突性
+    function checkFallGoodCol(rx, ry)
+    {
+        var inZ = checkInFlow(moveZone, [rx*SIZEX, ry*SIZEY]);
+        if(inZ == 0)
+            return 1;
+
+        var key = getMapKey(rx, ry);
+        var v = mapGridController.mapDict.get(key, null);
+        if(v != null)
+            return 1;
+        if(staticObstacle.get(key, null) != null)
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    /*
+    function checkBuildInZone(px, py, sx, sy)
+    {
+        var width = (sx+sy)*SIZEX;
+        var height = (sx+sy)*SIZEY;
+        for(var i = 0; i < len(moveZone); i++)
+        {
+            var difx = px - moveZone[i][0];
+            var dify = py - moveZone[i][1];
+            if(difx > width/2 && difx < (moveZone[i][2]-width/2) && dify > height && dify < (moveZone[i][3]-height))
+                return 1;
+        }
+        return 0;
+    }
+    */
+    //检测建筑物位置冲突 建筑物的底座宽度 高度 减去范围在范围内部
     function checkCollision(build)
     {
+        var inZ = checkInFlow(buildZone, build.getPos());
+        //var inZ = checkBuildInZone(build.getPos()[0], build.getPos()[1], build.sx, build.sy);
+        if(!inZ)
+            return 1;
+
         var map = getBuildMap(build);
         var sx = map[0];
         var sy = map[1];
@@ -175,10 +221,8 @@ class MoveMap extends MyNode
                         }
                     }
                 }
-                //trace("col key", key);
-                if(obstacleBlock.get(key, null) != null)
+                if(staticObstacle.get(key, null) != null)
                 {
-//                    trace("colWithRiver", key);
                     return blockBuilding;
                 }
                 curX -= 1;
@@ -186,5 +230,29 @@ class MoveMap extends MyNode
             }
         }
         return null;
+    }
+    //新建增加筑物
+    function addBuilding(chd, z)
+    {
+        addChildZ(chd, z);
+        mapGridController.addBuilding(chd);
+    }
+    //卖出建筑物 取消建造
+    function removeBuilding(chd)
+    {
+        removeChild(chd);
+        mapGridController.removeBuilding(chd);
+    }
+    
+    function addSoldier(sol)
+    {
+        addChildZ(sol, MAX_BUILD_ZORD);
+        mapGridController.addSoldier(sol);
+    }
+
+    function removeSoldier(sol)
+    {
+        removeChild(sol);
+        mapGridController.removeSoldier(sol);
     }
 }

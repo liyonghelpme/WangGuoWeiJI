@@ -62,7 +62,8 @@ class Soldier extends MyNode
 
     //var attacker = null;
 
-
+    //所有士兵缩放800/1100 = 
+    const SCALE = 73;
 
 
     /*
@@ -307,6 +308,7 @@ class Soldier extends MyNode
         切换方向 只切换changeNode
         */
         bg = node();
+        bg.scale(SCALE);
 
         changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
         changeDirNode.prepare();
@@ -331,30 +333,32 @@ class Soldier extends MyNode
         var vol = data.get("volumn");
         if(sx < 2)
         {
-            bloodScaX = 70*100/139;//大体积 采用144的长度 中等体积 采用普通长度    
+            bloodScaX = 100;//大体积 采用144的长度 中等体积 采用普通长度    
+            bloodScaY = 100;
         }
         else 
         {
-            bloodScaX = 139*100/139;
+            bloodScaX = 62*100/120;
+            bloodScaY = 62*100/120;
         }
 
-        backBanner = bg.addsprite("mapSolBloodBan0.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
+        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
         bloodTotalLen = backBanner.prepare().size()[0];
         bloodHeight = backBanner.prepare().size()[1];
         if(color == ENECOLOR)
             backBanner.visible(0);//初始敌人血条不显示
         var mInfo = getData(MAP_INFO, map.kind);
 
-        redBlood = backBanner.addsprite("mapSolBloodRed1.png").pos(2, 0);
+        redBlood = backBanner.addsprite("mapSolBloodRed.png").pos(2, 0);
         if(color == MYCOLOR)
         {
             if(mInfo["blood"] == 0)
-                greenBlood = backBanner.addsprite("mapSolBloodBlue2.png").pos(2, 0);
+                greenBlood = backBanner.addsprite("mapSolBloodBlue.png").pos(2, 0);
             else if(mInfo["blood"] == 1)
-                greenBlood = backBanner.addsprite("mapSolBloodGreen2.png").pos(2, 0);
+                greenBlood = backBanner.addsprite("mapSolBloodGreen.png").pos(2, 0);
         }
         else
-            greenBlood = backBanner.addsprite("mapSolBloodYellow2.png").pos(2, 0);
+            greenBlood = backBanner.addsprite("mapSolBloodYellow.png").pos(2, 0);
 
         /*
         if(color == 0)//nameBanner
@@ -436,6 +440,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         if(state != MAP_SOL_DEAD)
         {
             var expPng = altasWord("blue", "+"+str(e)+"xp");
+            expPng.scale(22*100/expPng.size()[1]);
             bg.add(expPng);
             expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
         }
@@ -492,9 +497,15 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         //bg 的size和图片的size大小相同
         var bWord;
         if(add < 0)
+        {
             bWord = altasWord("yellow", str(add));
+            bWord.scale(18*100/bWord.size()[1]);
+        }
         else
+        {
             bWord = altasWord("blue", "+"+str(add));
+            bWord.scale(22*100/bWord.size()[1]);
+        }
         //var wS = bWord.size()[1];
         //bWord.scale()
         //bg.addlabel(str(add), null, 30).pos(bSize[0]/2, -5).color(100, 0, 0).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), callfunc(removeTempNode)));

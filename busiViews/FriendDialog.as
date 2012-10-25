@@ -10,7 +10,6 @@ class FriendDialog extends MyNode
         kind = k;
         bg = node();
         init();
-        bg.addsprite("haha.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
         bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);

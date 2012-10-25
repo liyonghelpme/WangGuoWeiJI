@@ -57,8 +57,10 @@ class Loading extends MyNode
         passTime += diff;
         if(passTime >= speed)
         {
-            curProcess += 1;
-            passTime -= speed;
+            var coff = passTime / speed;
+            curProcess += coff;
+            curProcess = min(100, curProcess);
+            passTime -= speed*coff;
 
             if(curProcess <= 100)
             {
@@ -68,7 +70,7 @@ class Loading extends MyNode
                 processNum.anchor(50, 50).pos(oldPos);
                 bg.add(processNum);
             }
-            if(curProcess == 100 && hopeProcess == 100)
+            if(curProcess >= 100 && hopeProcess == 100)
             {
                 global.director.popView();
             }

@@ -37,12 +37,23 @@ import busiViews.DrugList;
 //经营页面
 import views.CastlePage;
 import busiViews.BoxOnMap;
-import views.BuildLayer;
+//import views.BuildLayer;
+import busiViews.BuildLayer;
 import views.BuildLand;
 import views.SoldierMax;
+
+import mine.MineScene;
+import mine.MineMenu;
+import mine.MakeMine;
+import mine.CrystalIsland;
+import mine.MoveIsland;
+/*
 import views.CrystalIsland;
 import views.MineMenu;
+*/
+
 import views.MineFunc;
+import mine.UpgradeMine;
 
 import views.FallGoods;
 import views.FallObj;
@@ -230,8 +241,10 @@ import views.ChallengeOver;
 import views.Arrow;
 import views.Magic;
 import views.MoveObject;
-import views.MapPause;
-import views.SkillFlowBanner;
+//import views.MapPause;
+import war.MapPause;
+//import views.SkillFlowBanner;
+import war.SkillFlowBanner;
 import views.MapDefense;
 
 
@@ -245,14 +258,18 @@ import busiViews.LevupDialog;
 
 
 
-import views.NoTipDialog;
+//import views.NoTipDialog;
+import busiViews.NoTipDialog;
+
 
 
 //战斗结束奖励 对话框
 import views.TrainOverDialog;
 import views.ChallengeFight;
 import views.ChallengeNeibor;
-import views.BreakDialog;
+//import views.BreakDialog;
+import war.ChallengeFail;
+import war.ChallengeWin;
 
 
 import views.CallSoldier;

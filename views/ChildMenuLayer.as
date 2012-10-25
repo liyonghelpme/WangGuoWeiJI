@@ -15,6 +15,7 @@ class ChildMenuLayer extends MyNode
     ["friend", ["menu_button_friend.png", onFriend]],
     ["mail", ["menu_button_mail.png", onMail]],
     ["plan", ["menu_button_plan.png", onPlan]],
+    ["planMine", ["menu_button_plan.png", onPlanMine]],
     ["rank", ["menu_button_rank.png", onRank]],
     //["role", ["menu_button_role.png", onRole]],
     ["setting", ["menu_button_setting.png", onSetting]],
@@ -468,6 +469,14 @@ class ChildMenuLayer extends MyNode
     {
         scene.ml.cancelAllMenu();
         global.director.pushView(new MailDialog(), 1, 0);
+    }
+    /*
+    规划水晶矿
+    */
+    function onPlanMine()
+    {
+        global.director.curScene.closeGlobalMenu(this);
+        global.director.curScene.doPlan(); 
     }
     function onPlan()
     {

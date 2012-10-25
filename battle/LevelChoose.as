@@ -99,7 +99,6 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
     {
         scene.gotoIsland(0);//飞回 主界面
     }
-    /*
     function initData()
     {
         data = [];
@@ -125,7 +124,6 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
             }
         }
     }
-    */
     function updateStar()
     {
         var enable = checkBigEnable(big);
@@ -148,6 +146,7 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         }
     }
 
+    /*
     function initData()
     {
         data = [];
@@ -177,6 +176,7 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
             }
         }
     }
+    */
 
     function updatePage()
     {
@@ -263,9 +263,9 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
                     mon.scale(sca);
                 }
                 else if(data[i][0] < 3)
-                    sb = panel.addsprite("starNot").pos(82, 149).anchor(50, 50);
+                    sb = panel.addsprite("starNot.png").pos(79, 150).anchor(50, 50);
                 else
-                    sb = panel.addsprite("starFull").pos(82, 149).anchor(50, 50);
+                    sb = panel.addsprite("starFull.png").pos(79, 150).anchor(50, 50);
                 if(data[i][0] > 0)
                 {
                     var ix = 28;

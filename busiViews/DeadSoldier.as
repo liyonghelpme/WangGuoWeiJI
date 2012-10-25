@@ -82,7 +82,7 @@ class DeadSoldier extends MyNode
             global.director.pushView(new DetailDialog(busiSol), 1, 0);
         }
     }
-    var reliveLabel;
+    //var reliveLabel;
     var sellBut;
     function DeadSoldier(d)
     {
@@ -91,11 +91,12 @@ class DeadSoldier extends MyNode
         init();
         initData();
 
-        var but0 = new NewButton("violetBut.png", [148, 42], getStr("", null), null, 20, FONT_NORMAL, [100, 100, 100], onRelive, null);
+        var but0 = new NewButton("violetBut.png", [148, 42], getStr("reliveWord", ["[KIND]", "crystal", "[NUM]", str(0)]), null, 20, FONT_NORMAL, [100, 100, 100], onRelive, null);
         but0.bg.pos(113, 432);
         addChild(but0);
-        but0.bg.addsprite("crystal.png").anchor(0, 0).pos(20, 7).size(27, 27).color(100, 100, 100, 100);
-        reliveLabel = but0.bg.addlabel(getStr("reliveBut", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(51, 20).color(100, 100, 100);
+        reliveBut = but0;
+        //but0.bg.addsprite("crystal.png").anchor(0, 0).pos(20, 7).size(27, 27).color(100, 100, 100, 100);
+        //reliveLabel = but0.bg.addlabel(getStr("reliveBut", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(51, 20).color(100, 100, 100);
 
         sellBut = new NewButton("solSell.png", [34, 43], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onSell, null);
         sellBut.bg.pos(213, 431);
@@ -238,6 +239,7 @@ class DeadSoldier extends MyNode
         }
     }
     var soldier = null;
+    var reliveBut;
     //bg.addsprite("雪山猿人左.png").anchor(50, 50).pos(132, 175).size(158, 137);
     function setSoldier(sol)
     {
@@ -280,12 +282,16 @@ class DeadSoldier extends MyNode
         //reliveLabel = but0.bg.addlabel(getStr("reliveBut", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(51, 20).color(100, 100, 100);
 
         if(soldier == null)
-            reliveLabel.text(getStr("reliveBut", ["[NUM]", str(0)]));
+        {
+            reliveBut.word.setWords(getStr("reliveWord", ["[KIND]", "crystal.png", "[NUM]", str(0)])); 
+            //reliveLabel.text(getStr("reliveBut", ["[NUM]", str(0)]));
+        }
         else
         {
             var cost = getReliveCost(soldier[0]);
             var it = cost.values();
-            reliveLabel.text(getStr("reliveBut", ["[NUM]", str(it[0])]));
+            reliveBut.word.setWords(getStr("reliveWord", ["[KIND]", "crystal.png", "[NUM]", str(it[0])])); 
+            //reliveLabel.text(getStr("reliveBut", ["[NUM]", str(it[0])]));
         }
             
     }

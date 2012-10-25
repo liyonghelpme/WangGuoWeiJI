@@ -5,7 +5,7 @@ class MCloud extends MyNode
     function MCloud(m)
     {
         map = m;
-        ty = 10+rand(400);
+        ty = getParam("IslandCloudYBase")+rand(getParam("IslandCloudYDiff"));
         bg = sprite("bc"+str(rand(8))+".png").pos(-100, ty);
         init();
         //bg.addaction(sequence(moveto(50000, 810, ty+rand(10)), callfunc(remove)));
@@ -34,7 +34,7 @@ class MapCloud extends MyNode
 
     function initCloud()
     {
-        for(var i = 0; i < 5; i++)
+        for(var i = 0; i < getParam("IslandCloudInitNum"); i++)
         {
             var c = new MCloud(this);
             //随机屏幕位置
@@ -42,7 +42,7 @@ class MapCloud extends MyNode
             var tx = rand(600)+20;
             c.setPos([tx, ty]);
             
-            var t = (800-tx)*50000/800;
+            var t = (800-tx)*getParam("cloudMoveTime")/800;
 
             addChild(c);
             clouds.append(c);
@@ -58,15 +58,15 @@ class MapCloud extends MyNode
     function update(diff)
     {
         lastTime += diff;
-        if(lastTime >= 10000)
+        if(lastTime >= getParam("IslandCloudGenTime"))
         {
             lastTime = 0;
-            if(len(clouds) < 5)
+            if(len(clouds) < getParam("CloudTotalNum"))
             {
                 var c = new MCloud(this);
                 addChild(c);
                 clouds.append(c);
-                c.bg.addaction(sequence(moveto(50000, 810, c.ty+rand(10)), callfunc(c.remove)));
+                c.bg.addaction(sequence(moveto(getParam("cloudMoveTime"), 810, c.ty+rand(10)), callfunc(c.remove)));
             }
         }
     }

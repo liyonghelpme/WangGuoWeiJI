@@ -129,12 +129,12 @@ initX initY SIZEX SIZEY
 */
 const FullZone = [
 //[2205, 486, 723, 363],
-
 [987, 498, 1914, 438],
 //[1209, 483, 678, 543],
 ];
 //limit soldier move zone
-const TrainZone = [100, 498, 2400, 400];
+const TrainZone = [[100, 498, 2400, 400]];
+
 //then check in which zone
 const FarmZone = [
 [2193, 432, 735, 393],
@@ -229,7 +229,7 @@ var buildFunc = dict([
 [GOD_BUILD, [["photo",  "soldier"], ["relive", "train"]]],
 [DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
-[MINE_KIND, [["photo"], ["upgrade"]]],
+[MINE_KIND, [["photo", "sell"], ["upgrade", "planMine"]]],
 [LOVE_TREE, [["photo", "invite"], ["love", "loveRank"]]],//, "upgradeBuild"
 [RING_FIGHTING, [[], []]],
 [CAMP, [["photo", "sell"], ["call"]]],//accSoldier
@@ -482,21 +482,34 @@ dict(
 );
 
 
-
+//temp = bg.addsprite("map0Def0.png").anchor(0, 0).pos(-5, 68).size(38, 339).color(100, 100, 100, 100);
+//temp = bg.addsprite("map0Def1.png").anchor(0, 0).pos(775, 60).size(24, 353).color(100, 100, 100, 100);
 //左边的防御装置 anchor 0 0 的位置   右边防御装置的位置 掉落物品类别0-21 药材 100-109 矿石 概率 掉落数量1个
+//temp = bg.addsprite("map1.png").anchor(0, 0).pos(0, -5).size(800, 497).color(100, 100, 100, 100);
+//temp = bg.addsprite("map1Def0.png").anchor(0, 0).pos(0, 77).size(51, 350).color(100, 100, 100, 100);
+//temp = bg.addsprite("map1Def1.png").anchor(0, 0).pos(2, 65).size(798, 355).color(100, 100, 100, 100);
+
+//temp = bg.addsprite("map2Def1.png").anchor(0, 0).pos(757, 76).size(43, 322).color(100, 100, 100, 100);
+//temp = bg.addsprite("map2Def0.png").anchor(0, 0).pos(0, 57).size(57, 351).color(100, 100, 100, 100);
+//temp = bg.addsprite("map3Def0.png").anchor(0, 0).pos(0, 57).size(43, 375).color(100, 100, 100, 100);
+//temp = bg.addsprite("map3Def1.png").anchor(0, 0).pos(776, 80).size(24, 325).color(100, 100, 100, 100);
+//temp = bg.addsprite("王国雪山防御装置右.png").anchor(0, 0).pos(760, 75).size(40, 325).color(100, 100, 100, 100);
+//temp = bg.addsprite("王国雪山防御装置左.png").anchor(0, 0).pos(1, 48).size(44, 362).color(100, 100, 100, 100);
+//temp = bg.addsprite("决斗场防御装置右.png").anchor(0, 0).pos(738, 41).size(62, 380).color(100, 100, 100, 100);
+//temp = bg.addsprite("决斗场防御装置左.png").anchor(0, 0).pos(0, 0).size(83, 433).color(100, 100, 100, 100);
 var mapInfo = dict([
-    [0, [[7, 115], [1063, 112]]],
-    [1, [[5, 118], [1066, 110]]],
-    [2, [[0, 91], [1047, 120]]],
-    [3, [[5, 120], [1060, 124]]],
-    [4, [[3, 45+28], [1014+20, 65+37]]],
-    [5, [[-5, 11], [1021, 68]]],
+    [0, [[-5, 68], [775, 60]]],
+    [1, [[0, 77], [770, 65]]],
+    [2, [[0, 57], [757, 76]]],
+    [3, [[0, 57], [776, 80]]],
+    [4, [[1, 48], [760, 75]]],
+    [5, [[0, 0], [738, 41]]],
 ]);
 
-const MAP_INITY = 130;
+const MAP_INITY = 87;
 const MAP_INITX = 0;
-const MAP_OFFX = 85;
-const MAP_OFFY = 85;
+const MAP_OFFX = 62;
+const MAP_OFFY = 62;
 const MAP_WIDTH = 12;
 const MAP_HEIGHT = 5;
 
@@ -627,7 +640,7 @@ const MINE_BUILD = 300;
 //用户自己的水晶矿的数据是分离于普通建筑的 因此不能通过updateBuilding 来更新 需要额外的更新机制
 const MINE_BID = -1;
 
-const MINE_BEGIN_LEVEL = 6;
+//const MINE_BEGIN_LEVEL = 6;
 
 const PLAN_BUILDING = 0;
 const PLAN_SOLDIER = 1;
@@ -813,7 +826,7 @@ const CHALLENGE_TIP = 0;
 const TRAIN_TIP = 1;
 const FIGHT_TIP = 2;
 const HEART_TIP = 3;
-const TIP_WORD = ["tips", "tips", "tips", "heartTip"];
+const TIP_WORD = ["roundTip", "trainTitle", "fightTitle", "heartTip"];
 const TIP_CON = ["noTip", "trainTipLine", "fightTip", "heartCon"];
 const MAP_KIND_TIP = dict([
     [CHALLENGE_MON, CHALLENGE_TIP],
@@ -950,3 +963,9 @@ const LOAD_ROUND = 1;
 const LOAD_TRAIN = 2;
 
 const TRAIN_CENTER = [465, 720];
+
+/*
+const FIGHT_ZONE = [
+    [63, 203, 1000, 337],
+];
+*/

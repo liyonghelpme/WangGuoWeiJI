@@ -153,16 +153,20 @@ class Building extends MyNode
         //取消static 木板建筑
         //else if(funcs == STATIC_BOARD)
         //    funcBuild = new StaticBuild(this); 
+        //是否进入工作状态由用户等级决定----> Free 状态/工作状态 ----->
+        //initWorking ---> level> and Not MoveState
         else if(funcs == MINE_KIND)
         {
             funcBuild = new Mine(this);
+            /*
             //等级大于6级水晶进入工作状态
             var level = global.user.getValue("level");
-            if(level >= MINE_BEGIN_LEVEL)
+            if(level >= PARAMS["MineMinLevel"])
                 privateData["state"] = PARAMS["buildWork"];
             else 
                 privateData["state"] = PARAMS["buildFree"];
-            buildLevel = privateData.get("level");
+            */
+            //buildLevel = privateData.get("level");
         }
         else if(funcs == RING_FIGHTING)
         {
@@ -364,20 +368,26 @@ class Building extends MyNode
     检测所有的建筑的碰撞效率较低， 可以采用hash表的方式
     不在大区域中， 则显示后色底色
     根据建筑当前所在位置的状态设定建筑的颜色
+
+
+    建筑物范围检测应该是有buildLayer 决定 而不是由自身决定
+    不要对包含者 的成员做过多假定
     */
     var colNow = 0;
     function setColPos()
     {
         colNow = 0;
         //var z = buildCheckInZone();
-        var ret = checkInZone(bg.pos());
+        //var ret = checkInZone(bg.pos());
+        /*
         if(ret == 0)
         {
             setColor(NotBigZone);
             colNow = 1;
         }
-        else
-        {
+        */
+        //else
+        //{
             var other = map.checkCollision(this);
             if(other != null)
             {
@@ -388,7 +398,7 @@ class Building extends MyNode
             {
                 setColor(InZone);
             }
-        }
+        //}
     }
     /*
     进入规划模式， 保存旧的坐标 
@@ -399,6 +409,7 @@ class Building extends MyNode
     keepPos finishPlan
     用于外界控制建筑的规划状态
     依赖于外界确定自己是否是当前规划中建筑
+    新建造建筑物 Planing == 1
     */
     var dirty = 0;
     var Planing = 0;
@@ -444,8 +455,11 @@ class Building extends MyNode
             如果方块的大小恰好和建筑物的底座一样大小 那么要求建筑物底座必须要一定大小
             +40 +20
             */
-            bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*SIZEY).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
-            bg.add(bottom, -1);
+            if(bottom == null)
+            {
+                bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*SIZEY).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
+                bg.add(bottom, -1);
+            }
             //half transparent + color
         }
 
@@ -465,13 +479,16 @@ class Building extends MyNode
     */
     /*
     建造时，防止重叠， 将建筑物放在最高层，建造结束调整建筑物的位置
+    建造完成更新局部数据
     */
     function finishBuild()
     {
         setState(PARAMS["buildFree"]);
+        trace("finishBuild", state, Planing);
         finishBottom();
         setZord(null);
-        //global.user.updateBuilding(this);
+        funcBuild.finishBuild();
+        global.user.updateBuilding(this);
     }
     /*
     建造结束 或者 规划结束需要清理 底层图标
@@ -783,31 +800,11 @@ class Building extends MyNode
 
             global.director.curScene.addChild(new PopBanner(showData));//自己控制
              
-            map.sellBuild(this);//没有清除建筑物的底座
+            //map.sellBuild(this);//没有清除建筑物的底座
+            map.removeBuilding(this);
+            global.user.sellBuild(this);
         }
     }
-    /*
-    //加经验建筑物 不会返还银币
-    function sureToSell()
-    {
-        var cost = getCost(BUILD, id);
-        cost = changeToSilver(cost);
-        if(funcs == DECOR_BUILD && data.get("exp") > 0)
-        {
-            cost.update("silver", 0);
-        }
-
-        global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid], ["silver", cost.get("silver", 0)]]), null, null);
-        global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
-
-        global.user.changeValue("people", -data.get("people"));//减去人口
-        global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
-
-        //map.removeChild(this);
-        map.sellBuild(this);
-        //global.user.sellBuild(this);
-    }
-    */
 
     function sellOver()
     {

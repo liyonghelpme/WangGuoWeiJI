@@ -19,11 +19,15 @@ class VisitDialog extends MyNode
     等待界面 如果没有用则由场景主动控制关闭
     但是要避免弹出其它对话框
     */
+
+
+    var passTime = 0;
     function update(diff)
     {
+        passTime += diff;
         if(friendScene != null)
         {
-            if(friendScene.initOver == 1)
+            if(friendScene.initOver == 1 && passTime >= 5000)
             {
                 global.director.popView();
             }

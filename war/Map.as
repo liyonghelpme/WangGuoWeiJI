@@ -90,6 +90,14 @@ class Map extends MyNode
         }
         return res;
     }
+    function initView()
+    {
+        bg = sprite("map"+str(kind)+".png", ARGB_8888).pos(0, 0);//.pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
+        init(); 
+//temp = bg.addsprite("mapGrid.png").anchor(0, 0).pos(0, 87).size(800, 310).color(100, 100, 100, 100);
+        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
+        grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
+    }
     function Map(k, sm, s, sc, eq)
     {
         monEquips = eq;
@@ -97,25 +105,27 @@ class Map extends MyNode
         kind = k;
         small = sm;
         //curStar = global.user.getCurStar(kind, small);
+        initView();
 
-        bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
-        var mapSize = bg.prepare().size();
-        var offY = global.director.disSize[1]-mapSize[1];
-        bg.pos(MAP_INITX, offY);
+        //bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
+        //var mapSize = bg.prepare().size();
+        //var offY = global.director.disSize[1]-mapSize[1];
+        //bg.pos(MAP_INITX, offY);
+//temp = bg.addsprite("mapGrid.png").anchor(0, 0).pos(0, 87).size(800, 310).color(100, 100, 100, 100);
 
-        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
-        grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
+//        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
+//        grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
 
-        bg.prepare();
-        init();
-        var bSize = bg.size();
-        touchDelegate = new StandardTouchHandler();
-        touchDelegate.bg = bg;
-        var ani = getMapAnimate(kind);
+        //bg.prepare();
+        //init();
+
+        //var bSize = bg.prepare().size();
+        //var ani = getMapAnimate(kind);
 //        trace("animate", ani);
         /*
         多个类型动画， 每个动画多个位置
         */
+        /*
         if(ani != null)
         {
             for(var i = 0; i < len(ani); i++)
@@ -135,16 +145,20 @@ class Map extends MyNode
             var shadow = sprite("mapShadow.png").pos(0, 0).size(bSize[0], bSize[1]);
             bg.add(shadow, 10000);
         }
+        */
 
+        bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
+        bg.setevent(EVENT_MOVE, touchMoved);
+        bg.setevent(EVENT_UNTOUCH, touchEnded);
+
+        touchDelegate = new StandardTouchHandler();
+        touchDelegate.bg = bg;
 
         if(s != null)//闯关 挑战 敌人预先确定 练级 怪兽根据用户士兵生成
             initSoldier(s);
         //练级没有防御血条
         if(scene.kind != CHALLENGE_TRAIN)
             initDefense();
-        bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
-        bg.setevent(EVENT_MOVE, touchMoved);
-        bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
     function getStar()
     {
@@ -847,7 +861,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var cost;
         if(scene.kind == CHALLENGE_MON)
         {
-            global.director.pushView(new BreakDialog(win, star, reward, this, levelUpSol), 1, 0);
+            if(win)
+                global.director.pushView(new ChallengeWin(this, dict([["levelUpSol", levelUpSol], ["star", star], ["reward", reward]])), 1, 0);
+                //global.director.pushView(new BreakDialog(win, star, reward, this, levelUpSol), 1, 0);
+            else
+                global.director.pushView(new ChallengeFail(this, dict([["levelUpSol", levelUpSol]])), 1, 0);
+
             global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", updateSoldierData], ["reward", reward], ["star", star], ["big", kind], ["small", small]]), null, null);
         }
         else if(scene.kind == CHALLENGE_FRI)

@@ -1,6 +1,7 @@
 //建造和 规划菜单
 class BuildMenu extends MyNode
 {
+    //var curBuild = null;
     var scene;
     var building;
     var buttonNode;
@@ -47,6 +48,11 @@ class BuildMenu extends MyNode
         {
             opKind = b[0];
             building = b[1].data;
+            //curBuild = b[1];
+        }
+        else
+        {
+            //curBuild = null;
         }
 
 

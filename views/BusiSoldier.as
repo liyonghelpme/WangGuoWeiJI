@@ -416,7 +416,6 @@ class BusiSoldier extends MyNode
         global.user.doAdd(cost);
         //global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
         //修改view
-        //map.sellSoldier(this);
         //修改数据
         //global.msgCenter.sendMsg(BUYSOL, null);
         clearSol();
@@ -426,7 +425,8 @@ class BusiSoldier extends MyNode
     function clearSol()
     {
         if(map != null) 
-            map.sellSoldier(this);
+            //map.sellSoldier(this);
+            map.removeSoldier(this);
         global.msgCenter.sendMsg(BUYSOL, null);
         global.user.sellSoldier(this);
     }
@@ -1149,6 +1149,8 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         map.mapGridController.clearSolMap(this);
         */
         realBeginGame(gId);
+        //单人游戏 隐藏所有其他士兵 在游戏结束时显示其他士兵
+        map.hideSoldier(this);
         
         bg.pos(PARAMS["GAME_X"], PARAMS["GAME_Y"]);
         var nPos = normalizePos(bg.pos(), sx, sy);
@@ -1158,6 +1160,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     }
     function endGame()
     {
+        map.showSoldier(this);
         map.map.moveToNormal(this);
         realEndGame();
         //inGame = 0;
