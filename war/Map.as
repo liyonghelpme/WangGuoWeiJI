@@ -772,8 +772,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var myRank = global.user.rankOrder;
             var myScore = global.user.rankScore;
 
-            var eneRank = scene.param[3];
-            var eneScore = scene.param[2];
+            var eneRank = scene.argument["rank"];//param[3];
+            var eneScore = scene.argument["score"];//param[2];
 
             var diff = eneRank-myRank;
             for(var i = 0; i < len(challengeReward); i++)
@@ -803,7 +803,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             var cry = 0;
             if(win)
-                cry = getChallengeNeiborCry(scene.param[0]);
+                cry = getChallengeNeiborCry(scene.argument["oid"]);//param[0]
             global.user.changeValue("crystal", cry);
         }
         else if(scene.kind == CHALLENGE_FIGHT || scene.kind == CHALLENGE_DEFENSE)
@@ -836,7 +836,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         else if(scene.kind == CHALLENGE_NEIBOR)
         {
             global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, levelUpSol), 1, 0);
-            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.param[0]], ["sols", updateSoldierData], ["crystal", cry], ["mid", global.user.getNewMsgId()]]), null, null);
+            //param[0]
+            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.argument["oid"]], ["sols", updateSoldierData], ["crystal", cry], ["mid", global.user.getNewMsgId()]]), null, null);
         }
         //奖励 金币 水晶 升级士兵 挑战擂台
         else if(scene.kind == CHALLENGE_FIGHT)

@@ -2,15 +2,15 @@
 class ChallengeScene extends MyNode
 {
     var initOver = 0;  
-    var oid;
-    var papayaId;
-    var score;
-    var rank;
-    var enemies;
-    var equips;
-    var kind;
-    var cityDefense;
-    var skills;
+    var oid = null;
+    var papayaId = null;
+    var score = null;
+    var rank = null;
+    var enemies = null;
+    var equips = null;
+    var kind = null;
+    var cityDefense = null;
+    var skills = null;
     /*
     挑战对方的uid
     挑战对方的papayaId
@@ -19,7 +19,7 @@ class ChallengeScene extends MyNode
 
     如果挑战对方是邻居
     */
-    var user;
+    var user = null;
     var dialogController;
     function ChallengeScene(o, p, s, r, k, par)
     {
@@ -68,36 +68,63 @@ class ChallengeScene extends MyNode
     }
     function loadingCallback()
     {
+        var argument;
+        argument = dict([["soldier", enemies], ["kind", kind], ["oid", oid], ["papayaId", papayaId], ["score", score], ["rank", rank], ["cityDefense", cityDefense], ["skills", skills], ["equips", equips], ["user", user]]);
         if(kind == CHALLENGE_FRI)
         {
-            global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
+            argument.update("big", 5);
+            argument.update("small", 0);
+            global.director.replaceScene(new BattleScene(argument));
+            //5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
         }
         else if(kind == CHALLENGE_NEIBOR)
         {
-            global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
+            argument.update("big", 5);
+            argument.update("small", 0);
+            global.director.replaceScene(new BattleScene(argument));
+            //5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
         }
         else if(kind == CHALLENGE_FIGHT)//挑战敌方士兵 类似于 挑战邻居 但是奖励不同
         {
-            global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FIGHT, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
+            argument.update("big", 5);
+            argument.update("small", 0);
+            global.director.replaceScene(new BattleScene(argument));
+            //5, 0, enemies, CHALLENGE_FIGHT, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
         }
         else if(kind == CHALLENGE_DEFENSE)
         {
-            global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_DEFENSE, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
+            argument.update("big", 5);
+            argument.update("small", 0);
+            global.director.replaceScene(new BattleScene(argument));
+            //5, 0, enemies, CHALLENGE_DEFENSE, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
         }
         else if(kind == CHALLENGE_TRAIN)
         {
-            global.director.replaceScene(
-                new BattleScene(user["bigLevel"], 0, 
+            argument.update("big", user["bigLevel"]);
+            argument.update("small", 0);
+            argument.update("double", user["doubleExp"]);
+            argument.update("singleSid", user["soldier"]);
+            argument.update("difficult", user["curChoose"]);
+            
+            global.director.replaceScene(new BattleScene(argument));
+            /*
+                user["bigLevel"], 0, 
                     null, CHALLENGE_TRAIN, [user["doubleExp"], user["soldier"]], user["curChoose"]
                 )
             );
+            */
         }
         else if(kind == CHALLENGE_MON)
         {
-            global.director.replaceScene(
-            new BattleScene(user["big"], user["small"], 
+            argument.update("big", user["big"]);
+            argument.update("small", user["small"]);
+            argument.update("soldier", user["mon"]);
+            global.director.replaceScene(new BattleScene(argument));
+            /*
+            user["big"], user["small"], 
                 user["mon"], CHALLENGE_MON, null, null
             ));
+            */
         }
     }
     /*
@@ -129,32 +156,18 @@ class ChallengeScene extends MyNode
             //挑战好友 挑战邻居获得技能
             else if(kind == CHALLENGE_FRI){
                 global.user.addChallengeRecord(oid);
-                //initOver = 1;
-                //战胜 失败于对方 需要知道对方
-                //global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
             }
             else if(kind == CHALLENGE_NEIBOR)
             //根据邻居的uid 得到邻居的数据 getNeiborData
             {
                 global.friendController.challengeNeibor(oid);
-                //enemies = con.get("soldiers");
-                //equips = con.get("equips");
-                //initOver = 1;
-                //战胜 失败于对方 需要知道对方
-                //global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_NEIBOR, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
             }
             //需要修改 挑战数据 数据 存储在 场景中
             else if(kind == CHALLENGE_FIGHT)//挑战敌方士兵 类似于 挑战邻居 但是奖励不同
             {
-                //enemies = con.get("soldiers");
-                //equips = con.get("equips");
-                //global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_FIGHT, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
             }
             else if(kind == CHALLENGE_DEFENSE)
             {
-                //enemies = con.get("soldiers");
-                //equips = con.get("equips");
-                //global.director.replaceScene(new BattleScene(5, 0, enemies, CHALLENGE_DEFENSE, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
             }
             initOver = 1;
         }

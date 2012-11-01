@@ -723,11 +723,6 @@ function colorWordsNode(s, si, nc, sc)
     return n;
 }
 
-function getMagicAnimate(id)
-{
-    var ani = magicAnimate.get(id);
-    return ani;
-}
 function getMapAnimate(id)
 {
     var ani = mapAllAnimate.get(id);

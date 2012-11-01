@@ -77,12 +77,15 @@ class ChallengeFail extends MyNode
     {
         global.director.popScene();
         var mon = getRoundMonster(map.kind, map.small);
-        global.director.pushScene(
-            new BattleScene( map.kind,  map.small,
+        var argument = dict([["big", map.kind], ["small", map.small], ["soldier", mon]]);
+        global.director.pushScene(new BattleScene(argument));
+        /*
+        map.kind,  map.small,
             mon,
             CHALLENGE_MON, null, null
             )
         );
+        */
     }
     function onQuit()
     {

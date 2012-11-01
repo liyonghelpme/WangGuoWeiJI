@@ -18,7 +18,7 @@ class BattleScene extends MyNode
     var user;
 
     //oid papayaId score rank cityDefense
-    var param;
+    //var param;
 
 
     var pausePage;
@@ -142,13 +142,18 @@ class BattleScene extends MyNode
     想要增加一个士兵到地图上需要MapBanner 和 Map 同时参与
     k, sm, s, ki, par, eq
     */
-    function BattleScene(argument)
+    var argument;
+    
+    //kind double singleSid difficult user skills big small cityDefense 
+
+    function BattleScene(arg)
     {
+        argument = arg;
         kind = argument["kind"];
         double = argument["double"];
         singleSid = argument["singleSid"];
         difficult = argument["difficult"];
-        param = argument["param"];
+        //param = argument["param"];
         user = argument["user"];
 
         skills = dict();
@@ -221,7 +226,7 @@ class BattleScene extends MyNode
         if(kind == CHALLENGE_TRAIN)
             map = new Map(argument["big"], argument["small"], null, this, null);
         else
-            map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equip"]);
+            map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equips"]);
 
         addChild(map);
         banner = new MapBanner(this);
@@ -239,9 +244,9 @@ class BattleScene extends MyNode
         if(kind == CHALLENGE_MON)
             return mapDefense.get(big*10+small);
         else if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR || kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
-            return param[4];
+            return argument["cityDefense"];//param[4];
         else if(kind == CHALLENGE_SELF)
-            return param[4];
+            return argument["cityDefense"];//param[4];
         return 0;
     }
     function finishArrange()
