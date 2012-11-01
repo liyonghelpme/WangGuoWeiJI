@@ -9,15 +9,6 @@ class User
     var papayaName;
 
     var resource;
-    //var updateList;
-    
-    //建筑物的view 实体
-
-    //地图的建筑物占有块数据
-
-    //士兵的view 实体
-    
-    //当前可用的最大的建筑物的编号
     var maxBid;
     var maxSid;
     var starNum;
@@ -26,115 +17,25 @@ class User
     //所有修改db的行为都对应修改 服务器数据
     var db;
     var rated = 0;
-    /*
-    存放当前场景所有冲突的建筑物
-    每次一个建筑物移动，则检测当前的冲突状态
-    */
-    //var colRelation;
-    //当前最大开启的等级是：
-    //每个关卡10个难度， 6个小关 5个大关
-    //当前状态 大关 小关 难度
-    //当前开启的maxLevel = (大关-1)*6*10 + 小关*10 + 难度
-    /*
-    从服务器获取数据后 初始化---> 用户数据
-    再初始化用户的建筑数据
-    */
-
 
     var drugs;
-    //eid --->kind level owner
-    //
     var equips;
     var maxEid;
-    //var tasks;
-
-    //var taskListener = [];
 
     var herbs;
     var serverTime;
     var clientTime;
 
     var lastVisitNeibor = 0;
-    //多个水晶矿都在 buildings
-    //var mine;
 
     var maxGiftId = 0;
     var skills;
 
     var lastColor;
     var name;
-    //var inviteCode;
     var invite;
     
 
-    /*
-    function getCurFinTaskNum()
-    {
-        var res = 0;
-        var it = tasks.items();
-        for(var i = 0; i < len(tasks); i++)
-        {
-            if(it[i][1][1] == 0)
-            {
-                var d = getData(TASK, it[i][0]);
-                if(it[i][1][0] >= d.get("need"))
-                    res += 1;
-            }
-        }
-        return res;
-    }
-    */
-    /*
-    可以做一个1000ms的timer 定时清理已经退出的对象
-    更新任务状态:
-        任务id 任务 完成数目 任务是否完成 任务是否进入下一个阶段
-
-
-    */
-    /*
-    //addTaskNum or just FinishIt
-    function updateTask(id, num, fin, sta)
-    {
-        var val = tasks.get(id, [0, 0]);
-        //任务已经完成没有必要继续  
-        if(val[1] == 1)
-            return;
-        var need = getData(TASK, id).get("need");
-        //任务的数量已经满足 则没有必要增加
-        if(val[0] >= need && num != 0)
-            return;
-
-        //增加任务数目
-        if(num != 0)
-        {
-            val[0] += num;
-            global.httpController.addRequest("taskC/doTask", dict([["uid", uid], ["tid", id], ["num", num]]), null, null);
-        }
-
-        //完成某个任务 检测是否进入下一个阶段
-        else if(fin != 0)
-        {
-            val[1] = fin;
-            global.httpController.addRequest("taskC/finishTask", dict([["uid", uid], ["tid", id]]), null, null);
-        }
-
-        //累计任务进入下一个阶段
-        if(sta == 1)
-        {
-            val[0] = 0;
-            val[1] = 0;
-            val[2]++;
-        }
-
-        tasks.update(id, val);
-        db.put("tasks", tasks);
-
-        //global.httpController.addRequest("taskC/updateTask", dict([["uid", uid], ["tid", id], ["num", num], ["fin", fin], ["stage", val[2]]]), null, null);
-
-        global.msgCenter.sendMsg(UPDATE_TASK, null);
-    }
-    */
-    //buildingKind 1
     function getAllBuildingKinds()
     {
         var b = buildings.values();
@@ -347,21 +248,6 @@ class User
     //所有装备页面 宝石数量更新数据
 
 
-    /*
-    function buyTreasureStone(id)
-    {
-        var cost = getCost(TREASURE_STONE, id);
-        doCost(cost);
-        changeGoodsNum(TREASURE_STONE, id, 1);
-    }
-
-    function buyMagicStone(id)
-    {
-        var cost = getCost(MAGIC_STONE, id);
-        doCost(cost);
-        changeGoodsNum(MAGIC_STONE, id, 1); 
-    }
-    */
 
     function getNewGiftId()
     {
@@ -582,13 +468,6 @@ class User
         soldiers = dict([[0, dict([["id", 0], ["name", "liyong"], ["level", 0]])]]); 
     }
 
-    /*
-    function updateMine(build)
-    {
-        mine["level"] = build.buildLevel;
-        mine["objectTime"] = build.getStartTime();
-    }
-    */
     function getLoadTip()
     {
         loadTip += 1;
@@ -648,12 +527,6 @@ class User
         db.put("lastVisitNeibor", lastVisitNeibor);
     }
 
-    /*
-    function getTaskFinData(id)
-    {
-        return tasks.get(id, [0, 0]);
-    }
-    */
 
     //士兵数据实体
     //updateSoldiers 修改士兵本地数据
@@ -809,19 +682,6 @@ class User
         }
         global.taskModel.finishTask(ONCE_TASK, "buy", 0, [kind, id]);
 
-        /*
-        doCost(cost);
-        var value;
-//        trace("buy Something", kind, id);
-        if(kind == DRUG)
-        {
-            changeGoodsNum(DRUG, id, 1);
-            global.msgCenter.sendMsg(BUY_DRUG, id);
-        }
-
-        //通知所有监听器修改数据
-        setValue(NOTIFY, 1);
-        */
     }
     //建筑物对象实体
     function buyBuilding(build)
@@ -833,16 +693,6 @@ class User
         updateBuilding(build); 
         global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, build.id]);
     }
-    /*
-    function buyEquip(eid, id, cost)
-    {
-        doCost(cost);
-        equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
-        db.put("equips", equips);
-        setValue(NOTIFY, 1);
-        global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
-    }
-    */
 
     function getNewEquip(eid, id, level)
     {
@@ -858,16 +708,6 @@ class User
 
 
 
-    /*
-    药品储存， 一次性使用 在某个对象身上 drug+id
-    */
-    /*
-    规划开始 和 规划取消 函数
-    */
-
-    /*
-    成功修改所有建筑物的坐标
-    */
 
     function getNewBid()
     {
@@ -899,9 +739,6 @@ class User
     {
         if(build.bid == -1)//好友页面建筑
             return;
-
-        //trace(build.bid);
-        //trace(dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()]]));
 
         trace("updateBuilding", build, build.id, build.bid, build.getPos(), build.state, build.dir, build.getObjectId(), build.getStartTime());
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor]]));

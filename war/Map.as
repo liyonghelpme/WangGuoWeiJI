@@ -94,9 +94,8 @@ class Map extends MyNode
     {
         bg = sprite("map"+str(kind)+".png", ARGB_8888).pos(0, 0);//.pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         init(); 
-//temp = bg.addsprite("mapGrid.png").anchor(0, 0).pos(0, 87).size(800, 310).color(100, 100, 100, 100);
         grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
-        grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
+        grid.addsprite("mapGrid.png").color(100, 100, 100, 30);
     }
     function Map(k, sm, s, sc, eq)
     {
@@ -104,48 +103,7 @@ class Map extends MyNode
         scene = sc;
         kind = k;
         small = sm;
-        //curStar = global.user.getCurStar(kind, small);
         initView();
-
-        //bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
-        //var mapSize = bg.prepare().size();
-        //var offY = global.director.disSize[1]-mapSize[1];
-        //bg.pos(MAP_INITX, offY);
-//temp = bg.addsprite("mapGrid.png").anchor(0, 0).pos(0, 87).size(800, 310).color(100, 100, 100, 100);
-
-//        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
-//        grid.addsprite("mapGrid.png");//.color(100, 100, 100, 50)
-
-        //bg.prepare();
-        //init();
-
-        //var bSize = bg.prepare().size();
-        //var ani = getMapAnimate(kind);
-//        trace("animate", ani);
-        /*
-        多个类型动画， 每个动画多个位置
-        */
-        /*
-        if(ani != null)
-        {
-            for(var i = 0; i < len(ani); i++)
-            {
-                var allPos = ani[i][1];
-                for(var j = 0; j < len(allPos); j += 2)
-                {
-                    var a = sprite().pos(allPos[j], allPos[j+1]);
-                    a.addaction(repeat(ani[i][0]()));
-                    bg.add(a, 1000);
-                }
-            }
-        }
-        //水底纹理
-        if(kind == LAKE_MAP)
-        {
-            var shadow = sprite("mapShadow.png").pos(0, 0).size(bSize[0], bSize[1]);
-            bg.add(shadow, 10000);
-        }
-        */
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
@@ -211,6 +169,7 @@ class Map extends MyNode
         var i;
         var j;
         var col;
+
         if(soldier.color == MYCOLOR)//自上而下 自右而左
         {
             for(xk = 5; xk > 1; xk--)
@@ -606,7 +565,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
                 nPos = getInitPos(so);
                 if(nPos[0] == -1)
-                    continue;
+                    break;
                 addChild(so);
                 so.setPos(nPos); 
                 setMap(so);
@@ -1034,8 +993,11 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         return defenses[id];
     }
 
+    var initYet = 0;
     function update(diff)
     {
+        if(scene.initYet && !initYet)
+            initYet = 1;
     }
     
     function stopGame()
@@ -1064,14 +1026,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     }
     override function enterScene()
     {
-//        trace("enterScene map");
         myTimer = new Timer(100);
         super.enterScene();
+        global.timer.addTimer(this);
         
     }
     override function exitScene()
     {
-//        trace("exitScene map");
+        global.timer.removeTimer(this);
         bg.setevent(EVENT_KEYDOWN, null);
         super.exitScene();
         myTimer.stop();

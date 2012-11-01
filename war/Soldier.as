@@ -60,30 +60,21 @@ class Soldier extends MyNode
 
     var leftMonNum = 0;//练级过程中 剩余的敌方怪兽的数量
 
-    //var attacker = null;
-
-    //所有士兵缩放800/1100 = 
-    const SCALE = 73;
-
 
     /*
     移动动画似乎有些卡
     移动动画7帧
     攻击动画8帧
     */
-    //var closeIcon;
     var sid;
 
     //[color kindId] 只有在受到攻击的时候才会显示血条 一会接着消失
     //blu
     var redBlood;
-    //var bloodBanner;
     var greenBlood;
 
     var bloodTotalLen = 134;
     var bloodHeight = 9;
-    var bloodScaX = 72*100/139;//根据怪兽的体积计算血条长度 
-    var bloodScaY = 9*100/12;
 
     var gainexp = 100;//杀死该士兵总的经验
     var hurts = dict();//其它士兵对自己造成的伤害 士兵sid 伤害
@@ -259,9 +250,6 @@ class Soldier extends MyNode
         id = d[1];//士兵类型id
 
         var k = id/10;
-        //暂时没有这些士兵的图片 类型转化成普通士兵
-        if(k >= 20)
-            id = 0;
 
         var feaFil = FEA_BLUE;
         if(color == ENECOLOR)
@@ -290,14 +278,8 @@ class Soldier extends MyNode
         {
             funcSoldier = new CloseSoldier(this);
         }
-        else if(kind == LONG_DISTANCE)
-        {
-            funcSoldier = new LongDistanceSoldier(this);
-        }
-        else if(kind == MAGIC)
-        {
-            funcSoldier = new MagicSoldier(this);
-        }
+        else
+            funcSoldier = new OtherSoldier(this);
 
         state = MAP_SOL_ARRANGE;
 
@@ -308,9 +290,8 @@ class Soldier extends MyNode
         切换方向 只切换changeNode
         */
         bg = node();
-        bg.scale(SCALE);
-
-        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        bg.scale(MAP_SOL_SCALE);
+        changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
         changeDirNode.prepare();
         var bSize = changeDirNode.size();
 
@@ -318,7 +299,8 @@ class Soldier extends MyNode
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
         //变身之后特征色消失
-        fea = changeDirNode.addsprite("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil);
+        //fea = changeDirNode.addsprite("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil);
+        fea = sprite("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil);
 
         var ani = getSolAnimate(id);
         movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
@@ -326,48 +308,35 @@ class Soldier extends MyNode
         attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
 
-        shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
+        var shadowOffY = data["shadowOffY"];
+        var shadowSize = dict([[1, 1], [2, 2], [3, 3]]);
+        var ss = shadowSize.get(sx, 3);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
         init();
 
-        var vol = data.get("volumn");
-        if(sx < 2)
-        {
-            bloodScaX = 100;//大体积 采用144的长度 中等体积 采用普通长度    
-            bloodScaY = 100;
-        }
-        else 
-        {
-            bloodScaX = 62*100/120;
-            bloodScaY = 62*100/120;
-        }
+        var suffix = "";
+        if(sx >= 2)
+            suffix = "1";
 
-        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY);
+        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100);
+
         bloodTotalLen = backBanner.prepare().size()[0];
         bloodHeight = backBanner.prepare().size()[1];
         if(color == ENECOLOR)
             backBanner.visible(0);//初始敌人血条不显示
         var mInfo = getData(MAP_INFO, map.kind);
 
-        redBlood = backBanner.addsprite("mapSolBloodRed.png").pos(2, 0);
+        redBlood = backBanner.addsprite("mapSolBloodRed"+suffix+".png").pos(2, 0);
         if(color == MYCOLOR)
         {
             if(mInfo["blood"] == 0)
-                greenBlood = backBanner.addsprite("mapSolBloodBlue.png").pos(2, 0);
+                greenBlood = backBanner.addsprite("mapSolBloodBlue"+suffix+".png").pos(2, 0);
             else if(mInfo["blood"] == 1)
-                greenBlood = backBanner.addsprite("mapSolBloodGreen.png").pos(2, 0);
+                greenBlood = backBanner.addsprite("mapSolBloodGreen"+suffix+".png").pos(2, 0);
         }
         else
-            greenBlood = backBanner.addsprite("mapSolBloodYellow.png").pos(2, 0);
-
-        /*
-        if(color == 0)//nameBanner
-        {
-            nameBanner = new SpeakDialog(this);
-            nameBanner.setPos([bSize[0]/2, 0]);
-            addChild(nameBanner);
-        }
-        */
+            greenBlood = backBanner.addsprite("mapSolBloodYellow"+suffix+".png").pos(2, 0);
 
         initHealth();
 
@@ -831,13 +800,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         for(var j = 0; j < sy; j++)
         {
             var t = map.soldiers.get(myMap[1]+j);//row  Soldiers
-            //trace("my tar", this, t);
-            //var posible = [];
-
-//            trace("myTar", t, myMap);
             for(var i = 0; i < len(t); i++)
             {
-//                trace("eneColor", t[i].color, t[i].state);
                 if(t[i].color == color || t[i].state == MAP_SOL_DEAD || t[i].state == MAP_SOL_SAVE)
                     continue;
                 var p = t[i].getPos();
@@ -862,8 +826,9 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     }
     function clearAnimation()
     {
-        movAni.stop();
-        attAni.stop();
+        movAni.clearAnimation();
+        attAni.clearAnimation();
+        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE);
     }
     var volumn;
     function getVolumn()
@@ -903,13 +868,14 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     const AI_PERIOD = 5000;
     function update(diff)
     {
-        //trace("update soldier", diff, state, tar);
-        //布局阶段  
         var tPos;
         var dist;
         var colObj;
         var t;
         if(stopNow == 1)
+            return;
+
+        if(inTransform == 1)//进行变身状态清空
             return;
 
 
@@ -982,7 +948,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             shiftAni.stop();
             clearAnimation();
 
-            //changeDirNode.texture("soldier"+str(id)+"dead.png", UPDATE_SIZE);
             backBanner.removefromparent();
             addChild(new DeadOver(this));
 
@@ -1061,11 +1026,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
             if((dist-getVolumn()-tar.getVolumn()) <= attRange)//攻击范围
             {
-                //trace("mePos tarPos", bg.pos(), tPos, tar.getVolumn(), attRange );
                 state = MAP_SOL_ATTACK;
                 clearAnimation();
-                //inAttacking = 1;
-                //changeDirNode.addaction(attAni);
                 attAni.enterScene();
                 return;
             }
@@ -1078,7 +1040,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
                 clearAnimation();
                 state = MAP_SOL_FREE;
                 tar = null;
-                //trace("col now", bg.pos(), colObj.getPos());
                 return;
             }
             t = dist*100/speed;
@@ -1106,7 +1067,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             if((dist- getVolumn() - tar.getVolumn())> attRange)
             {
                 clearAnimation();
-                //changeDirNode.addaction(movAni);
                 movAni.enterScene();
                 setDir();
                 state = MAP_SOL_MOVE; 
@@ -1117,8 +1077,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             if(attTime >= attSpeed)
             {
                 funcSoldier.doAttack();
-                //clearAnimation();
-                //changeDirNode.addaction(attAni);
                 attTime -= attSpeed;
             }
         }
@@ -1354,5 +1312,84 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         //总的经验值 也随攻击力 成倍数增长
         gainexp *= rate;
         gainexp /= 100;
+    }
+
+    var inTransform = 0;
+    var transAni = null;
+    //变身动画 重新设定 id data 以及 纹理 类似于转职
+    //类似于 MyAction 的动画播放 50 100 位置对齐
+    //高频率更新
+
+    //施展变身技能 --- 播放变身动画 且 进入变身状态
+    function onTransform()
+    {
+        //人物是英雄 且没有变身 等级5
+        if(data["isHero"] && id%10 != 4)
+        {
+            inTransform = 1;
+            state = MAP_SOL_FREE;
+
+            id = id/10 * 10 + 4;//变更id 英雄要在一起调试
+            data = getData(SOLDIER, id);
+            
+            kind = data.get("kind");
+            if(kind == CLOSE_FIGHTING)
+            {
+                funcSoldier = new CloseSoldier(this);
+            }
+            else
+                funcSoldier = new OtherSoldier(this);
+
+
+            clearAnimation();
+            shiftAni.stop();
+
+            var skillId = heroSkill[id/10*10];
+            var skillAnimate = getSkillAnimate(skillId);
+            
+
+            var feaFil = FEA_BLUE;
+            if(color == ENECOLOR)
+                feaFil = FEA_RED;
+
+            var ani = getSolAnimate(id);
+            movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
+            attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
+
+            fea.visible(0);
+            shadow.visible(0);
+            transAni = new TransformAnimate(skillAnimate[1], skillAnimate[0], changeDirNode, this);
+            transAni.enterScene();
+        }
+    }
+    //结束变动画画
+    function finishTransform()
+    {
+        load_sprite_sheet("soldierm"+str(id)+".plist");
+        load_sprite_sheet("soldiera"+str(id)+".plist");
+
+        load_sprite_sheet("soldierfm"+str(id)+".plist");
+        load_sprite_sheet("soldierfa"+str(id)+".plist");
+
+
+        changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", UPDATE_SIZE);
+        changeDirNode.prepare();
+        var bSize = changeDirNode.size();
+
+        bg.size(bSize);
+        changeDirNode.pos(bSize[0]/2, bSize[1]);
+
+        var feaFil = FEA_BLUE;
+        if(color == ENECOLOR)
+            feaFil = FEA_RED;
+        //变身之后特征色消失
+        fea.texture("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil, UPDATE_SIZE);
+        shadow.visible(1);
+        var shadowOffY = data["shadowOffY"];
+        shadow.pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50).size(data.get("shadowSize"), 32);
+
+        fea.visible(1);//重新设定图片和 特征色 
+        transAni = null;
+        inTransform = 0;
     }
 }

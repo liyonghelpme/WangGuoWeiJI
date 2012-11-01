@@ -140,9 +140,33 @@ class BattleScene extends MyNode
     var singleSid = null;
     /*
     想要增加一个士兵到地图上需要MapBanner 和 Map 同时参与
+    k, sm, s, ki, par, eq
     */
-    function BattleScene(k, sm, s, ki, par, eq)
+    function BattleScene(argument)
     {
+        kind = argument["kind"];
+        double = argument["double"];
+        singleSid = argument["singleSid"];
+        difficult = argument["difficult"];
+        param = argument["param"];
+        user = argument["user"];
+
+        skills = dict();
+        var sk = argument["skills"];
+        if(sk != null)
+        {
+            for(var i = 0; i < len(sk); i++)
+            {
+                var solSk = sk[i];
+                var skLev = skills.get(solSk[0], dict());
+                skLev.update(solSk[1], solSk[2]);
+                skills.update(solSk[0], skLev);
+            }
+        }
+        big = argument["big"];
+        small = argument["small"];
+
+        /*
         kind = ki;
         //进攻或者防守擂台
         if(kind == CHALLENGE_TRAIN)
@@ -169,7 +193,17 @@ class BattleScene extends MyNode
                 skills.update(solSk[0], skLev);
             }
         }
+        big = k;
+        small = sm;
+        */
 
+        initView();
+        initYet = 1;
+    }
+
+    var initYet = 0;
+    function initView()
+    {
         bg = node();
         init();
         dialogController = new DialogController(this);
@@ -181,28 +215,13 @@ class BattleScene extends MyNode
                 dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
             }
         }
-        /*
-        if(kind == CHALLENGE_MON && global.user.db.get("readYet") == null)//未曾读过战斗提示 显示战斗提示
-        {
-            //global.director.pushView(new NoTipDialog(), 1, 0);
-            dialogController.addCmd(dict([["cmd", "noTip"], ["word", getStr("noTip", null)], ["kind", CHALLENGE_TIP]]));
-        }
-        if(kind == CHALLENGE_TRAIN)
-        {
-            var tip = global.user.db.get("trainTip");
-            if(tip == null)
-                dialogController.addCmd(dict([["cmd", "noTip"], ["word", getStr("trainTipLine", null)], ["kind", TRAIN_TIP]]));
-        }
-        */
 
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));
 
-        big = k;
-        small = sm;
         if(kind == CHALLENGE_TRAIN)
-            map = new Map(k, sm, null, this, null);
+            map = new Map(argument["big"], argument["small"], null, this, null);
         else
-            map = new Map(k, sm, s, this, eq);
+            map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equip"]);
 
         addChild(map);
         banner = new MapBanner(this);
@@ -212,6 +231,7 @@ class BattleScene extends MyNode
             banner.putSoldierOnMap(singleSid);
         }
     }
+    
     //防御力的key = 10*big+small 
     function getEneDefense()
     {

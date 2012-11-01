@@ -25,11 +25,6 @@ import busiViews.AllSoldier;
 import busiViews.DeadSoldier;
 import busiViews.TransferSoldier;
 
-//import views.SoldierDialog;
-//import views.AllSoldier;
-//import views.DeadSoldier;
-//import views.TransferSoldier;
-//import views.DrugDialog;
 import busiViews.DrugDialog;
 import busiViews.DrugList;
 
@@ -222,8 +217,24 @@ import war.MapBanner;
 import war.Map;
 import war.Soldier;
 
+import war.CloseSoldier;
+import war.Arrow;
+import war.Magic;
+import war.Rocket;
+import war.FlyAndBomb;
+import war.RollBall;
+import war.MakeFly;
+import war.MakeFlyRoll;
+import war.FullStage;
+import war.GroundBomb;
+import war.TransformAnimate;
+import war.EarthQuake;
+import war.DeadOver;
+import war.SoldierAnimate;
+import model.SoldierEffect;
+
+
 import views.MonSmoke;
-import views.DeadOver;
 import views.LineSkill;
 import views.SingleSkill;
 import views.MultiSkill;
@@ -232,14 +243,13 @@ import views.HealSkill;
 import views.SaveSkill;
 import views.UseDrugSkill;
 
-import views.SoldierAnimate;
 
-import views.CloseSoldier;
+
+
 import views.CloseAttackEffect;
 import views.ChallengeOver;
 
-import views.Arrow;
-import views.Magic;
+
 import views.MoveObject;
 //import views.MapPause;
 import war.MapPause;

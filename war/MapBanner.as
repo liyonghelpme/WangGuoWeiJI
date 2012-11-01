@@ -9,15 +9,17 @@ class MapBanner extends MyNode
     var flowNode;
     var controlSoldier = null;
 
-    const INIT_X = 77;
+    const INIT_X = 80;
     const INIT_Y = 402;
     
-    const OFFX = 85;
+    const OFFX = 80;
     const ITEM_NUM = 8;
-    const WIDTH = ITEM_NUM * OFFX;
 
-    const CLIP_HEIGHT = 80;
-    const CLIP_WIDTH = WIDTH;
+    const WIDTH = 640;
+    const HEIGHT = 80;
+
+    const PANEL_WIDTH = 71;
+    const PANEL_HEIGHT = 70;
 
     var data;
     
@@ -77,47 +79,28 @@ class MapBanner extends MyNode
             okBut = bg.addsprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
         }
 
-        rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(769, 440).size(56, 56).color(100, 100, 100, 100).setevent(onMove, -1);
-        leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(34, 440).scale(-100, 100).size(56, 56).color(100, 100, 100, 100).setevent(onMove, 1);
+        rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(760, 440).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, -1);
+        leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(40, 440).scale(-100, 100).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, 1);
     }
 
 
-//temp = bg.addsprite("mapUnSel.png").anchor(0, 0).pos(77, 402).size(71, 70).color(100, 100, 100, 100);
     function MapBanner(sc)
     {
         scene = sc;
         initView();
         initData();
         
-        /*
-        bg = node();
-        init();
-        //117
-        if(scene.kind != CHALLENGE_TRAIN)
-        {
-            okBut = bg.addsprite("mapMenuOk.png", GRAY).pos(440, 19).setevent(EVENT_TOUCH, onOk);
-            bg.addsprite("mapMenuCancel.png").pos(557, 19).setevent(EVENT_TOUCH, onCancel);
-            //练级没有随机放置功能
-            bg.addsprite("random.png").pos(674, 19).setevent(EVENT_TOUCH, onRandom);
-        }
-        else
-        {
-            okBut = bg.addsprite("mapMenuOk.png", GRAY).pos(557, 19).setevent(EVENT_TOUCH, onOk);
-            bg.addsprite("mapMenuCancel.png").pos(674, 19).setevent(EVENT_TOUCH, onCancel);
-        }
-        */
 
-//temp = bg.addsprite("mapUnSel.png").anchor(0, 0).pos(77, 402).size(71, 70).color(100, 100, 100, 100);
-        cl = bg.addnode().pos(INIT_X, INIT_Y).size(CLIP_WIDTH, CLIP_HEIGHT).clipping(1).anchor(0, 0);
-        flowNode = cl.addnode().pos(0, 0);
-
-        //leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(57, 411).scale(-100, 100).setevent(EVENT_TOUCH, onMove, 1);
-        //rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(754, 411).setevent(EVENT_TOUCH, onMove, -1);
 
         shadowWord = bg.addsprite("storeBlack.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);//.visible(0);
         shadowWord.addaction(itintto(0, 0, 0, 0));
         words = null;
 
+        cl = bg.addnode().pos(INIT_X, INIT_Y).size(WIDTH, HEIGHT).clipping(1).anchor(0, 0);
+        flowNode = cl.addnode().pos(0, 0);
+        cl.setevent(EVENT_TOUCH, touchBegan);
+        cl.setevent(EVENT_MOVE, touchMoved);
+        cl.setevent(EVENT_UNTOUCH, touchEnded);
         onMove(null, null, 0, null, null, null);
     }
 
@@ -193,55 +176,32 @@ class MapBanner extends MyNode
         {
             var panel;
             if(data[i][1] == 0)
-                panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX, 0).anchor(0, 0);
+                panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
             else
-                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(i*OFFX, 0).anchor(0, 0);
+                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
                 
-            if(data[i][1] == 0)
-            {
-                panel.setevent(EVENT_TOUCH, touchBegan, i);
-                panel.setevent(EVENT_MOVE, touchMoved, i);
-                panel.setevent(EVENT_UNTOUCH, touchEnded, i);
-            }
 
             var sdata = global.user.getSoldierData(data[i][0]);
-//            trace("soldierData", sdata, data[i], i);
             //0 30 60 90
             var id = sdata.get("id");
             var solPic;
 
-            /*
-            var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(skillList[i][0])])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
-            sca = getSca(skillPic, [67, 43]);
-            skillPic.scale(sca);
-            */
             if(data[i][1] == 0)
             {
-                //同动画使用 spritesheet图片
-                //使用士兵头像 只使用全身像
-                //if(id == 0 || id == 30 || id == 60 || id == 90)
-                //    solPic = panel.addsprite("solAva"+str(sdata.get("id"))+".png").pos(45, 45).anchor(50, 50);
-                //else
                 solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(36, 34).anchor(50, 50);
             }
             else
             {
-                //if(id == 0 || id == 30 || id == 60 || id == 90)
-                //    solPic = panel.addsprite("solAva"+str(sdata.get("id"))+".png", GRAY).pos(45, 45).anchor(50, 50);
-                //else
                 solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", GRAY).pos(36, 34).anchor(50, 50);
             }
             //使用我方特征色
             var feaFil = FEA_BLUE;
             var fea = solPic.addsprite("soldierfm"+str(sdata["id"])+".plist/ss"+str(sdata["id"])+"fm0.png", feaFil);
-            var sca = getSca(solPic, [67, 43]);
+            var sca = getSca(solPic, [71, 70]);
             solPic.scale(sca, sca);
 
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
             panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
-            //panel.addlabel(sdata.get("name"), null, 18).pos(61, 40).color(0, 0, 0);
-            //panel.addsprite("skillLevel.png").pos(57, 79).anchor(50, 50);
-//panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fonts/heiti.ttf", 15).pos(57, 79).anchor(50, 50).color(100, 100, 100);
             panel.put(i);
         }
     }
@@ -249,7 +209,7 @@ class MapBanner extends MyNode
     var touchPos = null;
     var accMove = 0;
     var lastPoints;
-    //data[p] sid isInMap data[p][1] == 0
+    var curChild = null;
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
@@ -260,9 +220,17 @@ class MapBanner extends MyNode
         touchPos = n.node2world(0, 0);
         touchPos = bg.world2node(touchPos[0], touchPos[1]);//x 位置
 
-        bg.world2node()
-
-        n.texture("mapSel.png");
+        curChild = null;
+        var child = checkInChild(flowNode, lastPoints);
+        if(child != null)
+        {
+            var i = child.get(); 
+            if(data[i][1] == 0)
+            {
+                child.texture("mapSel.png");
+                curChild = child;
+            }
+        }
 
     }
     //地图给出空闲位置
@@ -306,19 +274,22 @@ class MapBanner extends MyNode
         }
         else if(accMove > 20)
         {
-            var sid = data[p][0];
-            controlSoldier = scene.map.addSoldier(sid);
-            if(controlSoldier == null)
-                return;
 
-            setCurChooseSol(controlSoldier);
+            if(curChild != null)
+            {
+                var i = curChild.get();
+                var sid = data[i][0];
+                controlSoldier = scene.map.addSoldier(sid);
+                if(controlSoldier == null)
+                    return;
+                setCurChooseSol(controlSoldier);
 
-            var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
-            controlSoldier.setPos(mPos);
-            
-            controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
-            data[p][1] = 1;
-            //n.texture("mapSel.png");
+                var mPos = scene.map.bg.world2node(nPos[0], nPos[1]);
+                controlSoldier.setPos(mPos);
+                
+                controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
+                data[i][1] = 1;
+            }
         }
     }
     //点击士兵结束
@@ -350,7 +321,6 @@ class MapBanner extends MyNode
     {
         if(sol == null)
         {
-            //shadowWord.visible(0);
         }
         else
         {
@@ -360,7 +330,6 @@ class MapBanner extends MyNode
                 words = null;
             }
 
-            //shadowWord.visible(1);
             shadowWord.stop();
             shadowWord.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
             var w = getStr("dragSol", ["[NAME]", sol.myName]);
@@ -370,19 +339,7 @@ class MapBanner extends MyNode
             sSize[0] = max(wSize[0]+40, sSize[0]);
             shadowWord.size(sSize);
             words.anchor(50, 50).pos(sSize[0]/2, sSize[1]/2);
-            //shadowWord.visible(1);
 
-            /*
-            var oldPos = shadowWord.pos();
-            //左右屏幕限制
-            //按钮和士兵中心对齐
-            if(touchPos != null)
-            {
-                //var x = min(max(touchPos[0]-sSize[0]/2, 0), global.director.disSize[0]-sSize[0]);
-                var x = min(max(touchPos[0], 0), global.director.disSize[0]-sSize[0]);
-                shadowWord.pos(x, oldPos[1]);
-            }
-            */
         }
     }
 

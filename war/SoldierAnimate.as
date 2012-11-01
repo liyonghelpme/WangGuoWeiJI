@@ -31,7 +31,7 @@ class SoldierAnimate
         bg.texture(ani0[curFrame], ARGB_8888, UPDATE_SIZE);
         fea.texture(ani1[curFrame], ARGB_8888, colFea, UPDATE_SIZE);
     }
-    function stop()
+    function clearAnimation()
     {
         global.myAction.removeAct(this);
         accTime = 0;
