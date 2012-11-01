@@ -232,6 +232,7 @@ import war.EarthQuake;
 import war.DeadOver;
 import war.SoldierAnimate;
 import model.SoldierEffect;
+import war.EffectBase;
 
 
 import views.MonSmoke;
