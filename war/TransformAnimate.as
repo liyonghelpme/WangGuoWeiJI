@@ -24,6 +24,7 @@ class TransformAnimate
     {
         accTime += diff;
         var curFrame;
+        //trace("TransformAnimate", a0, accTime, duration);
         if(accTime >= duration)
         {
             curFrame = len(ani0)-1;

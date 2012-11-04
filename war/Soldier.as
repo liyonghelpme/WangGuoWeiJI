@@ -660,6 +660,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     {
         if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
+            var oldMap = getSolMap(bg.pos(), sx, sy, offY);
+            var ret = map.checkInBoundary(this, oldMap);
             if(ret == 0)
             {
                 map.clearSoldier(this);
@@ -1430,6 +1432,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
             id = oldId;
             data = getData(SOLDIER, id);
+
+
             
             kind = data.get("kind");
             setPrivateFunc();
@@ -1458,16 +1462,18 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             var a = copy(skillAni);
             a[0] = copy(a[0]);//copy a0 reverse
             a[0].reverse();
-            trace("reverse", a);
+            //trace("reverse", a);
 
-            changeDirNode.texture(a[0][0]);
+            //changeDirNode.texture(a[0][0]);
             adjustPicSize();
-            transAni = new TransformAnimate(a[1], a[0], changeDirNode, this);
-            transAni.enterScene();
+        
+            //transAni = new TransformAnimate(a[1], a[0], changeDirNode, this);
+            //transAni.enterScene();
 
             //更新英雄数据
             initAttackAndDefense(this);
             initHealth();
+            finishTransform();
         }
     }
     function adjustPicSize()
@@ -1479,6 +1485,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
         var ss = ShadowSize.get(sx, 3);
         shadow.texture("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
+
+        backBanner.pos(bSize[0]/2, data["bloodHeight"]);
     }
     //结束变动画画
     function finishTransform()
