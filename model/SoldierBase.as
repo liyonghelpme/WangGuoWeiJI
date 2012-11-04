@@ -20,7 +20,6 @@ function getStage(data)
 
     var category = soldierKind[data.get("category")];
     var grade = soldierGrade[data.get("grade")];
-    var magic = data.get("kind");
 
     var magic = data["attackKind"];
     res = [];
