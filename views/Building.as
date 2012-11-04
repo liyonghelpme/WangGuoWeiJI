@@ -120,6 +120,7 @@ class Building extends MyNode
     var buildColor = 0;
 
     var featureColor = null;
+    var shadow = null;
     function Building(m, d, privateData)
     {
         bid = -1;
@@ -158,15 +159,6 @@ class Building extends MyNode
         else if(funcs == MINE_KIND)
         {
             funcBuild = new Mine(this);
-            /*
-            //等级大于6级水晶进入工作状态
-            var level = global.user.getValue("level");
-            if(level >= PARAMS["MineMinLevel"])
-                privateData["state"] = PARAMS["buildWork"];
-            else 
-                privateData["state"] = PARAMS["buildFree"];
-            */
-            //buildLevel = privateData.get("level");
         }
         else if(funcs == RING_FIGHTING)
         {
@@ -192,7 +184,7 @@ class Building extends MyNode
         //非本身颜色的建筑物颜色 根据编号设定颜色
         //1 采用标准特征色
         //2 采用其他特征色
-        if(buildColor != 0)
+        if(data["hasFeature"] && buildColor != 0)
         {
             var fc = COLOR_INDEX[buildColor];
             fc = getHue(fc);
@@ -303,6 +295,22 @@ class Building extends MyNode
             changeDirNode.scale(100, 100);
         else 
             changeDirNode.scale(-100, 100);
+
+        var shadowDir = dir;
+        if(data["symmetry"])
+            shadowDir = 0;
+        if(data["hasShadow"])
+        {
+            if(shadow == null) 
+                shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png").color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]);
+            else
+                shadow.texture("build"+str(id)+"Shadow"+str(shadowDir)+".png");
+            if(!data["upShadow"])
+                bg.add(shadow, -1);
+            else
+                bg.add(shadow);//阴影在建筑物上面
+        }
+
     }
     function onSwitch()
     {

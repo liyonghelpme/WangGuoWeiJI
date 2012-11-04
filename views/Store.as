@@ -46,6 +46,15 @@ class Store extends MyNode
     {
         //be care of cycle reference problem
         //scene = s;
+        //测试所有建筑
+        var bd = [];
+        var allBuilding = buildingData.keys();
+        for(var i = 0; i < len(allBuilding); i++)
+        {
+            bd.append([0, allBuilding[i]]);
+        }
+        allGoods[5] = bd;
+
         bg = node();
         init();
         bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
