@@ -125,6 +125,7 @@ import views.CastleScene;
 //建筑物
 //采用组合的方式 将farm相关的行为 实现在farm中
 import views.Building;
+import views.BuildAnimate;
 import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
@@ -258,61 +259,6 @@ import war.MapPause;
 import war.SkillFlowBanner;
 import war.MapDefense;
 
-import busiViews.BoxOnMap;
-import views.ChallengeScene;
-
-import busiViews.RankDialog;
-import busiViews.RankBase;
-
-//战斗结束奖励 对话框
-import views.TrainOverDialog;
-import views.ChallengeFight;
-import views.ChallengeNeibor;
-import war.ChallengeFail;
-import war.ChallengeWin;
-
-
-import views.CallSoldier;
-import views.SoldierGoods;
-
-import views.CastleScene;
-
-import views.CastlePage;
-
-import busiViews.BuildLayer;
-import views.BuildLand;
-import views.SoldierMax;
-
-import views.BuildMenu;
-import views.BuildWorkMenu;
-//建筑物
-//采用组合的方式 将farm相关的行为 实现在farm中
-import views.Building;
-import views.BuildAnimate;
-
-import views.MenuLayer;
-
-import views.MoveMap;
-import views.MoveSoldier;
-
-import views.Camp;
-
-import views.Farm;
-import views.Plant;
-import views.PlantChoose;
-import views.House;
-import views.LoveTree;
-import views.FuncBuild;
-
-//经营页面场景飞行的银币
-import views.FlyObject;
-
-import views.PopBanner;
-
-
-import views.Loading;
-
-import views.ChildMenuLayer;
 
 
 

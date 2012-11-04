@@ -143,7 +143,6 @@ function setEquipAttribute(sol, equips)
 function initAttackAndDefense(sol)
 {
     calculateStage(sol);
-
     //士兵攻击类型 增加相应的攻击力
     if(sol.addAttackTime > 0)
     {

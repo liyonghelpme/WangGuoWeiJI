@@ -240,6 +240,8 @@ class Soldier extends MyNode
     //var solAni;
     var fea;
     var oldId;
+
+    var ShadowSize = dict([[1, 1], [2, 2], [3, 3]]);
     function Soldier(m, d, s, md)
     {
         speed = getParam("soldierSpeed");
@@ -269,11 +271,7 @@ class Soldier extends MyNode
 
         data = getData(SOLDIER, id);
         initData();
-
-
         shiftAni = moveto(0, 0, 0);
-
-
 
         kind = data.get("kind");
         setPrivateFunc();
@@ -287,6 +285,8 @@ class Soldier extends MyNode
         切换方向 只切换changeNode
         */
         bg = node();
+        init();
+
         bg.scale(MAP_SOL_SCALE);
         changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
         changeDirNode.prepare();
@@ -306,11 +306,13 @@ class Soldier extends MyNode
 
 
         var shadowOffY = data["shadowOffY"];
-        var shadowSize = dict([[1, 1], [2, 2], [3, 3]]);
-        var ss = shadowSize.get(sx, 3);
+
+        var ss = ShadowSize.get(sx, 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
-        init();
+
+
+        //adjustPicSize();
 
         var suffix = "";
         if(sx >= 2)
@@ -658,8 +660,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     {
         if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
-            var oldMap = getSolMap(bg.pos(), sx, sy, offY);
-            var ret = map.checkInBoundary(this, oldMap);
             if(ret == 0)
             {
                 map.clearSoldier(this);
@@ -1421,8 +1421,10 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     //old Id 
     function finishMakeUpView()
     {
+        trace("finishMakeUpView");
         if(data["isHero"] && id%10 == 4 && !inTransform)
         {
+    
             inTransform = 1;
             state = MAP_SOL_FREE;
 
@@ -1436,7 +1438,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             shiftAni.stop();
 
             var skillId = heroSkill[id/10*10];
-            var skillAnimate = getSkillAnimate(skillId);
+            var skillAni = getSkillAnimate(skillId);
             
 
 
@@ -1453,10 +1455,13 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             shadow.visible(0);
 
             //逆向播放 英雄变身动画
-            var a = copy(skillAnimate);
+            var a = copy(skillAni);
             a[0] = copy(a[0]);//copy a0 reverse
             a[0].reverse();
+            trace("reverse", a);
 
+            changeDirNode.texture(a[0][0]);
+            adjustPicSize();
             transAni = new TransformAnimate(a[1], a[0], changeDirNode, this);
             transAni.enterScene();
 
@@ -1465,9 +1470,20 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             initHealth();
         }
     }
+    function adjustPicSize()
+    {
+        var bSize = changeDirNode.prepare().size();
+        bg.size(bSize);
+        changeDirNode.pos(bSize[0]/2, bSize[1]);
+        var shadowOffY = data["shadowOffY"];
+
+        var ss = ShadowSize.get(sx, 3);
+        shadow.texture("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
+    }
     //结束变动画画
     function finishTransform()
     {
+        trace("finish TransformAnimate");
         load_sprite_sheet("soldierm"+str(id)+".plist");
         load_sprite_sheet("soldiera"+str(id)+".plist");
 
@@ -1476,11 +1492,10 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
 
         changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", UPDATE_SIZE);
-        changeDirNode.prepare();
-        var bSize = changeDirNode.size();
-
-        bg.size(bSize);
-        changeDirNode.pos(bSize[0]/2, bSize[1]);
+        //changeDirNode.prepare();
+        //var bSize = changeDirNode.size();
+        //bg.size(bSize);
+        //changeDirNode.pos(bSize[0]/2, bSize[1]);
 
         var feaFil = FEA_BLUE;
         if(color == ENECOLOR)
@@ -1488,8 +1503,11 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         //变身之后特征色消失
         fea.texture("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil, UPDATE_SIZE);
         shadow.visible(1);
-        var shadowOffY = data["shadowOffY"];
-        shadow.pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50).size(data.get("shadowSize"), 32);
+        
+        //var shadowOffY = data["shadowOffY"];
+        //shadow.pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50).size(data.get("shadowSize"), 32);
+
+        adjustPicSize();
 
         fea.visible(1);//重新设定图片和 特征色 
         transAni = null;

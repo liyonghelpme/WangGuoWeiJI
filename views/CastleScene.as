@@ -111,10 +111,11 @@ class CastleScene extends MyNode
             ml.initDataOver();
             global.msgCenter.sendMsg(LOAD_PROCESS, 100);
         }
-        //加载新手任务
+        //加载新手 页面
+        //这里的 不能 100 Loading 页面自删除存在bug
         else if(msid == NEW_USER)
         {
-            global.msgCenter.sendMsg(LOAD_PROCESS, 100);
+            global.msgCenter.sendMsg(LOAD_PROCESS, 99);
             global.director.replaceScene(new WelcomeDialog());
         }
         else if(msid == BEGIN_BUILD)

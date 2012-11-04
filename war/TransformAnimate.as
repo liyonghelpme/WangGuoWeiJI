@@ -13,6 +13,7 @@ class TransformAnimate
         duration = d;
         ani0 = a0;
         accTime = 0;
+        //trace("TransformAnimate", a0, accTime, duration);
     }
     //进入场景开始动画 stop停止动画
     function enterScene()

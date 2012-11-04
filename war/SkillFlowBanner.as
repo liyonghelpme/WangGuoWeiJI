@@ -478,19 +478,12 @@ words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             id = skillList[i][0];
             
             var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(skillList[i][0])])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
-            sca = getSca(skillPic, [67, 43]);
+            sca = getSca(skillPic, [PANEL_WIDTH, PANEL_HEIGHT]);
             skillPic.scale(sca);
 
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
             panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
-            /*
-            var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(skillList[i][0])])).anchor(50, 50).pos(PANEL_WIDTH/2, PANEL_HEIGHT/2);
-            sca = getSca(skillPic, [PANEL_WIDTH, PANEL_HEIGHT]);
-            skillPic.scale(sca);
-            //panel.addsprite("skillLevel.png").pos(53, 66).anchor(50, 50);
-panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), "fonts/heiti.ttf", 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
-            */
 
             ready = skillList[i][3];
 
@@ -512,16 +505,10 @@ panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), "fonts/hei
             var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
             sca = getSca(drugPic, [67, 43]);
             drugPic.scale(sca);
-
-            //var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])])).anchor(50, 50).pos(PANEL_WIDTH/2, PANEL_HEIGHT/2);
-            //sca = getSca(drugPic, [PANEL_WIDTH, PANEL_HEIGHT]);
-            //drugPic.scale(sca);
             
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
             panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
-            //panel.addsprite("skillLevel.png").pos(53, 66).anchor(50, 50);
-            //panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 15).pos(53, 66).anchor(50, 50).color(100, 100, 100);
 
             ready = drugData[i][3];
             if(!ready)//技能ID 与众不同
