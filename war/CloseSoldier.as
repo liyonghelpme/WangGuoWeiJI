@@ -31,6 +31,9 @@ class OtherSoldier
     }
     
 }
+/*
+防御装置 和 士兵 应该实现相同的接口
+*/
 class CloseSoldier 
 {
     var sol;

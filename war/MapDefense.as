@@ -47,6 +47,10 @@ class MapDefense extends MyNode
     function finishArrange()
     {
     }
+    function acceptHarm(sol, hurt)
+    {
+        changeHealth(sol, -hurt[0]);
+    }
     function changeHealth(sol, add)
     {
         var val = hurts.get(sol.sid, [sol, 0]);

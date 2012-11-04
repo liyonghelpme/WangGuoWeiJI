@@ -256,7 +256,7 @@ import views.MoveObject;
 import war.MapPause;
 //import views.SkillFlowBanner;
 import war.SkillFlowBanner;
-import views.MapDefense;
+import war.MapDefense;
 
 
 import views.DialogController;

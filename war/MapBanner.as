@@ -195,8 +195,11 @@ class MapBanner extends MyNode
                 solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", GRAY).pos(36, 34).anchor(50, 50);
             }
             //使用我方特征色
+            /*
             var feaFil = FEA_BLUE;
             var fea = solPic.addsprite("soldierfm"+str(sdata["id"])+".plist/ss"+str(sdata["id"])+"fm0.png", feaFil);
+            */
+
             var sca = getSca(solPic, [71, 70]);
             solPic.scale(-sca, sca);
 

@@ -1086,7 +1086,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
                 tar = null;
                 return;
             }
-            t = dist*100/speed;
+            t = dist*1000/speed;
             shiftAni = moveto(t, tPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
         }

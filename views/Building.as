@@ -296,6 +296,7 @@ class Building extends MyNode
         else 
             changeDirNode.scale(-100, 100);
 
+        var bSize = bg.size();
         var shadowDir = dir;
         if(data["symmetry"])
             shadowDir = 0;
