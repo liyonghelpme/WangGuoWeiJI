@@ -274,7 +274,6 @@ import war.ChallengeWin;
 
 import views.CallSoldier;
 import views.SoldierGoods;
-*/
 
 import views.CastleScene;
 
@@ -315,7 +314,6 @@ import views.Loading;
 
 import views.ChildMenuLayer;
 
->>>>>>> 4ee09ff... 建筑物动画
 
 
 import views.DialogController;

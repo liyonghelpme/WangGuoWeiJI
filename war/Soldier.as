@@ -239,6 +239,7 @@ class Soldier extends MyNode
     var monsterData;
     //var solAni;
     var fea;
+    var oldId;
     function Soldier(m, d, s, md)
     {
         speed = getParam("soldierSpeed");
@@ -248,6 +249,7 @@ class Soldier extends MyNode
         map = m;
         color = d[0];
         id = d[1];//士兵类型id
+        oldId = id;//士兵旧的类型
 
         var k = id/10;
 
@@ -274,12 +276,7 @@ class Soldier extends MyNode
 
 
         kind = data.get("kind");
-        if(kind == CLOSE_FIGHTING)
-        {
-            funcSoldier = new CloseSoldier(this);
-        }
-        else
-            funcSoldier = new OtherSoldier(this);
+        setPrivateFunc();
 
         state = MAP_SOL_ARRANGE;
 
@@ -976,8 +973,9 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             if(makeUpTime >= totalMT)
             {
                 makeUpState = 0;
-                initAttackAndDefense(this);
-                initHealth();
+                finishMakeUpView();
+                //initAttackAndDefense(this);
+                //initHealth();
             }
         }
         var ret;
@@ -1259,7 +1257,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     //变身动画播放
     function doMakeUp(skillId, skillLevel)
     {
-        if(makeUpState == 0)
+        if(makeUpState == 0 && !inTransform)
         {
             makeUpSkillId = skillId;
             makeUpLevel = skillLevel;
@@ -1267,9 +1265,11 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             makeUpTime = 0;
             makeUpRate = getMakeUpRate(id); 
             initMakeUpData();
+            initMakeUpView();
             initHealth();
         }
     }
+    //id 等属性不会变化
     function initMakeUpData()
     {
         if(!makeUpState)
@@ -1365,10 +1365,10 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     //高频率更新
 
     //施展变身技能 --- 播放变身动画 且 进入变身状态
-    function onTransform()
+    function initMakeUpView()
     {
-        //人物是英雄 且没有变身 等级5
-        if(data["isHero"] && id%10 != 4)
+        //人物是英雄 且没有变身 等级5 
+        if(data["isHero"] && id%10 != 4 && !inTransform)
         {
             inTransform = 1;
             state = MAP_SOL_FREE;
@@ -1404,6 +1404,65 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             shadow.visible(0);
             transAni = new TransformAnimate(skillAnimate[1], skillAnimate[0], changeDirNode, this);
             transAni.enterScene();
+        }
+    }
+    
+    function setPrivateFunc()
+    {
+        if(kind == CLOSE_FIGHTING)
+        {
+            funcSoldier = new CloseSoldier(this);
+        }
+        else
+            funcSoldier = new OtherSoldier(this);
+    }
+    //执行 逆向动画
+    //动画结束 重新 initAttack  initHealth
+    //old Id 
+    function finishMakeUpView()
+    {
+        if(data["isHero"] && id%10 == 4 && !inTransform)
+        {
+            inTransform = 1;
+            state = MAP_SOL_FREE;
+
+            id = oldId;
+            data = getData(SOLDIER, id);
+            
+            kind = data.get("kind");
+            setPrivateFunc();
+
+            clearAnimation();
+            shiftAni.stop();
+
+            var skillId = heroSkill[id/10*10];
+            var skillAnimate = getSkillAnimate(skillId);
+            
+
+
+            var feaFil = FEA_BLUE;
+            if(color == ENECOLOR)
+                feaFil = FEA_RED;
+
+            var ani = getSolAnimate(id);
+
+            movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
+            attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
+
+            fea.visible(0);
+            shadow.visible(0);
+
+            //逆向播放 英雄变身动画
+            var a = copy(skillAnimate);
+            a[0] = copy(a[0]);//copy a0 reverse
+            a[0].reverse();
+
+            transAni = new TransformAnimate(a[1], a[0], changeDirNode, this);
+            transAni.enterScene();
+
+            //更新英雄数据
+            initAttackAndDefense(this);
+            initHealth();
         }
     }
     //结束变动画画
