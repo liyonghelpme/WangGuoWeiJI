@@ -256,10 +256,7 @@ import views.MoveObject;
 import war.MapPause;
 //import views.SkillFlowBanner;
 import war.SkillFlowBanner;
-<<<<<<< HEAD
 import war.MapDefense;
-=======
-import views.MapDefense;
 
 import busiViews.BoxOnMap;
 import views.ChallengeScene;
