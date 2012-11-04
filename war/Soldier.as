@@ -27,8 +27,7 @@ class Soldier extends MyNode
     var state;
     var tar = null;
     //10000ms 2000*100
-    const SPE = 20;
-    var speed = 5;
+    var speed = 50;
     var lastPoints;
     //var mobj;
     /*
@@ -242,6 +241,7 @@ class Soldier extends MyNode
     var fea;
     function Soldier(m, d, s, md)
     {
+        speed = getParam("soldierSpeed");
         ai = new SoldierAI(this);
         monsterData = md;
         sid = s;
@@ -319,24 +319,26 @@ class Soldier extends MyNode
         if(sx >= 2)
             suffix = "1";
 
-        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100);
+        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).scale(10000/MAP_SOL_SCALE);
 
-        bloodTotalLen = backBanner.prepare().size()[0];
-        bloodHeight = backBanner.prepare().size()[1];
+
         if(color == ENECOLOR)
             backBanner.visible(0);//初始敌人血条不显示
         var mInfo = getData(MAP_INFO, map.kind);
 
-        redBlood = backBanner.addsprite("mapSolBloodRed"+suffix+".png").pos(2, 0);
+        redBlood = backBanner.addsprite("mapSolBloodRed"+suffix+".png").pos(2, 2);
         if(color == MYCOLOR)
         {
             if(mInfo["blood"] == 0)
-                greenBlood = backBanner.addsprite("mapSolBloodBlue"+suffix+".png").pos(2, 0);
+                greenBlood = backBanner.addsprite("mapSolBloodBlue"+suffix+".png").pos(2, 2);
             else if(mInfo["blood"] == 1)
-                greenBlood = backBanner.addsprite("mapSolBloodGreen"+suffix+".png").pos(2, 0);
+                greenBlood = backBanner.addsprite("mapSolBloodGreen"+suffix+".png").pos(2, 2);
         }
         else
-            greenBlood = backBanner.addsprite("mapSolBloodYellow"+suffix+".png").pos(2, 0);
+            greenBlood = backBanner.addsprite("mapSolBloodYellow"+suffix+".png").pos(2, 2);
+
+        bloodTotalLen = greenBlood.prepare().size()[0];
+        bloodHeight = greenBlood.prepare().size()[1];
 
         initHealth();
 
@@ -414,7 +416,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
         }
     }
-    const BLOOD_SPEED = 3;
     function initHealth()
     {
         var oldSize = greenBlood.prepare().size();
@@ -424,8 +425,9 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         if(sx < oldSize[0])
         {
             var difX = oldSize[0]-sx;
-            var spe = bloodTotalLen/BLOOD_SPEED;//speed /s
-            var t = max(difX*1000/spe, 1000);//ms
+
+            var spe = bloodTotalLen*1000/getParam("hurtBloodShrinkTime");//speed /s
+            var t = max(difX*1000/spe, getParam("hurtBloodMinTime"));//ms
             redBlood.addaction(sizeto(t, sx, bloodHeight));
         }
         else
@@ -436,32 +438,77 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         greenBlood.size(sx, bloodHeight);
     }
 
+    //计算missRate 如果 没有伤害则忽略
+    function acceptHarm(sol, hurt)
+    {
+        var bSize = bg.size();
+        //bg 的size和图片的size大小相同
+        var bWord;
+        var missRate = data["missRate"];
+        var mr = rand(100);
+        if(mr < missRate)
+        {
+            bWord = sprite("miss.png");
+            bg.add(bWord);
+            bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
+            return;
+        }
+        var add = -hurt[0];
+        var val = hurts.get(sol.sid, [sol, 0]);
+        val[1] += add;
+        hurts.update(sol.sid, val);
+        health += add;
+
+        initHealth();
+
+        //暴击
+        if(hurt[1])
+            changeDirNode.addaction(sequence(tintto(getParam("criticalHitTime"), getParam("criticalHitColor"), 0, 0, 100), tintto(getParam("criticalFinishTime"), 100, 100, 100, 100)));
+        
+        var cs = changeDirNode.size();
+        //攻击类型 物理
+        //攻击类型 魔法 由 catergory决定
+        var attackKind = sol.data["attackKind"];
+        if(attackKind == PHYSIC_ATTACK)//近战远程 物理溅血
+        {
+            //var bl = sprite().pos(50, 50).pos(cs[0]/2, cs[1]/2).addaction(sequence(animate(700, "hurt0.png", "hurt1.png","hurt2.png","hurt3.png","hurt4.png","hurt5.png","hurt6.png", UPDATE_SIZE), callfunc(removeTempNode)));
+            //changeDirNode.add(bl, 10);
+        }
+        else//魔法攻击显示变色
+        {
+            //changeDirNode.addaction(sequence(tintto(500, 100, 0, 0), tintto(500, 100, 100, 100)));        
+        }
+
+        if(add < 0)
+        {
+            bWord = altasWord("yellow", str(add));
+            bWord.scale(18*100/bWord.size()[1]);
+        }
+        else
+        {
+            bWord = altasWord("blue", "+"+str(add));
+            bWord.scale(22*100/bWord.size()[1]);
+        }
+        bg.add(bWord);
+        bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
+
+
+        if(health < healthBoundary)
+            backBanner.visible(1);
+        else
+            backBanner.visible(0);
+    }
+
     //不能在callfunc中调用
     //士兵 伤害
     //生命值 < 0 表示死亡
     //死亡之后复活的生命值 >= 0
+    //只在增加生命值 使用药品时调用
     function changeHealth(sol, add)
     {
-        var val = hurts.get(sol.sid, [sol, 0]);
-        val[1] += add;
-        hurts.update(sol.sid, val);
-
         health += add;
-
-        //var sx = bloodTotalLen*max(health, 0)/healthBoundary;
-        //bloodBanner.size(sx, bloodHeight);
         initHealth();
         
-        var cs = changeDirNode.size();
-        if(sol.kind == CLOSE_FIGHTING || sol.kind == LONG_DISTANCE)//近战远程 物理溅血
-        {
-            var bl = sprite().pos(50, 50).pos(cs[0]/2, cs[1]/2).addaction(sequence(animate(700, "hurt0.png", "hurt1.png","hurt2.png","hurt3.png","hurt4.png","hurt5.png","hurt6.png", UPDATE_SIZE), callfunc(removeTempNode)));
-            changeDirNode.add(bl, 10);
-        }
-        else//魔法攻击显示变色
-        {
-            changeDirNode.addaction(sequence(tintto(500, 100, 0, 0), tintto(500, 100, 100, 100)));        
-        }
         var bSize = bg.size();
         //bg 的size和图片的size大小相同
         var bWord;
@@ -475,11 +522,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             bWord = altasWord("blue", "+"+str(add));
             bWord.scale(22*100/bWord.size()[1]);
         }
-        //var wS = bWord.size()[1];
-        //bWord.scale()
-        //bg.addlabel(str(add), null, 30).pos(bSize[0]/2, -5).color(100, 0, 0).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), callfunc(removeTempNode)));
         bg.add(bWord);
-        bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
+        bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
 
 
         if(health < healthBoundary)
@@ -992,7 +1036,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
                 state = MAP_SOL_FREE;
                 return;
             }
-            t = dist*100/speed;
+            t = dist*1000/speed;
             shiftAni = moveto(t, tPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
 

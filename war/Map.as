@@ -90,12 +90,52 @@ class Map extends MyNode
         }
         return res;
     }
+
+    var shadow = null;
+    var animateLayer = null;
     function initView()
     {
         bg = sprite("map"+str(kind)+".png", ARGB_8888).pos(0, 0);//.pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         init(); 
         grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
-        grid.addsprite("mapGrid.png").color(100, 100, 100, 30);
+        grid.addsprite("mapGrid.png").color(100, 100, 100, 100);
+        updateShadow();
+    }
+    function updateShadow()
+    {
+        if(shadow != null)
+        {
+            shadow.removefromparent();
+            shadow = null;
+        }
+        if(animateLayer != null)
+        {
+            animateLayer.removefromparent();
+            animateLayer = null;
+        }
+        var bSize = bg.prepare().size();
+        var mData = getData(MAP_INFO, kind);
+        if(mData["hasMask"])
+        {
+            shadow = sprite("map"+str(kind)+"Shadow.png").pos(0, 0).size(bSize);
+            bg.add(shadow, 10000);
+        }
+        if(mData["hasAnimation"])
+        {
+            animateLayer = node();
+            bg.add(animateLayer, 1000);
+            var ani = getMapAnimate(kind);
+            for(var i = 0; i < len(ani); i++)
+            {
+                var allPos = ani[i][1];
+                for(var j = 0; j < len(allPos); j += 2)
+                {
+                    var a = sprite().pos(allPos[j], allPos[j+1]);
+                    a.addaction(repeat(ani[i][0](getParam("bubbleTime"))));
+                    animateLayer.add(a);
+                }
+            }
+        }
     }
     function Map(k, sm, s, sc, eq)
     {

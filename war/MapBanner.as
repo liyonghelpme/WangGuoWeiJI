@@ -198,7 +198,7 @@ class MapBanner extends MyNode
             var feaFil = FEA_BLUE;
             var fea = solPic.addsprite("soldierfm"+str(sdata["id"])+".plist/ss"+str(sdata["id"])+"fm0.png", feaFil);
             var sca = getSca(solPic, [71, 70]);
-            solPic.scale(sca, sca);
+            solPic.scale(-sca, sca);
 
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
             panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);

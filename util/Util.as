@@ -493,54 +493,9 @@ function getZord(curPos)
     return curPos[1];
 }
 
-/*
-function checkPlaning()
-{
-    //trace("curScene", type(global.director.curScene), type(CastleScene));
-    if(global.staticScene == null)
-        return 0;
-    if(global.director.curScene == global.staticScene)
-        return global.director.curScene.Planing;
-    return 0;
-}
-*/
 
 /*
 访问是否存在临时的动画数组，如果不存在则拼接一个并存储在全局范围中，下次调用可以重用
-*/
-/*
-function getMoveAnimate(id)
-{
-    var ani = moveAnimate.get(id, null);
-    if(ani != null)
-        return ani;
-    var data = getData(SOLDIER, id);
-    var num = data.get("moveNum");
-    var pics = [];
-    for(var i = 0; i < num; i++)
-    {
-        pics.append("ss"+str(id)+"m"+str(i)+".png"); 
-    }
-    ani = [pics, 2000];
-    moveAnimate.update(id, ani);
-    return ani;
-}
-function getAttAnimate(id)
-{
-    var ani = attAnimate.get(id);
-    if(ani != null)
-        return ani;
-    var data = getData(SOLDIER, id);
-    var num = data.get("attNum");
-    var pics = [];
-    for(var i = 0; i < num; i++)
-    {
-        pics.append("ss"+str(id)+"a"+str(i)+".png"); 
-    }
-    ani = [pics, 1000];
-    attAnimate.update(id, ani);
-    return ani;
-}
 */
 
 //功能完全被colorWordsNode 取代
@@ -558,23 +513,6 @@ function colorWords(str)
 //每个区间前6个字符表示颜色
 //rrggbbxxxxx\nrrggbbxxxxxx\nrrggbbxxxxxxx]rrggbbxxxxx]
 //rrggbbxxxxx]rrggbbxxxx]rrggbbxxxxxx]
-/*
-function stringLines(s, sz, lineHeight, color, ft)
-{
-    var n = node();
-    s = s.split("\n");
-    var nSize = [0, 0];
-    for(var i = 0; i < len(s); i++)
-    {
-        var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, ft).pos(0, lineHeight * i).color(color);
-        var lSize = lab.prepare().size();
-        nSize[0] = max(lSize[0], nSize[0]);
-        nSize[1] += lineHeight;
-    }
-    n.size(nSize);
-    return n;
-}
-*/
 //hex xx--->0-255
 function hex2int(s)
 {
@@ -731,6 +669,7 @@ function getMapAnimate(id)
     var res = [];
     for(var i = 0; i < len(ani); i++)
     {
+        load_sprite_sheet("m"+str(ani[i])+"a.plist");
         res.append(mapAnimate.get(ani[i]));
     }
     return res;

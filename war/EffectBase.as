@@ -61,7 +61,7 @@ class EffectBase extends MyNode
         if(tar != null)//攻击对象没有死亡
         {
             var hurt = calHurt(sol, tar);
-            tar.changeHealth(sol, -hurt);
+            tar.acceptHarm(sol, hurt);
         }
         removeSelf();
     }

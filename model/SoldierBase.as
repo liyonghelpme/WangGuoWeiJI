@@ -22,10 +22,7 @@ function getStage(data)
     var grade = soldierGrade[data.get("grade")];
     var magic = data.get("kind");
 
-    if(magic == 2)
-        magic = 1;
-    else 
-        magic = 0;
+    var magic = data["attackKind"];
     res = [];
     for(var i = 0; i < len(soldierLevel); i++)
     {
@@ -33,11 +30,11 @@ function getStage(data)
         r.append(soldierAttBase[i][0]*category[0]*grade/10000);
         r.append(soldierAttBase[i][1]*category[1]*grade/10000);
         r.append(soldierAttBase[i][2]*category[2]*grade/10000);
-        if(magic == 0)
+        if(magic == PHYSIC_ATTACK)
             r.append(soldierAttBase[i][3]*category[3]*grade/10000);
         else
             r.append(0);
-        if(magic == 1)
+        if(magic == MAGIC_ATTACK)
             r.append(soldierAttBase[i][3]*category[3]*grade/10000);
         else
             r.append(0);
@@ -292,7 +289,15 @@ function calHurt(src, tar)
     var magHurt = src.magicAttack*mcoff*tar.pureMagDefense/tar.magicDefense/100;
 
     var hurt = max(phyHurt+magHurt, 1);
-    return hurt;
+
+    var critical = rand(100);
+    var criHit = 0;
+    if(critical < src.data["criticalHitRate"])
+    {
+        criHit = 1;
+        hurt *= 2;
+    }
+    return [hurt, criHit];
 }
 
 function getSkillColdTime(soldierId, skillId, skillLevel)
@@ -308,15 +313,6 @@ function getSkillColdTime(soldierId, skillId, skillLevel)
 
 //得到转职等级 我方士兵得到转职等级
 //敌方士兵 得到转职等级 敌方怪兽得到转职等级
-/*
-function getProLevel(sid)
-{
-    var sdata = global.user.getSoldierData(sid);
-    var kind = sdata.get("id");
-    var proLevel = kind%10;
-    return proLevel;
-}
-*/
 
 function getMakeUpRate(id)
 {

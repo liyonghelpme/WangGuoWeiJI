@@ -262,25 +262,29 @@ function ani1()
     return animate(2000, "m3a0.png", "m3a1.png", "m3a2.png", "m3a3.png", "m3a4.png", "m3a5.png", "m3a6.png", "m3a7.png", "m3a8.png", "m3a9.png", "m3a10.png", "m3a11.png", "m3a12.png", "m3a13.png", "m3a14.png", "m3a15.png", "m3a16.png", "m3a17.png", "m3a18.png", "m3a19.png");
 }
 
-function ani2()
+function ani2(t)
 {
-    return animate(2000, "m2a0.png", "m2a1.png","m2a2.png","m2a3.png","m2a4.png","m2a5.png","m2a6.png","m2a7.png","m2a8.png","m2a9.png","m2a10.png","m2a11.png","m2a12.png","m2a13.png","m2a14.png","m2a15.png","m2a16.png","m2a17.png","m2a18.png");
+    return animate(t, "m2a.plist/m2a0.png", "m2a.plist/m2a1.png", "m2a.plist/m2a2.png", "m2a.plist/m2a3.png", "m2a.plist/m2a4.png", "m2a.plist/m2a5.png", "m2a.plist/m2a6.png", "m2a.plist/m2a7.png", "m2a.plist/m2a8.png", "m2a.plist/m2a9.png", "m2a.plist/m2a10.png", "m2a.plist/m2a11.png", "m2a.plist/m2a12.png", "m2a.plist/m2a13.png", "m2a.plist/m2a14.png", "m2a.plist/m2a15.png", "m2a.plist/m2a16.png", "m2a.plist/m2a17.png", "m2a.plist/m2a18.png");
 }
+
+
 
 function ani3()
 {
     return animate(2000, "m1a0.png", "m1a1.png", "m1a2.png", ARGB_8888);
 }
-function ani4()
+
+function ani4(t)
 {
-    return animate(2000, "m4a0.png", "m4a1.png","m4a2.png","m4a3.png","m4a4.png","m4a5.png","m4a6.png","m4a7.png","m4a8.png","m4a9.png","m4a10.png","m4a11.png","m4a12.png","m4a13.png","m4a14.png","m4a15.png","m4a16.png","m4a17.png","m4a18.png","m4a19.png");
+    return animate(t, "m4a.plist/m4a0.png", "m4a.plist/m4a1.png", "m4a.plist/m4a2.png", "m4a.plist/m4a3.png", "m4a.plist/m4a4.png", "m4a.plist/m4a5.png", "m4a.plist/m4a6.png", "m4a.plist/m4a7.png", "m4a.plist/m4a8.png", "m4a.plist/m4a9.png", "m4a.plist/m4a10.png", "m4a.plist/m4a11.png", "m4a.plist/m4a12.png", "m4a.plist/m4a13.png", "m4a.plist/m4a14.png", "m4a.plist/m4a15.png", "m4a.plist/m4a16.png", "m4a.plist/m4a17.png", "m4a.plist/m4a18.png", "m4a.plist/m4a19.png");
 }
+
 var mapAnimate = dict([
     [0, [ani0, [646+22, -62+61]]],
     [1, [ani1, [816, -15]]],
-    [2, [ani2, [142, 293, 480, 293, 816, 156, 302, 140, 566, 92, 228, 26]]],
+    [2, [ani2, [103, 213, 350, 213, 595, 113, 220, 102, 413, 67, 166, 18]]],
     [3, [ani3, [777, 58]]],
-    [4, [ani4, [657, 306, 449, 226, 759, 178]]]
+    [4, [ani4, [479, 223, 327, 164, 554, 129]]],
 ]);
 
 /*
@@ -1252,3 +1256,6 @@ const MAP_SOL_SCALE = 73;
 const MAKE_NOW = 0;
 const FLY_NOW = 1;
 const BOMB_NOW = 2;
+
+const PHYSIC_ATTACK = 0;
+const MAGIC_ATTACK = 1;

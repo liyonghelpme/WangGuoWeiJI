@@ -43,15 +43,8 @@ class CloseSoldier
     {
         if(sol.tar != null)
         {
-            /*
-            //关闭近战特效
-            if(sol.data.get("attSpe") != -1)//攻击特效 不为-1表示存在
-            {
-                sol.map.addChildZ(new CloseAttackEffect(sol), 0);
-            }
-            */
             var hurt = calHurt(sol, sol.tar);
-            sol.tar.changeHealth(sol, -hurt);
+            sol.tar.acceptHarm(sol, hurt);
         }
     }
 }
