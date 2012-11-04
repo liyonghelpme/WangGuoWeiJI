@@ -1297,8 +1297,8 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         attSpeed /= 100;
         
         attAni.duration = attSpeed;//修正攻击速度
-
-        if(kind == LONG_DISTANCE || kind == MAGIC )
+        //变身之后 远程攻击范围增加
+        if(data["closeOrFar"] == FAR_SOL)
             attRange += getRangeAdd(id); 
     }
 

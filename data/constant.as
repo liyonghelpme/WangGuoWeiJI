@@ -1259,3 +1259,6 @@ const BOMB_NOW = 2;
 
 const PHYSIC_ATTACK = 0;
 const MAGIC_ATTACK = 1;
+
+const CLOSE_SOL = 0;
+const FAR_SOL = 1;
