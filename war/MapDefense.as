@@ -19,10 +19,17 @@ class MapDefense extends MyNode
 
     var hurts = dict();
     var data;
+    var sx = 1;
+    var sy = 1;
+    var curMap = [0, 0];
     function MapDefense(m, i, d)
     {
         map = m;
         color = i;
+        if(color == MYCOLOR)
+            curMap = [0, 0];
+        else
+            curMap = [MAP_WIDTH, 0];
         //城墙属性类型100
         data = dict([["category", 100]]);
         state = MAP_SOL_DEFENSE;
@@ -82,5 +89,20 @@ class MapDefense extends MyNode
     }
     function hideBlood()
     {
+    }
+
+    function setMap()
+    {
+        var i = 0;
+        if(color == MYCOLOR)
+        {
+            for(i = 0; i < 5; i++)
+                map.roundGridController.setMap(0, i, 1, 1, this);
+        }
+        else
+        {
+            for(i = 0; i < 5; i++)
+                map.roundGridController.setMap(MAP_WIDTH, i, 1, 1, this);
+        }
     }
 }

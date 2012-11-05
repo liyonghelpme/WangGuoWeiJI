@@ -800,7 +800,8 @@ class Soldier extends MyNode
     {
         if(tarMovePos != null)
         {
-            var tpos = tarMovePos;
+            var tpos = getSolPos(tarMovePos[0], tarMovePos[1], sx, sy, offY);
+            //var tpos = tarMovePos;
             var mpos = bg.pos();
             var difx = tpos[0] - mpos[0];
             if(difx > 0)
@@ -944,6 +945,7 @@ class Soldier extends MyNode
     */
     function checkTarDistance()
     {
+        //trace("curMap", curMap, tar.curMap, sx, sy, attRange);
         return (
             ((curMap[0]+sx) >= tar.curMap[0] && curMap[0] <= (tar.curMap[0]+tar.sx)) 
             || (abs(tar.curMap[0]-curMap[0]-sx) <= attRange || abs(curMap[0]-tar.curMap[0]-tar.sx) <= attRange)
@@ -1023,6 +1025,10 @@ class Soldier extends MyNode
         }
         var ret;
         var cheDis;
+        var nextPos;
+        var newPos;
+        var curPos;
+        var hasCol;
         if(health < 0 && state != MAP_SOL_DEAD)
         {
             dead = 1;
@@ -1057,11 +1063,81 @@ class Soldier extends MyNode
         if(state == MAP_SOL_ARRANGE)
         {
         }
-        //设定了移动目标位置
+        //设定了移动目标位置 
+        //训练时使用
+        //必须移动到目的地 之后 才可以调整方向
         else if(state == MAP_SOL_POS)
         {
+            curPos = bg.pos();
+            nextPos = getSolPos(nextMap[0], nextMap[1], sx, sy, offY);
+
+            if(curPos[0] == nextPos[0])//移动到下一个格子 设定下一个移动方向 检测冲突 如果 冲突中有地方士兵则攻击 否则 只是播放移动
+            {
+                shiftAni.stop();
+                //ret = checkTarState();
+                //if(ret)
+                //    return;
+                //和目标相交 
+                //目标相离 距离
+                //相交
+
+                if(curMap[0] == tarMovePos[0])
+                {
+                    state = MAP_SOL_FREE;
+                    clearAnimation();
+                    return;
+                }
+                else
+                {
+                    dist = tarMovePos[0]-curMap[0];
+                    if(dist > 0)
+                    {
+                        nextMap[0] += 1;
+                    }
+                    else
+                    {
+                        nextMap[0] -= 1;
+                    }
+
+                    hasCol = 0;
+                    colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
+                    for(i = 0; i < len(colObjects); i++)
+                    {
+                        if(colObjects[i] != this)//防止和自己冲突
+                        {
+                            hasCol = 1;
+                            break;
+                        }
+                    }
+                    //有冲突暂时不移动 设定下一个位置为本位置
+                    if(hasCol)
+                    {
+                        nextMap = copy(curMap);
+                        clearAnimation();
+                        state = MAP_SOL_FREE;
+                        return;    
+                    }
+                    clearMap();
+                    curMap = copy(nextMap);
+                    setMap();
+
+                    newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+                    dist = abs(newPos[0]-bg.pos()[0]);
+                    t = dist*1000/speed;
+                    shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
+                    bg.addaction(shiftAni);
+                }
+            }
+            else
+            {
+                shiftAni.stop();
+                dist = abs(nextPos[0]-bg.pos()[0]);
+                t = dist*1000/speed;
+                shiftAni = moveto(t, nextPos[0], bg.pos()[1]); 
+                bg.addaction(shiftAni);
+            }
+            /*
             shiftAni.stop();
-            //clearAnimation();
              
             tPos = tarMovePos;
             dist = abs(bg.pos()[0]-tPos[0]);//同一行 
@@ -1082,6 +1158,7 @@ class Soldier extends MyNode
             t = dist*1000/speed;
             shiftAni = moveto(t, tPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
+            */
 
         }
         else if(state == MAP_SOL_FREE)
@@ -1099,12 +1176,11 @@ class Soldier extends MyNode
             }
 
         }
-        
         //对方在移动过程中死亡 或者 被save 都停止攻击
         else if(state == MAP_SOL_MOVE)
         {
-            var curPos = bg.pos();
-            var nextPos = getSolPos(nextMap[0], nextMap[1], sx, sy, offY);
+            curPos = bg.pos();
+            nextPos = getSolPos(nextMap[0], nextMap[1], sx, sy, offY);
             //trace("curPos, nextPos", curPos, nextPos, curMap, nextMap);
             if(curPos[0] == nextPos[0])//移动到下一个格子 设定下一个移动方向 检测冲突 如果 冲突中有地方士兵则攻击 否则 只是播放移动
             {
@@ -1136,7 +1212,7 @@ class Soldier extends MyNode
                         nextMap[0] -= 1;
                     }
 
-                    var hasCol = 0;
+                    hasCol = 0;
                     colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
                     for(i = 0; i < len(colObjects); i++)
                     {
@@ -1156,12 +1232,21 @@ class Soldier extends MyNode
                     curMap = copy(nextMap);
                     setMap();
 
-                    var newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+                    newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
                     dist = abs(newPos[0]-bg.pos()[0]);
                     t = dist*1000/speed;
                     shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
                     bg.addaction(shiftAni);
                 }
+            }
+            else
+            {
+                shiftAni.stop();
+                dist = abs(nextPos[0]-bg.pos()[0]);
+                t = dist*1000/speed;
+                shiftAni = moveto(t, nextPos[0], bg.pos()[1]); 
+                bg.addaction(shiftAni);
+            }
         }
         /*
         inAttacking = 0 攻击动画结束 ---> 计算伤害 --->重新启动动画
@@ -1394,13 +1479,18 @@ class Soldier extends MyNode
     }
     function setMoveTar(t)
     {
-        tarMovePos = t;
+        
+        var myMap = getSolMap(tarMovePos, sx, sy, offY);
+        //var normalPos = getSolPos(myMap[0], myMap[1], sx, sy, offY);
+        //tarMovePos = no;
+        tarMovePos = myMap;
         if(state != MAP_SOL_DEAD && state != MAP_SOL_SAVE)
         {
             state = MAP_SOL_POS;
             setMoveDir();
             clearAnimation();
             movAni.enterScene();//进入行走状态
+            nextMap = copy(curMap);
         }
     }
 

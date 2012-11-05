@@ -1051,7 +1051,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     function initDefense()
     {
         var defense = mapInfo.get(kind);
-        var d = new MapDefense(this, 0, defense[0]);
+        var d = new MapDefense(this, MYCOLOR, defense[0]);
         var i;
         var row;
         d.setDefense(global.user.getValue("cityDefense"));
@@ -1062,11 +1062,13 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             row.append(d);
             soldiers.update(i, row);
         }
+        d.setMap();
         defenses.append(d);
 
 
+
         //big*10+small
-        d = new MapDefense(this, 1, defense[1]);
+        d = new MapDefense(this, ENECOLOR, defense[1]);
         d.setDefense(scene.getEneDefense());
 
         addChildZ(d, 0);
@@ -1076,6 +1078,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             row.append(d);
             soldiers.update(i, row);
         }
+        d.setMap();
         defenses.append(d);
 
 //        trace("soldiers each row", soldiers);
