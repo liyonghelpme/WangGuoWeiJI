@@ -20,6 +20,26 @@ class Soldier extends MyNode
     //士兵防御力 = 基础职业防御力 + 等级对应防御力 + 装备属性防御力
     //士兵生命值 = 基础职业生命值 + 等级对应生命值 + 装备增加生命值
 
+    var curMap = [0, 0];
+    //目标移动网格
+    var nextMap = [0, 0];
+
+    //统一 arrange 和 移动
+    function initMap()
+    {
+        curMap = getSolMap(bg.pos(), sx, sy, offY);
+        setMap();
+    }
+    function clearMap()
+    {
+        map.roundGridController.clearMap(curMap[0], curMap[1], sx, sy, this);
+    }
+    function setMap()
+    {
+        map.roundGridController.setMap(curMap[0], curMap[1], sx, sy, this);
+    }
+
+
     var tarMovePos = null;
 
     var map;
@@ -744,6 +764,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     //布局结束 增加士兵的攻击力 防御力 消耗 士兵的药水状态
     function finishArrange()
     {
+        initMap();
         var drugUse = 0;
         if(addAttackTime > 0)
         {
@@ -827,12 +848,36 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             }
         }
     }
+
+    function getTar()
+    {
+        var rowObjects = map.roundGridController.getRowObjects(curMap[0], curMap[1], sx, sy, this);
+        //trace("rowObjects", rowObjects);
+        var minDist = 10000;
+        var minTar = null;
+        for(var i = 0; i < len(rowObjects); i++)
+        {
+            var so = rowObjects[i];
+            if(so.color == color || so.state == MAP_SOL_DEAD || so.state == MAP_SOL_SAVE)
+                continue;
+
+            var p = so.getPos();
+            var dist = abs(bg.pos()[0]-p[0]);   
+            if(dist < minDist)
+            {
+                minDist = dist;
+                minTar = so;
+            }
+        }
+        return minTar;
+    }
     /*
     攻击最近的同一条线的对象
     攻击不同线的敌人
     攻击第二近的敌人
     确认了目标 但是还需要 一步一步的移动
     */
+    /*
     function getTar()
     {
         //同一条线的敌方对象 面前纵格子的对象 
@@ -858,6 +903,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         }
         return minTar;
     }
+    */
     override function setPos(p)
     {
         var zOrd = p[1];
@@ -907,6 +953,13 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
     敌方士兵的AI周期---> 技能冷却释放技能
     AI 周期大于动画周期
     */
+    function checkTarDistance()
+    {
+        return (
+            ((curMap[0]+sx) >= tar.curMap[0] && curMap[0] <= (tar.curMap[0]+tar.sx)) 
+            || (abs(tar.curMap[0]-curMap[0]-sx) <= attRange || abs(curMap[0]-tar.curMap[0]-tar.sx) <= attRange)
+            );
+    }
     var aiTime = 0;
     const AI_PERIOD = 5000;
     function update(diff)
@@ -915,6 +968,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         var dist;
         var colObj;
         var t;
+        var colObjects;
         if(stopNow == 1)
             return;
 
@@ -981,10 +1035,12 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             }
         }
         var ret;
+        var cheDis;
         if(health < 0 && state != MAP_SOL_DEAD)
         {
             dead = 1;
             health = 0;
+            clearMap();
             
             state = MAP_SOL_DEAD;
             shadow.removefromparent();
@@ -1048,80 +1104,105 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             if(tar != null)
             {
                 clearAnimation();
-                //changeDirNode.addaction(movAni);
                 movAni.enterScene();
+                nextMap = copy(curMap);//移动的下一个位置 和当前位置重叠
 
                 setDir();
                 state = MAP_SOL_MOVE;
             }
 
         }
+        
         //对方在移动过程中死亡 或者 被save 都停止攻击
         else if(state == MAP_SOL_MOVE)
         {
-            ret = checkTarState();
-            if(ret)
-                return;
-
-            shiftAni.stop();
-
-            tPos = tar.getPos();
-            dist = abs(bg.pos()[0]-tPos[0]);//同一行 
-
-            if((dist-getVolumn()-tar.getVolumn()) <= attRange)//攻击范围
+            var curPos = bg.pos();
+            var nextPos = getSolPos(nextMap[0], nextMap[1], sx, sy, offY);
+            //trace("curPos, nextPos", curPos, nextPos, curMap, nextMap);
+            if(curPos[0] == nextPos[0])//移动到下一个格子 设定下一个移动方向 检测冲突 如果 冲突中有地方士兵则攻击 否则 只是播放移动
             {
-                state = MAP_SOL_ATTACK;
-                clearAnimation();
-                attAni.enterScene();
-                return;
-            }
-            
-            //在前方存在冲突对象不能移动 更换攻击目标
-            colObj = map.checkDirCol(this, tar);
-            //trace("colObj", colObj);
-            if(colObj != null)
-            {
-                clearAnimation();
-                state = MAP_SOL_FREE;
-                tar = null;
-                return;
-            }
-            t = dist*1000/speed;
-            shiftAni = moveto(t, tPos[0], bg.pos()[1]); 
-            bg.addaction(shiftAni);
-        }
-        else if(state == MAP_SOL_TOUCH)
-        {
-            tar = null;
-            clearAnimation();
-            //changeDirNode.addaction(movAni);
-            movAni.enterScene();
-            state = MAP_SOL_WATI_TOUCH; 
+                shiftAni.stop();
+                ret = checkTarState();
+                if(ret)
+                    return;
+                //和目标相交 
+                //目标相离 距离
+                //相交
+                cheDis = checkTarDistance();
+                if(cheDis)
+                {
+                    state = MAP_SOL_ATTACK;
+                    clearAnimation();
+                    attAni.enterScene();
+                    return;
+                }
+                else
+                {
+                    tPos = tar.getPos();
+                    dist = tPos[0]-bg.pos()[0];
+                    if(dist > 0)
+                    {
+                        nextMap[0] += 1;
+                    }
+                    else
+                    {
+                        nextMap[0] -= 1;
+                    }
+
+                    var hasCol = 0;
+                    colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
+                    for(i = 0; i < len(colObjects); i++)
+                    {
+                        if(colObjects[i] != this)//防止和自己冲突
+                        {
+                            hasCol = 1;
+                            break;
+                        }
+                    }
+                    //有冲突暂时不移动 设定下一个位置为本位置
+                    if(hasCol)
+                    {
+                        nextMap = copy(curMap);
+                        return;    
+                    }
+                    clearMap();
+                    curMap = copy(nextMap);
+                    setMap();
+
+                    var newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+                    dist = abs(newPos[0]-bg.pos()[0]);
+                    t = dist*1000/speed;
+                    shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
+                    bg.addaction(shiftAni);
+                }
         }
         /*
         inAttacking = 0 攻击动画结束 ---> 计算伤害 --->重新启动动画
         */
         else if(state == MAP_SOL_ATTACK)
         {
+            
             ret = checkTarState();
             if(ret)
                 return;
-            tPos = tar.getPos();
-            dist = abs(tPos[0]-bg.pos()[0]);
-            if((dist- getVolumn() - tar.getVolumn())> attRange)
+            cheDis = checkTarDistance();
+            if(cheDis)
             {
-                clearAnimation();
-                movAni.enterScene();
-                setDir();
-                state = MAP_SOL_MOVE; 
-                return;
+                
+                 attTime += diff;
+                //攻击动画与伤害计算 分离
+                 if(attTime >= attSpeed)
+                 {
+                     funcSoldier.doAttack();
+                     attTime -= attSpeed;
+                 }
             }
-            attTime += diff;
-            //攻击动画与伤害计算 分离
-            if(attTime >= attSpeed)
+            else
             {
-                funcSoldier.doAttack();
-                attTime -= attSpeed;
+                attTime = 0;
+                clearAnimation();
+                state = MAP_SOL_FREE; 
+                tar = null;
             }
         }
         else if(state == MAP_SOL_WATI_TOUCH)

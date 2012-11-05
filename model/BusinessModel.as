@@ -156,10 +156,6 @@ function getProduction(level)
     return crystal;
 }
 
-function getMapKey(x, y)
-{
-    return x*10000+y;
-}
 
 const GOODS_COFF = 10000;
 function getGoodsKey(kind, id)

@@ -6,6 +6,7 @@
 */
 class Map extends MyNode
 {
+    var roundGridController;
     var kind;
     var touchDelegate;
     var scene;
@@ -137,13 +138,16 @@ class Map extends MyNode
             }
         }
     }
+    var gridLayer;
     function Map(k, sm, s, sc, eq)
     {
+        roundGridController = new RoundGridController(this);
         monEquips = eq;
         scene = sc;
         kind = k;
         small = sm;
         initView();
+        gridLayer = bg.addnode();
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
@@ -504,10 +508,12 @@ class Map extends MyNode
     
     //存储所有我方士兵实体 当战斗结束之后清算奖励 只变更我方士兵的数据状态
     var mySoldiers = [];
+    var soldierInstance = [];
     function finishArrange()
     {
-        var it = soldiers.values();
+        //var it = soldiers.values();
         grid.removefromparent();
+        /*
         for(var i = 0; i < len(it); i++)
         {
             for(var j = 0; j < len(it[i]); j++)
@@ -522,7 +528,17 @@ class Map extends MyNode
                 }
             }
         }
+        */
 
+        for(var i = 0; i < len(soldierInstance); i++)
+        {
+            var so = soldierInstance[i];
+            so.finishArrange();
+            if(so.color == MYCOLOR && so.addToMySol() == 0)
+            {
+                mySoldiers.append(so);
+            }
+        }
     }
     function checkMySoldier()
     {
@@ -572,7 +588,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
     }
 
-    //初始化敌人士兵
+    //初始化敌人士兵 怪兽 
     //sid=-1 kind level addAttack addDefense addAttackTime addDefenseTime
     function initSoldier(s)
     {
@@ -585,10 +601,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             for(i = 0; i < len(s); i++)
             {
-                so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
+                //so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
+                //nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
+
+                so = realAddSoldier(ENEMY, s[i]["id"], s[i], ENECOLOR);
                 nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
-                addChild(so);
                 so.setPos(nPos);
+                //addChild(so);
+                //so.setPos(nPos);
                 setMap(so);
             }
         }
@@ -596,7 +616,11 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             for(i = 0; i < len(s); i++)
             {
-                so = new Soldier(this, [ENECOLOR, s[i].get("id")], ENEMY, s[i]);  
+                so = realAddSoldier(ENEMY, s[i]["id"], s[i], ENECOLOR);
+                //nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
+                //so.setPos(nPos);
+
+                //so = new Soldier(this, [ENECOLOR, s[i].get("id")], ENEMY, s[i]);  
                 /*
                 设定人物位置会设定人物的zord 
                 所以要在添加了人物之后 设定位置
@@ -605,13 +629,46 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
                 nPos = getInitPos(so);
                 if(nPos[0] == -1)
+                {
+                    realRemoveSoldier(so);
                     break;
-                addChild(so);
+                }
+                //addChild(so);
                 so.setPos(nPos); 
                 setMap(so);
             }
         }
     }
+
+    function updateMapGrid()
+    {
+        gridLayer.removefromparent();
+        gridLayer = bg.addnode();
+        var k = roundGridController.mapDict.keys();
+        for(var i = 0; i < len(k); i++)
+        {
+            var x = k[i]/10000;
+            var y = k[i]%10000;
+
+            var p = getSolPos(x, y, 1, 1, 0);
+            var sp = gridLayer.addsprite("gridNew.png").size(MAP_OFFX, MAP_OFFY).pos(p).anchor(50, 100);
+        }
+        //trace("len grid", len(k));
+    }
+    function realAddSoldier(sid, id, priData, col)
+     {
+        var so = new Soldier(this, [col, id], sid, priData);
+         addChild(so);
+         soldierInstance.append(so);
+         return so;
+     }
+
+     function realRemoveSoldier(so)
+     {
+        so.clearMap();
+         so.removeSelf();
+         soldierInstance.remove(so);
+     }
     //每行只能放置一个士兵
     //取消随机放置功能
     //level grade category
@@ -705,7 +762,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         
         //英雄的怪兽档次 等级不能平级 基本能力太强太高了
 
-        var so = new Soldier(this, [ENECOLOR, sData.get("id")], ENEMY, dict([["level", sol.level]]));
+        var so = realAddSoldier(ENEMY, sData["id"], dict([["level", sol.level]]), ENECOLOR);
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         var x = rand(MAP_WIDTH-so.sx);//随机横坐标
         var y = min(oldMap[1], MAP_HEIGHT-so.sy);//纵坐标保证不超越下边界
@@ -727,9 +784,13 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 break;
             }
         }
-        if(find)
+        if(!find)
         {
-            addChild(so);
+            realRemoveSoldier(so);
+        }
+        else
+        {
+            //addChild(so);
             setMap(so);
             so.finishArrange();
             so.doAppearAni();
@@ -745,11 +806,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             var sid = data[i][0];
             var sdata = global.user.getSoldierData(sid);
-            var so = new Soldier(this, [MYCOLOR, sdata.get("id")], sid, null);
+            var so = realAddSoldier(sid, sdata["id"], null, MYCOLOR);
             var nPos = getInitPos(so);
             if(nPos[0] == -1)
+            {
+                realRemoveSoldier(so);
                 continue;
-            addChild(so);
+            }
+            //addChild(so);
             so.setPos(nPos);
             setMap(so);
             
@@ -766,8 +830,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     function addSoldier(sid)
     {
         var sdata = global.user.getSoldierData(sid);
-        var so = new Soldier(this, [MYCOLOR, sdata.get("id")], sid, null);
-        addChild(so);
+        var so = realAddSoldier(sid, sdata["id"], null, MYCOLOR);
+        //addChild(so);
         return so;
     }
 
@@ -983,8 +1047,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     //清空soldiers
     function removeSoldier(so)
     {
-        clearMap(so); 
-        so.removeSelf();
+        realRemoveSoldier(so);
     }
     /*
     布局时点击士兵头部 清除士兵数据 
@@ -1163,7 +1226,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 //坐标可能从 士兵传来 需要先转化成 世界坐标再计算相对地图坐标位置
                 moveSkillGrid(skillData, po[0], po[1]);
             }
-            //curMovSol = null;//释放技能则取消移动
             clearMoveSol();
         }
         else if(curMovSol == null)

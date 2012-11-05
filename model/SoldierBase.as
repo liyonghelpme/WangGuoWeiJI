@@ -314,21 +314,18 @@ function getSkillColdTime(soldierId, skillId, skillLevel)
 
 function getMakeUpRate(id)
 {
-    //var proLevel = getProLevel(sid);
     var careerLev = getCareerLev(id);
     return 110+20*careerLev;
 }
 function getAttSpeedRate(id)
 {
-    //var proLevel = getProLevel(sid);
     var careerLev = getCareerLev(id);
     return 95-careerLev*5;
 }
 function getRangeAdd(id)
 {
-    //var proLevel = getProLevel(sid);
     var careerLev = getCareerLev(id);
-    return careerLev*MAP_OFFX;
+    return careerLev+1;
 }
 
 function getMakeUpTime(sid, skillId, skLevel)

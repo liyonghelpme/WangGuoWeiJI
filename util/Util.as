@@ -1293,3 +1293,9 @@ function checkResLack(cost)
     }
     return ret;    
 }
+
+function getMapKey(x, y)
+{
+    return x*10000+y;
+}
+

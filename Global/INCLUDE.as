@@ -253,9 +253,7 @@ import views.ChallengeOver;
 
 
 import views.MoveObject;
-//import views.MapPause;
 import war.MapPause;
-//import views.SkillFlowBanner;
 import war.SkillFlowBanner;
 import war.MapDefense;
 
@@ -322,6 +320,7 @@ import views.UpgradeBanner;
 import model.SoldierAI;
 import model.BusinessModel;
 import model.RoundModel;
+import model.RoundGridController;
 import model.MapGridController;
 import model.SoldierBase;
 
