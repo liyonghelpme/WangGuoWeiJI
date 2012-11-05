@@ -1262,3 +1262,6 @@ const MAGIC_ATTACK = 1;
 const CLOSE_SOL = 0;
 const FAR_SOL = 1;
 
+
+const FIND_ENEMY = 0;
+const MOVE_CMD = 1;

@@ -20,6 +20,126 @@ class Soldier extends MyNode
     //士兵防御力 = 基础职业防御力 + 等级对应防御力 + 装备属性防御力
     //士兵生命值 = 基础职业生命值 + 等级对应生命值 + 装备增加生命值
 
+    //一次性命令
+    //持续性命令 执行一定 时间 不可以 被中断  
+    //可以中断命令
+    
+    //命令分成3个阶段:
+    //准备  执行  结束
+
+    var commandList = [];
+    var inCommand = 0;//正在执行某个命令
+    function pushCommand(op, param)
+    {
+        commandList.append([op, param]);
+    }
+    function findEnemy()
+    {
+        tar = getTar();
+        if(tar != null)
+        {
+            clearAnimation();
+            movAni.enterScene();
+            nextMap = copy(curMap);//移动的下一个位置 和当前位置重叠
+            setDir();
+            pushCommand(MOVE_CMD, null);
+        }
+    }
+    function doMove()
+    {
+        //var curPos = bg.pos();
+        //var nextPos = getSolPos(nextMap[0], nextMap[1], sx, sy, offY);
+        //if(curPos[0] == nextPos[0])//移动到下一个格子 设定下一个移动方向 检测冲突 如果 冲突中有地方士兵则攻击 否则 只是播放移动
+       // {
+            shiftAni.stop();
+            var ret = checkTarState();
+            if(ret)
+            {
+                pushCommand(FIND_ENEMY, null);
+                return;
+            }
+            //和目标相交 
+            //目标相离 距离
+            //相交
+            var cheDis = checkTarDistance();
+            if(cheDis)
+            {
+                //state = MAP_SOL_ATTACK;
+                //clearAnimation();
+                //attAni.enterScene();
+                return;
+            }
+            else
+            {
+                var tPos = tar.getPos();
+                var dist = tPos[0]-bg.pos()[0];
+                if(dist > 0)
+                {
+                    nextMap[0] += 1;
+                }
+                else
+                {
+                    nextMap[0] -= 1;
+                }
+
+                var hasCol = 0;
+                var colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
+                for(var i = 0; i < len(colObjects); i++)
+                {
+                    if(colObjects[i] != this)//防止和自己冲突
+                    {
+                        hasCol = 1;
+                        break;
+                    }
+                }
+                //有冲突暂时不移动 设定下一个位置为本位置
+                if(hasCol)
+                {
+                    nextMap = copy(curMap);
+                    return;    
+                }
+                clearMap();
+                curMap = copy(nextMap);
+                setMap();
+
+                var newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+                dist = abs(newPos[0]-bg.pos()[0]);
+                var t = dist*1000/speed;
+                shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
+                bg.addaction(sequence(shiftAni, finishMove));
+                inCommand = 1;
+            }
+        //}
+    }
+    function finishMove()
+    {
+        inCommand = 0;
+        pushCommand(MOVE_CMD, null);
+    }
+    function executeCommand(diff)
+    {
+        if(len(commandList) > 0 && !inCommand)
+        {
+            var cmd = commandList.pop(0);
+            var op = cmd[0];
+            var param = cmd[1];
+            if(op == FIND_ENEMY)
+            {
+                findEnemy();            
+            }
+            else if(op == MOVE_CMD)
+            {
+                doMove();
+            }
+        }
+    }
+    function clearCommand()
+    {
+    }
+    function update(diff)
+    {
+        executeCommand(diff);
+    }
     var curMap = [0, 0];
     //目标移动网格
     var nextMap = [0, 0];
@@ -49,18 +169,12 @@ class Soldier extends MyNode
     //10000ms 2000*100
     var speed = 50;
     var lastPoints;
-    //var mobj;
-    /*
-    data:
-    color kind
-    */
     var movAni;
     var attAni;
     var shiftAni;
     var recoverSpeed;
 
     var id;
-    //var cus;
     var shadow;
     var kind;
     var funcSoldier;
@@ -790,6 +904,7 @@ class Soldier extends MyNode
             backBanner.visible(1);
         else 
             backBanner.visible(0);
+        pushCommand(FIND_ENEMY, null);
     }
     function getDir()
     {
@@ -932,7 +1047,6 @@ class Soldier extends MyNode
     {
         if(tar.state == MAP_SOL_DEAD || tar.state == MAP_SOL_SAVE)
         {
-            state = MAP_SOL_FREE;
             clearAnimation();
             tar = null;
             return 1;
@@ -953,6 +1067,7 @@ class Soldier extends MyNode
     }
     var aiTime = 0;
     const AI_PERIOD = 5000;
+    /*
     function update(diff)
     {
         var tPos;
@@ -1136,29 +1251,6 @@ class Soldier extends MyNode
                 shiftAni = moveto(t, nextPos[0], bg.pos()[1]); 
                 bg.addaction(shiftAni);
             }
-            /*
-            shiftAni.stop();
-             
-            tPos = tarMovePos;
-            dist = abs(bg.pos()[0]-tPos[0]);//同一行 
-            if(dist < 5)
-            {
-                state = MAP_SOL_FREE;
-                clearAnimation();
-                return;
-            }
-
-            colObj = map.checkMoveDirCol(this, tarMovePos);
-            if(colObj != null)
-            {
-                clearAnimation();
-                state = MAP_SOL_FREE;
-                return;
-            }
-            t = dist*1000/speed;
-            shiftAni = moveto(t, tPos[0], bg.pos()[1]); 
-            bg.addaction(shiftAni);
-            */
 
         }
         else if(state == MAP_SOL_FREE)
@@ -1248,9 +1340,6 @@ class Soldier extends MyNode
                 bg.addaction(shiftAni);
             }
         }
-        /*
-        inAttacking = 0 攻击动画结束 ---> 计算伤害 --->重新启动动画
-        */
         else if(state == MAP_SOL_ATTACK)
         {
             
@@ -1280,10 +1369,6 @@ class Soldier extends MyNode
         else if(state == MAP_SOL_WATI_TOUCH)
         {
         }
-        /*
-        死亡后士兵实体并不会消失
-        保存在其它士兵的hurts 列表中 清空自身的hurt列表
-        */
         else if(state == MAP_SOL_DEAD)
         {
             deadTime += diff;
@@ -1296,6 +1381,7 @@ class Soldier extends MyNode
         }
 
     }
+    */
     override function enterScene()
     {
 //        trace("map", map, map.myTimer);
