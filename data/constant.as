@@ -1263,5 +1263,15 @@ const CLOSE_SOL = 0;
 const FAR_SOL = 1;
 
 
+//一次性命令
 const FIND_ENEMY = 0;
+//等待时间 指令
 const MOVE_CMD = 1;
+//等待时间指令
+const ATTACK_CMD = 2;
+//最高优先级指令
+const DEAD_CMD = 3;
+const MAKEUP_CMD = 4;
+const POS_MOVE_CMD = 5;
+const POSING_CMD = 6;
+const FINISH_ATTACK = 7;

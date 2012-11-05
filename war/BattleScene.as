@@ -324,6 +324,56 @@ class BattleScene extends MyNode
         {
             if(state != MAP_ARRANGE)//布局完成进入 游戏状态 停止刷新怪兽
             {
+                var eachRow = map.roundGridController.rows.items();
+                var hasLiveMon = 0;//mySol leftNum
+                for(var i = 0; i < len(eachRow); i++)
+                {
+                    var row = eachRow[i][1];
+                    var mySol = null;
+                    var eneSol = null;
+                    for(var j = 0; j < len(row); j++)
+                    {
+                        var sol = row[j];
+                        if(sol.color ==  ENECOLOR)
+                            eneSol = sol; 
+                        else if(sol.color == MYCOLOR)
+                            mySol = sol;
+                    }
+                    if(mySol != null && mySol.state != MAP_SOL_DEAD && mySol.state != MAP_SOL_SAVE)//未死亡
+                    {
+                        if(eneSol != null || mySol.leftMonNum > 0)//存在敌人 或者 存在剩余怪兽数量
+                            hasLiveMon = 1;
+                    }
+
+                    if(mySol != null && mySol.leftMonNum > 0 && mySol.state != MAP_SOL_DEAD && mySol.state != MAP_SOL_SAVE)
+                    {
+                        if(eneSol == null)
+                        {
+                            var newMon = map.genNewMonster(mySol);
+                            if(newMon != null)//有位置放置新的怪兽
+                                mySol.leftMonNum--;
+                        }
+                    }
+                }
+
+                if(!hasLiveMon)//没有存在敌人的我方士兵
+                {
+                    map.trainOver();  
+                    sceneSlowTimer.removeTimer(this);//停止怪兽数量刷新
+                }
+                map.showLeftNum();
+
+
+            }
+        }
+    }
+    /*
+    function update(diff)
+    {
+        if(kind == CHALLENGE_TRAIN)
+        {
+            if(state != MAP_ARRANGE)//布局完成进入 游戏状态 停止刷新怪兽
+            {
                 var eachRow = map.soldiers.items();//rowId ----> soldiers notDead 
                 var i;
                 var j;
@@ -381,4 +431,5 @@ class BattleScene extends MyNode
             }
         }
     }
+    */
 }

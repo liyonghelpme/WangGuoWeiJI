@@ -14,7 +14,7 @@ class Map extends MyNode
     var walkZone = 
     [MAP_INITX+MAP_OFFX/2, MAP_INITY+MAP_OFFY, MAP_INITX+MAP_OFFX*12+MAP_OFFX/2, MAP_INITY+MAP_OFFY*5];
 
-    var soldiers = dict();
+    //var soldiers = dict();
 
     /*
     gx*10000+gy = 士兵key
@@ -281,96 +281,6 @@ class Map extends MyNode
         return [-1, -1];
     }
     /*
-    首先根据当前格子和方向 得到所有可能的冲突
-    接着计算对方是否在我方向上  且对方的距离比体积小
-   
-    得到自己的map   得到目标 计算移动方向dir
-    得到两个格子的对象
-       在自己的前方对象 dir*difx > 0 距离小于 碰撞体积 则返回冲突对象 
-
-    只考虑x方向的距离
-    */
-    //考虑同一行的士兵是否在我们之间
-    //忽略 防御装置的 冲突处理问题 MAP_SOL_DEFENSE 不能阻挡士兵
-    function checkDirCol(sol, tar)
-    {
-        var myPos = sol.getPos();
-        var dir = tar.getPos()[0] - myPos[0];
-        if(dir > 0)
-            dir = 1;
-        else
-            dir = -1;
-        var solMap = getSolMap(myPos, sol.sx, sol.sy, sol.offY);
-        for(var j = 0; j < sol.sy; j++)//遍历每一行
-        {
-            //根据y值得到相应的map行
-            var it = soldiers.get(solMap[1]+j, []);
-            for(var i = 0; i < len(it); i++)
-            {
-                var col = it[i];
-                if(col == sol || col == tar || col.state == MAP_SOL_DEAD || col.state == MAP_SOL_DEFENSE)
-                    continue;
-                var dist = (col.getPos()[0]-myPos[0])*dir;
-                //trace("colDist", dist);
-                if(dist >= 0 && dist < (col.getVolumn()+sol.getVolumn()))
-                    return col;
-            }
-        }
-        return null;
-    }
-    //检测移动方向的直线冲突
-    //点击之后可以移动位置 或者释放技能
-    function checkMoveDirCol(sol, tarPos)
-    {
-        var myPos = sol.getPos();
-        var dir = tarPos[0] - myPos[0];
-        if(dir > 0)
-            dir = 1;
-        else
-            dir = -1;
-        var solMap = getSolMap(myPos, sol.sx, sol.sy, sol.offY);
-        for(var j = 0; j < sol.sy; j++)//遍历每一行
-        {
-            //根据y值得到相应的map行
-            var it = soldiers.get(solMap[1]+j, []);
-            for(var i = 0; i < len(it); i++)
-            {
-                var col = it[i];
-                if(col == sol || col.state == MAP_SOL_DEAD || col.state == MAP_SOL_DEFENSE)
-                    continue;
-                var dist = (col.getPos()[0]-myPos[0])*dir;
-                //trace("colDist", dist);
-                if(dist >= 0 && dist < (col.getVolumn()+sol.getVolumn()))
-                    return col;
-            }
-        }
-        return null;
-    }
-    //计算新出生的怪兽的位置是否冲突
-    function checkPosCol(sol)
-    {
-        var myPos = sol.getPos();
-        var solMap = getSolMap(myPos, sol.sx, sol.sy, sol.offY);
-        
-        for(var j = 0; j < sol.sy; j++)//遍历每一行
-        {
-            //根据y值得到相应的map行
-            var it = soldiers.get(solMap[1]+j, []);
-            for(var i = 0; i < len(it); i++)
-            {
-                var col = it[i];
-                if(col == sol || col.state == MAP_SOL_DEAD || col.state == MAP_SOL_DEFENSE)
-                    continue;
-                var dist = abs(col.getPos()[0]-myPos[0]);
-                //trace("colDist", dist);
-                //士兵之间横向距离冲突
-                if(dist >= 0 && dist < (col.getVolumn()+sol.getVolumn()))
-                    return col;
-            }
-        }
-        return null;
-    }
-    /*
     计算士兵的位置map
 
     挑战 闯关 检测 格子冲突
@@ -444,9 +354,9 @@ class Map extends MyNode
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var i = 0; i < sol.sy; i++)
         {
-            var row = soldiers.get(oldMap[1]+i, []);
-            row.append(sol);
-            soldiers.update(oldMap[1]+i, row);
+            //var row = soldiers.get(oldMap[1]+i, []);
+            //row.append(sol);
+            //soldiers.update(oldMap[1]+i, row);
 
             for(var j = 0; j < sol.sx; j++)
             {
@@ -467,10 +377,10 @@ class Map extends MyNode
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var i = 0; i < sol.sy; i++)
         {
-            var row = soldiers.get(oldMap[1]+i)
-            if(row == null)
-                continue;
-            row.remove(sol);
+            //var row = soldiers.get(oldMap[1]+i)
+            //if(row == null)
+            //    continue;
+            //row.remove(sol);
             for(var j = 0; j < sol.sx; j++)
             {
                 var key = (oldMap[0]+j)*10000+oldMap[1]+i;
@@ -511,25 +421,7 @@ class Map extends MyNode
     var soldierInstance = [];
     function finishArrange()
     {
-        //var it = soldiers.values();
         grid.removefromparent();
-        /*
-        for(var i = 0; i < len(it); i++)
-        {
-            for(var j = 0; j < len(it[i]); j++)
-            {
-                var so = it[i][j];
-                //占有多行的士兵只 清理一次
-                so.finishArrange();
-                //占有多行的士兵只加入一次
-                if(so.color == MYCOLOR && so.addToMySol() == 0)//我方士兵且 不为防御装置 且没有加入我方士兵列表 多行士兵可能被多次加入列表中应该避免
-                {
-                    mySoldiers.append(so);
-                }
-            }
-        }
-        */
-
         for(var i = 0; i < len(soldierInstance); i++)
         {
             var so = soldierInstance[i];
@@ -542,17 +434,10 @@ class Map extends MyNode
     }
     function checkMySoldier()
     {
-        var it = soldiers.values();
-        for(var i = 0; i < len(it); i++)
+        for(var i = 0; i < len(soldierInstance); i++)
         {
-            for(var j = 0; j < len(it[i]); j++)
-            {
-                var so = it[i][j];
-                if(so.color == MYCOLOR && so.state != MAP_SOL_DEFENSE)//我方士兵且 不为防御装置 且没有加入我方士兵列表 多行士兵可能被多次加入列表中应该避免
-                {
-                    return 1;
-                }
-            }
+            if(soldierInstance[i].color == MYCOLOR)
+                return 1;
         }
         return 0;
     }
@@ -655,7 +540,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
      function realRemoveSoldier(so)
      {
-        so.clearMap();
+         so.clearMap();
          so.removeSelf();
          soldierInstance.remove(so);
      }
@@ -767,12 +652,21 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var soPos = getSolPos(nx, y, so.sx, so.sy, so.offY);
             so.setPos(soPos);
 
-            var col = checkPosCol(so);
+            //var col = checkPosCol(so);
+
+            var colOjects = roundGridController.checkCol(nx, y, so.sx, so.sy, so);
+            if(len(colOjects) == 0)
+            {
+                find = 1;
+                break;
+            }
+            /*
             if(col == null)
             {
                 find = 1;
                 break;
             }
+            */
         }
         if(!find)
         {
@@ -970,9 +864,20 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     //闯关挑战 可以通过检测剩余士兵数量来判定游戏是否结束
     function checkGameOver()
     {
-        var v = soldiers.values(); 
+        //var v = soldiers.values(); 
         var myCount = 0;
         var eneCount = 0;
+
+        for(var i = 0; i < len(soldierInstance); i++)
+        {
+            if(soldierInstance[i].color == MYCOLOR)
+            {
+                myCount++;
+            }
+            else
+                eneCount++;
+        }
+        /*
         for(var i = 0; i < len(v); i++)
         {
             for(var j = 0; j < len(v[i]); j++)
@@ -991,6 +896,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             if(myCount > 0 && eneCount > 0)
                 break;
         }
+        */
 //        trace("myCount", myCount, eneCount);
 
         if(myCount == 0 || eneCount == 0)
@@ -1035,6 +941,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     //清空soldiers
     function removeSoldier(so)
     {
+        clearMap(so);
         realRemoveSoldier(so);
     }
     /*
@@ -1056,12 +963,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var row;
         d.setDefense(global.user.getValue("cityDefense"));
         addChildZ(d, 0);
+        /*
         for(i = 0; i < 5; i++)
         {
-            row = soldiers.get(i, []);
-            row.append(d);
-            soldiers.update(i, row);
+            //row = soldiers.get(i, []);
+            //row.append(d);
+            //soldiers.update(i, row);
         }
+        */
         d.setMap();
         defenses.append(d);
 
@@ -1072,12 +981,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         d.setDefense(scene.getEneDefense());
 
         addChildZ(d, 0);
+        /*
         for(i = 0; i < 5; i++)
         {
             row = soldiers.get(i, []);
             row.append(d);
             soldiers.update(i, row);
         }
+        */
         d.setMap();
         defenses.append(d);
 
@@ -1098,6 +1009,11 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     function stopGame()
     {
         myTimer.gameStop();
+        for(var i = 0; i < len(soldierInstance); i++)
+        {
+            soldierInstance[i].stopGame();
+        }
+        /*
         var val = soldiers.values();
         for(var i = 0; i < len(val); i++)
         {
@@ -1106,10 +1022,16 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 val[i][j].stopGame();
             }
         }
+        */
     }
     function continueGame()
     {
         myTimer.gameRestart();
+        for(var i = 0; i < len(soldierInstance); i++)
+        {
+            soldierInstance[i].continueGame();
+        }
+        /*
         var val = soldiers.values();
         for(var i = 0; i < len(val); i++)
         {
@@ -1118,6 +1040,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 val[i][j].continueGame();
             }
         }
+        */
     }
     override function enterScene()
     {
@@ -1367,6 +1290,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     }
     function hideBlood()
     {
+        for(var i = 0; i < len(soldierInstance); i++)
+        {
+            var sol = soldierInstance[i];
+            sol.hideBlood();
+        }
+        /*
         var allSol = soldiers.values();
         for(var i = 0; i < len(allSol); i++)
         {
@@ -1377,9 +1306,16 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                     sol.hideBlood();
             }
         }
+        */
     }
     function showBlood()
     {
+        for(var i = 0; i < len(soldierInstance); i++)
+        {
+            var sol = soldierInstance[i];
+            sol.showBlood();
+        }
+        /*
         var allSol = soldiers.values();
         for(var i = 0; i < len(allSol); i++)
         {
@@ -1390,6 +1326,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                     sol.showBlood();
             }
         }
+        */
     }
     var curMovSol = null;
     //设定当前要移动的士兵

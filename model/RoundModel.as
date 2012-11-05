@@ -80,18 +80,6 @@ function getSolMap(p, sx, sy, offY)
 
     return [xk, yk];
 }
-/*
-得到 sx = 0 sy = 0 点击位置 对应网格
-function getTouchMap(p, sx, sy, offY)
-{
-    var ix = p[0]-MAP_INITX;
-    var xk = ix/MAP_OFFX;
-    var iy = p[1]-MAP_INITY-offY;
-    var yk = iy/MAP_OFFY;
-
-    return [xk, yk];
-}
-*/
 
 //skill Map ---> 50 50 heart 
 
@@ -174,48 +162,6 @@ function getSolPos(mx, my, sx, sy, offY)
 }
 
 
-/*
-//<= bigNum
-function getOpenBig()
-{
-    var level = global.user.getValue("level");
-    if(level < 15)
-        return 1;
-    if(level < 30)
-        return 2;
-    if(level < 40)
-        return 3;
-    if(level < 50)
-        return 4;
-    return 5;
-}
-
-function getCurEnableDif()
-{
-    var star = global.user.starNum;
-    if(star == null)
-        return [1, 0];
-        
-    var i;
-    var j;
-    var find = 0;
-//    trace("curEnable ", star);
-    for(i = 0; i < len(star); i++)
-    {
-        for(j = 0; j < len(star[i]); j++)
-            if(star[i][j] == 0)
-            {
-                find = 1;
-                break;
-            }
-        if(find == 1)
-            break;
-    }
-    //enable big=i
-    //enable small = j
-    return [i+1, j];
-}
-*/
 
 function getTotalStar(big)
 {
