@@ -307,7 +307,7 @@ class Soldier extends MyNode
         bg = node();
         init();
 
-        bg.scale(MAP_SOL_SCALE);
+        bg.scale(getParam("mapSolScale"));
         changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
         changeDirNode.prepare();
         var bSize = changeDirNode.size();
@@ -338,7 +338,7 @@ class Soldier extends MyNode
         if(sx >= 2)
             suffix = "1";
 
-        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).scale(10000/MAP_SOL_SCALE);
+        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).scale(getParam("mapBloodScale"));
 
 
         if(color == ENECOLOR)
@@ -416,21 +416,10 @@ class Soldier extends MyNode
         addExp += e;
         exp += e; 
         
-        /*
-        //为了游戏流畅 在中间过程可以不写数据库 在结算经验的 被攻击方处 更新所有士兵状态
-        if(state != MAP_SOL_DEAD)
-        {
-            var temp = bg.addnode();
-            temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
-temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
-            temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
-        }
-        //bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
-        */
         if(state != MAP_SOL_DEAD)
         {
             var expPng = altasWord("blue", "+"+str(e)+"xp");
-            expPng.scale(22*100/expPng.size()[1]);
+            expPng.scale(getParam("expNumSize")*100/expPng.size()[1]);
             bg.add(expPng);
             expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
         }
@@ -482,7 +471,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
         //暴击
         if(hurt[1])
-            changeDirNode.addaction(sequence(tintto(getParam("criticalHitTime"), getParam("criticalHitColor"), 0, 0, 100), tintto(getParam("criticalFinishTime"), 100, 100, 100, 100)));
+            changeDirNode.addaction(sequence(tintto(getParam("criticalHitTime"), getParam("criticalHitRed")*100/255, getParam("criticalHitGreen")*100/255, getParam("criticalHitBlue")*100/255, 100), tintto(getParam("criticalFinishTime"), 100, 100, 100, 100)));
         
         var cs = changeDirNode.size();
         //攻击类型 物理
@@ -498,15 +487,15 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             //changeDirNode.addaction(sequence(tintto(500, 100, 0, 0), tintto(500, 100, 100, 100)));        
         }
 
-        if(add < 0)
+        if(hurt[1])
         {
-            bWord = altasWord("yellow", str(add));
-            bWord.scale(18*100/bWord.size()[1]);
+            bWord = altasWord("red", str(add));
+            bWord.scale(getParam("criticalNumSize")*100/bWord.size()[1]);
         }
         else
         {
-            bWord = altasWord("blue", "+"+str(add));
-            bWord.scale(22*100/bWord.size()[1]);
+            bWord = altasWord("yellow", str(add));
+            bWord.scale(getParam("harmNumSize")*100/bWord.size()[1]);
         }
         bg.add(bWord);
         bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
@@ -1030,8 +1019,6 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             {
                 makeUpState = 0;
                 finishMakeUpView();
-                //initAttackAndDefense(this);
-                //initHealth();
             }
         }
         var ret;
@@ -1480,7 +1467,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
                 feaFil = FEA_RED;
 
             var ani = getSolAnimate(id);
-            movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
+            movAni = new SoldierAnimate(getParam("soldierMoveAniTime"), ani[0], ani[2], changeDirNode, fea, feaFil);
             attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
             fea.visible(0);
@@ -1498,6 +1485,14 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
         }
         else
             funcSoldier = new OtherSoldier(this);
+    }
+    function finishMakeUpDate()
+    {
+        initAttackAndDefense(this);
+        attSpeed = data["attSpeed"];
+        attRange = data["range"];
+        initHealth();
+        attAni.duration = attSpeed;
     }
     //执行 逆向动画
     //动画结束 重新 initAttack  initHealth
@@ -1533,7 +1528,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
 
             var ani = getSolAnimate(id);
 
-            movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
+            movAni = new SoldierAnimate(getParam("soldierMoveAniTime"), ani[0], ani[2], changeDirNode, fea, feaFil);
             attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
             fea.visible(0);
@@ -1552,8 +1547,7 @@ temp.addlabel("+" + str(e), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).co
             //transAni.enterScene();
 
             //更新英雄数据
-            initAttackAndDefense(this);
-            initHealth();
+            finishMakeUpDate();
             finishTransform();
         }
     }

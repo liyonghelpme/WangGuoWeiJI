@@ -118,7 +118,7 @@ class Map extends MyNode
         var mData = getData(MAP_INFO, kind);
         if(mData["hasMask"])
         {
-            shadow = sprite("map"+str(kind)+"Shadow.png").pos(0, 0).size(bSize);
+            shadow = sprite("map"+str(kind)+"Shadow.png").pos(0, 0).size(bSize).color(100, 100, 100, mData["shadowOpacity"]);
             bg.add(shadow, 10000);
         }
         if(mData["hasAnimation"])
@@ -601,14 +601,9 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             for(i = 0; i < len(s); i++)
             {
-                //so = new Soldier(this, [1, s[i].get("id")], ENEMY, s[i]);  
-                //nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
-
                 so = realAddSoldier(ENEMY, s[i]["id"], s[i], ENECOLOR);
                 nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
                 so.setPos(nPos);
-                //addChild(so);
-                //so.setPos(nPos);
                 setMap(so);
             }
         }
@@ -617,10 +612,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             for(i = 0; i < len(s); i++)
             {
                 so = realAddSoldier(ENEMY, s[i]["id"], s[i], ENECOLOR);
-                //nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
-                //so.setPos(nPos);
-
-                //so = new Soldier(this, [ENECOLOR, s[i].get("id")], ENEMY, s[i]);  
                 /*
                 设定人物位置会设定人物的zord 
                 所以要在添加了人物之后 设定位置
@@ -633,7 +624,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                     realRemoveSoldier(so);
                     break;
                 }
-                //addChild(so);
                 so.setPos(nPos); 
                 setMap(so);
             }
@@ -790,7 +780,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
         else
         {
-            //addChild(so);
             setMap(so);
             so.finishArrange();
             so.doAppearAni();
@@ -813,7 +802,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 realRemoveSoldier(so);
                 continue;
             }
-            //addChild(so);
             so.setPos(nPos);
             setMap(so);
             

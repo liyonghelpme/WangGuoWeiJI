@@ -13,11 +13,7 @@ class DeadOver extends MyNode
 
     var changeDirNode;
     var fea;
-    //var deadTime = 
 
-    const WAIT_TIME = 300;
-    const ROTATE_TIME = 700;
-    const FALL_TIME = ROTATE_TIME+WAIT_TIME;
     function DeadOver(sol)
     {
         soldier = sol;
@@ -38,16 +34,18 @@ class DeadOver extends MyNode
 
         changeDirNode.addaction(
             sequence(
-                delaytime(WAIT_TIME),
-                moveby(100, 0, -15), 
-                spawn(rotateby(ROTATE_TIME, dir), moveby(ROTATE_TIME, 0, 5+cs[1]/2)), 
+
+                delaytime(getParam("deadWaitTime")),
+                moveby(getParam("jumpUpTime"), 0, -15), 
+                spawn(rotateby(getParam("rotateTime"), dir), moveby(getParam("rotateTime"), 0, 5+cs[1]/2)), 
                 itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
                 irotateby(-dir),
-                tintto(200, 0, 0, 0, 0),
-                tintto(200, 100, 100, 100, 100),
-                tintto(200, 0, 0, 0, 0),
-                tintto(200, 100, 100, 100, 100),
-                tintto(200, 0, 0, 0, 0)
+
+                tintto(getParam("twinkleTime"), 0, 0, 0, 0),
+                tintto(getParam("twinkleTime"), 100, 100, 100, 100),
+                tintto(getParam("twinkleTime"), 0, 0, 0, 0),
+                tintto(getParam("twinkleTime"), 100, 100, 100, 100),
+                tintto(getParam("twinkleTime"), 0, 0, 0, 0)
             )
         );
 
@@ -56,7 +54,7 @@ class DeadOver extends MyNode
             feaFil = FEA_RED;
         fea.addaction(
             sequence(
-                delaytime(WAIT_TIME+100+ROTATE_TIME),
+                delaytime(getParam("deadWaitTime")+getParam("jumpUpTime")+getParam("rotateTime")),
                 itexture("soldier"+str(soldier.id)+"deadFea.png", feaFil, UPDATE_SIZE)
             )
         );
@@ -67,10 +65,10 @@ class DeadOver extends MyNode
         blood.addaction( 
             sequence(
                 itintto(0, 0, 0, 0), 
-                delaytime(FALL_TIME),
+                delaytime(getParam("deadWaitTime")+getParam("jumpUpTime")+getParam("rotateTime")),
                 itintto(100, 100, 100, 100), 
-                delaytime(1000),
-                fadeout(1000)
+                delaytime(getParam("twinkleTime")*5),
+                fadeout(getParam("bloodDisappearTime"))
             )
         );
     }

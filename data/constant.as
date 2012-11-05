@@ -1250,7 +1250,6 @@ const LOAD_TRAIN = 2;
 const TRAIN_CENTER = [465, 720];
 
 
-const MAP_SOL_SCALE = 73;
 
 
 const MAKE_NOW = 0;
