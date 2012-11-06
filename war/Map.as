@@ -572,6 +572,13 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
     }
     
+    /*
+    首先生成 所有怪兽的一个档次列表 档次/10 大档次
+    所有兵力只有 1 2 3 4 5 6 个档次
+    其中英雄全部是 6档次
+    boss 是 5档次的 因此 将 boss 作为 英雄的怪兽
+        怪兽档次-------> 怪兽id
+    */
     function genNewMonster(sol)
     {
         var leftMonNum = sol.leftMonNum;
@@ -584,7 +591,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             initAllMonsters();
         }
-        var posMon = allMonsters.get(getGradeKey(grade));
+        //英雄采用boss档怪兽
+        var posMon;
+        if(getGradeKey(grade) == 6)
+            posMon = allMonsters.get(5);
+        else
+            posMon = allMonsters.get(getGradeKey(grade));
         //难度0 1 2 3
         //双倍经验 增加我方士兵
         var i;
@@ -687,19 +699,22 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var removed = [];
         for(var i = 0; i < len(data); i++)
         {
-            var sid = data[i][0];
-            var sdata = global.user.getSoldierData(sid);
-            var so = realAddSoldier(sid, sdata["id"], null, MYCOLOR);
-            var nPos = getInitPos(so);
-            if(nPos[0] == -1)
+            if(data[i][1] == 0)//未安排的士兵
             {
-                realRemoveSoldier(so);
-                continue;
+                var sid = data[i][0];
+                var sdata = global.user.getSoldierData(sid);
+                var so = realAddSoldier(sid, sdata["id"], null, MYCOLOR);
+                var nPos = getInitPos(so);
+                if(nPos[0] == -1)
+                {
+                    realRemoveSoldier(so);
+                    continue;
+                }
+                so.setPos(nPos);
+                setMap(so);
+                
+                removed.append(i);
             }
-            so.setPos(nPos);
-            setMap(so);
-            
-            removed.append(i);
         }
         return removed;
     }

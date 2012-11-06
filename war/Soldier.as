@@ -63,7 +63,7 @@ class Soldier extends MyNode
             setDir();
             pushCommand(MOVE_CMD, null);
         }
-        else    
+        if(len(commandList) == 0)
             pushCommand(FIND_ENEMY, null);
     }
     //鲁棒的移动
@@ -116,7 +116,8 @@ class Soldier extends MyNode
             if(hasCol)
             {
                 nextMap = copy(curMap);
-                pushCommand(MOVE_CMD, null);
+                if(len(commandList) == 0)
+                    pushCommand(MOVE_CMD, null);
                 return;    
             }
             clearMap();
@@ -128,7 +129,9 @@ class Soldier extends MyNode
             var t = dist*1000/speed;
             shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
-            pushCommand(MOVE_CMD, null);
+            //没有新的命令继续 移动
+            if(len(commandList) == 0)
+                pushCommand(MOVE_CMD, null);
             
             inCommand = 1;
             needTime = t;
@@ -139,7 +142,8 @@ class Soldier extends MyNode
     {
         if(tar != null)
             funcSoldier.doAttack(); 
-        pushCommand(ATTACK_CMD, null);
+        if(len(commandList) == 0)
+            pushCommand(ATTACK_CMD, null);
     }
     function doAttack(diff)
     {
@@ -176,10 +180,12 @@ class Soldier extends MyNode
             inCommand = 0;
             needTime = 0;
         }
+        /*
         if(len(commandList) == 0 && !inCommand && state == MAP_SOL_FREE)
         {
             pushCommand(FIND_ENEMY, null);
         }
+        */
         if(len(commandList) > 0 && !inCommand)
         {
             var cmd = commandList.pop(0);
@@ -278,7 +284,8 @@ class Soldier extends MyNode
             var t = dist*1000/speed;
             shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
-            pushCommand(POSING_CMD, null);
+            if(len(commandList) == 0)
+                pushCommand(POSING_CMD, null);
 
             inCommand = 1;
             needTime = t;
