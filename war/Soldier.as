@@ -52,10 +52,20 @@ class Soldier extends MyNode
     {
         commandList.append([op, param]);
     }
+
+    function beginAttack()
+    {
+        clearAnimation();
+        shiftAni.stop();
+        attAni.enterScene();
+        pushCommand(ATTACK_CMD, null);
+    }
     function findEnemy()
     {
+        if(len(commandList) > 0)
+            return;
         tar = getTar();
-        trace("findTar", tar, data["name"]);
+        //trace("findTar", tar, data["name"]);
         if(tar != null)
         {
             clearAnimation();
@@ -89,9 +99,7 @@ class Soldier extends MyNode
         var cheDis = checkTarDistance();
         if(cheDis)
         {
-            clearAnimation();
-            attAni.enterScene();
-            pushCommand(ATTACK_CMD, null);
+            pushCommand(BEGIN_ATTACK, null);
             return;
         }
         else
@@ -232,6 +240,8 @@ class Soldier extends MyNode
             {
                 finishAttack();
             }
+            else if(op == BEGIN_ATTACK)
+                beginAttack();
             else
                 trace("errorCommand", cmd);
         }
@@ -242,7 +252,7 @@ class Soldier extends MyNode
         clearAnimation();
         movAni.enterScene();//进入行走状态
         nextMap = copy(curMap);
-        clearCommand();
+        //clearCommand();
         pushCommand(POSING_CMD, null);
     }
     //持续性命令被中断了
@@ -307,7 +317,7 @@ class Soldier extends MyNode
     function doMakeUpCmd(tot)
     {
         //trace("curCommandStack", commandList);
-        clearCommand();
+        //clearCommand();
         pushCommand(FIND_ENEMY, null);
         makeUpRate = getMakeUpRate(id); 
         initMakeUpData();
@@ -421,10 +431,12 @@ class Soldier extends MyNode
             }
         }
     }
-    const STA = ["find", "move", "attack", "dead", "makeUp", "posMove", "posing", "finAttack"];
+    const STA = ["find", "move", "begin_attack", "attack", "dead", "makeUp", "posMove", "posing", "finAttack"];
     var lastCommand = 0;
     function update(diff)
     {
+        if(makeUpState)
+            leftTimeLab.text(str(makeUpTime/1000));
         if(len(commandList) > 0)
         {
             lastSta.text(STA[lastCommand]);
@@ -682,6 +694,9 @@ class Soldier extends MyNode
     var ShadowSize = dict([[1, 1], [2, 2], [3, 3]]);
     var staLabel;
     var lastSta;
+
+    var leftTimeLab;
+    var stateWord;
     function Soldier(m, d, s, md)
     {
         speed = getParam("soldierSpeed");
@@ -692,7 +707,11 @@ class Soldier extends MyNode
         color = d[0];
         id = d[1];//士兵类型id
         oldId = id;//士兵旧的类型
-        mapSolId = d[2];//地图上士兵的编号
+
+        if(len(d) >= 3)
+            mapSolId = d[2];//地图上士兵的编号
+        else
+            mapSolId = -1;
 
         var k = id/10;
 
@@ -727,8 +746,12 @@ class Soldier extends MyNode
         */
         bg = node();
         init();
-        staLabel =  bg.addlabel("状态", null, 30).color(0, 0, 0).pos(20, -20);
-        lastSta = bg.addlabel("上个状态", null, 30).color(100, 0, 0).pos(40, -40);
+
+        stateWord = bg.addnode();
+        staLabel =  stateWord.addlabel("状态", null, 30).color(0, 0, 0).pos(20, -20);
+        lastSta = stateWord.addlabel("上个状态", null, 30).color(100, 0, 0).pos(40, -40);
+        leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
+        stateWord.visible(0);
 
         bg.scale(getParam("mapSolScale"));
         changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
@@ -1475,6 +1498,7 @@ class Soldier extends MyNode
         trace("doMakeUp", skillId, skillLevel);
         if(makeUpState == 0 && !inTransform)
         {
+            makeUpTime = 0;
             makeUpState = 1;
             makeUpSkillId = skillId;
             makeUpLevel = skillLevel;
@@ -1624,7 +1648,7 @@ class Soldier extends MyNode
             shiftAni.stop();
 
             var skillId = heroSkill[id/10*10];
-            var skillAnimate = getSkillAnimate(skillId);
+            var skillAni = getSkillAnimate(skillId);
             
 
             var feaFil = FEA_BLUE;
@@ -1637,7 +1661,7 @@ class Soldier extends MyNode
 
             fea.visible(0);
             shadow.visible(0);
-            transAni = new TransformAnimate(skillAnimate[1], skillAnimate[0], changeDirNode, this);
+            transAni = new TransformAnimate(skillAni[1], skillAni[0], changeDirNode, this);
             transAni.enterScene();
         }
     }
@@ -1748,7 +1772,7 @@ class Soldier extends MyNode
         var suffix = "";
         if(sx >= 2)
             suffix = "1";
-        backBanner.texture("mapSolBloodBan"+suffix+".png");
+        backBanner.texture("mapSolBloodBan"+suffix+".png", UPDATE_SIZE);
         backBanner.pos(bSize[0]/2, data["bloodHeight"]);
     }
     //结束变动画画

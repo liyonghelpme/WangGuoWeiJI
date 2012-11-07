@@ -37,3 +37,8 @@ function getEffectAni(id)
     return ani;
 }
 
+function getArrowData(id)
+{
+    var ani = magicAnimate.get(id);
+    return ani;
+}

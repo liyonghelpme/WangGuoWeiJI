@@ -119,7 +119,12 @@ class Map extends MyNode
         var mData = getData(MAP_INFO, kind);
         if(mData["hasMask"])
         {
-            shadow = sprite("map"+str(kind)+"Shadow.png").pos(0, 0).size(bSize).color(100, 100, 100, getParam("shadowOpacity"));
+            var tran = m_color(
+            100, 0, 0, 0, 0,
+            0, 100, 0, 0, 0,
+            0, 0, 100, 0, 0,
+            0, 0, 0, getParam("shadowOpacity"), 0);
+            shadow = sprite("map"+str(kind)+"Shadow.png", UPDATE_SIZE, tran, ARGB_8888).pos(0, 0).size(bSize);
             bg.add(shadow, 10000);
         }
         if(mData["hasAnimation"])
@@ -531,9 +536,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
         //trace("len grid", len(k));
     }
+
+    function getNewMapId()
+    {
+        return maxMapIds++;
+    }
     function realAddSoldier(sid, id, priData, col)
      {
-        var so = new Soldier(this, [col, id, maxMapIds++], sid, priData);
+        var so = new Soldier(this, [col, id, getNewMapId()], sid, priData);
          addChild(so);
          soldierInstance.append(so);
          return so;
