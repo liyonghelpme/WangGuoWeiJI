@@ -69,8 +69,12 @@ class Soldier extends MyNode
     //鲁棒的移动
     //移动到目的地 
     //还在半路
+    //只有持续性命令可以被中断
     function doMove(diff)
     {
+        //命令被中断了
+        if(len(commandList) > 0)
+            return;
         shiftAni.stop();
         var ret = checkTarState();
         if(ret)
@@ -140,6 +144,9 @@ class Soldier extends MyNode
     }
     function finishAttack()
     {
+        //命令被中断了
+        if(len(commandList) > 0)
+            return;
         if(tar != null)
             funcSoldier.doAttack(); 
         if(len(commandList) == 0)
@@ -237,8 +244,11 @@ class Soldier extends MyNode
         clearCommand();
         pushCommand(POSING_CMD, null);
     }
+    //持续性命令被中断了
     function posMoving(diff)
     {
+        if(len(commandList) > 0)
+            return;
         shiftAni.stop();
         if(curMap[0] == tarMovePos[0])
         {
@@ -580,7 +590,7 @@ class Soldier extends MyNode
         sy = data.get("sy");
 
 
-        attSpeed = data.get("attSpeed");
+        attSpeed = getParam("soldierAttackAniTime");
         //attAni.duration = attSpeed;
 
         offY = data.get("offY");
@@ -905,6 +915,12 @@ class Soldier extends MyNode
         }
         bg.add(bWord);
         bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
+        
+        if(hurt[1])
+        {
+            beginSpinState(getParam("criticalHitStopTime"));
+            pushCommand(FIND_ENEMY, null);
+        }
 
 
         if(health < healthBoundary)
@@ -1563,6 +1579,9 @@ class Soldier extends MyNode
 
             id = id/10 * 10 + 4;//变更id 英雄要在一起调试
             data = getData(SOLDIER, id);
+            sx = data["sx"];
+            sy = data["sy"];
+            backBanner.visible(0);
             
             kind = data.get("kind");
             if(kind == CLOSE_FIGHTING)
@@ -1680,8 +1699,14 @@ class Soldier extends MyNode
         var shadowOffY = data["shadowOffY"];
 
         var ss = ShadowSize.get(sx, 3);
-        shadow.texture("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
+        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
 
+        backBanner.pos(bSize[0]/2, data["bloodHeight"]);
+
+        var suffix = "";
+        if(sx >= 2)
+            suffix = "1";
+        backBanner.texture("mapSolBloodBan"+suffix+".png");
         backBanner.pos(bSize[0]/2, data["bloodHeight"]);
     }
     //结束变动画画
@@ -1702,7 +1727,7 @@ class Soldier extends MyNode
         //变身之后特征色消失
         fea.texture("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil, UPDATE_SIZE);
         shadow.visible(1);
-
+        backBanner.visible(1);
         adjustPicSize();
 
         fea.visible(1);//重新设定图片和 特征色 

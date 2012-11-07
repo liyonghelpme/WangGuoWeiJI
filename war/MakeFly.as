@@ -7,8 +7,9 @@ class MakeFly extends EffectBase
         tar = t;
         var p = sol.getPos();
         var off = getEffectOff(sol, tar);
-        var makeFly = getMakeAndFly(sol.id);
+        var makeFly = getEffectAni(sol.id);
         var ani = pureMagicData[makeFly[0]];
+
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);//起始位置和人物位置和体积 高度相关
         init();
         shiftAni = moveto(0, 0, 0);
@@ -23,7 +24,7 @@ class MakeFly extends EffectBase
     }
     function initMakeState()
     {
-        var makeFly = getMakeAndFly(sol.id);
+        var makeFly = getEffectAni(sol.id);
         var ani = pureMagicData[makeFly[0]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         timeAll[MAKE_NOW] = ani[1];
@@ -51,7 +52,7 @@ class MakeFly extends EffectBase
         shiftAni = moveto(timeAll[FLY_NOW], tPos[0], bg.pos()[1]);
         bg.addaction(shiftAni);
 
-        var makeFly = getMakeAndFly(sol.id);
+        var makeFly = getEffectAni(sol.id);
         var ani = pureMagicData[makeFly[1]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         cus.enterScene();

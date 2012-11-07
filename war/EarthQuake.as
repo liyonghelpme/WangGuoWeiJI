@@ -3,18 +3,6 @@
 //map 很重要
 class EarthQuake extends EffectBase
 {
-    /*
-    var sol;
-    var tar;
-    var cus;
-    var shiftAni;
-
-    var speed = 200;//200 /s 
-    var state = MAKE_NOW;
-    */
-    //var offY;
-    //var rowY;
-    //var rotateAni;
 
     function EarthQuake(s, t)
     {
@@ -23,21 +11,12 @@ class EarthQuake extends EffectBase
 
         var p = sol.getPos();
         
-        /*
-        rowY = p[1];
-        var difx = tar.getPos()[0]-p[0];
-        offY = sol.data.get("arrpy");
-        var offX = sol.data.get("arrpx");
-        if(difx > 0)
-        {
-            offX = -offX;
-        }
-        */
 
         var off = getEffectOff(sol, tar);
 
         var earthQuake = getEarthQuake(sol.map.kind, sol.id);
-        var ani = pureMagicData[earthQuake];
+
+        var ani = puremagicdata[earthquake[2]];
 
         //50 50 出现在敌人脚下
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
@@ -46,7 +25,6 @@ class EarthQuake extends EffectBase
         initState();
 
 
-        //initBomb();
     }
     override function initState()
     {
@@ -58,7 +36,7 @@ class EarthQuake extends EffectBase
     function initBombState()
     {
         var earthQuake = getEarthQuake(sol.map.kind, sol.id);
-        var ani = pureMagicData[earthQuake];
+        var ani = pureMagicData[earthQuake[2]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         timeAll[BOMB_NOW] = ani[1];
         bg.pos(tar.getPos());

@@ -27,7 +27,8 @@ class Arrow extends EffectBase
         //soldier anchor 50 100 
         //-50 -50
         //单张弓箭图片  弓箭图片 弓箭缩放比例尺寸
-        var ani = getArrowData(sol.id);
+        var eff = getEffectAni(sol.id);
+        var ani = pureMagicData[eff[0]];
         bg = sprite("s"+str(id)+"e0.png").anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
         init();
         shiftAni = moveto(0, 0, 0);

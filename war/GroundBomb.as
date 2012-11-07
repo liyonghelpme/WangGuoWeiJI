@@ -11,7 +11,7 @@ class GroundBomb extends EffectBase
         
         var off = getEffectOff(sol, tar);
 
-        var groundBomb = getGroundBomb(sol.id);
+        var groundBomb = getEffectAni(sol.id);
         var ani = pureMagicData[groundBomb[2]];
 
         bg = sprite().anchor(50, 100).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
@@ -29,9 +29,9 @@ class GroundBomb extends EffectBase
     }
     function initBombState()
     {
-        var groundBomb = getGroundBomb(sol.id);
+        var groundBomb = getEffectAni(sol.id);
         var ani = pureMagicData[groundBomb[2]];
-        cus = new MyAnimate(ani[1], ani[0], bg);
+        cus = new OneAnimate(ani[1], ani[0], bg, "", 0);
         timeAll[BOMB_NOW] = ani[1];
         bg.pos(tar.getPos());
     }

@@ -118,7 +118,7 @@ class Map extends MyNode
         var mData = getData(MAP_INFO, kind);
         if(mData["hasMask"])
         {
-            shadow = sprite("map"+str(kind)+"Shadow.png").pos(0, 0).size(bSize).color(100, 100, 100, mData["shadowOpacity"]);
+            shadow = sprite("map"+str(kind)+"Shadow.png").pos(0, 0).size(bSize).color(100, 100, 100, getParam("shadowOpacity"));
             bg.add(shadow, 10000);
         }
         if(mData["hasAnimation"])

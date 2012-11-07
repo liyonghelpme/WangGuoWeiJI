@@ -23,6 +23,7 @@ class EffectBase extends MyNode
     //make fly roll的 飞行时间有些段 等待的时间过长了
     function updateTime()
     {
+        totalTime = 0;
         for(var i = 0; i < (state+1); i++)
         {
             totalTime += timeAll[i]; 

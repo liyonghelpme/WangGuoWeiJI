@@ -7,7 +7,8 @@ class Magic extends EffectBase
         tar = t;
         var p = sol.getPos();
         var off = getEffectOff(sol, tar);
-        var ani = getMagicAnimate(sol.id);
+        var magic = getEffectAni(sol.id);
+        var ani = pureMagicData[magic[1]];
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);//起始位置和人物位置和体积 高度相关
         init();
         shiftAni = moveto(0, 0, 0);
@@ -22,7 +23,8 @@ class Magic extends EffectBase
     }
     function initFlyState()
     {
-        var ani = getMagicAnimate(sol.id);
+        var magic = getEffectAni(sol.id);
+        var ani = pureMagicData[magic[1]];
         cus = new MyAnimate(ani[1], ani[0], bg);
 
         var tPos = tar.getPos();

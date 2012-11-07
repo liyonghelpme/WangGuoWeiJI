@@ -8,7 +8,7 @@ class Rocket extends EffectBase
         var p = sol.getPos();
         var off = getEffectOff(sol, tar);
 
-        var attackAni = getAttackAnimte(sol.id);
+        var attackAni = getEffectAni(sol.id);
         var ani = pureMagicData[attackAni[0]];
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
         init();
@@ -74,10 +74,10 @@ class Rocket extends EffectBase
     }
     function initBombState()
     {
-        var attackAni = getAttackAnimte(sol.id);
-        var ani = pureMagicData[attackAni[1]];
+        var attackAni = getEffectAni(sol.id);
+        var ani = pureMagicData[attackAni[2]];
         timeAll[BOMB_NOW] = ani[1];
-        cus = new MyAnimate(ani[1], ani[0], bg);
+        cus = new OneAnimate(ani[1], ani[0], bg, "", 1);
         cus.enterScene();
     }
 

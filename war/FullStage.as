@@ -17,8 +17,9 @@ class FullStage extends EffectBase
         //位置 scale 图片之后 再设置相对位置
         //50 100
         // 45 
-        var fullStage = getFullStage(sol.id);
+        var fullStage = getEffectAni(sol.id);
         var ani = pureMagicData[fullStage[0]];
+
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);//起始位置和人物位置和体积 高度相关
         init();
         shiftAni = moveto(0, 0, 0);
@@ -33,7 +34,7 @@ class FullStage extends EffectBase
     }
     function initMakeState()
     {
-        var fullStage = getFullStage(sol.id);
+        var fullStage = getEffectAni(sol.id);
         var ani = pureMagicData[fullStage[0]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         timeAll[MAKE_NOW] = ani[1];
@@ -50,7 +51,7 @@ class FullStage extends EffectBase
         timeAll[FLY_NOW] = dist*1000/speed;        
 
 
-        var fullStage = getFullStage(sol.id);
+        var fullStage = getEffectAni(sol.id);
         var ani = pureMagicData[fullStage[1]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         cus.enterScene();
@@ -60,7 +61,7 @@ class FullStage extends EffectBase
     }
     function initBombState()
     {
-        var fullStage = getFullStage(sol.id);
+        var fullStage = getEffectAni(sol.id);
         var ani = pureMagicData[fullStage[2]];
         timeAll[BOMB_NOW] = ani[1];
         cus = new MyAnimate(ani[1], ani[0], bg);

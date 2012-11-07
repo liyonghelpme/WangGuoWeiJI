@@ -11,8 +11,8 @@ class FlyAndBomb extends EffectBase
         var p = sol.getPos();
         var off = getEffectOff(sol, tar);
 
-        var flyAni = getFlyAndBombAni(sol.id);
-        var ani = pureMagicData[flyAni[0]];
+        var flyAni = getEffectAni(sol.id);
+        var ani = pureMagicData[flyAni[1]];
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
         init();
         shiftAni = moveto(0, 0, 0);
@@ -23,8 +23,8 @@ class FlyAndBomb extends EffectBase
     {
         state = FLY_NOW;
         setDir();
-        var flyAni = getFlyAndBombAni(sol.id);
-        var ani = pureMagicData[flyAni[0]];
+        var flyAni = getEffectAni(sol.id);
+        var ani = pureMagicData[flyAni[1]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         initFlyState();
         updateTime();
@@ -51,10 +51,10 @@ class FlyAndBomb extends EffectBase
     function initBombState()
     {
         state = BOMB_NOW;
-        var flyAni = getFlyAndBombAni(sol.id);
+        var flyAni = getEffectAni(sol.id);
         var ani = pureMagicData[flyAni[1]];
         timeAll[BOMB_NOW] = ani[1];
-        cus = new MyAnimate(ani[1], ani[0], bg);
+        cus = new OneAnimate(ani[1], ani[0], bg, "", 1);
         cus.enterScene();
     }
     override function switchState()
