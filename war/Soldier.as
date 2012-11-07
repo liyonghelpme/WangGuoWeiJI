@@ -41,6 +41,7 @@ class Soldier extends MyNode
     //Move 和 攻击是持续性 命令
     //变身 是 中断性命令 阻止命令执行直到外部条件 中断
     //保持状态的一致性
+    var mapSolId = 0;
 
     var commandList = [];
     var inCommand = 0;//正在执行某个命令
@@ -456,6 +457,11 @@ class Soldier extends MyNode
     {
         map.roundGridController.setMap(curMap[0], curMap[1], sx, sy, this);
     }
+    function resetPos()
+    {
+        var nPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+        setPos(nPos);
+    }
 
 
     var tarMovePos = null;
@@ -686,6 +692,7 @@ class Soldier extends MyNode
         color = d[0];
         id = d[1];//士兵类型id
         oldId = id;//士兵旧的类型
+        mapSolId = d[2];//地图上士兵的编号
 
         var k = id/10;
 
@@ -1568,6 +1575,7 @@ class Soldier extends MyNode
     //高频率更新
 
     //施展变身技能 --- 播放变身动画 且 进入变身状态
+    //重设占用的 网格 编号
     function initMakeUpView()
     {
         //人物是英雄 且没有变身 等级5 
@@ -1576,12 +1584,32 @@ class Soldier extends MyNode
             blockCommand = 1;
             inTransform = 1;
             state = MAP_SOL_FREE;
+            clearMap();
+            var oldSx = sx;
+            var oldSy = sy;
+            var oldMap = curMap;
+            var oldPos = getSolPos(curMap[0], curMap[1], sx, sy, 0);
 
             id = id/10 * 10 + 4;//变更id 英雄要在一起调试
             data = getData(SOLDIER, id);
             sx = data["sx"];
             sy = data["sy"];
+            offY = data["offY"];
+            
+            //根据现在无偏移位置 重新计算 新的map 
+            var newMap = getSolMap(oldPos, sx, sy, 0);
+            curMap = newMap;
+            setMap();
+            resetPos();
+            
+            //位置调整 要考虑遍历的方向 
+            //深度 或者 广度  每个被调整的首先 clearMap 
+            trace("startAdjust Map", curMap, sx, sy);
+            map.roundGridController.startAdjustSolPos(this);
+            
+
             backBanner.visible(0);
+
             
             kind = data.get("kind");
             if(kind == CLOSE_FIGHTING)
@@ -1650,8 +1678,22 @@ class Soldier extends MyNode
             inTransform = 1;
             state = MAP_SOL_FREE;
 
+            clearMap();
+            var oldSx = sx;
+            var oldSy = sy;
+            var oldMap = curMap;
+            var oldPos = getSolPos(curMap[0], curMap[1], sx, sy, 0);
+
             id = oldId;
             data = getData(SOLDIER, id);
+            sx = data["sx"];
+            sy = data["sy"];
+            offY = data["offY"];
+            var newMap = getSolMap(oldPos, sx, sy, 0);
+            curMap = newMap;
+            setMap();
+            resetPos();
+
 
             kind = data.get("kind");
             setPrivateFunc();

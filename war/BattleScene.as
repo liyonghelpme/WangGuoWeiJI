@@ -213,10 +213,12 @@ class BattleScene extends MyNode
         init();
         dialogController = new DialogController(this);
         addChild(dialogController);
+
         if(MAP_KIND_TIP.get(kind) != null)
         {
             if(checkTip(MAP_KIND_TIP[kind]) == null)
             {
+                trace("noTip", MAP_KIND_TIP[kind]);
                 dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
             }
         }

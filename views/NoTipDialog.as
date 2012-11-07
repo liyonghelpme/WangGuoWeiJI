@@ -15,7 +15,7 @@ class NoTipDialog extends MyNode
         init();
         bg.addlabel(getStr(TIP_WORD[kind], null), "fonts/heiti.ttf", 35).anchor(50, 50).pos(261, 33).color(100, 100, 100);
 
-        var but0 = new NewButton("noTip.png", [93, 23], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeNoTip, null);
+        var but0 = new NewButton("noTip.png", [93, 23], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(410, 278);
         addChild(but0);
 
@@ -25,7 +25,7 @@ class NoTipDialog extends MyNode
         word.pos(46, 130);
         bg.add(word);
 
-        but0 = new NewButton("closeBut.png", [40, 39], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
+        but0 = new NewButton("closeBut.png", [40, 39], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeNoTip, null);
         but0.bg.pos(474, 88);
         addChild(but0);
         //bg.addsprite("closeBut.png").anchor(50, 50).pos(470, 84).setevent(EVENT_TOUCH, closeNoTip);
@@ -36,6 +36,7 @@ class NoTipDialog extends MyNode
     }
     function closeDialog()
     {
+        trace("closeNoTip", kind);
         var readYet = global.user.db.get("readYet", dict());
         if(type(readYet) != type(dict()))
         {

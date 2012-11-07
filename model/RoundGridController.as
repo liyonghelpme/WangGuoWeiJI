@@ -84,4 +84,45 @@ class RoundGridController
         }
         return rowObjects;
     }
+    
+    //唯一标识 地图上士兵的随机性编号 由addSoldier 来分配
+    function startAdjustSolPos(sol)
+    {
+        trace("startAdjustSolPos", sol.curMap);
+        var adjustYet = dict();
+        var adjustList = [sol];//先入先出队列
+        while(1)
+        {
+            if(len(adjustList) == 0)
+                break;
+            var s = adjustList.pop(0);
+            adjustYet.update(s.mapSolId, 1);
+            trace("adjustYet", s.curMap);
+
+            var colList = checkCol(s.curMap[0], s.curMap[1], s.sx, s.sy, s);
+            //根据当前士兵 ---》 判断冲突士兵---》调整冲突士兵---》结束条真
+            for(var i = 0; i < len(colList); i++)
+            {
+                //判断冲突方式
+                if(colList[i] != s && adjustYet.get(colList[i].mapSolId) == null)
+                {
+                    var colSol = colList[i];
+                    colSol.clearMap();
+                    //MAIN COL 
+                    if(colSol.curMap[0] < (s.curMap[0] +s.sx) && (colSol.curMap[0]+colSol.sx) > s.curMap[0])
+                    {
+                        colSol.curMap[0] = s.curMap[0]+s.sx;
+                    }
+                    //COL MAIN 
+                    else
+                    { 
+                        colSol.curMap[0] = s.curMap[0]-colSol.sx;
+                    }
+                    colSol.resetPos(); 
+                    colSol.setMap();
+                    adjustList.append(colSol);
+                }
+            }
+        }
+    }
 }

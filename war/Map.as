@@ -6,6 +6,7 @@
 */
 class Map extends MyNode
 {
+    var maxMapIds = 0;
     var roundGridController;
     var kind;
     var touchDelegate;
@@ -532,7 +533,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     }
     function realAddSoldier(sid, id, priData, col)
      {
-        var so = new Soldier(this, [col, id], sid, priData);
+        var so = new Soldier(this, [col, id, maxMapIds++], sid, priData);
          addChild(so);
          soldierInstance.append(so);
          return so;
