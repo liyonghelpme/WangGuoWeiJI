@@ -19,10 +19,9 @@ class BattleScene extends MyNode
 
     //oid papayaId score rank cityDefense
     //var param;
-
-
     var pausePage;
-    //big small soldierData
+
+
     var big;
     var small;
 
@@ -171,36 +170,6 @@ class BattleScene extends MyNode
         big = argument["big"];
         small = argument["small"];
 
-        /*
-        kind = ki;
-        //进攻或者防守擂台
-        if(kind == CHALLENGE_TRAIN)
-        {
-            double = par[0];
-            singleSid = par[1];
-            difficult = eq;
-        }
-        else
-            param = par;
-
-        if(kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
-            user = param[6];
-        //soldierId ---> {skillId, level}
-        if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR || kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
-        {
-            skills = dict();
-            var sk = param[5];
-            for(var i = 0; i < len(sk); i++)
-            {
-                var solSk = sk[i];
-                var skLev = skills.get(solSk[0], dict());
-                skLev.update(solSk[1], solSk[2]);
-                skills.update(solSk[0], skLev);
-            }
-        }
-        big = k;
-        small = sm;
-        */
 
         initView();
         initYet = 1;
@@ -369,69 +338,4 @@ class BattleScene extends MyNode
             }
         }
     }
-    /*
-    function update(diff)
-    {
-        if(kind == CHALLENGE_TRAIN)
-        {
-            if(state != MAP_ARRANGE)//布局完成进入 游戏状态 停止刷新怪兽
-            {
-                var eachRow = map.soldiers.items();//rowId ----> soldiers notDead 
-                var i;
-                var j;
-                var row;
-                var sol;
-                //多行士兵可能 不能生成多个怪兽
-                for(i = 0; i < len(eachRow); i++)
-                {
-                    row = eachRow[i];
-                    for(j = 0; j < len(row[1]); j++)
-                    {
-                        sol = row[1][j];
-                        sol.genMonYet = 0;
-                    }
-                }
-                //如果所有我方士兵 存在的 都没有了敌人 则游戏结束
-                var hasLiveMon = 0;//mySol leftNum
-                for(i = 0; i < len(eachRow); i++)
-                {
-                    row = eachRow[i];
-                    var mySol = null;
-                    var eneSol = null;
-                    //所在行士兵我方 敌方士兵
-                    for(j = 0; j < len(row[1]); j++)
-                    {
-                        sol = row[1][j]; 
-                        if(sol.color ==  ENECOLOR)
-                            eneSol = sol; 
-                        else if(sol.color == MYCOLOR)
-                            mySol = sol;
-                    }
-                    if(mySol != null && mySol.state != MAP_SOL_DEAD && mySol.state != MAP_SOL_SAVE)//未死亡
-                    {
-                        if(eneSol != null || mySol.leftMonNum > 0)//存在敌人 或者 存在剩余怪兽数量
-                            hasLiveMon = 1;
-                    }
-
-                    if(mySol != null && mySol.genMonYet == 0 && mySol.leftMonNum > 0 && mySol.state != MAP_SOL_DEAD && mySol.state != MAP_SOL_SAVE)
-                    {
-                        if(eneSol == null)
-                        {
-                            var newMon = map.genNewMonster(mySol);
-                            if(newMon != null)//有位置放置新的怪兽
-                                mySol.leftMonNum--;
-                        }
-                        mySol.genMonYet = 1;
-                    }
-                }
-                if(!hasLiveMon)//没有存在敌人的我方士兵
-                {
-                    map.trainOver();  
-                    sceneSlowTimer.removeTimer(this);//停止怪兽数量刷新
-                }
-                map.showLeftNum();
-            }
-        }
-    }
-    */
 }

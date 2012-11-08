@@ -32,7 +32,9 @@ import busiViews.DrugList;
 //经营页面
 import views.CastlePage;
 import busiViews.BoxOnMap;
-//import views.BuildLayer;
+import busiViews.DownloadDialog;
+import busiViews.DownloadIcon;
+
 import busiViews.BuildLayer;
 import views.BuildLand;
 import views.SoldierMax;
@@ -358,6 +360,7 @@ import model.ParamController;
 import model.FriendController;
 import model.HttpController;
 import util.Util;
+import model.PictureManager;
 
 import Global.GlobalController;
 
@@ -373,6 +376,7 @@ import data.String;
 
 
 global.timer = new Timer(1000);
+
 global.httpController = new HttpController();
 global.msgCenter = new MessageCenter();
 global.director = new Director();
@@ -381,10 +385,12 @@ global.controller = new Controller();
 global.myAction = new MyAction();
 global.paramController = new ParamController();
 
+
 //friend  task mail fight  castleScene
 //不同途径相同归一目的地
 //global.staticScene = new CastleScene();
 global.user = new User();
+global.pictureManager = new PictureManager();
 global.sensorController = new SensorController();
 global.friendController = new FriendController();
 global.taskModel = new TaskModel();

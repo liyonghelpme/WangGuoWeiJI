@@ -1172,11 +1172,13 @@ function showTimeColor()
 
 function checkTip(k)
 {
-    var readYet = global.user.db.get("readYet", dict());
-    if(type(readYet) != type(dict()))
+    var readYet = global.user.db.get("readYet");
+    if(readYet == null)
     {
         readYet = dict();
+        global.user.db.put("readYet", readYet);
     }
+    trace("checkTip", k, readYet);
     return readYet.get(k, null);
 }
 

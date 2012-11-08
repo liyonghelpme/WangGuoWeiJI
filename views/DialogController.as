@@ -53,12 +53,6 @@ class DialogController extends MyNode
                 {
                     global.director.curScene.addChild(new UpgradeBanner(getStr("selectSol", null), [100, 100, 100], null));
                 }
-                /*
-                else if(curCmd.get("cmd") == "trainTip")
-                {
-                    global.director.pushView(new TrainTip(), 1, 0);
-                }
-                */
                 else if(curCmd.get("cmd") == "loading")
                 {
                     global.director.pushView(new VisitDialog(scene), 1, 0);
@@ -88,6 +82,10 @@ class DialogController extends MyNode
                 else if(curCmd["cmd"] == "initLoading")
                 {
                     global.director.pushView(new Loading(), 1, 0);
+                }
+                else if(curCmd["cmd"] == "download")
+                {
+                    global.director.pushView(new DownloadDialog(), 1, 0);
                 }
             }
         }

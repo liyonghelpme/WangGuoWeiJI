@@ -6,6 +6,7 @@ class ParamController
     {
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
+        global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
     }
     function fetchOver(rid, rcode, con, param)
     {
@@ -24,5 +25,11 @@ class ParamController
             pureMagicData = dict(con["ani"]);
             magicAnimate = dict(con["sol"]);
         }
+    }
+    function fetchTask(rid, rcode, con, param)
+    {
+        con = json_loads(con);
+        allTasksData = dict(con["taskData"]);
+        allTasksKey = con["taskKey"];
     }
 }

@@ -843,6 +843,7 @@ const LOAD_PROCESS = 36;
 const SQUARE_SOL = 37;//通知buildLayer 将士兵组成方阵 以[x, y] 为中心点 同时启动所有士兵的游戏模式 可以将Game实体传递给buildLayer 调用回调函数即可
 const ALL_ACTIVE_SOL = 38;//buildLayer 建立完方阵 返回士兵队列供游戏处理 
 const REMOVE_SOL = 39;
+const BEGIN_DOWNLOAD = 40;
 
 
 

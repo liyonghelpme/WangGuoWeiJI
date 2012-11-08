@@ -18,6 +18,10 @@ class ChallengeScene extends MyNode
     挑战对方的排名
 
     如果挑战对方是邻居
+
+
+    检测战场上所有的怪兽 是否已经下载过 如果没有 则在 loading的时候下载 
+    downloadList
     */
     var user = null;
     var dialogController;
@@ -35,6 +39,142 @@ class ChallengeScene extends MyNode
         addChild(dialogController);
         dialogController.addCmd(dict([["cmd", "challengeLoading"], ["kind", kind]]));
     }
+    var needDownload = [];
+    //我方士兵 地方士兵
+    function checkSolPic()
+    {
+        //全局已经在下载图片了 阻止这里下载图片
+        if(global.pictureManager.download)
+        {
+            finishLoadPic = 1;
+            return 1;
+        }
+        //我方士兵
+        var mySolIds = global.user.getAllSoldierKinds();
+        var allKind = ["m", "fm", "a", "fa"];
+        var k;
+        //敌方类型
+        if(enemies != null)
+        {
+            for(k = 0; k < len(enemies); k++)
+            {
+                mySolIds.update(enemies[k]["id"], 1);
+            }
+        }
+        if(kind == CHALLENGE_MON)
+        {
+            for(k = 0; k < len(user["mon"]); k++)
+            {
+                mySolIds.update(user["mon"][k]["id"], 1);
+            }
+        }
+        //需要预测怪兽类型 
+        if(kind == CHALLENGE_TRAIN)
+        {
+        }
+
+        mySolIds = mySolIds.keys();
+        for(k = 0; k < len(mySolIds); k++)
+        {
+            for(var i = 0; i < len(allKind); i++)
+            {
+                var name = "soldier"+allKind[i]+str(mySolIds[k])+".plist";
+                var ret0 = c_res_exist(name);
+                if(!ret0)
+                {
+                    needDownload.append(name);
+                }
+                name = "soldier"+allKind[i]+str(mySolIds[k])+".png";
+                var ret1 = c_res_exist(name);
+                if(!ret1)
+                {
+                    needDownload.append(name);
+                }
+            }
+
+            var solAttackEffect = magicAnimate.get(mySolIds[k]);
+            for(i = 0; i < len(solAttackEffect); i++)
+            {
+                var ani = solAttackEffect[i];
+                if(ani != -1)
+                {
+                    var pics = pureMagicData.get(ani)[0];
+                    if(len(pics) > 0)
+                    {
+                        name = "s"+str(ani)+"e.plist";
+                        ret0 = c_res_exist(name);
+                        if(!ret0)
+                        {
+                            needDownload.append(name);
+                        }
+                        name = "s"+str(ani)+"e.png";
+                        ret1 = c_res_exist(name);
+                        if(!ret1)
+                            needDownload.append(name);
+                    }
+                }
+            }
+        }
+
+        if(len(needDownload) > 0)
+        {
+            return 0;
+        }
+
+        finishLoadPic = 1;
+        return 1;
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.myAction.addAct(this);
+    }
+    override function exitScene()
+    {
+        global.myAction.removeAct(this);
+        super.exitScene();
+    }
+    var download = 0;
+    function startDownload()
+    {
+        if(download)
+            return;
+        download = 1;
+    }
+    var waitTime = 0;
+    var inConnect = 0;
+    var finishLoadPic = 0;
+    function update(diff)
+    {
+        if(finishLoadPic && finishLoadData)
+        {
+            initOver = 1;
+            return;
+        }
+
+        waitTime += diff;
+        if(waitTime >= getParam("downloadTime") && !inConnect)
+        {
+            waitTime = 0;
+            if(len(needDownload) > 0)
+            {
+                var pic = needDownload.pop(0);
+                inConnect = 1;
+                request(pic, 0, onGet, null);
+            }
+            else
+            {
+                //global.myAction.removeAct(this);
+                finishLoadPic = 1;
+            }
+        }
+    }
+    function onGet()
+    {
+        inConnect = 0;
+    }
+
+    var finishLoadData = 0;
     function initData()
     {
         //if(oid == global.user.uid)
@@ -59,13 +199,18 @@ class ChallengeScene extends MyNode
         }
         else if(kind == CHALLENGE_TRAIN)
         {
-            initOver = 1;
+            //initOver = 1;
+            finishLoadData = 1;
         }
         else if(kind == CHALLENGE_MON)
         {
-            initOver = 1;
+            //initOver = 1;
+            finishLoadData = 1;
         }
+        //需要下载
+
     }
+    //敌方士兵 enemies  monsters
     function loadingCallback()
     {
         var argument;
@@ -107,12 +252,6 @@ class ChallengeScene extends MyNode
             argument.update("difficult", user["curChoose"]);
             
             global.director.replaceScene(new BattleScene(argument));
-            /*
-                user["bigLevel"], 0, 
-                    null, CHALLENGE_TRAIN, [user["doubleExp"], user["soldier"]], user["curChoose"]
-                )
-            );
-            */
         }
         else if(kind == CHALLENGE_MON)
         {
@@ -120,11 +259,6 @@ class ChallengeScene extends MyNode
             argument.update("small", user["small"]);
             argument.update("soldier", user["mon"]);
             global.director.replaceScene(new BattleScene(argument));
-            /*
-            user["big"], user["small"], 
-                user["mon"], CHALLENGE_MON, null, null
-            ));
-            */
         }
     }
     /*
@@ -169,7 +303,14 @@ class ChallengeScene extends MyNode
             else if(kind == CHALLENGE_DEFENSE)
             {
             }
-            initOver = 1;
+            //initOver = 1;
+            finishLoadData = 1;
+        }
+        
+        //我方士兵 地方士兵
+        if(!checkSolPic())
+        {
+            startDownload();
         }
     }
 }

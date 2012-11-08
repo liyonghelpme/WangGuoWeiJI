@@ -166,6 +166,10 @@ class CastlePage extends MyNode
         dialogController.addCmd(dict([["cmd", "heart"]]));
         dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", 0]]));
         */
+        if(global.pictureManager.checkNeedDownload())
+        {
+            dialogController.addCmd(dict([["cmd", "download"]])); 
+        }
     }
 
     function CastlePage(s)

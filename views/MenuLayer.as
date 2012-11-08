@@ -30,15 +30,14 @@ class MenuLayer extends MyNode
     {
         global.director.pushView(new ScoreDialog(), 1, 0);
     }
+    var downloadIcon = null;
     function MenuLayer(s) {
         scene = s;
 //        trace("pushMenuLayer");
         menus = new Array(null,null);
         bg = node();
-        //banner = bg.addsprite("menu_back.png").scale(100,100).anchor(0,100).pos(0,480).rotate(0);
         init();
         
-        //scoreIcon = bg.addsprite("scoreIcon.png").anchor(0, 0).pos(716, 197).size(57, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, rateIt);
         banner = bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
 
         bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
@@ -68,6 +67,15 @@ class MenuLayer extends MyNode
 
         initText();
 
+
+    }
+    function removeDownloadIcon()
+    {
+        if(downloadIcon != null)
+        {
+            downloadIcon.removeSelf();
+            downloadIcon = null;
+        }
     }
     function onTask()
     {
@@ -287,6 +295,12 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     {
         updateValue(global.user.resource);
         updateExp(0);
+
+        if(global.pictureManager.checkNeedDownload())
+        {
+            downloadIcon = new DownloadIcon(this);
+            addChild(downloadIcon);
+        }
     }
     function updateValue(res)
     {

@@ -451,8 +451,8 @@ def hanData(name, data):
 
         names = [['title'+str(i['id']), i['title']] for i in f]
         names += [ ['des'+str(i['id']), i['des']] for i in f]
-        print 'const', name+'Key', '=', json.dumps(key), ';'
-        print 'const', name+'Data', '=', 'dict(', json.dumps(res), ');'
+        print 'var', name+'Key', '=', json.dumps(key), ';'
+        print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
         return names
 
     if name == 'task':#任务的title 和desc 引用字符串中的titleid desid

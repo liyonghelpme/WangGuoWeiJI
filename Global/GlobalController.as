@@ -17,6 +17,7 @@ class GlobalController
     var fightModel;
     var bannerController;
     var paramController;
+    var pictureManager;
     function Global()
     {
     }

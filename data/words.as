@@ -598,4 +598,10 @@ var WORDS = dict([
 ["sucWord", "恭喜你获得了胜利！早日拯救出公主吧！"],
 ["roundShare", "和好友分享这一好消息吧^_^"],
 ["rewardList", "你获得了[NAMES]物品"],
+["downloadNow", "立即下载"],
+["waitDownload", "稍后下载"],
+["newSolPicDownload", "新士兵图片下载"],
+["downFinReward", "下载完图片有[NUM]金币奖励哦!"],
+["YouNeedDownload", "你需要下载新士兵图片。请在wifi良好网络环境中下载"],
+["downloadTip", "提示：下载过程中游戏体验可能会不顺畅，敬请谅解"],
 ]);
