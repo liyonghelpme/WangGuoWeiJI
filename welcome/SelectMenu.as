@@ -1,12 +1,5 @@
 //播放相同的变身动画
 //hero = sprite("hero590.png").pos(371, 350).setevent(EVENT_TOUCH, onHero, 590);
-/*
-        hero = sprite("hero550.png").pos(739, 282).setevent(EVENT_TOUCH, onHero, 550);
-        bg.add(hero, 3);
-        heros.update(550, hero);
-
-        hero = sprite("hero440.png").pos(441, 405).setevent(EVENT_TOUCH, onHero, 440);
-*/
 //restore OldTexture
 class Hero extends MyNode
 {
@@ -143,7 +136,6 @@ class SelectMenu extends MyNode
     {
         if(curStep == 2)
             printFinish = 1;
-        //inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1000, "in0.png", "in1.png","in2.png","in3.png","in4.png",UPDATE_SIZE, ARGB_8888)));
     }
 
     function selectHero(p)
@@ -227,11 +219,11 @@ class SelectMenu extends MyNode
     }
     function enterGame()
     {
-        //替换场景
+        //替换场景 进入游戏不要loading页面了
+        //重新进入经营页面 不用初始化数据
         global.director.replaceScene(new CastleScene());
-        global.director.pushView(new Loading(), 1, 0);//DarkNod
+        //global.director.pushView(new Loading(), 1, 0);//DarkNod
         //初始化场景数据 数据初始化结束之后 取出loading页面
-        //global.user.initData();
         
         global.msgCenter.sendMsg(INITDATA_OVER, null);
     }

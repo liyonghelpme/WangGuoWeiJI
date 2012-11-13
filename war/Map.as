@@ -95,12 +95,13 @@ class Map extends MyNode
 
     var shadow = null;
     var animateLayer = null;
+    var mapPic;
+    var gridSp = null;
     function initView()
     {
         bg = sprite("map"+str(kind)+".png", ARGB_8888).pos(0, 0);//.pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         init(); 
         grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
-        grid.addsprite("mapGrid.png");
         updateShadow();
     }
     function updateShadow()
@@ -115,10 +116,24 @@ class Map extends MyNode
             animateLayer.removefromparent();
             animateLayer = null;
         }
-        var bSize = bg.prepare().size();
-        var mData = getData(MAP_INFO, kind);
-        if(mData["hasMask"])
+        if(gridSp != null)
         {
+            gridSp.removefromparent();
+            gridSp = null;
+        }
+
+        var fil = m_color(
+            100, 0, 0, 0, 0,
+            0, 100, 0, 0, 0,
+            0, 0, 100, 0, 0,
+            0, 0, 0, 30, 0
+        );
+        gridSp = grid.addsprite("mapGrid.png", ARGB_8888, fil);//.color(100, 100, 100, 100);//.color(100, 100, 100, 50)
+
+        var bSize = bg.size();
+         var mData = getData(MAP_INFO, kind);
+         if(mData["hasMask"])
+         {
             var tran = m_color(
             100, 0, 0, 0, 0,
             0, 100, 0, 0, 0,
@@ -523,6 +538,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
     function updateMapGrid()
     {
+        /*
         gridLayer.removefromparent();
         gridLayer = bg.addnode();
         var k = roundGridController.mapDict.keys();
@@ -534,6 +550,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var p = getSolPos(x, y, 1, 1, 0);
             var sp = gridLayer.addsprite("gridNew.png").size(MAP_OFFX, MAP_OFFY).pos(p).anchor(50, 100);
         }
+        */
         //trace("len grid", len(k));
     }
 
