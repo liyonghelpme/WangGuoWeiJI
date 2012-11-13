@@ -36,7 +36,11 @@ class PlantChoose extends MyNode
         for(var i = 0; i < len(plantData); i++)
         {
             var planting = getData(PLANT, i);
-            var panel = flowNode.addsprite("plantPanel.png").pos(0, i*Height);
+            var panel = sprite("plantPanel.png").pos(0, i*Height);
+            var zOrd = 0;
+            if(i == 0)
+                zOrd = 3;
+            flowNode.add(panel, zOrd);
             panel.addsprite("Wplant"+str(i)+".png").pos(169, 48).anchor(50, 50);
 
 
@@ -75,12 +79,15 @@ panel.addlabel(str(planting.get("gainsilver")), "fonts/heiti.ttf", 18).anchor(0,
                 panel.addsprite("dialogRankShadow.png").size(230, 106);
                 var words = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
                 words.anchor(50, 50).pos(115, 53);
-                //panel.addlabel(words[0], null, 20).pos(110-20*words[2], 99).anchor(0, 50).color(100, 100, 100);
-                //panel.addlabel(words[1], null, 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
                 panel.add(words);
 
             }
             panel.put(i);
+            if(i == 0)
+            {
+                global.taskModel.showHintArrow(panel, panel.prepare().size(), PLANT_ICON);
+            }
+
         }
         var row = len(plantData)*Height;
         minPos = min(-(row-BackHei), 0);
@@ -89,6 +96,7 @@ panel.addlabel(str(planting.get("gainsilver")), "fonts/heiti.ttf", 18).anchor(0,
         flowNode.setevent(EVENT_MOVE, touchMoved);
         flowNode.setevent(EVENT_UNTOUCH, touchEnded);
         
+
 
 
     }

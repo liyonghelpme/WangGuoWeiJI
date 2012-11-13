@@ -442,6 +442,14 @@ def hanData(name, data):
             i = dict(i)
             i['title'] = 'title'+str(i['id'])
             i['des'] = 'des'+str(i['id'])
+            i['commandList'] = json.loads(i['commandList'])
+            newCom = []
+            for c in i['commandList']:
+                if c.get('tip') != None:
+                    old = c['tip']
+                    c['tip'] = 'taskTip'+str(c['msgId'])
+                newCom.append(c.items())
+            i['commandList'] = newCom
 
             it = list(i.items())
             it = [list(k) for k in it]

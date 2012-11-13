@@ -52,14 +52,6 @@ class ChildMenuLayer extends MyNode
     ["menu1", ["menu1.png", onHeart]],
     ["menu2", ["menu2.png", onTranStatus]],
     
-    /*
-    ["menu3", ["menu3.png", onInspire]],
-    ["menu4", ["menu4.png", onSunFlower]],
-    ["menu5", ["menu5.png", onSun]],
-    ["menu6", ["menu6.png", onFlower]],
-    ["menu7", ["menu7.png", onStar]],
-    ["menu8", ["menu8.png", onMoon]],
-    */
 
     ["menu10", ["menu_button_game0.png", onInspire]],
     ["menu11", ["menu_button_game1.png", onMoney]],
@@ -84,6 +76,13 @@ class ChildMenuLayer extends MyNode
     {
         global.director.curScene.closeGlobalMenu(this);
         global.director.pushView(new CallSoldier(scene), 1, 0);
+
+        /*
+        if(inTask)
+        {
+            global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
+        }
+        */
     }
     //单人练级 传入当前人物
     function onSingleTrain()
@@ -175,48 +174,6 @@ class ChildMenuLayer extends MyNode
         global.director.pushView(new GameThree(scene), 0, 0);
     }
 
-    /*
-    function onSunFlower()
-    {
-        global.director.curScene.closeGlobalMenu(this);//这个会显示菜单
-        scene.clearStatus();
-        //操作士兵 
-        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
-        global.director.pushView(new GameTwo(scene, SUNFLOWER_STATUS), 0, 0);
-    }
-    function onSun()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        scene.clearStatus();
-
-        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
-        global.director.pushView(new GameTwo(scene, SUN_STATUS), 0, 0);
-    }
-    function onFlower()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        scene.clearStatus();
-
-        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
-        global.director.pushView(new GameTwo(scene, FLOWER_STATUS), 0, 0);
-    }
-    function onStar()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        scene.clearStatus();
-
-        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
-        global.director.pushView(new GameTwo(scene, STAR_STATUS), 0, 0);
-    }
-    function onMoon()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        scene.clearStatus();
-
-        global.director.curScene.showGame(scene, MONEY_GAME);//当前士兵游戏 这个会隐藏菜单
-        global.director.pushView(new GameTwo(scene, MOON_STATUS), 0, 0);
-    }
-    */
     
 
     //soldier skill
@@ -317,6 +274,9 @@ class ChildMenuLayer extends MyNode
     右键数量是特殊代码----> 应该要分离
     */
     var mailNum = null;
+    var callBut = null;
+    var mapBut = null;
+    var statusIcon = null;//>>
     function ChildMenuLayer(index, funcs, s, otherFunc){
         scene = s;
         functions = funcs;
@@ -348,8 +308,33 @@ class ChildMenuLayer extends MyNode
                 else
                     mailNum.visible(1);
             }
+
+            if(funcs[i] == "call")
+                callBut = button;
+            if(funcs[i] == "map")
+                mapBut = button;
+            //士兵状态 按钮
+            if(funcs[i] == "menu11")
+            {
+                statusIcon = button;
+            }
         }
+        if(callBut != null)
+        {
+            trace("showCallBut");
+            global.taskModel.showHintArrow(callBut, callBut.prepare().size(), CALL_IN_CAMP);
+        }
+        if(mapBut != null)
+            global.taskModel.showHintArrow(mapBut, mapBut.prepare().size(), MAP_ICON);
+        trace("statusIcon", statusIcon);
+        if(statusIcon != null)
+            global.taskModel.showHintArrow(statusIcon, statusIcon.prepare().size(), STATUS_ICON);
     }
+    /*
+    var inTask = 0;
+    var hintArrow = null;
+    first Command is just a starWorker
+    */
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -365,25 +350,28 @@ class ChildMenuLayer extends MyNode
                     mailNum.visible(1);
             }
         }
+        /*
+        else if(msgId == CALL_IN_CAMP)
+        {
+            inTask = 1;
+            hintArrow = callBut.addsprite("taskArrow.png").pos(DARK_WIDTH/2, -5).anchor(50, 100);
+            hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
+        }
+        */
     }
     override function enterScene()
     {
         super.enterScene();
         global.msgCenter.registerCallback(UPDATE_MAIL, this);
+        //global.msgCenter.registerCallback(CALL_IN_CAMP, this);
     }
     override function exitScene()
     {   
+        //global.msgCenter.removeCallback(CALL_IN_CAMP, this);
         global.msgCenter.removeCallback(UPDATE_MAIL, this);
         super.exitScene();
     }
 
-    /*
-    function touchMenu(callback)
-    {
-        //removeSelf();
-        callback();
-    }
-    */
     function newsFeedResponse(rid, rcode)
     {
 //        trace("newsFeedSuc", rid, rcode);

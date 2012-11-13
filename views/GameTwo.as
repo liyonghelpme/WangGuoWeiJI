@@ -91,6 +91,7 @@ class RewardGoods extends MyNode
 }
 /*
 getGain 要求资源key 前面有gain字符
+捡 银币游戏 开始啦
 */
 class GameTwo extends MyNode
 {
@@ -178,34 +179,8 @@ class GameTwo extends MyNode
                 global.director.popView();
                 global.director.curScene.finishGame();//显示场景菜单
                 sol.endGame();
+                global.taskModel.doAllTaskByKey("eliminate", 1);
             }
-            /*
-            var rd = rand(len(leftNum));//类型
-            var find = 0;
-            for(var i = 0; i < len(leftNum); i++)
-            {
-                var n = (rd+i)%len(leftNum);
-                if(leftNum[n] > 0)
-                {
-                    find = 1;
-                    break;
-                }
-            }
-            if(find)
-            {
-                leftNum[n] -= 1;
-                var rewardId = n+SUNFLOWER_STATUS;   
-                var re = new RewardGoods(this, rewardId);
-                addChild(re);
-            }
-            else
-            {
-                global.httpController.addRequest("soldierC/game2Over", dict([["uid", global.user.uid], ["silver", addSilver], ["crystal", addCrystal], ["gold", addGold]]), null, null);
-                global.director.popView();
-                global.director.curScene.finishGame();//显示场景菜单
-                sol.endGame();
-            }
-            */
         }
     }
     //检测
@@ -213,6 +188,7 @@ class GameTwo extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
+        global.taskModel.showHintArrow(sol.bg, sol.bg.size(), MOVE_SOL_PICK_FALL);
     }
     override function exitScene()
     {

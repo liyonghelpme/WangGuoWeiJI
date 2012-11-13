@@ -477,7 +477,7 @@ words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             allPanels.append(panel);//对应相应技能位置 面板
             id = skillList[i][0];
             
-            var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(skillList[i][0])])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
+            var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(id)])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
             sca = getSca(skillPic, [PANEL_WIDTH, PANEL_HEIGHT]);
             skillPic.scale(sca);
 
@@ -495,6 +495,9 @@ words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             }
 
             panel.put([SKILL, i]);
+            var sData = getData(SKILL, id);
+            if(sData["kind"] == MAKEUP_SKILL)
+                global.taskModel.showHintArrow(panel, panel.prepare().size(), MAKEUP_BUT);
         }
         //点击药品
         for(i = 0; i < len(drugData); i++)

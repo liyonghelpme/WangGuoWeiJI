@@ -158,64 +158,82 @@ class TaskDialog extends MyNode
     最上面所有完成的任务
     接着按照显示优先级 和 任务 id 排序
     */
-    function cmpTask(a, b)
-    {
-        var aData = getData(TASK, a[1]);
-        var bData = getData(TASK, b[1]);
-        if(aData["priority"] > bData["priority"])
-            return 1;
-        if(aData["priority"] == bData["priority"] && aData["tid"] > bData["tid"])
-            return 1;
-        return -1;
-    }
+
     function initData()
     {
         tasks = [];
         if(global.taskModel.initYet)
         {
             var finishTask = [];
+            var unFinishTask = [];
             var i;
             var tData;
             var taskD;
             var tid;
+            var ret;
 
-            //添加完成的任务
-            var cycleTask = global.taskModel.localCycleTask.keys();
-            for(i = 0; i < len(cycleTask); i++)
+            //有新手任务则不显示 其他 任务 
+            //不显示 新手阶段任务
+            var newTask = global.taskModel.getDoNewTask();
+            for(i = 0; i < len(newTask); i++)
             {
-                tData = global.taskModel.getCycleTask(cycleTask[i]);
-                taskD = getData(TASK, tData["tid"]);
-                //无限循环 或者 当前阶段 小于 总阶段数
-                if(taskD["stageNum"] == -1 || tData["stage"] < taskD["stageNum"])
+                tData = global.taskModel.getNewTask(newTask[i]);
+                taskD = getData(TASK, newTask[i]);
+                //不显示阶段任务
+                //if(taskD["stageTask"] == 0)
+                //{
+                //新手任务可以完成
+                ret = global.taskModel.checkNewTaskState(newTask[i]);
+                if(ret == TASK_CAN_FINISH)
                 {
-                    tid = cycleTask[i];
-                    if(global.taskModel.checkCycleFinish(tid))
-                        finishTask.append([CYCLE_TASK, cycleTask[i]]);//显示根据数量 stage 决定是否完成 tid
+                    finishTask.append([NEW_TASK, newTask[i]]); 
+                }
+                //新手任务没有 获取过奖励
+                else if(ret == TASK_DOING) 
+                    unFinishTask.append([NEW_TASK, newTask[i]]);
+                //}
+            }
+            //没有新手任务 则 显示下列任务
+            if(len(newTask) == 0)
+            {
+                //添加完成的任务
+                var cycleTask = global.taskModel.localCycleTask.keys();
+                for(i = 0; i < len(cycleTask); i++)
+                {
+                    tData = global.taskModel.getCycleTask(cycleTask[i]);
+                    taskD = getData(TASK, tData["tid"]);
+                    //无限循环 或者 当前阶段 小于 总阶段数
+                    if(taskD["stageNum"] == -1 || tData["stage"] < taskD["stageNum"])
+                    {
+                        tid = cycleTask[i];
+                        if(global.taskModel.checkCycleFinish(tid))
+                            finishTask.append([CYCLE_TASK, cycleTask[i]]);//显示根据数量 stage 决定是否完成 tid
+                    }
+                }
+
+                var needFinishBuy = global.taskModel.needToFinishBuyTask;
+                for(i = 0; i < len(needFinishBuy); i++)
+                {
+                    finishTask.append([ONCE_TASK, ["buy", needFinishBuy[i]]]);//显示购买任务 类型 key 参数
+                }
+
+                //添加未完成的任务
+
+                for(i = 0; i < len(cycleTask); i++)
+                {
+                    tData = global.taskModel.getCycleTask(cycleTask[i]);
+                    taskD = getData(TASK, tData["tid"]);
+                    //无限循环 或者 当前阶段 小于 总阶段数
+                    if(taskD["stageNum"] == -1 || tData["stage"] < taskD["stageNum"])
+                    {
+                        tid = cycleTask[i];
+                        if(!global.taskModel.checkCycleFinish(tid))
+                            unFinishTask.append([CYCLE_TASK, cycleTask[i]]);//显示根据数量 stage 决定是否完成 tid
+                    }
                 }
             }
 
-            var needFinishBuy = global.taskModel.needToFinishBuyTask;
-            for(i = 0; i < len(needFinishBuy); i++)
-            {
-                finishTask.append([ONCE_TASK, ["buy", needFinishBuy[i]]]);//显示购买任务 类型 key 参数
-            }
-
-            //添加未完成的任务
-            var unFinishTask = [];
-            for(i = 0; i < len(cycleTask); i++)
-            {
-                tData = global.taskModel.getCycleTask(cycleTask[i]);
-                taskD = getData(TASK, tData["tid"]);
-                //无限循环 或者 当前阶段 小于 总阶段数
-                if(taskD["stageNum"] == -1 || tData["stage"] < taskD["stageNum"])
-                {
-                    tid = cycleTask[i];
-                    if(!global.taskModel.checkCycleFinish(tid))
-                        unFinishTask.append([CYCLE_TASK, cycleTask[i]]);//显示根据数量 stage 决定是否完成 tid
-                }
-            }
             bubbleSort(unFinishTask, cmpTask);
-            
             tasks = finishTask+unFinishTask;
         }
     }
@@ -237,6 +255,7 @@ class TaskDialog extends MyNode
         cl.setevent(EVENT_TOUCH, touchBegan);
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
+        global.taskModel.doNewTaskByKey("checkTask", 1);
 
         initData();
         updateTab();
@@ -271,6 +290,13 @@ class TaskDialog extends MyNode
             var R_OFFY = 36;
             var R_HEIGHT = 38;
             var R_TOT_HEIGHT = 68;
+            var tid;
+            var tData;//私有数据
+            var taskData;//共有数据
+            var stageNum;
+            var num;
+            var needNum;
+
             if(kind == ONCE_TASK)
             {
                 var key = t[1][0];
@@ -293,10 +319,7 @@ class TaskDialog extends MyNode
                         panel.addlabel(getStr("buySth", ["[NAME]", gData["name"]]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
                         panel.addlabel(getStr("buyGoods", null), "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
                     }
-
-
                     reward = getGain(TASK, PARAMS["buyTaskId"]).items();
-
                 }
             }
             /*
@@ -307,11 +330,11 @@ class TaskDialog extends MyNode
             */
             else if(kind == CYCLE_TASK)
             {
-                var tid = t[1];
-                var tData = global.taskModel.getCycleTask(tid);
-                var taskData = getData(TASK, tid);
-                var stageNum = getCycleStageNum(tid, tData["stage"]);
-                var num = tData["number"];
+                tid = t[1];
+                tData = global.taskModel.getCycleTask(tid);
+                taskData = getData(TASK, tid);
+                stageNum = getCycleStageNum(tid, tData["stage"]);
+                num = tData["number"];
                 //trace(taskData, getStr(taskData["des"], null));
                 if(num >= stageNum)//任务可以完成
                 {
@@ -321,15 +344,11 @@ class TaskDialog extends MyNode
                     temp = panel.addsprite("hook.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
                     panel.addlabel(getStr("taskNum", ["[NUM0]", str(stageNum), "[NUM1]", str(stageNum)]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
 
-                    //panel.addlabel(taskData["title"], "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
-                    //panel.addlabel(taskData["des"], "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
-
                 }
                 else//任务没有完成
                 {
                     temp = panel.addsprite("taskExpIcon.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
                     panel.addlabel(getStr("needExp", ["[EXP]", str(taskData["exp"])]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
-
                     panel.addlabel(getStr("taskNum", ["[NUM0]", str(num), "[NUM1]", str(stageNum)]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(382, 22).color(96, 61, 21);
 
                 }
@@ -343,6 +362,31 @@ class TaskDialog extends MyNode
                 panel.addlabel(taskData["des"], "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
 
                 reward = getCycleReward(tid, tData["stage"]).items(); 
+            }
+            else if(kind == NEW_TASK)
+            {
+                tid = t[1];
+                tData = global.taskModel.getNewTask(tid);
+                taskData = getData(TASK, tid);
+                needNum = taskData["num"];
+                num = tData["number"];
+                if(num >= needNum)
+                {
+                    but0 = new NewButton("greenButton0.png", [91, 37], getStr("finishTask", null), null, 20, FONT_NORMAL, [100, 100, 100], onFinishTask, i);
+                    but0.bg.pos(429, 34);
+                    panel.add(but0.bg);
+                    temp = panel.addsprite("hook.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
+                    panel.addlabel(getStr("taskNum", ["[NUM0]", str(needNum), "[NUM1]", str(needNum)]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
+                }
+                else
+                {
+                    temp = panel.addsprite("taskExpIcon.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
+                    panel.addlabel(getStr("needExp", ["[EXP]", str(taskData["exp"])]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
+                    panel.addlabel(getStr("taskNum", ["[NUM0]", str(num), "[NUM1]", str(needNum)]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(382, 22).color(96, 61, 21);
+                }
+                panel.addlabel(taskData["title"], "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
+                panel.addlabel(taskData["des"], "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
+                reward = getGain(TASK, tid).items(); 
             }
 
             var height = R_OFFY*(len(reward)-1)+R_HEIGHT;
@@ -363,6 +407,8 @@ class TaskDialog extends MyNode
     function onFinishTask(curNum)
     {
         var reward;
+        var tid;
+        var tData;
         if(tasks[curNum][0] == ONCE_TASK)
         {
             if(tasks[curNum][1][0] == "buy")
@@ -378,8 +424,8 @@ class TaskDialog extends MyNode
         }
         else if(tasks[curNum][0] == CYCLE_TASK)
         {
-            var tid = tasks[curNum][1];
-            var tData = global.taskModel.getCycleTask(tid);
+            tid = tasks[curNum][1];
+            tData = global.taskModel.getCycleTask(tid);
             reward = getCycleReward(tid, tData["stage"]); 
             global.httpController.addRequest("taskC/finishCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(reward)]]), null, null); 
             global.user.doAdd(reward);
@@ -387,6 +433,13 @@ class TaskDialog extends MyNode
             initData();
             updateTab();
         }//每日任务不再这里显示
+        else if(tasks[curNum][0] == NEW_TASK)
+        {
+            tid = tasks[curNum][1];
+            global.taskModel.finishNewTask(tid);
+            initData();
+            updateTab();//更新 任务显示数据
+        }
     }
     override function enterScene()
     {

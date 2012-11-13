@@ -193,6 +193,7 @@ class BattleScene extends MyNode
         }
 
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));
+        dialogController.addCmd(dict([["cmd", "randomChoose"]]));
 
         if(kind == CHALLENGE_TRAIN)
             map = new Map(argument["big"], argument["small"], null, this, null);
@@ -220,6 +221,7 @@ class BattleScene extends MyNode
             return argument["cityDefense"];//param[4];
         return 0;
     }
+    //结束布阵就进入rank 但是如何表现回去的箭头任务
     function finishArrange()
     {
         banner.removeSelf();
@@ -233,15 +235,15 @@ class BattleScene extends MyNode
         state = MAP_FINISH_SKILL;
 
         if(kind == CHALLENGE_MON)
-            global.taskModel.doDayTaskByKey("round", 1);
+            global.taskModel.doAllTaskByKey("round", 1);
         if(kind == CHALLENGE_TRAIN)
-            global.taskModel.doDayTaskByKey("train", 1);
+            global.taskModel.doAllTaskByKey("train", 1);
         if(kind == CHALLENGE_NEIBOR)
-            global.taskModel.doDayTaskByKey("neiborChallenge", 1);
+            global.taskModel.doAllTaskByKey("neiborChallenge", 1);
         if(kind == CHALLENGE_FRI)
-            global.taskModel.doDayTaskByKey("rankChallenge", 1);
+            global.taskModel.doAllTaskByKey("rankChallenge", 1);
         if(kind == CHALLENGE_FIGHT)
-            global.taskModel.doDayTaskByKey("fightChallenge", 1);
+            global.taskModel.doAllTaskByKey("fightChallenge", 1);
     }
     function setSkillSoldier(sol)
     {

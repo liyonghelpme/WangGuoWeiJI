@@ -53,6 +53,7 @@ class MapBanner extends MyNode
     var words;
 
     var okBut;
+    var randomBut;
 
     /*
     将剩余士兵尽量全部放置到地面上
@@ -75,6 +76,11 @@ class MapBanner extends MyNode
         else
         {
             temp = bg.addsprite("random.png").anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
+            randomBut = temp;
+            //第一次进入不显示 闯关提示
+            //不显示 选择士兵
+            //global.taskModel.showHintArrow(temp, temp.prepare().size(), RANDOM_BUT);
+
             temp = bg.addsprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
             okBut = bg.addsprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
         }
@@ -82,7 +88,22 @@ class MapBanner extends MyNode
         rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(760, 440).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, -1);
         leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(40, 440).scale(-100, 100).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, 1);
     }
-
+    function receiveMsg(param)
+    {   
+        var msgId = param[0];
+        //if(msgId == OK_BUT)
+        //    global.taskModel.showHintArrow(okBut, okBut.prepare().size(), OK_BUT);
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        //global.msgCenter.registerCallback(OK_BUT, this);
+    }
+    override function exitScene()
+    {
+        //global.msgCenter.removeCallback(OK_BUT, this);
+        super.exitScene();
+    }
 
     function MapBanner(sc)
     {
@@ -116,6 +137,7 @@ class MapBanner extends MyNode
             data[removed[i]][1] = 1;
         }
         updateTab();
+        global.taskModel.showHintArrow(okBut, okBut.prepare().size(), OK_BUT);
     }
     /*
     点击某个士兵 之后士兵出现在场景中 

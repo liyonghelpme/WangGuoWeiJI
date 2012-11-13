@@ -1,7 +1,8 @@
 class FlyLayer extends MyNode
 {
-    var labelPos = [[302,237],[91,117],[350,413],[616,328],[667,109],[222,25]];
+    var labelPos = [[302,237],[91,160],[350,413],[616,328],[667,109],[222,25]];
     var scene;
+    var retBut;
     function FlyLayer(s){
         scene = s;
         bg = node();
@@ -18,6 +19,13 @@ jz.addlabel(getStr("mapIsland" + str(i), null), "fonts/heiti.ttf", 15).anchor(50
         var but0 = new NewButton("returnRoom.png", [72, 47], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onBack, null);
         but0.bg.anchor(50, 50).pos(75, 431);
         bg.add(but0.bg);
+        retBut = but0;
+
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.taskModel.showHintArrow(retBut.bg, retBut.bg.prepare().size(), BACK_BUSI);
     }
     function onBack()
     {

@@ -33,6 +33,7 @@ class FallGoods extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
+        global.msgCenter.registerCallback(MOVE_TO_FALL, this);
     }
     //100s
     const FALL_TIME = 50000;
@@ -86,7 +87,6 @@ class FallGoods extends MyNode
             var fo = new FallObj(this, i, rx, ry, buildLayer);
             fo.setPos([rx*SIZEX, ry*SIZEY]);
             allFalls.append(fo);
-//            trace("fallObj", rx, ry, ry*SIZEY);
             buildLayer.addChildZ(fo, MAX_BUILD_ZORD+1);
         }
     }
@@ -96,6 +96,27 @@ class FallGoods extends MyNode
     掉落物品的类型
     掉落物品的区域
     */
+
+    function getFallObjOnMap()
+    {
+        var fo = new FallObj(this, ids[0], 0, 0, buildLayer);
+        //直接设定 掉落物品位置
+        fo.bg.pos(2090, 750);
+        allFalls.append(fo);
+        buildLayer.addChildZ(fo, MAX_BUILD_ZORD);
+        return fo;
+    }
+    function receiveMsg(param)
+    {
+        trace("receiveFall", param);
+        var msgId = param[0];
+        if(msgId == MOVE_TO_FALL)
+        {
+            var fo = getFallObjOnMap();
+            map.moveToBuild(fo);
+            global.taskModel.showHintArrow(fo.bg, fo.bg.size(), PICK_FALL);
+        }
+    }
     function getNewFall()
     {
         var rv = rand(sum(possible));
@@ -163,6 +184,7 @@ class FallGoods extends MyNode
 
         //ry*SIZEY  普通掉落物品显示在最高的位置 
         //用户升级 掉落物品 供用户拾取
+        return fo;
     }
 
     function pickObj(obj)
@@ -171,6 +193,7 @@ class FallGoods extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(MOVE_TO_FALL, this);
         global.timer.removeTimer(this);
         super.exitScene();
     }

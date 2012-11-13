@@ -142,6 +142,7 @@ class UpgradeDialog extends MyNode
             global.director.popView();
             global.user.changeGoodsNum(TREASURE_STONE, curChoose, -1);
             global.httpController.addRequest("goodsC/upgradeEquip", dict([["uid", global.user.uid], ["eid", eid], ["tid", curChoose]]), upgradeFinish, eid);
+            global.taskModel.doAllTaskByKey("upgradeEquip", 1);
         }
         else
         {

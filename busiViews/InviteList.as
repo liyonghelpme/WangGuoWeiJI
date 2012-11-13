@@ -164,6 +164,7 @@ class InviteList extends MyNode
         global.friendController.inviteFriend(papayaId);
         data[curNum]["invited"] = 1;
         updateTab();
+        global.taskModel.doAllTaskByKey("inviteFriend", 1);
     }
     function inviteSuc(rid, rcode, con, param)
     {

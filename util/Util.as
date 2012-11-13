@@ -910,6 +910,10 @@ function qsort(obj, begin, end, cmp)
     qsort(obj, begin, initX-1, cmp);
     qsort(obj, initX+1, end, cmp);
 }
+function cmpInt(a, b)
+{
+    return a-b;
+}
 
 function bubbleSort(obj, cmp)
 {
@@ -1301,3 +1305,27 @@ function getMapKey(x, y)
     return x*10000+y;
 }
 
+//任务对话框 使用的排序函数
+function cmpTask(a, b)
+{
+    var aData = getData(TASK, a[1]);
+    var bData = getData(TASK, b[1]);
+    if(aData["priority"] > bData["priority"])
+        return 1;
+    if(aData["priority"] == bData["priority"] && aData["id"] > bData["id"])
+        return 1;
+    return -1;
+}
+//任务模块使用的排序函数
+//优先级 从小 到大
+//id 从小到大
+function cmpTaskId(a, b)
+{
+    var aData = getData(TASK, a);
+    var bData = getData(TASK, b);
+    if(aData["priority"] > bData["priority"])
+        return 1;
+    if(aData["priority"] == bData["priority"] && aData["id"] > bData["id"])
+        return 1;
+    return -1;
+}

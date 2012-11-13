@@ -166,10 +166,12 @@ class CastlePage extends MyNode
         dialogController.addCmd(dict([["cmd", "heart"]]));
         dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", 0]]));
         */
-        if(global.pictureManager.checkNeedDownload())
+        //新手任务完成才检测是否下载图片
+        if(global.taskModel.newTaskStage >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
         {
             dialogController.addCmd(dict([["cmd", "download"]])); 
         }
+
     }
 
     function CastlePage(s)
@@ -386,6 +388,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
 
     function finishBuild()
     {
+        trace("page finishBuild");
         inBuilding = 0; 
         curBuild.finishBuild();
         curBuild = null;
@@ -431,6 +434,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         if(!scene.inGame)
             touchDelegate.tEnded(n, e, p, x, y, points);
     }
+    //从 闯关页面 返回到 经营 页面 完成 闯关任务
     override function enterScene()
     {
 //        trace("castal Enter Scene");
@@ -442,7 +446,16 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         global.msgCenter.registerCallback(UPGRADE_LOVE_TREE, this);
         global.msgCenter.registerCallback(GEN_NEW_BOX, this);
         global.msgCenter.registerCallback(OPEN_BOX, this);
+        global.msgCenter.registerCallback(SHOW_NEW_TASK_REWARD, this);
+        global.msgCenter.registerCallback(SHOW_NEW_STAGE, this);
         solNum.text(str(global.user.getSolNum()));
+
+        //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
+        trace("reEnterScene");
+        if(global.taskModel.checkNewTaskCurCmd(NOW_IN_BUSI))
+        {
+            global.taskModel.doAllTaskByKey("newRoundWin", 1);
+        }
     }
 
     //购买士兵 只是增加士兵数量
@@ -496,6 +509,18 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
                 box = null;
             }
         }
+        else if(msg[0] == SHOW_NEW_TASK_REWARD)
+        {
+            dialogController.addCmd(dict([["cmd", "newTaskReward"]]));
+        }
+        else if(msg[0] == SHOW_NEW_STAGE)
+        {
+            //有新手任务没有完成需要显示
+            //if(global.taskModel.checkShowNewTask())
+            //{
+            dialogController.addCmd(dict([["cmd", "newTaskDialog"]]));
+            //}
+        }
     }
     function remove(c)
     {
@@ -529,6 +554,8 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(SHOW_NEW_STAGE, this);
+        global.msgCenter.removeCallback(SHOW_NEW_TASK_REWARD, this);
         global.msgCenter.removeCallback(OPEN_BOX, this);
         global.msgCenter.removeCallback(GEN_NEW_BOX, this);
         global.msgCenter.removeCallback(UPGRADE_LOVE_TREE, this);

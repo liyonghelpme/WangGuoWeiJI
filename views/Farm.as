@@ -26,6 +26,8 @@ class Farm extends FuncBuild
         if(planting.getState() >= MATURE)
         {
             harvestPlant();
+
+
             flowBanner.removefromparent();
             flowBanner = null;
             return 1;
@@ -33,6 +35,7 @@ class Farm extends FuncBuild
         return 0;
     }
     var flowBanner = null;
+    //出现成熟标志
     function setFlowBanner()
     {
         if(flowBanner == null)
@@ -43,6 +46,7 @@ class Farm extends FuncBuild
             var sca = min(63*100/bsize[0], 42*100/bsize[1]);
             pl.scale(sca);
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
+            global.taskModel.showHintArrow(baseBuild.bg, baseBuild.bg.size(), HARVEST_ICON);
         }
     }
     override function initWorking(data)
@@ -122,6 +126,7 @@ class Farm extends FuncBuild
 
         planting = null;
         global.user.updateBuilding(baseBuild);
+        global.taskModel.doNewTaskByKey("plant", 1);
     }
     function harvestPlant()
     {

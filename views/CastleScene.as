@@ -227,12 +227,10 @@ class CastleScene extends MyNode
     移动需要将建筑物置于最高层
     重新调整建筑物的zOrd 用于显示
 
-
     建造时： castleScene CastlePage 都有curBuild 用于防止其它操作发生
     */
     function finishBuild()
     {
-        //var other = checkCollision(mc.curBuild, global.user.allBuildings);
         var other = mc.buildLayer.checkCollision(curBuild);
         if(other != null)
             return;
@@ -249,25 +247,16 @@ class CastleScene extends MyNode
         showData.update(gain);
         global.director.curScene.addChild(new PopBanner(showData));//自己控制
 
-        global.user.buyBuilding(curBuild);
-
-        //showCost(curBuild.bg, cost);
-        //global.user.doCost(cost);
-        //增加经验 防御力 人口显示奖励 消耗银币水晶金币 显示FlyObject 自动增加数值
-        /*
-        if(len(gain) > 0)
-        {
-            global.director.curScene.addChild(new FlyObject(curBuild.bg, gain, null));
-        }
-        */
-
-
         var buildId = curBuild.id;
+        trace("curBuild", buildId);
         mc.finishBuild();
+
+        global.user.buyBuilding(curBuild);
+        trace("finishBuild");
+        global.taskModel.finishBuildTask(curBuild.id, 1);
         closeBuild();
 
         //在关闭 选择菜单之后再显示任务奖励菜单
-        //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, buildId]);
     }
 
     function cancelBuild()
@@ -280,6 +269,7 @@ class CastleScene extends MyNode
     */
     function closeBuild()
     {
+        trace("closeBuild");
         curBuild = null;
         ml.finishBuild();
         global.director.popView();
@@ -347,26 +337,6 @@ class CastleScene extends MyNode
         ml.finishBuild();
         mc.closeGlobalMenu();//还原场景状态
     }
-    /*
-    //取消功能
-    function buySoldier(id)
-    {
-        var cost = getCost(SOLDIER, id);
-        global.user.doCost(cost);
-        var sol = mc.buySoldier(id);
-        global.director.pushView(new RoleName(this, sol), 1, 0);
-        global.msgCenter.sendMsg(BUYSOL, null);
-
-        global.httpController.addRequest("soldierC/buySoldier", dict([["uid", global.user.uid], ["sid", sol.sid], ["kind", sol.id]]), null, null);
-        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, sol.id]);
-    }
-    */
-    /*
-    function nameSoldier(sol, name)
-    {
-        sol.setName(name);
-    }
-    */
     /*
     关闭全局菜单的时候 可以删除
     全局菜单 可能是 建筑物的 也可以是 士兵的

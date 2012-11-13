@@ -104,6 +104,7 @@ class MapPause extends MyNode
             //怪兽没有名字 采用 怪兽
             if(scene.kind == CHALLENGE_MON)
                 bg.addlabel(getStr("monster", null), "fonts/heiti.ttf", 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
+            //挑战其它用户名字
             else
                 bg.addlabel(scene.user["name"], "fonts/heiti.ttf", 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
                 

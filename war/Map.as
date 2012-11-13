@@ -833,8 +833,11 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         if(scene.kind == CHALLENGE_MON)
         {
             if(win)
+            {
+
                 global.director.pushView(new ChallengeWin(this, dict([["levelUpSol", levelUpSol], ["star", star], ["reward", reward]])), 1, 0);
-                //global.director.pushView(new BreakDialog(win, star, reward, this, levelUpSol), 1, 0);
+                //global.taskModel.doNewTaskByKey("round", 1);//任务结束 ---》 检测 是否有 开启下一个任务的时机是否成熟 所有command是否都执行过？ 另外一个任务 阶段胜利任务 一旦进入经营页面场景 就触发
+            }
             else
                 global.director.pushView(new ChallengeFail(this, dict([["levelUpSol", levelUpSol]])), 1, 0);
 

@@ -266,6 +266,7 @@ class FriendList extends MyNode
             global.httpController.addRequest("friendC/sendNeiborRequest", dict([["uid", global.user.uid], ["fid", data[curNum].get("uid")]]), null, null);
             global.friendController.sendRequest(data[curNum].get("uid"));
             global.director.curScene.addChild(new UpgradeBanner(getStr("neiReqSuc", null) , [100, 100, 100], null));
+            global.taskModel.doAllTaskByKey("sendNeiborRequest", 1);
         }
         clearShadow();
     }

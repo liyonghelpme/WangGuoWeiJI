@@ -7,6 +7,8 @@ class FallObj extends MyNode
     var sy = 1;
     var curMap = null;
     var buildLayer;
+    //用于 移动场景到 该对象 
+    var isBuilding = 1;
     /*
     背后的大bg 的anchor 决定了内部奖励物品图片的位置
     进行zord的计算进行比较
@@ -32,21 +34,26 @@ class FallObj extends MyNode
         var shadow = sprite("roleShadow.png").anchor(50, 50).pos(15, 30).size(39, 19);
         obj.add(shadow, -1);
 
+
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
+
     override function enterScene()
     {
         super.enterScene();
+        //global.msgCenter.registerCallback(MOVE_TO_FALL, this);
         buildLayer.mapGridController.updateRxRyMap(curMap[0], curMap[1], this);
     }
     override function exitScene()
     {
-        buildLayer.mapGridController.clearRxRyMap(curMap[0], curMap[1], this);
+        //buildLayer.mapGridController.clearRxRyMap(curMap[0], curMap[1], this);
+        global.msgCenter.removeCallback(MOVE_TO_FALL, this);
         super.exitScene();
     }
     var tarPos;
+    //通过设定目标位置 来 播放移动动画
     override function setPos(p)
     {
         tarPos = p;
@@ -89,5 +96,6 @@ class FallObj extends MyNode
         //测试任务完成 更新任务状态 
         global.taskModel.doCycleTaskByKey("pick", 1);
         global.taskModel.doDayTaskByKey("pick", 1);
+        global.taskModel.doNewTaskByKey("pick", 1);
     }
 }

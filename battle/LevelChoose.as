@@ -219,10 +219,12 @@ nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
             var col = inPage % ITEM_NUM;
 
 
+            var zord = 0;
             //未解锁大关 第一个块
             if(data[i][1] == -1)
             {
-                panel = flowNode.addsprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
+                panel = sprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
+
 
                 panel.addsprite("lock0.png").pos(26, 28).anchor(50, 50).size(25, 30);
 panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
@@ -241,7 +243,7 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
             else if(data[i][1] == 1)
             {
                 
-                panel = flowNode.addsprite("bluePanel0.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
+                panel = sprite("bluePanel0.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
                 if(data[i][0] > 0)
                 {
                     mon = panel.addsprite("soldier0.png").pos(79, 84).anchor(50, 50);
@@ -284,6 +286,10 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
                 panel = flowNode.addsprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
                 panel.addsprite("lock0.png").pos(86, 116).anchor(50, 50);
             }
+
+            if(i == 0)
+                zord = 3;
+            flowNode.add(panel, zord);
             panel.put(i);
             //allPanels.append(panel);
             if(data[i][1] != -1)
@@ -291,6 +297,10 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
                 var w = altasWord("bold", str(i+1));
                 w.pos(80, 36).anchor(50, 50);
                 panel.add(w);
+            }
+            if(i == 0)
+            {
+                global.taskModel.showHintArrow(panel, panel.prepare().size(), FIRST_LEVEL);
             }
         }
     }

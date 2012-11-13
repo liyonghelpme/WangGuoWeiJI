@@ -1,6 +1,6 @@
 class MenuLayer extends MyNode
 {
-    //var taskbutton;
+    var taskbutton;
     var taskFin;
     var finNum;
     var expfiller;
@@ -40,7 +40,7 @@ class MenuLayer extends MyNode
         
         banner = bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
 
-        bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
+        taskbutton = bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
         taskFin = bg.addsprite("taskFin0.png").anchor(0, 0).pos(83, 402).size(27, 27);
         finNum = bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 416).color(100, 100, 100);
 
@@ -127,11 +127,10 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     */
     function finishBuild()
     {
-        if(ins == 0)
-        {
-            scene.keepMenuLayer.addChild(this);
-            bg.addaction(fadein(0));
-        }
+        trace("finish MenuLayer");
+        removeSelf();
+        scene.keepMenuLayer.addChild(this);
+        bg.addaction(fadein(0));
     }
     /*
     进入场景之后 需要更新显示的用户数据
@@ -145,6 +144,9 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         global.msgCenter.registerCallback(UPDATE_TASK, this);
         global.msgCenter.registerCallback(UPDATE_EXP, this);
         global.msgCenter.registerCallback(RATE_GAME, this);
+        global.msgCenter.registerCallback(MENU_ICON, this);
+        global.msgCenter.registerCallback(INIT_NEW_TASK_FIN, this);
+        global.msgCenter.registerCallback(CHECK_TASK_ICON, this);
 
 
         updateValue(global.user.resource);
@@ -152,6 +154,9 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         updateTaskState();
         updateRightMenu();
         //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
+
+        global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON);
+        global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
 
     function updateExp(add)
@@ -212,34 +217,57 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
             rightMenu.removeSelf();
             rightMenu = null;
         }
+        if(downloadIcon != null)
+        {
+            downloadIcon.bg.visible(0);
+        }
+
         //显示子菜单 隐藏 打分图标
         if(showChildMenu == 1)
         {
-            //rightMenu.removeSelf();
-            //rightMenu.bg.visible(0);
-            //scoreIcon.visible(0);
             return;
         }
+
         var rated = global.user.db.get("rated");
         var funcs = [];
         if(rated != 1)
         {
             funcs.append("rate");
-            //scoreIcon.visible(1);
         }
-        if(global.taskModel.initYet)
+
+        //是否显示 3个图标
+        var ret = global.taskModel.checkShowThreeIcon()
+        if(ret)
         {
-            if(len(global.taskModel.localDayTask) > 0)
+            if(global.user.getValue("level") < getParam("inviteShowLevel"))
             {
-                funcs.append("dayTask");
+                funcs.append("invite");
+            }
+            //没有反馈过 则 显示反馈图标
+            if(global.user.db.get("feedback") != 1)
+            {
+                funcs.append("feedback");
             }
         }
+        else
+        {
+            if(global.taskModel.initYet)
+            {
+                if(len(global.taskModel.localDayTask) > 0)
+                {
+                    funcs.append("dayTask");
+                }
+            }
+        }
+
         if(len(funcs) > 0)
         {
             rightMenu = new CastleRightMenu(this, funcs);
             rightMenu.setPos([753, 129]);
             addChild(rightMenu);
         }
+        if(downloadIcon != null)
+            downloadIcon.bg.visible(1);
     }
     function receiveMsg(param)
     {
@@ -257,6 +285,12 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
             updateExp(param[1]);
         else if(msgId == RATE_GAME)
             updateRightMenu();
+        else if(msgId == MENU_ICON)
+            global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON);
+        else if(msgId == INIT_NEW_TASK_FIN)
+            updateRightMenu(); 
+        else if(msgId == CHECK_TASK_ICON)
+            global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
     function updateTaskState()
     {
@@ -276,6 +310,9 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(CHECK_TASK_ICON, this);
+        global.msgCenter.removeCallback(INIT_NEW_TASK_FIN, this);
+        global.msgCenter.removeCallback(MENU_ICON, this);
         global.msgCenter.removeCallback(RATE_GAME, this);
         global.msgCenter.removeCallback(UPDATE_EXP, this);
         global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
@@ -318,11 +355,11 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     var visLock = 0;
     function showMenu(t)
     {
-        if(ins == 0)
-        {
-            finishBuild();
-            bg.addaction(fadein(t));
-        }
+        //if(ins == 0)
+        //{
+        finishBuild();
+        bg.addaction(fadein(t));
+        //}
     }
     function hideMenu(t)
     {
@@ -336,7 +373,6 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     需要确保两个子菜单的位置相同高度， 所以需要传递另一个菜单的高度
     */
     function draw_func(index, funcs){
-        //unsupported param
         updateRightMenu();
         if(menus[index] != null){
             removeChild(menus[index]);

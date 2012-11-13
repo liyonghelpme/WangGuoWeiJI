@@ -67,11 +67,18 @@ class RoundGridController
                 var k = getMapKey(px, py);
                 var it = mapDict.get(k);
                 if(it != null)
-                    colObjs += it;
+                {
+                    //不和防御建筑判断冲突
+                    for(var t = 0; t < len(it); t++)
+                        if(it[t].state != MAP_SOL_DEFENSE)
+                            colObjs.append(it[t]);
+                }
+
             }
         }
         return colObjs;
     }
+
     function getRowObjects(left, top, sx, sy, obj)
     {
         var rowObjects = [];
@@ -103,7 +110,7 @@ class RoundGridController
             //根据当前士兵 ---》 判断冲突士兵---》调整冲突士兵---》结束条真
             for(var i = 0; i < len(colList); i++)
             {
-                //判断冲突方式
+                //判断冲突方式 不和防御建筑判断冲突
                 if(colList[i] != s && adjustYet.get(colList[i].mapSolId) == null)
                 {
                     var colSol = colList[i];

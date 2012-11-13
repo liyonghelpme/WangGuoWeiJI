@@ -845,6 +845,57 @@ const ALL_ACTIVE_SOL = 38;//buildLayer 建立完方阵 返回士兵队列供游�
 const REMOVE_SOL = 39;
 const BEGIN_DOWNLOAD = 40;
 
+const DO_NEW_TASK = 41;
+const NEW_TASK_NEXT_STEP = 42;
+const SHOW_NEW_TASK_REWARD = 43;
+const INIT_NEW_TASK_FIN = 44;
+
+
+
+//新手任务命令 每个消息 都有唯一的一个代理 来接受 处理  变换代理之后 需要 重新发送消息
+//这个消息编号 属于 MSG——ID 编号 因此不能重复
+const MOVE_TO_CAMP = 100;
+const CALL_IN_CAMP = 101;
+const CALL_SOLDIER = 102;
+const SURE_TO_CALL = 103;
+
+const MENU_ICON = 104;
+const MAP_ICON = 105;
+const FOREST_ISLAND = 106;
+const FIRST_LEVEL = 107;
+const RANDOM_BUT = 108;
+const OK_BUT = 109;
+const MAKEUP_BUT = 110; 
+const SHARE_WIN = 111;
+const BACK_BUSI = 112;
+const NOW_IN_BUSI = 113;
+
+
+//开启第二阶段新手任务
+const MOVE_TO_FARM = 114;
+const PLANT_ICON = 115;
+const HARVEST_ICON = 116;
+const NOW_HARVEST = 117;
+
+const MOVE_TO_FALL = 118;
+const PICK_FALL = 119;
+
+const MOVE_TO_SOL = 120;
+const TOUCH_SOL = 121;
+const STATUS_ICON = 122;
+
+//每个新手任务的commandList
+const SHOW_THREE_ICON = 123;
+//正在显示 3个 图标
+const NOW_SHOW_TRHEE_ICON = 124;
+
+//箭头显示 不能 和 check_task_icon 相同 要避免 0号命令 的check 因为缺少依赖
+const CHECK_TASK_ICON = 125;
+const TASK_ICON = 126;
+
+const SHOW_NEW_STAGE = 127;
+//回到经营页面任务 ---> 显示箭头  新任务出现应该 比箭头先出来
+const MOVE_SOL_PICK_FALL = 128; 
 
 
 
@@ -886,6 +937,7 @@ const ORE = 1;
 const ONCE_TASK = 0;
 const CYCLE_TASK = 1;
 const DAILY_TASK = 2;
+const NEW_TASK = 3;
 
 
 //邮件信息类型
@@ -1277,3 +1329,15 @@ const POS_MOVE_CMD = 5;
 const POSING_CMD = 6;
 const FINISH_ATTACK = 7;
 const BEGIN_ATTACK = 8;
+
+
+const DOWN = 0;
+const LEFT = 1;
+const RIGHT = 2;
+const UP = 3;
+
+const TASK_DOING = 0;
+const TASK_CAN_FINISH = 1;
+const TASK_REWARD_YET = 2;
+
+//const SCRIPT_DICT = 6;

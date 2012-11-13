@@ -497,23 +497,10 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     */
     function doTransfer()
     {
-        //var proLevel = id%10;
-        //var solOrMon = data.get("solOrMon");
-        //var ret = checkTransfer(level, data);
-
-        //if(proLevel < 3 && (proLevel+1)*5 <= level && solOrMon == 0)//每5级可以转职一次
-        //if(ret == 1)
-        {
-        //改变形象bg  改变数据 id 
-            //global.httpController.addRequest("soldierC/doTransfer", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
-            id += 1;
-            //global.user.updateSoldiers(this);//更新士兵类型
-            //var d = getData(SOLDIER, id);
-            //updateStaticData();
-            updateTransData();
-            global.user.updateSoldiers(this);//更新士兵类型
-            global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
-        }
+        id += 1;
+        updateTransData();
+        global.user.updateSoldiers(this);//更新士兵类型
+        global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
     }
     var accMove = 0;
     var lastPoints;
@@ -695,6 +682,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         global.msgCenter.registerCallback(USE_DRUG, this);
         global.msgCenter.registerCallback(SELL_SOL, this);
         global.msgCenter.registerCallback(TRANSFER_SOL, this);
+        global.msgCenter.registerCallback(MOVE_TO_SOL, this);
     }
     function receiveMsg(param)
     {
@@ -733,10 +721,18 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             if(sid == tranSid)
             {
                 //更新士兵id
-                //id = global.user.getSoldierData(sid)["id"]; 
-                //var d = getData(SOLDIER, id);
                 updateStaticData();
             }
+        }
+        else if(mid == MOVE_TO_SOL)
+        {
+            //if(curStatus != NO_STATUS)
+            //{
+            curStatus = PICK_GAME;
+            showCurStatus();
+            map.map.moveToBuild(this);  
+            global.taskModel.showHintArrow(bg, bg.size(), TOUCH_SOL);
+            //}
         }
     }
 
@@ -986,6 +982,8 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
 
     override function exitScene()
     {
+        global.msgCenter.removeCallback(TRANSFER_SOL, this);
+        global.msgCenter.removeCallback(MOVE_TO_SOL, this);
         global.msgCenter.removeCallback(SELL_SOL, this);
         global.msgCenter.removeCallback(USE_DRUG, this);
         global.msgCenter.removeCallback(UPDATE_EQUIP, this);
@@ -1114,18 +1112,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             }
             else 
                 curStatus = PICK_GAME;
-            /*
-            if(possible == null)
-                initPossible();
-            for(var i = 0; i < len(possible); i++)
-            {
-                if(rd <= possible[i])
-                {
-                    break;
-                }
-            }
-            */
-            //curStatus = statusPossible[min(i, len(statusPossible)-1)][0];
             showCurStatus();
         }
     }

@@ -31,6 +31,7 @@ import busiViews.DrugList;
 
 //经营页面
 import views.CastlePage;
+import busiViews.NewTaskReward;
 import busiViews.BoxOnMap;
 import busiViews.DownloadDialog;
 import busiViews.DownloadIcon;
@@ -263,6 +264,7 @@ import war.MapDefense;
 
 
 import views.DialogController;
+import busiViews.NewTaskDialog2;
 import views.Mask;
 
 //import views.ScoreDialog;

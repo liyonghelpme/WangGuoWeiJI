@@ -141,7 +141,8 @@ class FriendMenu extends MyNode
 
         updateRightMenu();
 
-        global.tashModel.doDayTaskByKey("sendHeart", 1);
+        //global.tashModel.doDayTaskByKey("sendHeart", 1);
+        global.taskModel.doAllTaskByKey("sendHeart", 1);
     }
     var challenged = 0;
     //挑战结束返回好友页面

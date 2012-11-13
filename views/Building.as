@@ -186,10 +186,23 @@ class Building extends MyNode
         if(funcs == CAMP && state == PARAMS["buildFree"])
         {
             global.msgCenter.removeCallback(CALL_SOL, this);
+            global.msgCenter.removeCallback(MOVE_TO_CAMP, this);
+
+
             global.msgCenter.registerCallback(CALL_SOL, this);
+            global.msgCenter.registerCallback(MOVE_TO_CAMP, this);
+
+        }
+
+        if(funcs == FARM_BUILD && state == PARAMS["buildFree"])
+        {
+            global.msgCenter.removeCallback(MOVE_TO_FARM, this);
+            global.msgCenter.registerCallback(MOVE_TO_FARM, this);
         }
     }
+    var inTask = 0;
     //空闲建筑 则 工作
+    //重新进入 场景 需要主动 的显示
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -201,11 +214,30 @@ class Building extends MyNode
                 global.director.pushView(new CallSoldier(this), 1, 0);
             }
         }
+        else if(msgId == MOVE_TO_CAMP)
+        {
+            if(state == PARAMS["buildFree"])
+            {
+                map.map.moveToBuild(this); 
+                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_CAMP);
+            }
+        }
+        //多个农田怎么办？ 最后一个肯定会存在
+        else if(msgId == MOVE_TO_FARM)
+        {
+            if(state == PARAMS["buildFree"])
+            {
+                map.map.moveToBuild(this); 
+                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_FARM);
+            }
+        }
     }
 
     override function exitScene()
     {
+        global.msgCenter.removeCallback(MOVE_TO_FARM, this);
         global.msgCenter.removeCallback(CALL_SOL, this);
+        global.msgCenter.removeCallback(MOVE_TO_CAMP, this);
         if(aniNode != null)
             aniNode.exitScene();
         funcBuild.exitScene();
@@ -399,18 +431,6 @@ class Building extends MyNode
     }
 
     /*
-    function buildCheckInZone()
-    {
-        var ret = checkInZone(bg.pos());
-        if(ret == 0)
-        {
-            //not in big zone
-            return NotBigZone;
-        }
-        return InZone;
-    }
-    */
-    /*
     建造时，防止重叠， 将建筑物放在最高层，建造结束调整建筑物的位置
     建造完成更新局部数据
     */
@@ -574,8 +594,30 @@ class Building extends MyNode
     /*
     如果用户手指移动 一定的范围 表示没有意图打开建筑物对话框
     当前移动建筑不是 自身不能处理
-
     */
+    function doFree()
+    {
+        //任务状态
+        /*
+        if(funcs == CAMP && inTask)
+        {
+            inTask = 0;
+            hintArrow.removefromparent();
+            global.director.curScene.showGlobalMenu(this, showGlobalMenu);
+            global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
+            return;
+        }
+        */
+
+        var ret = funcBuild.whenFree();
+        if(ret == 0)
+        {
+            if(showMenuYet == 0)
+            {
+                global.director.curScene.showGlobalMenu(this, showGlobalMenu);
+            }
+        }
+    }
     function touchEnded(n, e, p, x, y, points)
     {
 
@@ -599,14 +641,7 @@ class Building extends MyNode
         */
         else if(state == PARAMS["buildFree"] && accMove < 20)
         {
-            ret = funcBuild.whenFree();
-            if(ret == 0)
-            {
-                if(showMenuYet == 0)
-                {
-                    global.director.curScene.showGlobalMenu(this, showGlobalMenu);
-                }
-            }
+            doFree();
         }
         /*
         工作中的农田显示

@@ -691,7 +691,12 @@ class User
         var gain = getGain(BUILD, build.id);
         doAdd(gain);
         updateBuilding(build); 
-        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, build.id]);
+
+        //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, build.id]);
+        global.taskModel.finishBuyTask(BUILD, build.id);
+        global.taskModel.finishBuildTask(build.id, 1);
+
+        trace("finsh User buy Building");
     }
 
     function getNewEquip(eid, id, level)
@@ -1097,34 +1102,6 @@ class User
         return ret;
     }
     /*
-    function getLevelUpReward()
-    {
-        var ret = dict();
-        var level = getValue("level");
-        var sil = 0;
-        var gol = 0;
-        var cry = 0;
-        for(var i = 0; i < 10; i++)
-        {
-            var reward = getGain(FALL_THING, i/2+5);
-            if(reward["silver"] != 0)
-            {
-                reward["silver"] += global.user.getValue("level")/5*5;
-            }
-            sil += reward["silver"];
-            gol += reward["gold"];
-            cry += reward["cry"];
-        }
-        ret.update("silver", sil);
-        ret.update("gold", gol);
-        ret.update("crystal", cry);
-
-        doAdd(ret);
-//        trace("levelUp reward", ret);
-        return ret;
-    }
-    */
-    /*
     改变用户经验 有可能自动升级
     */
     function changeValue(key, add)
@@ -1380,6 +1357,7 @@ class User
         doCost(cost);
         addNewSkill(soldierId, skillId);
         global.msgCenter.sendMsg(UPDATE_SKILL, [soldierId, skillId]);
+        global.taskModel.doAllTaskByKey("buySkill", 1);
     }
     function upgradeSkill(soldierId, skillId)
     {

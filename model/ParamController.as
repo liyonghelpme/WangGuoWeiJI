@@ -26,10 +26,19 @@ class ParamController
             magicAnimate = dict(con["sol"]);
         }
     }
+    /*
+    更新数据得 重新Keys CostData 调整 
+    脚本中 的task的commandlist使用的 是 数组的形式 主要是为了方便生成
+    服务器 直接返回json_loads 就变成了 dict的形式
+
+    */
     function fetchTask(rid, rcode, con, param)
     {
         con = json_loads(con);
+        trace("fetchTask", len(con), len(allTasksData));
         allTasksData = dict(con["taskData"]);
         allTasksKey = con["taskKey"];
+        Keys[TASK] = allTasksKey;
+        CostData[TASK] = allTasksData;
     }
 }

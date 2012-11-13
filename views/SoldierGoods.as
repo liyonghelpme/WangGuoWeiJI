@@ -35,6 +35,20 @@ class SoldierGoods extends MyNode
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
     }
+
+    //进入场景的时候再updateTab 保证看到黑色框 不被对话框遮挡
+    //完全克隆一个虚假的 view 或者 控制所有view 的touch
+    override function enterScene()
+    {
+        super.enterScene();
+        //global.msgCenter.registerCallback(CALL_SOLDIER, this);
+        //updateTab();
+    }
+    override function exitScene()
+    {
+        //global.msgCenter.removeCallback(CALL_SOLDIER, this);
+        super.exitScene();
+    }
     /*
     根据移动的位置 计算需要显示的范围 预先显示额外的上下两行
     0-325
@@ -51,8 +65,10 @@ class SoldierGoods extends MyNode
     两种思路， 每次移动结束更新状态
     移动过程中， 每次检测，对于溢出的进行删除，没有显示的进行补偿显示
     */
+    var firstSolPanel = null;
     function updateTab()
     {
+        firstSolPanel = null;
         var rg = getShowRange();
         
         var oldPos = flowNode.pos();
@@ -72,7 +88,16 @@ class SoldierGoods extends MyNode
                 {
                     break;
                 }
-                panel = flowNode.addsprite("goodPanel.png").pos(j*offX+PAN_WID/2, curY+PAN_HEI/2).anchor(50, 50);
+
+                panel = sprite("goodPanel.png").pos(j*offX+PAN_WID/2, curY+PAN_HEI/2).anchor(50, 50);
+                var zOrd = 0;
+                if(curNum == 0)
+                {
+                    zOrd = 3;
+                    firstSolPanel = panel;
+                }
+                flowNode.add(panel, zOrd);
+
                 var sca = getSca(panel, [PAN_WID, PAN_HEI]);
                 panel.scale(sca);
 
@@ -130,6 +155,11 @@ class SoldierGoods extends MyNode
             }
         }
 
+        if(firstSolPanel != null)
+        {
+            global.taskModel.showHintArrow(firstSolPanel, firstSolPanel.prepare().size(), CALL_SOLDIER);
+        }
+
     }
     /*
     切换tab 更新面板 更新物品信息
@@ -151,17 +181,6 @@ class SoldierGoods extends MyNode
             player = global.controller.butMusic.play(0, 80, 80, 0, 100);
         }
 
-        /*
-        var child = checkInChild(flowNode, newPos);
-        if(child != null)
-        {
-            //var canBuy = child.get()[1];
-            //if(canBuy == 0)
-            //    store.setSoldier(null);
-            //else
-            store.setSoldier(child.get());
-        }
-        */
     }
     function moveBack(dify)
     {
@@ -197,35 +216,15 @@ class SoldierGoods extends MyNode
         }
 
         var newPos = n.node2world(x, y);
+        var child = null;
         if(accMove < 10)
         {
-            var child = checkInChild(flowNode, newPos);
+            child = checkInChild(flowNode, newPos);
             if(child != null)
             {
                 var idCan = child.get(); 
                 store.setSoldier(idCan);
 
-                //士兵人数超出 50
-                //士兵人数超出 民居数量
-                if(idCan[1] == 1)//等级足够显示职业介绍
-                {
-
-                    /*
-                    var curSolNum = global.user.getSolNum();
-                    var peopleNum = global.user.getPeopleNum();
-                    if(curSolNum >= MAX_BUSI_SOLNUM)
-                    {
-                        global.director.pushView(new MyWarningDialog(getStr("solTooMany", null), getStr("sorrySol", null), null), 1, 0);
-                    }
-                    else if(curSolNum < peopleNum)
-                        global.director.pushView(new ProfessionIntroDialog(this, idCan[0]), 1, 0);
-                    else if(curSolNum > peopleNum)
-                        global.director.pushView(new MyWarningDialog(getStr("houseNot", null), getStr("buildHouse", null), solNotEnough), 1, 0);
-                    else
-                    {
-                    }
-                    */
-                }
             }
         }
 
@@ -235,5 +234,8 @@ class SoldierGoods extends MyNode
         curPos[1] = max(rows, min(0, curPos[1]));
         flowNode.pos(curPos);
         updateTab();
+        
+        //if(child != null)
+        store.showHintArrow();
     }
 }

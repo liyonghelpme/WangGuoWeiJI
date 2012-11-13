@@ -253,8 +253,7 @@ class SkillDialog extends MyNode
     {
         global.httpController.addRequest("soldierC/buySkill", dict([["uid", global.user.uid], ["soldierId", soldier.sid], ["skillId", buySkillId]]), null, null);
         global.user.buySkill(soldier.sid, buySkillId);
-        //updateTab();
-        //updateSkillText();
+
     }
 
     var lastPoints;

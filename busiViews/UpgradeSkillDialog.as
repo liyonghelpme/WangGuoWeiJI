@@ -137,6 +137,7 @@ class UpgradeSkillDialog extends MyNode
             global.director.popView();
             global.user.changeGoodsNum(MAGIC_STONE, curChoose, -1);
             global.httpController.addRequest("soldierC/upgradeSkill", dict([["uid", global.user.uid], ["soldierId", soldierId], ["skillId", skillId], ["stoneId", curChoose]]), upgradeFinish, null);
+            global.taskModel.doAllTaskByKey("upgradeSkill", 1);
         }
         else
         {

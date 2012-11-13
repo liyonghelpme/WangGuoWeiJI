@@ -48,6 +48,7 @@ class MailDialog extends MyNode
         views = [requestView, moreView];
 
         switchView(0);
+        global.taskModel.doAllTaskByKey("checkMessage", 1);
     }
     function switchView(p)
     {

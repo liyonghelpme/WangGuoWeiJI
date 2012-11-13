@@ -93,24 +93,28 @@ class ChallengeScene extends MyNode
             }
 
             var solAttackEffect = magicAnimate.get(mySolIds[k]);
-            for(i = 0; i < len(solAttackEffect); i++)
+            //没有攻击特效的地方士兵 不用下载图片
+            if(solAttackEffect != null)
             {
-                var ani = solAttackEffect[i];
-                if(ani != -1)
+                for(i = 0; i < len(solAttackEffect); i++)
                 {
-                    var pics = pureMagicData.get(ani)[0];
-                    if(len(pics) > 0)
+                    var ani = solAttackEffect[i];
+                    if(ani != -1)
                     {
-                        name = "s"+str(ani)+"e.plist";
-                        ret0 = c_res_exist(name);
-                        if(!ret0)
+                        var pics = pureMagicData.get(ani)[0];
+                        if(len(pics) > 0)
                         {
-                            needDownload.append(name);
+                            name = "s"+str(ani)+"e.plist";
+                            ret0 = c_res_exist(name);
+                            if(!ret0)
+                            {
+                                needDownload.append(name);
+                            }
+                            name = "s"+str(ani)+"e.png";
+                            ret1 = c_res_exist(name);
+                            if(!ret1)
+                                needDownload.append(name);
                         }
-                        name = "s"+str(ani)+"e.png";
-                        ret1 = c_res_exist(name);
-                        if(!ret1)
-                            needDownload.append(name);
                     }
                 }
             }

@@ -175,7 +175,6 @@ class Store extends MyNode
                 }
             }
 
-            //scene.beginBuild(id);
             ret = global.msgCenter.checkCallback(BEGIN_BUILD);
             if(!ret)
             {
@@ -189,22 +188,16 @@ class Store extends MyNode
         else{
             if(kind == DRUG)
             {
-                //if(kind == DRUG)
                 global.httpController.addRequest("goodsC/buyDrug", dict([["uid", global.user.uid], ["drugKind", id]]), null, null);
                 global.user.buySomething(kind, id, null);
-                /*
-                刷新当前购买页面
-                */
-
-                //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [DRUG, id]);
+                global.taskModel.doAllTaskByKey("buyDrug", 1);
             }
             else if(kind == EQUIP)
             {
                 var newEid = global.user.getNewEid();
                 global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
                 global.user.buySomething(kind, id, newEid);
-                //global.user.buyEquip(newEid, id, cost);
-                //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [EQUIP, id]);
+                global.taskModel.doAllTaskByKey("buyEquip", 1);
             }
             //购买金币 需要消耗木瓜币 有所不同
             else if(kind == GOLD)

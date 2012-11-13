@@ -11,7 +11,8 @@ class TreasureBox extends MyNode
         updateState();
         global.director.curScene.addChild(new UpgradeBanner(getStr("helpSuc", null) , [100, 100, 100], null));
 
-        global.tashModel.doDayTaskByKey("helpOpenBox", 1);
+        //global.tashModel.doDayTaskByKey("helpOpenBox", 1);
+        global.tashModel.doAllTaskByKey("helpOpenBox", 1);
     }
 //temp = bg.addsprite("friendBlock.png").anchor(0, 0).pos(196, 184).size(55, 55).color(100, 100, 100, 100);
     //帮助别人开启宝箱初始化头像
@@ -138,6 +139,7 @@ class TreasureBox extends MyNode
             }
             global.user.openBox();
             global.director.pushView(new BoxReward(rewards), 1, 0);
+            global.taskModel.doAllTaskByKey("openBox", 1);
         }
         inOpen = 0;
     }
@@ -173,6 +175,7 @@ class TreasureBox extends MyNode
     function onFindFriend()
     {
         doShare(getStr("shareBox", ["[NAME]", global.user.name]), null, null, null, null);
+        global.taskModel.doAllTaskByKey("askOpen", 1);
     }
     var openBut;
     function initView()

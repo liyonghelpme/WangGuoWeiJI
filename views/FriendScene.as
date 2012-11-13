@@ -1,10 +1,3 @@
-/*
-    var scene;
-    var solTimer;
-    var mapDict = dict();
-
-    如果将 BuildLayer MoveLayer 都构造在 MoveMap 上
-*/
 class MovLayer extends MoveMap
 {
     var kind;
@@ -47,23 +40,11 @@ class MovLayer extends MoveMap
         super.enterScene();
         solTimer = new Timer(200);
         initSoldiers();
-        //initBuildings();
-        /*
-        if(kind == VISIT_NEIBOR)
-        {
-            initMine();
-        }
-        */
     }
 
     override function exitScene()
     {
         removeSoldiers();
-        //removeBuildings();
-        /*
-        if(kind == VISIT_NEIBOR)
-            removeMine();
-        */
         super.exitScene();
         solTimer.stop();
         solTimer = null;
@@ -85,12 +66,9 @@ class MovLayer extends MoveMap
             }
             var s = new FriendSoldier(val[i], this, hasCry, key[i]);
             addChild(s);
-            //allSoldiers.append(s);
             mapGridController.addSoldier(s);
-            //mapGridController.allSoldiers.update(soldier.sid, soldier);
         }
     }
-    //var allBuildings = [];
     function initBuildings()
     {
         for(var i = 0; i < len(scene.buildings); i++)
@@ -100,38 +78,14 @@ class MovLayer extends MoveMap
             b.setBid(-1);
             b.setPos([pdata.get("px"), pdata.get("py")]);
             addChild(b);
-            //allBuildings.append(b);
 
             mapGridController.allBuildings.append(b);
             mapGridController.updateMap(b);
         }
     }
 
-    /*
-    var mine = null;
-    function initMine()
-    {
-        mine = bg.addsprite("build300.png", ARGB_8888).pos(768, 352).anchor(50, 100); 
-    }
-    */
-
-
-    /*
-    function removeMine()
-    {
-        if(mine != null)
-        {
-            mine.removefromparent();
-            mine = null;
-        }
-    }
-    */
-
     function removeSoldiers()
     {
-        //for(var i = 0; i < len(allSoldiers); i++)
-        //    allSoldiers[i].removeSelf();
-        //allSoldiers = [];
         mapGridController.removeAllSoldiers();
     }
 
@@ -232,15 +186,6 @@ class FriendScene extends MyNode
         }
     }
 
-    /*
-        伪造建筑需要的数据
-        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor]]));
-
-        mine = bg.addsprite("build300.png", ARGB_8888).pos(768, 352).anchor(50, 100); 
-        好友建筑不能进行任何操作！?? 操作包括？
-
-        邻居数据返回 爱心树等级
-    */
     function makeFakeBuilding()
     {
         trace("building data", user);
@@ -306,6 +251,8 @@ class FriendScene extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
+        if(kind == VISIT_NEIBOR)
+            global.taskModel.doAllTaskByKey("visitNeibor", 1);
     }
 
     override function exitScene()

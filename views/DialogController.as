@@ -87,6 +87,18 @@ class DialogController extends MyNode
                 {
                     global.director.pushView(new DownloadDialog(), 1, 0);
                 }
+                else if(curCmd["cmd"] == "newTaskDialog")
+                {
+                    global.director.pushView(new NewTaskDialog2(), 1, 0);
+                }
+                else if(curCmd["cmd"] == "newTaskReward")
+                    global.director.pushView(new NewTaskReward(), 1, 0);
+                //闯关页面的随机按钮显示 箭头
+                else if(curCmd["cmd"] == "randomChoose")
+                {
+                    var randBut = scene.banner.randomBut;
+                    global.taskModel.showHintArrow(randBut, randBut.prepare().size(), RANDOM_BUT);
+                }
             }
         }
     }

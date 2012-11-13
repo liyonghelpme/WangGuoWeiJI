@@ -81,6 +81,9 @@ class ChallengeWin extends MyNode
         but0 = new NewButton("roleNameBut0.png", [156, 52], getStr("share", null), null, 27, FONT_NORMAL, [100, 100, 100], onShare, null);
         but0.bg.pos(287, 401);
         addChild(but0);
+        
+        global.taskModel.showHintArrow(but0.bg, but0.bg.prepare().size(), SHARE_WIN);
+
         button0 = but0;
         but0 = new NewButton("roleNameBut1.png", [156, 52], getStr("ok", null), null, 27, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(509, 402);
@@ -88,8 +91,10 @@ class ChallengeWin extends MyNode
         button1 = but0;
         temp = bg.addsprite("roundWin.png").anchor(50, 50).pos(410, 57).size(149, 51).color(100, 100, 100, 100);
     }
+    //分享之后 回到 经营页面任务
     function closeDialog()
     {
+        //global.taskModel.doAllTaskByKey("newRoundWin", 1);
         global.director.popScene();
     }
 

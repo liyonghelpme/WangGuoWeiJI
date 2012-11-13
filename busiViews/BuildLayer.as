@@ -1,16 +1,6 @@
 class BuildLayer extends MoveMap
 {
     var map;
-    //var solTimer = null;
-    //var mapDict = dict();//建筑物 士兵 所在的block
-    //var allBuildings = [];
-    //var allSoldiers = dict();
-
-    //var mapGridController;
-    //var blockBuilding;
-
-    //var gridLayer;
-
     function BuildLayer(m)
     {
         moveZone = TrainZone;   

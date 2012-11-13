@@ -13,7 +13,19 @@ class CastleRightMenu extends MyNode
     var buts = dict([
         ["rate", ["scoreIcon.png", onRate]],
         ["dayTask", ["dayTaskIcon.png", onDayTask]],
+        ["invite", ["inviteIcon.png", onInvite]],
+        ["feedback", ["settingIcon.png", onFeedback]],
     ]);
+    function onInvite()
+    {
+        global.director.pushView(new InviteIntro(), 1, 0);
+    }
+    function onFeedback()
+    {
+        global.user.db.put("feedback", 1);
+        global.director.pushView(new SettingDialog(), 1, 0);
+        menu.updateRightMenu();
+    }
     function onRate()
     {
         global.director.pushView(new ScoreDialog(), 1, 0);
@@ -42,6 +54,17 @@ class CastleRightMenu extends MyNode
             temp.scale(sca);
             curY += OFFY;
         }
+    }
+
+    override function enterScene()
+    {
+        super.enterScene();
+
+    }
+    override function exitScene()
+    {
+
+        super.exitScene();
     }
     function CastleRightMenu(m, f)
     {

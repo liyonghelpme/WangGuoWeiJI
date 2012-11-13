@@ -61,9 +61,10 @@ class CallSoldier extends MyNode
         else//显示 默认士兵
             setSoldier([0, 1]);//soldier Id 0 canBuy 1
     }
+
     //id can
-    var curSelSol = null;
     //招募 加速
+    var curSelSol;
     function onCall()
     {
         if(curSelSol != null)
@@ -100,7 +101,17 @@ class CallSoldier extends MyNode
             setSoldier(curSelSol);//更新显示信息
             
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, curSelSol[0]]);
+            global.taskModel.doNewTaskByKey("call", 1);
+            //if(inTask)
+            //    global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
         }
+    }
+    var needShow = 0;
+    function showHintArrow()
+    {
+        trace("needShow", needShow);
+        needShow = 1;
+        global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), SURE_TO_CALL);
     }
     function setSoldier(idCan)
     {
@@ -169,6 +180,8 @@ class CallSoldier extends MyNode
             if(scene.state != PARAMS["buildWork"])
             {
                 blueButton = new NewButton("blueButton.png", [150, 44], getStr("callSol", null), null, 25, FONT_NORMAL, [100, 100, 100], onCall, null);
+                if(needShow)
+                    global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), SURE_TO_CALL);
                 if(!can)
                 {
                     blueButton.setGray();
@@ -218,6 +231,7 @@ class CallSoldier extends MyNode
         global.director.popView();
         scene.funcBuild.whenBusy();
     }
+    var solPanel = null;
     function update(diff)
     {
         if(curSelSol != null && scene.state == PARAMS["buildWork"])
@@ -273,8 +287,12 @@ class CallSoldier extends MyNode
     {
         super.enterScene();
         global.msgCenter.registerCallback(UPDATE_RESOURCE, this);
+        //global.msgCenter.registerCallback(SURE_TO_CALL, this);
         global.timer.addTimer(this);
     }
+
+    //var inTask = 0;
+    //var hintArrow = null;
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -282,10 +300,20 @@ class CallSoldier extends MyNode
         {
             updateValue(global.user.resource);
         }
+        /*
+        else if(msgId == SURE_TO_CALL)
+        {
+            inTask = 1;
+            var bSize = blueButton.size();
+            hintArrow = blueButton.addsprite("taskArrow.png").pos(bSize[0]/2, -5).anchor(50, 100);
+            hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
+        }
+        */
     }
     override function exitScene()
     {
         global.timer.removeTimer(this);
+        //global.msgCenter.removeCallback(SURE_TO_CALL, this);
         global.msgCenter.removeCallback(UPDATE_RESOURCE, this);
         super.exitScene();
     }

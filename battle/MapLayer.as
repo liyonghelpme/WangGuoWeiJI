@@ -20,6 +20,8 @@ class MapLayer extends MyNode
         island[4] = islandLayer.addsprite("map_island4.png",ARGB_8888, ALPHA_TOUCH).size(519,428).anchor(0,0).pos(994,220).rotate(0);
         island[5] = islandLayer.addsprite("map_island5.png",ARGB_8888, ALPHA_TOUCH).size(524,439).anchor(0,0).pos(550,14).rotate(0);
 
+        global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND);
+
         var i=0;
         //big small
         //big 0 1 2 3 4 5 

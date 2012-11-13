@@ -321,7 +321,6 @@ class RankBase extends MyNode
             }
             else if(param == RANK_BEGIN)
             {
-                //newData = adjustData(con.get("res"));
 
                 //数据头部存在空隙
                 if(len(data) > 0 && len(newData) > 0)
@@ -680,12 +679,8 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
         var score = data[diff]["score"];
         var rank = data[diff]["rank"];
 
-        var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, null);
+        var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, data[diff]);
         global.director.pushScene(cs);
-
-        //global.director.pushView(new VisitDialog(cs), 1, 0);
-        //global.director.pushView(new LoadChallenge(LOAD_CHALLENGE, cs), 1, 0);
-        //cs.initData();
     }
     function onVisit(curNum)
     {
