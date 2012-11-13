@@ -100,7 +100,7 @@ class Map extends MyNode
         bg = sprite("map"+str(kind)+".png", ARGB_8888).pos(0, 0);//.pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
         init(); 
         grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
-        grid.addsprite("mapGrid.png").color(100, 100, 100, 100);
+        grid.addsprite("mapGrid.png");
         updateShadow();
     }
     function updateShadow()
