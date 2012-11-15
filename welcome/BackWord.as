@@ -153,7 +153,7 @@ class BackWord extends MyNode
         var op = c[0];
         var par = c[1];
 
-        trace("curWordPos, par", curWordPos, par);
+        ////trace("curWordPos, par", curWordPos, par);
         //if(curWordPos > par)//字符位置
         if(totalNum > par)
         {
@@ -236,7 +236,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
     //只支持单行文字
     function setCurPos(l, p)
     {
-        trace("setCurPos", l, p);
+        ////trace("setCurPos", l, p);
         totalNum = 0;
         curLine = l;
         for(var i = 0; i < curLine; i++)
@@ -260,7 +260,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
             curWordPos++;
             totalNum++;
         }
-        trace("set", curLine, curPos, curWordPos, totalNum);
+        //trace("set", curLine, curPos, curWordPos, totalNum);
     }
     //打字到固定文字长度结束
     function executePrint()
@@ -269,7 +269,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         var op = c[0];
         var par = c[1];
 
-        //trace("print curWordPos par", curLine, curWordPos, totalNum, par);
+        ////trace("print curWordPos par", curLine, curWordPos, totalNum, par);
         //if(curWordPos < par)//字符位置
         if(totalNum < par)
         {

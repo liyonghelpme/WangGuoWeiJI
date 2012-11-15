@@ -74,10 +74,18 @@ class MyNode
             child.enterScene();
         bg.add(child.bg, z);
     }
+    //mynode 调用isinstance 有问题？
     function removeChild(child)
     {
+        //if(child.isinstance(MyNode))
+        //{
         bg.remove(child.bg);
         child.exitScene();
+        //}
+        //else
+        //{
+        //    trace("type child error", type(child));
+        //}
     }
     function exitAllChild()
     {

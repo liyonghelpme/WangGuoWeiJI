@@ -40,6 +40,7 @@ class SelectHero extends MyNode
         //return 810*100/1200;
         return 100;
     }
+
     function SelectHero()
     {
         bg = node();
@@ -53,8 +54,7 @@ class SelectHero extends MyNode
         for(var i = 0; i < len(heros); i++)
         {
             var hid = heros[i];
-            //var h = map.addsprite("hero"+str(hid)+"n.png", ARGB_8888).pos(HeroPos.get(hid)).anchor(50, 100).scale(dirs[i], 100);
-            var h = map.addsprite("hero"+str(hid)+"l.png", ARGB_8888).pos(HeroPos.get(hid)).scale(HeroDir.get(hid), 100).anchor(50, 100);
+            var h = map.addsprite("hero"+str(hid)+"l.png", ARGB_8888).pos(HeroPos.get(hid)).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100);
             heroPic.append(h);
 
         }
@@ -126,7 +126,7 @@ class SelectHero extends MyNode
 
             if(curCmd < len(cmd))
             {
-                trace("command", cmd[curCmd], curCmd);
+                //trace("command", cmd[curCmd], curCmd);
                 var c = cmd[curCmd];
                 if(c[0] == SETPOS)
                 {

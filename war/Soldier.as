@@ -348,7 +348,7 @@ class Soldier extends MyNode
             global.user.updateSoldiers(this);
             //杀死敌方怪兽
             if(color == ENECOLOR && data["solOrMon"] == 1)
-                global.taskModel.doCycleTaskByKey("killMonster", 1);
+                global.taskModel.doAllTaskByKey("killMonster", 1);
             pushCommand(DEAD_CMD, null);
         }
         else

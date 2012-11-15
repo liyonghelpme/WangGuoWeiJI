@@ -65,6 +65,7 @@ class SoldierGoods extends MyNode
     两种思路， 每次移动结束更新状态
     移动过程中， 每次检测，对于溢出的进行删除，没有显示的进行补偿显示
     */
+    var touchYet = 0;
     var firstSolPanel = null;
     function updateTab()
     {
@@ -155,7 +156,7 @@ class SoldierGoods extends MyNode
             }
         }
 
-        if(firstSolPanel != null)
+        if(firstSolPanel != null && !touchYet)
         {
             global.taskModel.showHintArrow(firstSolPanel, firstSolPanel.prepare().size(), CALL_SOLDIER);
         }
@@ -215,6 +216,7 @@ class SoldierGoods extends MyNode
             player = null;
         }
 
+
         var newPos = n.node2world(x, y);
         var child = null;
         if(accMove < 10)
@@ -224,7 +226,7 @@ class SoldierGoods extends MyNode
             {
                 var idCan = child.get(); 
                 store.setSoldier(idCan);
-
+                touchYet = 1;
             }
         }
 
@@ -235,7 +237,6 @@ class SoldierGoods extends MyNode
         flowNode.pos(curPos);
         updateTab();
         
-        //if(child != null)
         store.showHintArrow();
     }
 }

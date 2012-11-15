@@ -100,6 +100,8 @@ class RoleName extends MyNode
         soldier.finishName();//结束士兵的命名状态
         global.msgCenter.sendMsg(FINISH_NAME, soldier);
         global.director.popView();
+
+        global.taskModel.doAllTaskByKey("call", 1);
     }
 
     function closeDialog()

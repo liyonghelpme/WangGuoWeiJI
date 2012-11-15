@@ -476,11 +476,6 @@ class ChildMenuLayer extends MyNode
         scene.ml.cancelAllMenu();
         global.director.pushView(new RankDialog(CHALLENGE_RANK), 1, 0);
     }
-    function onRole()
-    {
-        scene.ml.cancelAllMenu();
-        scene.onRole();
-    }
     function onSetting()
     {
         scene.ml.cancelAllMenu();

@@ -101,30 +101,27 @@ class CastlePage extends MyNode
 
     function getLoginRewardOver(rid, rcode, con, param)
     {
+        trace("getLoginRewardOver", rid, rcode, con, param);
         if(rcode != 0)
         {
-            //con = json_loads(con);
-            //var silver = con.get("silver");
-            //var crystal = con.get("crystal");
-            //var loginDays = con.get("loginDays");
             var loginDays = param;
             global.user.setValue("loginDays", loginDays);
-            //if(silver != 0 || crystal != 0)
             dialogController.addCmd(dict([["cmd", "login"], ["loginDays", loginDays]]));
 
             if(global.user.week == 0)//每周第一次登录
             {
                 dialogController.addCmd(dict([["cmd", "update"]]));
                 dialogController.addCmd(dict([["cmd", "heart"]]));
-
             }
         }
     }
 
     function initDataOver()
     {
+        trace("beginInit castlePage");
         buildLayer.initDataOver();
         solNum.text(str(global.user.getSolNum()));
+        trace("finish buildLayer");
         /*
         检测是否今天第一次登录 以及连续登录次数
         传递奖励数据给后台
@@ -154,12 +151,14 @@ class CastlePage extends MyNode
             
             //每周第一次登录 发送登录每天任务完成提示
         }
-
+        trace("finishLoginReward", day);
+        trace("box", global.user.hasBox);
         if(global.user.hasBox)
         {
             box = new BoxOnMap();
             addChild(box);
         }
+        trace("finishBox onMap");
 
         /*
         dialogController.addCmd(dict([["cmd", "update"]]));
@@ -171,10 +170,11 @@ class CastlePage extends MyNode
         {
             dialogController.addCmd(dict([["cmd", "download"]])); 
         }
+        trace("finishDownload");
 
     }
 
-    function CastlePage(s)
+    function CastlePage(s, showLoading)
     {
         scene = s;
         //场景居中， 没有缩放
@@ -225,7 +225,9 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
 
         dialogController = new DialogController(this);
         addChild(dialogController);
-        dialogController.addCmd(dict([["cmd", "initLoading"]]));
+        //首次登录 才 loading初始化数据
+        //if(showLoading)
+        //    dialogController.addCmd(dict([["cmd", "initLoading"]]));
 
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -479,6 +481,7 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
                 dialogController.addCmd(dict([["cmd", "waitTime"], ["time", 1500]]));
                 dialogController.addCmd(dict([["cmd", "roleName"], ["sol", newSol]]));
                 //global.director.pushView(new RoleName(null, newSol), 1, 0);
+
             }
         }
         else if(msg[0] == LEVEL_UP)

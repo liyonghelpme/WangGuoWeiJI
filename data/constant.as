@@ -850,10 +850,14 @@ const NEW_TASK_NEXT_STEP = 42;
 const SHOW_NEW_TASK_REWARD = 43;
 const INIT_NEW_TASK_FIN = 44;
 
+const FINISH_STORY = 45;
+const SHOW_HINT_WORD = 46;//经营页面或者 战斗页面 有dialogController 的 对象显示 当前的 提示文字  检测当期的系统 stack为空 
+
 
 
 //新手任务命令 每个消息 都有唯一的一个代理 来接受 处理  变换代理之后 需要 重新发送消息
 //这个消息编号 属于 MSG——ID 编号 因此不能重复
+//accelate harvest
 const MOVE_TO_CAMP = 100;
 const CALL_IN_CAMP = 101;
 const CALL_SOLDIER = 102;
@@ -896,6 +900,10 @@ const TASK_ICON = 126;
 const SHOW_NEW_STAGE = 127;
 //回到经营页面任务 ---> 显示箭头  新任务出现应该 比箭头先出来
 const MOVE_SOL_PICK_FALL = 128; 
+
+const ACC_SOL = 129;
+const HARVEST_SOL = 130;
+const NAME_SOL = 131;
 
 
 
@@ -1028,12 +1036,17 @@ const DARK_BACK = 4;
 const MON_ATTACK = 5;
 const MON_SPEAK = 6;
 
-
+/*
+temp = bg.addsprite("hero440.png").anchor(50, 100).pos(568, 292).size(174, 109).color(100, 100, 100, 100);
+temp = bg.addsprite("hero480.png").anchor(50, 100).pos(417, 241).size(149, 93).color(100, 100, 100, 100);
+temp = bg.addsprite("hero550.png").anchor(50, 100).pos(390, 401).size(110, 124).color(100, 100, 100, 100);
+temp = bg.addsprite("hero590.png").anchor(50, 100).pos(315, 305).size(198, 127).color(100, 100, 100, 100);
+*/
 const HeroPos = dict([
-    [480, [394, 240]],
-    [590, [305, 311]],
-    [550, [413, 387]],
-    [440, [582, 317]],
+    [480, [417, 241]],
+    [590, [315, 305]],
+    [550, [390, 401]],
+    [440, [568, 292]],
 ]);
 const HeroDir = dict([
     [480, -100],
@@ -1041,6 +1054,7 @@ const HeroDir = dict([
     [550, -100],
     [440, 100],
 ]);
+const SHOW_SCALE = 120;
 
 const WEAPON_SOL = 0;
 const DEFENSE_SOL = 1;

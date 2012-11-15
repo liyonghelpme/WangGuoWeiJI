@@ -15,13 +15,13 @@ class CastleScene extends MyNode
     */
 
     var mapDict;
-    function CastleScene()
+    function CastleScene(showLoading)
     {
         bg = node();
         init();
         mapDict = dict();
 
-        mc = new CastlePage(this);
+        mc = new CastlePage(this, showLoading);
         ml = new MenuLayer(this);
         
         keepMenuLayer = new MyNode();
@@ -54,6 +54,7 @@ class CastleScene extends MyNode
         global.msgCenter.registerCallback(INITDATA_OVER, this);
         global.msgCenter.registerCallback(NEW_USER, this);
         global.msgCenter.registerCallback(BEGIN_BUILD, this);
+        global.msgCenter.registerCallback(FINISH_STORY, this);
     }
     var realDisappear = 0;
     var inSen = 0;
@@ -103,6 +104,18 @@ class CastleScene extends MyNode
             else if(p == 1)//关闭对话框
                 enableMenu();
         }
+        /*
+        //类似 初始化数据一样 重新初始化 页面
+        else if(msid == FINISH_STORY)
+        {
+            trace("finishStory");
+            global.msgCenter.sendMsg(LOAD_PROCESS, 70);
+            mc.initDataOver();
+            global.msgCenter.sendMsg(LOAD_PROCESS, 85);
+            ml.initDataOver();
+            global.msgCenter.sendMsg(LOAD_PROCESS, 100);
+        }
+        */
         else if(msid == INITDATA_OVER)
         {
             global.msgCenter.sendMsg(LOAD_PROCESS, 70);
@@ -115,13 +128,17 @@ class CastleScene extends MyNode
         //这里的 不能 100 Loading 页面自删除存在bug
         else if(msid == NEW_USER)
         {
-            global.msgCenter.sendMsg(LOAD_PROCESS, 99);
+            //global.msgCenter.sendMsg(LOAD_PROCESS, 99);
+            //删除loading页面
+            trace("newUser CastleScene 本身替换了默认场景 导致底部为空 最好采用pushScene方式 来避免");
+            //global.director.popView();
             global.director.replaceScene(new WelcomeDialog());
         }
         else if(msid == BEGIN_BUILD)
         {
             beginBuild(param[1]);
         }
+        
     }
     override function exitScene()
     {
@@ -131,6 +148,7 @@ class CastleScene extends MyNode
         //global.staticScene = null;
         global.timer.removeTimer(this);
 
+        global.msgCenter.removeCallback(FINISH_STORY, this);
         global.msgCenter.removeCallback(BEGIN_BUILD, this);
         global.msgCenter.removeCallback(SHOW_DIALOG, this);
         global.msgCenter.removeCallback(INITDATA_OVER, this);
@@ -388,9 +406,5 @@ class CastleScene extends MyNode
     function onStore()
     {
         global.director.pushView(new Store(this), 1, 0);
-    }
-    function onRole()
-    {
-        global.director.pushView(new SoldierStore(this), 1, 0);
     }
 }

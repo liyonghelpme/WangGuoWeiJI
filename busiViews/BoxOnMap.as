@@ -7,7 +7,7 @@ class BoxOnMap extends MyNode
         //scene = s;
         bg = sprite("box0.png").anchor(50, 50).pos(1018, 791).setevent(EVENT_TOUCH, touchBegan);
         init();
-        bg.addaction(repeat(animate(600, "box0.png", "box1.png", "box2.png", "box3.png", "box4.png")));
+        bg.addaction(repeat(animate(getParam("boxOnMapTime"), "box0.png", "box1.png", "box2.png", "box3.png", "box4.png")));
     }
     function showFlowTap()
     {

@@ -6,20 +6,23 @@ class Hero extends MyNode
     var scene;
     var hid;
     var ani;
-    var sca;
+    //var sca;
     function Hero(s, i)//英雄ID---》人物ID
     {
         scene = s;
         hid = i;
+        
         var mapPos = HeroPos.get(hid);
+        /*
         var worldPos = scene.scene.map.node2world(mapPos[0], mapPos[1]);
         var menuPos = scene.bg.world2node(worldPos[0], worldPos[1]);
+        */
 
         //map 缩放大小
-        sca = scene.scene.getMapNormalScale();
-        trace("heroPos", menuPos, sca);
+        //sca = scene.scene.getMapNormalScale();
+        ////trace("heroPos", menuPos);
 
-        bg = sprite("hero"+str(hid)+"l.png", ARGB_8888).pos(menuPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*sca/100, sca).anchor(50, 100);
+        bg = sprite("hero"+str(hid)+"l.png", ARGB_8888).pos(mapPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100);
         init();
         ani = copy(getSkillAnimate(heroSkill.get(hid)));
         //ani = copy(skillAnimate.get());//英雄变身动画的 hid--->id
@@ -185,6 +188,7 @@ class SelectMenu extends MyNode
     var colNames = dict();//冲突名字
     var name = null;
     var inConnect = 0;
+    var newHeroId = null;
     function onInput()
     {
         if(inConnect)
@@ -203,7 +207,10 @@ class SelectMenu extends MyNode
             col = 0;
             colNames.update(name, 1);
             inConnect = 1;
-            global.httpController.addRequest("chooseFirstHero", dict([["uid", global.user.uid], ["hid", curSelHero], ["name", name]]), finishName, null);
+            if(newHeroId == null)
+                newHeroId = global.user.getNewSid();
+
+            global.httpController.addRequest("chooseFirstHero", dict([["uid", global.user.uid], ["hid", curSelHero], ["name", name], ["sid", newHeroId]]), finishName, null);
             //确认了名字没有重复 则 进入下一步
             //curStep++;
             //updateMenu();
@@ -220,11 +227,11 @@ class SelectMenu extends MyNode
     function enterGame()
     {
         //替换场景 进入游戏不要loading页面了
-        //重新进入经营页面 不用初始化数据
-        global.director.replaceScene(new CastleScene());
+        //重新进入经营页面 不用初始化数据 不显示loading页面
+        global.director.replaceScene(new CastleScene(0));
         //global.director.pushView(new Loading(), 1, 0);//DarkNod
-        //初始化场景数据 数据初始化结束之后 取出loading页面
-        
+        //初始化场景数据 数据初始化结束之后 取出loading页面 经营页面初始化数据胡
+        //只是 经营页面 初始数据 其它模块不参与
         global.msgCenter.sendMsg(INITDATA_OVER, null);
     }
     const BLOCK_W = 273;
@@ -251,7 +258,7 @@ class SelectMenu extends MyNode
                 //构造新的士兵数据初始化士兵
                 //学习英雄技能
                 //id sid name
-                var newSol = new BusiSoldier(null, getData(SOLDIER, curSelHero), null, global.user.getNewSid());
+                var newSol = new BusiSoldier(null, getData(SOLDIER, curSelHero), null, newHeroId);
                 newSol.setName(name);
                 global.user.updateSoldiers(newSol);
                 global.user.addNewSkill(newSol.sid, heroSkill.get(newSol.id));
@@ -326,12 +333,12 @@ class SelectMenu extends MyNode
                 inputView.text(global.user.papayaName);
             if(tooLong)
             {
-                warnLabel.text(getStr("nameLen", null));
+                warnLabel.text(getStr("nameLen", null)).color(97, 3, 3);
                 warnLabel.visible(1);
             }
             else if(col)
             {
-                warnLabel.text(getStr("nameRepeat", null));
+                warnLabel.text(getStr("nameRepeat", null)).color(97, 3, 3);
                 warnLabel.visible(1);
             }
         }
@@ -356,7 +363,7 @@ class SelectMenu extends MyNode
     {
         if(printFinish && checkName && inGame == null)//打字结束 且 检测名字无误 进入游戏
         {
-            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(1200, "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
+            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(getParam("enterTime"), "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
         }
     }
     override function exitScene()

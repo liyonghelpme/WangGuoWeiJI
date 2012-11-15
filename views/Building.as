@@ -203,6 +203,7 @@ class Building extends MyNode
     var inTask = 0;
     //空闲建筑 则 工作
     //重新进入 场景 需要主动 的显示
+    //消息激励 来 出现 兵营的 arrow 或者 士兵商店提示
     function receiveMsg(param)
     {
         var msgId = param[0];

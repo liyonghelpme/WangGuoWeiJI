@@ -291,6 +291,7 @@ class BuildLayer extends MoveMap
             //mapGridController.allSoldiers.update(soldier.sid, soldier);
             mapGridController.addSoldier(soldier);
         }
+        trace("initSoldiers Finish");
     }
     function removeSoldiers()
     {

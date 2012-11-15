@@ -17,7 +17,9 @@ import Global.INCLUDE;
 
 
 //显示场景
-global.director.replaceScene(new CastleScene());
+global.director.pushScene(new CastleScene(1));
+global.director.curScene.addChild(new Loading());
+global.user.initData();
 //global.director.pushView(new Loading(), 1, 0);//DarkNod
 //初始化场景数据 数据初始化结束之后 取出loading页面
 //在loading页面开始初始化数据 保证view 先显示 再加载数据

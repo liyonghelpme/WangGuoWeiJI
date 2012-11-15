@@ -19,6 +19,9 @@ class CampWorkNode extends MyNode
             var bSize = func.baseBuild.bg.size();
             flowBanner = func.baseBuild.bg.addsprite("callFlow.png").pos(bSize[0]/2, -5).anchor(50, 100);
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
+            
+            //兵营结束招募 提示 用户收获
+            global.taskModel.showHintArrow(func.baseBuild.bg, func.baseBuild.bg.size(), HARVEST_SOL);
         }
     }
     override function enterScene()
@@ -97,6 +100,8 @@ class Camp extends FuncBuild
 
         var showData = cost; 
         global.director.curScene.addChild(new PopBanner(cost2Minus(showData)));//自己控制
+
+
     }
     override function getAccCost()
     {

@@ -47,10 +47,10 @@ class LoginDialog extends MyNode
 
 
         bg.addlabel(getStr("infoFri", null), "fonts/heiti.ttf", 19).anchor(50, 50).pos(400, 370).color(66, 46, 28);
-        var but0 = new NewButton("roleNameBut0.png", [190, 60], getStr("share", null), null, 35, FONT_NORMAL, [100, 100, 100], shareGift, null);
+        var but0 = new NewButton("roleNameBut0.png", [190, 60], getStr("share", null), null, 30, FONT_NORMAL, [100, 100, 100], shareGift, null);
         but0.bg.pos(251, 420);
         addChild(but0);
-        but0 = new NewButton("roleNameBut1.png", [190, 60], getStr("ok", null), null, 35, FONT_NORMAL, [100, 100, 100], closeDialog, null);
+        but0 = new NewButton("roleNameBut1.png", [190, 60], getStr("ok", null), null, 30, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(545, 421);
         addChild(but0);
         bg.addsprite("scroll.png").anchor(0, 0).pos(130, 101).size(541, 67);

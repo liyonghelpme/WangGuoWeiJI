@@ -141,7 +141,7 @@ class GrayWord extends MyNode
                     }
                     curWordPos++;
                     totalNum++;
-                    trace("curPos", curPos, curWordPos, totalNum, curLine, len(word), len(line));
+                    //trace("curPos", curPos, curWordPos, totalNum, curLine, len(word), len(line));
                     
                     
                     var showWord;

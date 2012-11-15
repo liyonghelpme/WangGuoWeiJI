@@ -175,6 +175,7 @@ class TaskDialog extends MyNode
             //有新手任务则不显示 其他 任务 
             //不显示 新手阶段任务
             var newTask = global.taskModel.getDoNewTask();
+            trace("newTask", newTask);
             for(i = 0; i < len(newTask); i++)
             {
                 tData = global.taskModel.getNewTask(newTask[i]);

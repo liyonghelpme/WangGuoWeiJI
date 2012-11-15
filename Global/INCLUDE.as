@@ -64,12 +64,10 @@ import busiViews.DailyTask;
 import busiViews.DailyReward;
 
 
-//import views.RoleName;
 import busiViews.RoleName;
 
 
 //人物对话框
-import views.SoldierStore;
 import views.BusiSoldier;
 
 import views.TrainBanner;

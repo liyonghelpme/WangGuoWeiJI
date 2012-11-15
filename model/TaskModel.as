@@ -55,6 +55,8 @@ class TaskModel
         return 0;
     }
     //如果需要 通知 则由 经营页面 弹出 提醒 提醒之后才 出现 箭头
+    var delayTime = 0;
+    const SLOW_TASK = 3000;
     function update(diff)
     {
         if(initYet == 0 && initBuyTask && initCycleTask && initDayTask && initNewTask)
@@ -65,7 +67,12 @@ class TaskModel
         //当前没有任务 显示 则 自动发现任务 执行
         if(initYet && !inCommand && newTaskStage < getParam("showFinish"))
         {
-            findAvailableNewTask();
+            delayTime += diff;
+            if(delayTime >= SLOW_TASK)
+            {
+                delayTime = 0;
+                findAvailableNewTask();
+            }
         }
     }
 
@@ -144,7 +151,7 @@ class TaskModel
             //第一次登录初始化 每日任务
             if(diff >= 1)
             {
-                doCycleTaskByKey("login", 1);
+                doAllTaskByKey("login", 1);
                 getDayTaskFromServer();
             }
             else//同一天多次登录 不用初始化 每日任务
@@ -212,21 +219,35 @@ class TaskModel
                 clearHintArrow();
                 //确认当前存在该命令 显示该命令的 hintArrow
                 if(dir == DOWN)
+                {
                     hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2, -5).anchor(50, 100);
+                    hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
+                }
                 else if(dir == LEFT)
+                {
                     hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]+5, bSize[1]/2).anchor(50, 100).rotate(90);
+                    hintArrow.addaction(repeat(moveby(500, -20, 0), delaytime(300), moveby(500, 20, 0)));
+                }
                 else if(dir == RIGHT)
+                {
                     hintArrow = pic.addsprite("taskArrow.png").pos(-5, bSize[1]/2).anchor(50, 100).rotate(-90);
+                    hintArrow.addaction(repeat(moveby(500, -20, 0), delaytime(300), moveby(500, 20, 0)));
+                }
                 else if(dir == UP)
+                {
                     hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2, bSize[1]+5).anchor(50, 100).rotate(180);
+                    hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
+                }
                 //其它情况不显示箭头
                 //默认显示向上箭头
+                
+                //提示文字 招募士兵页面的文字 普通页面的 文字 接受 体 显示 hintArrow 检测上一个任务 结束了 但是 下一个任务还在当前页面的覆盖下面 需要 close之类的 操作来提示
                 if(commandList[find].get("tip") != null)
                 {
                     global.director.curScene.addChildZ(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null), MAX_BUILD_ZORD);
+                    //global.msgCenter.sendMsg(SHOW_HINT_WORD, getStr(commandList[find]["tip"], null));
                 }
-                if(hintArrow != null)    
-                    hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
+
             }
         }
     }
@@ -361,7 +382,7 @@ class TaskModel
             trace("newTask", task, ret, taskData["title"]);
 
 
-            if(ret == TASK_CAN_FINISH && task.get("showYet") == null)
+            if(ret == TASK_CAN_FINISH && task.get("showYet") == null && taskData["showTaskFinish"])//显示任务结束
             {
                 task["showYet"] = 1;
                 trace("showFinish");
@@ -493,7 +514,7 @@ class TaskModel
             }
         }
         bubbleSort(curNewTask, cmpTaskId);//按照显示优先级 tid 排序
-        trace("sort", curNewTask);
+        //trace("sort", curNewTask);
         return curNewTask;
     }
     //静态数据 num
@@ -728,11 +749,12 @@ class TaskModel
             var task = localCycleTask[tid];
             task["number"] += num;
             var ret = checkCycleFinish(tid);
+            var taskData = getData(TASK, tid);
             trace("cycleTask", task, ret);
-            if(ret && task.get("showYet") == null)
+            if(ret && task.get("showYet") == null && taskData["showTaskFinish"])
             {
                 task["showYet"] = 1;
-                var taskData = getData(TASK, tid);
+
                 global.director.curScene.addChild(new TaskFinish(replaceStr(taskData["title"], ["[NUM]", str(getCycleStageNum(tid, task["stage"])) ])), MAX_BUILD_ZORD);
             }
 
@@ -788,11 +810,12 @@ class TaskModel
             var task = localDayTask[tid];
             task["number"] += num;
             var ret = checkDayFinish(tid);
+            var taskData = getData(TASK, tid);
             trace("dayTask", task, ret);
-            if(ret && task.get("showYet") == null)
+            if(ret && task.get("showYet") == null && taskData["showTaskFinish"])
             {
                 task["showYet"] = 1;
-                var taskData = getData(TASK, tid);
+
                 global.director.curScene.addChild(new TaskFinish(taskData["title"]), MAX_BUILD_ZORD);
             }
 

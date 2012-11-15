@@ -702,33 +702,6 @@ res [id, curNum]
 升级更新任务列表
 完成任务更新数据
 */
-/*
-function getCurLevelAllTask(level)
-{
-    var res;
-    var it = taskData.keys(); 
-    var fin = [];
-    var notFin = [];
-    for(var i = 0; i < len(it); i++)
-    {
-        var ta = getData(TASK, it[i]);
-        if(ta.get("level") <= level)
-        {
-            var d = global.user.getTaskFinData(it[i]);
-            if(d[1] == 0)
-            {
-                if(d[0] >= ta.get("need"))
-                    fin.append([it[i], d[0]]);
-                else
-                    notFin.append([it[i], d[0]]);
-            }
-        }
-    }
-    res = fin + notFin;
-//    trace("curLevelAllTask", level, res);
-    return res;
-}
-*/
 
 function getNodeSca(n, box)
 {
@@ -1198,8 +1171,8 @@ function showFullBack()
 {
     var tc = showTimeColor();
     trace("full", tc);
-    var temp = sprite("dialogLoginBack0.jpg", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, 80);
-    temp.addsprite("dialogLoginStar.png", ARGB_8888);
+    var temp = sprite("dialogLoginBack.png", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, 80);
+    temp.addsprite("dialogLoginStar0.png", ARGB_8888);
     return temp;
 }
 

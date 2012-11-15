@@ -118,7 +118,6 @@ class NewBattle extends MyNode
     const WORD_TIME = 500;
     function NewBattle()
     {
-        //bg = sprite("battleBegin.jpg");
         bg = node();
         init();
         map = bg.addsprite("battleBegin0.jpg");
@@ -127,11 +126,11 @@ class NewBattle extends MyNode
         dia1 = bg.addsprite("dialogBack1.png").pos(508, 138).visible(0).scale(67);
 
         
+        /*
         for(var i = 0; i < len(SOL_KIND); i++)
         {
             var so = new SpeakSoldier(SOL_KIND[i][0], SOL_KIND[i][1]);
             soldiers.update(i, so);
-            //addChildZ(so, so.getPos()[1]);
             map.add(so.bg, so.getPos()[1]);
         }
         for(i = 0; i < len(WORD_POS); i++)
@@ -140,6 +139,7 @@ class NewBattle extends MyNode
             bg.add(w, MAX_BUILD_ZORD);
             words.update(i, w);
         }
+        */
         setCommand();
     }
     //0 1 dialogPanel
@@ -148,31 +148,28 @@ class NewBattle extends MyNode
     {
         //var NORMAL = 810*100/1200;
         var NORMAL = 100;
-        //cmd.append([SETPOS, [600, 360]]);
         cmd.append([CLOSEUP, [0, [0, 0], NORMAL]]);//缩放到正常大小 屏幕中心对齐背景中心
         cmd.append([WAIT, 2000]);
-        //cmd.append([CLOSEUP, [2000, [7, 150], 100]]);
         cmd.append([SPEAK_NOW, [3000, "dearKing", 0]]);
 
+        /*
         cmd.append([MON_ATTACK, 0]);
         cmd.append([MON_ATTACK, 1]);
         cmd.append([MON_ATTACK, 2]);
         cmd.append([MON_SPEAK, 0]);
         cmd.append([WAIT, WORD_TIME]);
 
-        //cmd.append([WAIT, 1500]);
 
         cmd.append([MON_SPEAK, 1]);
         cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 2]);
         cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 7]);
+        */
 
-        //cmd.append([CLOSEUP, [1000, [0, 0], NORMAL]]);
-        //cmd.append([CLOSEUP, [1000, [388, 141], 100]]);
-        //cmd.append([SPEAK_NOW, [3000, "dearSuo", 1]]);
         cmd.append([SPEAK_NOW, [3000, "fightNow", 1]]);
 
+        /*
         cmd.append([MON_SPEAK, 5]);
         cmd.append([MON_ATTACK, 3]);
         cmd.append([MON_ATTACK, 4]);
@@ -183,7 +180,6 @@ class NewBattle extends MyNode
         cmd.append([MON_ATTACK, 9]);
         cmd.append([MON_ATTACK, 10]);
         cmd.append([WAIT, WORD_TIME]);
-        //cmd.append([WAIT, WORD_TIME]);
 
         cmd.append([MON_SPEAK, 6]);
         cmd.append([WAIT, WORD_TIME]);
@@ -191,6 +187,8 @@ class NewBattle extends MyNode
         cmd.append([WAIT, WORD_TIME]);
         cmd.append([MON_SPEAK, 3]);
         cmd.append([WAIT, WORD_TIME]);
+        */
+
 
         initYet = 1;
     }
@@ -232,7 +230,7 @@ class NewBattle extends MyNode
 
             if(curCmd < len(cmd))
             {
-                trace("command", cmd[curCmd], curCmd);
+                //trace("command", cmd[curCmd], curCmd);
                 var c = cmd[curCmd];
                 if(c[0] == SETPOS)
                 {

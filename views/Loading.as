@@ -7,7 +7,8 @@ class Loading extends MyNode
     var curProcess = 0;
     function initView()
     {
-        bg = node();
+        bg = node().size(800, 480);
+        bg.setevent(EVENT_TOUCH, doNothing);
         init();
         var but0;
         var line;
@@ -47,13 +48,16 @@ class Loading extends MyNode
     */
     var speed = 50;
     var initDataYet = 0;
+    //初始化数据 由主控制 不由 view 控制
     function update(diff)
     {
+        /*
         if(initDataYet == 0)
         {
             initDataYet = 1;
             global.user.initData();
         }
+        */
         passTime += diff;
         if(passTime >= speed)
         {
@@ -72,24 +76,12 @@ class Loading extends MyNode
             }
             if(curProcess >= 100 && hopeProcess == 100)
             {
-                global.director.popView();
+                //global.director.popView();
+                trace("移除当前loadingview popView pushView 不易管理 最好使用 addChild removeSelf 来定向管理");
+                removeSelf();
             }
         }
 
-        /*
-        curProcess += 1;
-        if(curProcess < 100)
-        {
-            var oldPos = processNum.pos();
-            processNum.removefromparent();
-            processNum = altasWord("red", str(curProcess)+"%");
-            processNum.anchor(50, 50).pos(oldPos);
-            bg.add(processNum);
-        }
-        else
-        {
-        }
-        */
     }
     var hopeProcess = 10;
     function receiveMsg(param)
@@ -114,16 +106,18 @@ class Loading extends MyNode
     }
     override function enterScene()
     {
+        trace("loading view enterScene");
         super.enterScene();
         //global.timer.addTimer(this);
         global.myAction.addAct(this);
-        global.msgCenter.registerCallback(INITDATA_OVER, this);
+        //global.msgCenter.registerCallback(INITDATA_OVER, this);
         global.msgCenter.registerCallback(LOAD_PROCESS, this);
     }
     override function exitScene()
     {
+        trace("exit Loading", LOAD_PROCESS);
         global.msgCenter.removeCallback(LOAD_PROCESS, this);
-        global.msgCenter.removeCallback(INITDATA_OVER, this);
+        //global.msgCenter.removeCallback(INITDATA_OVER, this);
         //global.timer.removeTimer(this);
         global.myAction.removeAct(this);
         super.exitScene();

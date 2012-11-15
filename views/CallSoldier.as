@@ -101,7 +101,7 @@ class CallSoldier extends MyNode
             setSoldier(curSelSol);//更新显示信息
             
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, curSelSol[0]]);
-            global.taskModel.doNewTaskByKey("call", 1);
+            //global.taskModel.doNewTaskByKey("call", 1);
             //if(inTask)
             //    global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
         }
@@ -190,13 +190,12 @@ class CallSoldier extends MyNode
             }
             else
             {
-
-    //but0 = new NewButton("violetBut.png", [113, 35], getStr("costBuy", ["[KIND]", its[0]+".png", "[NUM]", str(its[1])]), null, 18, FONT_NORMAL, [100, 100, 100], onBuyIt, i);
-
                 var gold = scene.funcBuild.getAccCost();
                 blueButton = new NewButton("violetBut.png", [173, 53], getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]), null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
 
-                //blueButton.bg.addsprite("gold.png").anchor(0, 0).pos(5, 7).size(36, 36);
+                if(needShow)
+                    global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), ACC_SOL);
+
             }
             blueButton.bg.pos(130, 432).anchor(50, 50);
             addChild(blueButton);
@@ -259,6 +258,8 @@ class CallSoldier extends MyNode
                     if(accTime == 0)
                     {
                         blueButton.word.setWords(getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]));
+                        //if(needShow)
+                        //    global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), ACC_SOL);
                     }
                     else
                     {

@@ -416,7 +416,7 @@ class User
             //正常： 初始任务 礼物 建筑物数据 
             if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
             {
-                global.msgCenter.sendMsg(LOAD_PROCESS, 80);
+                //global.msgCenter.sendMsg(LOAD_PROCESS, 80);
                 global.msgCenter.sendMsg(NEW_USER, null);
                 return;
             }

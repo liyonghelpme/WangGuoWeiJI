@@ -81,6 +81,7 @@ class DialogController extends MyNode
                 }
                 else if(curCmd["cmd"] == "initLoading")
                 {
+                    trace("pushInitLoading loading view 似乎存在问题 exitscene不正常 不明情况 只能手动push了");
                     global.director.pushView(new Loading(), 1, 0);
                 }
                 else if(curCmd["cmd"] == "download")

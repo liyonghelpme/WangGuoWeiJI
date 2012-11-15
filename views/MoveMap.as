@@ -61,6 +61,7 @@ class MoveMap extends MyNode
 
     function updateMapGrid()
     {
+        /*
         gridLayer.removefromparent();
         gridLayer = bg.addnode();
         var k = mapGridController.mapDict.keys();
@@ -72,6 +73,7 @@ class MoveMap extends MyNode
 
             var sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
         }
+        */
         //trace("len grid", len(k));
     }
 

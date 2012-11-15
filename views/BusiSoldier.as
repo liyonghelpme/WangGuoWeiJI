@@ -337,6 +337,7 @@ class BusiSoldier extends MyNode
 
     function BusiSoldier(m, d, privateData, s)
     {
+        trace("init BusiSoldier", m, d, privateData, s);
         sid = s;
         data = d;
         map = m;
@@ -355,6 +356,7 @@ class BusiSoldier extends MyNode
         if(oldPos == null)//默认出现位置 中心
             oldPos = TRAIN_CENTER;
 
+        trace("bSize", bSize);
         bg.size(bSize).anchor(50, 100).pos(oldPos);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
