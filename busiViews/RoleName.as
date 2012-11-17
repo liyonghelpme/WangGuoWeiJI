@@ -12,7 +12,7 @@ class RoleName extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(186, 134).size(448, 237).color(100, 100, 100, 100);
+        temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(186, 134).size(448, 237).color(100, 100, 100, 100);
         temp = bg.addsprite("parchment.png").anchor(0, 0).pos(204, 163).size(413, 188).color(100, 100, 100, 100);
         temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(264, 111).size(302, 51).color(100, 100, 100, 100);
         inputView = v_create(V_INPUT_VIEW, 348, 211, 230, 50);

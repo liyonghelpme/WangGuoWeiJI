@@ -60,6 +60,25 @@ class Goods extends MyNode
 
         var showGain = data.get("showGain", 1);
         var buildPic = panel.addsprite(buildPicName).pos(74, 88).anchor(50, 50);
+        var ret;
+        if(objKind == BUILD)
+        {
+            if(data["funcs"] == FARM_BUILD)
+            {
+                ret = checkFarmNum(); 
+                if(!ret)
+                    buildPic.texture(buildPicName, GRAY);
+                if(objId == 0)//普通农田
+                    panel.addlabel(str(getCurFarmNum())+"/"+str(getFarmEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+            }
+            else if(data["funcs"] == CAMP)
+            {
+                ret = checkCampNum();
+                if(!ret)
+                    buildPic.texture(buildPicName, GRAY);
+                panel.addlabel(str(getCurCampNum())+"/"+str(getCampEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+            }
+        }
         var sca;
         //var buildPicSize = buildPic.prepare().size();
         if(showGain == 0)
@@ -74,10 +93,6 @@ class Goods extends MyNode
             sca = getSca(buildPic, [121, 71]);
             buildPic.scale(sca);
         }
-        /*
-        if(objKind == DRUG)
-            panel.addsprite("lev"+str(objId/10)+".png").anchor(0, 0).pos(96, 48).size(44, 32);
-        */
         
 
         var canBuy = 1;
@@ -86,10 +101,6 @@ class Goods extends MyNode
             buildPic.texture(buildPicName, BLACK);
             panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
             
-            //var words = colorWords(getStr("levelNot", ["[LEVEL]", str(needLevel)]));
-            //panel.addlabel(words[0], "fonts/heiti.ttf", 20).pos(110 - (20 * words[2]), 99).anchor(0, 50).color(100, 100, 100);
-            //panel.addlabel(words[1], "fonts/heiti.ttf", 20).pos(110, 99).anchor(0, 50).color(0, 100, 0);
-
             var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
             cw.anchor(50, 50).pos(75, 97);
             panel.add(cw); 

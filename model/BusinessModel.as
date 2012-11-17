@@ -122,7 +122,7 @@ temp.addlabel("-" + str(it[i][1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, 
 function getFarmEnableNum()
 {
     var level = global.user.getValue("level");
-    var num = 5+level;
+    var num = getParam("initFarmNum")+level*getParam("addFarmNum");
     return num;
 }
 function getCurFarmNum()
@@ -131,7 +131,8 @@ function getCurFarmNum()
     var val = global.user.buildings.values();
     for(var i = 0; i < len(val); i++)
     {
-        if(val[i].get("funcs") == FARM_BUILD)
+        var bd = getData(BUILD, val[i]["id"]);
+        if(bd["funcs"] == FARM_BUILD)
         {
             count++;
         }
@@ -147,6 +148,40 @@ function checkFarmNum()
         return 1;
     }
     return 0;
+}
+function getCurCampNum()
+{
+    var count = 0;
+    var val = global.user.buildings.values();
+    for(var i = 0; i < len(val); i++)
+    {
+        var bd = getData(BUILD, val[i]["id"]);
+        if(bd["funcs"] == CAMP)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+function getCampEnableNum()
+{
+    var level = global.user.getValue("level");
+    var num = getParam("initCampNum")+level/getParam("campLevel");
+    return num;
+}
+function checkCampNum()
+{
+    var now = getCurCampNum();
+    var cap = getCampEnableNum();
+    if(cap > now)
+        return 1;
+    return 0;
+}
+function getNextCampLevel()
+{
+    var level = global.user.getValue("level");
+    var need = (level+getParam("campLevel")-1)/getParam("campLevel");
+    return need*getParam("campLevel");
 }
 
 

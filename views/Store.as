@@ -174,6 +174,15 @@ class Store extends MyNode
                     return;
                 }
             }
+            if(data["funcs"] == CAMP)
+            {
+                ret = checkCampNum();
+                if(!ret)
+                {
+                    global.director.curScene.addChild(new UpgradeBanner(getStr("campTooCon", ["[LEV]", str(getNextCampLevel()+1) ] ) , [100, 100, 100], null));
+                    return;
+                }
+            }
 
             ret = global.msgCenter.checkCallback(BEGIN_BUILD);
             if(!ret)

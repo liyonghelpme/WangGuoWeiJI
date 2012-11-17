@@ -640,7 +640,7 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
         var but0;
 
         var shadow = child.addnode();
-        shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 79).size(144, 164).color(100, 100, 100, 47);
+        shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 79).size(144, 164).color(100, 100, 100, 100);
         if(rankKind == CHALLENGE_RANK)
         {
             but0 = new NewButton("violetBut.png", [92, 39], getStr("challenge", null), null, 18, FONT_NORMAL, [100, 100, 100], onChallenge, curNum);

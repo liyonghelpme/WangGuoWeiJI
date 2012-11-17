@@ -44,7 +44,7 @@ class LevelChoose extends MyNode
         bg = node();
         init();
         initData();
-        bg.addsprite("title"+str(big)+".png").pos(34, 15);
+        bg.addsprite("title"+str(big)+".png", ARGB_8888).pos(34, 15);
         var but0 = new NewButton("map_back0.png", [79, 58], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], goBack, null);
         but0.bg.anchor(50, 50).pos(745, 38);
         bg.add(but0.bg);
@@ -70,19 +70,13 @@ class LevelChoose extends MyNode
         {
             tot = bg.addsprite("totalStar.png").pos(239, 17).size(139, 46);
             tot.addsprite("star.png").pos(33, 22).anchor(50, 50).size(33, 31);
-            //nums = new ShadowWords("0/0", null, 22, FONT_NORMAL, [100, 100, 100]);
-            //tot.add(nums.bg);
-            //nums.bg.pos(57, 14);
-nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
+            nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         }
         else
         {
             tot = bg.addsprite("totalStar.png").pos(239, 17).size(170, 46);
             tot.addsprite("star.png").pos(33, 22).anchor(50, 50).size(33, 31);
-            //nums = new ShadowWords("0/0", null, 22, FONT_NORMAL, [100, 100, 100]);
-            //tot.add(nums.bg);
-            //nums.bg.pos(57, 14);
-nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
+            nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
         }
 
 

@@ -270,21 +270,29 @@ function getTimeStr(t)
         res += str(sec)+"s";
     return res;
 }
-
-/*
-function checkInZone(position)
+//day hour minute
+function getDayTime(t)
 {
-    for(var i = 0; i < len(FullZone); i++)
-    {
-        var zone = FullZone[i];
-        var difx = position[0] - zone[0];
-        var dify = position[1] - zone[1];
-        if(difx >= 0 && difx < zone[2] && dify > 0 && dify < zone[3])
-            return 1;
-    }
-    return 0;
+    var sec = t % 60;
+    t = t / 60;
+    var min = t % 60;
+    t = t / 60;
+    var hour = t % 24;
+    t = t / 24;
+    var day = t;
+
+    var res = "";
+    if(day != 0)
+        res += str(day)+"d ";
+    if(hour != 0)
+        res += str(hour)+"h ";
+    if(min != 0)
+        res += str(min)+"m ";
+    if(day == 0 || hour == 0 || min == 0)
+        res += str(sec)+"s ";
+    return res;
 }
-*/
+
 
 function checkInTrain(p)
 {   
@@ -294,74 +302,6 @@ function checkInTrain(p)
     return difx > 0 && difx < TrainZone[2] && dify > 0 && dify < TrainZone[3]; 
 }
 
-/*
-function getBoundary(dia)
-{
-    var x0 = dia[2]-(dia[0]+dia[1])/2*SIZEX;
-    var y0 = dia[3]-(dia[0]+dia[1])/2*SIZEY;
-    var x1 = x0+dia[1]*SIZEX;
-    var y1 = y0;
-    var x2 = x0+dia[0]*SIZEX;
-    var y2 = y0+(dia[0]+dia[1])*SIZEY;
-    //trace("x1, y1, x2, y2", x1, y1, x2, y2);
-    return [x1, y1, x2, y2];
-}
-function getT1(x, y)
-{
-    if(x == 0 && y == 0)
-        return 0;
-    var t1 = (x*SIZEX+y*-SIZEY)/sqrt(x*x+y*y);
-    return t1;
-}
-function getT2(x, y)
-{
-    if(x == 0 && y == 0)
-        return 0;
-    var t2 = (x*-SIZEX+y*-SIZEY)/sqrt(x*x+y*y);
-    return t2;
-}
-function getABound(a)
-{
-    var aBound = getBoundary(a);
-    var t1 = getT1(aBound[0], aBound[1]);
-    var t2 = getT2(aBound[0], aBound[1]);
-    var t11 = getT1(aBound[2], aBound[3]);
-    var t22 = getT2(aBound[2], aBound[3]);
-    aBound = [t1, t2, t11, t22];
-    return aBound;
-}
-*/
-//[sx sy px py] [sx sy px py]
-/*
-冲突检测的精度问题， 
-除非采用离散化方法， 否则冲突检测存在精度问题
-根据建筑物结构， 当前位置是标准化的（50， 100）
-所以可以直接计算相应格子
-*/
-/*
-function checkCol(a, b)
-{
-    //a = [a[0], a[1], 0, 0];
-    //b = [b[0], b[1], b[2]-a[2], b[3]-a[3]]
-    //a = [a[0], a[1], 0, 0];
-
-    //var aBound = getABound(a);
-    //var bBound = getABound(b);
-    //trace("checkCollision", a, b, aBound, bBound);
-    var difx = a[2]-b[2];
-    var dify = a[3]-b[3];
-    var cx = difx/SIZEX;
-    var cy = dify/SIZEY;
-    //var size0 = [(a[0])/2*SIZEX, (a[0])/2*SIZEY];
-    //var size1 = [(b[0])/2*SIZEX, (b[0])/2*SIZEY];
-    var total = a[0]+b[0];
-
-    return (abs(cx)+abs(cy)) < total;
-    
-    //return abs(difx) < (size0[0]+size1[0]-4) && abs(dify) < (size0[1]+size1[1]-4);
-    //return aBound[0] < bBound[2] && aBound[2] > bBound[0] && aBound[1] < bBound[3] && aBound[3] > bBound[1]; 
-}
-*/
 /*
 返回菱形拼图的左上角第一块的中心的编号
 自动调整x y值 使其奇偶性相同

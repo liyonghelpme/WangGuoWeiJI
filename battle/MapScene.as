@@ -111,24 +111,10 @@ class MapScene extends MyNode
         flyLayer = new FlyLayer(this);
         addChildZ(flyLayer, 3);
         
-        //bg.add(sprite("map_toplayer.png").size(801,481),4);
         
     }
-
-    //var noOpTime = 0;
-    //const SHOW_ARROW_TIME = 5000;
     function update(diff)
     {
-        /*
-        if(len(contextStack) == 0)//在主界面 没有选择地图
-            noOpTime += diff;
-
-        if(noOpTime >= SHOW_ARROW_TIME)
-        {
-            noOpTime = 0;
-            islandLayer.showArrow();
-        }
-        */
         showTime += diff;
         if(needShow == 1 && showTime >= 800)
         {
@@ -171,8 +157,6 @@ class MapScene extends MyNode
     //变更菜单 更新 岛屿
     //变更岛屿
     function gotoIsland(param){
-        //islandLayer.removeArrow();
-        //noOpTime = 0;
         //回到主页面
         flyLayer.removeSelf();
         if(param == 0)
@@ -186,67 +170,8 @@ class MapScene extends MyNode
         islandLayer.gotoIsland(param);
         showTime = 0;
         needShow = 1;
-        /*
-        var sl = len(contextStack);
-        if( (sl==0 && param!=0) || (sl==1 && contextStack[0]!=param) ){
-            removeChild(flyLayer);
-            //从难度选择页面返回
-            if(param == 0){
-                flyLayer = new FlyLayer(this);
-                contextStack.pop();
-            }
-            //选择其它岛屿
-            else{
-                //显示新的 等级选择页面
-                //flyLayer = new LevelSelectLayer(param, this);
-                //未进入选择页面
-                
-                //实际的战斗页面编号
-                flyLayer = new LevelChoose(this, param-1); 
-                if(sl==0){
-                    contextStack.append(param);
-                }
-                //选择其它岛屿
-                else{
-                    contextStack[0] = param;
-                }
-            }
-            //进入岛屿
-            islandLayer.gotoIsland(param);
-            //显示新的等级选择页面 全局控制显示新页面
-
-            showTime = 0;
-            needShow = 1;
-        }
-        */
     }
     
-    /*
-    function onSmall(param)
-    {
-        //var sl = len(contextStack);//第一阶段 
-        //if(sl == 1 && param<6){
-
-        flyLayer.selectSmall(param);
-        //contextStack.append(param);
-
-        //}
-    }
-    */
-
-    /*
-    function onDiff(param)
-    {
-//        trace("scene onDiff", param, contextStack);
-        var sl = len(contextStack);
-        if(sl==2){
-            //flyLayer.selectLevel(param);
-            flyLayer.selectDiff(param);
-            contextStack.append(param);
-        }
-    }
-    */
-
     function refreshFly(){
         needShow = 0;
         showTime = 0;

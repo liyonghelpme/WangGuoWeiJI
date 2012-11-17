@@ -186,8 +186,8 @@ class CastlePage extends MyNode
 
 
         var flow0 = bg.addsprite("flow0.png").pos(0, 48).setevent(EVENT_TOUCH, goFlow, 0);
-        var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100).size(60, 88).scale(50);
-banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+        var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100);
+        banner.addlabel("50", "fonts/heiti.ttf", 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
 
         bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0))).setevent(EVENT_TOUCH, visitNeibor);
 
@@ -209,8 +209,8 @@ banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 5
         //px - (1+1)*32/2 = pYN  / 32 = 26
         //py - (1+1)*16 = pYN / 16 = 48
         //260048 特殊的固定建筑 不能移动 也不能任意的点击 由客户端确定的建筑
-        banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).size(60, 88).setevent(EVENT_TOUCH, onBanner).scale(50);
-        solNum = banner.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+        banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).setevent(EVENT_TOUCH, onBanner);
+        solNum = banner.addlabel("50", "fonts/heiti.ttf", 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
 
         buildLayer = new BuildLayer(this);
         addChild(buildLayer);

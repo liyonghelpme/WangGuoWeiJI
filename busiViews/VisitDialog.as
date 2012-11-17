@@ -10,28 +10,14 @@ class VisitDialog extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("visitBack.jpg").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        temp = bg.addsprite().anchor(50, 50).pos(403, 274).size(290, 130).color(100, 100, 100, 100).addaction(repeat(animate(2000, "visitAni0.png", "visitAni1.png", "visitAni2.png", "visitAni3.png", "visitAni4.png", "visitAni5.png", "visitAni6.png", "visitAni7.png", "visitAni8.png", "visitAni9.png", "visitAni8.png", "visitAni7.png", UPDATE_SIZE)));
+        //temp = bg.addsprite("visitBack.jpg").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+        temp = bg.addsprite("dialogVisitFriend.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
+        temp.addsprite().anchor(50, 50).pos(231, 247).addaction(repeat(animate(2000, "visitAni0.png", "visitAni1.png", "visitAni2.png", "visitAni3.png", "visitAni4.png", "visitAni5.png", "visitAni6.png", "visitAni7.png", "visitAni8.png", "visitAni9.png", "visitAni8.png", "visitAni7.png")));
 
         var tid = global.user.getNextTip();
         tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
 
-        bg.addlabel(getStr("flying", null), "fonts/heiti.ttf", 37).anchor(50, 50).pos(410, 77).color(66, 46, 28);
-
-        /*
-        var prW = new BackWord(this, getStr("flying", null), 37, 15, [66, 46, 28], 800, 0, 4, null, FONT_BOLD);
-        prW.setPos([342, 59]);
-        addChild(prW);
-        //瞬时命令立即执行
-        var cmd = [
-            [SET_TIME, 4],
-            [BEGIN_REPEAT, [-1, -1]],//循环次数 循环结束进入的下一条语句位置
-            [SET_CURPOS, [0, 2]],
-            [PRINT, 6],
-            [END_REPEAT, -1],//循环开始位置 
-        ];
-        prW.setCommand(cmd);
-        */
+        //bg.addlabel(getStr("flying", null), "fonts/heiti.ttf", 37).anchor(50, 50).pos(410, 77).color(66, 46, 28);
     }
     function VisitDialog(fc)
     {

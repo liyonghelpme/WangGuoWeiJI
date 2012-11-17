@@ -260,7 +260,17 @@ class Building extends MyNode
         if(data["hasShadow"])
         {
             if(shadow == null) 
-                shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png").color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]);
+            {
+                if(!data["isoView"])
+                {
+                    shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png").color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]);
+                }
+                else
+                {
+                    var offY = (sy+sx)*SIZEY/2;
+                    shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png").color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]-offY);
+                }
+            }
             else
                 shadow.texture("build"+str(id)+"Shadow"+str(shadowDir)+".png");
             if(!data["upShadow"])

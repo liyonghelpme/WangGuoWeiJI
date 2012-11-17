@@ -1,6 +1,6 @@
 class FlyLayer extends MyNode
 {
-    var labelPos = [[302,237],[91,160],[350,413],[616,328],[667,109],[222,25]];
+    var labelPos = [[302,237],[91,117],[350,413],[616,328],[667,109],[222,25]];
     var scene;
     var retBut;
     function FlyLayer(s){

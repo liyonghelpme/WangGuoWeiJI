@@ -308,10 +308,14 @@ class CastleScene extends MyNode
     function clearHideTime()
     {
         hideTime = 0;
+        /*
         if(realDisappear == 0 && !isBuildOrPlan())//not disappear
         {
             ml.showMenu(1000);
         }
+        */
+        if(!isBuildOrPlan())
+            ml.showMenu(1000);
     }
     function update(diff)
     {
@@ -319,10 +323,14 @@ class CastleScene extends MyNode
         if(hideTime >= 10000)
         {
             hideTime = 0;
+            if(!isBuildOrPlan())
+                ml.hideMenu(1000);
+            /*
             if(realDisappear == 0 && !isBuildOrPlan())//not disappear
             {
                 ml.hideMenu(1000);
             }
+            */
         }
     }
     //var building = null;

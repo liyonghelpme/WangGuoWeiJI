@@ -24,6 +24,7 @@ class CallSoldier extends MyNode
     }
     function CallSoldier(s)//兵营
     {
+        var temp;
         scene = s;
         bg = sprite("back.png");
         init();
@@ -36,8 +37,8 @@ class CallSoldier extends MyNode
 
         bg.addsprite("resBack.png").anchor(0, 0).pos(270, 24).size(454, 37);
         monAni = bg.addnode();
-        bg.addsprite("conTitSol.png").anchor(0, 0).pos(386, 90).size(185, 44);
-        bg.addsprite("titCamp.png").anchor(0, 0).pos(0, 0);
+        bg.addsprite("conTitSol.png").anchor(50, 50).pos(514, 112);
+        temp = bg.addsprite("titCamp.png").anchor(0, 0).pos(0, 0);
 
         
         var close = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
@@ -131,16 +132,31 @@ class CallSoldier extends MyNode
             
             load_sprite_sheet("soldierm"+str(id)+".plist");
             var act;
+            var sca;
             if(can == 1)
                 act = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
             else
                 act = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png", BLACK));
 
-            monAni = bg.addsprite().anchor(50, 50).pos(135, 177);
+            monAni = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 50).pos(131, 158);
+            //缩放120% 接着 控制最大范围
+            var mSize = monAni.prepare().size();
+            mSize[0] *= 1.2;
+            mSize[1] *= 1.2;
+            /*
+temp = bg.addsprite("最大尺寸.png").anchor(50, 50).pos(131, 158).color(100, 100, 100, 100);
+sca = getSca(temp, [184, 143]);
+temp.scale(sca);
+        */
+            monAni.size(mSize);
+            sca = getSca(monAni, [184, 143]);
+            monAni.scale(sca);
+            
             monAni.addaction(act);
             
 
-            info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 263).size(201, 134).color(100, 100, 100, 47);
+            //info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 263).size(201, 134).color(100, 100, 100, 60);
+            info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 240).size(201, 155).color(100, 100, 100, 60);
             var s;
             var solPure = getSolPureData(id, 0);
             var att = max(solPure["physicAttack"], solPure["magicAttack"]);
@@ -149,29 +165,37 @@ class CallSoldier extends MyNode
             //兵营没有工作
             if(scene.state != PARAMS["buildWork"] || id != scene.getObjectId())
             {
+/*
+line = stringLines(getStr("雇佣兵（不能转职） 近程物理攻击 攻击力：强 防御力：强 生命值：强 招募时间：1d 2h", null), 132, 20, [100, 100, 100], FONT_NORMAL );
+line.pos(47, 252);
+bg.add(line);
+*/
+                s = stringLines(getStr("monDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"]), "[TIME]", str(getDayTime(soldier["time"]))]), 19, 23, [100, 100, 100], FONT_NORMAL );
+                /*
                 //怪兽
                 if(soldier["solOrMon"] == 1)
                 {
-                    s = stringLines(getStr("monDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 19, 23, [100, 100, 100], FONT_NORMAL );
+
                 }
                 //普通士兵
                 else if(soldier["isHero"] == 0)
                 {
-                    s = stringLines(getStr("solDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 19, 23, [100, 100, 100], FONT_NORMAL );
+                    s = stringLines(getStr("solDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"]), "[TIME]", str(getDayTime(soldier["time"])) ]), 19, 23, [100, 100, 100], FONT_NORMAL );
                 }
                 else
                 {
-                    s = stringLines(getStr("heroDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"])]), 19, 23, [100, 100, 100], FONT_NORMAL );
+                    s = stringLines(getStr("heroDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"]), "[TIME]", str(getDayTime(soldier["time"]))]), 19, 23, [100, 100, 100], FONT_NORMAL );
                 }
+                */
 
                 infoLabel = s;
-                s.pos(47, 275);
+                s.pos(47, 252);
                 bg.add(infoLabel);
             }
             //兵营工作 显示招募状态
             else if(scene.state == PARAMS["buildWork"] && id == scene.getObjectId())//正在工作 且点击的是当前对象
             {
-                s = stringLines(getStr("calling", ["[NAME]", soldier["name"], "[TIME]", getWorkTime(scene.getLeftTime())] ), 20, 25, [100, 100, 100], FONT_NORMAL );
+                s = stringLines(getStr("calling", ["[NAME]", soldier["name"], "[TIME]", getDayTime(scene.getLeftTime())] ), 20, 25, [100, 100, 100], FONT_NORMAL );
                 infoLabel = s;
                 s.pos(59, 306);
                 bg.add(infoLabel);
@@ -191,7 +215,11 @@ class CallSoldier extends MyNode
             else
             {
                 var gold = scene.funcBuild.getAccCost();
-                blueButton = new NewButton("violetBut.png", [173, 53], getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]), null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
+                //getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)])
+                var temp;
+                blueButton = new NewButton("violetBut.png", [173, 53], "", null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
+                blueButton.bg.addlabel(getStr("accCallSol", ["[NUM]", str(gold)]), "fonts/heiti.ttf", 30).anchor(0, 50).pos(49, 24).color(100, 100, 100);
+                temp = blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(23, 25).size(36, 36).color(100, 100, 100, 100);
 
                 if(needShow)
                     global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), ACC_SOL);
@@ -242,7 +270,7 @@ class CallSoldier extends MyNode
                 var leftTime = scene.getLeftTime();
                 var soldier = getData(SOLDIER, id);
 
-                infoLabel = stringLines(getStr("calling", ["[NAME]", soldier["name"], "[TIME]", getWorkTime(max(leftTime, 0))]), 20, 25, [100, 100, 100], FONT_NORMAL );
+                infoLabel = stringLines(getStr("calling", ["[NAME]", soldier["name"], "[TIME]", getDayTime(max(leftTime, 0))]), 20, 25, [100, 100, 100], FONT_NORMAL );
                 infoLabel.pos(59, 306);
                 bg.add(infoLabel);
 
@@ -257,9 +285,19 @@ class CallSoldier extends MyNode
                     var gold = scene.funcBuild.getAccCost();
                     if(accTime == 0)
                     {
-                        blueButton.word.setWords(getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]));
+                        var temp;
+                        //getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)])
+                        //blueButton.word.setWords("");
+                        //blueButton.bg.addlabel(getStr("accCallSol", ["[NUM]", str(gold)]), "fonts/heiti.ttf", 30).anchor(0, 50).pos(49, 24).color(100, 100, 100);
+                        //temp = blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(23, 25).size(36, 36).color(100, 100, 100, 100);
                         //if(needShow)
                         //    global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), ACC_SOL);
+                        blueButton.removeSelf();
+                        blueButton = new NewButton("violetBut.png", [173, 53], "", null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
+                        blueButton.bg.addlabel(getStr("accCallSol", ["[NUM]", str(gold)]), "fonts/heiti.ttf", 30).anchor(0, 50).pos(49, 24).color(100, 100, 100);
+                        temp = blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(23, 25).size(36, 36).color(100, 100, 100, 100);
+                        blueButton.bg.pos(130, 432).anchor(50, 50);
+                        addChild(blueButton);
                     }
                     else
                     {

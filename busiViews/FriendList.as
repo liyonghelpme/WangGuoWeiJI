@@ -270,23 +270,6 @@ class FriendList extends MyNode
         }
         clearShadow();
     }
-    /*
-    function addNeiborOver(rid, rcode, con, param)
-    {
-        if(rcode != 0)
-        {
-            con = json_loads(con);
-            if(con["id"])
-            {
-
-            }
-            else
-            {
-                
-            }
-        }
-    }
-    */
     function showShadow(child)
     {
         var curNum = child.get();
@@ -300,7 +283,7 @@ class FriendList extends MyNode
             return;
         }
         shadow = child.addnode();
-        shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 78).size(144, 164).color(100, 100, 100, 47);
+        shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 78).size(144, 164).color(100, 100, 100, 100);
         if(uid == ADD_NEIBOR_MAX)
         {
             but0 = new NewButton("roleNameBut0.png", [129, 39], "", null, 18, FONT_NORMAL, [100, 100, 100], onAddGoldSeat, curNum);

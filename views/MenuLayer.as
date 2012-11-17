@@ -32,6 +32,7 @@ class MenuLayer extends MyNode
     }
     var downloadIcon = null;
     function MenuLayer(s) {
+        var temp
         scene = s;
 //        trace("pushMenuLayer");
         menus = new Array(null,null);
@@ -40,9 +41,10 @@ class MenuLayer extends MyNode
         
         banner = bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
 
+        temp = bg.addsprite("menuFeather.png").anchor(0, 0).pos(107, 367).size(52, 59).color(100, 100, 100, 100);
         taskbutton = bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
         taskFin = bg.addsprite("taskFin0.png").anchor(0, 0).pos(83, 402).size(27, 27);
-        finNum = bg.addlabel(getStr("99", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 416).color(100, 100, 100);
+        finNum = bg.addlabel(getStr("99+", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(96, 416).color(100, 100, 100);
 
         expfiller = bg.addsprite("exp_filler.png").anchor(0, 0).pos(133, 419);//.size(24, 10);
         expback = bg.addsprite("level0.png").anchor(0, 0).pos(120, 406).size(33, 36);
@@ -62,6 +64,8 @@ class MenuLayer extends MyNode
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
         menubutton = bg.addsprite("menu_button.png").anchor(0, 0).pos(685, 380).size(112, 106).setevent(EVENT_TOUCH, onClicked, 0);
+        bg.addlabel(getStr("rank", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(169, 461).color(100, 100, 100);
+
 
         rightMenu = new CastleRightMenu(this, []);
 
@@ -110,7 +114,10 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
 
         silverText = bg.addlabel(getStr("1", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(333, 461).color(100, 100, 100);
         goldText =  bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461).color(100, 100, 100);
-        gloryLevText = bg.addlabel("A-", "fonts/heiti.ttf", 25).anchor(50, 50).pos(253, 461).color(100, 100, 100);
+        var w = str(global.user.rankOrder);
+        if(global.user.rankOrder > 999)
+            w = "999+";
+        gloryLevText = bg.addlabel(w, "fonts/heiti.ttf", 16).anchor(50, 50).pos(253, 461).color(100, 100, 100);
     }
     //var building = 0;
     /*
@@ -296,7 +303,10 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     {
         //var num = global.user.getCurFinTaskNum();
         var num = global.taskModel.getFinishNum();
-        finNum.text(str(num));
+        var w = str(num);
+        if(num >= 99)
+            w = "99+";
+        finNum.text(w);
         if(num == 0)
         {
             taskFin.visible(0);
@@ -351,15 +361,17 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     震动显示隐藏对话框 beginBuild finishBuild   震动感应
 
     菜单当前的状态 显示 隐藏 状态转移过程中
+    
+    奇怪了 隐藏之后 一直不能出现这是为什么
     */
     var visLock = 0;
     function showMenu(t)
     {
-        //if(ins == 0)
-        //{
-        finishBuild();
-        bg.addaction(fadein(t));
-        //}
+        if(ins == 0)
+        {
+            finishBuild();
+            bg.addaction(fadein(t));
+        }
     }
     function hideMenu(t)
     {

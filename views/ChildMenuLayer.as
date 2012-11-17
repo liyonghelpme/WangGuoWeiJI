@@ -274,9 +274,10 @@ class ChildMenuLayer extends MyNode
     右键数量是特殊代码----> 应该要分离
     */
     var mailNum = null;
+    var mailBox = null;
     var callBut = null;
     var mapBut = null;
-    var statusIcon = null;//>>
+    var statusIcon = null;
     function ChildMenuLayer(index, funcs, s, otherFunc){
         scene = s;
         functions = funcs;
@@ -292,7 +293,7 @@ class ChildMenuLayer extends MyNode
             bg.anchor(100, 0).pos(800, offset);
         }
         init();
-        
+        var temp;
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
@@ -301,12 +302,32 @@ class ChildMenuLayer extends MyNode
             if(funcs[i] == "mail")
             {
                 var num = global.mailController.getMailNum();
+
+                mailBox = sprite("mailBoxNum.png").anchor(50, 50).pos(103, 32).size(33, 33).color(100, 100, 100, 100);
+                button.add(mailBox);
+                var w = str(num);
+                if(num >= 99)
+                    w = "99+";
+                mailNum = label(w, "fonts/heiti.ttf", 18).anchor(50, 50).pos(103, 32).color(100, 100, 100);
+                button.add(mailNum, 1, 1);
+                if(num == 0)
+                {
+                    mailBox.visible(0);
+                    mailNum.visible(0);
+                }
+                else
+                {
+                    mailBox.visible(1);
+                    mailNum.visible(1);
+                }
+                /*
                 mailNum = label(str(num), "fonts/heiti.ttf", 18).anchor(0, 50).color(14, 64, 26).pos(88, 66);
                 button.add(mailNum, 1, 1);//z tag 
                 if(num == 0)
                     mailNum.visible(0);
                 else
                     mailNum.visible(1);
+                */
             }
 
             if(funcs[i] == "call")
@@ -343,11 +364,20 @@ class ChildMenuLayer extends MyNode
             if(mailNum != null)
             {
                 var num = global.mailController.getMailNum();
-                mailNum.text(str(num));
+                var w = str(num);
+                if(num >= 99)
+                    num = "99+";
+                mailNum.text(w);
                 if(num == 0)
+                {
                     mailNum.visible(0);
+                    mailBox.visible(0);
+                }
                 else
+                {
+                    mailBox.visible(1);
                     mailNum.visible(1);
+                }
             }
         }
         /*
