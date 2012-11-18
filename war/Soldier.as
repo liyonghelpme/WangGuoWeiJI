@@ -18,6 +18,8 @@ MAP_START_SKILL 场景 状态时， 点击士兵释放技能
 */
 class Soldier extends MyNode
 {
+    //之前攻击累计剩余的伤害值
+    var leftHurt = 0;
     //base 由属性决定的 生命值 攻击力 防御力
     //转职增加 大量的属性 包括一些静态属性  攻击速度 攻击范围 生命回复速度 这个由职业属性决定
     //士兵攻击力 = 基础职业攻击力 + 等级对应增加攻击力 + 装备属性攻击力
@@ -865,14 +867,16 @@ class Soldier extends MyNode
     function changeExp(e)
     {
 //        trace("changeExp", e);
-        if(color == ENECOLOR)//敌方不增加经验
-            return;
+        //敌方不增加经验 网络对战的顺序是不定的
+        //if(color == ENECOLOR)        
+        //    return;
+
         addExp += e;
         exp += e; 
         
         if(state != MAP_SOL_DEAD)
         {
-            var expPng = altasWord("blue", "+"+str(e)+"xp");
+            var expPng = altasWord("blue", "+"+str(myFloor(e))+"xp");
             expPng.scale(getParam("expNumSize")*100/expPng.size()[1]);
             bg.add(expPng);
             expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
@@ -942,14 +946,16 @@ class Soldier extends MyNode
             //changeDirNode.addaction(sequence(tintto(500, 100, 0, 0), tintto(500, 100, 100, 100)));        
         }
 
+        //如何显示一个士兵的累计离散伤害值？类似于直线离散化
+        //1 1 2 1 1 2  1 2 1 2 攻击次数上次累计伤害剩余数 伤害补偿
         if(hurt[1])
         {
-            bWord = altasWord("red", str(add));
+            bWord = altasWord("red", str(myFloor(add)));
             bWord.scale(getParam("criticalNumSize")*100/bWord.size()[1]);
         }
         else
         {
-            bWord = altasWord("yellow", str(add));
+            bWord = altasWord("yellow", str(myFloor(add)));
             bWord.scale(getParam("harmNumSize")*100/bWord.size()[1]);
         }
         bg.add(bWord);
@@ -979,12 +985,12 @@ class Soldier extends MyNode
         var bWord;
         if(add < 0)
         {
-            bWord = altasWord("yellow", str(add));
+            bWord = altasWord("yellow", str(myFloor(add)));
             bWord.scale(18*100/bWord.size()[1]);
         }
         else
         {
-            bWord = altasWord("blue", "+"+str(add));
+            bWord = altasWord("blue", "+"+str(myFloor(add)));
             bWord.scale(22*100/bWord.size()[1]);
         }
         bg.add(bWord);
@@ -1142,6 +1148,9 @@ class Soldier extends MyNode
             setCol();//清理冲突状态
             map.setMap(this);
             map.removeGrid();
+            //只有自己的士兵才会发送给对方消息
+            trace("sendMsg", id, level, oldMap);
+            map.scene.warHttpController.sendMsg("sendSol", id, level, oldMap[0], oldMap[1]);
 
             finishArrange();
         }

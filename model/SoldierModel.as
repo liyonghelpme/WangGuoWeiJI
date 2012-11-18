@@ -15,11 +15,11 @@ function initAttackAndDefense(sol)
 function getSolPureData(id, level)
 {
     var sdata = getData(SOLDIER, id); 
-    var healthBoundary = myFloor(sdata["initHealth"]+level*sdata["addHealth"]);
-    var physicAttack = myFloor(sdata["initPhysicAttack"]+level*sdata["addPhysicAttack"]);
-    var physicDefense = myFloor(sdata["initPhysicDefense"]+level*sdata["addPhysicDefense"]);
-    var magicAttack = myFloor(sdata["initMagicAttack"]+level*sdata["addMagicAttack"]);
-    var magicDefense = myFloor(sdata["initMagicDefense"]+level*sdata["addMagicDefense"]);
+    var healthBoundary = sdata["initHealth"]+level*sdata["addHealth"];
+    var physicAttack = sdata["initPhysicAttack"]+level*sdata["addPhysicAttack"];
+    var physicDefense = sdata["initPhysicDefense"]+level*sdata["addPhysicDefense"];
+    var magicAttack = sdata["initMagicAttack"]+level*sdata["addMagicAttack"];
+    var magicDefense = sdata["initMagicDefense"]+level*sdata["addMagicDefense"];
 
     return dict([["physicAttack", physicAttack], ["physicDefense", physicDefense], ["magicAttack", magicAttack], ["magicDefense", magicDefense], ["healthBoundary", healthBoundary]]);
 }
@@ -37,5 +37,8 @@ function calHurt(src, tar)
         criHit = 1;
         hurt *= 2;
     }
-    return [hurt, criHit];
+    hurt += src.leftHurt;
+    var intHurt = myFloor(hurt);
+    src.leftHurt = hurt-intHurt;
+    return [intHurt, criHit];
 }

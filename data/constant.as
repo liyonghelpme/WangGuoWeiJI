@@ -996,6 +996,7 @@ const USE_DRUG_SKILL = 8;
 
 const DRUG_SKILL_ID = 16;
 
+//实际应该是左侧 和 右侧 颜色区分
 const MYCOLOR = 0;
 const ENECOLOR = 1;
 

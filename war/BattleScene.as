@@ -146,6 +146,7 @@ class BattleScene extends MyNode
     
     //kind double singleSid difficult user skills big small cityDefense 
 
+    var warHttpController;
     function BattleScene(arg)
     {
         argument = arg;
@@ -174,6 +175,18 @@ class BattleScene extends MyNode
 
         initView();
         initYet = 1;
+
+        warHttpController = new WarHttpController(this);
+        warHttpController.connectGame();
+    }
+    function putEnemySol(arg)
+    {
+        trace("enemyColor", arg, warHttpController.myColor);
+        var sol = map.addSoldier(arg["kind"], 1-warHttpController.myColor);//敌方颜色 
+        var nPos = getSolPos(arg["mx"], arg["my"], sol.sx, sol.sy, sol.offY); 
+        sol.setPos(nPos);
+        map.setMap(sol);
+        sol.finishArrange();
     }
 
     var initYet = 0;
@@ -224,11 +237,16 @@ class BattleScene extends MyNode
         pausePage = new MapPause(this);
         addChild(pausePage);
 
-        banner = new SelBanner(this);
-        addChild(banner);
-        
-        selB2 = new SelBanner2(this);
-        addChild(selB2);
+        if(warHttpController.myColor == MYCOLOR)
+        {
+            banner = new SelBanner(this);
+            addChild(banner);
+        }
+        else
+        {
+            selB2 = new SelBanner2(this);
+            addChild(selB2);
+        }
 
         state = MAP_FINISH_SKILL;
 

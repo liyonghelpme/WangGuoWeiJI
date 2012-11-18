@@ -350,6 +350,7 @@ import model.FriendController;
 import model.HttpController;
 import util.Util;
 import model.PictureManager;
+import model.WarHttpController;
 
 import Global.GlobalController;
 
