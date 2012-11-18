@@ -47,6 +47,7 @@ function getStage(data)
 计算士兵的裸露 攻击力 生命值 和受伤比例
 id -->stage
 */
+/*
 function getSolPureData(id, level)
 {
 
@@ -81,6 +82,7 @@ function getSolPureData(id, level)
     var healthBoundary = begin[1][0]+(level-begin[0])*addHealth/levelDiff;
     return dict([["physicAttack", physicAttack], ["physicDefense", physicDefense], ["magicAttack", magicAttack], ["magicDefense", magicDefense], ["healthBoundary", healthBoundary]]);
 }
+*/
 //士兵属性 和 士兵 数据
 
 //[[lev, [health, magicDefense, physicDefense, physicAttack, magicAttack]], ...]
@@ -139,6 +141,7 @@ function setEquipAttribute(sol, equips)
     }
 }
 
+/*
 //根据士兵 类型 当前状态 计算士兵的各个属性
 function initAttackAndDefense(sol)
 {
@@ -177,6 +180,7 @@ function initAttackAndDefense(sol)
     //var mhurt = getMagicHurt(sol.data);
 //    trace("Basic Attribute", sol.physicAttack, sol.magicAttack, sol.physicDefense, sol.magicDefense, sol.healthBoundary, phurt, mhurt);
 }
+*/
 /*
     attack * cofficient * pure/total / 100
     攻击城墙的物理伤害系数是100 魔法伤害系数是100
@@ -279,6 +283,7 @@ function calSkillHurt(attack, tar)
     return magHurt;
 }
 
+/*
 function calHurt(src, tar)
 {
     var pcoff = getPhysicHurt(tar.data);
@@ -297,6 +302,7 @@ function calHurt(src, tar)
     }
     return [hurt, criHit];
 }
+*/
 
 function getSkillColdTime(soldierId, skillId, skillLevel)
 {

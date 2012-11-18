@@ -18,8 +18,11 @@ class GlobalController
     var bannerController;
     var paramController;
     var pictureManager;
-    function Global()
+    var staticClass;
+    function GlobalController()
     {
+        staticClass = getclass("com.liyong.testTime.TestTime");
+        //trace(staticClass.getfunc("floor"), staticClass.getfunc("ceil"), staticClass.get("ceil")(1.5), staticClass.getfunc("getTime"), staticClass.getfunc("getTime")(10));
     }
 }
 var global = new GlobalController();

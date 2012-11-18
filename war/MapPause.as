@@ -36,7 +36,7 @@ class MapPause extends MyNode
     var leftText;
     var rightText;
     
-    var skillFlowBanner;
+    //var skillFlowBanner;
     var blood = 0;
     var bloodBut;
     function onBlood()
@@ -85,7 +85,7 @@ class MapPause extends MyNode
                 leftDef.texture("mapDefenseGreen.png");
 
             //自己名字
-            bg.addlabel(global.user.name, "fonts/heiti.ttf", 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
+            //bg.addlabel(global.user.name, "fonts/heiti.ttf", 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
             temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(51, 41).size(68, 63).color(100, 100, 100, 100);
             //自己头像
             var sid = global.user.getFirstHero();
@@ -136,8 +136,8 @@ class MapPause extends MyNode
         initView();
 
         
-        skillFlowBanner = new SkillFlowBanner(this);
-        addChild(skillFlowBanner);
+        //skillFlowBanner = new SkillFlowBanner(this);
+        //addChild(skillFlowBanner);
     }
     /*
     需要保证生命值 > 0

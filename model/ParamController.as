@@ -4,9 +4,34 @@ class ParamController
     var AnimateParams = dict();
     function ParamController()
     {
+        global.httpController.addRequest("getAllSolIds", dict(), fetchSol, null);
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
+    }
+    function fetchSol(rid, rcode, con, param)
+    {
+        con = json_loads(con);
+        trace("fetchSol", con["soldierData"][0]);
+        soldierKey = con["soldierKey"];
+        soldierData = con["soldierData"];
+
+        for(var i = 0; i < len(soldierData); i++)
+        {
+            for(var j = 0; j < len(soldierKey); j++)
+            {
+                var k = soldierKey[j];
+                if(k == "initPhysicAttack" || k == "addPhysicAttack" 
+                    || k == "initMagicAttack" || k == "addMagicAttack"
+                    || k == "initPhysicDefense" || k == "addPhysicDefense"
+                    || k == "initMagicDefense" || k == "addMagicDefense"
+                )
+                    soldierData[i][1][j] /= 10.0;
+            }
+        }
+        
+        Keys[SOLDIER] = soldierKey;
+        CostData[SOLDIER] = dict(soldierData);
     }
     function fetchOver(rid, rcode, con, param)
     {
@@ -39,6 +64,7 @@ class ParamController
         allTasksData = dict(con["taskData"]);
         allTasksKey = con["taskKey"];
         Keys[TASK] = allTasksKey;
+
         CostData[TASK] = allTasksData;
     }
 }

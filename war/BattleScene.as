@@ -32,9 +32,9 @@ class BattleScene extends MyNode
     var skillLevel;
     var sceneSlowTimer;
     var drugId;
-    var dialogController;
 
     var skills = null;
+    var selB2 = null;
     function cancelSkill()
     {
         skillSoldier = null;
@@ -54,6 +54,7 @@ class BattleScene extends MyNode
     }
     function selectSkill(sol, skId, skLevel)
     {
+        /*
         trace("selectSkill", sol, skId);
         skillSoldier = sol;
         skillId = skId;
@@ -89,7 +90,7 @@ class BattleScene extends MyNode
             state = MAP_FINISH_SKILL;
             pausePage.skillFlowBanner.finishSkill(sol);
         }
-
+        */
     }
     override function enterScene()
     {
@@ -99,8 +100,8 @@ class BattleScene extends MyNode
         sceneSlowTimer.addTimer(this);
 
 
-        bg.setevent(EVENT_KEYDOWN, quitMap);
-        bg.focus(1);
+        //bg.setevent(EVENT_KEYDOWN, quitMap);
+        //bg.focus(1);
     }
     override function exitScene()
     {
@@ -114,7 +115,7 @@ class BattleScene extends MyNode
         //global.msgCenter.sendMsg(UPDATE_SKILL, MAP_FINISH_SKILL);
         trace("finishSkill", sol);
         
-        pausePage.skillFlowBanner.finishSkill(sol);
+        //pausePage.skillFlowBanner.finishSkill(sol);
         state = MAP_FINISH_SKILL;
 
         //单体技能确定 攻击目标
@@ -180,20 +181,8 @@ class BattleScene extends MyNode
     {
         bg = node();
         init();
-        dialogController = new DialogController(this);
-        addChild(dialogController);
 
-        if(MAP_KIND_TIP.get(kind) != null)
-        {
-            if(checkTip(MAP_KIND_TIP[kind]) == null)
-            {
-                trace("noTip", MAP_KIND_TIP[kind]);
-                dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
-            }
-        }
 
-        dialogController.addCmd(dict([["cmd", "chooseSol"]]));
-        dialogController.addCmd(dict([["cmd", "randomChoose"]]));
 
         if(kind == CHALLENGE_TRAIN)
             map = new Map(argument["big"], argument["small"], null, this, null);
@@ -201,7 +190,7 @@ class BattleScene extends MyNode
             map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equips"]);
 
         addChild(map);
-        banner = new MapBanner(this);
+        banner = new OkBanner(this);
         addChild(banner);
         if(singleSid != null)
         {
@@ -221,9 +210,11 @@ class BattleScene extends MyNode
             return argument["cityDefense"];//param[4];
         return 0;
     }
+    var setLevel = 0;
     //结束布阵就进入rank 但是如何表现回去的箭头任务
-    function finishArrange()
+    function finishArrange(lev)
     {
+        setLevel = lev;
         banner.removeSelf();
         banner = null;
         map.finishArrange();
@@ -232,6 +223,13 @@ class BattleScene extends MyNode
 
         pausePage = new MapPause(this);
         addChild(pausePage);
+
+        banner = new SelBanner(this);
+        addChild(banner);
+        
+        selB2 = new SelBanner2(this);
+        addChild(selB2);
+
         state = MAP_FINISH_SKILL;
 
         if(kind == CHALLENGE_MON)
@@ -247,8 +245,8 @@ class BattleScene extends MyNode
     }
     function setSkillSoldier(sol)
     {
-        if(pausePage != null)
-            pausePage.skillFlowBanner.setSoldier(sol);
+        //if(pausePage != null)
+        //    pausePage.skillFlowBanner.setSoldier(sol);
     }
     //暂停游戏 需要停止技能冷却时间的更新
     //否则用户可以暂停游戏来 回复技能
@@ -271,15 +269,17 @@ class BattleScene extends MyNode
     {
         if(kc == KEYCODE_BACK)
         {
-            if(state == MAP_ARRANGE) 
-                global.director.popScene();
-            else 
-                pausePage.onPause();
+            //if(state == MAP_ARRANGE) 
+            global.director.popScene();
+
+            //else 
+            //    pausePage.onPause();
         }
     }
     function clearSoldier(so)
     {
-        banner.clearSoldier(so);
+        //banner.clearSoldier(so);
+        //selB2.clearSoldier(so);
     }
     function getDefense(id)
     {

@@ -126,11 +126,15 @@ class Soldier extends MyNode
                 }
             }
             //有冲突暂时不移动 设定下一个位置为本位置
+            //重新发现新的敌人
             if(hasCol)
             {
                 nextMap = copy(curMap);
                 if(len(commandList) == 0)
-                    pushCommand(MOVE_CMD, null);
+                {
+                    pushCommand(FIND_ENEMY, null);
+                    //pushCommand(MOVE_CMD, null);
+                }
                 return;    
             }
             clearMap();
@@ -534,16 +538,11 @@ class Soldier extends MyNode
     var sy = 1;
     var offY = 0;
     
-    //var attack = 100;
-    //var defense = 50;
-
     var physicAttack;
     var physicDefense;
-    var purePhyDefense;
 
     var magicAttack;
     var magicDefense;
-    var pureMagDefense;
 
 
     var attRange = 100;
@@ -615,7 +614,13 @@ class Soldier extends MyNode
         volumn = data.get("volumn");
         recoverSpeed = 0;
 
+        //变动的属性不变的属性
         //trace("soldierData", monsterData, map.monEquips);
+        attRange = data.get("range");
+        dead = 0;
+        myName = data["name"];
+
+        initAttackAndDefense(this);
 
     
         //CHALLENGE_MON
@@ -623,6 +628,7 @@ class Soldier extends MyNode
         //CHALLENGE_NEIBOR
         //CHALLENGE_TRAIN
         //怪兽没有装备
+        /*
         if(sid == ENEMY)//敌对方士兵 地图怪兽 
         {
             if(monsterData != null)
@@ -637,7 +643,7 @@ class Soldier extends MyNode
                 myEquips = map.getEnemyEquips(monsterData.get("sid"));
             }
 
-            attRange = data.get("range");
+
 
             health = 0;
             initAttackAndDefense(this);
@@ -674,13 +680,13 @@ class Soldier extends MyNode
             health = privateData.get("health", 0);
             initAttackAndDefense(this);
 
-            myName = privateData.get("name");
-            dead = 0;
+
+
 
         }
+        */
         //根据士兵基本属性重新计算经验值
         gainexp = getAddExp(id, level);
-        trace("soldierData", physicAttack, physicDefense, magicAttack, magicDefense, purePhyDefense);
     }
 
     var attSpeed;
@@ -699,6 +705,7 @@ class Soldier extends MyNode
     var stateWord;
     function Soldier(m, d, s, md)
     {
+
         speed = getParam("soldierSpeed");
         ai = new SoldierAI(this);
         monsterData = md;
@@ -708,6 +715,7 @@ class Soldier extends MyNode
         id = d[1];//士兵类型id
         oldId = id;//士兵旧的类型
 
+        level = map.scene.setLevel;
         if(len(d) >= 3)
             mapSolId = d[2];//地图上士兵的编号
         else
@@ -873,6 +881,7 @@ class Soldier extends MyNode
     function initHealth()
     {
         var oldSize = greenBlood.prepare().size();
+        //trace("bloodTotalLen", bloodTotalLen, health, healthBoundary);
         var sx = max(bloodTotalLen*health/healthBoundary, 0);
 
         redBlood.stop();
@@ -952,11 +961,7 @@ class Soldier extends MyNode
             pushCommand(FIND_ENEMY, null);
         }
 
-
-        if(health < healthBoundary)
-            backBanner.visible(1);
-        else
-            backBanner.visible(0);
+        showBloodBanner();
     }
 
     //不能在callfunc中调用
@@ -986,10 +991,7 @@ class Soldier extends MyNode
         bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
 
 
-        if(health < healthBoundary)
-            backBanner.visible(1);
-        else
-            backBanner.visible(0);
+        showBloodBanner();
     }
 
 
@@ -1034,7 +1036,7 @@ class Soldier extends MyNode
     function touchWorldBegan(n, e, p, x, y, points)
     {
 
-        if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
+        if(state == MAP_SOL_ARRANGE)//控制自己的士兵
         {
             map.moveGrid(this);
             setZord(MAX_SOL_ZORD);
@@ -1075,7 +1077,7 @@ class Soldier extends MyNode
     {
         //trace("touchWorldMoved", x, y);
         
-        if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
+        if(state == MAP_SOL_ARRANGE)
         {
             lastPoints = map.bg.world2node(x, y);
 
@@ -1119,22 +1121,11 @@ class Soldier extends MyNode
     */
     function touchWorldEnded(n, e, p, x, y, points)
     {
-        if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
+        if(state == MAP_SOL_ARRANGE)
         {
             var oldMap = getSolMap(bg.pos(), sx, sy, offY);
-            var ret = map.checkInBoundary(this, oldMap);
-            if(ret == 0)
-            {
-                map.clearSoldier(this);
-                return;
-            }
-            else//规整位置
-            {
-                var nPos = getSolPos(oldMap[0], oldMap[1], sx, sy, offY); 
-                setPos(nPos);
-            }
-
-            //var col = map.checkCol(this);
+            var nPos = getSolPos(oldMap[0], oldMap[1], sx, sy, offY); 
+            setPos(nPos);
 
             var col = map.checkSolOutOrCol(this);
             if(col != null)
@@ -1151,6 +1142,8 @@ class Soldier extends MyNode
             setCol();//清理冲突状态
             map.setMap(this);
             map.removeGrid();
+
+            finishArrange();
         }
         //战斗状态 场景设定 技能选择 只有英雄才有技能
         else if(map.scene.state == MAP_FINISH_SKILL)//&& data.get("isHero") && color == MYCOLOR 点击敌方士兵也出状态
@@ -1238,12 +1231,18 @@ class Soldier extends MyNode
             nameBanner = null;
         }
         //生命值小于上限则显示血条
-        if(health < healthBoundary)
+        showBloodBanner();
+        pushCommand(FIND_ENEMY, null);
+    }
+    function showBloodBanner()
+    {
+        if(health < healthBoundary && !dead)
             backBanner.visible(1);
         else 
             backBanner.visible(0);
-        pushCommand(FIND_ENEMY, null);
     }
+
+
     function getDir()
     {
         var sca = changeDirNode.scale();

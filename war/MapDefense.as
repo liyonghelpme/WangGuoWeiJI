@@ -14,8 +14,6 @@ class MapDefense extends MyNode
     //var defense = 0;
     var physicDefense = 1;
     var magicDefense = 1;
-    var purePhyDefense = 1;
-    var pureMagDefense = 1;
 
     var hurts = dict();
     var data;
@@ -39,9 +37,9 @@ class MapDefense extends MyNode
     }
     function setDefense(val)
     {
-        trace("setDefense", val);
-        health = val;
-        healthBoundary = val;
+        trace("setDefense 暂时用临时值", val);
+        //health = val;
+        //healthBoundary = val;
     }
     function getKind()
     {

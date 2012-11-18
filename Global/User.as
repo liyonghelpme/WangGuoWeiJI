@@ -1050,7 +1050,11 @@ class User
     function getSoldierData(sid)
     {
 //        trace("getSoldierData", sid, soldiers);
-        return soldiers.get(sid);
+        //return soldiers.get(sid);
+        var sdata = getData(SOLDIER, sid);
+        var pureData = getSolPureData(sid, 0);
+        return dict([["id", sid], ["name", sdata["name"]], ["health", pureData["healthBoundary"]], ["exp", 0], ["dead", 0], ["level", 0], ["addAttack", 0], ["addDefense", 0], ["addAttackTime", 0], ["addDefenseTime", 0], ["addHealthBoundary", 0], ["addHealthBoundaryTime", 0] ]);
+
     }
     function sellSoldier(soldier)
     {
@@ -1330,7 +1334,8 @@ class User
     }
     function getSolSkills(sid)
     {
-        return skills.get(sid, dict());
+        return dict();
+        //return skills.get(sid, dict());
     }
     function getSolSkillLevel(sid, skillId)
     {

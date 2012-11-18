@@ -1,5 +1,6 @@
-import Global.INCLUDE;
+//import Global.INCLUDE;
 //import test.GameInclude;
+import test.BattleINCLUDE;
 
 
 //初始化经营页面
@@ -17,9 +18,10 @@ import Global.INCLUDE;
 
 
 //显示场景
-global.director.pushScene(new CastleScene(1));
-global.director.curScene.addChild(new Loading());
-global.user.initData();
+//global.director.pushScene(new CastleScene(1));
+//global.director.curScene.addChild(new Loading());
+//global.user.initData();
+
 //global.director.pushView(new Loading(), 1, 0);//DarkNod
 //初始化场景数据 数据初始化结束之后 取出loading页面
 //在loading页面开始初始化数据 保证view 先显示 再加载数据
@@ -50,5 +52,8 @@ global.user.initData();
 //global.replaceScene(scene);
 //var soldier = new BusiSoldier(scene, getData(SOLDIER, 0), null, 0);
 //global.director.pushView(new GameThree(soldier), 1, 0);
+
+//soldier Data px py level sid kindId equips skills 
+global.director.pushScene(new BattleScene(dict([["kind", CHALLENGE_MON], ["big", 0], ["small", 0]])));
 
 

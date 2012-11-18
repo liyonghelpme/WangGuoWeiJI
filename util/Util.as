@@ -1242,3 +1242,15 @@ function cmpTaskId(a, b)
         return 1;
     return -1;
 }
+
+//浮点变成整数
+function myFloor(f)
+{
+    var math = getclass("java.lang.Math");
+    return math.callobj("floor", (f).callobj("doubleValue")).callobj("intValue");
+}
+function myCeil(f)
+{
+    var math = getclass("java.lang.Math");
+    return math.callobj("ceil", (f).callobj("doubleValue")).callobj("intValue");
+}
