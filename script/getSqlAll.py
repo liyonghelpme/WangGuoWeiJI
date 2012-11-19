@@ -434,7 +434,7 @@ def hanData(name, data):
 
         names = [['soldier'+str(i['id']), [i['name'], i['engName']]] for i in f]
         print 'var', name+'Key', '=', json.dumps(key), ';'
-        print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
+        print 'var', name+'Data', '=', 'dict(', json.dumps(res).replace('0.0', '0'), ');'
         return names 
     if name == 'allTasks':
         res = []
