@@ -15,7 +15,12 @@ class CastleRightMenu extends MyNode
         ["dayTask", ["dayTaskIcon.png", onDayTask]],
         ["invite", ["inviteIcon.png", onInvite]],
         ["feedback", ["settingIcon.png", onFeedback]],
+        ["newUserGift", ["newUserGift.png", onNewUserGift]],
     ]);
+    function onNewUserGift()
+    {
+        global.director.pushView(new NewTaskDialog2(), 1, 0);
+    }
     function onInvite()
     {
         global.director.pushView(new InviteIntro(), 1, 0);

@@ -152,9 +152,14 @@ class FriendScene extends MyNode
         }
         //访问邻居但是数据没有初始化 好友模块在登录时应该初始化邻居数据  && kind == VISIT_NEIBOR
         //点击上方浮动岛屿 没有初始化 邻居数据时  需要等待
+        initData();
+
+    }
+    function initData()
+    {
         if(papayaId == null)
         {
-            //等待邻居数据初始化结束 
+            //global.timer.addTimer(this);
         }
         else
             global.httpController.addRequest("friendC/getFriend", dict([["uid", global.user.uid], ["papayaId", papayaId]]), getFriendOver, null);
@@ -181,8 +186,9 @@ class FriendScene extends MyNode
         else
         {
             var friendScene = new FriendScene(friends[curNum].get("id"), curNum, kind, friends[curNum].get("crystal"), friends[curNum]);
-            global.director.replaceScene(friendScene);
-            global.director.pushView(new VisitDialog(friendScene), 1, 0);
+            //global.director.replaceScene(friendScene);
+            global.director.curScene.addChildZ(friendScene, -1);
+            global.director.pushView(new VisitDialog(friendScene, FRIEND_DIA_INFRIEND), 1, 0);
         }
     }
 
@@ -250,6 +256,7 @@ class FriendScene extends MyNode
     override function enterScene()
     {
         super.enterScene();
+        global.timer.removeTimer(this);//首先清理Timer 再重新注册
         global.timer.addTimer(this);
         if(kind == VISIT_NEIBOR)
             global.taskModel.doAllTaskByKey("visitNeibor", 1);

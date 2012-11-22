@@ -650,6 +650,13 @@ function getNodeSca(n, box)
     sca = max(min(150, sca), 50);
     return sca;
 }
+function strictSca(n, box)
+{
+    var nSize = n.prepare().size();
+    var sca = min(box[0]*100/nSize[0], box[1]*100/nSize[1]);
+    //sca = max(min(150, sca), 50);
+    return sca;
+}
 function getSca(n, box)
 {
     var nSize = n.prepare().size();
@@ -1111,7 +1118,7 @@ function showFullBack()
 {
     var tc = showTimeColor();
     trace("full", tc);
-    var temp = sprite("dialogLoginBack.png", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, 80);
+    var temp = sprite("dialogLoginBack.png", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, getParam("loginBackOpacity"));
     temp.addsprite("dialogLoginStar0.png", ARGB_8888);
     return temp;
 }

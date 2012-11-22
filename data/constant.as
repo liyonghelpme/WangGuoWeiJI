@@ -1054,6 +1054,24 @@ const HeroDir = dict([
     [550, -100],
     [440, 100],
 ]);
+//temp = bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(17, 5).size(112, 107).color(100, 100, 100, 100);
+//temp = bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(14, -14).size(104, 109).color(100, 100, 100, 100);
+//temp = bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(-7, -15).size(103, 139).color(100, 100, 100, 100);
+//temp = bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(19, 12).size(121, 111).color(100, 100, 100, 100);
+const HERO_LIGHT_POS = dict([
+    [440, [17, 5]],
+    [480, [14, -14]],
+    [550, [-7, -15]],
+    [590, [19, 12]],
+]);
+
+const HERO_SIZE = dict([
+    [440, [144, 91]],
+    [480, [124, 77]],
+    [550, [92, 104]],
+    [590, [164, 106]],
+]);
+
 const SHOW_SCALE = 120;
 
 const WEAPON_SOL = 0;
@@ -1309,6 +1327,7 @@ const STR2KIND = dict([
 //主界面 访问 好友 还是 好友页面访问好友
 const FRIEND_DIA_HOME = 0;
 const FRIEND_DIA_INFRIEND = 1; 
+const FRIEND_NO_VISIT_FRIEND = 2;//非访问好友页面使用visitDialog 不需要替换场景
 
 const LOAD_CHALLENGE = 0;
 const LOAD_ROUND = 1;

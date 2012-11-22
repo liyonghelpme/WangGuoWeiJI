@@ -9,8 +9,8 @@ class FriendList extends MyNode
     const OFFY = 187;//offy
     const ITEM_NUM = 4;//in
     const ROW_NUM = 2;//rn
-    const WIDTH = 663;
-    const HEIGHT = 333;
+    const WIDTH = 704;
+    const HEIGHT = 331;
     const PANEL_HEIGHT = 156;//默认图片大小
     const PANEL_WIDTH = 144;
     const INIT_X = 70;//第一个面板的x y 值
@@ -117,6 +117,7 @@ class FriendList extends MyNode
         var rowNum = (len(data)+ITEM_NUM-1)/ITEM_NUM;
         return [max(0, lowRow-ROW_NUM), min(rowNum, upRow+ROW_NUM)];
     }
+    const PAN_OFFY = 5;
     function updateTab()
     {
         if(data == null)//数据未初始化完成 则不更新列表
@@ -136,7 +137,7 @@ class FriendList extends MyNode
                 if(curNum >= len(data))
                     break;
 
-                var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY).size(PANEL_WIDTH, PANEL_HEIGHT); 
+                var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY+PAN_OFFY).size(PANEL_WIDTH, PANEL_HEIGHT); 
                 panel.put(curNum);
 
                 var papayaId = data[curNum].get("id");
@@ -241,11 +242,16 @@ class FriendList extends MyNode
         global.director.popView();
         var papayaId = data[curNum].get("id");
         var friendScene = new FriendScene(papayaId, curNum, friendKind, data[curNum].get("crystal"), data[curNum]);
+        global.director.emptyScene.addChildZ(friendScene, -1);
+        /*
         if(scene.kind == FRIEND_DIA_HOME)
-            global.director.pushScene(friendScene);
+        {
+            //global.director.pushScene(friendScene);
+        }
         else if(scene.kind == FRIEND_DIA_INFRIEND)
-            global.director.replaceScene(friendScene);
-        global.director.pushView(new VisitDialog(friendScene), 1, 0);
+            //global.director.replaceScene(friendScene);
+        */
+        global.director.pushView(new VisitDialog(friendScene, scene.kind), 1, 0);
     }
 
     function clearShadow()

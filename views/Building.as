@@ -608,18 +608,6 @@ class Building extends MyNode
     */
     function doFree()
     {
-        //任务状态
-        /*
-        if(funcs == CAMP && inTask)
-        {
-            inTask = 0;
-            hintArrow.removefromparent();
-            global.director.curScene.showGlobalMenu(this, showGlobalMenu);
-            global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
-            return;
-        }
-        */
-
         var ret = funcBuild.whenFree();
         if(ret == 0)
         {

@@ -34,6 +34,7 @@ class SoldierGoods extends MyNode
         cl.setevent(EVENT_TOUCH, touchBegan);
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
+        trace("init SoldierGoods finish");
     }
 
     //进入场景的时候再updateTab 保证看到黑色框 不被对话框遮挡
@@ -41,12 +42,9 @@ class SoldierGoods extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        //global.msgCenter.registerCallback(CALL_SOLDIER, this);
-        //updateTab();
     }
     override function exitScene()
     {
-        //global.msgCenter.removeCallback(CALL_SOLDIER, this);
         super.exitScene();
     }
     /*
@@ -69,6 +67,7 @@ class SoldierGoods extends MyNode
     var firstSolPanel = null;
     function updateTab()
     {
+        trace("update Sol Tab");
         firstSolPanel = null;
         var rg = getShowRange();
         
@@ -148,8 +147,8 @@ class SoldierGoods extends MyNode
 
                 var sSca = getSca(sol, [120, 100]);
                 sol.scale(sSca);
-
-                panel.addlabel(sData["name"], "fonts/heiti.ttf", 21).anchor(50, 50).pos(pSize[0]/2, 25).color(29, 16, 4);
+                //160/120*21 = 
+                panel.addlabel(sData["name"], "fonts/heiti.ttf", 25).anchor(50, 50).pos(pSize[0]/2, 30).color(29, 16, 4);
                 panel.put([id, canBuy]);
             }
         }

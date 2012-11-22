@@ -41,9 +41,10 @@ class Farm extends FuncBuild
         if(flowBanner == null)
         {
             flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(64, -11).anchor(50, 100);
-            var pl = flowBanner.addsprite("Wplant"+str(planting.id)+".png").anchor(50, 50).pos(43, 30);
-            var bsize = pl.prepare().size();
-            var sca = min(63*100/bsize[0], 42*100/bsize[1]);
+            var pl = flowBanner.addsprite("Wplant"+str(planting.id)+".png").anchor(50, 50).pos(33, 20);
+            //var bsize = pl.prepare().size();
+            //var sca = min(63*100/bsize[0], 42*100/bsize[1]);
+            var sca = strictSca(pl, [52, 31]);
             pl.scale(sca);
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
             global.taskModel.showHintArrow(baseBuild.bg, baseBuild.bg.size(), HARVEST_ICON);

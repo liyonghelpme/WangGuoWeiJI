@@ -16,8 +16,8 @@ class Loading extends MyNode
         var sca;
         temp = bg.addsprite("loadMain.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         temp = bg.addsprite("wangguoLogo.png").anchor(0, 0).pos(19, 4).size(184, 116).color(100, 100, 100, 100);
-        temp = bg.addsprite("loadingCircle.png").anchor(50, 50).pos(763, 37).size(50, 57).color(100, 100, 100, 100).addaction(repeat(rotateby(2000, 360)));
-        temp = bg.addsprite("loadingWord.png").anchor(0, 0).pos(607, 23).size(129, 29).color(100, 100, 100, 100);
+        temp = bg.addsprite("loadingCircle.png", ARGB_8888).anchor(50, 50).pos(763, 37).size(50, 57).color(100, 100, 100, 100).addaction(repeat(rotateby(2000, 360)));
+        temp = bg.addsprite("loadingWord.png", ARGB_8888).anchor(0, 0).pos(607, 23).size(129, 29).color(100, 100, 100, 100);
         temp = bg.addsprite().pos(0, 480).anchor(0, 100).addaction(repeat(animate(1500, "lighting0.png",  "lighting1.png", "lighting2.png", "lighting3.png", "lighting4.png", "lighting5.png", "lighting6.png", UPDATE_SIZE)));
         processNum = altasWord("red", "0%")
         processNum.anchor(50, 50).pos(400, 394);

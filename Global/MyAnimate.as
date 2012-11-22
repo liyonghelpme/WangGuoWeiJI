@@ -103,7 +103,70 @@ class MyAnimate
         global.myAction.removeAct(this);
     }
 }
+//选择英雄页面 英雄的 闪光动画  英雄图片上面有一个贴层 用于显示全闪光 也就是分离size 和 图内容， 但是动画的时候 需要调整这个背景的size和图内容
+class LightAnimate
+{
+    var bg;
+    var ani;
+    var accTime;
+    var duration;
+    var restore = 0;
+    var oldTexture;
+    var callback;//动画结束调用回调函数 处理
+    function LightAnimate(d, a, b, old, re, cb)
+    {
+        restore = re;
+        bg = b;
+        oldTexture = old;
+        duration = d;
+        ani = a;
+        accTime = 0;
+        callback = cb;
+    }
 
+    /*
+    function reverseAni()
+    {
+        ani.reverse();
+        accTime = 0;
+    }
+    */
+    function setAni(a, re)
+    {
+        restore = re;
+
+        ani = a[0];
+        duration = a[1];
+        accTime = 0;
+    }
+    function enterScene()
+    {
+        global.myAction.addAct(this);
+    }
+    function update(diff)
+    {
+        accTime += diff;
+        //动画显示最后一张
+        if(accTime >= duration)
+        {
+            exitScene();
+            if(restore)
+                bg.texture(oldTexture, ARGB_8888, UPDATE_SIZE);
+            else
+                bg.texture(ani[len(ani)-1], ARGB_8888, UPDATE_SIZE);
+            if(callback != null)
+                callback();
+            return;
+        }
+        accTime %= duration;
+        var curFrame = accTime*len(ani)/duration;
+        bg.texture(ani[curFrame], ARGB_8888, UPDATE_SIZE);
+    }
+    function exitScene()
+    {
+        global.myAction.removeAct(this);
+    }
+}
 class OneAnimate
 {
     var bg;

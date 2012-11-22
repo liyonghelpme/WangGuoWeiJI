@@ -56,7 +56,7 @@ class TaskModel
     }
     //如果需要 通知 则由 经营页面 弹出 提醒 提醒之后才 出现 箭头
     var delayTime = 0;
-    const SLOW_TASK = 3000;
+    //const SLOW_TASK = 3000;
     function update(diff)
     {
         if(initYet == 0 && initBuyTask && initCycleTask && initDayTask && initNewTask)
@@ -68,7 +68,7 @@ class TaskModel
         if(initYet && !inCommand && newTaskStage < getParam("showFinish"))
         {
             delayTime += diff;
-            if(delayTime >= SLOW_TASK)
+            if(delayTime >= getParam("slowTask"))
             {
                 delayTime = 0;
                 findAvailableNewTask();
@@ -207,6 +207,10 @@ class TaskModel
             }
 
             var dir = commandList[find].get("arrDir", DOWN);
+            //箭头的x y 偏移
+            var offY = commandList[find].get("arrOffY", 0);
+            var offX = commandList[find].get("arrOffX", 0);
+            var sca = commandList[find].get("arrScale", 100);
             //激活某个进度的箭头 但是没有 退后的功能
             trace("state", inCommand, find, curCmd, dir);
             //查找的命令 大于当前 命令 则 移动当前命令 进入新的提示体系
@@ -220,22 +224,22 @@ class TaskModel
                 //确认当前存在该命令 显示该命令的 hintArrow
                 if(dir == DOWN)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2, -5).anchor(50, 100);
+                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2+offX, -5+offY).anchor(50, 100).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
                 }
                 else if(dir == LEFT)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]+5, bSize[1]/2).anchor(50, 100).rotate(90);
+                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]+5+offX, bSize[1]/2+offY).anchor(50, 100).rotate(90).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, -20, 0), delaytime(300), moveby(500, 20, 0)));
                 }
                 else if(dir == RIGHT)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(-5, bSize[1]/2).anchor(50, 100).rotate(-90);
+                    hintArrow = pic.addsprite("taskArrow.png").pos(-5+offX, bSize[1]/2+offY).anchor(50, 100).rotate(-90).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, -20, 0), delaytime(300), moveby(500, 20, 0)));
                 }
                 else if(dir == UP)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2, bSize[1]+5).anchor(50, 100).rotate(180);
+                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2+offX, bSize[1]+5+offY).anchor(50, 100).rotate(180).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
                 }
                 //其它情况不显示箭头
@@ -842,10 +846,21 @@ class TaskModel
         global.user.db.put("localDayTask", localDayTask);
         global.msgCenter.sendMsg(UPDATE_TASK, null);
     }
+    //显示新手任务3个图标 打分
     function checkShowThreeIcon()
     {
         if(newTaskStage >= getParam("showStart") && newTaskStage < getParam("showFinish"))
             return 1;
         return 0;
+    }
+    //显示新手礼包
+    function checkShowNewTaskGift()
+    {
+        return newTaskStage < getParam("showStart");
+    }
+    //新手阶段任务完成
+    function checkNewTaskFinish()
+    {
+        return newTaskStage >= getParam("showFinish");
     }
 }

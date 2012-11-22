@@ -64,7 +64,7 @@ class MenuLayer extends MyNode
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
         menubutton = bg.addsprite("menu_button.png").anchor(0, 0).pos(685, 380).size(112, 106).setevent(EVENT_TOUCH, onClicked, 0);
-        bg.addlabel(getStr("rank", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(169, 461).color(100, 100, 100);
+        //bg.addlabel(getStr("rank", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(169, 461).color(100, 100, 100);
 
 
         rightMenu = new CastleRightMenu(this, []);
@@ -101,14 +101,6 @@ class MenuLayer extends MyNode
     var silverText;
     var goldText;
     var gloryText;
-    /*
-    初始化文本数据之后注册 用户数据的监听器
-bg.addlabel(getStr("1", null), "fonts/heiti.ttf", 23).anchor(0, 0).pos(333, 454).color(100, 100, 100);
-bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 0).pos(588, 454).color(100, 100, 100);
-
-bg.addlabel(getStr("1", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(333, 461).color(100, 100, 100);
-bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461).color(100, 100, 100);
-    */
     function initText()
     {
 
@@ -213,7 +205,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         var bSize = expback.prepare().size();
         
         //背景宽度 图片自身宽度 图片高度
-        var sca = getNodeSca(levelLabel, [min(lSize[0], bSize[0]), min(lSize[1], 25)]);
+        var sca = getNodeSca(levelLabel, [min(lSize[0], bSize[0]), min(lSize[1], 21)]);
         //if(level >= 100)
         levelLabel.scale(sca);
     }
@@ -237,15 +229,16 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
 
         var rated = global.user.db.get("rated");
         var funcs = [];
-        if(rated != 1)
-        {
-            funcs.append("rate");
-        }
+
 
         //是否显示 3个图标
         var ret = global.taskModel.checkShowThreeIcon()
         if(ret)
         {
+            if(rated != 1)
+            {
+                funcs.append("rate");
+            }
             if(global.user.getValue("level") < getParam("inviteShowLevel"))
             {
                 funcs.append("invite");
@@ -256,8 +249,13 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
                 funcs.append("feedback");
             }
         }
-        else
+        //新手任务完成
+        else if(global.taskModel.checkNewTaskFinish())
         {
+            if(rated != 1)
+            {
+                funcs.append("rate");
+            }
             if(global.taskModel.initYet)
             {
                 if(len(global.taskModel.localDayTask) > 0)
@@ -265,6 +263,11 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
                     funcs.append("dayTask");
                 }
             }
+        }
+        //新手任务礼包没有结束 显示
+        else if(global.taskModel.checkShowNewTaskGift())
+        {
+            funcs.append("newUserGift"); 
         }
 
         if(len(funcs) > 0)
@@ -343,7 +346,7 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
         updateValue(global.user.resource);
         updateExp(0);
 
-        if(global.pictureManager.checkNeedDownload())
+        if(global.taskModel.newTaskStage >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
         {
             downloadIcon = new DownloadIcon(this);
             addChild(downloadIcon);
@@ -373,16 +376,26 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
             bg.addaction(fadein(t));
         }
     }
+    /*
+    隐藏子菜单
+    接着关闭自身
+    因为自菜单的 exitScene 需要调用 addaction但是 callfunc中不能调用 addaction
+    */
     function hideMenu(t)
     {
         if(ins == 0)
             return;
+        cancelAllMenu();
         bg.addaction(sequence(fadeout(t), callfunc(beginBuild)));
     }
     
     
     /*
     需要确保两个子菜单的位置相同高度， 所以需要传递另一个菜单的高度
+    统一显示showGlobalMenu 如何？
+    drawAllMenu
+    cancelAllMenu
+    但是不能popView 来关闭 需要 cancelAllMenu
     */
     function draw_func(index, funcs){
         updateRightMenu();
@@ -409,14 +422,16 @@ bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461
     }
     function cancel_func(index){
         if(menus[index]!=null){
-            removeChild(menus[index]);
+            //removeChild(menus[index]);
+            menus[index].removeSelf();
+            //menus[index].clearChildMenu();
             menus[index] = null;
         }
     }
     
     function onClicked(n, e, param, x, y, points){
         if(param==0){
-            if(menus[0] == null){
+            if(showChildMenu == 0){
                 drawAllMenu();
             }
             else{

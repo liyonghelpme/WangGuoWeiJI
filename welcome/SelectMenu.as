@@ -6,6 +6,8 @@ class Hero extends MyNode
     var scene;
     var hid;
     var ani;
+    var full;
+    var heroSize;
     //var sca;
     function Hero(s, i)//英雄ID---》人物ID
     {
@@ -21,13 +23,27 @@ class Hero extends MyNode
         //map 缩放大小
         //sca = scene.scene.getMapNormalScale();
         ////trace("heroPos", menuPos);
+        //load_sprite_sheet("soldiera"+str(hid)+".plist");
+        //heroSize = sprite("soldiera"+str(hid)+".plist/ss"+str(hid)+"a0.png").prepare().size();
+        heroSize = HERO_SIZE[hid];
 
-        bg = sprite("hero"+str(hid)+"l.png", ARGB_8888).pos(mapPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100);
+        bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100).size(heroSize);
         init();
+        var lp = HERO_LIGHT_POS[hid];
+        full = bg.addsprite("hero"+str(hid)+"Full.png", ARGB_8888).pos(lp);
+
         ani = copy(getSkillAnimate(heroSkill.get(hid)));
         //ani = copy(skillAnimate.get());//英雄变身动画的 hid--->id
         ani[0] = copy(ani[0]);
-        cus = new OneAnimate(ani[1], ani[0], bg, "hero"+str(hid)+"l.png", 0);//不恢复旧的纹理
+        cus = new LightAnimate(ani[1], ani[0], bg, "", 0, onNormal);//不恢复旧的纹理
+    }
+    //显示 全光图片
+    //设定空的纹理
+    function onNormal()
+    {
+        bg.texture();//无纹理
+        bg.size(heroSize);
+        full.visible(1);
     }
     function onHero(n, e, p, x, y, points)
     {
@@ -37,22 +53,26 @@ class Hero extends MyNode
     {
         if(cus != null)
         {
+            full.visible(0);
+            cus.callback = null;
             cus.exitScene();
             cus.setAni(ani, 0);
             cus.enterScene();
         }
     }
     var cus = null;
+    //如何检测动画结束?
     function showNormal()
     {
         if(cus != null)
         {
+            cus.callback = onNormal;
             cus.exitScene();
             var a = copy(ani);
             a[0] = copy(a[0]);//copy a0 reverse
             a[0].reverse();
 
-            cus.setAni(a, 1);//恢复旧的纹理
+            cus.setAni(a, 0);//恢复旧的纹理 设定的大小
             cus.enterScene();
         }
     }

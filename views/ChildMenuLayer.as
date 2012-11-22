@@ -76,13 +76,6 @@ class ChildMenuLayer extends MyNode
     {
         global.director.curScene.closeGlobalMenu(this);
         global.director.pushView(new CallSoldier(scene), 1, 0);
-
-        /*
-        if(inTask)
-        {
-            global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
-        }
-        */
     }
     //单人练级 传入当前人物
     function onSingleTrain()
@@ -278,19 +271,24 @@ class ChildMenuLayer extends MyNode
     var callBut = null;
     var mapBut = null;
     var statusIcon = null;
+    var position;
+    var offset;
     function ChildMenuLayer(index, funcs, s, otherFunc){
+        position = index;
         scene = s;
         functions = funcs;
         var height = len(functions)*OFFY;
         var h2 = len(otherFunc)*OFFY;
         var mH = max(height, h2);
-        var offset = MIDY-mH/2;
+        offset = MIDY-mH/2;
         bg=sprite("dark0.png").scale(100,100).size(DARK_WIDTH, height);
         if(index == 0){
-            bg.anchor(0, 0).pos(0, offset);
+            bg.anchor(0, 0).pos(-DARK_WIDTH, offset);
+            //bg.anchor(0, 0).pos(0, offset);
         }
         else{
-            bg.anchor(100, 0).pos(800, offset);
+            bg.anchor(100, 0).pos(800+DARK_WIDTH, offset);
+            //bg.anchor(100, 0).pos(800, offset);
         }
         init();
         var temp;
@@ -320,14 +318,6 @@ class ChildMenuLayer extends MyNode
                     mailBox.visible(1);
                     mailNum.visible(1);
                 }
-                /*
-                mailNum = label(str(num), "fonts/heiti.ttf", 18).anchor(0, 50).color(14, 64, 26).pos(88, 66);
-                button.add(mailNum, 1, 1);//z tag 
-                if(num == 0)
-                    mailNum.visible(0);
-                else
-                    mailNum.visible(1);
-                */
             }
 
             if(funcs[i] == "call")
@@ -351,11 +341,6 @@ class ChildMenuLayer extends MyNode
         if(statusIcon != null)
             global.taskModel.showHintArrow(statusIcon, statusIcon.prepare().size(), STATUS_ICON);
     }
-    /*
-    var inTask = 0;
-    var hintArrow = null;
-    first Command is just a starWorker
-    */
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -380,26 +365,58 @@ class ChildMenuLayer extends MyNode
                 }
             }
         }
-        /*
-        else if(msgId == CALL_IN_CAMP)
-        {
-            inTask = 1;
-            hintArrow = callBut.addsprite("taskArrow.png").pos(DARK_WIDTH/2, -5).anchor(50, 100);
-            hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
-        }
-        */
     }
+    var passTime = 0;
+    function update(diff)
+    {
+        if(removed)
+        {
+            if(passTime >= getParam("hideTime"))
+            {
+                //exitScene();
+                clearChildMenu();
+            }
+            passTime += diff;
+        }
+    }
+    var removed = 0;
     override function enterScene()
     {
         super.enterScene();
         global.msgCenter.registerCallback(UPDATE_MAIL, this);
-        //global.msgCenter.registerCallback(CALL_IN_CAMP, this);
+        if(position == 0)
+            bg.addaction(expout(moveto(getParam("hideTime"), 0, offset)));
+        else
+            bg.addaction(expout(moveto(getParam("hideTime"), 800, offset)));
+        global.timer.addTimer(this);
     }
+    override function removeSelf()
+    {
+        exitScene();  
+    }
+    //手动删除 该节点
+    function clearChildMenu()
+    {
+        trace("clearChildMenu");
+        global.timer.removeTimer(this);
+        global.msgCenter.removeCallback(UPDATE_MAIL, this);
+        bg.removefromparent();
+        super.exitScene();
+    }
+    //不清楚什么时候 调用 如果是在 addaction中调用callfunc就存在问题
+    //exitScene 和 关闭子菜单的语义上还是有些区别的
+    //比如隐藏 主菜单 的时候 需要关闭菜单
     override function exitScene()
     {   
-        //global.msgCenter.removeCallback(CALL_IN_CAMP, this);
-        global.msgCenter.removeCallback(UPDATE_MAIL, this);
-        super.exitScene();
+        //clearChildMenu();
+        if(removed)
+            return;
+        if(position == 0)
+            bg.addaction(sequence(expin(moveto(getParam("hideTime"), -DARK_WIDTH-5, offset)), itintto(0, 0, 0, 0)));
+        else
+            bg.addaction(sequence(expin(moveto(getParam("hideTime"), 800+DARK_WIDTH+5, offset)), itintto(0, 0, 0, 0)));
+        removed = 1;
+        trace("childMenu exitScene");
     }
 
     function newsFeedResponse(rid, rcode)

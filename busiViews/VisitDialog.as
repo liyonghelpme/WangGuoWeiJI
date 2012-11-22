@@ -2,6 +2,7 @@ class VisitDialog extends MyNode
 {
     var friendScene;
     var tipWord;
+    var kind;
     function initView()
     {
         bg = node();
@@ -10,17 +11,14 @@ class VisitDialog extends MyNode
         var line;
         var temp;
         var sca;
-        //temp = bg.addsprite("visitBack.jpg").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         temp = bg.addsprite("dialogVisitFriend.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         temp.addsprite().anchor(50, 50).pos(231, 247).addaction(repeat(animate(2000, "visitAni0.png", "visitAni1.png", "visitAni2.png", "visitAni3.png", "visitAni4.png", "visitAni5.png", "visitAni6.png", "visitAni7.png", "visitAni8.png", "visitAni9.png", "visitAni8.png", "visitAni7.png")));
-
         var tid = global.user.getNextTip();
         tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
-
-        //bg.addlabel(getStr("flying", null), "fonts/heiti.ttf", 37).anchor(50, 50).pos(410, 77).color(66, 46, 28);
     }
-    function VisitDialog(fc)
+    function VisitDialog(fc, k)
     {
+        kind = k;
         friendScene = fc;
         initView();
     }
@@ -33,6 +31,11 @@ class VisitDialog extends MyNode
     访问好友或者挑战好友 获取数据成功之后关闭对话框
     等待界面 如果没有用则由场景主动控制关闭
     但是要避免弹出其它对话框
+
+    停留在当前场景 ---》主经营页面场景 或者当前好友的场景
+    等待 friendScene 初始化结束 则 replaceScene 或者 pushScene
+    主经营页面则pushScene 好友页面则 replaceScene
+    或者主经营页面也可以replace 而 重新进入 而初始化 数据即可
     */
     var passTime = 0;
     function update(diff)
@@ -42,6 +45,12 @@ class VisitDialog extends MyNode
             if(friendScene.initOver == 1)
             {
                 global.director.popView();
+                friendScene.removeSelf();
+                trace("pushScene");
+                if(kind == FRIEND_DIA_INFRIEND)
+                    global.director.replaceScene(friendScene);
+                else if(kind == FRIEND_DIA_HOME)
+                    global.director.pushScene(friendScene);
             }
         }
         passTime += diff;

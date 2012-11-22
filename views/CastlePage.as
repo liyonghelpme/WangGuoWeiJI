@@ -126,6 +126,10 @@ class CastlePage extends MyNode
         检测是否今天第一次登录 以及连续登录次数
         传递奖励数据给后台
         */
+
+
+        //新手阶段 没有登录奖励
+
         var conDays = global.user.getValue("loginDays");
 
         var diff = checkFirstLogin();
@@ -147,11 +151,13 @@ class CastlePage extends MyNode
             //global.friendController.firstLogin();
 
             reward = getLoginReward(day);
-            global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+            if(global.taskModel.newTaskStage >= getParam("showFinish"))
+                global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
             
             //每周第一次登录 发送登录每天任务完成提示
         }
         trace("finishLoginReward", day);
+
         trace("box", global.user.hasBox);
         if(global.user.hasBox)
         {
@@ -260,8 +266,9 @@ class CastlePage extends MyNode
             lastVisit %= len(neibors);
             //papayaId
             friendScene = new FriendScene(neibors[lastVisit].get("id"), lastVisit, VISIT_NEIBOR, neibors[lastVisit].get("crystal"), neibors[lastVisit]);
-            global.director.pushScene(friendScene);
-            global.director.pushView(new VisitDialog(friendScene), 1, 0);
+            //global.director.pushScene(friendScene);
+            global.director.curScene.addChildZ(friendScene, -1);
+            global.director.pushView(new VisitDialog(friendScene, FRIEND_DIA_HOME), 1, 0);
         }
     }
     function onBanner()

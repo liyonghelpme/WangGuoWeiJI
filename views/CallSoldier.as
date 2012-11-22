@@ -32,8 +32,8 @@ class CallSoldier extends MyNode
 
 
         bg.addsprite("titleBack.png").anchor(0, 0).pos(38, 10).size(705, 64);
-        bg.addsprite("rightBack.png").anchor(0, 0).pos(246, 75).size(523, 393);
-        bg.addsprite("leftBack.png").anchor(0, 0).pos(33, 75).size(205, 392);
+        bg.addsprite("rightBack.png", ARGB_8888).anchor(0, 0).pos(246, 75).size(523, 393);
+        bg.addsprite("leftBack.png", ARGB_8888).anchor(0, 0).pos(33, 75).size(201, 392);
 
         bg.addsprite("resBack.png").anchor(0, 0).pos(270, 24).size(454, 37);
         monAni = bg.addnode();
@@ -61,6 +61,7 @@ class CallSoldier extends MyNode
             setSoldier([scene.getObjectId(), 1]);
         else//显示 默认士兵
             setSoldier([0, 1]);//soldier Id 0 canBuy 1
+        trace("initCallSoldierFinish");
     }
 
     //id can
@@ -102,9 +103,6 @@ class CallSoldier extends MyNode
             setSoldier(curSelSol);//更新显示信息
             
             global.taskModel.finishTask(ONCE_TASK, "buy", 0, [SOLDIER, curSelSol[0]]);
-            //global.taskModel.doNewTaskByKey("call", 1);
-            //if(inTask)
-            //    global.msgCenter.sendMsg(NEW_TASK_NEXT_STEP, null);
         }
     }
     var needShow = 0;
@@ -154,9 +152,7 @@ temp.scale(sca);
             
             monAni.addaction(act);
             
-
-            //info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 263).size(201, 134).color(100, 100, 100, 60);
-            info = bg.addsprite("infoBack.png").anchor(0, 0).pos(35, 240).size(201, 155).color(100, 100, 100, 60);
+            info = bg.addsprite("infoBack.png").anchor(0, 0).pos(33, 240).size(201, 155).color(100, 100, 100, 60);
             var s;
             var solPure = getSolPureData(id, 0);
             var att = max(solPure["physicAttack"], solPure["magicAttack"]);
@@ -165,28 +161,7 @@ temp.scale(sca);
             //兵营没有工作
             if(scene.state != PARAMS["buildWork"] || id != scene.getObjectId())
             {
-/*
-line = stringLines(getStr("雇佣兵（不能转职） 近程物理攻击 攻击力：强 防御力：强 生命值：强 招募时间：1d 2h", null), 132, 20, [100, 100, 100], FONT_NORMAL );
-line.pos(47, 252);
-bg.add(line);
-*/
                 s = stringLines(getStr("monDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"]), "[TIME]", str(getDayTime(soldier["time"]))]), 19, 23, [100, 100, 100], FONT_NORMAL );
-                /*
-                //怪兽
-                if(soldier["solOrMon"] == 1)
-                {
-
-                }
-                //普通士兵
-                else if(soldier["isHero"] == 0)
-                {
-                    s = stringLines(getStr("solDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"]), "[TIME]", str(getDayTime(soldier["time"])) ]), 19, 23, [100, 100, 100], FONT_NORMAL );
-                }
-                else
-                {
-                    s = stringLines(getStr("heroDes", ["[NAME]", soldier["name"], "[ATTKIND]", getStr(SOL_CATEGORY[soldier["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(solPure["healthBoundary"]), "[TIME]", str(getDayTime(soldier["time"]))]), 19, 23, [100, 100, 100], FONT_NORMAL );
-                }
-                */
 
                 infoLabel = s;
                 s.pos(47, 252);
@@ -197,7 +172,7 @@ bg.add(line);
             {
                 s = stringLines(getStr("calling", ["[NAME]", soldier["name"], "[TIME]", getDayTime(scene.getLeftTime())] ), 20, 25, [100, 100, 100], FONT_NORMAL );
                 infoLabel = s;
-                s.pos(59, 306);
+                s.pos(60, 294);
                 bg.add(infoLabel);
             }
             
@@ -215,11 +190,8 @@ bg.add(line);
             else
             {
                 var gold = scene.funcBuild.getAccCost();
-                //getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)])
                 var temp;
-                blueButton = new NewButton("violetBut.png", [173, 53], "", null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
-                blueButton.bg.addlabel(getStr("accCallSol", ["[NUM]", str(gold)]), "fonts/heiti.ttf", 30).anchor(0, 50).pos(49, 24).color(100, 100, 100);
-                temp = blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(23, 25).size(36, 36).color(100, 100, 100, 100);
+                blueButton = new NewButton("violetBut.png", [173, 53], getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]), null, 25, FONT_NORMAL, [100, 100, 100], onAcc, null);
 
                 if(needShow)
                     global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), ACC_SOL);
@@ -271,7 +243,7 @@ bg.add(line);
                 var soldier = getData(SOLDIER, id);
 
                 infoLabel = stringLines(getStr("calling", ["[NAME]", soldier["name"], "[TIME]", getDayTime(max(leftTime, 0))]), 20, 25, [100, 100, 100], FONT_NORMAL );
-                infoLabel.pos(59, 306);
+                infoLabel.pos(60, 294);
                 bg.add(infoLabel);
 
                 if(leftTime <= 0)//可以收获 
@@ -286,18 +258,7 @@ bg.add(line);
                     if(accTime == 0)
                     {
                         var temp;
-                        //getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)])
-                        //blueButton.word.setWords("");
-                        //blueButton.bg.addlabel(getStr("accCallSol", ["[NUM]", str(gold)]), "fonts/heiti.ttf", 30).anchor(0, 50).pos(49, 24).color(100, 100, 100);
-                        //temp = blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(23, 25).size(36, 36).color(100, 100, 100, 100);
-                        //if(needShow)
-                        //    global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.prepare().size(), ACC_SOL);
-                        blueButton.removeSelf();
-                        blueButton = new NewButton("violetBut.png", [173, 53], "", null, 30, FONT_NORMAL, [100, 100, 100], onAcc, null);
-                        blueButton.bg.addlabel(getStr("accCallSol", ["[NUM]", str(gold)]), "fonts/heiti.ttf", 30).anchor(0, 50).pos(49, 24).color(100, 100, 100);
-                        temp = blueButton.bg.addsprite("gold.png").anchor(50, 50).pos(23, 25).size(36, 36).color(100, 100, 100, 100);
-                        blueButton.bg.pos(130, 432).anchor(50, 50);
-                        addChild(blueButton);
+                        blueButton.word.setWords(getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(gold)]));
                     }
                     else
                     {
@@ -311,6 +272,7 @@ bg.add(line);
     }
     function initText()
     {
+        trace("initText");
         cryText = bg.addlabel(str(global.user.getValue("crystal")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(621, 37);
         goldText = bg.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(474, 37);
         silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 0).pos(318, 36);

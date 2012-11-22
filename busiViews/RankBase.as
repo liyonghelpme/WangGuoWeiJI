@@ -694,8 +694,9 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
         var papayaId = data[diff]["id"];
         //排行榜不是好友 不能进行下一个
         var friend = new FriendScene(papayaId, -1, VISIT_RANK, null, userData); 
-        global.director.pushScene(friend);
-        global.director.pushView(new VisitDialog(friend), 1, 0);
+        global.director.curScene.addChildZ(FriendScene, -1);
+        //global.director.pushScene(friend);
+        global.director.pushView(new VisitDialog(friend, FRIEND_DIA_HOME), 1, 0);
     }
 
 }

@@ -1,10 +1,18 @@
 /*
 因为MyNode bg 的put 已经被使用了所以需要判断 get得到的对象如果不是MyNode 则不处理exitScene
+
+退出场景exitScene和被当前父亲节点删除关系
+也就是父亲 exitScene 则 子节点也exitScene 修改场景状态
+ins
+
+退出场景 ins = 0
+删除节点  =  bg removefrom  ins = 0
 */
 class MyNode
 {
     var ins;
     var bg;
+    //var myChild;
 
     function MyNode()
     {
@@ -15,7 +23,9 @@ class MyNode
     {
         bg.put(this);
         ins = 0;
+        //myChild = [];
     }
+    //都在exitScene的时候 删除自己
     function removeSelf()
     {
         bg.removefromparent();
@@ -31,6 +41,9 @@ class MyNode
         }
     }
 
+    /*
+    节点从场景中出去 以及 重新回到场景中 需要 child重新添加入 bg.add(bg)
+    */
     function enterScene()
     {
 //        trace("enterScene", this);
@@ -57,9 +70,14 @@ class MyNode
     {
         return bg.pos();
     }
+
+    /*
+    只是退出场景 也会删除myChild
+    */
     function exitScene()
     {
         ins = 0;
+        //bg.removefromparent();
         exitAllChild(); 
         //bg.put(null);
     }
@@ -73,8 +91,10 @@ class MyNode
         if(ins == 1)
             child.enterScene();
         bg.add(child.bg, z);
+        //myChild.push(child);
     }
     //mynode 调用isinstance 有问题？
+    //重写 removeChild 方法
     function removeChild(child)
     {
         //if(child.isinstance(MyNode))

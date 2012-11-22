@@ -42,12 +42,6 @@ class MapLayer extends MyNode
         dx *= dir;
         islandLayer.addaction(repeat(moveby(getParam("IslandTime"), dx, dy), moveby(getParam("IslandTime"), -dx, -dy)));
 
-        /*
-        for(i = 1; i < len(island); i++)
-        {
-            island[i].addaction(repeat(moveby(5000, dx, dy), moveby(5000, -dx, -dy)));
-        }
-        */
 
         for(i = 0; i <= PARAMS.get("bigNum"); i++)
         {

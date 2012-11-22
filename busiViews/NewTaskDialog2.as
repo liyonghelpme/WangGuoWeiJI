@@ -6,7 +6,7 @@ class NewTaskDialog2 extends MyNode
     }
     function onGo()
     {
-        global.msgCenter.sendMsg(DO_NEW_TASK, null);
+        //global.msgCenter.sendMsg(DO_NEW_TASK, null);
         closeDialog();
     }
 
@@ -110,12 +110,14 @@ class NewTaskDialog2 extends MyNode
         else if(global.taskModel.newTaskStage == 1)
             initStageTwoView();
     }
+    /*
+    只完成特定阶段的阅读任务
+    */
     function closeDialog()
     {
         global.director.popView();
-
-        var tid = global.taskModel.getCurNewTid();
-        var tData = getData(TASK, tid);
-        global.taskModel.doAllTaskByKey(tData["key"], 1);
+        //var tid = global.taskModel.getCurNewTid();
+        //var tData = getData(TASK, tid);
+        global.taskModel.doAllTaskByKey("showNewStage"+str(global.taskModel.newTaskStage), 1);
     }
 }

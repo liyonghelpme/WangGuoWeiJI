@@ -104,18 +104,6 @@ class CastleScene extends MyNode
             else if(p == 1)//关闭对话框
                 enableMenu();
         }
-        /*
-        //类似 初始化数据一样 重新初始化 页面
-        else if(msid == FINISH_STORY)
-        {
-            trace("finishStory");
-            global.msgCenter.sendMsg(LOAD_PROCESS, 70);
-            mc.initDataOver();
-            global.msgCenter.sendMsg(LOAD_PROCESS, 85);
-            ml.initDataOver();
-            global.msgCenter.sendMsg(LOAD_PROCESS, 100);
-        }
-        */
         else if(msid == INITDATA_OVER)
         {
             global.msgCenter.sendMsg(LOAD_PROCESS, 70);
@@ -402,9 +390,9 @@ class CastleScene extends MyNode
             curMenuBuild = null;
             ml.finishBuild();
             mc.closeGlobalMenu();
-            //ml = new MenuLayer(this);
-            //addChild(ml);
         }
+        //关闭菜单栏子菜单
+        ml.cancelAllMenu();
     }
 
     function onMap()

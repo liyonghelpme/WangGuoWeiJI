@@ -54,9 +54,11 @@ class SelectHero extends MyNode
         for(var i = 0; i < len(heros); i++)
         {
             var hid = heros[i];
-            var h = map.addsprite("hero"+str(hid)+"l.png", ARGB_8888).pos(HeroPos.get(hid)).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100);
+            var heroSize = HERO_SIZE[hid];//或者攻击图片的大小写到数据库里面 soldier表格 这样获取显示大小数据
+            var h = map.addsprite().pos(HeroPos.get(hid)).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100).size(heroSize);
+            var lp = HERO_LIGHT_POS[hid];
+            h.addsprite("hero"+str(hid)+"Full.png", ARGB_8888).pos(lp);
             heroPic.append(h);
-
         }
         dia0 = sprite("dialogBack0.png").pos(404, 81).visible(0).size(224, 85);//.scale(60*100/90);
         bg.add(dia0, 2);

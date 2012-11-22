@@ -17,24 +17,6 @@ class FightingScene extends MyNode
     var dialogController;
 
     var initOver = 0;
-    /*
-    var initMyData = 0;
-    var initRecord = 0;
-    var initArena = 0;
-
-    var challengers;
-    var myArena;
-    var mostEarlyTime = 0;
-    var myRecords;
-    var otherArenas;
-    var inConnect = 0;
-
-    var MIN_RECORD = 0;
-    var MAX_RECORD = null;
-
-    const FIGHT_NUM = 20;//获取20个数据
-    var curOffBegin = 0;
-    */
     function FightingScene()
     {
         bg = node();

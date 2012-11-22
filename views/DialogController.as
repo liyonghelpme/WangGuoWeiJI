@@ -55,7 +55,7 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "loading")
                 {
-                    global.director.pushView(new VisitDialog(scene), 1, 0);
+                    global.director.pushView(new VisitDialog(scene, FRIEND_NO_VISIT_FRIEND), 1, 0);
                 }
                 else if(curCmd.get("cmd") == "waitTime")
                 {

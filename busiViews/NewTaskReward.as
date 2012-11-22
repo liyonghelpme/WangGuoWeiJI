@@ -60,8 +60,8 @@ class NewTaskReward extends MyNode
     {
         global.director.popView();
 
-        var tid = global.taskModel.getCurNewTid();
-        var tData = getData(TASK, tid);
-        global.taskModel.doNewTaskByKey(tData["key"], 1);
+        //var tid = global.taskModel.getCurNewTid();
+        //var tData = getData(TASK, tid);
+        global.taskModel.doNewTaskByKey("finish"+str(global.taskModel.newTaskStage), 1);
     }
 }

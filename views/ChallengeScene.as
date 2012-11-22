@@ -132,6 +132,7 @@ class ChallengeScene extends MyNode
     {
         super.enterScene();
         global.myAction.addAct(this);
+        dialogController.update(0);//立即显示等待页面
     }
     override function exitScene()
     {

@@ -24,6 +24,7 @@ class Director
     var Display;
     var stack;
     var quitState = 0;
+    var emptyScene;//最底层帮助进行场景切换
     function Director()
     {
 //        trace("init director");
@@ -32,6 +33,10 @@ class Director
         v_scale(disSize[0], disSize[1]);
         sceneStack = new Array();
         curScene = new Scene();
+
+        emptyScene = new Scene();
+        getscene().add(emptyScene.bg);
+        emptyScene.enterScene();
 
         getscene().add(curScene.bg);
         curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
@@ -153,7 +158,7 @@ class Director
             return;
         stack = []
 
-        getscene().add(curScene.bg);
+        getscene().add(curScene.bg, 0);
         curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
         curScene.bg.focus(1);
         curScene.enterScene();
