@@ -12,6 +12,8 @@ class BuildWorkMenu extends MyNode
     var timeLabel = null;
     var cw;
     var banner;
+    var left;
+    var right;
     function BuildWorkMenu(b, func1, func2)
     {
         build = b;
@@ -97,8 +99,8 @@ class BuildWorkMenu extends MyNode
             timeLabel = cw;
         }
 
-        var left = new ChildMenuLayer(0, func1, build, func2);
-        var right = new ChildMenuLayer(1, func2, build, func1);
+        left = new ChildMenuLayer(0, func1, build, func2);
+        right = new ChildMenuLayer(1, func2, build, func1);
         addChildZ(left, -1);
         addChildZ(right, -1);
     }
@@ -160,6 +162,13 @@ class BuildWorkMenu extends MyNode
         else if(build.state == PARAMS["buildFree"])//农田空闲中 使用另一个文字
         {
         }
+    }
+    //关闭两个子菜单
+    override function removeSelf()
+    {
+        left.removeSelf();
+        right.removeSelf();
+        super.removeSelf();
     }
     override function enterScene()
     {

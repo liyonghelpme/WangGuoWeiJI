@@ -99,8 +99,9 @@ class MyNode
     {
         //if(child.isinstance(MyNode))
         //{
-        bg.remove(child.bg);
-        child.exitScene();
+        child.removeSelf();
+        //bg.remove(child.bg);
+        //child.exitScene();
         //}
         //else
         //{

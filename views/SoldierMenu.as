@@ -1,5 +1,7 @@
 class SoldierMenu extends MyNode
 {
+    var left;
+    var right;
     //传递模型给 childMenu 去处理
     const MODELS = dict([
          
@@ -72,10 +74,16 @@ class SoldierMenu extends MyNode
             
         }
         
-        var left = new ChildMenuLayer(0, func1, soldier, func2);
-        var right = new ChildMenuLayer(1, func2, soldier, func1);
+        left = new ChildMenuLayer(0, func1, soldier, func2);
+        right = new ChildMenuLayer(1, func2, soldier, func1);
         addChildZ(left, -1);
         addChildZ(right, -1);
+    }
+    override function removeSelf()
+    {
+        left.removeSelf();
+        right.removeSelf();
+        super.removeSelf();
     }
     function onDetail()
     {
