@@ -224,6 +224,7 @@ A 生命值*B攻击力/A受伤比           B生命值*A攻击力/B受伤比
 A 1 xxx 1                          Bheal * 1 / B受伤比
 A/B攻击力   = 1                   
 */
+/*
 function getBasicAbility(id, level)
 {
     var data = getData(SOLDIER, id);
@@ -237,13 +238,14 @@ function getBasicAbility(id, level)
 //    trace("basicAbility", ab);
     return ab; //士兵能力
 }
+*/
 
 function getAddExp(id, level)
 {
-    var basic = getBasicAbility(id, level);
-    var exp = (2*basic-1)*3;
-//    trace("soldierExp", exp);
-    return exp; 
+    //var basic = getBasicAbility(id, level);
+    //var exp = (2*basic-1)*3;
+    //return exp; 
+    return 1;
 }
 //升级经验5倍于普通经验
 function getLevelUpExp(id, level)
@@ -283,26 +285,6 @@ function calSkillHurt(attack, tar)
     return magHurt;
 }
 
-/*
-function calHurt(src, tar)
-{
-    var pcoff = getPhysicHurt(tar.data);
-    var phyHurt = src.physicAttack*pcoff*tar.purePhyDefense/tar.physicDefense/100;
-    var mcoff = getMagicHurt(tar.data);
-    var magHurt = src.magicAttack*mcoff*tar.pureMagDefense/tar.magicDefense/100;
-
-    var hurt = max(phyHurt+magHurt, 1);
-
-    var critical = rand(100);
-    var criHit = 0;
-    if(critical < src.data["criticalHitRate"])
-    {
-        criHit = 1;
-        hurt *= 2;
-    }
-    return [hurt, criHit];
-}
-*/
 
 function getSkillColdTime(soldierId, skillId, skillLevel)
 {

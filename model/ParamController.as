@@ -4,8 +4,8 @@ class ParamController
     var AnimateParams = dict();
     function ParamController()
     {
-        global.httpController.addRequest("getAllSolIds", dict(), fetchSol, null);
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
+        global.httpController.addRequest("getAllSolIds", dict(), fetchSol, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
     }
@@ -15,6 +15,7 @@ class ParamController
         trace("fetchSol", con["soldierData"][0]);
         soldierKey = con["soldierKey"];
         soldierData = con["soldierData"];
+        /*
 
         for(var i = 0; i < len(soldierData); i++)
         {
@@ -29,6 +30,7 @@ class ParamController
                     soldierData[i][1][j] /= 10.0;
             }
         }
+        */
         
         Keys[SOLDIER] = soldierKey;
         CostData[SOLDIER] = dict(soldierData);

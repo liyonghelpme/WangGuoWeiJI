@@ -68,7 +68,7 @@ class LineSkill extends MyNode
             //color id 所在行 所在列
             near = new Soldier(map, [0, 0], -1, null);
             if(tarDis > 0)
-                tar[0] = MAP_OFFX*MAP_WIDTH;
+                tar[0] = MAP_OFFX*getParam("WAR_MAP_WIDTH");
             else
                 tar[0] = 0;
             near.setPos([tar[0], tar[1]]);//地图两侧边界

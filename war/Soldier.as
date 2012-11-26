@@ -18,6 +18,14 @@ MAP_START_SKILL 场景 状态时， 点击士兵释放技能
 */
 class Soldier extends MyNode
 {
+    //护甲类型
+    //攻击类型
+    var defenseType = 0;
+    var attackType = 0;
+    var attack = 0;
+    //healthBoundary
+
+
     //之前攻击累计剩余的伤害值
     var leftHurt = 0;
     //base 由属性决定的 生命值 攻击力 防御力
@@ -425,6 +433,8 @@ class Soldier extends MyNode
             clearAnimation();
             shiftAni.stop();
             pushCommand(DEAD_CMD, null);    
+
+            map.scene.genSolAI.immediateUpdate();
         }
         //以变身状态死亡
         if(makeUpState)
@@ -621,6 +631,8 @@ class Soldier extends MyNode
         attRange = data.get("range");
         dead = 0;
         myName = data["name"];
+        attackType = data["attackType"];
+        defenseType = data["defenseType"];
 
         initAttackAndDefense(this);
 
@@ -629,65 +641,6 @@ class Soldier extends MyNode
         //CHALLENGE_FRI
         //CHALLENGE_NEIBOR
         //CHALLENGE_TRAIN
-        //怪兽没有装备
-        /*
-        if(sid == ENEMY)//敌对方士兵 地图怪兽 
-        {
-            if(monsterData != null)
-            {
-                level = monsterData.get("level");
-                addAttack = monsterData.get("addAttack", 0);
-                addAttackTime = monsterData.get("addAttackTime", 0);
-                addDefense = monsterData.get("addDefense", 0);
-                addDefenseTime = monsterData.get("addDefenseTime", 0);
-                addHealthBoundary = monsterData.get("addHealthBoundary", 0);
-                addHealthBoundaryTime = monsterData.get("addHealthBoundaryTime", 0);
-                myEquips = map.getEnemyEquips(monsterData.get("sid"));
-            }
-
-
-
-            health = 0;
-            initAttackAndDefense(this);
-
-            //根据士兵myEquips 来初始化装备附加属性
-            //setEquipAttribute(this, map.monEquips);//设定地图怪兽我方装备
-            //根据敌人sid 得到获取敌人的装备
-            //初始化士兵状态 设定装备属性需要
-            //setEquipAttribute(this, map.getEnemyEquips(monsterData.get("sid")));
-
-            health = healthBoundary;
-
-            myName = null;
-            dead = 0;
-        }
-        //初始化额外攻击力 和 额外 防御力 以及 额外 生命值上限
-        else
-        {
-            //从用户数据得到装备数据
-            myEquips = global.user.getSoldierEquipData(sid);
-
-            var privateData = global.user.getSoldierData(sid);
-            level = privateData.get("level", 0);
-            
-            attRange = data.get("range");
-
-            addAttack = privateData.get("addAttack", 0);
-            addAttackTime = privateData.get("addAttackTime", 0);
-            addDefense = privateData.get("addDefense", 0);
-            addDefenseTime = privateData.get("addDefenseTime", 0);
-            addHealthBoundary = privateData.get("addHealthBoundary", 0);
-            addHealthBoundaryTime = privateData.get("addHealthBoundaryTime", 0);
-
-            health = privateData.get("health", 0);
-            initAttackAndDefense(this);
-
-
-
-
-        }
-        */
-        //根据士兵基本属性重新计算经验值
         gainexp = getAddExp(id, level);
     }
 
@@ -707,7 +660,6 @@ class Soldier extends MyNode
     var stateWord;
     function Soldier(m, d, s, md)
     {
-
         speed = getParam("soldierSpeed");
         ai = new SoldierAI(this);
         monsterData = md;
@@ -1138,6 +1090,7 @@ class Soldier extends MyNode
             {
                 if(oldPos == null)//初始布阵失败则消失
                 {
+                    //不会清除mapDict 只是删除士兵
                     map.clearSoldier(this); 
                     map.removeGrid();
                     return;
@@ -1146,12 +1099,12 @@ class Soldier extends MyNode
                     setPos(oldPos);
             }
             setCol();//清理冲突状态
-            map.setMap(this);
+            
+            //用户放置了一个士兵 驱动AI 更新士兵 士兵死亡 驱动AI 更新士兵
+            map.scene.genSolAI.immediateUpdate();
+            //设置地图状态 增加士兵
             map.removeGrid();
-            //只有自己的士兵才会发送给对方消息
-            trace("sendMsg", id, level, oldMap);
-            map.scene.warHttpController.sendMsg("sendSol", id, level, oldMap[0], oldMap[1]);
-
+            //设置状态
             finishArrange();
         }
         //战斗状态 场景设定 技能选择 只有英雄才有技能
@@ -1208,6 +1161,7 @@ class Soldier extends MyNode
     function finishArrange()
     {
         initMap();
+        map.scene.addNewSol(this);//更新 地图放置的士兵数量
         var drugUse = 0;
         if(addAttackTime > 0)
         {
@@ -1808,5 +1762,10 @@ class Soldier extends MyNode
         transAni = null;
         inTransform = 0;
         blockCommand = 0;
+    }
+
+    function printSoldier()
+    {
+        trace(id, health, curMap, color, mapSolId);
     }
 }

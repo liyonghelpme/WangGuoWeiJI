@@ -48,8 +48,8 @@ class OkBanner extends MyNode
         temp = bg.addsprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
         okBut = bg.addsprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
 
-        inputView = v_create(V_INPUT_VIEW, 20, 20, 233, 50);
-        v_root().addview(inputView);
+        //inputView = v_create(V_INPUT_VIEW, 20, 20, 233, 50);
+        //v_root().addview(inputView);
     }
     override function enterScene()
     {
@@ -57,7 +57,7 @@ class OkBanner extends MyNode
     }
     override function exitScene()
     {
-        inputView.removefromparent();
+        //inputView.removefromparent();
         super.exitScene();
     }
 
@@ -75,9 +75,9 @@ class OkBanner extends MyNode
         {
             global.director.curScene.addChild(new UpgradeBanner(getStr("noSol", null), [100, 100, 100], null));
             return;
-        }
+        }int(inputView.text())
         */
-        scene.finishArrange(int(inputView.text()));
+        scene.finishArrange(0);
     }
     function onCancel()
     {

@@ -39,6 +39,8 @@ class MapPause extends MyNode
     //var skillFlowBanner;
     var blood = 0;
     var bloodBut;
+    var leftNum;
+    var rightNum;
     function onBlood()
     {
         if(blood == 0)
@@ -126,6 +128,9 @@ class MapPause extends MyNode
             defBlood = [leftDef, rightDef];
             redBlood = [leftRed, rightRed];
             bloodText = [leftText, rightText];
+
+            leftNum = bg.addlabel("0", "fonts/heiti.ttf", 30).pos(10, 240).color(0, 0, 0);
+            rightNum = bg.addlabel("0", "fonts/heiti.ttf", 30).anchor(100, 0).pos(790, 240).color(0, 0, 0);
         }
 
         temp = bg.addsprite("mapMenuPause.png").anchor(0, 0).pos(715, 409).size(58, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onPause);
@@ -173,6 +178,12 @@ class MapPause extends MyNode
         bText.text(str(defense.health)+"/"+str(defense.healthBoundary));
 
     }
+    function initSelSolNum()
+    {
+        trace("updateSolNum", scene.leftSolNum);
+        leftNum.text(str(scene.leftMaxNum - scene.leftSolNum));
+        rightNum.text(str(scene.rightMaxNum - scene.rightSolNum));
+    }
     override function enterScene()
     {
         super.enterScene();
@@ -180,14 +191,15 @@ class MapPause extends MyNode
         {
             initHealth(scene.getDefense(0));
             initHealth(scene.getDefense(1));
+            initSelSolNum();
             global.msgCenter.registerCallback(CASTLE_DEF, this);
         }
 
     }
     override function exitScene()
     {
-        if(scene.kind != CHALLENGE_TRAIN)
-            global.msgCenter.removeCallback(CASTLE_DEF, this);
+        //if(scene.kind != CHALLENGE_TRAIN)
+        global.msgCenter.removeCallback(CASTLE_DEF, this);
         super.exitScene();
     }
 

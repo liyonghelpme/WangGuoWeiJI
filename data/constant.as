@@ -783,8 +783,10 @@ const MAP_INITY = 87;
 const MAP_INITX = 0;
 const MAP_OFFX = 62;
 const MAP_OFFY = 62;
+/*
 const MAP_WIDTH = 12;
 const MAP_HEIGHT = 5;
+*/
 
 const MIN_SOL_ZORD = 0;
 const MAX_SOL_ZORD = 100000;
@@ -1356,3 +1358,26 @@ const TASK_CAN_FINISH = 1;
 const TASK_REWARD_YET = 2;
 
 //const SCRIPT_DICT = 6;
+
+//AI 使用
+/*
+const WAR_MAP_WIDTH = 13;
+const WAR_MAP_HEIGHT = 5;
+const WAR_MAP_LEFT_BOUND = WAR_MAP_WIDTH/2-1;
+const WAR_MAP_RIGHT_BOUND = WAR_MAP_LEFT_BOUND+2;
+*/
+const WAR_MAP_COFF = 10000;
+
+//0 1 2 3
+//重甲  猎人  法袍  城墙
+//0 1 2 3 攻击类型 != 3 即非城墙单位
+//普通  穿刺  魔法  城墙
+//对付城墙没有损失
+const HARM_TABLE = [
+[100, 150, 100, 100],
+[100, 75, 150, 100],
+[150, 75, 50, 100],
+[100, 100, 100, 100],
+];
+
+const MAP_DEFENSE_ID = -2;

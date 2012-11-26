@@ -1,6 +1,7 @@
 /*
 赤裸初始化士兵能力
 */
+/*
 function initAttackAndDefense(sol)
 {
     var pureData = getSolPureData(sol.id, sol.level);
@@ -41,4 +42,30 @@ function calHurt(src, tar)
     var intHurt = myFloor(hurt);
     src.leftHurt = hurt-intHurt;
     return [intHurt, criHit];
+}
+*/
+
+function initAttackAndDefense(sol)
+{
+    var pureData = getSolPureData(sol.id, sol.level);
+    sol.health = pureData["healthBoundary"];
+    sol.healthBoundary = pureData["healthBoundary"];
+    sol.attack = pureData["attack"];
+}
+function getSolPureData(id, level)
+{
+    var sdata = getData(SOLDIER, id); 
+    var healthBoundary = sdata["healthBoundary"];
+    var attack = sdata["attack"];
+    return dict([["attack", attack], ["healthBoundary", healthBoundary]]);
+}
+function calHurt(src, tar)
+{
+    var attack = src.attack;
+    var coff = HARM_TABLE[src.attackType][tar.defenseType];
+    attack *= coff;
+    attack += src.leftHurt;
+    var intHurt = attack/100;
+    src.leftHurt = attack-intHurt*100;
+    return [intHurt, 0];
 }

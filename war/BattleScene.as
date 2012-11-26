@@ -35,6 +35,12 @@ class BattleScene extends MyNode
 
     var skills = null;
     var selB2 = null;
+    
+    //地图静态状态
+    var leftMaxNum = 5;
+    var rightMaxNum = 5;
+
+    //var mapState = null;
     function cancelSkill()
     {
         skillSoldier = null;
@@ -146,16 +152,17 @@ class BattleScene extends MyNode
     
     //kind double singleSid difficult user skills big small cityDefense 
 
-    var warHttpController;
-    function BattleScene(arg)
+    //计算机移动
+    var leftSolNum = 0;
+    var rightSolNum = 0;
+
+    var genSolAI;
+    function initData()
     {
-        argument = arg;
-        kind = argument["kind"];
-        double = argument["double"];
-        singleSid = argument["singleSid"];
-        difficult = argument["difficult"];
-        //param = argument["param"];
-        user = argument["user"];
+        leftMaxNum = getParam("leftMaxNum");
+        rightMaxNum = getParam("rightMaxNum");
+
+
 
         skills = dict();
         var sk = argument["skills"];
@@ -175,27 +182,30 @@ class BattleScene extends MyNode
 
         initView();
         initYet = 1;
-
-        warHttpController = new WarHttpController(this);
-        warHttpController.connectGame();
     }
-    function putEnemySol(arg)
+    function BattleScene(arg)
     {
-        trace("enemyColor", arg, warHttpController.myColor);
-        var sol = map.addSoldier(arg["kind"], 1-warHttpController.myColor);//敌方颜色 
-        var nPos = getSolPos(arg["mx"], arg["my"], sol.sx, sol.sy, sol.offY); 
+        argument = arg;
+        kind = argument["kind"];
+        double = argument["double"];
+        singleSid = argument["singleSid"];
+        difficult = argument["difficult"];
+        user = argument["user"];
+        bg = node();
+        init();
+    }
+    function putNewSol(move)
+    {
+        var sol = map.addSoldier(move[0], ENECOLOR);//敌方颜色 
+        var nPos = getSolPos(move[1][0], move[1][1], sol.sx, sol.sy, sol.offY); 
         sol.setPos(nPos);
-        map.setMap(sol);
+        //map.setMap(sol);
         sol.finishArrange();
     }
 
     var initYet = 0;
     function initView()
     {
-        bg = node();
-        init();
-
-
 
         if(kind == CHALLENGE_TRAIN)
             map = new Map(argument["big"], argument["small"], null, this, null);
@@ -223,6 +233,17 @@ class BattleScene extends MyNode
             return argument["cityDefense"];//param[4];
         return 0;
     }
+    /*
+    士兵完成布局之后调用 addNewSol 更新 用户和计算机士兵数量
+    */
+    function addNewSol(sol)
+    {
+        if(sol.color == MYCOLOR)
+            leftSolNum++;
+        else if(sol.color == ENECOLOR)
+            rightSolNum++;
+        pausePage.initSelSolNum();
+    }
     var setLevel = 0;
     //结束布阵就进入rank 但是如何表现回去的箭头任务
     function finishArrange(lev)
@@ -237,18 +258,17 @@ class BattleScene extends MyNode
         pausePage = new MapPause(this);
         addChild(pausePage);
 
-        if(warHttpController.myColor == MYCOLOR)
-        {
-            banner = new SelBanner(this);
-            addChild(banner);
-        }
-        else
-        {
-            selB2 = new SelBanner2(this);
-            addChild(selB2);
-        }
+        banner = new SelBanner(this);
+        addChild(banner);
+
+        selB2 = new SelBanner2(this);
+        addChild(selB2);
 
         state = MAP_FINISH_SKILL;
+
+        //地图生成AI 士兵机制开始工作
+        genSolAI = new NewMapGenSolAI(this);
+        addChild(genSolAI);
 
         if(kind == CHALLENGE_MON)
             global.taskModel.doAllTaskByKey("round", 1);
@@ -309,8 +329,14 @@ class BattleScene extends MyNode
     //该行还有士兵
     //该行还有怪兽剩余量
     //
+    var initDataOver = 0;
     function update(diff)
     {
+        if(global.paramController.initYet == 1 && !initDataOver)
+        {
+            initDataOver = 1;
+            initData();        
+        }
         if(kind == CHALLENGE_TRAIN)
         {
             if(state != MAP_ARRANGE)//布局完成进入 游戏状态 停止刷新怪兽

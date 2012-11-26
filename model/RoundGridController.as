@@ -4,55 +4,30 @@ class RoundGridController
     var map;
     var mapDict = dict();
     var rows = dict();
+    var leftSoldier = set();
+    var rightSoldier = set();
+    var freeList = set();//剩余可以放置士兵的空间
+    var solAttribute = dict();
     function RoundGridController(m)
     {
         map = m;
-    }
-    function clearMap(left, top, sx, sy, obj)
-    {
-        for(var i = 0; i < sx; i++)
+        for(var i = 0; i < getParam("WAR_MAP_WIDTH"); i++)
         {
-            for(var j = 0; j < sy; j++)
+            for(var j = 0; j < getParam("WAR_MAP_HEIGHT"); j++)
             {
-                var px = left+i;
-                var py = top+j;
-                
-                var curRow = rows.get(py);
-                if(curRow != null)
-                {
-                    curRow.remove(obj);
-                    if(len(curRow) == 0)
-                        rows.pop(py);
-                }
-
-                var k = getMapKey(px, py);
-                var it = mapDict.get(k);
-                if(it != null)
-                {
-                    it.remove(obj);
-                    if(len(it) == 0)//简单判定是否是null 就可以断定有无冲突
-                        mapDict.pop(k);
-                }
+                freeList.add(i*WAR_MAP_COFF+j);
             }
         }
+    }
+    //可扩展性 每个位置可能有多个士兵 状态需要作为明显的参数传入
+    function clearMap(left, top, sx, sy, obj)
+    {
+        roundClearMap(this, left, top, sx, sy, obj);
         map.updateMapGrid();
     }
     function setMap(left, top, sx, sy, obj)
     {
-        for(var i = 0; i < sx; i++)
-        {
-            for(var j = 0; j < sy; j++)
-            {
-                var px = left+i;
-                var py = top+j;
-                var curRow = rows.setdefault(py, []);
-                curRow.append(obj);
-
-                var k = getMapKey(px, py);
-                var it = mapDict.setdefault(k, []);
-                it.append(obj);
-            }
-        }
+        roundSetMap(this, left, top, sx, sy, obj);
         map.updateMapGrid();
     }
     function checkCol(left, top, sx, sy, obj)
@@ -69,9 +44,9 @@ class RoundGridController
                 if(it != null)
                 {
                     //不和防御建筑判断冲突
-                    for(var t = 0; t < len(it); t++)
-                        if(it[t].state != MAP_SOL_DEFENSE)
-                            colObjs.append(it[t]);
+                    it = solAttribute.get(it);
+                    if(it.id != MAP_DEFENSE_ID)
+                        colObjs.append(it);
                 }
 
             }

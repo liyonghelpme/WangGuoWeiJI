@@ -1215,7 +1215,11 @@ function checkResLack(cost)
 
 function getMapKey(x, y)
 {
-    return x*10000+y;
+    return x*WAR_MAP_COFF+y;
+}
+function getMapXY(k)
+{
+    return [k/WAR_MAP_COFF, k%WAR_MAP_COFF];
 }
 
 //任务对话框 使用的排序函数
@@ -1253,4 +1257,11 @@ function myCeil(f)
 {
     var math = getclass("java.lang.Math");
     return math.callobj("ceil", (f).callobj("doubleValue")).callobj("intValue");
+}
+
+function if_(con, v0, v1)
+{
+    if(con)
+        return v0;
+    return v1;
 }

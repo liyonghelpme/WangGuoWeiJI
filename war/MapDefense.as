@@ -2,6 +2,7 @@
 其它士兵攻击他 生命值 状态
 计算和他的距离
 
+1*5 的装置
 */
 class MapDefense extends MyNode
 {
@@ -18,8 +19,12 @@ class MapDefense extends MyNode
     var hurts = dict();
     var data;
     var sx = 1;
-    var sy = 1;
+    var sy = 5;
     var curMap = [0, 0];
+    var mapSolId = 0;
+    var attackType = 3;
+    var defenseType = 3;
+    var id = MAP_DEFENSE_ID;//防御建筑
     function MapDefense(m, i, d)
     {
         map = m;
@@ -27,7 +32,7 @@ class MapDefense extends MyNode
         if(color == MYCOLOR)
             curMap = [0, 0];
         else
-            curMap = [MAP_WIDTH, 0];
+            curMap = [getParam("WAR_MAP_WIDTH")-1, 0];
         //城墙属性类型100
         data = dict([["category", 100]]);
         state = MAP_SOL_DEFENSE;
@@ -91,16 +96,12 @@ class MapDefense extends MyNode
 
     function setMap()
     {
-        var i = 0;
-        if(color == MYCOLOR)
-        {
-            for(i = 0; i < 5; i++)
-                map.roundGridController.setMap(0, i, 1, 1, this);
-        }
-        else
-        {
-            for(i = 0; i < 5; i++)
-                map.roundGridController.setMap(MAP_WIDTH, i, 1, 1, this);
-        }
+        map.roundGridController.setMap(curMap[0], curMap[1], sx, sy, this);
+    }
+
+
+    function printSoldier()
+    {
+        trace(id, health, curMap, color, mapSolId);
     }
 }

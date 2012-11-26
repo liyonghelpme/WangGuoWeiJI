@@ -231,7 +231,10 @@ import war.SkillFlowBanner;
 
 //战斗页面
 import war.BattleScene;
-//import war.MapBanner;
+import model.WarStateModel;
+//import model.MapGenSolAI;
+import model.NewMapGenSolAI;
+import model.MiniSoldier;
 import war.OkBanner;
 import war.SelBanner;
 import war.SelBanner2;

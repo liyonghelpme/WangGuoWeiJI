@@ -38,19 +38,6 @@ class SelBanner extends MyNode
     function initData()
     {
         data = [[0, 0], [20, 0], [30, 0], [60, 0]];
-
-        /*
-        var sols = global.user.soldiers.items();
-        for(var i = 0; i < len(sols); i++)
-        {
-            var sdata = sols[i][1];
-            if(sdata.get("dead", 0) == 0)//soldierId
-            {
-                data.append([sols[i][0], 0]);//是否已经放置
-            }
-        }
-        bubbleSort(data, cmp);
-        */
     }
     var leftArr;
     var rightArr;
@@ -88,11 +75,6 @@ class SelBanner extends MyNode
         scene = sc;
         initView();
         initData();
-        
-
-        //shadowWord = bg.addsprite("storeBlack.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);//.visible(0);
-        //shadowWord.addaction(itintto(0, 0, 0, 0));
-        //words = null;
 
         cl = bg.addnode().pos(INIT_X, INIT_Y).size(WIDTH, HEIGHT).clipping(1).anchor(0, 0);
         flowNode = cl.addnode().pos(0, 0);
@@ -191,6 +173,8 @@ class SelBanner extends MyNode
     var curChild = null;
     function touchBegan(n, e, p, x, y, points)
     {
+        if(scene.leftSolNum >= scene.leftMaxNum)
+            return;
         var newPos = n.node2world(x, y);
 
         lastPoints = newPos;
@@ -215,6 +199,8 @@ class SelBanner extends MyNode
     //地图给出空闲位置
     function touchMoved(n, e, p, x, y, points)
     {
+        if(scene.leftSolNum >= scene.leftMaxNum)
+            return;
         var nPos = n.node2world(x, y);
         var oldPos = lastPoints;
         lastPoints = nPos;
@@ -251,6 +237,8 @@ class SelBanner extends MyNode
     //如果放置失败 则 士兵 clearSoldier 自身 重新放置数据
     function touchEnded(n, e, p, x, y, points)
     {
+        if(scene.leftSolNum >= scene.leftMaxNum)
+            return;
         //在点击之后更新panel
         var curPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;

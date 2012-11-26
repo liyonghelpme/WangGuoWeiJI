@@ -240,3 +240,76 @@ function getChallengeNeiborCry(nid)
         cry = cry/2;
     return cry;
 }
+/*
+RoundGridController 实际调用的函数
+每个位置只放一个士兵不能重叠
+*/
+function roundSetMap(state, left, top, sx, sy, obj)
+{
+    for(var i = 0; i < sx; i++)
+    {
+        for(var j = 0; j < sy; j++)
+        {
+            var px = left+i;
+            var py = top+j;
+            if(state.rows != null)
+            {
+                var curRow = state.rows.setdefault(py, []);
+                curRow.append(obj);
+            }
+
+            var k = getMapKey(px, py);
+            state.mapDict.update(k, obj.mapSolId);
+            //var it = state.mapDict.setdefault(k, []);
+            //it.append(obj.mapSolId);
+            state.freeList.discard(k);
+        }
+    }
+    state.solAttribute.update(obj.mapSolId, obj);
+    if(obj.color == MYCOLOR)
+        state.leftSoldier.add(obj.mapSolId);
+    else if(obj.color == ENECOLOR)
+        state.rightSoldier.add(obj.mapSolId);
+}
+//每个位置只放一个士兵
+function roundClearMap(state, left, top, sx, sy, obj)
+{
+    for(var i = 0; i < sx; i++)
+    {
+        for(var j = 0; j < sy; j++)
+        {
+            var px = left+i;
+            var py = top+j;
+            if(state.rows != null)
+            {
+                var curRow = state.rows.get(py);
+                if(curRow != null)
+                {
+                    curRow.remove(obj);
+                    if(len(curRow) == 0)
+                        state.rows.pop(py);
+                }
+            }
+
+            var k = getMapKey(px, py);
+            //确定是该士兵的网格才可以删除
+            if(state.mapDict.get(k) != null && state.mapDict.get(k) == obj.mapSolId)
+                state.mapDict.pop(k);
+            /*
+            var it = state.mapDict.get(k);
+            if(it != null)
+            {
+                it.remove(obj.mapSolId);
+                if(len(it) == 0)//简单判定是否是null 就可以断定有无冲突
+                    state.mapDict.pop(k);
+            }
+            */
+            state.freeList.add(k);
+        }
+    }
+    state.solAttribute.update(obj.mapSolId, obj);
+    if(obj.color == MYCOLOR)
+        state.leftSoldier.discard(obj.mapSolId);
+    else if(obj.color == ENECOLOR)
+        state.rightSoldier.discard(obj.mapSolId);
+}

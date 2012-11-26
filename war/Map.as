@@ -51,12 +51,13 @@ class Map extends MyNode
     function checkInBoundary(sol, oldMap)
     {
         if(sol.color == MYCOLOR)
-            return (oldMap[0] >= 1 && oldMap[0] <= (6-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-sol.sy))
-        return (oldMap[0] >= 7 && oldMap[0] <= (13-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-sol.sy))
+            return (oldMap[0] >= 1 && oldMap[0] <= (getParam("WAR_MAP_WIDTH")/2-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (getParam("WAR_MAP_HEIGHT")-sol.sy))
+        return (oldMap[0] >= getParam("WAR_MAP_WIDTH")/2+1 && oldMap[0] <= (getParam("WAR_MAP_WIDTH")-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (getParam("WAR_MAP_HEIGHT")-sol.sy))
     }
+    //参数？？
     function checkSkillInBoundary(si, oldMap)
     {
-        return (oldMap[0] >= 1 && oldMap[0] <= (MAP_WIDTH-si[0]) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-si[1]))
+        return (oldMap[0] >= 1 && oldMap[0] <= (getParam("WAR_MAP_WIDTH")-1-si[0]) && oldMap[1] >= 0 && oldMap[1] <= (getParam("WAR_MAP_HEIGHT")-si[1]))
     }
 
     function moveGrid(sol)
@@ -253,24 +254,6 @@ class Map extends MyNode
                     col = roundGridController.checkCol(xk, yk, soldier.sx, soldier.sy);
                     if(len(col) > 0)
                         continue;
-                    /*
-                    for(i = 0; i < soldier.sy && !col; i++)
-                    {
-                        for(j = 0; j < soldier.sx && !col; j++)
-                        {
-                            key = getKey(xk+j, yk+i);
-                            //val = mapDict.get(key, []);
-                            val = roundGridController.get(key, []);
-                            if(len(val) > 0)
-                            {
-                                col = 1;
-                                break;
-                            }
-                        }
-                    }
-                    if(col == 1)
-                        continue;
-                    */
                     return getSolPos(xk, yk, soldier.sx, soldier.sy, soldier.offY);
                 }
             }
@@ -289,24 +272,6 @@ class Map extends MyNode
                     col = roundGridController.checkCol(xk, yk, soldier.sx, soldier.sy);
                     if(len(col) > 0)
                         continue;
-                    /*
-                    col = 0;    
-                    for(i = 0; i < soldier.sy && !col; i++)
-                    {
-                        for(j = 0; j < soldier.sx && !col; j++)
-                        {
-                            key = getKey(xk+j, yk+i);
-                            val = mapDict.get(key, []);
-                            if(len(val) > 0)
-                            {
-                                col = 1;
-                                break;
-                            }
-                        }
-                    }
-                    if(col == 1)
-                        continue;
-                    */
 
                     return getSolPos(xk, yk, soldier.sx, soldier.sy, soldier.offY);
                 }
@@ -346,46 +311,18 @@ class Map extends MyNode
         if(len(col) > 0)
             return col;
         return null;
-
-        /*
-        for(var i = 0; i < sol.sx; i++)
-        {
-            for(var j = 0; j < sol.sy; j++)
-            {
-                var key = (oldMap[0]+i)*10000+oldMap[1]+j;
-                var res = mapDict.get(key, null);
-                if(res != null)
-                    return res;
-            }
-        }
-        return null;
-        */
     }
     //多行士兵只算 起始行
     function checkLineCol(sol)
     {
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-        for(var i = 0; i < MAP_WIDTH; i += sol.sx)
+        for(var i = 0; i < getParam("WAR_MAP_WIDTH"); i += sol.sx)
         {
             var col = roundGridController.checkCol(i, oldMap[1], sol.sx, sol.sy);
             if(len(col) > 0)
                 return col;
         }
         return null;
-        /*
-
-        for(var i = 0; i < MAP_WIDTH; i++)
-        {
-            for(var j = 0; j < sol.sy; j++)
-            {
-                var key = i*10000+oldMap[1]+j;
-                var res = mapDict.get(key, null);
-                if(res != null)
-                    return res;
-            }
-        }
-        return null;
-        */
     }
     /*
     设定士兵的坐标映射和每行所有的士兵
@@ -405,17 +342,6 @@ class Map extends MyNode
     {
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         roundGridController.setMap(oldMap[0], oldMap[1], sol.sx, sol.sy, sol);
-        /*
-        for(var i = 0; i < sol.sy; i++)
-        {
-            for(var j = 0; j < sol.sx; j++)
-            {
-                //var key = (oldMap[0]+j)*10000+oldMap[1]+i;
-                //mapDict.update(key, sol);
-
-            }
-        }
-        */
     }
     /*
     每个位置只有一个士兵
@@ -427,20 +353,6 @@ class Map extends MyNode
     {
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         roundGridController.clearMap(oldMap[0], oldMap[1], sol.sx, sol.sy, sol);
-        /*
-        for(var i = 0; i < sol.sy; i++)
-        {
-            //var row = soldiers.get(oldMap[1]+i)
-            //if(row == null)
-            //    continue;
-            //row.remove(sol);
-            for(var j = 0; j < sol.sx; j++)
-            {
-                var key = (oldMap[0]+j)*10000+oldMap[1]+i;
-                mapDict.pop(key);
-            }
-        }
-        */
     }
 
     /*
@@ -519,7 +431,7 @@ class Map extends MyNode
         {
             var sol = mySoldiers[i];
             var map = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-            var p = getGridPos([MAP_WIDTH/2, map[1]]);//行中间显示
+            var p = getGridPos([getParam("WAR_MAP_WIDTH")/2, map[1]]);//行中间显示
             if(sol.state == MAP_SOL_DEAD || sol.state == MAP_SOL_SAVE)
                 sol.leftMonNum = 0;
 var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).pos(p[0] + (MAP_OFFX / 2), p[1] + (MAP_OFFY / 2)).anchor(50, 50);
@@ -710,9 +622,9 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
         var so = realAddSoldier(ENEMY, sData["id"], dict([["level", sol.level]]), ENECOLOR);
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-        var x = rand(MAP_WIDTH-so.sx);//随机横坐标
-        var y = min(oldMap[1], MAP_HEIGHT-so.sy);//纵坐标保证不超越下边界
-        var maxW = MAP_WIDTH-so.sx;
+        var x = rand(getParam("WAR_MAP_WIDTH")-so.sx);//随机横坐标
+        var y = min(oldMap[1], getParam("WAR_MAP_HEIGHT")-so.sy);//纵坐标保证不超越下边界
+        var maxW = getParam("WAR_MAP_WIDTH")-so.sx;
 
         //var row = soldiers.get(oldMap[1]);//当前士兵所在行 不应该有冲突
 
@@ -723,21 +635,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var soPos = getSolPos(nx, y, so.sx, so.sy, so.offY);
             so.setPos(soPos);
 
-            //var col = checkPosCol(so);
-
             var colOjects = roundGridController.checkCol(nx, y, so.sx, so.sy, so);
             if(len(colOjects) == 0)
             {
                 find = 1;
                 break;
             }
-            /*
-            if(col == null)
-            {
-                find = 1;
-                break;
-            }
-            */
         }
         if(!find)
         {
@@ -984,7 +887,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     //每秒检测一次是否还有我方或者敌方士兵剩余 没有则胜利
     function disappearSoldier(so)
     {
-        removeSoldier(so);
+        //removeSoldier(so);
+        realRemoveSoldier(so);
         if(scene.kind != CHALLENGE_TRAIN)
             checkGameOver();
     }
@@ -998,17 +902,21 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     }
     //清空mapDict 只在布局时使用
     //清空soldiers
+    /*
     function removeSoldier(so)
     {
-        clearMap(so);
+        //clearMap(so);
         realRemoveSoldier(so);
     }
+    */
     /*
     布局时点击士兵头部 清除士兵数据 
+    布局时士兵没有分配位置
     */
     function clearSoldier(so)
     {
-        removeSoldier(so);
+        so.removeSelf();
+        soldierInstance.remove(so);
         scene.clearSoldier(so);
     }
 
@@ -1020,34 +928,19 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var d = new MapDefense(this, MYCOLOR, defense[0]);
         var i;
         var row;
+        d.mapSolId = getNewMapId();
         d.setDefense(global.user.getValue("cityDefense"));
         addChildZ(d, 0);
-        /*
-        for(i = 0; i < 5; i++)
-        {
-            //row = soldiers.get(i, []);
-            //row.append(d);
-            //soldiers.update(i, row);
-        }
-        */
         d.setMap();
         defenses.append(d);
 
 
-
         //big*10+small
         d = new MapDefense(this, ENECOLOR, defense[1]);
+        d.mapSolId = getNewMapId();
         d.setDefense(scene.getEneDefense());
 
         addChildZ(d, 0);
-        /*
-        for(i = 0; i < 5; i++)
-        {
-            row = soldiers.get(i, []);
-            row.append(d);
-            soldiers.update(i, row);
-        }
-        */
         d.setMap();
         defenses.append(d);
 

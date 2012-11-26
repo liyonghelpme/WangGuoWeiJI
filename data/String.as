@@ -710,6 +710,7 @@ var strings = dict([
 ["soldier484", ["德鲁伊", ""]],
 ["soldier594", ["凤凰骑士", ""]],
 ["soldier554", ["火人", ""]],
+["soldier-2", ["", ""]],
 ["title0", "购买[NAME]"],
 ["title1", "登录[NUM]天"],
 ["title2", "捡起[NUM]个掉落物"],
