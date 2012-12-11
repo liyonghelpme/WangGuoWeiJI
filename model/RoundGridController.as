@@ -79,6 +79,9 @@ class RoundGridController
         return colObjs;
     }
 
+    /*
+    得到士兵或者技能所在行的所有士兵
+    */
     function getRowObjects(left, top, sx, sy, obj)
     {
         var rowObjects = [];

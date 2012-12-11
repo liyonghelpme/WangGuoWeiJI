@@ -234,13 +234,13 @@ import war.EffectBase;
 
 
 import views.MonSmoke;
-import views.LineSkill;
-import views.SingleSkill;
-import views.MultiSkill;
-import views.SpinSkill;
-import views.HealSkill;
-import views.SaveSkill;
-import views.UseDrugSkill;
+import war.LineSkill;
+import war.SingleSkill;
+import war.MultiSkill;
+import war.SpinSkill;
+import war.HealSkill;
+import war.SaveSkill;
+import war.UseDrugSkill;
 
 
 

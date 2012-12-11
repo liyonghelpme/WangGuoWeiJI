@@ -375,10 +375,6 @@ class Map extends MyNode
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var i = 0; i < sol.sy; i++)
         {
-            //var row = soldiers.get(oldMap[1]+i, []);
-            //row.append(sol);
-            //soldiers.update(oldMap[1]+i, row);
-
             for(var j = 0; j < sol.sx; j++)
             {
                 var key = (oldMap[0]+j)*10000+oldMap[1]+i;

@@ -66,8 +66,9 @@ function getSuitAllEquips(suitId)
     for(var i = 0; i < len(equip); i++)
     {
         if(equip[i]["suit"] == suitId)
-            ret.append(equip[i]);
+            ret.append(equip[i]["id"]);
     }
+    trace("getSuitAllEquips", suitId, ret);
     return ret;
 }
 //基础属性 加上装备加成
@@ -120,13 +121,17 @@ function getSkillAnimate(id)
     load_sprite_sheet(ani[2]);
     return ani;
 }
-
+/*
+技能的没有加成
+*/
 function getTotalSkillDamage(sol, skillId, skillLevel)
 {
+    return getData(SKILL, skillId)["attack"];
 }
 
 function calSkillHurt(attack, tar)
 {
+    return attack;
 }
 
 /*

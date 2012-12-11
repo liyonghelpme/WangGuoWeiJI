@@ -28,7 +28,8 @@ class LineSkill extends MyNode
         var near = null;
         var minDistance = 1000000;
         var p = sol.getPos();
-        row = map.soldiers.get(skillMap[1]);
+        //row = map.soldiers.get(skillMap[1]);
+        row = map.roundGridController.getRowObjects(skillMap[0], skillMap[1], skillData["sx"], skillData["sy"], this);
         var i;
         var ene;
         var tarDis;
@@ -156,7 +157,8 @@ class LineSkill extends MyNode
         {
             var damage = getTotalSkillDamage(sol, skillId, skillLevel);
             var hurt = calSkillHurt(damage, tar);
-            tar.changeHealth(sol, -hurt);
+            //tar.changeHealth(sol, -hurt);
+            tar.acceptHarm(sol, [hurt, 0]);
             tar.inSkill = 0;
         }
         removeSelf();
