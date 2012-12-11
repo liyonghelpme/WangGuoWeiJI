@@ -41,6 +41,8 @@ class Soldier extends MyNode
     //Move 和 攻击是持续性 命令
     //变身 是 中断性命令 阻止命令执行直到外部条件 中断
     //保持状态的一致性
+    var inTransfer = 0;
+    var transferStartTime = 0; 
     var mapSolId = 0;
 
     var commandList = [];
@@ -48,6 +50,7 @@ class Soldier extends MyNode
     var commandTime = 0;
     var needTime = 0;
     var blockCommand = 0;
+    var leftHurt = 0;
     function pushCommand(op, param)
     {
         commandList.append([op, param]);
@@ -224,10 +227,6 @@ class Soldier extends MyNode
             {
                 doDead(diff);    
             }
-            else if(op == MAKEUP_CMD)
-            {
-                doMakeUpCmd(param);
-            }
             else if(op == POS_MOVE_CMD)
             {
                 doPosMove(diff);
@@ -313,17 +312,7 @@ class Soldier extends MyNode
             commandTime = 0;
         }
     }
-    //Make Up 命令会把其它命令终止
-    function doMakeUpCmd(tot)
-    {
-        //trace("curCommandStack", commandList);
-        //clearCommand();
-        pushCommand(FIND_ENEMY, null);
-        makeUpRate = getMakeUpRate(id); 
-        initMakeUpData();
-        initMakeUpView();
-        initHealth();
-    }
+    var dead = 0;
     function doDead(diff)
     {
         if(!dead)
@@ -342,7 +331,6 @@ class Soldier extends MyNode
             tar = null;
             //增加经验
             deadTime = 0;
-            map.calHurts(this);
 
             //进入死亡状态 闯关结束时更新所有士兵状态
             global.user.updateSoldiers(this);
@@ -421,22 +409,11 @@ class Soldier extends MyNode
             pushCommand(DEAD_CMD, null);    
         }
         //以变身状态死亡
-        if(makeUpState)
-        {
-            makeUpTime += diff;
-            var totalMT = getMakeUpTime(sid, makeUpSkillId, makeUpLevel);
-            if(makeUpTime >= totalMT)
-            {
-                finishMakeUp();
-            }
-        }
     }
     const STA = ["find", "move", "begin_attack", "attack", "dead", "makeUp", "posMove", "posing", "finAttack"];
     var lastCommand = 0;
     function update(diff)
     {
-        if(makeUpState)
-            leftTimeLab.text(str(makeUpTime/1000));
         if(len(commandList) > 0)
         {
             lastSta.text(STA[lastCommand]);
@@ -499,14 +476,6 @@ class Soldier extends MyNode
     var health = 100;
     var healthBoundary = 100;
 
-    var addAttack = 0;
-    var addAttackTime = 0;
-    var addDefense = 0;
-    var addDefenseTime = 0;
-
-    var addHealthBoundary = 0;
-    var addHealthBoundaryTime = 0;
-
     var leftMonNum = 0;//练级过程中 剩余的敌方怪兽的数量
 
 
@@ -525,33 +494,21 @@ class Soldier extends MyNode
     var bloodTotalLen = 134;
     var bloodHeight = 9;
 
-    var gainexp = 100;//杀死该士兵总的经验
     var hurts = dict();//其它士兵对自己造成的伤害 士兵sid 伤害
-    var exp = 0;
 
     var changeDirNode;
     var sx = 1;
     var sy = 1;
     var offY = 0;
     
-    //var attack = 100;
-    //var defense = 50;
-
-    var physicAttack;
-    var physicDefense;
-    var purePhyDefense;
-
-    var magicAttack;
-    var magicDefense;
-    var pureMagDefense;
-
+    var attack = 0;
+    var defense = 0;
+    var attackType = 0;
+    var defenseType = 0;
 
     var attRange = 100;
-    //var soldierKind = 0;
 
-    var level = 5;
     var myName;
-    var dead;
 
     var nameBanner = null;
     var backBanner = null;
@@ -563,25 +520,21 @@ class Soldier extends MyNode
 
     //攻击速度 
     //skId level coldTime ready
-    /*
-    初始化数据 之后 修改攻击速度 修改动画帧率
-    初始化动画 使用数据来初始化动画帧率
-    */
-    function setLeftMonNum(diff)
-    {
-        leftMonNum = (5+level)*diff/100;
-    }
     //skillId level time ready
     var genEneYet = 0;
     //怪兽装备
     var myEquips = [];
     var ai;
+    //每个士兵的技能列表
     function initData()
     {
         var i;
         //初始化技能列表 等级 冷却时间
+        /*
         if(sid == ENEMY)
         {
+            //得到怪兽或者敌人的技能列表
+            //敌人 或者 怪兽数据 不为0
             if(monsterData != null && map.scene.skills != null)
             {
                 skillList = map.scene.skills.get(monsterData.get("sid"), dict()).items(); 
@@ -602,85 +555,43 @@ class Soldier extends MyNode
                 skillList[i].append(0);//累计的 冷却时间
                 skillList[i].append(1);//ready 是否准备好
             }
+            
         }
+        */
+        skillList = [];
 
         sx = data.get("sx");
         sy = data.get("sy");
 
-
-        attSpeed = getParam("soldierAttackAniTime");
-        //attAni.duration = attSpeed;
-
         offY = data.get("offY");
-        volumn = data.get("volumn");
-        recoverSpeed = 0;
-
-        //trace("soldierData", monsterData, map.monEquips);
-
-    
         //CHALLENGE_MON
         //CHALLENGE_FRI
         //CHALLENGE_NEIBOR
         //CHALLENGE_TRAIN
         //怪兽没有装备
+        var privateData = dict();
         if(sid == ENEMY)//敌对方士兵 地图怪兽 
         {
             if(monsterData != null)
             {
-                level = monsterData.get("level");
-                addAttack = monsterData.get("addAttack", 0);
-                addAttackTime = monsterData.get("addAttackTime", 0);
-                addDefense = monsterData.get("addDefense", 0);
-                addDefenseTime = monsterData.get("addDefenseTime", 0);
-                addHealthBoundary = monsterData.get("addHealthBoundary", 0);
-                addHealthBoundaryTime = monsterData.get("addHealthBoundaryTime", 0);
                 myEquips = map.getEnemyEquips(monsterData.get("sid"));
             }
-
-            attRange = data.get("range");
-
-            health = 0;
-            initAttackAndDefense(this);
-
-            //根据士兵myEquips 来初始化装备附加属性
-            //setEquipAttribute(this, map.monEquips);//设定地图怪兽我方装备
-            //根据敌人sid 得到获取敌人的装备
-            //初始化士兵状态 设定装备属性需要
-            //setEquipAttribute(this, map.getEnemyEquips(monsterData.get("sid")));
-
-            health = healthBoundary;
-
             myName = null;
-            dead = 0;
         }
         //初始化额外攻击力 和 额外 防御力 以及 额外 生命值上限
         else
         {
             //从用户数据得到装备数据
             myEquips = global.user.getSoldierEquipData(sid);
-
-            var privateData = global.user.getSoldierData(sid);
-            level = privateData.get("level", 0);
-            
-            attRange = data.get("range");
-
-            addAttack = privateData.get("addAttack", 0);
-            addAttackTime = privateData.get("addAttackTime", 0);
-            addDefense = privateData.get("addDefense", 0);
-            addDefenseTime = privateData.get("addDefenseTime", 0);
-            addHealthBoundary = privateData.get("addHealthBoundary", 0);
-            addHealthBoundaryTime = privateData.get("addHealthBoundaryTime", 0);
-
-            health = privateData.get("health", 0);
-            initAttackAndDefense(this);
-
+            privateData = global.user.getSoldierData(sid);
             myName = privateData.get("name");
-            dead = 0;
-
         }
-        //根据士兵基本属性重新计算经验值
-        gainexp = getAddExp(id, level);
-        trace("soldierData", physicAttack, physicDefense, magicAttack, magicDefense, purePhyDefense);
+        inTransfer = privateData.get("inTransfer", 0);
+        transferStartTime = privateData.get("transferStartTime", 0);
+
+        initAttackAndDefense(this);
+        initEquipAttribute(this, myEquips);
+        skillList = initSkillList(this, myEquips);//根据装备初始化技能
     }
 
     var attSpeed;
@@ -822,54 +733,7 @@ class Soldier extends MyNode
         backBanner.visible(0);
     }
     var attTime = 0;
-    function getLevelUp()
-    {
-        while(1)
-        {
-            var ne = getLevelUpExp(id, level);
-            if(exp >= ne)
-            {
-                exp -= ne;
-                level += 1;
-            }
-            else
-                break;
-        }
-        initAttackAndDefense(this);
-        health = healthBoundary;
-        initMakeUpData();
-        //等级自动变动
-    }
 
-    /*
-    士兵升级需要的经验如何表示每种类型的士兵
-    例如剑士 系列 ----> 升级需要的经验是 *2 增加
-    0kindId ---->20 50 30 60 80 90 100
-    10
-
-    只在闯关结束之后 更新所有参战士兵的数据
-    经验 等级 生命值 死亡状态 类型
-
-
-    */
-    //闯关 挑战 训练  增加的经验
-    var addExp = 0;
-    function changeExp(e)
-    {
-//        trace("changeExp", e);
-        if(color == ENECOLOR)//敌方不增加经验
-            return;
-        addExp += e;
-        exp += e; 
-        
-        if(state != MAP_SOL_DEAD)
-        {
-            var expPng = altasWord("blue", "+"+str(e)+"xp");
-            expPng.scale(getParam("expNumSize")*100/expPng.size()[1]);
-            bg.add(expPng);
-            expPng.anchor(50, 100).pos(bg.size()[0]/2, -5).addaction(sequence(moveby(1000, 0, -20), fadeout(1000), callfunc(removeTempNode)));
-        }
-    }
     function initHealth()
     {
         var oldSize = greenBlood.prepare().size();
@@ -953,10 +817,12 @@ class Soldier extends MyNode
         }
 
 
-        if(health < healthBoundary)
-            backBanner.visible(1);
-        else
-            backBanner.visible(0);
+        //未死亡 显示学条
+        if(!dead)
+            if(health < healthBoundary)
+                backBanner.visible(1);
+            else
+                backBanner.visible(0);
     }
 
     //不能在callfunc中调用
@@ -1033,13 +899,11 @@ class Soldier extends MyNode
     }
     function touchWorldBegan(n, e, p, x, y, points)
     {
-
         if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
             map.moveGrid(this);
             setZord(MAX_SOL_ZORD);
             map.clearMap(this);
-            //map.scene.banner.setCurChooseSol(this);
         }
         else
         {
@@ -1056,10 +920,7 @@ class Soldier extends MyNode
     {
         var scKind = map.scene.kind; 
         var col;
-        //if(scKind != CHALLENGE_TRAIN)//训练检测每行冲突
         col = map.checkSolOutOrCol(this);
-        //else
-        //    col = map.checkLineCol(this);
         if(col != null)
             bg.color(93, 4, 1, 30);
         else
@@ -1073,8 +934,6 @@ class Soldier extends MyNode
     */
     function touchWorldMoved(n, e, p, x, y, points)
     {
-        //trace("touchWorldMoved", x, y);
-        
         if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
             lastPoints = map.bg.world2node(x, y);
@@ -1133,8 +992,6 @@ class Soldier extends MyNode
                 var nPos = getSolPos(oldMap[0], oldMap[1], sx, sy, offY); 
                 setPos(nPos);
             }
-
-            //var col = map.checkCol(this);
 
             var col = map.checkSolOutOrCol(this);
             if(col != null)
@@ -1206,31 +1063,6 @@ class Soldier extends MyNode
     function finishArrange()
     {
         initMap();
-        var drugUse = 0;
-        if(addAttackTime > 0)
-        {
-            addAttackTime -= 1;
-            drugUse = 1;
-        }
-        if(addDefenseTime > 0)
-        {
-            addDefenseTime -= 1;
-            drugUse = 1;
-        }
-        if(addHealthBoundaryTime > 0)
-        {
-            addHealthBoundaryTime -= 1;
-            drugUse = 1;
-        }
-        if(sid != ENEMY)//敌方士兵不会使用药品
-        {
-            if(drugUse == 1)
-            {
-                global.httpController.addRequest("soldierC/useState", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
-                global.user.updateSoldiers(this);
-            }
-        }
-
         state = MAP_SOL_FREE;
         if(nameBanner != null)
         {
@@ -1295,7 +1127,6 @@ class Soldier extends MyNode
     function getTar()
     {
         var rowObjects = map.roundGridController.getRowObjects(curMap[0], curMap[1], sx, sy, this);
-        //trace("rowObjects", rowObjects);
         var minDist = 10000;
         var minTar = null;
         for(var i = 0; i < len(rowObjects); i++)
@@ -1336,11 +1167,6 @@ class Soldier extends MyNode
         attAni.clearAnimation();
         changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE);
     }
-    var volumn;
-    function getVolumn()
-    {
-        return volumn;
-    }
     var deadTime = 0;
     var DEAD_TIME = getParam("solDeadTime");
     var deadYet = 0;
@@ -1371,7 +1197,6 @@ class Soldier extends MyNode
     */
     function checkTarDistance()
     {
-        //trace("curMap", curMap, tar.curMap, sx, sy, attRange);
         return (
             ((curMap[0]+sx) >= tar.curMap[0] && curMap[0] <= (tar.curMap[0]+tar.sx)) 
             || (abs(tar.curMap[0]-curMap[0]-sx) <= attRange || abs(curMap[0]-tar.curMap[0]-tar.sx) <= attRange)
@@ -1381,14 +1206,12 @@ class Soldier extends MyNode
     const AI_PERIOD = 5000;
     override function enterScene()
     {
-//        trace("map", map, map.myTimer);
         super.enterScene();   
         map.myTimer.addTimer(this);
     }
     override function exitScene()
     {
         map.myTimer.removeTimer(this);
-        //cus.exitScene();
         clearAnimation();
         super.exitScene();   
     }
@@ -1402,71 +1225,7 @@ class Soldier extends MyNode
         clearAnimation();
         shiftAni.stop();
     }
-    function doHeal(heal)
-    {
-        var addHealth = healthBoundary*heal/100;
-        health += addHealth;
-        health = min(health, healthBoundary);
-        initHealth();
-    }
 
-    //根据药品重新计算士兵的生命值上限 和 攻击力 以及防御力
-    function doDrug(drugId)
-    {
-        var dd = getData(DRUG, drugId);    
-
-        var pureData = getSolPureData(id, level);
-        var pureHealthBoundary;
-        if(dd.get("healthBoundary") != 0)
-        {
-            addHealthBoundary = dd.get("healthBoundary");
-            addHealthBoundaryTime = dd.get("effectTime");
-        }
-        else if(dd.get("percentHealthBoundary") != 0)
-        {
-            pureHealthBoundary = pureData["healthBoundary"];
-            addHealthBoundary = dd.get("percentHealth")*pureHealthBoundary/100;
-            addHealthBoundaryTime = dd.get("effectTime");
-        }
-        else if(dd.get("percentAttack") != 0)
-        {
-            var purePhyAttack = pureData["physicAttack"];
-            var pureMagAttack = pureData["magicAttack"];
-            addAttack = dd.get("percentAttack")*max(purePhyAttack, pureMagAttack)/100;
-            addAttackTime = dd.get("effectTime");
-        }
-        else if(dd.get("percentDefense") != 0)
-        {
-            var purePhyDef = pureData["physicDefense"];
-            var pureMagDef = pureData["magicDefense"];
-            addDefense = dd.get("percentDefense")*max(purePhyDef, pureMagDef)/100;
-            addDefenseTime = dd.get("effectTime");
-        }
-        else if(dd.get("attack") != 0)
-        {
-            addAttack = dd.get("attack");
-            addAttackTime = dd.get("effectTime");
-        }
-        else if(dd.get("defense") != 0)
-        {
-            addDefense = dd.get("defense");
-            addDefenseTime = dd.get("effectTime");
-        }
-        else if(dd.get("health") > 0)
-        {
-            health += dd.get("health");
-            health = min(health, healthBoundary);
-        }
-        else if(dd.get("percentHealth") > 0)
-        {
-            var addHealth = pureData["healthBoundary"]*dd.get("percentHealth")/100;
-            health += addHealth;
-            health = min(health, healthBoundary);//补充纯粹生命值上限 一定百分比生命值
-        }
-        initAttackAndDefense(this);
-        initMakeUpData();
-        initHealth();
-    }
 
     //所有攻击我的士兵都停止攻击
     function doSave()
@@ -1475,13 +1234,6 @@ class Soldier extends MyNode
         clearAnimation();
         map.saveSoldier(this);
     }
-    var makeUpState = 0;
-    
-    var makeUpTime = 0;
-    var makeUpLevel = 0;
-
-    var makeUpRate = 100;
-    var makeUpSkillId = -1;
     //选择某个英雄 在 右上角显示士兵的能力数值
 
     //确定对应的变身对象
@@ -1493,50 +1245,6 @@ class Soldier extends MyNode
     
     //变身状态无敌
     //变身动画播放
-    function doMakeUp(skillId, skillLevel)
-    {
-        trace("doMakeUp", skillId, skillLevel);
-        if(makeUpState == 0 && !inTransform)
-        {
-            makeUpTime = 0;
-            makeUpState = 1;
-            makeUpSkillId = skillId;
-            makeUpLevel = skillLevel;
-            pushCommand(MAKEUP_CMD, null);
-        }
-    }
-    //id 等属性不会变化
-    function initMakeUpData()
-    {
-        if(!makeUpState)
-            return;
-        physicAttack *= makeUpRate;
-        physicAttack /= 100;
-
-        physicDefense *= makeUpRate;
-        physicDefense /= 100;
-        
-        magicAttack *= makeUpRate;
-        magicAttack /= 100;
-
-        magicDefense *= makeUpRate;
-        magicDefense /= 100;
-
-        healthBoundary *= makeUpRate;
-        healthBoundary /= 100;
-
-        health *= makeUpRate;
-        health /= 100;
-        health = min(health, healthBoundary);
-
-        attSpeed *= getAttSpeedRate(id);
-        attSpeed /= 100;
-        
-        attAni.duration = attSpeed;//修正攻击速度
-        //变身之后 远程攻击范围增加
-        if(data["closeOrFar"] == FAR_SOL)
-            attRange += getRangeAdd(id); 
-    }
 
     var greenStar = null;//当前技能释放者
     function setSkillState()
@@ -1573,24 +1281,6 @@ class Soldier extends MyNode
     {
         map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], null), MAX_BUILD_ZORD);
     }
-    function setAttackCofficient(sol, dif)
-    {
-        var rate;
-        if(sol.data.get("isHero"))
-            rate = ATTACK_RATE.get(HERO)[dif];
-        else if(sol.data.get("solOrMon"))
-            rate = ATTACK_RATE.get(MONSTER)[dif];
-        else
-            rate = ATTACK_RATE.get(NORMAL_SOL)[dif];
-        physicAttack *= rate;
-        physicAttack /= 100;
-        magicAttack *= rate;
-        magicAttack /= 100;
-
-        //总的经验值 也随攻击力 成倍数增长
-        gainexp *= rate;
-        gainexp /= 100;
-    }
 
     var inTransform = 0;
     var transAni = null;
@@ -1600,71 +1290,6 @@ class Soldier extends MyNode
 
     //施展变身技能 --- 播放变身动画 且 进入变身状态
     //重设占用的 网格 编号
-    function initMakeUpView()
-    {
-        //人物是英雄 且没有变身 等级5 
-        if(data["isHero"] && id%10 != 4 && !inTransform)
-        {
-            blockCommand = 1;
-            inTransform = 1;
-            state = MAP_SOL_FREE;
-            clearMap();
-            var oldSx = sx;
-            var oldSy = sy;
-            var oldMap = curMap;
-            var oldPos = getSolPos(curMap[0], curMap[1], sx, sy, 0);
-
-            id = id/10 * 10 + 4;//变更id 英雄要在一起调试
-            data = getData(SOLDIER, id);
-            sx = data["sx"];
-            sy = data["sy"];
-            offY = data["offY"];
-            
-            //根据现在无偏移位置 重新计算 新的map 
-            var newMap = getSolMap(oldPos, sx, sy, 0);
-            curMap = newMap;
-            setMap();
-            resetPos();
-            
-            //位置调整 要考虑遍历的方向 
-            //深度 或者 广度  每个被调整的首先 clearMap 
-            trace("startAdjust Map", curMap, sx, sy);
-            map.roundGridController.startAdjustSolPos(this);
-            
-
-            backBanner.visible(0);
-
-            
-            kind = data.get("kind");
-            if(kind == CLOSE_FIGHTING)
-            {
-                funcSoldier = new CloseSoldier(this);
-            }
-            else
-                funcSoldier = new OtherSoldier(this);
-
-
-            clearAnimation();
-            shiftAni.stop();
-
-            var skillId = heroSkill[id/10*10];
-            var skillAni = getSkillAnimate(skillId);
-            
-
-            var feaFil = FEA_BLUE;
-            if(color == ENECOLOR)
-                feaFil = FEA_RED;
-
-            var ani = getSolAnimate(id);
-            movAni = new SoldierAnimate(getParam("soldierMoveAniTime"), ani[0], ani[2], changeDirNode, fea, feaFil);
-            attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
-
-            fea.visible(0);
-            shadow.visible(0);
-            transAni = new TransformAnimate(skillAni[1], skillAni[0], changeDirNode, this);
-            transAni.enterScene();
-        }
-    }
     
     function setPrivateFunc()
     {
@@ -1674,88 +1299,6 @@ class Soldier extends MyNode
         }
         else
             funcSoldier = new OtherSoldier(this);
-    }
-    function finishMakeUpDate()
-    {
-        initAttackAndDefense(this);
-        attSpeed = data["attSpeed"];
-        attRange = data["range"];
-        initHealth();
-        attAni.duration = attSpeed;
-    }
-    //执行 逆向动画
-    //动画结束 重新 initAttack  initHealth
-    //old Id 
-    function finishMakeUp()
-    {
-        makeUpState = 0;
-        finishMakeUpView();
-        finishMakeUpDate();
-        clearCommand();
-        pushCommand(FIND_ENEMY, null);
-    }
-    function finishMakeUpView()
-    {
-        if(data["isHero"] && id%10 == 4 && !inTransform)
-        {
-            blockCommand = 1; 
-            inTransform = 1;
-            state = MAP_SOL_FREE;
-
-            clearMap();
-            var oldSx = sx;
-            var oldSy = sy;
-            var oldMap = curMap;
-            var oldPos = getSolPos(curMap[0], curMap[1], sx, sy, 0);
-
-            id = oldId;
-            data = getData(SOLDIER, id);
-            sx = data["sx"];
-            sy = data["sy"];
-            offY = data["offY"];
-            var newMap = getSolMap(oldPos, sx, sy, 0);
-            curMap = newMap;
-            setMap();
-            resetPos();
-
-
-            kind = data.get("kind");
-            setPrivateFunc();
-
-            clearAnimation();
-            shiftAni.stop();
-
-            var skillId = heroSkill[id/10*10];
-            var skillAni = getSkillAnimate(skillId);
-
-            var feaFil = FEA_BLUE;
-            if(color == ENECOLOR)
-                feaFil = FEA_RED;
-
-            var ani = getSolAnimate(id);
-
-            movAni = new SoldierAnimate(getParam("soldierMoveAniTime"), ani[0], ani[2], changeDirNode, fea, feaFil);
-            attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
-
-            fea.visible(0);
-            shadow.visible(0);
-
-            //逆向播放 英雄变身动画
-            var a = copy(skillAni);
-            a[0] = copy(a[0]);//copy a0 reverse
-            a[0].reverse();
-            //trace("reverse", a);
-
-            //changeDirNode.texture(a[0][0]);
-            adjustPicSize();
-        
-            transAni = new TransformAnimate(a[1], a[0], changeDirNode, this);
-            transAni.enterScene();
-
-            //更新英雄数据
-            //finishMakeUpDate();
-            //finishTransform();
-        }
     }
     function adjustPicSize()
     {
@@ -1774,31 +1317,5 @@ class Soldier extends MyNode
             suffix = "1";
         backBanner.texture("mapSolBloodBan"+suffix+".png", UPDATE_SIZE);
         backBanner.pos(bSize[0]/2, data["bloodHeight"]);
-    }
-    //结束变动画画
-    function finishTransform()
-    {
-        trace("finish TransformAnimate");
-        load_sprite_sheet("soldierm"+str(id)+".plist");
-        load_sprite_sheet("soldiera"+str(id)+".plist");
-
-        load_sprite_sheet("soldierfm"+str(id)+".plist");
-        load_sprite_sheet("soldierfa"+str(id)+".plist");
-
-        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE);
-
-        var feaFil = FEA_BLUE;
-        if(color == ENECOLOR)
-            feaFil = FEA_RED;
-        //变身之后特征色消失
-        fea.texture("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil, UPDATE_SIZE);
-        shadow.visible(1);
-        backBanner.visible(1);
-        adjustPicSize();
-
-        fea.visible(1);//重新设定图片和 特征色 
-        transAni = null;
-        inTransform = 0;
-        blockCommand = 0;
     }
 }

@@ -182,7 +182,7 @@ class TaskModel
     }
     function realShowHintArrow(pic, bSize, cmd)
     {
-        trace("realshowHintArrow", pic, bSize, cmd, commandList, curCmd, inCommand);
+        //trace("realshowHintArrow", pic, bSize, cmd, commandList, curCmd, inCommand);
 
         if(inCommand)
         {
@@ -258,7 +258,7 @@ class TaskModel
 
     function showHintArrow(pic, bSize, cmd)
     {
-        trace("showHintArrow", pic, bSize, cmd, commandList, curCmd, inCommand);
+        //trace("showHintArrow", pic, bSize, cmd, commandList, curCmd, inCommand);
         realShowHintArrow(pic, bSize, cmd);
     }
     function getCurNewTid()

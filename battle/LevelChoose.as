@@ -93,6 +93,7 @@ class LevelChoose extends MyNode
     {
         scene.gotoIsland(0);//飞回 主界面
     }
+    /*
     function initData()
     {
         data = [];
@@ -118,6 +119,7 @@ class LevelChoose extends MyNode
             }
         }
     }
+    */
     function updateStar()
     {
         var enable = checkBigEnable(big);
@@ -140,7 +142,6 @@ class LevelChoose extends MyNode
         }
     }
 
-    /*
     function initData()
     {
         data = [];
@@ -170,7 +171,6 @@ class LevelChoose extends MyNode
             }
         }
     }
-    */
 
     function updatePage()
     {

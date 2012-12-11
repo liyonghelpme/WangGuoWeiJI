@@ -23,14 +23,6 @@ class MapBanner extends MyNode
 
     var data;
     
-    //sid inMap
-    function cmp(a, b)
-    {
-        var sa = global.user.getSoldierData(a[0]);
-        var sb = global.user.getSoldierData(b[0]);
-        return sb.get("level")-sa.get("level");
-    }
-    //[士兵sid,  0/1] 是否放置 
     //所有
     //sid not dead 
     function initData()
@@ -40,12 +32,11 @@ class MapBanner extends MyNode
         for(var i = 0; i < len(sols); i++)
         {
             var sdata = sols[i][1];
-            if(sdata.get("dead", 0) == 0)//soldierId
+            if(sdata.get("inTransfer", 0) == 0)//soldierId 不再转职中
             {
                 data.append([sols[i][0], 0]);//是否已经放置
             }
         }
-        bubbleSort(data, cmp);
     }
     var leftArr;
     var rightArr;
@@ -148,9 +139,7 @@ class MapBanner extends MyNode
     function clearSoldier(so)
     {
         var sid = so.sid;
-//        trace("soldier clear", sid);
 
-        //insertArr(data, sid, cmp);
         for(var i = 0; i < len(data); i++)
         {
             if(data[i][0] == sid)
@@ -225,8 +214,6 @@ class MapBanner extends MyNode
             var sca = getSca(solPic, [71, 70]);
             solPic.scale(-sca, sca);
 
-            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
-            panel.addlabel(getStr("skillLevel", ["[LEV]", str(sdata.get("level") + 1)]), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
             panel.put(i);
         }
     }

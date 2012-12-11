@@ -69,8 +69,6 @@ class BuildLayer extends MoveMap
             for(i = 0; i < len(soldiers); i++)
                 soldiers[i].clearRandomStatus();
 
-            for(i = 0; i < len(soldiers); i++)
-                soldiers[i].genBloodAndTransferStatus();
 
             //生成随机奖励金银币状态
             for(i  = 0; i < len(soldiers) && i < MAX_STATUS_SOL; i++)

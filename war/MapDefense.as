@@ -11,11 +11,11 @@ class MapDefense extends MyNode
     var map;
     var state;
     var kind = 3;//0 close 1 far 2 magic 3 defense
-    //var defense = 0;
-    var physicDefense = 1;
-    var magicDefense = 1;
-    var purePhyDefense = 1;
-    var pureMagDefense = 1;
+
+    var attack = 0;
+    var defense = 0;
+    var attackType = 3;
+    var defenseType = 3;
 
     var hurts = dict();
     var data;

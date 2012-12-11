@@ -239,7 +239,7 @@ class ChildMenuLayer extends MyNode
     function onTransfer()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new SoldierDialog(2), 1, 0);
+        global.director.pushView(new TransferDialog(scene), 1, 0);
     }
     function onStory()
     {
@@ -373,7 +373,6 @@ class ChildMenuLayer extends MyNode
         {
             if(passTime >= getParam("hideTime"))
             {
-                //exitScene();
                 clearChildMenu();
             }
             passTime += diff;

@@ -94,6 +94,8 @@ class User
                 maxSid = k;
         }
         maxSid++;
+
+        initSolNames();
     }
     function initThings(d)
     {
@@ -365,6 +367,9 @@ class User
 
             initBuildings(con.get("buildings"));
             initSoldiers(con.get("soldiers"));
+            
+
+
             drugs = initThings(con.get("drugs"));
             initEquips(con.get("equips"));
 
@@ -746,7 +751,7 @@ class User
             return;
 
         trace("updateBuilding", build, build.id, build.bid, build.getPos(), build.state, build.dir, build.getObjectId(), build.getStartTime());
-        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor]]));
+        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor], ["objectList", build.objectList]]));
         db.put("buildings", buildings);
     }
     /*
@@ -779,10 +784,36 @@ class User
         {
             return;
         }
-        soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["health", soldier.health], ["exp", soldier.exp], ["dead", soldier.dead], ["level", soldier.level], ["addAttack", soldier.addAttack], ["addDefense", soldier.addDefense], ["addAttackTime", soldier.addAttackTime], ["addDefenseTime", soldier.addDefenseTime], ["addHealthBoundary", soldier.addHealthBoundary], ["addHealthBoundaryTime", soldier.addHealthBoundaryTime] ]));
+        //闯关结束 提示士兵阵亡
+        if(soldier.dead)
+        {
+            //清除士兵身上所有非套装suit == 0
+            killSoldier(soldier);
+        }
+        else
+        {
+            soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["inTransfer", soldier.inTransfer], ["addAttack", soldier.transferStartTime] ]));
+        }
         //updateSoldierDB();
         db.put("soldiers", soldiers);
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);
+    }
+    function killSoldier(soldier)
+    {
+        var solEquips = getSoldierEquip(soldier.sid);
+        for(var i = 0; i < len(solEquips); i++)
+        {
+            var eData = getData(EQUIP, equips[solEquips[i]]["kind"]);
+            //非套装删除装备
+            if(eData["suit"] == 0)
+                equips.pop(solEquips[i]);
+            else//套装卸下
+                equips[solEquips[i]]["owner"] = -1;
+        }
+        soldiers.pop(soldier.sid);//去除士兵数据
+
+        db.put("equips", equips);
+        //global.msgCenter.sendMsg(SOL_UNLOADTHING, sid);
     }
     /*
     如果该士兵显示出来则更新状态
@@ -850,17 +881,6 @@ class User
                 return 0;
         }
         return 1;
-    }
-    function checkUseLevel(sid, eid)
-    {
-        var sdata = soldiers.get(sid);
-        var edata = equips.get(eid);
-        edata = getData(EQUIP, edata.get("kind"));
-        if(sdata.get("level") < edata.get("useLevel"))
-        {
-            return [0, edata.get("useLevel"), sdata.get("level")];
-        }
-        return [1];
     }
 
     function getEquipData(eid)
@@ -1409,22 +1429,23 @@ class User
     {
         return invite["inviteCode"];
     }
-    //英雄类型 heroSid == 0 FirstHero
-    function getFirstHero()
+    //使用完名字 就 去除掉
+    function initSolNames()
     {
-        return 0;
-        /*
-        var sid = soldiers.keys();
-        var alSol = soldiers.values();
-        for(var i = 0; i < len(alSol); i++)
+        var solVal = soldiers.values();
+        for(var j = 0; j < len(solVal); j++)
         {
-            var sdata = getData(SOLDER, alSol[i]["id"]);
-            if(sdata["isHero"])
+            var solN = solVal[j]["name"];
+            for(var i = 0; i < len(soldierName);)
             {
-                return sid[i];
+                var tempName = getStr(soldierName[i][0], null);
+                if(tempName == solN)
+                {
+                    soldierName.pop(i);
+                }
+                else
+                    i++;
             }
         }
-        return -1;
-        */
     }
 }

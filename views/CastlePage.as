@@ -484,9 +484,9 @@ class CastlePage extends MyNode
                 buildLayer.addSoldier(newSol);
 
                 newSol.setSmoke();
-                moveToBuild(newSol);
-                dialogController.addCmd(dict([["cmd", "waitTime"], ["time", 1500]]));
-                dialogController.addCmd(dict([["cmd", "roleName"], ["sol", newSol]]));
+                //moveToBuild(newSol);
+                //dialogController.addCmd(dict([["cmd", "waitTime"], ["time", 1500]]));
+                //dialogController.addCmd(dict([["cmd", "roleName"], ["sol", newSol]]));
                 //global.director.pushView(new RoleName(null, newSol), 1, 0);
 
             }

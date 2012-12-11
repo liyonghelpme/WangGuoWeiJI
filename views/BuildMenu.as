@@ -11,6 +11,7 @@ class BuildMenu extends MyNode
     var OFFX = 57;
     //是否刚进入规划功能尚没有改变建筑物状态
     var setYet = 0;
+
     function BuildMenu(s, b)
     {
         scene = s;

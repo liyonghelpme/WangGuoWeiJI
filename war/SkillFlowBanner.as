@@ -131,18 +131,14 @@ class SkillFlowBanner extends MyNode
         }
         if(soldier != null)
         {
-            attributeList = stringLines(getStr("solAtt", ["[HEAL]", str(soldier.health), 
+            attributeList = stringLines(getStr("solAtt", 
+                                        ["[HEAL]", str(soldier.health), 
                                         "[NAME]", soldier.data.get("name"), 
                                         "[BOUNDARY]", str(soldier.healthBoundary),
-                                        "[PATTACK]", str(soldier.physicAttack),
-                                        "[PDEFENSE]", str(soldier.physicDefense),
-                                        "[MAGATT]", str(soldier.magicAttack),
-                                        "[MAGDEF]", str(soldier.magicDefense),
+                                        "[PATTACK]", str(soldier.attack),
+                                        "[PDEFENSE]", str(soldier.defense),
                                         "[RANGE]", str(soldier.attRange),
                                         "[SPEED]", str(soldier.attSpeed),
-                                        "[EXP]", str(soldier.exp),
-                                        "[NEEDEXP]", str(getLevelUpExp(soldier.id, soldier.level)),
-                                        "[LEV]", str(soldier.level+1),
                                         ]), 
                                         18, 20, [0, 0, 0], FONT_NORMAL);
             attributeList.pos(50, 140);
@@ -429,6 +425,7 @@ words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
     //内部更新所有面板状态函数
     function updateSkillPanel(sol)
     {
+
         allPanels = [];
 
         soldier = sol;
@@ -436,6 +433,8 @@ words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             skillList = [];
         else
             skillList = sol.skillList;//global.user.getSolSkills(soldier.sid).items();//skillId level lastColdTime
+
+        trace("set soldier skillList", skillList);
 
         var oldPos = flowNode.pos();
         flowNode.removefromparent();

@@ -197,15 +197,15 @@ class Map extends MyNode
     {
         var reward = null;
         if(scene.kind == CHALLENGE_MON)
-            reward = getRandomMapReward(kind, small);
-        var levelUpSol = getAllLevelUp();
+            reward = getMapReward(kind, small);
+        var deadSols = getAllDeadSol();
 
         stopGame();
         trace("MapDefenseBreak");
         if(def.color == MYCOLOR)
-            challengeOver(0, 0, null, levelUpSol);
+            challengeOver(0, 0, null, deadSols);
         else 
-            challengeOver(1, getStar(), reward, levelUpSol);
+            challengeOver(1, getStar(), reward, deadSols);
     }
     /*
     color kind
@@ -269,13 +269,13 @@ class Map extends MyNode
         }
         else
         {
-            for(yk = 0; yk < 5; yk++)
+            for(xk = 7; xk < 12; xk++)
             {
-                if((yk+soldier.sy) > 5)
+                if((xk+soldier.sx) > 12)
                     continue;
-                for(xk = 7; xk < 12; xk++)
+                for(yk = 0; yk < 5; yk++)
                 {
-                    if((xk+soldier.sx) > 12)
+                    if((yk+soldier.sy) > 5)
                         continue;
 
                     col = 0;    
@@ -410,30 +410,7 @@ class Map extends MyNode
         }
     }
 
-    /*
-    结束战斗之后更新所有我方士兵的状态
-    */
-    function getAllLevelUp()
-    {
-        var updateSoldierData = [];
-        var levelUpSol = [];
-//        trace("mySoldiers", mySoldiers);
-        for(var i = 0; i < len(mySoldiers); i++)
-        {
-            var ne = getLevelUpExp(mySoldiers[i].id, mySoldiers[i].level);
-            var sol = mySoldiers[i];
-            if(mySoldiers[i].exp >= ne)
-            {
-                mySoldiers[i].getLevelUp();
 
-                levelUpSol.append(mySoldiers[i]);
-            }
-            updateSoldierData.append([sol.sid, sol.health, sol.exp, sol.dead, sol.level]);//士兵的sid 
-            global.user.updateSoldiers(mySoldiers[i]);
-        }
-        //global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", updateSoldierData]]), null, null);
-        return [levelUpSol, updateSoldierData];
-    }
     //保持所有我方士兵的引用 检测如果杀死对方奖励我方经验
     //我方士兵如果没有死亡
     
@@ -761,41 +738,19 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     }
 
     /*
-    死亡对象更新所有的士兵状态 计算经验
-    */
-    function calHurts(so)
-    {
-        var it = so.hurts.values();
-        var totalExp = so.gainexp;
-        var totalHurt = 0;
-        var i;
-        //根据总的经验总的伤害计算经验分配
-        for(i = 0; i < len(it); i++)
-        {
-            totalHurt += it[i][1];
-        }
-        //场景双倍经验
-        var rate = 1;
-        if(scene.kind == CHALLENGE_TRAIN && scene.double == 1)
-            rate = 2;
-        for(i = 0; i < len(it); i++)
-        {
-            it[i][0].changeExp(totalExp*it[i][1]/totalHurt*rate);
-        }
-    }
-    /*
     不应该出现breakDialog
     
     [oid, papayaId, score, rank]
     */
-    function challengeOver(win, star, reward, levelUpSol)
+    function challengeOver(win, star, reward, deads)
     {
-        var updateSoldierData = levelUpSol[1];
-        levelUpSol = levelUpSol[0];
-
+        if(reward == null)
+            reward = dict();
         var crystal = 0;
         var score = 0;
-        //挑战RANK 或者 邻居
+        var deadSols = deads[0];
+        var deadInstance = deads[1];
+        //挑战RANK 或者 邻居 按照排名 得到奖励
         if(scene.kind == CHALLENGE_FRI) 
         {
             var myRank = global.user.rankOrder;
@@ -835,74 +790,29 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 cry = getChallengeNeiborCry(scene.argument["oid"]);//param[0]
             global.user.changeValue("crystal", cry);
         }
-        else if(scene.kind == CHALLENGE_FIGHT || scene.kind == CHALLENGE_DEFENSE)
-        {
-            if(win == 1)//攻击其它人擂台 奖励为attackReward
-            {
-
-            }
-        }
-
         trace("sceneKind", scene.kind, CHALLENGE_FRI);
-        var arenaKind;
-        var fData;
-        var cost;
         if(scene.kind == CHALLENGE_MON)
         {
             if(win)
-            {
-
-                global.director.pushView(new ChallengeWin(this, dict([["levelUpSol", levelUpSol], ["star", star], ["reward", reward]])), 1, 0);
-                //global.taskModel.doNewTaskByKey("round", 1);//任务结束 ---》 检测 是否有 开启下一个任务的时机是否成熟 所有command是否都执行过？ 另外一个任务 阶段胜利任务 一旦进入经营页面场景 就触发
-            }
+                global.director.pushView(new ChallengeWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward]])), 1, 0);
             else
-                global.director.pushView(new ChallengeFail(this, dict([["levelUpSol", levelUpSol]])), 1, 0);
+                global.director.pushView(new ChallengeFail(this, dict([["deadSols", deadInstance], ["reward", reward]])), 1, 0);
+            global.user.doAdd(reward);
 
-            global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", updateSoldierData], ["reward", reward], ["star", star], ["big", kind], ["small", small]]), null, null);
+            global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", deadSols], ["reward", json_dumps(reward)], ["star", star], ["big", kind], ["small", small]]), null, null);
         }
         else if(scene.kind == CHALLENGE_FRI)
         {
-            global.director.pushView(new ChallengeOver(win, star, crystal, score, this, levelUpSol), 1, 0);
-            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["sols", updateSoldierData], ["crystal", crystal], ["score", score]]), null, null);
+            //global.director.pushView(new ChallengeOver(win, star, crystal, score, this, deadInstance), 1, 0);
+            //挑战邻居 有水晶 有 得分 
+            global.director.pushView(new ChallengeOver(this, dict([["win", win], ["star", star], ["reward", dict([["crystal", crystal], ["score", score]])], ["deadSols", deadInstance], ["type", CHALLENGE_FRI]])), 1, 0);
+            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["sols", deadSols], ["crystal", crystal], ["score", score]]), null, null);
         }
         else if(scene.kind == CHALLENGE_NEIBOR)
         {
-            global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, levelUpSol), 1, 0);
-            //param[0]
-            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.argument["oid"]], ["sols", updateSoldierData], ["crystal", cry], ["mid", global.user.getNewMsgId()]]), null, null);
-        }
-        //奖励 金币 水晶 升级士兵 挑战擂台
-        else if(scene.kind == CHALLENGE_FIGHT)
-        {
-            if(win == 1)
-            {
-                arenaKind = scene.user.get("kind"); 
-                fData = getData(FIGHT_COST, arenaKind);
-                cost = getCost(FIGHT_COST, arenaKind);
-                cost = multiScalar(cost, fData.get("attackReward"));
-                global.user.doAdd(cost);
-            }
-            else
-                cost = dict();
-            global.director.pushView(new ChallengeFight(win, star, cost, 0, this, levelUpSol), 1, 0);
-
-            global.httpController.addRequest("fightC/attackOver", dict([["uid", global.user.uid], ["oid", scene.user.get("uid")], ["sols", updateSoldierData], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)], ["win", win]]), null, null);
-        }
-        else if(scene.kind == CHALLENGE_DEFENSE)
-        {
-            if(win == 1)
-            {
-                arenaKind = global.fightModel.getArenaKind(); 
-                fData = getData(FIGHT_COST, arenaKind);
-                cost = getCost(FIGHT_COST, arenaKind);
-                cost = multiScalar(cost, fData.get("defenseReward"));
-                global.user.doAdd(cost);
-            }
-            else
-                cost = dict();
-            global.director.pushView(new ChallengeFight(win, star, cost, 0, this, levelUpSol), 1, 0);
-
-            global.httpController.addRequest("fightC/defenseOver", dict([["uid", global.user.uid], ["oid", scene.user.get("uid")], ["sols", updateSoldierData], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)], ["win", win]]), null, null);
+            //global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, deadInstance), 1, 0);
+            global.director.pushView(new ChallengeOver(this, dict([["win", win], ["star", star], ["reward", dict([["crystal", crystal]])], ["deadSols", deadInstance], ["type", CHALLENGE_NEIBOR]])), 1, 0);
+            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.argument["oid"]], ["sols", deadSols], ["crystal", cry], ["mid", global.user.getNewMsgId()]]), null, null);
         }
     }
     
@@ -923,51 +833,37 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             else
                 eneCount++;
         }
-        /*
-        for(var i = 0; i < len(v); i++)
-        {
-            for(var j = 0; j < len(v[i]); j++)
-            {
-                if(v[i][j].color == 0 && v[i][j].state != MAP_SOL_DEFENSE && v[i][j].state != MAP_SOL_DEAD && v[i][j].state != MAP_SOL_SAVE)
-                {
-                    myCount++;
-                }
-                else if(v[i][j].color == 1 && v[i][j].state != MAP_SOL_DEFENSE && v[i][j].state != MAP_SOL_DEAD && v[i][j].state != MAP_SOL_SAVE) 
-                {
-                    eneCount++;
-                }
-                if(myCount > 0 && eneCount > 0)
-                    break;
-            }
-            if(myCount > 0 && eneCount > 0)
-                break;
-        }
-        */
-//        trace("myCount", myCount, eneCount);
 
         if(myCount == 0 || eneCount == 0)
         {
             var reward = null;
             if(scene.kind == CHALLENGE_MON)
-                reward = getRandomMapReward(kind, small);
-            var levelUpSol = getAllLevelUp();
+                reward = getMapReward(kind, small);
+            var deadSols = getAllDeadSol();
             stopGame();
             if(myCount == 0)
-                challengeOver(0, 0, null, levelUpSol);
+                challengeOver(0, 0, null, deadSols);
             else
-                challengeOver(1, getStar(), reward, levelUpSol);
+                challengeOver(1, getStar(), reward, deadSols);
         }
     }
-    
-    function trainOver()
+
+    function getAllDeadSol()
     {
-        stopGame();
-        var levelUpSol = getAllLevelUp(); 
-        var updateSoldierData = levelUpSol[1];
-        levelUpSol = levelUpSol[0];
-        global.director.pushView(new TrainOverDialog(this, mySoldiers), 1, 0);
-        global.httpController.addRequest("soldierC/trainOver", dict([["uid", global.user.uid], ["sols", updateSoldierData]]), null, null);
+        var deadSols = [];
+        var deadInstance = [];
+        for(var i = 0; i < len(mySoldiers); i++)
+        {
+            var sol = mySoldiers[i];
+            if(sol.dead == 1)
+            {
+                deadSols.append(sol.sid);
+                deadInstance.append(sol);
+            }
+        }
+        return [deadSols, deadInstance];
     }
+    
     //每秒检测一次是否还有我方或者敌方士兵剩余 没有则胜利
     function disappearSoldier(so)
     {

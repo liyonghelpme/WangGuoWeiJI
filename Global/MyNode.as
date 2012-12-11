@@ -87,11 +87,9 @@ class MyNode
     }
     function addChildZ(child, z)
     {
-//        trace("addChild", child, z, ins);
         if(ins == 1)
             child.enterScene();
         bg.add(child.bg, z);
-        //myChild.push(child);
     }
     //mynode 调用isinstance 有问题？
     //重写 removeChild 方法

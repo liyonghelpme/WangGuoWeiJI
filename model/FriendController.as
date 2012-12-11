@@ -166,7 +166,6 @@ class FriendController
         if(inviteList == null)
             inviteList = dict();
 
-        //getNeibors();
         getPapayaFriend();
         global.timer.addTimer(this);
         global.msgCenter.registerCallback(INITDATA_OVER, this);
@@ -192,7 +191,6 @@ class FriendController
         {
             nei = copy(nei);
             nei["challengeYet"] = 0;
-            nei["heartYet"] = 0;
             nei["mineLevel"] = 0;
             neibors.append(nei);
             setNeiborCrystal();
@@ -217,14 +215,6 @@ class FriendController
     }
     //每天第一次登录清空邻居信息
     //清理好友数据 同步好友uid
-    /*
-    if(neibors != null)
-        for(var i = 0; i < len(neibors); i++)
-        {
-            neibors[i]["challengeYet"] = 0;
-            neibors[i]["heartYet"] = 0;
-        }
-    */
     function firstLogin()
     {
         global.httpController.addRequest("friendC/clearNeiborData", dict([["uid", global.user.uid]]), null, null);
@@ -293,18 +283,6 @@ class FriendController
             initNeiborYet = 1;
             global.msgCenter.sendMsg(INIT_NEIBOR_OVER, null);
         }
-    }
-    function sendHeart(nid)
-    {
-        for(var i = 0; i < len(neibors); i++)
-        {
-            if(neibors[i]["uid"] == nid)
-            {
-                neibors[i]["heartYet"] = 1;
-                break;
-            }
-        }
-        global.user.db.put("neibors", neibors);
     }
     function challengeNeibor(nid)
     {

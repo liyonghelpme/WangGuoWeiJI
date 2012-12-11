@@ -1,5 +1,15 @@
 class BusiSoldier extends MyNode
 {
+    var dead = 0;
+    var attack;
+    var defense;
+    var attackType;
+    var defenseType;
+    var health;
+    var healthBoundary;
+    var inTransfer;
+    var transferStartTime;
+
     //在同时处理建筑物和士兵的模块 通过这个标志区分两者
     //或者传递参数的时候， 通过明显的变量区分
     var isBuilding = 0;
@@ -14,8 +24,6 @@ class BusiSoldier extends MyNode
     var sy = 1;
     var state = SOL_FREE;
     var tar = null;
-    //var mobj;
-    //var cus = null;
     var myName;
     var shadow;
     //50 /s 
@@ -28,62 +36,15 @@ class BusiSoldier extends MyNode
     //用于在setMap 和clear Map中设定 农田的上边界 
     var funcs = BUSI_SOL;
 
-    //var inspire = INSPIRE;
-    //var inspirePic = null;
-
-    var healthBoundary;
-    var health;
-
-    //var attack;
-    //var defense;
-    var physicAttack;
-    var physicDefense;
-    var purePhyDefense;
-
-    var magicAttack;
-    var magicDefense;
-    var pureMagDefense;
-
-    //var base;
-
     var attSpeed;
     var attRange;
-    
-    var exp;
-    var dead;
-    var level;
-    //const showSize = 50;
-
-    var recoverSpeed;
-    //当前只有士兵才有特征色
-    //var featureColor;
-    //var featureMov;
-
-
-    /*
-    需要在行走的时候开始动画
-    updateMap 是view相关数据是由动作生成的
-    战斗页面生命值不能回复 只有在经营页面生命值才回复
-    用户在游戏中 才回复 还是 上次回复的时间计算生命值回复时间
-    战斗中不会计算生命值回复
-
-    生命值上限 由 基础职业+等级增加+装备
-
-    等级分成两种：
-    职业等级
-    普通等级
-
-    攻击速度1500 慢 1000 中等 500 快
-
-    */
-
 
     var bloodTotalLen = 134;
     var bloodHeight = 9;
     var bloodScaX = 72*100/139;//根据怪兽的体积计算血条长度 
     var bloodScaY = 9*100/12;
     var firstBuy = 0;
-    //var myEquips;
+    //首次购买士兵
     function initData(privateData)
     {
         if(privateData == null)
@@ -91,161 +52,16 @@ class BusiSoldier extends MyNode
             firstBuy = 1;
             privateData = dict();
         }
-        //myEquips = global.user.getSoldierEquipData(sid);
-
-        level = privateData.get("level", 0);
-
-        addAttack = privateData.get("addAttack", 0);
-        addAttackTime = privateData.get("addAttackTime", 0);
-        addDefense = privateData.get("addDefense", 0);
-        addDefenseTime = privateData.get("addDefenseTime", 0);
-        addHealthBoundary = privateData.get("addHealthBoundary", 0);
-        addHealthBoundaryTime = privateData.get("addHealthBoundaryTime", 0);
-
-        health = privateData.get("health", 0);
-        recoverSpeed = data.get("recoverSpeed");
+        inTransfer = privateData.get("inTransfer", 0);
+        transferStartTime = privateData.get("transferStartTime", 0);
         initAttackAndDefense(this);
-        if(firstBuy)
-            health = healthBoundary;
-        
-        exp = privateData.get("exp", 0);
-        dead = privateData.get("dead", 0);
-        
-
-        attSpeed = data.get("attSpeed");
-        attRange = data.get("range");
-
-
-    }
-    var recoverTime = 0;
-    //[[lev, [health, magicDefense, physicDefense, physicAttack, magicAttack]], ...]
-    //if i >= len(stage)
-    //计算裸 基本属性
-
-    var addAttack = 0;
-    var addAttackTime = 0;
-    var addDefense = 0;
-    var addDefenseTime = 0;
-    var addHealthBoundary = 0;
-    var addHealthBoundaryTime = 0;
-
-    //攻击药水 防御药水 在闯关的1个回合中暂时提升士兵能力 100 attack 100 defense
-    //复活药水 复活士兵 增加 0 
-    //取消增加经验药水
-    //%生命 %攻击 %防御 加百分比的药水在 使用的时候将会转化成 增加数值
-    function doRelive()
-    {
-        dead = 0;
-        health = healthBoundary;
-        global.user.updateSoldiers(this);
-        global.msgCenter.sendMsg(RELIVE_SOL, [sid, global.user.getSoldierData(sid)]);
-    }
-    //计算药水使用在 当前士兵身上的效果值
-    //dict({k:v})
-    function getDrugEffect(tid)
-    {
-        var pureData = getSolPureData(id, level);
-        var dd = getGain(DRUG, tid);
-        var it = dd.items()[0];
-        var k = it[0];
-        var v = it[1];
-        if(k.find("percent") != 0)
-            return dd;
-
-        var ret = dict();
-        if(dd.get("percentHealth") != null)
-            ret.update("health", pureData["healthBoundary"]*dd.get("percentHealth")/100);
-        if(dd.get("percentAttack") != null)
-        {
-            var purePhyAttack = pureData["physicAttack"];
-            var pureMagAttack = pureData["magicAttack"];
-            var attack = dd.get("percentAttack")*max(purePhyAttack, pureMagAttack)/100;
-            ret.update("attack", attack);
-        }
-        if(dd.get("percentDefense") != null)
-        {
-            var purePhyDef = pureData["physicDefense"];
-            var pureMagDef = pureData["magicDefense"];
-            var defense = dd.get("percentDefense")*max(purePhyDef, pureMagDef)/100;
-            ret.update("defense", defense);
-        }
-        if(dd.get("percentHealthBoundary") != null)
-        {
-            var pureHealthBoundary = pureData["healthBoundary"];
-            var healthBoundary = dd.get("percentHealth")*pureHealthBoundary/100;
-            ret.update("healthBoundary", healthBoundary); 
-        }
-        return ret;
-    }
-
-    function useDrug(tid)
-    {
-        var dd = getData(DRUG, tid);    
-        changeHealth(dd.get("health"));
-
-        var pureData = getSolPureData(id, level);
-        var pureHealthBoundary;
-
-        if(dd.get("healthBoundary") != 0)
-        {
-            addHealthBoundary = dd.get("healthBoundary");
-            addHealthBoundaryTime = dd.get("effectTime");
-        }
-        else if(dd.get("percentHealth") != 0)
-        {
-            pureHealthBoundary = pureData["healthBoundary"];
-            changeHealth(dd.get("percentHealth")*pureHealthBoundary/100);
-        }
-        else if(dd.get("percentHealthBoundary") != 0)
-        {
-            pureHealthBoundary = pureData["healthBoundary"];
-            addHealthBoundary = dd.get("percentHealth")*pureHealthBoundary/100;
-            addHealthBoundaryTime = dd.get("effectTime");
-        }
-        else if(dd.get("percentAttack") != 0)
-        {
-            var purePhyAttack = pureData["physicAttack"];
-            var pureMagAttack = pureData["magicAttack"];
-            addAttack = dd.get("percentAttack")*max(purePhyAttack, pureMagAttack)/100;
-            addAttackTime = dd.get("effectTime");
-        }
-        else if(dd.get("percentDefense") != 0)
-        {
-            var purePhyDef = pureData["physicDefense"];
-            var pureMagDef = pureData["magicDefense"];
-            addDefense = dd.get("percentDefense")*max(purePhyDef, pureMagDef)/100;
-            addDefenseTime = dd.get("effectTime");
-        }
-        else if(dd.get("attack") != 0)
-        {
-            addAttack = dd.get("attack");
-            addAttackTime = dd.get("effectTime");
-        }
-        else if(dd.get("defense") != 0)
-        {
-            addDefense = dd.get("defense");
-            addDefenseTime = dd.get("effectTime");
-        }
-        else if(dd.get("relive") == 1)//x% life dead = 0
-        {
-//            trace("reliveSoldier", sid);
-            dead = 0;
-            //health = dd.get("effectTime")*healthBoundary/100; 
-            health = healthBoundary;
-            //复活本士兵
-
-        }
-        initAttackAndDefense(this);
-        initHealth();
-        global.user.updateSoldiers(this);
-
-        if(dd.get("relive") == 1)
-            global.msgCenter.sendMsg(RELIVE_SOL, [sid, global.user.getSoldierData(sid)]);
+        initEquipAttribute(this, global.user.getSoldierEquipData(sid));
     }
 
     function updateState()
     {
         initAttackAndDefense(this);
+        initEquipAttribute(this, global.user.getSoldierEquipData(sid));
         initHealth();
     }
     //参数  -1 表示去掉某件装备
@@ -254,19 +70,13 @@ class BusiSoldier extends MyNode
     function useEquip(tid)
     {
         updateState();
-        //initAttackAndDefense(this);
-        //initHealth();
         global.user.updateSoldiers(this);
     }
     function updateTransData()
     {
         data = getData(SOLDIER, id);
-        //id = data.get("id");
-        //var colStr = "red";
         load_sprite_sheet("soldierm"+str(id)+".plist");
         changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png");
-        //initAttackAndDefense(this);
-        //initHealth();
         updateState();
         if(movAni != null)
         {
@@ -275,28 +85,7 @@ class BusiSoldier extends MyNode
         movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
     }
 
-    function updateStaticData()
-    {
-        id = global.user.getSoldierData(sid)["id"];
-        updateTransData();
-    }
 
-    //杀死该士兵后
-    //view 消失 user 场景对象消失
-    /*
-    function killMonster()
-    {
-        dead = 1;
-        global.user.updateSoldiers(this);//更新死亡状态
-        map.removeChild(this); 
-    }
-    */
-    //闯关页面士兵死亡  经营页面 在进入场景的时候会根据数据重新生成士兵
-
-    function doTrain()
-    {
-        //killMonster();
-    }
     var changeDirNode;
     /*
     所有和bg 相关的 需要改变方向的需要修改成changeDirNode
@@ -324,15 +113,12 @@ class BusiSoldier extends MyNode
         oldState = state;
         state = SOL_NAME;
         clearMoveState();//停止移动
-        map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], null), MAX_BUILD_ZORD);
+        map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], finishName), MAX_BUILD_ZORD);
     }
     function finishName()
     {
-        if(oldState != null)
-        {
-            state = oldState;
-            oldState = null;
-        }
+        state = oldState;
+        oldState = null;
     }
 
     function BusiSoldier(m, d, privateData, s)
@@ -404,25 +190,6 @@ class BusiSoldier extends MyNode
     {
         sid = s;
     }
-    /*
-    function doSell()
-    {
-        global.director.pushView(new SellDialog(this), 1, 0);
-    }
-    */
-    function sureToSell()
-    {
-        global.httpController.addRequest("soldierC/sellSoldier", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
-        var cost = getCost(SOLDIER, id);
-        cost = changeToSilver(cost);
-        global.user.doAdd(cost);
-        //global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
-        //修改view
-        //修改数据
-        //global.msgCenter.sendMsg(BUYSOL, null);
-        clearSol();
-        global.msgCenter.sendMsg(SELL_SOL, sid);
-    }
     //卖出士兵之后接受消息清除自身
     function clearSol()
     {
@@ -432,9 +199,7 @@ class BusiSoldier extends MyNode
         global.msgCenter.sendMsg(BUYSOL, null);
         global.user.sellSoldier(this);
     }
-    function sellOver()
-    {
-    }
+    //游戏2中
     function changeMoney(gain)
     {
         var temp = bg.addnode();
@@ -449,49 +214,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         }
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
     }
-    //使用药品应该出现生命图标
-    function changeExp(add)
-    {
-        if(add == 0)
-            return;
-        exp += add;
-        var ne = getLevelUpExp(id, level);
-        if(exp >= ne)
-        {
-            for(; 1; )
-            {
-                ne = getLevelUpExp(id, level);
-                if(exp >= ne)
-                {
-                    exp -= ne;
-                    level += 1;
-                }
-                else 
-                    break;
-            }
-            initAttackAndDefense(this);
-            initHealth();
-            if(dead == 0)
-                health = healthBoundary;
-        }
-
-        var temp = bg.addnode().scale(100*100/PARAMS["SOL_SHOW_SIZE"]);
-        temp.addsprite("exp.png").anchor(0, 50).pos(0, -30).size(30, 30);
-        temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(6, 26, 46);
-        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
-    }
-    function changeHealth(add)
-    {
-        if(add == 0)
-            return;
-        health += add;
-        health = min(healthBoundary, health);
-
-        var temp = bg.addnode().scale(100*100/PARAMS["SOL_SHOW_SIZE"]);
-        temp.addsprite("drug0.png").anchor(0, 50).pos(0, -30).size(30, 30);
-        temp.addlabel("+" + str(add), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(6, 26, 46);
-        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
-    }
     /*
     修改士兵的id
     修改士兵的攻击力 防御力 经验
@@ -499,10 +221,39 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     */
     function doTransfer()
     {
+        trace("start transfer");
+        inTransfer = 1;
+        transferStartTime = client2Server(time()/1000);
+        global.user.updateSoldiers(this);//更新士兵类型
+        //global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
+    }
+
+    //完成转职
+    function finishTransfer()
+    {
+        global.httpController.addRequest("soldierC/finishTransfer", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
+        inTransfer = 0;
+        transferStartTime = 0;
         id += 1;
         updateTransData();
-        global.user.updateSoldiers(this);//更新士兵类型
-        global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
+        global.user.updateSoldiers(this);
+
+        oldState = state;
+        state = SOL_IN_TRANSFER;
+        clearMoveState();
+        map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], transferOver), MAX_BUILD_ZORD);
+    }
+    //action
+    function transferOver()
+    {
+        state = oldState;
+        oldState = null;
+    }
+
+    function getLeftTime()
+    {
+        var leftTime = data["transferTime"] - (time()/1000-server2Client(transferStartTime));
+        return max(leftTime, 0);
     }
     var accMove = 0;
     var lastPoints;
@@ -521,7 +272,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             {   
                 setBottom();
             }
-            //if(global.director.curScene.curBuild == this)
             map.mapGridController.clearSolMap(this); 
         }
         else //if(curStatus == NO_STATUS)
@@ -533,12 +283,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         if(bottom == null)
         {
             var bSize = bg.size();
-            /*
-            如果方块的大小恰好和建筑物的底座一样大小 那么要求建筑物底座必须要一定大小
-            +40 +20
-            士兵脚底是方块中心
-            士兵的sx sy 与 建筑不同
-            */
             bottom = sprite().pos(bSize[0]/2, bSize[1]).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
             bg.add(bottom, -1);
         }
@@ -602,37 +346,28 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         }
 
     }
+    //都有装备
     function showGlobalMenu()
     {
         showMenuYet = 1;
         var func1;
         var solOrMon = data.get("solOrMon");
         //怪兽没有装备
-        if(solOrMon == 1)
-            func1 = ["photo", "drug"];
+        func1 = ["photo", "equip"];
         //普通士兵装备
-        else
-            func1 = ["photo", "drug", "equip"];
             
+        var career = id%10;
+
         var func2;
-        var isHero = data.get("isHero");
-        if(isHero == 0)
+        if(curStatus != NO_STATUS)
         {
-            if(curStatus != NO_STATUS)
-            {
-                func2 = ["menu"+str(curStatus), "singleTrain", "gather"];
-            }
-            else
-                func2 = ["singleTrain", "gather"];
+            func2 = ["menu"+str(curStatus)];
         }
         else
-        {
-            if(curStatus != NO_STATUS)
-                func2 = ["menu"+str(curStatus), "singleTrain", "skill", "gather"];
-            else
-                func2 = ["singleTrain", "skill", "gather"];
-        }
+            func2 = [];
           
+        if(career < 3 && !inTransfer)//0 1 2 3
+            func2.append("transfer");
         //快速编译解决依赖关系
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
     }
@@ -669,7 +404,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     function setName(n)
     {
         myName = n;
-        global.httpController.addRequest("soldierC/setName", dict([["uid", global.user.uid], ["sid", sid], ["name", myName]]), null, null);
+        //global.httpController.addRequest("soldierC/setName", dict([["uid", global.user.uid], ["sid", sid], ["name", myName]]), null, null);
         global.user.updateSoldiers(this);
     }
     /*
@@ -683,7 +418,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         global.msgCenter.registerCallback(UPDATE_EQUIP, this);
         global.msgCenter.registerCallback(USE_DRUG, this);
         global.msgCenter.registerCallback(SELL_SOL, this);
-        global.msgCenter.registerCallback(TRANSFER_SOL, this);
+        //global.msgCenter.registerCallback(TRANSFER_SOL, this);
         global.msgCenter.registerCallback(MOVE_TO_SOL, this);
     }
     function receiveMsg(param)
@@ -719,12 +454,14 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         }
         else if(mid == TRANSFER_SOL)
         {
+            /*
             var tranSid = param[1];
             if(sid == tranSid)
             {
                 //更新士兵id
                 updateStaticData();
             }
+            */
         }
         else if(mid == MOVE_TO_SOL)
         {
@@ -810,8 +547,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             map.mapGridController.clearSolMap(this);
             bg.pos(TRAIN_CENTER);
         }
-        //trace("move TarGetPos", start+i);
-        //trace("getTar", moveable);
         if(moveable == 1)
         {
             var tmap = allPos[(start+i)%len(allPos)];
@@ -832,16 +567,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         else
             changeDirNode.scale(-100, 100);
     }
-    /*
-    function showInspire()
-    {
-        if(inspire == 1)
-        {
-            var bsize = bg.size();
-            inspirePic = bg.addsprite("soldierMorale.png").pos(bsize[0]/2, -5).anchor(50, 100);
-        }
-    }
-    */
     //var inspireTime = 0;
     //士兵当前占用的map映射格子 
     var curMap = null;
@@ -864,23 +589,12 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     }
     function update(diff)
     {
-        recoverTime += diff;
-        if(recoverTime >= RECOVER_TIME)
+        if(inTransfer)
         {
-            //需要优化生命值数据
-            //回复累计1min
-            if(health < healthBoundary)
-            {
-                var addHealth = min(recoverSpeed, healthBoundary-health);
-                global.httpController.cacheHealthRecover(dict([["sid", sid], ["addHealth", addHealth]]));
-            }
-            health += recoverSpeed;
-            health = min(health, healthBoundary);
-            recoverTime = 0;
-            initHealth();
-
+            var leftTime = data["transferTime"] - (time()/1000-server2Client(transferStartTime));
+            if(leftTime <= 0)
+                finishTransfer();
         }
-
 
         if(Planing)//规划中停止移动
             return;
@@ -984,7 +698,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
 
     override function exitScene()
     {
-        global.msgCenter.removeCallback(TRANSFER_SOL, this);
+        //global.msgCenter.removeCallback(TRANSFER_SOL, this);
         global.msgCenter.removeCallback(MOVE_TO_SOL, this);
         global.msgCenter.removeCallback(SELL_SOL, this);
         global.msgCenter.removeCallback(USE_DRUG, this);
@@ -1057,46 +771,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             realClearStatus();
         }   
     }
-    //生命值少于2/3
-    //返回是否有了状态
-    function genBloodAndTransferStatus()
-    {
-        if(inGame)
-            return;
-        if(status == null)
-        {
-            var rd = rand(100);
-            if(health < healthBoundary*2/3) 
-            {
-                //if(rd < 50)
-                //curStatus = BLOOD_STATUS;
-                curStatus = HEART_STATUS;
-                //else
-                //    curStatus = HEART_STATUS;
-            }
-            else
-            {
-                var tranLev = getTransferLevel(this);
-                if(level >= tranLev && tranLev != -1)
-                {
-                    curStatus = TRANSFER_STATUS;
-                }
-            }
-            showCurStatus();
-        }
-        return curStatus;
-    }
-    var possible = null;
-    function initPossible()
-    {
-        possible = [];
-        var i;
-        possible.append(statusPossible[0][1]);
-        for(i = 1; i < len(statusPossible); i++)
-        {
-            possible.append(statusPossible[i][1]+possible[i-1]);
-        }
-    }
     /*
     生成加经验游戏 和 捡银币游戏
     30 70 概率
@@ -1107,13 +781,8 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             return;
         if(curStatus == NO_STATUS)
         {
-            var rd = rand(100);
-            if(rd < 30)
-            {
-                curStatus = EXP_GAME;  
-            }
-            else 
-                curStatus = PICK_GAME;
+            //只有捡金币游戏
+            curStatus = PICK_GAME;
             showCurStatus();
         }
     }
@@ -1130,12 +799,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     var gameId = -1;
     function beginGame(gId)
     {
-        /*
-        inGame = 1;
-        gameId = gId;
-        clearMoveState();
-        map.mapGridController.clearSolMap(this);
-        */
         realBeginGame(gId);
         //单人游戏 隐藏所有其他士兵 在游戏结束时显示其他士兵
         map.hideSoldier(this);
@@ -1151,8 +814,6 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         map.showSoldier(this);
         map.map.moveToNormal(this);
         realEndGame();
-        //inGame = 0;
-        //gameId = -1;
     }
 
     //game 1 3 4 共用的 去除特定游戏的代码

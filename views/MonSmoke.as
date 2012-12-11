@@ -58,7 +58,7 @@ class MonSmoke extends MyNode
             appearStar.removefromparent();
             if(callback != null)
             {
-                
+                callback();   
             }
         }
     }

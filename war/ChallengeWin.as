@@ -3,8 +3,7 @@ class ChallengeWin extends MyNode
     var map;
     var param;
     var roundStar;
-    var rewardStr;
-    var levelUpStr;
+    var levelUpStr = null;
     var button0;
     var button1;
     var board;
@@ -32,32 +31,24 @@ class ChallengeWin extends MyNode
         }
 
         //UI 组件做成内容可替换的
-        var reward = param["reward"];
-        rewardStr = "";
         var i;
-        for(i = 0; i < len(reward); i++)
-        {
-            global.user.changeGoodsNum(HERB, reward[i][0], reward[i][1]);
-            var hData = getData(HERB, reward[i][0]);
-            
-            if(i < (len(reward)-1))
-                rewardStr += hData.get("name")+"X"+str(reward[i][1])+", ";
-            else
-                rewardStr += hData.get("name")+"X"+str(reward[i][1]);
-        }
 
-        var sols = param.get("levelUpSol");
+        var sols = param.get("deadSols");
         if(len(sols) > 0)
         {
             var nstr = "";
             for(i = 0; i < len(sols); i++)
             {
-                nstr += sols[i].myName+"、";
+                if(i < len(sols)-1)
+                    nstr += sols[i].myName+"、";
+                else
+                    nstr += sols[i].myName;
             }
-            levelUpStr = getStr("solExp", ["[NAMES]", nstr]);
+            levelUpStr = getStr("deadSols", ["[NAMES]", nstr]);
         }
         else
-            levelUpStr = getStr("noLevelUp", null);
+            levelUpStr = null;
+            //levelUpStr = getStr("noLevelUp", null);
     }
     function initView()
     {
@@ -67,13 +58,25 @@ class ChallengeWin extends MyNode
         var line;
         var temp;
         var sca;
+        var i;
         board = bg.addsprite("dialogRoundOver.png").anchor(50, 50).pos(398, 201).size(542, 403).color(100, 100, 100, 100);
         roundStar = bg.addsprite("round"+str(param["star"])+"Star.png").anchor(50, 50).pos(402, 136).size(137, 56).color(100, 100, 100, 100);
-        line = stringLines(getStr("rewardList", ["[NAMES]", rewardStr]), 17, 28, [11, 11, 11], FONT_NORMAL );
-        line.pos(213, 207);
-        bg.add(line);
 
-        temp= bg.addlabel(levelUpStr, "fonts/heiti.ttf", 17, FONT_NORMAL, 334, 0, ALIGN_LEFT).anchor(0, 0).pos(213, 237).color(11, 11, 11);
+        var its = param["reward"].items();
+        var rewStr = "";
+        for(i = 0; i < len(its); i++)
+        {   
+            if(i < (len(its)-1))
+            {
+                rewStr += str(its[i][1])+getStr(its[i][0], null)+"、";   
+            }
+            else
+                rewStr += str(its[i][1])+getStr(its[i][0], null);   
+        }
+        temp = bg.addlabel(getStr("youGetReward", ["[REWARDS]", rewStr]), "fonts/heiti.ttf", 17, FONT_NORMAL).color(11, 11, 11).pos(213, 207);
+
+        if(levelUpStr != null)
+            temp = bg.addlabel(levelUpStr, "fonts/heiti.ttf", 17, FONT_NORMAL, 334, 0, ALIGN_LEFT).anchor(0, 0).pos(213, 237).color(11, 11, 11);
 
         bg.addlabel(getStr("roundShare", null), "fonts/heiti.ttf", 17).anchor(0, 50).pos(212, 310).color(40, 37, 37);
         bg.addlabel(getStr("sucWord", null), "fonts/heiti.ttf", 19).anchor(0, 50).pos(212, 184).color(64, 32, 32);

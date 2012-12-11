@@ -25,8 +25,7 @@ class AllSoldier extends MyNode
         data = [];
         for(var i = 0; i < len(its); i++)
         {
-            if(its[i][1]["dead"] == 0)//只有没有阵亡的士兵
-                data.append(its[i]);
+            data.append(its[i]);
         }
     }
 
@@ -61,23 +60,10 @@ class AllSoldier extends MyNode
         bg = node();
         init();
         initData();
-
-        skillBut = new NewButton("solSkill.png", [59, 47], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onSkill, null);
-        skillBut.bg.pos(211, 433);
-        //addChild(skillBut);
-
-        sellBut = new NewButton("solSell.png", [34, 43], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onSell, null);
-        sellBut.bg.pos(211, 433);
-        //addChild(but0);
+        var but0;
         
-        var but0 = new NewButton("solDrug.png", [38, 45], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onDrug, null);
-        but0.bg.pos(159, 432);
-        addChild(but0);
         but0 = new NewButton("solEquip.png", [48, 46], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onEquip, null);
-        but0.bg.pos(110, 431);
-        addChild(but0);
-        but0 = new NewButton("solTrain.png", [44, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onTrain, null);
-        but0.bg.pos(60, 429);
+        but0.bg.pos(60, 431);
         addChild(but0);
 
         but0 = new NewButton("dialogSolDetail0.png", [41, 30], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onDetail, null);
@@ -248,11 +234,9 @@ class AllSoldier extends MyNode
 
             var busiSol = new BusiSoldier(null, sData, soldier[1], soldier[0]);//privateData sid
 
-            var att = max(busiSol.physicAttack, busiSol.magicAttack);
-            var def = max(busiSol.physicDefense, busiSol.magicDefense);
             var healthBoundary = busiSol.healthBoundary;
 
-            var line = stringLines(getStr("allSolDes", ["[NAME]", busiSol.myName, "[CAREER]", busiSol.data["name"], "[LEV]", str(busiSol.level), "[ATTKIND]", getStr(SOL_CATEGORY[busiSol.data["kind"]], null), "[ATT]", str(att), "[DEF]", str(def), "[HEALTH]", str(healthBoundary)] ), 15, 20, [100, 100, 100], FONT_NORMAL );
+            var line = stringLines(getStr("allSolDes", ["[NAME]", busiSol.myName, "[CAREER]", busiSol.data["name"], "[ATTKIND]", getStr(SOL_CATEGORY[busiSol.data["kind"]], null), "[ATT]", str(busiSol.attack), "[DEF]", str(busiSol.defense), "[HEALTH]", str(healthBoundary)] ), 15, 20, [100, 100, 100], FONT_NORMAL );
             line.pos(47, 275);
             infoNode.add(line);
         }

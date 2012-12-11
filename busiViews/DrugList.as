@@ -69,7 +69,7 @@ class DrugList extends MyNode
                 var owner = val.get("owner");
                 if(owner != -1)
                 {
-                    if(owner == soldier.sid)//我方装备
+                    if(owner == soldier.sid)//仅显示 当前士兵的装备
                         usedEquips.append([USE_EQUIP, key[i]]);
                 }
                 else
@@ -124,7 +124,6 @@ class DrugList extends MyNode
         var rg = getRange();
         for(var i = rg[0]; i < rg[1]; i++)
         {
-
             var curNum = i; 
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i);
 
@@ -178,15 +177,6 @@ class DrugList extends MyNode
             }
             else if(kind == EQUIP)
             {
-                var eqLevel = useData.get("level");
-                temp = panel.addsprite("skillLevel.png").anchor(50, 50).pos(59, 55).size(60, 14).color(100, 100, 100, 100);
-                panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(58, 56).color(49, 90, 48);
-                if(useData.get("level") < PARAMS["maxEquipLevel"])
-                {
-                    but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("upgrade", null), null, 18, FONT_NORMAL, [100, 100, 100], onUpgrade, curNum);
-                    but0.bg.pos(573, 36);
-                    panel.add(but0.bg);
-                }
                 but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("unloadIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onUnloadIt, curNum);
                 if(ifUse == 0)
                 {
@@ -233,16 +223,11 @@ class DrugList extends MyNode
 
         if(kind == EQUIP)
         {
+            //相同属性装备 不能装备多件
             var ret = global.user.checkSoldierEquip(soldier.sid, p);
             if(ret == 0)
             {
                 global.director.pushView(new MyWarningDialog(getStr("oneEquipTitle", null), getStr("oneEquipCon", null), null), 1, 0);
-                return;
-            }
-            ret = global.user.checkUseLevel(soldier.sid, p);
-            if(ret[0] == 0)
-            {
-                global.director.pushView(new MyWarningDialog(getStr("useLevelNot", null), getStr("useLevelCon", ["[LEV0]", str(ret[1]), "[LEV1]", str(ret[2])]), null), 1, 0);
                 return;
             }
         }

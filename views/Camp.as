@@ -1,27 +1,78 @@
 //避免多重继承Camp 所以使用CampWorkNode 作为更新节点
+
+//检测objectList 头部类型---> id, number---->
+//计时结束 生产头部类型
+
+//计时方式:
+//  id--->needTime 
+// startTime += 
 class CampWorkNode extends MyNode
 {
     var func;
     var flowBanner = null;
     function CampWorkNode(f)
     {
+        trace("init Camp Node");
         func = f;
         bg = node();
         init();
     }
+    function getNewName()
+    {
+        var rd = rand(len(soldierName));
+        var sname = getStr(soldierName[rd][0], "");
+        soldierName.pop(rd);
+        return sname;
+    }
+    //每个兵营都初始化一次名字？
     //加速时间 <= 0 进入完成状态
     //考虑 加速时间到 时建筑物 打开招募对话框 自动关闭
     function update(diff)
     {
-        var leftTime = func.getLeftTime();
-        if(leftTime <= 0 && flowBanner == null)
+        if(len(func.baseBuild.objectList) > 0)
         {
-            var bSize = func.baseBuild.bg.size();
-            flowBanner = func.baseBuild.bg.addsprite("callFlow.png").pos(bSize[0]/2, -5).anchor(50, 100);
-            flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
-            
-            //兵营结束招募 提示 用户收获
-            global.taskModel.showHintArrow(func.baseBuild.bg, func.baseBuild.bg.size(), HARVEST_SOL);
+            var harvestYet = 0;
+            var totalNeedTime = 0;
+            while(1)
+            {
+                var leftTime = func.getRealLeftTime();
+                var needTime = leftTime[1];//当前士兵需要的工作时间
+                leftTime = leftTime[0];
+                //剩余时间最小0
+                //且正在工作
+                var objectList = func.baseBuild.objectList;
+                trace("finish camp", leftTime, objectList);
+                if(leftTime <= 0 && len(objectList) > 0)
+                {
+                    var solId = objectList[0][0];
+                    var sid = global.user.getNewSid();
+                    var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid);
+                    var newName = getNewName();
+                    newSol.setName(newName);
+                    global.user.updateSoldiers(newSol);
+                    global.msgCenter.sendMsg(BUYSOL, newSol.sid);
+                    
+                    global.httpController.addRequest("buildingC/campHarvestSoldier", dict([["uid", global.user.uid], ["bid", func.baseBuild.bid], ["solId",  solId], ["sid", sid], ["name", newName]]), null, null);//收获之后 命名士兵
+                    
+                    trace("objectList Num", objectList[0]);
+                    objectList[0][1] -= 1;
+                    if(objectList[0][1] <= 0)
+                        objectList.pop(0);
+
+                    global.user.updateBuilding(func.baseBuild);
+                    harvestYet = 1;
+
+                    totalNeedTime += needTime;
+                    func.objectTime += needTime;
+                }
+                else
+                    break;
+            }
+            if(harvestYet)
+            {
+                global.msgCenter.sendMsg(CALL_SOL_FINISH, null);
+                func.startWork();//更新工作时间
+            }
         }
     }
     override function enterScene()
@@ -34,14 +85,6 @@ class CampWorkNode extends MyNode
         global.timer.removeTimer(this);
         super.exitScene();
     }
-    function clearFlowBanner()
-    {
-        if(flowBanner != null)
-        {
-            flowBanner.removefromparent();
-            flowBanner = null;
-        }
-    }
 }
 class Camp extends FuncBuild
 {
@@ -52,92 +95,107 @@ class Camp extends FuncBuild
     {
         baseBuild = b;
         workNode = new CampWorkNode(this);
+        //需要等待baseBuild init结束才能
+        baseBuild.addChild(workNode);
     }
     //BUYSOL 信号发出 自动移动 当前屏幕
     override function whenBusy()
     {
-        var leftTime = getLeftTime();
-        if(leftTime <= 0)//收获 但是更新士兵数据需要构造一个虚拟的士兵对象来调用 user接口来初始化士兵数据
-        {
-            workNode.removeSelf();
-            workNode.clearFlowBanner();
-
-            var sid = global.user.getNewSid();
-            var newSol = new BusiSoldier(null, getData(SOLDIER, objectId), null, sid);
-            global.user.updateSoldiers(newSol);
-            global.msgCenter.sendMsg(BUYSOL, sid);//购买新的士兵 通知经营页面添加士兵
-            global.httpController.addRequest("buildingC/finishCall", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["sid", sid]]), null, null);//收获之后 命名士兵
-            
-
-            baseBuild.state = PARAMS["buildFree"];
-            global.user.updateBuilding(baseBuild);
-
-            return 1;
-        }
+        //工作时 点击士兵一次性收获多个?
         return 0;
     }
+    /*
+    兵营总是在工作状态
+    检测objectList
+    队列不空则工作 
+    兵营没有工作状态
+    */
     override function initWorking(data)
     {
         if(data == null)
             return null;
-        if(baseBuild.state != PARAMS["buildWork"])
-            return;
-        objectId = data.get("objectId"); 
-        objectTime = server2Client(data.get("objectTime")); 
-        baseBuild.addChild(workNode);
+        if(len(baseBuild.objectList) > 0)
+        {
+            //baseBuild.state = PARAMS["buildWork"];
+            objectId = 0;
+            objectTime = server2Client(data.get("objectTime")); 
+        }
     }
-    override function doAcc()
+
+    //需要自己计算剩余时间
+    //修正objectTime
+    //立即更新workNode
+    function adjustObjectTime(needTime)
     {
-        var gold = getAccCost();
-        var cost = dict([["gold", gold]]);
-        global.user.doCost(cost);
-        var needTime = getData(SOLDIER, objectId)["time"];
-        var now = time()/1000;
-        objectTime = now - needTime; 
+        objectTime -= needTime;
+        workNode.update(0);
         global.user.updateBuilding(baseBuild);
-
-        global.httpController.addRequest("buildingC/accWork", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["objectKind", SOLDIER], ["gold", gold]]), null, null);
-
-        var showData = cost; 
-        global.director.curScene.addChild(new PopBanner(cost2Minus(showData)));//自己控制
-
-
     }
-    override function getAccCost()
+    //更新兵营工作时间
+    function startWork()
     {
-        var leftTime = getLeftTime();
-        return max(leftTime/3600, 1); 
-    }
-
-    function beginWork(sid)
-    {
-        baseBuild.setState(PARAMS["buildWork"]); 
-        objectId = sid;
-        objectTime = time()/1000; 
+        objectTime = time()/1000;
         global.user.updateBuilding(baseBuild);
-        baseBuild.addChild(workNode);//开始更新工作状态 直到 收获士兵
+        global.httpController.addRequest("buildingC/campUpdateWorkTime", dict([["uid", global.user.uid], ["bid", baseBuild.bid]]), null, null);
     }
-    override function getObjectId()
+    //
+    function addSoldier(kind)
     {
-        if(baseBuild.state == PARAMS["buildWork"])
-            return objectId;
-        return -1;
+        var objectList = baseBuild.objectList;
+        var index = null;
+        for(var i = 0; i < len(objectList); i++)
+        {
+            if(objectList[i][0] == kind)
+            {
+                index = objectList[i];
+                break;
+            }
+        }
+        if(index == null)
+            objectList.append([kind, 1]);
+        else
+            index[1] += 1;
+        global.user.updateBuilding(baseBuild);
     }
+
+    //objectTime 是客户端时间
+    //收获一个士兵 objectTime += leftTime 时间向后移动一下
+    //harvestYet 来更新 远程工作时间
+    //objectTime += needTime
     override function getLeftTime()
     {
-        //计算剩余时间采用本地时间
-        if(baseBuild.state == PARAMS["buildWork"])
+        /*
+        if(len(baseBuild.objectList) > 0)
         {
-            var needTime = getData(SOLDIER, objectId)["time"];
+            //trace("camp leftTime", baseBuild.objectList);
+
+            var sol = baseBuild.objectList[0];
+            var needTime = getData(SOLDIER, sol[0])["time"];
             var now = time()/1000;
             var passTime = now-objectTime;
             return max(needTime-passTime, 0);
         }
         return 0;
+        */
+        return getRealLeftTime()[0];
+    }
+    function getRealLeftTime()
+    {
+        if(len(baseBuild.objectList) > 0)
+        {
+            //trace("camp leftTime", baseBuild.objectList);
+
+            var sol = baseBuild.objectList[0];
+            var needTime = getData(SOLDIER, sol[0])["time"];
+            var now = time()/1000;
+            var passTime = now-objectTime;
+            return [max(needTime-passTime, 0), needTime];
+        }
+        return [0, 0];
     }
     override function getStartTime()
     {
-        if(baseBuild.state == PARAMS["buildWork"])
+        if(len(baseBuild.objectList) > 0)
             return client2Server(objectTime); 
         return 0;
     }

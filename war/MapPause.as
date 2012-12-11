@@ -88,10 +88,7 @@ class MapPause extends MyNode
             bg.addlabel(global.user.name, "fonts/heiti.ttf", 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
             temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(51, 41).size(68, 63).color(100, 100, 100, 100);
             //自己头像
-            var sid = global.user.getFirstHero();
-            var spriData = global.user.getSoldierData(sid);
-
-            temp = bg.addsprite("soldier"+str(spriData["id"])+".png").anchor(50, 50).pos(52, 41).color(100, 100, 100, 100);
+            temp = bg.addsprite(avatar_url(global.user.papayaId)).anchor(50, 50).pos(52, 41).color(100, 100, 100, 100);
             sca = getSca(temp, [63, 56]);
             temp.scale(sca);
             leftText = bg.addlabel("", "fonts/heiti.ttf", 28).anchor(0, 50).pos(91, 29).color(0, 0, 0);

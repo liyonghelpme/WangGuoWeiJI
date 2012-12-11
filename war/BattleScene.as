@@ -156,15 +156,14 @@ class BattleScene extends MyNode
         user = argument["user"];
 
         skills = dict();
-        var sk = argument["skills"];
+        var sk = argument["skills"];//skills --->soldierId--->dict([skillId, skillLevel])
         if(sk != null)
         {
             for(var i = 0; i < len(sk); i++)
             {
                 var solSk = sk[i];
-                var skLev = skills.get(solSk[0], dict());
+                var skLev = skills.setdefault(solSk[0], dict());
                 skLev.update(solSk[1], solSk[2]);
-                skills.update(solSk[0], skLev);
             }
         }
         big = argument["big"];

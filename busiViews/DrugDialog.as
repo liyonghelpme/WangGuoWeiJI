@@ -61,11 +61,6 @@ class DrugDialog extends MyNode
             but0.word.setWords(getStr("buyEquipBut", null));
         }
 
-        but0 = new NewButton("blueButton.png", [113, 42], getStr("freeMake", null), null, 20, FONT_NORMAL, [100, 100, 100], onFreeMake, null);
-        but0.bg.pos(537, 125);
-        addChild(but0);
-        if(kind == EQUIP)
-            but0.word.setWords(getStr("freeForge", null));
     }
     function onFreeMake()
     {
@@ -114,11 +109,8 @@ class DrugDialog extends MyNode
             nameText.text(soldier.myName);
             healthText.text(str(soldier.health)+"/"+str(soldier.healthBoundary));
 
-            var attack = max(soldier.physicAttack, soldier.magicAttack);
-            var defense = max(soldier.physicDefense, soldier.magicDefense);
-
-            attText.text(str(attack));
-            defText.text(str(defense));
+            attText.text(str(soldier.attack));
+            defText.text(str(soldier.defense));
         }
     }
     function receiveMsg(para)

@@ -28,6 +28,7 @@ class Building extends MyNode
     
 
     var bottom = null;
+    var objectList;
 
     /*
     在设置完特殊建筑之后设置相应的建筑的
@@ -55,6 +56,8 @@ class Building extends MyNode
         sx = data.get("sx");
         kind = data.get("kind");
         funcs = data.get("funcs");
+        bg = node();
+        init();//尽早初始化 node
 
         //购买建筑 随机颜色
         if(privateData == null)
@@ -64,10 +67,9 @@ class Building extends MyNode
         }
         else
             buildColor = privateData.get("color", 0);
-            
 
+        objectList = privateData.get("objectList", []);
         buildLevel = privateData.get("level", 0);
-
 
         if(funcs == FARM_BUILD)
             funcBuild = new Farm(this);
@@ -99,7 +101,7 @@ class Building extends MyNode
         else 
             funcBuild = new Castle(this);
 
-        bg = node();
+
         if(funcs != LOVE_TREE)
             changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
         else//爱心树图片和等级相关
@@ -130,7 +132,7 @@ class Building extends MyNode
 
         //.pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
         
-        init();
+
 
         dir = privateData.get("dir", 0);
         setState(privateData.get("state", PARAMS["buildMove"]));
@@ -140,10 +142,12 @@ class Building extends MyNode
         setPos(npos);
         setColPos();
 
+
         /*
         初始化农作物 工作状态
         */
         funcBuild.initWorking(privateData);
+
         /*
         初始化动画
         动画加在 bg 上， 则 旋转时不能准确控制方向
@@ -154,6 +158,7 @@ class Building extends MyNode
             aniNode = new BuildAnimate(this);
             changeDirNode.add(aniNode.bg);
         }
+
 
         //alphatouch 变向node
         changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

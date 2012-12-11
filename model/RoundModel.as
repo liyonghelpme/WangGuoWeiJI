@@ -16,7 +16,14 @@ function getRoundMonster(big, small)
     trace("mapMonster", res);
     return res;
 }
+//1 大关奖励 1个 
+//2 大关奖励 2 个
+function getMapReward(big, small)
+{
+    return dict([["crystal", big*10+small+1], ["silver", 10*(big*10+small+1)]]);
+}
 
+/*
 function getRandomMapReward(big, small)
 {
     var reward = mapReward.get(big*10+small);
@@ -54,7 +61,7 @@ function getRandomMapReward(big, small)
     }
     return res;
 }
-
+*/
 
 /*
 战斗地图使用的Map 函数
@@ -238,5 +245,5 @@ function getChallengeNeiborCry(nid)
         cry = cry/5;
     else
         cry = cry/2;
-    return cry;
+    return max(cry, 1);
 }

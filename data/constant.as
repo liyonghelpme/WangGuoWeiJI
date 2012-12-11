@@ -36,6 +36,7 @@ const SOL_MOVE = 1;
 const SOL_WAIT = 2;
 const SOL_POS = 3;
 const SOL_NAME = 4;
+const SOL_IN_TRANSFER = 5;
 
 const INSPIRE = 1; 
 
@@ -227,7 +228,7 @@ var buildFunc = dict([
 [HOUSE_BUILD, [["photo"], [ "sell" ]]],//"upgradeBuild"
 [DECOR_BUILD, [["photo"], ["sell"]]],
 [CASTLE_BUILD, [["photo", "story"], ["tip", "collection"]]],
-[GOD_BUILD, [["photo",  "soldier"], ["relive", "train"]]],
+[GOD_BUILD, [["photo"], ["soldier"]]],
 [DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
 [MINE_KIND, [["photo", "sell"], ["upgrade", "planMine"]]],
@@ -622,6 +623,7 @@ var attEffect = dict([
 var addKey = ["people", "cityDefense", "attack", "defense", "health", "gainsilver", "gaincrystal", "gaingold", "exp", 
     "healthBoundary", "physicAttack", "physicDefense", "magicAttack", "magicDefense", "recoverSpeed",
     "percentHealth", "percentHealthBoundary", "percentAttack", "percentDefense", "effectLevel",
+    "attack", "defense",
     ];
 
 //getCost
@@ -662,6 +664,7 @@ const MAP_INFO = 19;
 const FIGHT_COST = 20;
 const MONEY_GAME_GOODS = 21;
 const EXP_GAME_GOODS = 22;
+const EQUIP_SKILL = 23;
 
 
 
@@ -689,6 +692,7 @@ var Keys = [
     fightingCostKey,
     MoneyGameGoodsKey,
     ExpGameGoodsKey,
+    equipSkillKey,
 ];
 var CostData = [
     buildingData,
@@ -714,6 +718,7 @@ var CostData = [
     fightingCostData,
     MoneyGameGoodsData,
     ExpGameGoodsData,
+    equipSkillData,
 ];
 
 //更新商店load_sprite_sheet
@@ -852,6 +857,7 @@ const INIT_NEW_TASK_FIN = 44;
 
 const FINISH_STORY = 45;
 const SHOW_HINT_WORD = 46;//经营页面或者 战斗页面 有dialogController 的 对象显示 当前的 提示文字  检测当期的系统 stack为空 
+const CALL_SOL_FINISH = 47;
 
 
 
@@ -1303,7 +1309,7 @@ const NEIBOR_REQ_KEY = ["uid", "papayaId", "name", "level", "time"];
 const GIFT_KEY = ["uid", "name", "kind", "tid", "eqLevel", "time", "gid"];
 const MSG_KEY = ["uid", "kind", "param", "time", "name", "mid"];
 
-const NEIBOR_KEY = ["uid", "id", "name", "level", "mineLevel", "challengeYet", "heartYet", "heartLevel"];
+const NEIBOR_KEY = ["uid", "id", "name", "level", "mineLevel", "challengeYet"];
 const INGAME_FRIEND_KEY = ["uid", "name", "level", "id"];
 const RECOMMAND_KEY = ["uid", "level", "name", "id"]; 
 //更新好友的key 完全可以依赖于 服务器返回一批数据 及其对应的key
@@ -1374,3 +1380,10 @@ const TASK_CAN_FINISH = 1;
 const TASK_REWARD_YET = 2;
 
 //const SCRIPT_DICT = 6;
+
+const HARM_TABLE = [
+[100, 150, 100, 100],
+[100, 100, 150, 100],
+[150, 100, 100, 100],
+[100, 100, 100, 100],
+];

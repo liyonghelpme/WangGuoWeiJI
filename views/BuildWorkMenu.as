@@ -114,8 +114,18 @@ class BuildWorkMenu extends MyNode
     //需要显示工作时间
     //普通农田 魔法农田
     //水晶矿
+    var removed = 0;
+    var passTime = 0;
     function update(diff)
     {
+        if(removed)
+        {
+            if(passTime >= getParam("hideTime"))
+                clearChildMenu();
+            passTime += diff;
+        }
+
+
         if(timeLabel != null)
         {
             var bData = build.data;
@@ -164,21 +174,36 @@ class BuildWorkMenu extends MyNode
         }
     }
     //关闭两个子菜单
-    override function removeSelf()
-    {
-        left.removeSelf();
-        right.removeSelf();
-        super.removeSelf();
-    }
+    /*
+    父菜单被删除了
+    但是子菜单要保留下来
+    */
     override function enterScene()
     {
         super.enterScene();
         global.timer.addTimer(this);
     }
-    override function exitScene()
+
+    override function removeSelf()
     {
+        left.removeSelf();
+        right.removeSelf();
+        exitScene();
+    }
+    function clearChildMenu()
+    {
+        trace("clearChildMenu");
         global.timer.removeTimer(this);
+        bg.removefromparent();
         super.exitScene();
     }
-
+    override function exitScene()
+    {   
+        if(removed)
+            return;
+        //向下移动40
+        bg.addaction(sequence(expin(moveby(getParam("hideTime"), 0, 40)), itintto(0, 0, 0, 0)));
+        removed = 1;
+        trace("childMenu exitScene");
+    }
 }

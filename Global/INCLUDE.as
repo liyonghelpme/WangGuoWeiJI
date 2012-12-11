@@ -17,7 +17,6 @@ import busiViews.SettingDialog;
 
 import busiViews.TaskDialog;
 import views.TipDialog;
-//import views.MakeDrugDialog;
 import busiViews.MakeDrugDialog;
 
 import busiViews.SoldierDialog;
@@ -70,6 +69,7 @@ import busiViews.RoleName;
 //人物对话框
 import views.BusiSoldier;
 
+
 import views.TrainBanner;
 import views.ProfessionIntroDialog;
 
@@ -78,10 +78,11 @@ import views.ProfessionIntroDialog;
 import views.ResourceBanner;
 
 
-import views.SoldierMenu;
+import busiViews.SoldierMenu;
 import busiViews.DetailDialog;
 
 import views.ChildMenuLayer;
+import busiViews.TransferDialog;
 import views.GameFour;
 import views.GameTwo;
 import views.GameThree;
@@ -94,16 +95,11 @@ import busiViews.MailDialog;
 import busiViews.RequestView;
 import busiViews.MoreView;
 
-//import views.GiftView;
-//import views.AllGoods;
 import busiViews.AllGoods;
 
-//import views.UpgradeDialog;
 import busiViews.UpgradeDialog;
-//import views.SkillDialog;
 import busiViews.SkillDialog;
 
-//import views.UpgradeSkillDialog;
 import busiViews.UpgradeSkillDialog;
 import views.TrainDialog;
 
@@ -250,7 +246,7 @@ import views.UseDrugSkill;
 
 
 import views.CloseAttackEffect;
-import views.ChallengeOver;
+import war.ChallengeOver;
 
 
 import views.MoveObject;
@@ -286,8 +282,8 @@ import war.ChallengeFail;
 import war.ChallengeWin;
 
 
-import views.CallSoldier;
-import views.SoldierGoods;
+import busiViews.CallSoldier;
+import busiViews.SoldierGoods;
 
 //import views.RankDialog;
 //import views.RankBase;
@@ -319,12 +315,13 @@ import views.UpgradeBanner;
 
 
 
+
 import model.SoldierAI;
+import model.SoldierModel;
 import model.BusinessModel;
 import model.RoundModel;
 import model.RoundGridController;
 import model.MapGridController;
-import model.SoldierBase;
 
 import views.MyWarningDialog;
 import views.ShadowWords;

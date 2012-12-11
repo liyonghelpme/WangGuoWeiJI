@@ -19,19 +19,40 @@ class ChallengeFail extends MyNode
         var line;
         var temp;
         var sca;
-        //-403
+        var i;
         board = bg.addsprite("dialogRoundOver.png").anchor(50, 50).pos(398, 201).size(542, 403).color(100, 100, 100, 100);
 
-        var levelStr = bg.addlabel(getStr("noLevelUp", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 334, 0, ALIGN_LEFT).anchor(0, 0).pos(210, 252).color(11, 11, 11);
-        var sols = param.get("levelUpSol");
+        //按照用户损失奖励 水晶和银币？ 失败 不应该奖励
+        /*
+        var its = param["reward"].items();
+        var rewStr = "";
+        for(i = 0; i < len(its); i++)
+        {   
+            if(i < (len(its)-1))
+            {
+                rewStr += str(its[i][1])+getStr(its[i][0], null)+"、";   
+            }
+            else
+                rewStr += str(its[i][1])+getStr(its[i][0], null);   
+        }
+
+        temp = bg.addlabel(getStr("youGetReward", ["[REWARDS]", rewStr]), "fonts/heiti.ttf", 17, FONT_NORMAL, 329, 0, ALIGN_LEFT).anchor(0, 0).pos(209, 245).color(11, 11, 11);
+        */
+
+        var sols = param.get("deadSols");
         if(len(sols) > 0)
         {
+            var levelStr = bg.addlabel(getStr("noLevelUp", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 334, 0, ALIGN_LEFT).anchor(0, 0).pos(210, 272).color(11, 11, 11);
+
             var nstr = "";
-            for(var i = 0; i < len(sols); i++)
+            for(i = 0; i < len(sols); i++)
             {
-                nstr += sols[i].myName+"、";
+                if(i < len(sols)-1)
+                    nstr += sols[i].myName+"、";
+                else
+                    nstr += sols[i].myName;
             }
-            levelStr.text(getStr("solExp", ["[NAMES]", nstr]));
+            levelStr.text(getStr("deadSols", ["[NAMES]", nstr]));
         }
         bg.addlabel(getStr("equipGood", null), "fonts/heiti.ttf", 17).anchor(0, 50).pos(209, 188).color(40, 37, 37);
         bg.addlabel(getStr("youFail", null), "fonts/heiti.ttf", 19).anchor(0, 50).pos(209, 229).color(64, 32, 32);

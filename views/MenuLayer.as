@@ -366,13 +366,16 @@ class MenuLayer extends MyNode
     菜单当前的状态 显示 隐藏 状态转移过程中
     
     奇怪了 隐藏之后 一直不能出现这是为什么
+    重入场景之后 会重新 
     */
     var visLock = 0;
     function showMenu(t)
     {
-        if(ins == 0)
+        if(infadeOut == 1)
         {
             finishBuild();
+            infadeOut = 0;
+            bg.stop();
             bg.addaction(fadein(t));
         }
     }
@@ -380,12 +383,17 @@ class MenuLayer extends MyNode
     隐藏子菜单
     接着关闭自身
     因为自菜单的 exitScene 需要调用 addaction但是 callfunc中不能调用 addaction
+    调用 beginBuild函数失败了 只是fadeout了
+    如何查看fadeout的状态？
     */
+    var infadeOut = 0;
     function hideMenu(t)
     {
-        if(ins == 0)
+        if(infadeOut == 1)
             return;
         cancelAllMenu();
+        infadeOut = 1;
+        bg.stop();
         bg.addaction(sequence(fadeout(t), callfunc(beginBuild)));
     }
     

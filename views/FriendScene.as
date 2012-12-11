@@ -196,7 +196,7 @@ class FriendScene extends MyNode
     {
         trace("building data", user);
         buildings.append(dict([["id", PARAMS["mineId"]], ["px", 768], ["py", 352], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", mineLevel], ["color", 0] ]));
-        buildings.append(dict([ ["id", PARAMS["loveTreeId"]], ["px", 480], ["py", 416], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", heartLevel], ["color", 0]  ] ));
+        //buildings.append(dict([ ["id", PARAMS["loveTreeId"]], ["px", 480], ["py", 416], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", heartLevel], ["color", 0]  ] ));
     }
 
     function helpOpen()
@@ -209,7 +209,7 @@ class FriendScene extends MyNode
     var papayaIdName = [];
 
     var mineLevel;
-    var heartLevel;
+    //var heartLevel;
     function getFriendOver(rid, rcode, con, param)
     {
         if(rcode != 0)
@@ -219,7 +219,7 @@ class FriendScene extends MyNode
             soldiers = con.get("soldiers");
             buildings = [];
             mineLevel = con["mineLevel"];
-            heartLevel = con["heartLevel"];
+            //heartLevel = con["heartLevel"];
             makeFakeBuilding(); 
 
             hasBox = con["hasBox"];
