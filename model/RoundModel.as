@@ -247,3 +247,9 @@ function getChallengeNeiborCry(nid)
         cry = cry/2;
     return max(cry, 1);
 }
+//闯关页面 两个矩形的相交测试
+function checkInterSect(rect1, rect2)
+{
+    //trace("checkInterSect", rect1, rect2);
+    return rect1[0] < (rect2[0]+rect2[2]) && rect1[1] < (rect2[1]+rect2[3]) &&  rect2[0] < (rect1[0]+rect1[2]) && rect2[1] < (rect1[1]+rect1[3]);
+}

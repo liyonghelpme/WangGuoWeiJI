@@ -76,7 +76,8 @@ class Mine extends FuncBuild
         {
             var bSize = baseBuild.bg.size();
             flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(bSize[0]/2, -11).anchor(50, 100);
-            var pl = flowBanner.addsprite("crystalBig.png").anchor(50, 50).pos(43, 30);
+            var fSize = flowBanner.prepare().size();
+            var pl = flowBanner.addsprite("crystalBig.png").anchor(50, 50).pos(fSize[0]/2, 20);
             var sca = getSca(pl, [63, 42]);
             pl.scale(sca);
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
@@ -123,13 +124,11 @@ class Mine extends FuncBuild
 
     function doUpgrade()
     {
-        var cost = dict([["colorCrystal", PARAMS["UpgradeMineColorCost"]]]);
-        global.httpController.addRequest("mineC/upgradeMine", dict([["uid", global.user.uid], ["bid", baseBuild.bid]]), null, null); 
+        var cost = getLevelUpCost();
+        global.httpController.addRequest("mineC/upgradeMine", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["cost", json_dumps(cost)]]), null, null); 
         global.user.doCost(cost);
         baseBuild.buildLevel += 1;
-        //global.user.updateMine(baseBuild);
         global.user.updateBuilding(baseBuild);
-
         
         var it = cost.items();
         var temp = baseBuild.bg.addnode();
@@ -148,18 +147,6 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     function sureToUpgrade()
     {
         global.director.pushView(new UpgradeMine(baseBuild), 1, 0);
-        /*
-        var cost = dict([["colorCrystal", PARAMS["UpgradeMineColorCost"]]]);
-        var buyable = global.user.checkCost(cost);
-        var crystal = getProduction(baseBuild.buildLevel);
-        global.director.pushView(new ResourceWarningDialog(
-                        getStr("upgradeMineTit", null), 
-                                getStr("upgradeMineCon", 
-                                        ["[NUM0]", str(crystal), 
-                                        "[NUM1]", str(global.user.getValue("colorCrystal")),
-                                        "[NUM2]", str(mineProduction.get("colorCrystal")),
-                                        "[NUM3]", str(getProduction(baseBuild.buildLevel+1))]), doUpgrade, buyable, cost, "colorCrystal.png"), 1, 0);
-        */
     }
     //工作时间长度
     //
@@ -178,6 +165,14 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
             planting = new MinePlant(baseBuild, privateData);
             baseBuild.addChild(planting);
         }
+    }
+    function getLevelUpCost()
+    {
+        if(baseBuild.buildLevel < len(MINE_UPGRADE_COST))   
+        {
+            return MINE_UPGRADE_COST[baseBuild.buildLevel];
+        }
+        return dict();
     }
     override function getStartTime()
     {

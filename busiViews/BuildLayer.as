@@ -233,10 +233,6 @@ class BuildLayer extends MoveMap
         var item = global.user.buildings.items();
         for(var i = 0; i < len(item); i++)
         {
-            //水晶框不在经营页面显示
-            if(item[i][1]["id"] == PARAMS["MineKind"])
-                continue;
-
             var bid = item[i][0];
             var bdata = item[i][1];
 

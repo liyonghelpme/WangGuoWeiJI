@@ -20,8 +20,10 @@ class MapDefense extends MyNode
     var hurts = dict();
     var data;
     var sx = 1;
-    var sy = 1;
+    var sy = 5;
     var curMap = [0, 0];
+    //城墙是 编号-2 的 士兵
+    var id = getParam("mapDefenseId");
     function MapDefense(m, i, d)
     {
         map = m;
@@ -31,7 +33,8 @@ class MapDefense extends MyNode
         else
             curMap = [MAP_WIDTH, 0];
         //城墙属性类型100
-        data = dict([["category", 100]]);
+        //data = dict([["category", 100], []]);
+        data = getData(SOLDIER, getParam("mapDefenseId"));
         state = MAP_SOL_DEFENSE;
 
         bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(d);
@@ -96,13 +99,11 @@ class MapDefense extends MyNode
         var i = 0;
         if(color == MYCOLOR)
         {
-            for(i = 0; i < 5; i++)
-                map.roundGridController.setMap(0, i, 1, 1, this);
+            map.roundGridController.setMap(0, i, sx, sy, this);
         }
         else
         {
-            for(i = 0; i < 5; i++)
-                map.roundGridController.setMap(MAP_WIDTH, i, 1, 1, this);
+            map.roundGridController.setMap(MAP_WIDTH, i, sx, sy, this);
         }
     }
 }

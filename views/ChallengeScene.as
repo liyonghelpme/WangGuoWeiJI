@@ -22,6 +22,9 @@ class ChallengeScene extends MyNode
 
     检测战场上所有的怪兽 是否已经下载过 如果没有 则在 loading的时候下载 
     downloadList
+
+
+    可以实现类似于堆栈的环境变量压入---》argument context上下文
     */
     var user = null;
     var dialogController;

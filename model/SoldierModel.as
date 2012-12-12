@@ -40,7 +40,7 @@ function initSkillList(sol, equips)
         {
             var ret = checkFullEquip(equipsKind, e["suit"]); 
             if(ret)
-                suits.add(ret);
+                suits.add(e["suit"]);
         }
     }
     var temp = [];
@@ -131,7 +131,7 @@ function getTotalSkillDamage(sol, skillId, skillLevel)
 
 function calSkillHurt(attack, tar)
 {
-    return attack;
+    return [attack, 0, 0];
 }
 
 /*
@@ -151,7 +151,13 @@ function calHurt(src, tar)
         criHit = 1;
         intHurt *= 2;
     }
-    return [intHurt-tar.defense, criHit];//攻击力减去防御力
+    
+    var missRate = tar.data["missRate"];
+    var mr = rand(100);
+    var missYet = 0;
+    if(mr < missRate)
+        missYet = 1;
+    return [intHurt-tar.defense, criHit, missYet];//攻击力减去防御力
 }
 
 function getMakeUpRate(id)

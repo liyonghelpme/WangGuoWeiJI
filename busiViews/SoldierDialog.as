@@ -26,9 +26,6 @@ class SoldierDialog extends MyNode
         bg.addsprite("infoBack.png").anchor(0, 0).pos(33, 265).size(199, 130).color(100, 100, 100, 47);
 
         bg.addsprite("dialogSoldier.png").anchor(0, 0).pos(71, 10).size(174, 62);
-        but0 = new NewButton("roleNameBut0.png", [113, 42], getStr("allSoldier", null), null, 20, FONT_NORMAL, [100, 100, 100], switchView, 0);
-        but0.bg.pos(412, 43);
-        addChild(but0);
 
         views = [new AllSoldier(this)];
 

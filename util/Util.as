@@ -1206,6 +1206,9 @@ function getParam(k)
     return global.paramController.AnimateParams.get(k);
 }
 
+/*
+检测资源不足 弹出提示对话框
+*/
 function checkResLack(cost)
 {
     var ret = 1;

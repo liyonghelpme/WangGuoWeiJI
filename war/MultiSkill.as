@@ -77,32 +77,17 @@ class MultiSkill extends MyNode
     {
         //总伤害
         var damage = getTotalSkillDamage(sol, skillId, skillLevel);
-        var allEnemies = map.soldiers;
+        var row = map.roundGridController.getRowObjects(leftUp[0], leftUp[1], data["sx"], data["sy"], this);
         var hurtEne = [];
 
-
-        //计算列范围 和 行范围
-        for(var i = 0; i < sy; i++)
-        {
-            var row = allEnemies.get(leftUp[1]+i);
-            if(row != null)
+        for(var j = 0; j < len(row); j++)
+            if(row[j].state != MAP_SOL_DEFENSE && row[j].state != MAP_SOL_DEAD && row[j].color != sol.color)
             {
-                for(var j = 0; j < len(row); j++)
-                {
-                    //敌对方非我方 未死亡
-                    if(row[j].state != MAP_SOL_DEFENSE && row[j].state != MAP_SOL_DEAD && row[j].color != sol.color)
-                    {
-                        var ene = row[j];
-                        var ePos = ene.getPos();
-                        var difx = ePos[0] - startPos[0]; 
-                        var dify = ePos[1] - startPos[1];
-                        //可能一个士兵多次被加入到燃烧伤害计算中
-                        if(difx >= 0 && difx <= skillRange[0] && dify >= 0 && dify <= skillRange[1])
-                            hurtEne.append(ene);
-                    }
-                }
+                var ene = row[j];
+                var ret = checkInterSect([ene.curMap[0], ene.curMap[1], ene.sx, ene.sy], [leftUp[0], leftUp[1], data["sx"], data["sy"]]);
+                if(ret)
+                    hurtEne.append(ene);
             }
-        }
         
         //计算伤害
         if(len(hurtEne) > 0)
@@ -112,8 +97,7 @@ class MultiSkill extends MyNode
             {
                 var tar = hurtEne[k];
                 var hurt = calSkillHurt(perDamage, tar);
-                tar.changeHealth(sol, -hurt);
-                
+                tar.acceptHarm(sol, hurt);
             }
         }
     }

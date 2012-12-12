@@ -52,8 +52,8 @@ class AllSoldier extends MyNode
             }
         }
     }
-    var skillBut;
-    var sellBut;
+    //var skillBut;
+    //var sellBut;
     function AllSoldier(d)
     {
         dialog = d;
@@ -210,8 +210,8 @@ class AllSoldier extends MyNode
         else
             soldier = null;
         infoNode = bg.addnode();
-        skillBut.removeSelf();
-        sellBut.removeSelf();
+        //skillBut.removeSelf();
+        //sellBut.removeSelf();
 
 
         if(soldier != null)
@@ -223,10 +223,12 @@ class AllSoldier extends MyNode
             monAni.scale(sca);
 
             var sData = getData(SOLDIER, id);
+            /*
             if(sData["isHero"] == 1)
                 addChild(skillBut);
             else
                 addChild(sellBut);
+            */
 
             var act;
             act = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));

@@ -37,6 +37,8 @@ class MailController
             return null;
         return mail;
     }
+    //挑战消息0
+    //挑战
     var initMessage = 0;
     function getMessageOver(rid, rcode, con, param)
     {

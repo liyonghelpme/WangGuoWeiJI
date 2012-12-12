@@ -231,7 +231,7 @@ var buildFunc = dict([
 [GOD_BUILD, [["photo"], ["soldier"]]],
 [DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
 [FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
-[MINE_KIND, [["photo", "sell"], ["upgrade", "planMine"]]],
+[MINE_KIND, [["photo", "sell"], ["upgrade"]]],
 [LOVE_TREE, [["photo", "invite"], ["love", "loveRank"]]],//, "upgradeBuild"
 [RING_FIGHTING, [[], []]],
 [CAMP, [["photo", "sell"], ["call"]]],//accSoldier
@@ -1386,4 +1386,13 @@ const HARM_TABLE = [
 [100, 100, 150, 100],
 [150, 100, 100, 100],
 [100, 100, 100, 100],
+];
+
+const DEBUG = 1;
+
+const MINE_UPGRADE_COST = [
+    dict([["silvier", 100]]),
+    dict([["silvier", 100]]),
+    dict([["silvier", 100]]),
+    dict([["silvier", 100]]),
 ];

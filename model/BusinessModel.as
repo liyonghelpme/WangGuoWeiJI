@@ -177,6 +177,38 @@ function checkCampNum()
         return 1;
     return 0;
 }
+function getCurHouseNum()
+{
+    var count = 0;
+    var val = global.user.buildings.values();
+    for(var i = 0; i < len(val); i++)
+    {
+        var bd = getData(BUILD, val[i]["id"]);
+        if(bd["funcs"] == HOUSE_BUILD)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+function getHouseEnableNum()
+{
+    var level = global.user.getValue("level");
+    var num = getParam("initHouseNum")+level/getParam("houseLevel");
+    return num;
+}
+function getNextHouseLevel()
+{
+    var level = global.user.getValue("level");
+    var need = (level+getParam("houseLevel")-1)/getParam("houseLevel");
+    return need*getParam("houseLevel");
+}
+function checkHouseNum()
+{
+    var now = getCurHouseNum();
+    var cap = getHouseEnableNum();
+    return cap > now;
+}
 function getNextCampLevel()
 {
     var level = global.user.getValue("level");
@@ -184,6 +216,38 @@ function getNextCampLevel()
     return need*getParam("campLevel");
 }
 
+function getCurMineNum()
+{
+    var count = 0;
+    var val = global.user.buildings.values();
+    for(var i = 0; i < len(val); i++)
+    {
+        var bd = getData(BUILD, val[i]["id"]);
+        if(bd["funcs"] == MINE_KIND)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+function getMineEnableNum()
+{
+    var level = global.user.getValue("level");
+    var num = getParam("initMineNum")+level/getParam("mineLevel");
+    return num;
+}
+function getNextMineLevel()
+{
+    var level = global.user.getValue("level");
+    var need = (level+getParam("mineLevel")-1)/getParam("mineLevel");
+    return need*getParam("mineLevel");
+}
+function checkMineNum()
+{
+    var now = getCurMineNum();
+    var cap = getMineEnableNum();
+    return cap > now;
+}
 
 function getProduction(level)
 {

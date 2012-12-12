@@ -249,7 +249,7 @@ class RequestView extends MyNode
                 var okKind = data[i][1]["kind"];
                 if(okKind == PARAMS["MSG_CHALLENGE"])
                 {
-                    panel.addlabel(getStr("robCrystal", ["[NAME]", data[i][1]["name"], "[NUM]", data[i][1]["param"], "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
+                    panel.addlabel(getStr("robCrystal", ["[NAME]", data[i][1]["name"], "[NUM]", str(data[i][1]["param"]), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
                 }
                 else if(okKind == PARAMS["MSG_HEART"])
                 {   

@@ -15,25 +15,16 @@ class Hero extends MyNode
         hid = i;
         
         var mapPos = HeroPos.get(hid);
-        /*
-        var worldPos = scene.scene.map.node2world(mapPos[0], mapPos[1]);
-        var menuPos = scene.bg.world2node(worldPos[0], worldPos[1]);
-        */
 
-        //map 缩放大小
-        //sca = scene.scene.getMapNormalScale();
-        ////trace("heroPos", menuPos);
-        //load_sprite_sheet("soldiera"+str(hid)+".plist");
-        //heroSize = sprite("soldiera"+str(hid)+".plist/ss"+str(hid)+"a0.png").prepare().size();
         heroSize = HERO_SIZE[hid];
 
-        bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100).size(heroSize);
+        //取消选择士兵
+        bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, null).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100).size(heroSize);
         init();
         var lp = HERO_LIGHT_POS[hid];
         full = bg.addsprite("hero"+str(hid)+"Full.png", ARGB_8888).pos(lp);
 
         ani = copy(getSkillAnimate(heroSkill.get(hid)));
-        //ani = copy(skillAnimate.get());//英雄变身动画的 hid--->id
         ani[0] = copy(ani[0]);
         cus = new LightAnimate(ani[1], ani[0], bg, "", 0, onNormal);//不恢复旧的纹理
     }
@@ -118,8 +109,10 @@ class SelectMenu extends MyNode
     function SelectMenu(s, cur)
     {
         scene = s;
-        curStep = cur;
-        word = getStr("selectHero", null).split("\n");
+        //curStep = cur;
+        //直接进入 
+        curStep = 0;
+        word = getStr("selectHeroNew", ["[NAME]", global.user.papayaName]);
 
         bg = node();
         init();
@@ -147,7 +140,7 @@ class SelectMenu extends MyNode
         menuNode = node();
         bg.add(menuNode, MENU);
         
-        stepTip = new GrayWord(this, getStr("selectHero", null), 22, 5, [100, 100, 100], 800, 0, 6, printOver, curStep);//passLine 70 70 70
+        stepTip = new GrayWord(this, word, 22, 5, [100, 100, 100], 800, 0, 6, printOver, curStep);//passLine 70 70 70
         stepTip.setPos([37, 50])
         addChildZ(stepTip, ENTER);
 
@@ -157,7 +150,8 @@ class SelectMenu extends MyNode
     var printFinish = 0;
     function printOver()
     {
-        if(curStep == 2)
+        //if(curStep == 2)
+        if(curStep == 0)
             printFinish = 1;
     }
 
@@ -381,7 +375,7 @@ class SelectMenu extends MyNode
     }
     function update(diff)
     {
-        if(printFinish && checkName && inGame == null)//打字结束 且 检测名字无误 进入游戏
+        if(printFinish && inGame == null)//打字结束 且 检测名字无误 进入游戏
         {
             inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(getParam("enterTime"), "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
         }

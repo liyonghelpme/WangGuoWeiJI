@@ -15,7 +15,6 @@ class Map extends MyNode
     var walkZone = 
     [MAP_INITX+MAP_OFFX/2, MAP_INITY+MAP_OFFY, MAP_INITX+MAP_OFFX*12+MAP_OFFX/2, MAP_INITY+MAP_OFFY*5];
 
-    //var soldiers = dict();
 
     /*
     gx*10000+gy = 士兵key
@@ -318,10 +317,7 @@ class Map extends MyNode
         if(!inB)
             return 0;
         var col;
-        if(scene.kind != CHALLENGE_TRAIN)
-            col = checkCol(sol);
-        else
-            col = checkLineCol(sol);
+        col = checkCol(sol);
         return col;
     }
     function checkCol(sol)
@@ -332,23 +328,6 @@ class Map extends MyNode
             for(var j = 0; j < sol.sy; j++)
             {
                 var key = (oldMap[0]+i)*10000+oldMap[1]+j;
-                var res = mapDict.get(key, null);
-                if(res != null)
-                    return res;
-            }
-        }
-        return null;
-    }
-    //多行士兵只算 起始行
-    function checkLineCol(sol)
-    {
-        var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-
-        for(var i = 0; i < MAP_WIDTH; i++)
-        {
-            for(var j = 0; j < sol.sy; j++)
-            {
-                var key = i*10000+oldMap[1]+j;
                 var res = mapDict.get(key, null);
                 if(res != null)
                     return res;
@@ -394,10 +373,6 @@ class Map extends MyNode
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         for(var i = 0; i < sol.sy; i++)
         {
-            //var row = soldiers.get(oldMap[1]+i)
-            //if(row == null)
-            //    continue;
-            //row.remove(sol);
             for(var j = 0; j < sol.sx; j++)
             {
                 var key = (oldMap[0]+j)*10000+oldMap[1]+i;
@@ -511,20 +486,20 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
     function updateMapGrid()
     {
-        /*
-        gridLayer.removefromparent();
-        gridLayer = bg.addnode();
-        var k = roundGridController.mapDict.keys();
-        for(var i = 0; i < len(k); i++)
+        if(getParam("DEBUG"))
         {
-            var x = k[i]/10000;
-            var y = k[i]%10000;
+            gridLayer.removefromparent();
+            gridLayer = bg.addnode();
+            var k = roundGridController.mapDict.keys();
+            for(var i = 0; i < len(k); i++)
+            {
+                var x = k[i]/10000;
+                var y = k[i]%10000;
 
-            var p = getSolPos(x, y, 1, 1, 0);
-            var sp = gridLayer.addsprite("gridNew.png").size(MAP_OFFX, MAP_OFFY).pos(p).anchor(50, 100);
+                var p = getSolPos(x, y, 1, 1, 0);
+                var sp = gridLayer.addsprite("gridNew.png").size(MAP_OFFX, MAP_OFFY).pos(p).anchor(50, 100);
+            }
         }
-        */
-        //trace("len grid", len(k));
     }
 
     function getNewMapId()
@@ -544,6 +519,10 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
          so.clearMap();
          so.removeSelf();
          soldierInstance.remove(so);
+     }
+     function getAllSoldiers()
+     {
+        return soldierInstance;
      }
     //每行只能放置一个士兵
     //取消随机放置功能
@@ -802,7 +781,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             //global.director.pushView(new ChallengeOver(win, star, crystal, score, this, deadInstance), 1, 0);
             //挑战邻居 有水晶 有 得分 
             global.director.pushView(new ChallengeOver(this, dict([["win", win], ["star", star], ["reward", dict([["crystal", crystal], ["score", score]])], ["deadSols", deadInstance], ["type", CHALLENGE_FRI]])), 1, 0);
-            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["sols", deadSols], ["crystal", crystal], ["score", score]]), null, null);
+            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["crystal", crystal], ["score", score], ["mid", global.user.getNewMsgId()]]), null, null);
         }
         else if(scene.kind == CHALLENGE_NEIBOR)
         {
@@ -901,32 +880,14 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var row;
         d.setDefense(global.user.getValue("cityDefense"));
         addChildZ(d, 0);
-        /*
-        for(i = 0; i < 5; i++)
-        {
-            //row = soldiers.get(i, []);
-            //row.append(d);
-            //soldiers.update(i, row);
-        }
-        */
         d.setMap();
         defenses.append(d);
-
-
 
         //big*10+small
         d = new MapDefense(this, ENECOLOR, defense[1]);
         d.setDefense(scene.getEneDefense());
 
         addChildZ(d, 0);
-        /*
-        for(i = 0; i < 5; i++)
-        {
-            row = soldiers.get(i, []);
-            row.append(d);
-            soldiers.update(i, row);
-        }
-        */
         d.setMap();
         defenses.append(d);
 
@@ -951,16 +912,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             soldierInstance[i].stopGame();
         }
-        /*
-        var val = soldiers.values();
-        for(var i = 0; i < len(val); i++)
-        {
-            for(var j = 0; j < len(val[i]); j++)
-            {
-                val[i][j].stopGame();
-            }
-        }
-        */
     }
     function continueGame()
     {
@@ -969,16 +920,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             soldierInstance[i].continueGame();
         }
-        /*
-        var val = soldiers.values();
-        for(var i = 0; i < len(val); i++)
-        {
-            for(var j = 0; j < len(val[i]); j++)
-            {
-                val[i][j].continueGame();
-            }
-        }
-        */
     }
     override function enterScene()
     {
@@ -1041,6 +982,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
         //直线攻击需要在 英雄所在的若干条直线上
         var skillKind = skillData.get("kind");
+        //使用药品 施法对象是防御装置
         var solMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
         if(skillKind == LINE_SKILL)
         {
@@ -1233,18 +1175,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var sol = soldierInstance[i];
             sol.hideBlood();
         }
-        /*
-        var allSol = soldiers.values();
-        for(var i = 0; i < len(allSol); i++)
-        {
-            for(var j = 0; j < len(allSol[i]); j++)
-            {
-                var sol = allSol[i][j];
-                if(sol.state != MAP_SOL_DEFENSE && sol.state != MAP_SOL_DEAD && sol.state != MAP_SOL_SAVE)
-                    sol.hideBlood();
-            }
-        }
-        */
     }
     function showBlood()
     {
@@ -1253,18 +1183,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             var sol = soldierInstance[i];
             sol.showBlood();
         }
-        /*
-        var allSol = soldiers.values();
-        for(var i = 0; i < len(allSol); i++)
-        {
-            for(var j = 0; j < len(allSol[i]); j++)
-            {
-                var sol = allSol[i][j];
-                if(sol.state != MAP_SOL_DEFENSE && sol.state != MAP_SOL_DEAD && sol.state != MAP_SOL_SAVE)
-                    sol.showBlood();
-            }
-        }
-        */
     }
     var curMovSol = null;
     //设定当前要移动的士兵

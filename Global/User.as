@@ -595,6 +595,11 @@ class User
     {
         return drugs;
     }
+    function getDrugTotalNum()
+    {
+        var v = drugs.values();
+        return sum(v);
+    }
 
 
 

@@ -158,7 +158,7 @@ class LineSkill extends MyNode
             var damage = getTotalSkillDamage(sol, skillId, skillLevel);
             var hurt = calSkillHurt(damage, tar);
             //tar.changeHealth(sol, -hurt);
-            tar.acceptHarm(sol, [hurt, 0]);
+            tar.acceptHarm(sol, hurt);
             tar.inSkill = 0;
         }
         removeSelf();

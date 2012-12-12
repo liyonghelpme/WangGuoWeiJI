@@ -61,20 +61,20 @@ class MoveMap extends MyNode
 
     function updateMapGrid()
     {
-        /*
-        gridLayer.removefromparent();
-        gridLayer = bg.addnode();
-        var k = mapGridController.mapDict.keys();
-        for(var i = 0; i < len(k); i++)
+        if(getParam("DEBUG"))
         {
-            var x = k[i]/10000;
-            var y = k[i]%10000;
-            var p = setBuildMap([1, 1, x, y]);
+            gridLayer.removefromparent();
+            gridLayer = bg.addnode();
+            var k = mapGridController.mapDict.keys();
+            for(var i = 0; i < len(k); i++)
+            {
+                var x = k[i]/10000;
+                var y = k[i]%10000;
+                var p = setBuildMap([1, 1, x, y]);
 
-            var sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+                var sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+            }
         }
-        */
-        //trace("len grid", len(k));
     }
 
     /*
@@ -112,8 +112,6 @@ class MoveMap extends MyNode
         }
     }
     */
-
-
     
     function checkInFlow(zone, p)
     {   

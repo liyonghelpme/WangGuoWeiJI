@@ -46,11 +46,22 @@ class BattleScene extends MyNode
     function selectDrug(sol, did)
     {
         skillSoldier = sol;
-        skillId = DRUG_SKILL_ID;
+        //skillId = DRUG_SKILL_ID;
         skillLevel = 0;
         drugId = did;
-
+        var drugData = getData(DRUG, did);
+        skillId = drugData["skillId"];
         state = MAP_START_SKILL;
+
+        //释放药品技能的施法者是防御装置 或者一个伪造的士兵
+        //MY_COLOR 士兵 我防御装置位置
+        //ENE_COLOR 士兵
+        var fakeSoldier = new Soldier(map, [MYCOLOR, getParam("mapDefenseId"), -1], -1, null); 
+        fakeSoldier.curMap = [0, 0];
+        var nPos = getSolPos(0, 0, 1, 5, 0);
+        fakeSoldier.setPos(nPos);
+
+        selectSkill(fakeSoldier, skillId, 0);
     }
     function selectSkill(sol, skId, skLevel)
     {
@@ -63,33 +74,23 @@ class BattleScene extends MyNode
 
         var sData = getData(SKILL, skillId);
         var skillKind = sData.get("kind");
+        //群体治疗效果 所有释放技能方的士兵
         if(skillKind == MULTI_HEAL_SKILL)
         {
-            var allMySoldier = map.soldiers.values();//每行士兵[[], [], []] 
+            var allMySoldier = map.getAllSoldiers();
             for(var i = 0; i < len(allMySoldier); i++)
             {
-                for(var j = 0; j < len(allMySoldier[i]); j++)
+                var healSol = allMySoldier[i];//每个士兵
+                trace("healSol", healSol.color, healSol.state);
+                if(sol.color == healSol.color && healSol.state != MAP_SOL_DEAD && healSol.state != MAP_SOL_DEFENSE)//治疗效果 我方未阵亡士兵
                 {
-                    var healSol = allMySoldier[i][j];//每个士兵
-                    trace("healSol", healSol.color, healSol.state);
-                    if(sol.color == healSol.color && healSol.state != MAP_SOL_DEAD && healSol.state != MAP_SOL_DEFENSE)//治疗效果 我方未阵亡士兵
-                    {
-                        map.doSkillEffect(skillSoldier, healSol, skillId, skillLevel);
-                    }
+                    map.doSkillEffect(skillSoldier, healSol, skillId, skillLevel);
                 }
             }
             trace("finish MULTI_HEAL_SKILL");
             state = MAP_FINISH_SKILL;
             pausePage.skillFlowBanner.finishSkill(sol);
         }
-        else if(skillKind == MAKEUP_SKILL)
-        {
-            //skillSoldier.doMakeUp(skillId);
-            map.doSkillEffect(skillSoldier, skillSoldier, skillId, skillLevel);
-            state = MAP_FINISH_SKILL;
-            pausePage.skillFlowBanner.finishSkill(sol);
-        }
-
     }
     override function enterScene()
     {

@@ -69,7 +69,10 @@ class Goods extends MyNode
                 if(!ret)
                     buildPic.texture(buildPicName, GRAY);
                 if(objId == 0)//普通农田
+                {
                     panel.addlabel(str(getCurFarmNum())+"/"+str(getFarmEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                    showGain = 0;
+                }
             }
             else if(data["funcs"] == CAMP)
             {
@@ -77,6 +80,23 @@ class Goods extends MyNode
                 if(!ret)
                     buildPic.texture(buildPicName, GRAY);
                 panel.addlabel(str(getCurCampNum())+"/"+str(getCampEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                showGain = 0;
+            }
+            else if(data["funcs"] == HOUSE_BUILD)
+            {
+                ret = checkHouseNum();
+                if(!ret)
+                    buildPic.texture(buildPicName, GRAY);
+                panel.addlabel(str(getCurHouseNum())+"/"+str(getHouseEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                showGain = 0;
+            }
+            else if(data["funcs"] == MINE_KIND)
+            {
+                ret = checkMineNum();
+                if(!ret)
+                    buildPic.texture(buildPicName, GRAY);
+                panel.addlabel(str(getCurMineNum())+"/"+str(getMineEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                showGain = 0;
             }
         }
         var sca;
@@ -110,10 +130,10 @@ class Goods extends MyNode
         //物品属性
         else
         {
-            if(objKind == DRUG)
-                panel.addlabel(data.get("storeName"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
-            else
-                panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
+            //if(objKind == DRUG)
+            //    panel.addlabel(data.get("storeName"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
+            //else
+            panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
             var picCost = cost.items();
             if(len(picCost) > 0)
             {
@@ -159,9 +179,11 @@ class Goods extends MyNode
                     w = getStr(StoreWords.get(objKey), null);   
                     if(objKind == DRUG)
                     {
-                        w = getStr("drugAttWord", ["[LEVEL]", data["levelName"], "[ATT]", w]);
+                        //药品显示技能类型属性
+                        //w = getStr("drugAttWord", ["[LEVEL]", data["levelName"], "[ATT]", w]);
                     }
-                    panel.addlabel(w, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
+                    else
+                        panel.addlabel(w, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
                 else
                 {
@@ -284,32 +306,12 @@ class Goods extends MyNode
     {
         curSel = null;
         store.buy(param); 
-        //可以多次购买
-        /*
-        if(greenBut != null)
-        {
-            greenBut.removeSelf();
-            greenBut = null;
-        }
-        */
-
     }
     //var greenBut = null;
     var curSel = null;
     var shadow = null;
     function showGreenBut(child)
     {
-        /*
-        if(greenBut != null)
-        {
-            greenBut.removeSelf();
-            greenBut = null;
-        }
-        greenBut = new NewButton("greenButton0.png", [130, 38], getStr("buyIt", null), null, 21, FONT_NORMAL, [100, 100, 100], onBuy, child.get());
-        greenBut.bg.pos(74, 170);
-        child.add(greenBut.bg); 
-        */
-
         shadow = child.addnode();
         shadow.addsprite("storeShadow.png").anchor(0, 0).pos(0, 0).size(151, 191).color(100, 100, 100, 47);
         var but0 = new NewButton("greenButton0.png", [128, 39], getStr("sureToBuy", null), null, 20, FONT_NORMAL, [100, 100, 100], onBuy, child.get());

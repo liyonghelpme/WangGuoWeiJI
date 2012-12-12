@@ -47,6 +47,8 @@ class SkillFlowBanner extends MyNode
     //skillList = soldierItems
     //drugData = hereColdTime
     //ShowData
+
+    //id, level, startColdTime, ready
     function initDrug()
     {
         drugData = [];
@@ -56,18 +58,9 @@ class SkillFlowBanner extends MyNode
             var dd = getData(DRUG, temp[i][0]);
             if(temp[i][1] > 0)
             {
-                if(dd.get("healthBoundary") > 0 || dd.get("percentHealthBoundary") > 0
-                    || dd.get("attack") > 0 || dd.get("percentAttack") > 0
-                    || dd.get("defense") > 0 || dd.get("percentDefense") > 0
-                )
+                if(dd.get("skillId") != -1)//只显示有技能药水
                 {
                     drugData.append([temp[i][0], 0, 0, 1]);//drugId
-                }
-                //训练场景显示补血药品
-                if(pausePage.scene.kind == CHALLENGE_TRAIN)
-                {
-                    if(dd.get("health") > 0 || dd.get("percentHealth") > 0)
-                        drugData.append([temp[i][0], 0, 0, 1]);//drugId
                 }
             }
         }
@@ -232,8 +225,6 @@ class SkillFlowBanner extends MyNode
     {
         super.enterScene();
         pausePage.scene.sceneSlowTimer.addTimer(this);
-        //global.timer.addTimer(this);
-        //global.msgCenter.registerCallback(UPDATE_SKILL_STATE, this);
     }
     //使用技能tar！=null 施法成功
     //取消技能
@@ -365,38 +356,40 @@ class SkillFlowBanner extends MyNode
             var selectNum = curSel.get()[1];
             //当前没有选择技能 则选择技能
             var w = "";
-            if(kind == SKILL)
+            var sdata;
+            if(kind == DRUG)
             {
-                var sdata = getData(SKILL, skillList[selectNum][0]); 
-                var skillKind = sdata.get("kind");
+                var dData = getData(DRUG, drugData[selectNum][0]);
+                sdata = getData(SKILL, dData["skillId"]);
+            }
+            else if(kind == SKILL)
+            {
+                sdata = getData(SKILL, skillList[selectNum][0]); 
+            }
+            var skillKind = sdata.get("kind");
                 
-                if(skillKind == MAKEUP_SKILL && soldier.makeUpState)//士兵已经处于变身状态 不能再次变身 清理按钮状态
-                {
-                    clearSelSkill();
-                    return;
-                }
-
-                if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL)
-                {
-                    w = getStr("selTarget", null);
-                }
-                else if(skillKind == MULTI_ATTACK_SKILL)
-                {
-                    w = getStr("selMulti", null);
-                }
-                else if(skillKind == LINE_SKILL)
-                {
-                    w = getStr("selRow", null);
-                }
-                else if(skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == MAKEUP_SKILL )
-                    w = getStr("selOurSol", null);
-
-            }
-            else if(kind == DRUG)
+            if(skillKind == MAKEUP_SKILL && soldier.makeUpState)//士兵已经处于变身状态 不能再次变身 清理按钮状态
             {
-                w = getStr("selOurSol", null);
+                clearSelSkill();
+                return;
             }
-words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
+
+            if(skillKind == SINGLE_ATTACK_SKILL || skillKind == SPIN_SKILL)
+            {
+                w = getStr("selTarget", null);
+            }
+            else if(skillKind == MULTI_ATTACK_SKILL)
+            {
+                w = getStr("selMulti", null);
+            }
+            else if(skillKind == LINE_SKILL)
+            {
+                w = getStr("selRow", null);
+            }
+            else if(skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == MAKEUP_SKILL )
+                w = getStr("selOurSol", null);
+
+            words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             var wSize = words.prepare().size();
             var sSize = shadowWord.prepare().size();
             sSize[0] = max(wSize[0], sSize[0]);
@@ -406,6 +399,7 @@ words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
             
             if(kind == SKILL)
                 pausePage.scene.selectSkill(soldier, skillList[selectNum][0], skillList[selectNum][1]);
+            //使用药水模拟 技能使用
             else if(kind == DRUG)
                 pausePage.scene.selectDrug(soldier, drugData[selectNum][0]);
         }

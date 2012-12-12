@@ -357,7 +357,13 @@ class Soldier extends MyNode
     {
         commandList = [];
     }
-
+    //增加生命值数量
+    function doHeal(heal)
+    {
+        health += heal;
+        health = min(health, healthBoundary);
+        initHealth();
+    }
     function checkState(diff)
     {
         if(stopNow)
@@ -372,6 +378,7 @@ class Soldier extends MyNode
             if(spinTime > 0)//仍在眩晕状态 停止移动 停止攻击
                 return 1;
             spinState = 0;//眩晕状态结束
+            pushCommand(FIND_ENEMY, null);//重新发现敌人
         }
         return 0;
     }
@@ -630,11 +637,14 @@ class Soldier extends MyNode
         if(color == ENECOLOR)
             feaFil = FEA_RED;
 
-        load_sprite_sheet("soldierm"+str(id)+".plist");
-        load_sprite_sheet("soldiera"+str(id)+".plist");
+        if(id != getParam("mapDefenseId"))
+        {
+            load_sprite_sheet("soldierm"+str(id)+".plist");
+            load_sprite_sheet("soldiera"+str(id)+".plist");
 
-        load_sprite_sheet("soldierfm"+str(id)+".plist");
-        load_sprite_sheet("soldierfa"+str(id)+".plist");
+            load_sprite_sheet("soldierfm"+str(id)+".plist");
+            load_sprite_sheet("soldierfa"+str(id)+".plist");
+        }
 
 
         //1500 ms攻击一次 
@@ -665,21 +675,29 @@ class Soldier extends MyNode
         stateWord.visible(0);
 
         bg.scale(getParam("mapSolScale"));
-        changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
-        changeDirNode.prepare();
-        var bSize = changeDirNode.size();
+        var bSize = [0, 0];
+        changeDirNode = node();
 
-        bg.size(bSize).anchor(50, 100).pos(102, 186);
-        changeDirNode.pos(bSize[0]/2, bSize[1]);
+        if(id != getParam("mapDefenseId"))
+        {
+            changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
+            changeDirNode.prepare();
+            bSize = changeDirNode.size();
+
+            bg.size(bSize).anchor(50, 100).pos(102, 186);
+            changeDirNode.pos(bSize[0]/2, bSize[1]);
+
+            fea = sprite("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil);
+
+            var ani = getSolAnimate(id);
+            movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
+            //攻击速度提升 则 动画的频率也提升
+            attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
+
+        }
 
         //变身之后特征色消失
         //fea = changeDirNode.addsprite("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil);
-        fea = sprite("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil);
-
-        var ani = getSolAnimate(id);
-        movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
-        //攻击速度提升 则 动画的频率也提升
-        attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
 
         var shadowOffY = data["shadowOffY"];
@@ -687,8 +705,6 @@ class Soldier extends MyNode
         var ss = ShadowSize.get(sx, 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
-
-
         //adjustPicSize();
 
         var suffix = "";
@@ -696,7 +712,6 @@ class Soldier extends MyNode
             suffix = "1";
 
         backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).scale(getParam("mapBloodScale"));
-
 
         if(color == ENECOLOR)
             backBanner.visible(0);//初始敌人血条不显示
@@ -759,12 +774,18 @@ class Soldier extends MyNode
     //计算missRate 如果 没有伤害则忽略
     function acceptHarm(sol, hurt)
     {
+        //拯救中
+        if(state == MAP_SOL_SAVE)
+            return;
+        //死亡
+        if(state == MAP_SOL_DEAD)
+            return;
         var bSize = bg.size();
         //bg 的size和图片的size大小相同
         var bWord;
-        var missRate = data["missRate"];
-        var mr = rand(100);
-        if(mr < missRate)
+
+        var missYet = hurt[2];
+        if(missYet)
         {
             bWord = sprite("miss.png");
             bg.add(bWord);
@@ -772,9 +793,11 @@ class Soldier extends MyNode
             return;
         }
         var add = -hurt[0];
+        /*
         var val = hurts.get(sol.sid, [sol, 0]);
         val[1] += add;
         hurts.update(sol.sid, val);
+        */
         health += add;
 
         initHealth();
