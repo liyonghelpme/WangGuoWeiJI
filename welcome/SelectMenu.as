@@ -378,6 +378,8 @@ class SelectMenu extends MyNode
         if(printFinish && inGame == null)//打字结束 且 检测名字无误 进入游戏
         {
             inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(getParam("enterTime"), "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
+            //新手阶段结束
+            global.httpController.addRequest("finishNewStory", dict([["uid", global.user.uid]]), null, null);
         }
     }
     override function exitScene()
