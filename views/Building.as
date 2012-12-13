@@ -293,14 +293,10 @@ class Building extends MyNode
         dirty = 1;
 
         dir = 1-dir;
-        //bg.texture("build"+str(id+dir)+".png");
-        //bg.texture("build"+str(id)+".png");
         if(dir == 0)
             changeDirNode.scale(100, 100);
         else 
             changeDirNode.scale(-100, 100);
-        //if(aniNode != null)
-        //    aniNode.changeDir();
         
         global.user.updateBuilding(this);
     }
@@ -482,7 +478,10 @@ class Building extends MyNode
         accMove = 0;
         lastPoints = n.node2world(x, y);         
         
-        map.touchBegan(n, e, p, x, y, points); 
+        //如果当前显示了菜单则再次点击是关闭菜单
+        if(!showMenuYet)
+            map.touchBegan(n, e, p, x, y, points); 
+
 
         if(Planing)
         {
@@ -581,7 +580,8 @@ class Building extends MyNode
         else
         {
             accMove += abs(difx) + abs(dify);
-            map.touchMoved(n, e, p, x, y, points);
+            if(!showMenuYet)
+                map.touchMoved(n, e, p, x, y, points);
         }
     }
 
@@ -624,7 +624,7 @@ class Building extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
-
+        var oldShowMenuYet = showMenuYet;
         var ret;
         if((state == PARAMS["buildMove"]) || Planing)
         {
@@ -646,6 +646,7 @@ class Building extends MyNode
         else if(state == PARAMS["buildFree"] && accMove < 20)
         {
             doFree();
+
         }
         /*
         工作中的农田显示
@@ -657,15 +658,15 @@ class Building extends MyNode
                 ret = funcBuild.whenBusy();
                 if(ret == 0)
                 {
-                    //showMenuYet = 1;
                     global.director.curScene.showGlobalMenu(this, showGlobalMenu);
                 }
             }
         }
-        //等待解锁状态
-
-        //父亲节点移动结束
-        map.touchEnded(n, e, p, x, y, points);
+        //doFree 有可能改变当前的菜单状态
+        if(!oldShowMenuYet)
+            map.touchEnded(n, e, p, x, y, points);
+        else
+            map.map.scene.closeGlobalMenu(this);//关闭全局菜单
     }
     /*
     来自上层的点击信息，关闭打开的全局菜单

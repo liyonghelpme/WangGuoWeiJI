@@ -152,7 +152,6 @@ class MenuLayer extends MyNode
         updateExp(0);
         updateTaskState();
         updateRightMenu();
-        //sensor = c_sensor(SENSOR_ACCELEROMETER, menuDisappear);
 
         global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON);
         global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
@@ -209,6 +208,10 @@ class MenuLayer extends MyNode
         //if(level >= 100)
         levelLabel.scale(sca);
     }
+    /*
+    点击右侧按钮 更新
+
+    */
     function updateRightMenu()
     {
         if(rightMenu != null)
@@ -275,6 +278,8 @@ class MenuLayer extends MyNode
             rightMenu = new CastleRightMenu(this, funcs);
             rightMenu.setPos([753, 129]);
             addChild(rightMenu);
+            //初次显现
+            rightMenu.bg.addaction(sequence(itintto(0, 0, 0, 0), delaytime(100), fadein(300)));
         }
         if(downloadIcon != null)
             downloadIcon.bg.visible(1);
@@ -369,14 +374,14 @@ class MenuLayer extends MyNode
     重入场景之后 会重新 
     */
     var visLock = 0;
-    function showMenu(t)
+    function showMenu()
     {
         if(infadeOut == 1)
         {
             finishBuild();
             infadeOut = 0;
             bg.stop();
-            bg.addaction(fadein(t));
+            bg.addaction(sequence(delaytime(100), fadein(500)));
         }
     }
     /*
@@ -423,10 +428,14 @@ class MenuLayer extends MyNode
     var showChildMenu = 0;
     function cancelAllMenu()
     {
-        showChildMenu = 0;
-        updateRightMenu();
-        cancel_func(0);
-        cancel_func(1);
+        //如果显示子菜单则隐藏
+        if(showChildMenu)
+        {
+            showChildMenu = 0;
+            updateRightMenu();
+            cancel_func(0);
+            cancel_func(1);
+        }
     }
     function cancel_func(index){
         if(menus[index]!=null){

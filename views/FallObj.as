@@ -43,13 +43,11 @@ class FallObj extends MyNode
     override function enterScene()
     {
         super.enterScene();
-        //global.msgCenter.registerCallback(MOVE_TO_FALL, this);
         buildLayer.mapGridController.updateRxRyMap(curMap[0], curMap[1], this);
     }
     override function exitScene()
     {
-        //buildLayer.mapGridController.clearRxRyMap(curMap[0], curMap[1], this);
-        global.msgCenter.removeCallback(MOVE_TO_FALL, this);
+        buildLayer.mapGridController.clearRxRyMap(curMap[0], curMap[1], this);
         super.exitScene();
     }
     var tarPos;

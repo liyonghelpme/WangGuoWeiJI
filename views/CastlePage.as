@@ -304,19 +304,12 @@ class CastlePage extends MyNode
         moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
         return curBuild;
     }
-    /*
-    //直接构造士兵 接着更新士兵数据
-    function buySoldier(id)
+    //spawn scale move
+    var movToAni = moveto(0, 0, 0);
+    function clearAnimation()
     {
-        var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, id), null, global.user.getNewSid());
-
-        //newSol.setSid(global.user.getNewSid());
-        buildLayer.addSoldier(newSol);
-
-        global.user.updateSoldiers(newSol);
-        return newSol;
+        movToAni.stop();
     }
-    */
 
     /*
     先缩放再移动 保留旧的缩放比例
@@ -339,12 +332,11 @@ class CastlePage extends MyNode
         var bPos = build.getPos();
         bPos[1] -= bSize[1]/2;
         moveToPoint(bPos[0], bPos[1]);
+        
     }
     //结束后不调整尺寸和 位置
     function moveToCertainPos(s, p)
     {
-        //oldScale = bg.scale();
-        //oldPos = bg.pos();
         oldScale = s;
         oldPos = p;
 
@@ -355,6 +347,7 @@ class CastlePage extends MyNode
     {
         var sm = 100;
         touchDelegate.scaleToMax(sm);
+        oldScale = bg.scale();
 
         oldPos = bg.pos();
         var bSize = build.bg.size();
@@ -367,7 +360,11 @@ class CastlePage extends MyNode
     {
         if(oldScale != null)
         {
-            touchDelegate.scaleToOld(oldScale, oldPos);
+            //touchDelegate.scaleToOld(oldScale, oldPos);
+            clearAnimation();
+            movToAni = spawn(scaleto(500, oldScale[0], oldScale[1]), moveto(500, oldPos[0], oldPos[1]));
+            bg.addaction(movToAni);
+
             oldScale = null;
             oldPos = null;
         }
@@ -392,7 +389,20 @@ class CastlePage extends MyNode
 
         curPos[0] = min(max(minX, curPos[0]), maxX);
         curPos[1] = min(max(minY, curPos[1]), maxY);
-        bg.pos(curPos);
+        
+        var newScale = bg.scale();
+        bg.scale(oldScale);
+        bg.pos(oldPos);
+
+        clearAnimation();
+        trace("oldScale, newScale", oldScale, newScale);
+        //缩小
+        //if(oldScale > newScale)
+        //movToAni = spawn(expin(scaleto(500, newScale[0], newScale[1])), expin(moveto(500, curPos[0], curPos[1])));
+        //else
+        movToAni = spawn(expout(scaleto(500, newScale[0], newScale[1])), expout(moveto(500, curPos[0], curPos[1])));
+        bg.addaction(movToAni);
+        //bg.pos(curPos);
     }
 
     function finishBuild()
@@ -484,11 +494,6 @@ class CastlePage extends MyNode
                 buildLayer.addSoldier(newSol);
 
                 newSol.setSmoke();
-                //moveToBuild(newSol);
-                //dialogController.addCmd(dict([["cmd", "waitTime"], ["time", 1500]]));
-                //dialogController.addCmd(dict([["cmd", "roleName"], ["sol", newSol]]));
-                //global.director.pushView(new RoleName(null, newSol), 1, 0);
-
             }
         }
         else if(msg[0] == LEVEL_UP)

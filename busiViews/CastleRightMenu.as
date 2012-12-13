@@ -60,7 +60,7 @@ class CastleRightMenu extends MyNode
             curY += OFFY;
         }
     }
-
+    //显示添加 400ms的 fadein
     override function enterScene()
     {
         super.enterScene();

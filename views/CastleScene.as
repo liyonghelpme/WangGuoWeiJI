@@ -147,7 +147,8 @@ class CastleScene extends MyNode
     var planView = null;
     function doPlan()
     {
-        ml.beginBuild();
+        //ml.beginBuild();
+        ml.hideMenu();
         Planing = 1;
         mc.buildLayer.keepPos();
 
@@ -171,12 +172,14 @@ class CastleScene extends MyNode
     function disableMenu()
     {
         if(realDisappear == 0)
-            ml.beginBuild();
+            //ml.beginBuild();
+            ml.hideMenu();
     }
     function enableMenu()
     {
         if(realDisappear == 0)
-            ml.finishBuild();
+            //ml.finishBuild();
+            ml.showMenu();
     }
     function onSell()
     {
@@ -195,7 +198,8 @@ class CastleScene extends MyNode
     function closePlan()
     {
         Planing = 0;
-        ml.finishBuild();
+        //ml.finishBuild();
+        ml.showMenu();
         global.director.popView();
         planView = null;
         curBuild = null;
@@ -277,7 +281,8 @@ class CastleScene extends MyNode
     {
         trace("closeBuild");
         curBuild = null;
-        ml.finishBuild();
+        //ml.finishBuild();
+        ml.showMenu();
         global.director.popView();
     }
     function onSwitch()
@@ -296,14 +301,8 @@ class CastleScene extends MyNode
     function clearHideTime()
     {
         hideTime = 0;
-        /*
-        if(realDisappear == 0 && !isBuildOrPlan())//not disappear
-        {
-            ml.showMenu(1000);
-        }
-        */
         if(!isBuildOrPlan())
-            ml.showMenu(1000);
+            ml.showMenu();
     }
     function update(diff)
     {
@@ -313,15 +312,8 @@ class CastleScene extends MyNode
             hideTime = 0;
             if(!isBuildOrPlan())
                 ml.hideMenu(1000);
-            /*
-            if(realDisappear == 0 && !isBuildOrPlan())//not disappear
-            {
-                ml.hideMenu(1000);
-            }
-            */
         }
     }
-    //var building = null;
     /*
     开始建造的时候 将菜单释放
     */
@@ -329,7 +321,8 @@ class CastleScene extends MyNode
     {
         var building = getData(BUILD, id);
 
-        ml.beginBuild();   
+        //ml.beginBuild();   
+        ml.hideMenu();
         curBuild = mc.beginBuild(building);
         global.director.pushView(new BuildMenu(this, [PLAN_BUILDING, curBuild]), 0, 0);
     }
@@ -340,7 +333,8 @@ class CastleScene extends MyNode
         inGame = 1;
         gameId = gid;
         curBuild = sol;
-        ml.beginBuild();//隐藏菜单
+        //ml.beginBuild();//隐藏菜单
+        ml.hideMenu();
         mc.moveToBuild(curBuild);//移动屏幕中心到游戏士兵位置
     }
     function finishGame()
@@ -348,7 +342,8 @@ class CastleScene extends MyNode
         inGame = 0;
         gameId = -1;
         curBuild = null;
-        ml.finishBuild();
+        //ml.finishBuild();
+        ml.showMenu();
         mc.closeGlobalMenu();//还原场景状态
     }
     /*
@@ -362,9 +357,8 @@ class CastleScene extends MyNode
         if(curMenuBuild == null && curBuild == null)
         {
             curMenuBuild = build;
-            ml.beginBuild();
-            //ml.removeSelf();
-            //ml = null;
+            //ml.beginBuild();
+            ml.hideMenu();
             mc.moveToBuild(build);
             callback();
         }
@@ -388,7 +382,8 @@ class CastleScene extends MyNode
             curMenuBuild.closeGlobalMenu();
             global.director.popView();
             curMenuBuild = null;
-            ml.finishBuild();
+            //ml.finishBuild();
+            ml.showMenu();
             mc.closeGlobalMenu();
         }
         //关闭菜单栏子菜单

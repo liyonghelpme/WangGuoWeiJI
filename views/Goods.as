@@ -100,7 +100,6 @@ class Goods extends MyNode
             }
         }
         var sca;
-        //var buildPicSize = buildPic.prepare().size();
         if(showGain == 0)
         {
             buildPic.pos(74, 97);
@@ -276,12 +275,14 @@ class Goods extends MyNode
         var rg = getShowRange();
         updateTab(rg);
     }
+    var touchEventTime = [];
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
         lastPoints = newPos;
         accMove = 0;
         curSel = null;
+        touchEventTime = [[lastPoints, time()]];
     }
     function moveBack(dify)
     {
@@ -292,6 +293,13 @@ class Goods extends MyNode
     function touchMoved(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
+        var now = time();
+        if(now - touchEventTime[len(touchEventTime)-1][1] > getParam("minInertiaTime"))
+        {
+            touchEventTime.append([newPos, now]);
+            if(len(touchEventTime) > 2)
+                touchEventTime.pop(0);
+        }
         var oldPoints = lastPoints;
         lastPoints = newPos;
         var dify = lastPoints[1] - oldPoints[1];
@@ -339,8 +347,39 @@ class Goods extends MyNode
                 }
             }
         }
+        //需要惯性移动 最后位移足够， 时间足够
+        var needInertia = 0;
 
-        //accMove = 0;
+        if(len(touchEventTime) >= 2)
+        {
+            var t0 = touchEventTime[0];
+            var t1 = touchEventTime[1];
+            var passTime = t1[1]-t0[1];
+            var diffY = t1[0][1]-t0[0][1];
+            var finishMove = diffY*getParam("inertiaTime")/passTime;
+            var expMove = finishMove/6.931;//expout initSpeed
+            if(abs(expMove) > 10)
+                needInertia = 1;
+            trace("inertiaTime", needInertia, diffY, passTime, finishMove, expMove, touchEventTime, getParam("inertiaTime"));
+        }
+
+
+        if(needInertia)
+            flowNode.addaction(sequence(expout(moveby(getParam("inertiaTime"), 0, expMove)), callfunc(finishInertia)));
+        else
+        {
+            //accMove = 0;
+            var oldPos = flowNode.pos();
+            oldPos[1] = min(0, max(minPos, oldPos[1]));
+            flowNode.pos(oldPos[0], oldPos[1]);
+
+            var rg = getShowRange();
+            updateTab(rg);
+        }
+    }
+    function finishInertia()
+    {
+        trace("finishInertia", finishInertia);
         var oldPos = flowNode.pos();
         oldPos[1] = min(0, max(minPos, oldPos[1]));
         flowNode.pos(oldPos[0], oldPos[1]);
