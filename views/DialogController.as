@@ -26,7 +26,7 @@ class DialogController extends MyNode
         var initX = dis[0]/2;
         var initY = dis[1]/2;
         trace("addBanner", len(bannerStack), maxOff, getParam("bannerMoveTime"), getParam("bannerOffY"), initX, initY);
-        for(var i = 0; i < len(bannerStack); i++, maxOff--)
+        for(var i = 0; i < len(bannerStack); i++)
         {
             var ban = bannerStack[i][0];
             //ban.bg.stop();
@@ -36,6 +36,7 @@ class DialogController extends MyNode
             oldPos[1] -= getParam("bannerOffY");
             ban.bg.pos(oldPos);
             */
+            maxOff--;
         }
         bannerStack.append([banner, time()]);
         global.director.curScene.addChildZ(banner, MAX_BUILD_ZORD);

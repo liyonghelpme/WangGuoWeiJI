@@ -1,3 +1,6 @@
+/*
+Banner 需要实现接口 setMoveAni 用于dialogController 管理
+*/
 class UpgradeBanner extends MyNode
 {
     var movAni = moveto(0, 0, 0);

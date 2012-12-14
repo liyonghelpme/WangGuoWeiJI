@@ -109,6 +109,7 @@ class FriendScene extends MyNode
     var menuLayer;
     var kind;
     var user;
+    var dialogController;
 
     //需要收获的水晶数量
     var crystal;
@@ -153,7 +154,7 @@ class FriendScene extends MyNode
         //访问邻居但是数据没有初始化 好友模块在登录时应该初始化邻居数据  && kind == VISIT_NEIBOR
         //点击上方浮动岛屿 没有初始化 邻居数据时  需要等待
         initData();
-
+        dialogController = new DialogController(this);
     }
     function initData()
     {

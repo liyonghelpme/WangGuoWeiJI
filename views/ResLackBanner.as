@@ -1,6 +1,7 @@
 //点击按钮 调用回调函数
 class ResLackBanner extends MyNode
 {
+    var movAni = moveto(0, 0, 0);
     //var callback;
     var store;
     function ResLackBanner(w, col, butWord, buyParam, s)
@@ -55,5 +56,14 @@ class ResLackBanner extends MyNode
         removeSelf();
         //if(callback != null)
         //    callback();
+    }
+
+    function setMoveAni(X, Y)
+    {
+        trace("setMoveAni", X, Y);
+        movAni.stop();
+        trace("addaction", movAni);
+        movAni = expout(moveto(getParam("bannerMoveTime"), X, Y));
+        bg.addaction(movAni);
     }
 }

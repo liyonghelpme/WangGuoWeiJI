@@ -17,9 +17,10 @@ class Store extends MyNode
 
     /*
     商店去除 编号 126木牌建筑物 数据库也可以删除
+[MAGIC_STONE, 0], [MAGIC_STONE, 1], [MAGIC_STONE, 2], [MAGIC_STONE, 3],  [TREASURE_STONE, 0],  [TREASURE_STONE, 1], [TREASURE_STONE, 2], [TREASURE_STONE, 3], 
     */
     var allGoods = [
-        [[MAGIC_STONE, 0], [MAGIC_STONE, 1], [MAGIC_STONE, 2], [MAGIC_STONE, 3],  [TREASURE_STONE, 0],  [TREASURE_STONE, 1], [TREASURE_STONE, 2], [TREASURE_STONE, 3], [0, 142], [0, 144], [1, 20], [1, 21]],
+        [[0, 142], [0, 144], [1, 20], [1, 21]],
         [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [FREE_GOLD, 0]],
         [[4, 0], [4, 1], [4, 2]],
         [[5, 0], [5, 1], [5, 2]],
@@ -156,7 +157,8 @@ class Store extends MyNode
         {
             buyable.pop("ok");
             var it = buyable.items();
-            global.director.curScene.addChild(new ResLackBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], BUY_RES[it[0][0]], ObjKind_Page_Map[it[0][0]], this));
+            global.director.curScene.dialogController.addBanner(new ResLackBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], BUY_RES[it[0][0]], ObjKind_Page_Map[it[0][0]], this));
+
             return;
         }
 

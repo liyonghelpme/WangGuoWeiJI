@@ -397,31 +397,6 @@ function normalizePos(p, sx, sy)
 假定消耗的物品非0 飞向的是经营页面的菜单栏位置
 */
 /*
-function flyObject(bg, cost, callback)
-{
-    var TarPos = dict([["silver", [297, 460]], ["crystal", [253, 460]], ["gold", [550, 460]]]);
-    var bsize = bg.size();
-    var coor2 = bg.node2world(bsize[0]/2, bsize[1]/2);
-
-    var item = cost.items();
-    for(var i = 0; i < len(item); i++)
-    {
-        var k = item[i][0];
-        var v = item[i][1];
-        var obj = getscene().addsprite(str(k)+".png");
-        var tar = TarPos.get(k);
-        var dis = sqrt(distance(coor2, tar));
-        obj.addaction(sequence(sinein(bezierby(
-                    500+dis*25,
-                    coor2[0], coor2[1], 
-                    coor2[0]+100, coor2[1]-100, 
-                    coor2[0]+100, coor2[1]+100, 
-                    tar[0], tar[1])),callfunc(callback)));
-        
-    }
-}
-*/
-/*
 building id-->function id -> function array
 */
 function getBuildFunc(id)

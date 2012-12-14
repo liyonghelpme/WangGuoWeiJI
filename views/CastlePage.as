@@ -243,7 +243,7 @@ class CastlePage extends MyNode
     }
     function onCryIsland()
     {
-        global.director.pushScene(new MineScene()); 
+        //global.director.pushScene(new MineScene()); 
     }
 
     function visitNeibor()
