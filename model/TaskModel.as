@@ -249,7 +249,7 @@ class TaskModel
                 if(commandList[find].get("tip") != null)
                 {
                     //global.director.curScene.addChildZ(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null), MAX_BUILD_ZORD);
-                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null), MAX_BUILD_ZORD);
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null));
                 }
 
             }

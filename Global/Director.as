@@ -1,15 +1,19 @@
 //different dialog scene view 
 class Scene extends MyNode
 {
+    var dialogController;
     function Scene()
     {
         bg = node();
         init();
+        dialogController = new DialogController(this);
     }
+    /*
     function quitScene()
     {
 
     }
+    */
 }
 /*
 确保当前最高的对话框 自己关闭自己 
@@ -67,7 +71,7 @@ class Director
             {
                 quitState = 1;
                 //pushView(new QuitBanner(), 0, 0);
-                curScene.addChildZ(new UpgradeBanner(getStr("quitNow", null), [100, 100, 100], clearQuitState), BANNER_LAYER);
+                curScene.dialogController.addBanner(new UpgradeBanner(getStr("quitNow", null), [100, 100, 100], clearQuitState));
             }
         }
         else if(quitState == 1)

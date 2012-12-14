@@ -305,7 +305,7 @@ panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
         var buyable = global.user.checkCost(cost);
         if(buyable.get("ok") == 0)
         {
-            global.director.curScene.addChildZ(new UpgradeBanner(getStr("lack", ["[NUM]", str(buyable.get("gold")), "[NAME]", getStr("gold", null)]), [100, 100, 100], null), MAX_MAP_LAYER);
+            global.director.curScene.dialogContrller.addBanner(new UpgradeBanner(getStr("lack", ["[NUM]", str(buyable.get("gold")), "[NAME]", getStr("gold", null)]), [100, 100, 100], null));
             return;
         }
         

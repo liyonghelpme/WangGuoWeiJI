@@ -1253,3 +1253,19 @@ function cmpTaskId(a, b)
         return 1;
     return -1;
 }
+
+function showMultiPopBanner(showData)
+{
+    var its = showData.items();
+    for(var i = 0; i < len(its); i++)
+    {
+        var k = its[i][0];
+        var v = its[i][1];
+        var w;
+        if(v > 0)
+            w = getStr("opSuc", ["[NUM]", "+"+str(v), "[KIND]", getStr(k, null)]);
+        else
+            w = getStr("opSuc", ["[NUM]", str(v), "[KIND]", getStr(k, null)]);
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(w, [100, 100, 100], null));
+    }
+}

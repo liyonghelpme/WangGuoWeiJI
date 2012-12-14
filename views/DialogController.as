@@ -21,15 +21,25 @@ class DialogController extends MyNode
     }
     function addBanner(banner)
     {
-        for(var i = 0; i < len(bannerStack); i++)
+        var maxOff = len(bannerStack);
+        var dis = global.director.disSize;
+        var initX = dis[0]/2;
+        var initY = dis[1]/2;
+        trace("addBanner", len(bannerStack), maxOff, getParam("bannerMoveTime"), getParam("bannerOffY"), initX, initY);
+        for(var i = 0; i < len(bannerStack); i++, maxOff--)
         {
             var ban = bannerStack[i][0];
+            //ban.bg.stop();
+            ban.setMoveAni(initX, initY-getParam("bannerOffY")*maxOff);
+            /*
             var oldPos = ban.bg.pos();
             oldPos[1] -= getParam("bannerOffY");
             ban.bg.pos(oldPos);
+            */
         }
         bannerStack.append([banner, time()]);
-        global.director.curScene.addChild(banner);
+        global.director.curScene.addChildZ(banner, MAX_BUILD_ZORD);
+        trace("finishAddBanner");
     }
     //统一向上移动
     function update(diff)

@@ -1,5 +1,6 @@
 class UpgradeBanner extends MyNode
 {
+    var movAni = moveto(0, 0, 0);
     var callback;
     function UpgradeBanner(w, col, cb)
     {
@@ -21,12 +22,49 @@ class UpgradeBanner extends MyNode
         var nBsize = bg.size();
         word.pos(nBsize[0]/2, nBsize[1]/2);
 
-        bg.addaction(sequence(delaytime(2000), fadeout(1000), callfunc(removeNow)));
+        bg.addaction(sequence(delaytime(2000), fadeout(1000)));
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.timer.addTimer(this);
+    }
+    var passTime = 0;
+    var inFade = 0;
+    var moveX;
+    var moveY;
+    function update(diff)
+    {
+        /*
+        if(passTime >= getParam("bannerDelayTime"))
+        {
+            var pt = passTime-getParam("bannerDelayTime");
+            pt = min(100, pt*100/getParam("bannerFadeTime"));
+            bg.color(100, 100, 100, 100-pt);
+            //bg.addaction(fadeout(getParam("bannerFadeTime")));
+        }
+        */
+        if(passTime >= getParam("bannerRemoveTime"))
+            removeNow();
+        passTime += diff;
+    }
+    override function exitScene()
+    {
+        global.timer.removeTimer(this);
+        super.exitScene();
     }
     function removeNow()
     {
         removeSelf();
         if(callback != null)
             callback();
+    }
+    function setMoveAni(X, Y)
+    {
+        trace("setMoveAni", X, Y);
+        movAni.stop();
+        trace("addaction", movAni);
+        movAni = expout(moveto(getParam("bannerMoveTime"), X, Y));
+        bg.addaction(movAni);
     }
 }

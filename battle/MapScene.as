@@ -100,10 +100,12 @@ class MapScene extends MyNode
 {
     var islandLayer;
     var flyLayer;
+    var dialogController;
     
     function MapScene(){
         bg = sprite("map_background0.jpg", ARGB_8888).size(801,481);
         init();
+        dialogController = new DialogController(this);
         islandLayer = new MapLayer(this);
         addChildZ(islandLayer, ISLAND_LAYER);
         addChildZ(new MapCloud(), CLOUD_LAYER);
