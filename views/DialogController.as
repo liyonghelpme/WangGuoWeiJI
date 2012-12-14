@@ -1,5 +1,7 @@
 class DialogController extends MyNode
 {
+    //banner timestamp
+    var bannerStack = [];
     var cmds = [];
     var scene;
     function DialogController(sc)
@@ -17,8 +19,29 @@ class DialogController extends MyNode
     {
         cmds.append(c);
     }
+    function addBanner(banner)
+    {
+        for(var i = 0; i < len(bannerStack); i++)
+        {
+            var ban = bannerStack[i][0];
+            var oldPos = ban.bg.pos();
+            oldPos[1] -= getParam("bannerOffY");
+            ban.bg.pos(oldPos);
+        }
+        bannerStack.append([banner, time()]);
+        global.director.curScene.addChild(banner);
+    }
+    //统一向上移动
     function update(diff)
     {
+        var now = time();
+        if(len(bannerStack) > 0)
+        {
+            var first = bannerStack[0];
+            if((now - first[1]) > getParam("bannerFinishTime"))
+                bannerStack.pop(0);
+        }
+
         if(len(global.director.stack) == 0) 
         {
             if(len(cmds) > 0)

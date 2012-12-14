@@ -6,6 +6,7 @@ class CastleScene extends MyNode
     var ml = null;
     var Planing = 0;
     var keepMenuLayer;
+    var dialogController = null;
     /*
     把经营页面 和 菜单在 场景构造的时候 初始化
     如果 将菜单页面作为一个可以弹出 和 压入的 view来处理  
@@ -23,6 +24,7 @@ class CastleScene extends MyNode
 
         mc = new CastlePage(this, showLoading);
         ml = new MenuLayer(this);
+        dialogController = mc.dialogController;
         
         keepMenuLayer = new MyNode();
         keepMenuLayer.bg = node();

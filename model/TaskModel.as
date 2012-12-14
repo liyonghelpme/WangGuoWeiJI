@@ -248,8 +248,8 @@ class TaskModel
                 //提示文字 招募士兵页面的文字 普通页面的 文字 接受 体 显示 hintArrow 检测上一个任务 结束了 但是 下一个任务还在当前页面的覆盖下面 需要 close之类的 操作来提示
                 if(commandList[find].get("tip") != null)
                 {
-                    global.director.curScene.addChildZ(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null), MAX_BUILD_ZORD);
-                    //global.msgCenter.sendMsg(SHOW_HINT_WORD, getStr(commandList[find]["tip"], null));
+                    //global.director.curScene.addChildZ(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null), MAX_BUILD_ZORD);
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null), MAX_BUILD_ZORD);
                 }
 
             }
