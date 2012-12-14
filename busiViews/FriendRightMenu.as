@@ -20,11 +20,11 @@ class FriendRightMenu extends MyNode
     }
     function onHeartYet()
     {
-        global.director.curScene.addChild(new UpgradeBanner(getStr("dayOne", null) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("dayOne", null), [100, 100, 100], null));
     }
     function onChallengeYet()
     {
-        global.director.curScene.addChild(new UpgradeBanner(getStr("oneChallenge", null) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("oneChallenge", null), [100, 100, 100], null));
     }
     //横向居中对其
     function onBox()

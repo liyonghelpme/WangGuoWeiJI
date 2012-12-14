@@ -211,7 +211,7 @@ class SkillDialog extends MyNode
         var leftNum = maxSkillNum-curSkillNum;
         if(leftNum <= 0)//技能点不足
         {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("heroSkillCountNot", ["[NUM]", str(maxSkillNum)]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("heroSkillCountNot", ["[NUM]", str(maxSkillNum)]), [100, 100, 100], null));
             return;
         }
         
@@ -223,7 +223,7 @@ class SkillDialog extends MyNode
         var needLevel = sdata.get("heroLevel");
         if(soldier.level < needLevel)
         {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("heroLevelNot", ["[LEV]", str(needLevel)]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("heroLevelNot", ["[LEV]", str(needLevel)]), [100, 100, 100], null));
             return;
         }
 
@@ -238,7 +238,7 @@ class SkillDialog extends MyNode
         if(buyed == 0)
         {
             buyed = 1;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("clickToBuy", null), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("clickToBuy", null), [100, 100, 100], null));
             return;
         }
         else

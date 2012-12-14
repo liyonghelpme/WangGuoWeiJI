@@ -142,7 +142,7 @@ class UpgradeSkillDialog extends MyNode
         else
         {
             var objData = getData(MAGIC_STONE, curChoose);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sorryNum", ["[NAME]", objData["name"]]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sorryNum", ["[NAME]", objData["name"]]), [100, 100, 100], null));
         }
     }
 
@@ -156,11 +156,11 @@ class UpgradeSkillDialog extends MyNode
                 if(con.get("suc") == 1)
                 {
                     global.user.upgradeSkill(soldierId, skillId);
-                    scene.addChild(new UpgradeBanner(getStr("sucUpgradeSkill", null), [0, 100, 0], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sucUpgradeSkill", null), [0, 100, 0], null));
                 }
                 else
                 {
-                    scene.addChild(new UpgradeBanner(getStr("failUpgradeSkill", null), [100, 0, 0], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("failUpgradeSkill", null), [100, 0, 0], null));
                 }
             }
         }

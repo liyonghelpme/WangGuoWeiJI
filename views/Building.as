@@ -705,7 +705,7 @@ class Building extends MyNode
         var buyable = global.user.checkCost(cost);
         if(buyable.get("ok") == 0)
         {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr("gold", null), "[NUM]", str(gold)]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr("gold", null), "[NUM]", str(gold)]), [100, 100, 100], null));
             return;            
         }
 
@@ -714,7 +714,7 @@ class Building extends MyNode
             if(acced == 0)
             {
                 acced += 1;
-                global.director.curScene.addChild(new UpgradeBanner(getStr("sureToGenAcc", ["[NUM]", str(gold)]) , [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToGenAcc", ["[NUM]", str(gold)]), [100, 100, 100], null));
             }
             else
             {
@@ -752,7 +752,7 @@ class Building extends MyNode
         if(selled == 0)
         {
             selled = 1;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(cost.get("silver", 0))]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(cost.get("silver", 0))]), [100, 100, 100], null));
         }
         else
         {

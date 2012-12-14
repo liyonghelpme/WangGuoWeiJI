@@ -125,7 +125,7 @@ class UpdateDialog extends MyNode
                     return;
                 }
             }
-            global.director.curScene.addChild(new UpgradeBanner(getStr("noCamp", null), [100, 100, 100]));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noCamp", null), [100, 100, 100]));
             //global.director.pushView(new SoldierStore(global.director.curScene), 1, 0);
         }
         */

@@ -51,7 +51,7 @@ class TransferSoldier extends MyNode
             busiSol.doTransfer();
 
             var carLev = getCareerLev(busiSol.id);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("conTrans", ["[NAME]", busiSol.myName, "[LEV]", getStr(CAREER_TIT[carLev], null), "[CAREER]", busiSol.data["name"]]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("conTrans", ["[NAME]", busiSol.myName, "[LEV]", getStr(CAREER_TIT[carLev], null), "[CAREER]", busiSol.data["name"]]), [100, 100, 100], null));
 
         }
     }

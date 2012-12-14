@@ -38,7 +38,7 @@ class DeadSoldier extends MyNode
             if(selled == 0)
             {
                 selled = 1;
-                global.director.curScene.addChild(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(cost.get("silver", 0))]) , [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(cost.get("silver", 0))]), [100, 100, 100], null));
             }
             else
             {

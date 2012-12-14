@@ -191,7 +191,7 @@ class FriendList extends MyNode
         if(buyable.get("ok") == 0)
         {
             var it = cost.items();
-            global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]), [100, 100, 100], null));
             return;
         }
 
@@ -219,12 +219,12 @@ class FriendList extends MyNode
         if(removed == 0)
         {
             removed = 1;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("touchRemoveNeibor", null), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("touchRemoveNeibor", null), [100, 100, 100], null));
         }
         else
         {
             removed = 0;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("relationBreak", ["[NAME]", data[curNum]["name"]]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("relationBreak", ["[NAME]", data[curNum]["name"]]), [100, 100, 100], null));
             global.httpController.addRequest("friendC/removeNeibor", dict([["uid", global.user.uid], ["fid", data[curNum].get("uid")]]), null, null);
             global.friendController.removeNeibor(data[curNum].get("uid"));
             updateData();
@@ -265,13 +265,13 @@ class FriendList extends MyNode
         var curNeiborNum = global.friendController.getNeiborNum();
         if(curNeiborNum >= neiborMax)
         {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("neiborFullCon", null) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("neiborFullCon", null), [100, 100, 100], null));
         }
         else
         {
             global.httpController.addRequest("friendC/sendNeiborRequest", dict([["uid", global.user.uid], ["fid", data[curNum].get("uid")]]), null, null);
             global.friendController.sendRequest(data[curNum].get("uid"));
-            global.director.curScene.addChild(new UpgradeBanner(getStr("neiReqSuc", null) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("neiReqSuc", null), [100, 100, 100], null));
             global.taskModel.doAllTaskByKey("sendNeiborRequest", 1);
         }
         clearShadow();

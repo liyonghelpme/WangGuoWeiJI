@@ -138,7 +138,7 @@ class FriendMenu extends MyNode
         global.friendController.sendHeart(user["uid"]);
         global.httpController.addRequest("friendC/sendHeart", dict([["uid", global.user.uid], ["fid", user.get("uid")], ["mid", global.user.getNewMsgId()]]), null, null);
 
-        global.director.curScene.addChild(new UpgradeBanner(getStr("freeHeart", null) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("freeHeart", null), [100, 100, 100], null));
 
         updateRightMenu();
 
@@ -155,7 +155,7 @@ class FriendMenu extends MyNode
         {
             challenged += 1;
             var cry = getChallengeNeiborCry(scene.user["uid"]);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToChallenge", ["[NUM]", str(cry)]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToChallenge", ["[NUM]", str(cry)]), [100, 100, 100], null));
             return;
         }
         challenged = 0;

@@ -189,7 +189,7 @@ class MakeDrug extends MyNode
             global.httpController.addRequest("goodsC/makeEquip", dict([["uid", global.user.uid], ["eid", eid], ["pid", p]]), null, null); 
             global.user.makeEquip(eid, tid);
         }
-        global.director.curScene.addChild(new UpgradeBanner(getStr("makeSuc", null) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("makeSuc", null), [100, 100, 100], null));
 
         updateTab();
         

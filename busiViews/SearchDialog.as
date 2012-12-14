@@ -47,21 +47,21 @@ class SearchDialog extends MyNode
             con = json_loads(con);
             if(con["id"])
             {
-                global.director.curScene.addChild(new UpgradeBanner(getStr("neiReqSuc", null), [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("neiReqSuc", null), [100, 100, 100], null));
             }
             else 
             {
                 if(con["status"] == 0)
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("errorCode", null), [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("errorCode", null), [100, 100, 100], null));
                 }
                 else if(con["status"] == 1)
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("noCode", null), [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noCode", null), [100, 100, 100], null));
                 }
                 else
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("reqYet", null), [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("reqYet", null), [100, 100, 100], null));
                 }
             }
         }

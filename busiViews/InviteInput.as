@@ -41,13 +41,13 @@ class InviteInput extends MyNode
         if(global.user.invite["inputYet"] == 1)
         {
             global.director.popView();
-            global.director.curScene.addChild(new UpgradeBanner(getStr("inputYet", null) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inputYet", null), [100, 100, 100], null));
             return;
         }
         if(global.user.getValue("level") >= PARAMS["inviteLevel"])
         {
             global.director.popView();
-            global.director.curScene.addChild(new UpgradeBanner(getStr("level3Input", ["[LEV]", str(PARAMS["inviteLevel"])]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("level3Input", ["[LEV]", str(PARAMS["inviteLevel"])]), [100, 100, 100], null));
             return;
         }
 
@@ -62,7 +62,7 @@ class InviteInput extends MyNode
         if(int(inCode) == global.user.invite["inviteCode"])
         {
             global.director.popView();
-            global.director.curScene.addChild(new UpgradeBanner(getStr("selfInvite", null) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("selfInvite", null), [100, 100, 100], null));
             return;
         }
 
@@ -80,13 +80,13 @@ class InviteInput extends MyNode
                 if(status == 2)
                 {
                     global.director.popView();
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("noSuchUser", null) , [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noSuchUser", null), [100, 100, 100], null));
                 }
             }
             else
             {
                 global.director.popView();
-                global.director.curScene.addChild(new UpgradeBanner(getStr("inviteSuc", null) , [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inviteSuc", null), [100, 100, 100], null));
             }
         }
         inConnect = 0;

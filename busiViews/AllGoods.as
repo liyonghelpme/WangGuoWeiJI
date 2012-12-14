@@ -337,7 +337,7 @@ class AllGoods extends MyNode
         if(selled == 0)
         {
             selled = 1;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(addSilver["silver"])]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToSell", ["[NUM]", str(addSilver["silver"])]), [100, 100, 100], null));
             return;
         }
         else

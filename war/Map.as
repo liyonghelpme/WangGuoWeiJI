@@ -1191,7 +1191,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         if(curMovSol == null && scene.kind == CHALLENGE_TRAIN)
         {
             curMovSol = sol;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("selTarPos", null), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("selTarPos", null), [100, 100, 100], null));
         }
     }
     function clearMoveSol()

@@ -380,7 +380,7 @@ class MapBanner extends MyNode
         var ret = scene.map.checkMySoldier();
         if(ret == 0)
         {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("noSol", null), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noSol", null), [100, 100, 100], null));
             return;
         }
         scene.finishArrange();

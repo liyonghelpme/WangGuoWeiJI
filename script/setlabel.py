@@ -63,7 +63,7 @@ def walkThrough(cur):
                 files.close()
 
                     
-walkThrough('.')
+walkThrough('../')
 
 f = open('label.txt', 'w')
 f.write(json.dumps(lineRes))

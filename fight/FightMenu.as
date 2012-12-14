@@ -35,7 +35,7 @@ class FightMenu extends MyNode
         if(global.fightModel.myArena == null)
             global.director.pushView(new MakeArenaDialog(scene), 1, 0); 
         else
-            global.director.curScene.addChild(new UpgradeBanner(getStr("inDefNow", null), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inDefNow", null), [100, 100, 100], null));
     }
 
 
@@ -115,7 +115,7 @@ accInfo = black2.addlabel(getStr("accInfo", null), "fonts/heiti.ttf", 18, FONT_N
         if(buyable.get("ok") == 0)
         {
             var key = cost.keys()[0];
-            global.director.curScene.addChild(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100], null));
         }
         else
         {

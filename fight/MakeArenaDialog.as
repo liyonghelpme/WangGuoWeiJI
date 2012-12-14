@@ -110,7 +110,7 @@ pan.addlabel(getStr("costNum", ["[KIND]", getStr(key, null), "[NUM]", str(val)])
         {
             var key = cost.keys()[0];
             var val = cost.values()[0];
-            global.director.curScene.addChild(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("fightNot", ["[NAME]", getStr(key, null)]), [100, 100, 100], null));
             return;
         }
 

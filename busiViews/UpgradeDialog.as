@@ -147,7 +147,7 @@ class UpgradeDialog extends MyNode
         else
         {
             var objData = getData(TREASURE_STONE, curChoose);
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sorryNum", ["[NAME]", objData["name"]]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sorryNum", ["[NAME]", objData["name"]]), [100, 100, 100], null));
         }
     }
 
@@ -161,18 +161,18 @@ class UpgradeDialog extends MyNode
                 if(con.get("suc") == 1)
                 {
                     global.user.upgradeEquip(eid);
-                    scene.addChild(new UpgradeBanner(getStr("sucUpgrade", null), [0, 100, 0], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sucUpgrade", null), [0, 100, 0], null));
                 }
                 else
                 {
                     if(con.get("breakEquip") == 0)
                     {
-                        scene.addChild(new UpgradeBanner(getStr("failUpgrade", null), [100, 0, 0], null));
+                        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("failUpgrade", null), [100, 0, 0], null));
                     }
                     else
                     {
                         global.user.breakEquip(eid);
-                        scene.addChild(new UpgradeBanner(getStr("failEquip", null), [100, 0, 0], null));
+                        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("failEquip", null), [100, 0, 0], null));
                     }
                 }
             }

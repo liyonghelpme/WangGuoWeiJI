@@ -182,7 +182,7 @@ class CollectionList extends MyNode
             var ret = global.msgCenter.checkCallback(CALL_SOL); 
             if(!ret)
             {
-                global.director.curScene.addChild(new UpgradeBanner(getStr("noCamp", null) , [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noCamp", null), [100, 100, 100], null));
             }
             else
             {

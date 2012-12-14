@@ -87,7 +87,7 @@ class Mine extends FuncBuild
     //空闲状态 水晶矿没有开启
     override function whenFree()
     {
-        global.director.curScene.addChild(new UpgradeBanner(getStr("notOpenMine", ["[LEV]", str(PARAMS["MineMinLevel"])]) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("notOpenMine", ["[LEV]", str(PARAMS["MineMinLevel"])]), [100, 100, 100], null));
         return 1;
     }
     /*

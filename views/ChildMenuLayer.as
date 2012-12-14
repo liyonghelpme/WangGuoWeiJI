@@ -126,18 +126,18 @@ class ChildMenuLayer extends MyNode
         var buyable = global.user.checkCost(cost);
         if(buyable.get("ok") == 0)
         {
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToGather", ["[NUM]", str(PARAMS["gatherGold"])]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToGather", ["[NUM]", str(PARAMS["gatherGold"])]), [100, 100, 100], null));
 
             buyable.pop("ok");
             var it = buyable.items();
-            global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]), [100, 100, 100], null));
 
             return;
         }
         if(playGatherNow == 0)
         {
             playGatherNow = 1;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("sureToGather", ["[NUM]", str(PARAMS["gatherGold"])]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToGather", ["[NUM]", str(PARAMS["gatherGold"])]), [100, 100, 100], null));
             return;
         }
         playGatherNow = 0;

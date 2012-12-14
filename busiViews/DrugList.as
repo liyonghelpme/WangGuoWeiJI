@@ -237,14 +237,14 @@ class DrugList extends MyNode
         {
             var effect = soldier.getDrugEffect(p);
             var its = effect.items()[0];
-            global.director.curScene.addChild(new UpgradeBanner(getStr("opSucDrug", ["[NAME]", soldier.myName, "[NUM]", str(its[1]), "[KIND]", getStr(its[0], null) ]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("opSucDrug", ["[NAME]", soldier.myName, "[NUM]", str(its[1]), "[KIND]", getStr(its[0], null)]), [100, 100, 100], null));
         }
         //增加物理魔法 生命值上限
         else if(kind == EQUIP)
         {
             effect = getGain(kind, p);
             its = effect.items()[0];
-            global.director.curScene.addChild(new UpgradeBanner(getStr("opSucDrug", ["[NAME]", soldier.myName, "[NUM]", str(its[1]), "[KIND]", getStr(its[0], null) ]) , [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("opSucDrug", ["[NAME]", soldier.myName, "[NUM]", str(its[1]), "[KIND]", getStr(its[0], null)]), [100, 100, 100], null));
         }
         global.user.useThing(kind, p, soldier);
     }

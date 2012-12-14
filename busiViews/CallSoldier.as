@@ -336,12 +336,12 @@ class CallSoldier extends MyNode
             //超出人口上限
             if(curSolNum >= MAX_BUSI_SOLNUM)
             {
-                global.director.curScene.addChild(new UpgradeBanner(getStr("sorrySol", null), [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sorrySol", null), [100, 100, 100], null));
                 return;
             }
             else if(curSolNum > peopleNum)
             {
-                global.director.curScene.addChild(new UpgradeBanner(getStr("buildHouse", null), [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("buildHouse", null), [100, 100, 100], null));
                 return;
             }
   
@@ -353,7 +353,7 @@ class CallSoldier extends MyNode
             {
                 buyable.pop("ok");
                 var it = buyable.items();
-                global.director.curScene.addChild(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]) , [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(it[0][0], null), "[NUM]", str(it[0][1])]), [100, 100, 100], null));
                 return;
             }
 

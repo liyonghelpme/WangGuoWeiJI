@@ -85,14 +85,14 @@ but1.addlabel(getStr("generalExp", null), "fonts/heiti.ttf", 35).pos(107, 32).an
         {
             buyable.pop("ok");
             var it = buyable.items()[0];
-            global.director.curScene.addChild(new UpgradeBanner(getStr("lack", ["[NUM]", str(it[1]), "[NAME]", getStr(it[0], null)]), [100, 0, 0], null)); 
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("lack", ["[NUM]", str(it[1]), "[NAME]", getStr(it[0], null)]), [100, 0, 0], null));
             return;
         }
         else
         {
             if(doubleYet == 0)
             {
-                global.director.curScene.addChild(new UpgradeBanner(getStr("need10Gold", null), [100, 100, 100], null)); 
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("need10Gold", null), [100, 100, 100], null));
                 doubleYet = 1;
                 buyWord.text(getStr("ok", null));
             }

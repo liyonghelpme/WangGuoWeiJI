@@ -170,7 +170,7 @@ class Store extends MyNode
                 ret = checkFarmNum(); 
                 if(ret == 0)
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("farmTooCon", ["[LEV]", str(global.user.getValue("level")+1+1) ] ) , [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("farmTooCon", ["[LEV]", str((global.user.getValue("level") + 1) + 1)]), [100, 100, 100], null));
 
                     return;
                 }
@@ -180,7 +180,7 @@ class Store extends MyNode
                 ret = checkCampNum();
                 if(!ret)
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("campTooCon", ["[LEV]", str(getNextCampLevel()+1) ] ) , [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("campTooCon", ["[LEV]", str(getNextCampLevel() + 1)]), [100, 100, 100], null));
                     return;
                 }
             }
@@ -190,7 +190,7 @@ class Store extends MyNode
                 ret = checkHouseNum();
                 if(!ret)
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("houseTooCon", ["[LEV]", str(getNextHouseLevel()+1) ] ) , [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("houseTooCon", ["[LEV]", str(getNextHouseLevel() + 1)]), [100, 100, 100], null));
                     return;
                 }
             }
@@ -200,7 +200,7 @@ class Store extends MyNode
                 ret = checkMineNum();
                 if(!ret)
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("mineTooCon", ["[LEV]", str(getNextMineLevel()+1) ] ) , [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("mineTooCon", ["[LEV]", str(getNextMineLevel() + 1)]), [100, 100, 100], null));
                     return;
                 }
             }
@@ -208,7 +208,7 @@ class Store extends MyNode
             ret = global.msgCenter.checkCallback(BEGIN_BUILD);
             if(!ret)
             {
-                global.director.curScene.addChild(new UpgradeBanner(getStr("cantBuild", null) , [100, 100, 100], null));
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("cantBuild", null), [100, 100, 100], null));
                 return;
             }
 
@@ -220,7 +220,7 @@ class Store extends MyNode
             {
                 if(global.user.getDrugTotalNum() >= getParam("maxDrugNum"))
                 {
-                    global.director.curScene.addChild(new UpgradeBanner(getStr("tooManyDrug", ["[NUM]", str(getParam("maxDrugNum"))]) , [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("tooManyDrug", ["[NUM]", str(getParam("maxDrugNum"))]), [100, 100, 100], null));
                     return;
                 }
                 global.httpController.addRequest("goodsC/buyDrug", dict([["uid", global.user.uid], ["drugKind", id]]), null, null);

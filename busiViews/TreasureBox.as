@@ -9,7 +9,7 @@ class TreasureBox extends MyNode
         global.httpController.addRequest("friendC/helpOpen", dict([["uid", global.user.uid], ["fid", scene.user["uid"]]]), null, null)
         scene.helpOpen();
         updateState();
-        global.director.curScene.addChild(new UpgradeBanner(getStr("helpSuc", null) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("helpSuc", null), [100, 100, 100], null));
 
         //global.tashModel.doDayTaskByKey("helpOpenBox", 1);
         global.tashModel.doAllTaskByKey("helpOpenBox", 1);
@@ -101,7 +101,7 @@ class TreasureBox extends MyNode
         if(opened == 0)
         {
             opened += 1;
-            global.director.curScene.addChild(new UpgradeBanner(getStr("openOnePos", null), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("openOnePos", null), [100, 100, 100], null));
             return;
         }
         else

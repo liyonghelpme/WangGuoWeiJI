@@ -264,7 +264,7 @@ class GiftDialog extends MyNode
         }
 
         var objData = getData(kind, objId);
-        global.director.curScene.addChild(new UpgradeBanner(getStr("sendOver", ["[NAME]", objData["name"]]) , [100, 100, 100], null));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sendOver", ["[NAME]", objData["name"]]), [100, 100, 100], null));
         if(num == 0)
             data.pop(p);
         updateTab();
