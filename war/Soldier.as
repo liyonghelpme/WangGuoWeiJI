@@ -1124,6 +1124,7 @@ class Soldier extends MyNode
     }
     function setDir()
     {
+
         if(tar == null)
         {
             if(color == MYCOLOR)
@@ -1145,6 +1146,15 @@ class Soldier extends MyNode
                 changeDirNode.scale(100, 100);
             }
         }
+        //调整阴影位置
+        var bSize = changeDirNode.size();
+        var shadowOffX = data["shadowOffX"];
+        var shadowOffY = data["shadowOffY"];
+
+        if(changeDirNode.scale()[0] < 0)
+            shadow.pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY);
+        else
+            shadow.pos(bSize[0]/2-shadowOffX, bSize[1]+shadowOffY);
     }
 
     function getTar()
@@ -1341,4 +1351,6 @@ class Soldier extends MyNode
         backBanner.texture("mapSolBloodBan"+suffix+".png", UPDATE_SIZE);
         backBanner.pos(bSize[0]/2, data["bloodHeight"]);
     }
+    //map 上增加 bomb
+
 }

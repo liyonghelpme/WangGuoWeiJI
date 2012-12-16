@@ -42,8 +42,16 @@ class CloseSoldier
     {
         sol = s;
     }
+    //出现在士兵身体的某个位置
     function doAttack()
     {
+        var bomb = new AttackBombEffect();
+        
+        var midX = sol.getPos()[0];
+        var midY = sol.getPos()[1]-sol.offY-sol.sy*MAP_OFFY/2;
+
+        bomb.setPos([midX+getParam("randBombX")/2-rand(getParam("randBombX")), midY+getParam("randBombY")/2-rand(getParam("randBombY"))]);
+        sol.map.addChildZ(bomb, MAX_BUILD_ZORD); 
         if(sol.tar != null)
         {
             var hurt = calHurt(sol, sol.tar);

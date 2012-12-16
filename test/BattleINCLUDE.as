@@ -2,6 +2,7 @@
 
 //构造初始化的建筑物分布时，需要初始化一个河流相关的冲突图
 
+/*
 import views.FriendScene;
 //import views.FriendMenu;
 import busiViews.FriendMenu;
@@ -17,6 +18,7 @@ import busiViews.SettingDialog;
 
 import busiViews.TaskDialog;
 import views.TipDialog;
+//import views.MakeDrugDialog;
 import busiViews.MakeDrugDialog;
 
 import busiViews.SoldierDialog;
@@ -24,17 +26,19 @@ import busiViews.AllSoldier;
 import busiViews.DeadSoldier;
 import busiViews.TransferSoldier;
 
+//import views.SoldierDialog;
+//import views.AllSoldier;
+//import views.DeadSoldier;
+//import views.TransferSoldier;
+//import views.DrugDialog;
 import busiViews.DrugDialog;
 import busiViews.DrugList;
 
 
 //经营页面
 import views.CastlePage;
-import busiViews.NewTaskReward;
 import busiViews.BoxOnMap;
-import busiViews.DownloadDialog;
-import busiViews.DownloadIcon;
-
+//import views.BuildLayer;
 import busiViews.BuildLayer;
 import views.BuildLand;
 import views.SoldierMax;
@@ -44,10 +48,6 @@ import mine.MineMenu;
 import mine.MakeMine;
 import mine.CrystalIsland;
 import mine.MoveIsland;
-/*
-import views.CrystalIsland;
-import views.MineMenu;
-*/
 
 import views.MineFunc;
 import mine.UpgradeMine;
@@ -63,12 +63,13 @@ import busiViews.DailyTask;
 import busiViews.DailyReward;
 
 
+//import views.RoleName;
 import busiViews.RoleName;
 
 
 //人物对话框
+import views.SoldierStore;
 import views.BusiSoldier;
-
 
 import views.TrainBanner;
 import views.ProfessionIntroDialog;
@@ -78,11 +79,10 @@ import views.ProfessionIntroDialog;
 import views.ResourceBanner;
 
 
-import busiViews.SoldierMenu;
+import views.SoldierMenu;
 import busiViews.DetailDialog;
 
 import views.ChildMenuLayer;
-import busiViews.TransferDialog;
 import views.GameFour;
 import views.GameTwo;
 import views.GameThree;
@@ -95,11 +95,16 @@ import busiViews.MailDialog;
 import busiViews.RequestView;
 import busiViews.MoreView;
 
+//import views.GiftView;
+//import views.AllGoods;
 import busiViews.AllGoods;
 
+//import views.UpgradeDialog;
 import busiViews.UpgradeDialog;
+//import views.SkillDialog;
 import busiViews.SkillDialog;
 
+//import views.UpgradeSkillDialog;
 import busiViews.UpgradeSkillDialog;
 import views.TrainDialog;
 
@@ -122,7 +127,6 @@ import views.CastleScene;
 //建筑物
 //采用组合的方式 将farm相关的行为 实现在farm中
 import views.Building;
-import views.BuildAnimate;
 import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
@@ -208,59 +212,28 @@ import battle.MapLayer;
 import battle.LevelChoose;
 
 
-//战斗页面
-import war.BattleScene;
-import war.MapBanner;
-//闯关地图
-import war.Map;
-import war.Soldier;
-
-import war.CloseSoldier;
-import war.AttackBombEffect;
-import war.ArrowFlyEffect;
-import war.Arrow;
-import war.Magic;
-import war.Rocket;
-import war.FlyAndBomb;
-import war.RollBall;
-import war.MakeFly;
-import war.MakeFlyRoll;
-import war.FullStage;
-import war.GroundBomb;
-import war.TransformAnimate;
-import war.EarthQuake;
-import war.DeadOver;
-import war.SoldierAnimate;
-import model.SoldierEffect;
-import war.EffectBase;
-
-
-import views.MonSmoke;
-import war.LineSkill;
-import war.SingleSkill;
-import war.MultiSkill;
-import war.SpinSkill;
-import war.HealSkill;
-import war.SaveSkill;
-import war.UseDrugSkill;
 
 
 
 
-import views.CloseAttackEffect;
-import war.ChallengeOver;
+
+
+
+
+
+
+import views.ChallengeOver;
 
 
 import views.MoveObject;
-import war.MapPause;
-import war.SkillFlowBanner;
-import war.MapDefense;
+//import views.MapPause;
 
+//import views.SkillFlowBanner;
 
+import views.MapDefense;
 
 
 import views.DialogController;
-import busiViews.NewTaskDialog2;
 import views.Mask;
 
 //import views.ScoreDialog;
@@ -284,8 +257,8 @@ import war.ChallengeFail;
 import war.ChallengeWin;
 
 
-import busiViews.CallSoldier;
-import busiViews.SoldierGoods;
+import views.CallSoldier;
+import views.SoldierGoods;
 
 //import views.RankDialog;
 //import views.RankBase;
@@ -302,14 +275,60 @@ import views.Store;
 import views.Choice;
 import views.Goods;
 import views.ResLackBanner;
+import views.UpdateDialog;
 
 import busiViews.LoadChallenge;
-import views.UpdateDialog;
+
 import views.LoveUpgradeDialog;
 import views.LoveDialog;
 import views.LiveHeartDialog;
 import views.LoginDialog;
 import busiViews.LoadChallenge;
+*/
+//
+//战斗页面
+import war.BattleScene;
+import war.MapBanner;
+//闯关地图
+import war.Map;
+import war.Soldier;
+import war.AttackBombEffect;
+import war.ArrowFlyEffect;
+import war.MapPause;
+import war.SkillFlowBanner;
+import war.CloseSoldier;
+import war.SoldierAnimate;
+import war.DeadOver;
+import views.MonSmoke;
+//import war.Bomb;
+import war.Rocket;
+//import war.Music;
+import war.FlyAndBomb;
+import war.RollBall;
+import war.MakeFly;
+import war.MakeFlyRoll;
+import war.FullStage;
+import war.GroundBomb;
+import war.TransformAnimate;
+import war.EarthQuake;
+import model.SoldierEffect;
+
+
+import views.LineSkill;
+import views.SingleSkill;
+import views.MultiSkill;
+import views.SpinSkill;
+import views.HealSkill;
+import views.SaveSkill;
+import views.UseDrugSkill;
+
+import war.Arrow;
+import war.Magic;
+//import views.CloseAttackEffect;
+
+import war.EffectBase;
+
+
 
 //菜单使用的按钮对象
 import views.Button;
@@ -317,13 +336,11 @@ import views.UpgradeBanner;
 
 
 
-
 import model.SoldierAI;
-import model.SoldierModel;
 import model.BusinessModel;
 import model.RoundModel;
-import model.RoundGridController;
 import model.MapGridController;
+import model.SoldierBase;
 
 import views.MyWarningDialog;
 import views.ShadowWords;
@@ -333,7 +350,8 @@ import views.BannerController;
 
 
 
-import Global.User;
+//import Global.User;
+import test.User;
 import Global.MessageCenter;
 
 
@@ -355,11 +373,11 @@ import model.MailController;
 
 import Global.MyNode;
 
+import model.PictureManager;
 import model.ParamController;
 import model.FriendController;
 import model.HttpController;
 import util.Util;
-import model.PictureManager;
 
 import Global.GlobalController;
 
@@ -375,7 +393,6 @@ import data.String;
 
 
 global.timer = new Timer(1000);
-
 global.httpController = new HttpController();
 global.msgCenter = new MessageCenter();
 global.director = new Director();
@@ -384,18 +401,17 @@ global.controller = new Controller();
 global.myAction = new MyAction();
 global.paramController = new ParamController();
 
-
 //friend  task mail fight  castleScene
 //不同途径相同归一目的地
 //global.staticScene = new CastleScene();
 global.user = new User();
-global.pictureManager = new PictureManager();
 global.sensorController = new SensorController();
 global.friendController = new FriendController();
 global.taskModel = new TaskModel();
 global.mailController = new MailController();
 global.fightModel = new FightModel();
 global.bannerController = new BannerController();
+//global.pictureManager = new PictureManager();
 
 
 

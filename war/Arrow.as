@@ -29,10 +29,18 @@ class Arrow extends EffectBase
         //单张弓箭图片  弓箭图片 弓箭缩放比例尺寸
         var eff = getArrowData(sol.id);
         var ani = pureMagicData[eff[0]];
-        bg = sprite("s"+str(id)+"e0.png").anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
+        //.anchor(50, 50) 效果偏移针对 每个技能也是针对每种士兵的
+        bg = sprite("s"+str(id)+"e0.png").pos(p[0]+off[0], p[1]+off[1]).scale(sol.data.get("arrSca")).anchor(50, 100);
         init();
         shiftAni = moveto(0, 0, 0);
         initState();
+        
+        //p[0]+off[0] p[1]+off[1]
+        var startPos = [p[0]+off[0], p[1]+off[1]+sol.data["arrFlyOffY"]];
+        var endPos = [tar.getPos()[0], p[1]+off[1]+sol.data["arrFlyOffY"]];
+        var dir = getDir(); 
+        var arrowTrail = new ArrowFlyEffect(timeAll[FLY_NOW], startPos, endPos, dir);
+        sol.map.addChildZ(arrowTrail, MAX_BUILD_ZORD);
     }
     
     override function initState()

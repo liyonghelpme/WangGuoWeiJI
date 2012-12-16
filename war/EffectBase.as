@@ -36,6 +36,10 @@ class EffectBase extends MyNode
         setDir();
     }
 
+    function getDir()
+    {
+        return (bg.scale()[0] < 0);
+    }
     function setDir()
     {
         var difx = tar.getPos()[0]-bg.pos()[0];

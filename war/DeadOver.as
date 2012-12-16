@@ -36,8 +36,8 @@ class DeadOver extends MyNode
             sequence(
 
                 delaytime(getParam("deadWaitTime")),
-                moveby(getParam("jumpUpTime"), 0, -15), 
-                spawn(rotateby(getParam("rotateTime"), dir), moveby(getParam("rotateTime"), 0, 5+cs[1]/2)), 
+                expout(moveby(getParam("jumpUpTime"), 0, getParam("jumpHeight"))), 
+                spawn(expout(rotateby(getParam("rotateTime"), dir)), expout(moveby(getParam("rotateTime"), 0, 5+cs[1]/2))), 
                 itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
                 irotateby(-dir),
 
