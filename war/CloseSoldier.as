@@ -28,6 +28,15 @@ class OtherSoldier
             sol.map.addChildZ(new Rocket(sol, fakeTar), MAX_BUILD_ZORD);
         else if(sol.kind == LONG_DISTANCE)
             sol.map.addChildZ(new Arrow(sol, fakeTar), MAX_BUILD_ZORD);
+        else if(sol.kind == MAGIC_FLY)
+            sol.map.addChildZ(new MagicFly(sol, fakeTar), MAX_BUILD_ZORD);
+        else if(sol.kind == THREE_BALL)
+            sol.map.addChildZ(new ThreeBall(sol, fakeTar), MAX_BUILD_ZORD);
+        else if(sol.kind == FIRE_BALL)
+            sol.map.addChildZ(new FireBall(sol, fakeTar), MAX_BUILD_ZORD);
+        else if(sol.kind == GALAXY)
+            sol.map.addChildZ(new Galaxy(sol, fakeTar), MAX_BUILD_ZORD);
+            
     }
     
 }

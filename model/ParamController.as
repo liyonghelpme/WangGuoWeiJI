@@ -36,6 +36,10 @@ class ParamController
             con = json_loads(con);
             pureMagicData = dict(con["ani"]);
             magicAnimate = dict(con["sol"]);
+            ParticleKey = con["pKey"];
+            ParticleData = dict(con["pData"]);
+            Keys[PARTICLES] = ParticleKey;
+            CostData[PARTICLES] = ParticleData;
         }
     }
     /*

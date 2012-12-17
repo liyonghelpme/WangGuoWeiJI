@@ -658,6 +658,10 @@ const FIGHT_COST = 20;
 const MONEY_GAME_GOODS = 21;
 const EXP_GAME_GOODS = 22;
 const EQUIP_SKILL = 23;
+const PARTICLES = 24;
+
+var ParticleData = [];
+var ParticleKey = [];
 
 
 
@@ -686,6 +690,7 @@ var Keys = [
     MoneyGameGoodsKey,
     ExpGameGoodsKey,
     equipSkillKey,
+    ParticleKey,
 ];
 var CostData = [
     buildingData,
@@ -712,6 +717,7 @@ var CostData = [
     MoneyGameGoodsData,
     ExpGameGoodsData,
     equipSkillData,
+    ParticleData,
 ];
 
 //更新商店load_sprite_sheet
@@ -987,6 +993,7 @@ const SKILL_MIN_COLDTIME = 5000;
 const DRUG_COLD_TIME = 1000;//ms
 
 //soldier type
+//soldier attack_type
 const CLOSE_FIGHTING = 0;
 const LONG_DISTANCE = 1;
 const MAGIC = 2;
@@ -1001,6 +1008,10 @@ const FULL_STAGE = 10;
 const GROUND_BOMB = 11;
 const ROLL_FLY_BOMB = 12;
 const EARTH_QUAKE = 13;
+const MAGIC_FLY = 14;
+const THREE_BALL = 15;
+const FIRE_BALL = 16;
+const GALAXY = 17;
 
 
 /*

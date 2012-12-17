@@ -35,9 +35,7 @@ class Arrow extends EffectBase
         shiftAni = moveto(0, 0, 0);
         initState();
         
-
         //p[0]+off[0] p[1]+off[1]
-
     }
     
     override function initState()
@@ -64,7 +62,7 @@ class Arrow extends EffectBase
         var startPos = [p[0]+off[0], p[1]+off[1]+sol.data["arrFlyOffY"]];
         var endPos = [tar.getPos()[0], p[1]+off[1]+sol.data["arrFlyOffY"]];
         var dir = getDir(); 
-        var arrowTrail = new ArrowFlyEffect(timeAll[FLY_NOW], startPos, endPos, dir);
+        var arrowTrail = new ArrowFlyEffect(timeAll[FLY_NOW], startPos, endPos, dir, sol.data["particleId"]);
         sol.map.addChildZ(arrowTrail, MAX_BUILD_ZORD);
     }
     

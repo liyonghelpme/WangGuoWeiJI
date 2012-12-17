@@ -322,6 +322,12 @@ import views.HealSkill;
 import views.SaveSkill;
 import views.UseDrugSkill;
 
+import war.Galaxy;
+import war.GalaxyFireBall;
+import war.FireBall;
+import war.ThreeBall;
+import war.ThreeTrail;
+import war.MagicFly;
 import war.Arrow;
 import war.Magic;
 //import views.CloseAttackEffect;
