@@ -147,13 +147,6 @@ const FarmZone = [
 
 
 //id coin crystal cae possible
-/*
-var fallThings = [
-[0, 5, 0, 0, 20], [1, 10, 0, 0, 15], [2, 20, 0, 0, 15], 
-[3, 30, 0, 0, 15], [4, 40, 0, 0, 15], [5, 50, 0, 0, 5],
-[6, 0, 0, 1, 2], [7, 0, 1, 0, 1], [8, 0, 1, 0, 2], 
-[9, 100, 0, 0, 10]];
-*/
 //0-9 id
 
 
@@ -760,21 +753,6 @@ dict(
 );
 
 
-//temp = bg.addsprite("map0Def0.png").anchor(0, 0).pos(-5, 68).size(38, 339).color(100, 100, 100, 100);
-//temp = bg.addsprite("map0Def1.png").anchor(0, 0).pos(775, 60).size(24, 353).color(100, 100, 100, 100);
-//左边的防御装置 anchor 0 0 的位置   右边防御装置的位置 掉落物品类别0-21 药材 100-109 矿石 概率 掉落数量1个
-//temp = bg.addsprite("map1.png").anchor(0, 0).pos(0, -5).size(800, 497).color(100, 100, 100, 100);
-//temp = bg.addsprite("map1Def0.png").anchor(0, 0).pos(0, 77).size(51, 350).color(100, 100, 100, 100);
-//temp = bg.addsprite("map1Def1.png").anchor(0, 0).pos(2, 65).size(798, 355).color(100, 100, 100, 100);
-
-//temp = bg.addsprite("map2Def1.png").anchor(0, 0).pos(757, 76).size(43, 322).color(100, 100, 100, 100);
-//temp = bg.addsprite("map2Def0.png").anchor(0, 0).pos(0, 57).size(57, 351).color(100, 100, 100, 100);
-//temp = bg.addsprite("map3Def0.png").anchor(0, 0).pos(0, 57).size(43, 375).color(100, 100, 100, 100);
-//temp = bg.addsprite("map3Def1.png").anchor(0, 0).pos(776, 80).size(24, 325).color(100, 100, 100, 100);
-//temp = bg.addsprite("王国雪山防御装置右.png").anchor(0, 0).pos(760, 75).size(40, 325).color(100, 100, 100, 100);
-//temp = bg.addsprite("王国雪山防御装置左.png").anchor(0, 0).pos(1, 48).size(44, 362).color(100, 100, 100, 100);
-//temp = bg.addsprite("决斗场防御装置右.png").anchor(0, 0).pos(738, 41).size(62, 380).color(100, 100, 100, 100);
-//temp = bg.addsprite("决斗场防御装置左.png").anchor(0, 0).pos(0, 0).size(83, 433).color(100, 100, 100, 100);
 var mapInfo = dict([
     [0, [[-5, 68], [775, 60]]],
     [1, [[0, 77], [770, 65]]],
