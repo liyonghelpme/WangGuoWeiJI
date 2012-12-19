@@ -259,7 +259,6 @@ class Store extends MyNode
             }
             trace("addPopBanner");
             setTab(curSel);
-            //global.director.curScene.dialogController.addBanner(new PopBanner(cost2Minus(cost)));//自己控制
             showMultiPopBanner(cost2Minus(cost));
         }
     }

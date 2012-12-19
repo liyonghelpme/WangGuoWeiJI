@@ -48,7 +48,7 @@ class AllSoldier extends MyNode
                 var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
                 busiSol.sureToSell();
 
-                global.director.curScene.addChild(new PopBanner(cost));//自己控制
+                showMultiPopBanner(cost);
             }
         }
     }

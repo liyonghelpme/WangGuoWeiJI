@@ -199,7 +199,6 @@ class FriendList extends MyNode
         global.user.changeValue("neiborMax", 1);
         global.user.doCost(cost);
 
-        //global.director.curScene.addChild(new PopBanner(cost2Minus(cost)));//自己控制
         showMultiPopBanner(cost2Minus(cost));
 
         updateData();

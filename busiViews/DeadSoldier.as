@@ -46,7 +46,7 @@ class DeadSoldier extends MyNode
                 var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
                 busiSol.sureToSell();
 
-                global.director.curScene.addChild(new PopBanner(cost));//自己控制
+                showMultiPopBanner(cost);
             }
         }
     }
@@ -69,7 +69,7 @@ class DeadSoldier extends MyNode
             var id = soldier[1]["id"]; 
             var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
             busiSol.doRelive();
-            global.director.curScene.addChild(new PopBanner(cost2Minus(cost)));//自己控制
+            showMultiPopBanner(cost2Minus(cost));
         }
     }
 

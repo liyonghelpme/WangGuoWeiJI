@@ -771,7 +771,7 @@ class Building extends MyNode
             //global.user.changeValue("people", -data.get("people"));//减去人口
             //global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
 
-            global.director.curScene.addChild(new PopBanner(showData));//自己控制
+            showMultiPopBanner(showData);
              
             //map.sellBuild(this);//没有清除建筑物的底座
             map.removeBuilding(this);

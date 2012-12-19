@@ -366,7 +366,7 @@ class AllGoods extends MyNode
                 updateTab();
             }
         }
-        global.director.curScene.addChild(new PopBanner(addSilver));
+        showMultiPopBanner(addSilver);
 
     }
     //升级装备 参数位置 
