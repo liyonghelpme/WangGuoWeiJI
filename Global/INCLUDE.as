@@ -215,6 +215,13 @@ import war.MapBanner;
 import war.Map;
 import war.Soldier;
 
+import war.FireBall;
+import war.GunSmoke;
+import war.GunSmokeTrail;
+import war.MagicFly;
+import war.MakeFlyEffect;
+import war.MakeFlyTrail;
+
 import war.Galaxy;
 import war.GalaxyFireBall;
 import war.ThreeBall;
