@@ -45,16 +45,6 @@ class Galaxy extends EffectBase
         if(state == FLY_NOW)
             removeSelf();
     }
-    function doHarm()
-    {
-        //攻击对象没有死亡
-        if(tar != null)
-        {
-            var hurt = calHurt(sol, tar);
-            tar.changeHealth(sol, -hurt);
-        }
-        removeSelf();
-    }
     override function enterScene()
     {
         super.enterScene();

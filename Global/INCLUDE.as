@@ -215,6 +215,11 @@ import war.MapBanner;
 import war.Map;
 import war.Soldier;
 
+import war.Galaxy;
+import war.GalaxyFireBall;
+import war.ThreeBall;
+import war.ThreeTrail;
+
 import war.CloseSoldier;
 import war.AttackBombEffect;
 import war.ArrowFlyEffect;
