@@ -202,6 +202,7 @@ function getObjKindId(v)
 */
 function getData(kind, id)
 {
+    //trace("getData", kind, id);
     //var key = getObjKey(kind, id);
     var key = getGoodsKey(kind, id);
     var ret = dataPool.get(key, null);
@@ -219,7 +220,10 @@ function getData(kind, id)
             else if(k[i] == "title" || k[i] == "des")//任务的描述字符串 配方的描述字符串 药材矿石的描述字符串
                 ret.update(k[i], getStr(datas[i], null));
             else
+            {
+
                 ret.update(k[i], datas[i]);
+            }
         }
         dataPool.update(key, ret);
     }

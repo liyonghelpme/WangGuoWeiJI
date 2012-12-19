@@ -146,7 +146,12 @@ class BusiSoldier extends MyNode
         bg.size(bSize).anchor(50, 100).pos(oldPos);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
-        shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
+        //shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
+        //.size(data.get("shadowSize"), 32);
+        //shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
+
+        var ss = SOL_SHADOW_SIZE.get(sx, 3);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
 
         changeDirNode.add(shadow, -1);
         initData(privateData);
@@ -566,6 +571,15 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             changeDirNode.scale(100, 100);
         else
             changeDirNode.scale(-100, 100);
+
+        var bSize = changeDirNode.size();
+        var shadowOffX = data["shadowOffX"];
+        var shadowOffY = data["shadowOffY"];
+
+        if(changeDirNode.scale()[0] < 0)
+            shadow.pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY);
+        else
+            shadow.pos(bSize[0]/2-shadowOffX, bSize[1]+shadowOffY);
     }
     //var inspireTime = 0;
     //士兵当前占用的map映射格子 

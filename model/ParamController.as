@@ -7,6 +7,7 @@ class ParamController
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
+        global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
     }
     function fetchOver(rid, rcode, con, param)
     {
@@ -15,6 +16,17 @@ class ParamController
             con = json_loads(con);
             AnimateParams = con;
             initYet = 1;
+        }
+    }
+    function getAllSolIds(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            soldierKey = con["soldierKey"];
+            soldierData = dict(con["soldierData"]);
+            Keys[SOLDIER] = soldierKey;
+            CostData[SOLDIER] = soldierData;
         }
     }
     function fetchAni(rid, rcode, con, param)

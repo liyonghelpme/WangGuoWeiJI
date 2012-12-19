@@ -164,7 +164,7 @@ class SoldierGoods extends MyNode
                         panel.addlabel(getStr("callInQueue", ["[NUM]", str(ret[1]+1)]), "fonts/heiti.ttf", 17).anchor(0, 50).pos(14, 132).color(43, 25, 9);
                 }
 
-                if(len(picCost) > 0)
+                if(len(picCost) > 0 && canBuy)//可以购买
                 {
                     var picName = picCost[0][0]+".png";
                     var valNum = picCost[0][1];

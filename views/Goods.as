@@ -129,9 +129,6 @@ class Goods extends MyNode
         //物品属性
         else
         {
-            //if(objKind == DRUG)
-            //    panel.addlabel(data.get("storeName"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
-            //else
             panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
             var picCost = cost.items();
             if(len(picCost) > 0)

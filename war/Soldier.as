@@ -567,6 +567,7 @@ class Soldier extends MyNode
         */
         skillList = [];
 
+        kind = data.get("kind");
         sx = data.get("sx");
         sy = data.get("sy");
 
@@ -609,7 +610,6 @@ class Soldier extends MyNode
     var fea;
     var oldId;
 
-    var ShadowSize = dict([[1, 1], [2, 2], [3, 3]]);
     var staLabel;
     var lastSta;
 
@@ -653,8 +653,6 @@ class Soldier extends MyNode
         data = getData(SOLDIER, id);
         initData();
         shiftAni = moveto(0, 0, 0);
-
-        kind = data.get("kind");
         setPrivateFunc();
 
         state = MAP_SOL_ARRANGE;
@@ -702,7 +700,7 @@ class Soldier extends MyNode
 
         var shadowOffY = data["shadowOffY"];
 
-        var ss = ShadowSize.get(sx, 3);
+        var ss = SOL_SHADOW_SIZE.get(sx, 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
         //adjustPicSize();
@@ -733,6 +731,7 @@ class Soldier extends MyNode
 
         initHealth();
 
+        trace("setDir");
         setDir();
 
         bg.setevent(EVENT_TOUCH, touchBegan);
@@ -1147,10 +1146,11 @@ class Soldier extends MyNode
             }
         }
         //调整阴影位置
-        var bSize = changeDirNode.size();
+        var bSize = changeDirNode.prepare().size();
         var shadowOffX = data["shadowOffX"];
         var shadowOffY = data["shadowOffY"];
 
+        //trace("setDir changeDirNode", changeDirNode.scale(), changeDirNode.size(), bSize, shadowOffY, shadowOffX);
         if(changeDirNode.scale()[0] < 0)
             shadow.pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY);
         else
@@ -1340,7 +1340,7 @@ class Soldier extends MyNode
         changeDirNode.pos(bSize[0]/2, bSize[1]);
         var shadowOffY = data["shadowOffY"];
 
-        var ss = ShadowSize.get(sx, 3);
+        var ss = SOL_SHADOW_SIZE.get(sx, 3);
         shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
 
         backBanner.pos(bSize[0]/2, data["bloodHeight"]);

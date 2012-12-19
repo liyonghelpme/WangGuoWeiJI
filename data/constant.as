@@ -1373,3 +1373,6 @@ const MINE_UPGRADE_COST = [
     dict([["silvier", 100]]),
     dict([["silvier", 100]]),
 ];
+
+const SOL_SHADOW_SIZE = dict([[1, 1], [2, 2], [3, 3]]);
+

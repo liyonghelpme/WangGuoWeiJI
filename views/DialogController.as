@@ -21,6 +21,11 @@ class DialogController extends MyNode
     }
     function addBanner(banner)
     {
+        while(len(bannerStack) > getParam("maxBannerNum"))
+        {
+            var t = bannerStack.pop(0);
+            t.removeNow();
+        }
         var maxOff = len(bannerStack);
         var dis = global.director.disSize;
         var initX = dis[0]/2;

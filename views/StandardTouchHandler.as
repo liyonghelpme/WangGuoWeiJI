@@ -233,16 +233,20 @@ class StandardTouchHandler
             var t1 = touchEvents[1];
 
             var passTime = t1[1]-t0[1];
-            var diffX = t1[0][0][0]-t0[0][0][0];//第一个touch组的第一个点的x坐标
-            var diffY = t1[0][0][1]-t0[0][0][1];
-            if(diffX*diffX+diffY*diffY >= getParam("minMoveDis"))
+            //没有两根手指 放下又抬起
+            if(t1[0][0] != null && t0[0][0] != null)
             {
-                var finishMX = diffX*getParam("touchInertiaTime")/passTime;
-                var finishMY = diffY*getParam("touchInertiaTime")/passTime;
-                var expMX = finishMX/6.931;
-                var expMY = finishMY/6.931;//expout initSpeed
-                var mv = checkMove(expMX, expMY);
-                bg.addaction(expout(moveby(getParam("touchInertiaTime"), mv[0], mv[1])));
+                var diffX = t1[0][0][0]-t0[0][0][0];//第一个touch组的第一个点的x坐标
+                var diffY = t1[0][0][1]-t0[0][0][1];
+                if(diffX*diffX+diffY*diffY >= getParam("minMoveDis"))
+                {
+                    var finishMX = diffX*getParam("touchInertiaTime")/passTime;
+                    var finishMY = diffY*getParam("touchInertiaTime")/passTime;
+                    var expMX = finishMX/6.931;
+                    var expMY = finishMY/6.931;//expout initSpeed
+                    var mv = checkMove(expMX, expMY);
+                    bg.addaction(expout(moveby(getParam("touchInertiaTime"), mv[0], mv[1])));
+                }
             }
         }
     }
