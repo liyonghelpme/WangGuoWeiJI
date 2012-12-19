@@ -14,7 +14,7 @@ class ArrowFlyEffect extends MyNode
                       ["start_color_alpha",255], 
                       //["start_color_var_blue",51], ["start_color_var_alpha",26], ["finish_color_alpha ",255],
                       ["start_particle_size", pData["startSize"]], ["start_particle_size_var", pData["startSizeVar"]], ["finish_particle_size",-1], 
-                      ["blend_additive",1],
+                      ["blend_additive", pData["blend_additive"]],
                       //["finish_color_alpha", 0],
                       ["emission_rate", 20],
                         ["max_particles", 100],

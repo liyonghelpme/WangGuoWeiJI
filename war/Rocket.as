@@ -10,7 +10,7 @@ class Rocket extends EffectBase
 
         var attackAni = getEffectAni(sol.id);
         var ani = pureMagicData[attackAni[0]];
-        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);
+        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);
         init();
 
         cus = new MyAnimate(ani[1], ani[0], bg);
@@ -30,7 +30,7 @@ class Rocket extends EffectBase
         timeAll[FLY_NOW] = dist*1000/speed;        
 
         var startPos = bg.pos();
-        var endPos = tPos;
+        var endPos = [tPos[0], bg.pos()[1]];
         var difx = (endPos[0]-startPos[0])/3;
 
         trace("dist", tPos[0] - bg.pos()[0]);

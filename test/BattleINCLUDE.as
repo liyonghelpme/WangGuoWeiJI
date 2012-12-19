@@ -322,6 +322,10 @@ import views.HealSkill;
 import views.SaveSkill;
 import views.UseDrugSkill;
 
+import war.MakeFlyEffect;
+import war.MakeFlyTrail;
+import war.GunSmoke;
+import war.GunSmokeTrail;
 import war.Galaxy;
 import war.GalaxyFireBall;
 import war.FireBall;

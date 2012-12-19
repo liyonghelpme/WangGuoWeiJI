@@ -997,21 +997,23 @@ const DRUG_COLD_TIME = 1000;//ms
 const CLOSE_FIGHTING = 0;
 const LONG_DISTANCE = 1;
 const MAGIC = 2;
-const BOMB = 3;
+//const BOMB = 3;
 const ROCKET = 4;
-const MUSIC = 5;
+//const MUSIC = 5;
 const FLY_BOMB = 6;
 const ROLL_BALL = 7;
 const MAKE_FLY = 8;
 const MAKE_FLY_ROLL = 9;
 const FULL_STAGE = 10;
 const GROUND_BOMB = 11;
-const ROLL_FLY_BOMB = 12;
+//const ROLL_FLY_BOMB = 12;
 const EARTH_QUAKE = 13;
 const MAGIC_FLY = 14;
 const THREE_BALL = 15;
 const FIRE_BALL = 16;
 const GALAXY = 17;
+const GUN_SMOKE = 18;
+const MAKE_FLY_TRAIL = 19;
 
 
 /*

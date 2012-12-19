@@ -19,8 +19,7 @@ class FullStage extends EffectBase
         // 45 
         var fullStage = getEffectAni(sol.id);
         var ani = pureMagicData[fullStage[0]];
-
-        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);//起始位置和人物位置和体积 高度相关
+        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);//起始位置和人物位置和体积 高度相关
         init();
         shiftAni = moveto(0, 0, 0);
         initState();

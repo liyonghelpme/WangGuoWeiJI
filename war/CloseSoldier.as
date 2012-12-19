@@ -36,7 +36,10 @@ class OtherSoldier
             sol.map.addChildZ(new FireBall(sol, fakeTar), MAX_BUILD_ZORD);
         else if(sol.kind == GALAXY)
             sol.map.addChildZ(new Galaxy(sol, fakeTar), MAX_BUILD_ZORD);
-            
+        else if(sol.kind == GUN_SMOKE)
+            sol.map.addChildZ(new GunSmoke(sol, fakeTar), MAX_BUILD_ZORD);
+        else if(sol.kind == MAKE_FLY_TRAIL)
+            sol.map.addChildZ(new MakeFlyTrail(sol, fakeTar), MAX_BUILD_ZORD);
     }
     
 }

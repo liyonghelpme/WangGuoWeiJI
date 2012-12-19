@@ -13,7 +13,7 @@ class EffectBase extends MyNode
     override function init()
     {
         super.init();
-        speed = 200;
+        speed = getParam("flySpeed");
         state = MAKE_NOW;
         passTime = 0;
         timeAll = [0, 0, 0];
@@ -36,6 +36,12 @@ class EffectBase extends MyNode
         setDir();
     }
 
+    function getDirCoff()
+    {
+        if(bg.scale()[0] < 0)
+            return 1;
+        return -1;
+    }
     function getDir()
     {
         return (bg.scale()[0] < 0);

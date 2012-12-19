@@ -9,7 +9,7 @@ class MakeFlyRoll extends EffectBase
         var off = getEffectOff(sol, tar);
         var makeFly = getEffectAni(sol.id);
         var ani = pureMagicData[makeFly[0]];
-        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(ani[3]);//起始位置和人物位置和体积 高度相关
+        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);//起始位置和人物位置和体积 高度相关
         init();
         shiftAni = moveto(0, 0, 0);
         initState();
