@@ -257,7 +257,8 @@ class CastleScene extends MyNode
         var showData = cost2Minus(cost);
 
         showData.update(gain);
-        global.director.curScene.addChild(new PopBanner(showData));//自己控制
+        //global.director.curScene.addChild(new PopBanner(showData));//自己控制
+        showMultiPopBanner(showData);
 
         var buildId = curBuild.id;
         trace("curBuild", buildId);

@@ -20,6 +20,7 @@ class BusiSoldier extends MyNode
     //var kind;
     var sid;
     var id;
+    //经营页面不需要 士兵 有大体积
     var sx = 1;
     var sy = 1;
     var state = SOL_FREE;
@@ -150,7 +151,7 @@ class BusiSoldier extends MyNode
         //.size(data.get("shadowSize"), 32);
         //shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
 
-        var ss = SOL_SHADOW_SIZE.get(sx, 3);
+        var ss = SOL_SHADOW_SIZE.get(data["sx"], 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
 
         changeDirNode.add(shadow, -1);

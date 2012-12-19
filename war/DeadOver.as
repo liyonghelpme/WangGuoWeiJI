@@ -31,16 +31,17 @@ class DeadOver extends MyNode
         else
             dir = 90;
         changeDirNode.anchor(50, 50).pos(curPos[0], curPos[1]-cs[1]/2);
+        changeDirNode.texture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE);
 
-        changeDirNode.addaction(
-            sequence(
-
+        /*
                 delaytime(getParam("deadWaitTime")),
                 expout(moveby(getParam("jumpUpTime"), 0, getParam("jumpHeight"))), 
                 spawn(expout(rotateby(getParam("rotateTime"), dir)), expout(moveby(getParam("rotateTime"), 0, 5+cs[1]/2))), 
                 itexture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE), 
                 irotateby(-dir),
-
+        */
+        changeDirNode.addaction(
+            sequence(
                 tintto(getParam("twinkleTime"), 0, 0, 0, 0),
                 tintto(getParam("twinkleTime"), 100, 100, 100, 100),
                 tintto(getParam("twinkleTime"), 0, 0, 0, 0),
@@ -52,24 +53,30 @@ class DeadOver extends MyNode
         var feaFil = FEA_BLUE;
         if(soldier.color == ENECOLOR)
             feaFil = FEA_RED;
+        fea.texture("soldier"+str(soldier.id)+"deadFea.png", feaFil, UPDATE_SIZE);
+
+        /*
         fea.addaction(
             sequence(
                 delaytime(getParam("deadWaitTime")+getParam("jumpUpTime")+getParam("rotateTime")),
                 itexture("soldier"+str(soldier.id)+"deadFea.png", feaFil, UPDATE_SIZE)
             )
         );
+        */
 
         //横向调整 血液位置
+        /*
         var blood = sprite("blood0.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
         soldier.bg.add(blood, -1);
         blood.addaction( 
             sequence(
-                itintto(0, 0, 0, 0), 
-                delaytime(getParam("deadWaitTime")+getParam("jumpUpTime")+getParam("rotateTime")),
+                //itintto(0, 0, 0, 0), 
+                //delaytime(getParam("deadWaitTime")+getParam("jumpUpTime")+getParam("rotateTime")),
                 itintto(100, 100, 100, 100), 
                 delaytime(getParam("twinkleTime")*5),
                 fadeout(getParam("bloodDisappearTime"))
             )
         );
+        */
     }
 }

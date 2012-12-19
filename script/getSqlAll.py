@@ -567,6 +567,7 @@ sql = 'select * from soldier order by level'
 con.query(sql)
 res = con.store_result().fetch_row(0, 1)
 showId = []
+#显示凤凰？ 地狱火 魔法类型怪兽
 for r in res:
     if r['id'] % 10 == 0 and r['isHero'] == 0:
         showId.append(r['id'])

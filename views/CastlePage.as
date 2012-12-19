@@ -301,14 +301,21 @@ class CastlePage extends MyNode
 
         buildLayer.addBuilding(curBuild, MAX_BUILD_ZORD);
         var kind = building.get("kind");
+        //所有调用moveToPoint 的地方记录 旧的位置和 比例尺
+        oldScale = bg.scale();
+        oldPos = bg.pos();
         moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
         return curBuild;
     }
     //spawn scale move
-    var movToAni = moveto(0, 0, 0);
+    var movToAni = null;
     function clearAnimation()
     {
-        movToAni.stop();
+        if(movToAni != null)
+        {
+            movToAni.stop();
+            movToAni = null;
+        }
     }
 
     /*
@@ -355,6 +362,7 @@ class CastlePage extends MyNode
         bPos[1] -= bSize[1]/2;
         moveToPoint(bPos[0], bPos[1]);
     }
+
     //如果没有进入游戏则可以恢复到原来的位置
     function closeGlobalMenu()
     {
@@ -362,13 +370,14 @@ class CastlePage extends MyNode
         {
             //touchDelegate.scaleToOld(oldScale, oldPos);
             clearAnimation();
-            movToAni = spawn(scaleto(500, oldScale[0], oldScale[1]), moveto(500, oldPos[0], oldPos[1]));
+            movToAni = sequence(spawn(scaleto(500, oldScale[0], oldScale[1]), moveto(500, oldPos[0], oldPos[1])), callfunc(finishMove));
             bg.addaction(movToAni);
 
             oldScale = null;
             oldPos = null;
         }
     }
+    //var inMove = 0;
     function moveToPoint(tarX, tarY)
     {
         var worldPos = bg.node2world(tarX, tarY);
@@ -400,9 +409,16 @@ class CastlePage extends MyNode
         //if(oldScale > newScale)
         //movToAni = spawn(expin(scaleto(500, newScale[0], newScale[1])), expin(moveto(500, curPos[0], curPos[1])));
         //else
-        movToAni = spawn(expout(scaleto(500, newScale[0], newScale[1])), expout(moveto(500, curPos[0], curPos[1])));
+        //inMove = 1;
+        movToAni = sequence(spawn(expout(scaleto(500, newScale[0], newScale[1])), expout(moveto(500, curPos[0], curPos[1]))), callfunc(finishMove));
         bg.addaction(movToAni);
         //bg.pos(curPos);
+    }
+    function finishMove()
+    {
+        //inMove = 0;
+        movToAni = null;
+        trace("clearMovToAni", movToAni);
     }
 
     function finishBuild()
@@ -429,6 +445,7 @@ class CastlePage extends MyNode
     {
         scene.clearHideTime();
         scene.closeGlobalMenu(this);
+        trace("movToAni", movToAni);
 
         //在游戏2中 需要设定士兵的 移动目标位置
         if(scene.inGame)
@@ -440,17 +457,17 @@ class CastlePage extends MyNode
                 scene.curBuild.setTarPos(pp[0], pp[1]);
             }
         }
-        else
+        else if(movToAni == null)
             touchDelegate.tBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)
     {
-        if(!scene.inGame)
+        if(!scene.inGame && movToAni == null)
             touchDelegate.tMoved(n, e, p, x, y, points);
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        if(!scene.inGame)
+        if(!scene.inGame && movToAni == null)
             touchDelegate.tEnded(n, e, p, x, y, points);
     }
     //从 闯关页面 返回到 经营 页面 完成 闯关任务

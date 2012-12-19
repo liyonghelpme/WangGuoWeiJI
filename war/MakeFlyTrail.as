@@ -70,16 +70,6 @@ class MakeFlyTrail extends EffectBase
         var arrowTrail = new MakeFlyEffect(timeAll[FLY_NOW], startPos, endPos, dir, sol.data["particleId"]);
         sol.map.addChildZ(arrowTrail, MAX_BUILD_ZORD);
     }
-    function doHarm()
-    {
-        //攻击对象没有死亡
-        if(tar != null)
-        {
-            var hurt = calHurt(sol, tar);
-            tar.changeHealth(sol, -hurt);
-        }
-        removeSelf();
-    }
     override function enterScene()
     {
         super.enterScene();

@@ -158,7 +158,8 @@ class Farm extends FuncBuild
         global.user.updateBuilding(baseBuild);
 
         var showData = cost; 
-        global.director.curScene.addChild(new PopBanner(cost2Minus(showData)));//自己控制
+        //global.director.curScene.addChild(new PopBanner(cost2Minus(showData)));//自己控制
+        showMultiPopBanner(cost2Minus(showData));
     }
 }
 
