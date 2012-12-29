@@ -335,7 +335,6 @@ class CastleScene extends MyNode
         inGame = 1;
         gameId = gid;
         curBuild = sol;
-        //ml.beginBuild();//隐藏菜单
         ml.hideMenu();
         mc.moveToBuild(curBuild);//移动屏幕中心到游戏士兵位置
     }

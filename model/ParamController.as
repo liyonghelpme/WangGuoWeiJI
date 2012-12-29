@@ -1,6 +1,7 @@
 class ParamController 
 {
     var initYet = 0;
+    //存在一份临时数据用于调试
     var AnimateParams = dict();
     function ParamController()
     {
@@ -8,6 +9,7 @@ class ParamController
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
         global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
+        global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
     }
     function fetchOver(rid, rcode, con, param)
     {
@@ -40,6 +42,17 @@ class ParamController
             ParticleData = dict(con["pData"]);
             Keys[PARTICLES] = ParticleKey;
             CostData[PARTICLES] = ParticleData;
+        }
+    }
+    function getAllFallGoods(rid, rcode, con, param)
+    {
+        if(rcode != -1)
+        {
+            con = json_loads(con);
+            MoneyGameGoodsKey = con["MoneyGameGoodsKey"];
+            MoneyGameGoodsData = dict(con["MoneyGameGoodsData"]);
+            Keys[MONEY_GAME_GOODS] = MoneyGameGoodsKey;
+            CostData[MONEY_GAME_GOODS] = MoneyGameGoodsData;
         }
     }
     /*

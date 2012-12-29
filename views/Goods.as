@@ -63,40 +63,28 @@ class Goods extends MyNode
         var ret;
         if(objKind == BUILD)
         {
+            ret = checkBuildNum(objId);
+            if(ret[0] == 0)
+            {
+                buildPic.texture(buildPicName, GRAY);
+            }
+            //普通农田显示 数量
             if(data["funcs"] == FARM_BUILD)
             {
-                ret = checkFarmNum(); 
-                if(!ret)
-                    buildPic.texture(buildPicName, GRAY);
-                if(objId == 0)//普通农田
+                if(objId == 0)
                 {
-                    panel.addlabel(str(getCurFarmNum())+"/"+str(getFarmEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                    panel.addlabel(str(getCurBuildNum(objId))+"/"+str(getBuildEnableNum(objId)[0]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
                     showGain = 0;
                 }
             }
-            else if(data["funcs"] == CAMP)
+            else
             {
-                ret = checkCampNum();
-                if(!ret)
-                    buildPic.texture(buildPicName, GRAY);
-                panel.addlabel(str(getCurCampNum())+"/"+str(getCampEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
-                showGain = 0;
-            }
-            else if(data["funcs"] == HOUSE_BUILD)
-            {
-                ret = checkHouseNum();
-                if(!ret)
-                    buildPic.texture(buildPicName, GRAY);
-                panel.addlabel(str(getCurHouseNum())+"/"+str(getHouseEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
-                showGain = 0;
-            }
-            else if(data["funcs"] == MINE_KIND)
-            {
-                ret = checkMineNum();
-                if(!ret)
-                    buildPic.texture(buildPicName, GRAY);
-                panel.addlabel(str(getCurMineNum())+"/"+str(getMineEnableNum()), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
-                showGain = 0;
+                //总量存在限制 则显示当前拥有的数字 
+                if(ret[2] == 1)
+                {
+                    panel.addlabel(str(getCurBuildNum(objId))+"/"+str(getBuildEnableNum(objId)[0]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                    showGain = 0;
+                }
             }
         }
         var sca;

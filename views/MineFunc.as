@@ -152,9 +152,10 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     //
     override function initWorking(data)
     {
-        var userLevel = global.user.getValue("level");
+        //var userLevel = global.user.getValue("level");
         //等级足够开启建筑物
-        if(userLevel >= PARAMS["MineMinLevel"] && baseBuild.state != PARAMS["buildMove"])//非移动状态
+        //userLevel >= PARAMS["MineMinLevel"] && 
+        if(baseBuild.state != PARAMS["buildMove"])//非移动状态
         {
             baseBuild.setState(PARAMS["buildWork"]);
             var startTime = data.get("objectTime");//serverTime 秒为单位
@@ -184,7 +185,8 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     {
         var userLevel = global.user.getValue("level");
         //等级足够开启建筑物
-        if(userLevel >= PARAMS["MineMinLevel"] && baseBuild.state != PARAMS["buildMove"])//非移动状态
+        //userLevel >= PARAMS["MineMinLevel"] && 
+        if(baseBuild.state != PARAMS["buildMove"])//非移动状态
         {
             baseBuild.setState(PARAMS["buildWork"]);
             var startTime = time()/1000; 

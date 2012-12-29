@@ -50,16 +50,14 @@ class BuildLayer extends MoveMap
         global.msgCenter.registerCallback(SQUARE_SOL, this);
         global.timer.addTimer(this); 
     }
-    const UPDATE_STATUS_TIME = 10000;
-    const MAX_STATUS_SOL = 5;
-    var passTime = UPDATE_STATUS_TIME;
+    var passTime = getParam("UpdateStatusTime");
 
     //随机5 个 士兵 出现状态
     //sid 
     function update(diff)
     {
         passTime += diff;
-        if(passTime > UPDATE_STATUS_TIME)
+        if(passTime > getParam("UpdateStatusTime"))
         {
             passTime = 0;
 
@@ -71,7 +69,7 @@ class BuildLayer extends MoveMap
 
 
             //生成随机奖励金银币状态
-            for(i  = 0; i < len(soldiers) && i < MAX_STATUS_SOL; i++)
+            for(i  = 0; i < len(soldiers) && i < getParam("MaxStatusSolNum"); i++)
             {
                 var n = (rd+i)%len(soldiers);
                 var so = soldiers[n];

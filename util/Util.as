@@ -1182,7 +1182,7 @@ function getPosIds(possible)
 
 function getParam(k)
 {
-    return global.paramController.AnimateParams.get(k);
+    return global.paramController.AnimateParams.get(k, 0);
 }
 
 /*

@@ -135,6 +135,8 @@ class TaskModel
             }
             checkAvailableCycleTask();
             
+            localDayTask = dict();
+            /*
             //初始化 每日任务
             localDayTask = global.user.db.get("localDayTask");
             if(localDayTask == null)
@@ -142,6 +144,7 @@ class TaskModel
                 localDayTask = dict();
                 global.user.db.put("localDayTask", localDayTask);
             }
+            */
 
             //完成每日登录循环任务
             //第一次登录 没有初始化 localCycle 中的任务所以无法显示
@@ -152,7 +155,7 @@ class TaskModel
             if(diff >= 1)
             {
                 doAllTaskByKey("login", 1);
-                getDayTaskFromServer();
+                //getDayTaskFromServer();
             }
             else//同一天多次登录 不用初始化 每日任务
             {
@@ -444,6 +447,7 @@ class TaskModel
     }
 
 
+    /*
     //清空每日任务 重新获取
     function getDayTaskFromServer()
     {
@@ -466,6 +470,7 @@ class TaskModel
             initDayTask = 1;
         }
     }
+    */
 
     function getNewTask(tid)
     {

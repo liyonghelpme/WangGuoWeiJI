@@ -62,12 +62,6 @@ class AllGoods extends MyNode
     }
     //s 操作士兵对象 k 药品或者 武器 复活药水
     //0 1 2 3 stoneNum
-    var nums = [];
-    function setStoneNum()
-    {
-        for(var i = 0; i < 4; i++)
-            nums[i].text(str(global.user.getGoodsNum(TREASURE_STONE, i)));
-    }
     function initView()
     {
         bg = node();
@@ -88,24 +82,6 @@ class AllGoods extends MyNode
         if(kind == DRUG)
             temp.texture("allDrugTitle.png", UPDATE_SIZE);
 
-        if(kind == EQUIP)
-        {
-            temp = bg.addsprite("treasureBack.png").anchor(0, 0).pos(278, 25).size(441, 38).color(100, 100, 100, 100);
-            temp = bg.addsprite("stone3.png").anchor(0, 0).pos(613, 28).size(33, 31).color(100, 100, 100, 100);
-            temp = bg.addsprite("stone0.png").anchor(0, 0).pos(280, 28).size(32, 30).color(100, 100, 100, 100);
-            temp = bg.addsprite("stone1.png").anchor(0, 0).pos(391, 28).size(33, 30).color(100, 100, 100, 100);
-            temp = bg.addsprite("stone2.png").anchor(0, 0).pos(503, 28).size(33, 30).color(100, 100, 100, 100);
-            s = bg.addlabel(getStr("red", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(316, 43).color(100, 100, 100);
-            nums.append(s);
-            s = bg.addlabel(getStr("green", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(427, 43).color(100, 100, 100);
-            nums.append(s);
-            s = bg.addlabel(getStr("blue", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(539, 43).color(100, 100, 100);
-            nums.append(s);
-            s = bg.addlabel(getStr("violet", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(650, 43).color(100, 100, 100);
-            nums.append(s);
-            setStoneNum();
-        }
-
 
         temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
         temp = bg.addlabel(getStr("equipDialog", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 369, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
@@ -115,12 +91,6 @@ class AllGoods extends MyNode
         addChild(but0);
         if(kind == EQUIP)
             but0.word.setWords(getStr("buyEquipBut", null));
-
-        but0 = new NewButton("blueButton.png", [113, 42], getStr("freeMake", null), null, 20, FONT_NORMAL, [100, 100, 100], onFreeMake, null);
-        but0.bg.pos(537, 125);
-        addChild(but0);
-        if(kind == EQUIP)
-            but0.word.setWords(getStr("freeForge", null));
     }
 
     function buyIt()
@@ -247,28 +217,12 @@ class AllGoods extends MyNode
                         panel.addlabel(getStr("closeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                     }
                 }
-                else if(data[i][0] == DETAIL_EQUIP)
-                {
-                    var eqLevel = ed.get("level");
-                    temp = panel.addsprite("skillLevel.png").anchor(50, 50).pos(59, 55).size(60, 14).color(100, 100, 100, 100);
-                    panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(58, 56).color(49, 90, 48);
-
-                    but0 = new NewButton("roleNameBut1.png", [74, 37], getStr("sell", null), null, 18, FONT_NORMAL, [100, 100, 100], onSell, i);
-                    but0.bg.pos(654, 35);
-                    panel.add(but0.bg);
-                    but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("upgrade", null), null, 18, FONT_NORMAL, [100, 100, 100], onUpgrade, i);
-                    but0.bg.pos(573, 36);
-                    panel.add(but0.bg);
-                }
             }
             else if(kind == DRUG)
             {
                 panel.addlabel(str(num), "fonts/heiti.ttf", 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
                 if(num > 0)
                 {
-                    but0 = new NewButton("roleNameBut1.png", [74, 37], getStr("sell", null), null, 18, FONT_NORMAL, [100, 100, 100], onSell, i);
-                    but0.bg.pos(631, 35);
-                    panel.add(but0.bg);
                 }
             }
         }
@@ -439,7 +393,6 @@ class AllGoods extends MyNode
         }
         else if(msgId == UPDATE_TREASURE)//变更宝石数量
         {
-            setStoneNum(); 
         }
         else if(msgId == BUY_DRUG)
         {

@@ -1093,39 +1093,6 @@ class User
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);//卖出士兵
     }
 
-    function getLevelUpReward()
-    {
-        //kind = 6 7 8 9 10
-
-        var ret = dict();
-        var sil = 0;
-        var cry = 0;
-        var gold = 0;
-        //掉落10-15 编号的物品
-        for(var i = 10; i < 15; i++)
-        {
-            var kind = i;
-
-            var fallData = getData(FALL_THING, kind);
-            //银币是百分比值
-            var reward = getFallObjValue(kind);
-            var level = global.user.getValue("level");
-            //水晶是等级相关
-            if(reward.get("crystal") != 0)
-                reward.update("crystal", 3+level/reward.get("crystal"));//等级/10的水晶数量   
-
-            sil += reward["silver"];
-            cry += reward["crystal"];
-            gold += reward["gold"];
-
-        }
-        ret.update("silver", sil);
-        ret.update("gold", gold);
-        ret.update("crystal", cry);
-        doAdd(ret);
-//        trace("levelUp reward", ret);
-        return ret;
-    }
     /*
     改变用户经验 有可能自动升级
     */
@@ -1172,7 +1139,6 @@ class User
                 if(ret == 0)
                 {
 //                    trace("not in business page!");
-                    //var rew = getLevelUpReward();//生成奖励时已经增加
                     global.msgCenter.sendMsg(LEVEL_UP, null);
                     global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
                 }

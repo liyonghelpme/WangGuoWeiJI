@@ -71,14 +71,22 @@ function getLevelUpNeedExp(level)
 
 //掉落物品价值value/1000
 //0 - 9 编号
-function getFallObjValue(id)
+function getFallObjValue(id, fallTimes)
 {
     var level = global.user.getValue("level");
-    var income = getTotalIncome(level);
+    var maxGain;
+    maxGain = getData(LEVEL_MAX_FALL_GAIN, min(level, len(levelMaxFallGainData)-1));
+    var gData = getData(FALL_THING, id);
     var gain = getGain(FALL_THING, id);
+    trace("maxGain, gain ", maxGain, gain, id, fallTimes);
+
     if(gain.get("silver") != null)
-        gain["silver"] = gain["silver"]*income/1000;
-//    trace("FallThing", gain, income);
+        gain["silver"] = min(maxGain["maxSilver"], maxGain["initSilver"]+gData["addsilver"]*fallTimes);
+    if(gain.get("crystal") != null)
+        gain["crystal"] = min(maxGain["maxCrystal"], maxGain["initCrystal"]+gData["addcrystal"]*fallTimes);
+    if(gain.get("gold") != null)
+        gain["gold"] = min(maxGain["maxGold"], maxGain["initGold"]+gData["addgold"]*fallTimes);
+
     return gain;
 }
 
@@ -102,152 +110,6 @@ function getLoginReward(day)
 }
 
 
-
-/*
-function showCost(bg, cost)
-{
-    var it = cost.items();
-    for(var i = 0; i < len(it); i++)
-    {
-        var temp = bg.addnode();
-        //key.png
-        temp.addsprite(str(it[i][0])+".png").anchor(0, 50).pos(0, -30).size(30, 30);
-temp.addlabel("-" + str(it[i][1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
-        temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
-    }
-}
-*/
-
-
-function getFarmEnableNum()
-{
-    var level = global.user.getValue("level");
-    var num = getParam("initFarmNum")+level*getParam("addFarmNum");
-    return num;
-}
-function getCurFarmNum()
-{
-    var count = 0;
-    var val = global.user.buildings.values();
-    for(var i = 0; i < len(val); i++)
-    {
-        var bd = getData(BUILD, val[i]["id"]);
-        if(bd["funcs"] == FARM_BUILD)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-function checkFarmNum()
-{
-    var now = getCurFarmNum();
-    var cap = getFarmEnableNum();
-    if(cap > now)//capacity > own
-    {
-        return 1;
-    }
-    return 0;
-}
-function getCurCampNum()
-{
-    var count = 0;
-    var val = global.user.buildings.values();
-    for(var i = 0; i < len(val); i++)
-    {
-        var bd = getData(BUILD, val[i]["id"]);
-        if(bd["funcs"] == CAMP)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-function getCampEnableNum()
-{
-    var level = global.user.getValue("level");
-    var num = getParam("initCampNum")+level/getParam("campLevel");
-    return num;
-}
-function checkCampNum()
-{
-    var now = getCurCampNum();
-    var cap = getCampEnableNum();
-    if(cap > now)
-        return 1;
-    return 0;
-}
-function getCurHouseNum()
-{
-    var count = 0;
-    var val = global.user.buildings.values();
-    for(var i = 0; i < len(val); i++)
-    {
-        var bd = getData(BUILD, val[i]["id"]);
-        if(bd["funcs"] == HOUSE_BUILD)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-function getHouseEnableNum()
-{
-    var level = global.user.getValue("level");
-    var num = getParam("initHouseNum")+level/getParam("houseLevel");
-    return num;
-}
-function getNextHouseLevel()
-{
-    var level = global.user.getValue("level");
-    var need = (level+getParam("houseLevel")-1)/getParam("houseLevel");
-    return need*getParam("houseLevel");
-}
-function checkHouseNum()
-{
-    var now = getCurHouseNum();
-    var cap = getHouseEnableNum();
-    return cap > now;
-}
-function getNextCampLevel()
-{
-    var level = global.user.getValue("level");
-    var need = (level+getParam("campLevel")-1)/getParam("campLevel");
-    return need*getParam("campLevel");
-}
-
-function getCurMineNum()
-{
-    var count = 0;
-    var val = global.user.buildings.values();
-    for(var i = 0; i < len(val); i++)
-    {
-        var bd = getData(BUILD, val[i]["id"]);
-        if(bd["funcs"] == MINE_KIND)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-function getMineEnableNum()
-{
-    var level = global.user.getValue("level");
-    var num = getParam("initMineNum")+level/getParam("mineLevel");
-    return num;
-}
-function getNextMineLevel()
-{
-    var level = global.user.getValue("level");
-    var need = (level+getParam("mineLevel")-1)/getParam("mineLevel");
-    return need*getParam("mineLevel");
-}
-function checkMineNum()
-{
-    var now = getCurMineNum();
-    var cap = getMineEnableNum();
-    return cap > now;
-}
 
 function getProduction(level)
 {
@@ -314,4 +176,55 @@ function getUpdateObject()
             break;
     }
     return find;
+}
+
+//根据funcs来确定名字
+const KIND2NAME = dict([
+[FARM_BUILD, "Farm"], [HOUSE_BUILD, "House"], [MINE_KIND, "Mine"], [CAMP, "Camp"],
+]);
+//根据建筑ID 得到 建筑的funcs
+function getCurBuildNum(id)
+{
+    var bData = getData(BUILD, id);
+    var count = 0;
+    var val = global.user.buildings.values();
+    for(var i = 0; i < len(val); i++)
+    {
+        var bd = getData(BUILD, val[i]["id"]);
+        if(bd["funcs"] == bData["funcs"])
+        {
+            count++;
+        }
+    }
+    return count;
+}
+function getBuildEnableNum(id)
+{
+    var bData = getData(BUILD, id);
+    var level = global.user.getValue("level");
+    var name = KIND2NAME[bData["funcs"]];
+    if(name == null)//没有限制
+        return [999999, 0, 0];
+    //K 级解锁1个
+    var num = getParam("init"+name+"Num")+level/getParam(name+"Level");
+    var upBound = 0;
+    if(num >= getParam("max"+name+"Num"))
+        upBound = 1;
+    //trace("getBuildEnableNum", num, upBound);
+    return [min(num, getParam("max"+name+"Num")), upBound, 1];//最大限制 总量存在限制
+}
+function checkBuildNum(id)
+{
+    var curNum = getCurBuildNum(id);
+    var enableNum = getBuildEnableNum(id);
+    return [enableNum[0]>curNum, enableNum[1], enableNum[2]];
+}
+
+function getNextBuildNum(id)
+{
+    var bData = getData(BUILD, id);
+    var bLevel = getParam(KIND2NAME[bData["funcs"]]+"Level");
+    var level = global.user.getValue("level");
+    var need = (level+bLevel)/bLevel;
+    return need*bLevel;
 }

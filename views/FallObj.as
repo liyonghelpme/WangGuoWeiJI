@@ -1,3 +1,7 @@
+/*
+奖励： 每个等级增加的量由类型决定或者由level决定
+levelMaxFallGain min(maxSilver, initSilver + addSilver*timer)
+*/
 class FallObj extends MyNode
 {
     var map;
@@ -17,8 +21,10 @@ class FallObj extends MyNode
     显示的图片由view 决定
 
     */
-    function FallObj(m, k, rx, ry, bl)
+    var fallTimes;
+    function FallObj(m, k, rx, ry, bl, ft)
     {
+        fallTimes = ft;
         buildLayer = bl;
         map = m;
         kind = k;
@@ -72,14 +78,9 @@ class FallObj extends MyNode
     
     function onclicked(){
         var fallData = getData(FALL_THING, kind);
-        //var reward = getGain(FALL_THING, kind);
-        var reward = getFallObjValue(kind);
+        var reward = getFallObjValue(kind, fallTimes);
         var level = global.user.getValue("level");
-        if(fallData.get("possible") == 0)
-        {
-            if(reward.get("crystal") != 0 && reward.get("crystal") != null)
-                reward.update("crystal", 3+level/reward.get("crystal"));//等级/10的水晶数量   
-        }
+        //不修改水晶的数量
         //奖励可能没有某些项 需要 将其设置默认0
         global.httpController.addRequest("goodsC/pickObj", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)], ["gold", reward.get("gold", 0)]]), null, null);
         global.director.curScene.addChild(new FlyObject(bg, reward, pickMe));

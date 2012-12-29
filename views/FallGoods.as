@@ -5,11 +5,12 @@ class FallGoods extends MyNode
 {
     var allFalls;
     var map;
-    var lastFallTime = 0;
+    var lastFallTime = getParam("FallTime");
     var Zone = [[60, 492, 774, 468], [831, 483, 294, 537], [1920, 510, 357, 480], [2292, 483, 576, 429]];
     var possible = [];
     var ids = [];
     var buildLayer;
+    var fallTimes = 0;
     function FallGoods(m, b)
     {
         map = m;
@@ -36,27 +37,27 @@ class FallGoods extends MyNode
         global.msgCenter.registerCallback(MOVE_TO_FALL, this);
     }
     //100s
-    const FALL_TIME = 50000;
-    const FALL_NUM = 5;
     function update(diff)
     {
-        //trace("lastTime", lastFallTime);
         lastFallTime += diff;
-        if(lastFallTime >= FALL_TIME )
+        if(lastFallTime >= getParam("FallTime") )
         {
             lastFallTime = 0;
-//            trace("getFallObj", lastFallTime, len(allFalls));
-            if(len(allFalls) < FALL_NUM)
+            //最多掉落物品
+            if(len(allFalls) < getParam("FallNum"))
             {
-                getNewFall();       
-
+                for(var i = 0; i < getParam("EachFallNum") && len(allFalls) < getParam("FallNum"); i++)
+                    getNewFall();       
+                fallTimes++;
             }
             else
             {
-                var f = allFalls.pop(0);//删除旧的没有拾取的物品
-                f.removeSelf();
+                if(len(allFalls) > 0)
+                {
+                    var f = allFalls.pop(0);//删除旧的没有拾取的物品
+                    f.removeSelf();
+                }
             }
-
         }
     }
     //得到当前屏幕中心 生成 若干 掉落物品
@@ -84,7 +85,7 @@ class FallGoods extends MyNode
             var curX = rx*SIZEX;
             var curY = ry*SIZEY;
 
-            var fo = new FallObj(this, i, rx, ry, buildLayer);
+            var fo = new FallObj(this, i, rx, ry, buildLayer, fallTimes);
             fo.setPos([rx*SIZEX, ry*SIZEY]);
             allFalls.append(fo);
             buildLayer.addChildZ(fo, MAX_BUILD_ZORD+1);
@@ -99,7 +100,7 @@ class FallGoods extends MyNode
 
     function getFallObjOnMap()
     {
-        var fo = new FallObj(this, ids[0], 0, 0, buildLayer);
+        var fo = new FallObj(this, ids[0], 0, 0, buildLayer, fallTimes);
         //直接设定 掉落物品位置
         fo.bg.pos(2090, 750);
         allFalls.append(fo);
@@ -134,24 +135,6 @@ class FallGoods extends MyNode
         
         var fallData = getData(FALL_THING, kind);
         //掉落物品有次数 限制 
-        var times = fallData.get("times");
-//        trace("fallData", fallData, kind, rv, ids, times);
-
-        if(times > 0)
-        {
-            var fallNum = global.user.getFallNum(kind);
-//            trace("fallNum", fallNum);
-            //超过掉落的最大次数 则停止掉落
-            if(fallNum >= times)
-            {
-                lastFallTime = FALL_TIME;
-                return;
-            }
-            else
-            {
-                global.user.updateFallNum(kind);
-            }
-        }
 
         var rx = rand(MapWidth/SIZEX);
         var ry = rand(MapHeight/SIZEY);
@@ -166,18 +149,20 @@ class FallGoods extends MyNode
             if(difx > 0 && difx < Zone[i][2] && dify > 0 && dify < Zone[i][3])
                 break;
         }
+        //超出边界 冲突 不掉落
         if(i > len(Zone))
         {
-            lastFallTime = FALL_TIME;
+            //lastFallTime = getParam("FallTime");
             return;
         }
         var col = buildLayer.checkFallGoodCol(rx, ry);
         if(col == 1)
         {
-            lastFallTime = FALL_TIME;
+            //lastFallTime = getParam("FallTime");
             return;
         }
-        var fo = new FallObj(this, kind, rx, ry, buildLayer);
+        //根据当前掉落次数计算奖励 reward = min(base+add*times max)
+        var fo = new FallObj(this, kind, rx, ry, buildLayer, fallTimes);
         fo.setPos([rx*SIZEX, ry*SIZEY]);
         allFalls.append(fo);
         buildLayer.addChildZ(fo, ry*SIZEY);

@@ -167,44 +167,16 @@ class Store extends MyNode
         if(kind == BUILD)
         {
             var data = getData(BUILD, id);
-            if(data.get("funcs") == FARM_BUILD)//FARM 
+            ret = checkBuildNum(id);
+            if(ret[0] == 0)
             {
-                ret = checkFarmNum(); 
-                if(ret == 0)
+                if(ret[1] == 0)//只超过等级上限
                 {
-                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("farmTooCon", ["[LEV]", str((global.user.getValue("level") + 1) + 1)]), [100, 100, 100], null));
-
-                    return;
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr(KIND2NAME[data["funcs"]]+"TooCon", ["[LEV]", str(getNextBuildNum(id) + 1)]), [100, 100, 100], null));
                 }
-            }
-            if(data["funcs"] == CAMP)
-            {
-                ret = checkCampNum();
-                if(!ret)
-                {
-                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("campTooCon", ["[LEV]", str(getNextCampLevel() + 1)]), [100, 100, 100], null));
-                    return;
-                }
-            }
-
-            if(data["funcs"] == HOUSE_BUILD)
-            {
-                ret = checkHouseNum();
-                if(!ret)
-                {
-                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("houseTooCon", ["[LEV]", str(getNextHouseLevel() + 1)]), [100, 100, 100], null));
-                    return;
-                }
-            }
-
-            if(data["funcs"] == MINE_KIND)
-            {
-                ret = checkMineNum();
-                if(!ret)
-                {
-                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("mineTooCon", ["[LEV]", str(getNextMineLevel() + 1)]), [100, 100, 100], null));
-                    return;
-                }
+                else//超过总量上限
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("buildMax", null), [100, 100, 100], null));
+                return;
             }
 
             ret = global.msgCenter.checkCallback(BEGIN_BUILD);
@@ -249,12 +221,10 @@ class Store extends MyNode
             {
                 global.httpController.addRequest("goodsC/buyTreasureStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
                 global.user.buySomething(kind, id, null);
-                //global.user.buyTreasureStone(id);
             }
             else if(kind == MAGIC_STONE)
             {
                 global.httpController.addRequest("goodsC/buyMagicStone", dict([["uid", global.user.uid], ["tid", id]]), null, null);
-                //global.user.buyMagicStone(id);
                 global.user.buySomething(kind, id, null);
             }
             trace("addPopBanner");

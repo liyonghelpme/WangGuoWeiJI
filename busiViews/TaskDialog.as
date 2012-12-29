@@ -143,12 +143,6 @@ class TaskDialog extends MyNode
         addChild(but0);
         temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
         temp = bg.addsprite("taskTitle.png").anchor(50, 50).pos(157, 43).size(177, 73).color(100, 100, 100, 100);
-        but0 = new NewButton("violetBut.png", [113, 42], getStr("dayTask", null), null, 20, FONT_NORMAL, [100, 100, 100], onDayTask, null);
-        but0.bg.pos(532, 43);
-        addChild(but0);
-        but0 = new NewButton("blueButton.png", [113, 42], getStr("taskTip", null), null, 20, FONT_NORMAL, [100, 100, 100], onTaskTip, null);
-        but0.bg.pos(652, 43);
-        addChild(but0);
         updateExpBar();
 
     }

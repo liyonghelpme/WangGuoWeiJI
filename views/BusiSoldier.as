@@ -28,7 +28,7 @@ class BusiSoldier extends MyNode
     var myName;
     var shadow;
     //50 /s 
-    var speed = 5;
+    var speed;
 
     var movAni;
     var shiftAni;
@@ -358,19 +358,19 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         showMenuYet = 1;
         var func1;
         var solOrMon = data.get("solOrMon");
-        //怪兽没有装备
-        func1 = ["photo", "equip"];
+        //怪兽没有装备 怪兽也显示装备
+        func1 = ["photo"];
         //普通士兵装备
             
         var career = id%10;
 
-        var func2;
+        var func2 = ["equip"];
         if(curStatus != NO_STATUS)
         {
-            func2 = ["menu"+str(curStatus)];
+            func2.append("menu"+str(curStatus));
         }
-        else
-            func2 = [];
+        //else
+        //    func2 = [];
           
         if(career < 3 && !inTransfer)//0 1 2 3
             func2.append("transfer");
@@ -471,13 +471,10 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         }
         else if(mid == MOVE_TO_SOL)
         {
-            //if(curStatus != NO_STATUS)
-            //{
             curStatus = PICK_GAME;
             showCurStatus();
             map.map.moveToBuild(this);  
             global.taskModel.showHintArrow(bg, bg.size(), TOUCH_SOL);
-            //}
         }
     }
 
@@ -815,10 +812,11 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     function beginGame(gId)
     {
         realBeginGame(gId);
+        speed = getParam("GameSolMoveSpeed");
         //单人游戏 隐藏所有其他士兵 在游戏结束时显示其他士兵
         map.hideSoldier(this);
         
-        bg.pos(PARAMS["GAME_X"], PARAMS["GAME_Y"]);
+        bg.pos(getParam("GAME_X"), getParam("GAME_Y"));
         var nPos = normalizePos(bg.pos(), sx, sy);
         setPos(nPos);
 
@@ -828,6 +826,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     {
         map.showSoldier(this);
         map.map.moveToNormal(this);
+        speed = getParam("busiSoldierSpeed");
         realEndGame();
     }
 

@@ -26,14 +26,17 @@ class RewardGoods extends MyNode
 
         speed = getParam("GOODS_SPEED")*gData["speed"];
 
-        bg = sprite("goods"+str(k)+".png").anchor(50, 100);
+        bg = sprite("goods"+str(k)+".png").anchor(50, 100).scale(getParam("PickFallObjScale"));
         init();
         var p = rand(getParam("pickRandX"))+45;//起始位置
         bg.pos(p, 20);
         //trace("rewardGoods", k, bg.pos());
         startPos = [p, -10];
         tarPos = [rand(650)+60, 500];//终止位置
+        
+        //光滑bezier曲线
     }
+    //只检测相撞
     override function enterScene()
     {
         super.enterScene();
@@ -66,20 +69,11 @@ class RewardGoods extends MyNode
         if(dist < 40)//45*45 = 
         {
             removeSelf();
-
-            var sData = getGain(MONEY_GAME_GOODS, kind);
-            var income = getTotalIncome(global.user.getValue("level"));
-
-            if(sData.get("silver") != null)
-            {
-                sData["silver"] *= income;
-                sData["silver"] /= 1000;
-                sData["silver"] = max(sData["silver"], 1);
-            }
-            game.sol.changeMoney(sData);
-
-            global.user.doAdd(sData);
-            game.cacheAdd(sData);
+            //使用 FALL_OBJ 的数据
+            var reward = getFallObjValue(kind, 0);
+            game.sol.changeMoney(reward);
+            global.user.doAdd(reward);
+            game.cacheAdd(reward);
             return;
         }
         //超出屏幕
@@ -128,10 +122,7 @@ class GameTwo extends MyNode
         initPossible();
 
         GOODS_TIME = getParam("GOODS_TIME");
-        //var sData = getData(STATUS, k);//不同类型的降落物品奖励
         //剩余数量 复制数量
-        //leftNum = copy(sData.get("nums"));
-        //goodsLeftNum = PARAMS["GameOneNum"];
         goodsLeftNum = getParam("GameOneNum");
         sol.beginGame(2);
         leftNum = bg.addlabel(getStr("leftNum", ["[NUM]", str(goodsLeftNum)]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(622, 455).color(28, 18, 3);

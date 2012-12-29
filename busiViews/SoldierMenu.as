@@ -24,7 +24,6 @@ class SoldierMenu extends MyNode
         temp = bg.addsprite("soldierMenu.png").anchor(0, 0).pos(11, 390).size(428, 37).color(100, 100, 100, 100);
         temp = bg.addsprite("buildMenu1.png").anchor(0, 0).pos(0, 419).size(800, 61).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("dialogSolDetail0.png").anchor(0, 0).pos(732, 436).size(45, 34).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onDetail);
         bg.addlabel(str(soldier.healthBoundary), "fonts/heiti.ttf", 20).anchor(0, 50).pos(76, 454).color(100, 100, 100);
         bg.addlabel(str(soldier.attack), "fonts/heiti.ttf", 20).anchor(0, 50).pos(206, 453).color(100, 100, 100);
         temp = bg.addsprite("dialogSolHealth.png").anchor(0, 0).pos(35, 440).size(33, 27).color(100, 100, 100, 100);

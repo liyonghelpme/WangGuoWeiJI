@@ -220,10 +220,10 @@ var buildFunc = dict([
 [FARM_BUILD, [["photo", "sell"], ["acc"]]],
 [HOUSE_BUILD, [["photo"], [ "sell" ]]],//"upgradeBuild"
 [DECOR_BUILD, [["photo"], ["sell"]]],
-[CASTLE_BUILD, [["photo", "story"], ["tip", "collection"]]],
+[CASTLE_BUILD, [["photo"], ["tip"]]],
 [GOD_BUILD, [["photo"], ["soldier"]]],
-[DRUG_BUILD, [["photo"], ["makeDrug", "allDrug"]]],
-[FORGE_SHOP, [["photo"], ["forge", "allEquip"]]],
+[DRUG_BUILD, [["photo"], ["allDrug"]]],
+[FORGE_SHOP, [["photo"], ["allEquip"]]],
 [MINE_KIND, [["photo", "sell"], ["upgrade"]]],
 [LOVE_TREE, [["photo", "invite"], ["love", "loveRank"]]],//, "upgradeBuild"
 [RING_FIGHTING, [[], []]],
@@ -659,6 +659,7 @@ const MONEY_GAME_GOODS = 21;
 const EXP_GAME_GOODS = 22;
 const EQUIP_SKILL = 23;
 const PARTICLES = 24;
+const LEVEL_MAX_FALL_GAIN = 25;
 
 var ParticleData = [];
 var ParticleKey = [];
@@ -691,6 +692,7 @@ var Keys = [
     ExpGameGoodsKey,
     equipSkillKey,
     ParticleKey,
+    levelMaxFallGainKey,
 ];
 var CostData = [
     buildingData,
@@ -718,6 +720,7 @@ var CostData = [
     ExpGameGoodsData,
     equipSkillData,
     ParticleData,
+    levelMaxFallGainData,
 ];
 
 //更新商店load_sprite_sheet
