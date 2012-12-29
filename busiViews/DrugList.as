@@ -98,10 +98,6 @@ class DrugList extends MyNode
     药品存储药品的类型ID
     装备存储装备的 eid
     */
-    function onUpgrade(curNum)
-    {
-        global.director.pushView(new UpgradeDialog(this, data[curNum][1]), 1, 0);
-    }
     function onUnloadIt(curNum)
     {
         global.httpController.addRequest("soldierC/unloadThing", dict([["uid", global.user.uid], ["eid", data[curNum][1]]]), null, null);

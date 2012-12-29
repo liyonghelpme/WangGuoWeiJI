@@ -73,18 +73,8 @@ bg.addlabel(getStr("resList", ["[NAME]", getStr(item[i][0], null), "[VAL]", str(
         closeCastleDialog();
         var c = cost.items()[0];
         var store = new Store(global.director.curScene);
-        if(c[0] == "silver")
-        {
-            store.changeTab(SILVER_PAGE);
-        }
-        else if(c[0] == "crystal")
-        {
-            store.changeTab(CRYSTAL_PAGE);
-        }
-        else if(c[0] == "gold")
-        {
-            store.changeTab(GOLD_PAGE);
-        }
+        if(ObjKind_Page_Map.get(c[0]) != null)
+            store.changeTab(ObjKind_Page_Map.get(c[0]));
         global.director.pushView(store);
     }
     function closeDialog()

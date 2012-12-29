@@ -28,13 +28,47 @@ class RewardGoods extends MyNode
 
         bg = sprite("goods"+str(k)+".png").anchor(50, 100).scale(getParam("PickFallObjScale"));
         init();
-        var p = rand(getParam("pickRandX"))+45;//起始位置
-        bg.pos(p, 20);
+        var p = rand(getParam("pickRandX"))+getParam("MoneyGameBaseX");//起始位置
+        //相对于 0 0 位置
+        //bg.pos(p, 20);
+
         //trace("rewardGoods", k, bg.pos());
-        startPos = [p, -10];
-        tarPos = [rand(650)+60, 500];//终止位置
+        startPos = [p, getParam("MoneyGameStartY")];
+        tarPos = [rand(getParam("MoneyGameEndRandX"))+getParam("MoneyGameEndBaseX"), getParam("MoneyGameEndY")];//终止位置
+       //20-50 的范围   +- 方向 
+        var rdX = rand(getParam("GameGoodsRandX"))+getParam("GameGoodsBaseX");
+        var dir = rand(2);
+        var rdX1 = rdX;
+        if(dir == 0)
+            rdX = -rdX;
+        dir = rand(2);
+        if(dir == 0)
+            rdX1 = -rdX1;
+
+        //trace("randX is", rdX);
+        var diff31X = (tarPos[0]-startPos[0])/3;
+        var diff31Y = (tarPos[1]-startPos[1])/3;
+        var p31y = startPos[1]+diff31Y;
+        var p32y = startPos[1]+diff31Y*2;
         
+        var p31x = startPos[0]+diff31X;
+        var p32x = startPos[0]+diff31X*2;
+        
+        //100/s
+        var needFallTime = distance(startPos, tarPos)*1000/speed;
+
         //光滑bezier曲线
+        bg.addaction(
+        spawn(
+            expin(bezierby(
+                needFallTime,
+                startPos[0], startPos[1],
+                p31x+rdX, p31y,
+                p32x+rdX1, p32y,
+                tarPos[0], tarPos[1]
+            )), 
+            repeat(rotateby(getParam("MoneyGameRotateTime"), 360)))
+        );
     }
     //只检测相撞
     override function enterScene()
@@ -53,14 +87,7 @@ class RewardGoods extends MyNode
     function update(diff)
     {
         passTime += diff;
-        var s = speed*diff/1000; 
         var curPos = bg.pos();
-        curPos[0] += rand(getParam("jitterAmp"))-getParam("jitterOrigin");
-        curPos[0] = min(max(45, curPos[0]), 745);
-        curPos[1] += s;
-
-        bg.pos(curPos);
-
         var sPos = game.sol.getPos();
         //士兵的50 100 坐标转化成 定点坐标 士兵相对于其地图上的 世界坐标
         sPos = game.sol.map.bg.node2world(sPos[0], sPos[1]);
@@ -77,7 +104,7 @@ class RewardGoods extends MyNode
             return;
         }
         //超出屏幕
-        if(curPos[1] >= 500)
+        if(curPos[1] >= getParam("MoneyGameDisappearY"))
         {
             removeSelf();
         }

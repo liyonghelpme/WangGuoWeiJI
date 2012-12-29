@@ -90,10 +90,6 @@ class Building extends MyNode
         {
             funcBuild = new RingFighting(this); 
         }
-        else if(funcs == LOVE_TREE)//没有卖出 有升级
-        {
-            funcBuild = new LoveTree(this);
-        }
         else if(funcs == CAMP)//类似于 Farm 招募 加速招募 卖出 招募士兵的类型ID
         {
             funcBuild = new Camp(this);

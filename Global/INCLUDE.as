@@ -97,11 +97,11 @@ import busiViews.MoreView;
 
 import busiViews.AllGoods;
 
-import busiViews.UpgradeDialog;
-import busiViews.SkillDialog;
+//import busiViews.UpgradeDialog;
+//import busiViews.SkillDialog;
 
-import busiViews.UpgradeSkillDialog;
-import views.TrainDialog;
+//import busiViews.UpgradeSkillDialog;
+//import views.TrainDialog;
 
 
 //import views.HeartRankDialog;
@@ -178,7 +178,6 @@ import views.Farm;
 import views.Plant;
 import views.PlantChoose;
 import views.House;
-import views.LoveTree;
 import views.FuncBuild;
 
 //经营页面场景飞行的银币
@@ -317,9 +316,7 @@ import views.ResLackBanner;
 
 import busiViews.LoadChallenge;
 import views.UpdateDialog;
-import views.LoveUpgradeDialog;
-import views.LoveDialog;
-import views.LiveHeartDialog;
+
 import views.LoginDialog;
 import busiViews.LoadChallenge;
 

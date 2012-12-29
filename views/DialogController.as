@@ -82,7 +82,6 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "heart")
                 {
-                    global.director.pushView(new LiveHeartDialog(), 1, 0);
                 }
                 else if(curCmd.get("cmd") == "noTip")
                 {
@@ -108,12 +107,9 @@ class DialogController extends MyNode
                 //测试爱心对话框使用
                 else if(curCmd.get("cmd") == "love")
                 {
-                    //var tree = global.user.buildings; 
-                    //global.director.pushView(new LoveDialog(), 1, 0);
                 }
                 else if(curCmd.get("cmd") == "loveUpgrade")
                 {
-                    global.director.pushView(new LoveUpgradeDialog(curCmd["level"]), 1, 0);
                 }
                 else if(curCmd["cmd"] == "challengeLoading")
                 {

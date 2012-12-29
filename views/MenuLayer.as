@@ -95,7 +95,7 @@ class MenuLayer extends MyNode
     function openCharge()
     {
         var st = new Store(scene);
-        st.changeTab(GOLD_PAGE);
+        st.changeTab(TREASURE_PAGE);
         global.director.pushView(st, 1, 0);
     }
     var silverText;

@@ -1233,19 +1233,16 @@ const BUY_RES = dict([
 ]);
 
 //页面ID
-const NEW_GOODS = 0;
-const GOLD_PAGE = 1;
-const SILVER_PAGE = 2;
-const CRYSTAL_PAGE = 3;
-const BUILD_PAGE = 4;
-const DECOR_PAGE = 5;
-const EQUIP_PAGE = 6;
-const DRUG_PAGE = 7;
+const TREASURE_PAGE = 0;
+const BUILD_PAGE = 1;
+const DECOR_PAGE = 2;
+const EQUIP_PAGE = 3;
+const DRUG_PAGE = 4;
 
 const ObjKind_Page_Map = dict([
-    ["gold", GOLD_PAGE],
-    ["silver", SILVER_PAGE],
-    ["crystal", CRYSTAL_PAGE],
+    ["gold", TREASURE_PAGE],
+    ["silver", TREASURE_PAGE],
+    ["crystal", TREASURE_PAGE],
 ]);
 const GOODS_PAGE = dict([
     [BUILD, BUILD_PAGE],

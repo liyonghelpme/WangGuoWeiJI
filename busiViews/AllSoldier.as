@@ -252,15 +252,7 @@ class AllSoldier extends MyNode
             global.director.pushView(new DetailDialog(busiSol), 1, 0);
         }
     }
-    function onSkill()
-    {
-        if(soldier != null)
-        {
-            var id = soldier[1]["id"];
-            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
-            global.director.pushView(new SkillDialog(busiSol), 1, 0);
-        }
-    }
+
     function onDrug()
     {
         if(soldier != null)
@@ -286,7 +278,6 @@ class AllSoldier extends MyNode
         if(soldier != null)
         {
             global.director.popView();
-            global.director.pushView(new TrainDialog(soldier[0]), 1, 0);
         }
     }
     override function enterScene()

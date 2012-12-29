@@ -40,12 +40,10 @@ class ChildMenuLayer extends MyNode
     //["inspire", ["menu_button_inspire.png", onInspire]],
     ["equip", ["menu_button_equip.png", onEquip]],
     ["gather", ["menu_button_gather.png", onGather]],
-    ["train", ["menu_button_train.png", onTrain]],
     ["upgrade", ["menu_button_upgrade.png", onUpgrade]],
 
     ["allDrug", ["menu_button_allDrug.png", onAllDrug]],
     ["allEquip", ["menu_button_allEquip.png", onAllEquip]],
-    ["skill", ["menu_button_skill.png", onSkill]],
 
     //士兵状态
     //["menu0", ["menu0.png", onBlood]],
@@ -58,10 +56,7 @@ class ChildMenuLayer extends MyNode
 
     //爱心树
     ["invite", ["menu_button_invite.png", onInvite]],
-    ["love", ["menu1.png", onLove]],
-    ["loveRank", ["menuLoveRank.png", onLoveRank]],
 
-    ["singleTrain", ["menu_button_train.png", onSingleTrain]],
     ["upgradeBuild", ["menu_button_upgrade_build.png", onUpgrade]],
 
     ["call", ["menu_button_call.png", onCall]],
@@ -77,24 +72,7 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.closeGlobalMenu(this);
         global.director.pushView(new CallSoldier(scene), 1, 0);
     }
-    //单人练级 传入当前人物
-    function onSingleTrain()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new TrainDialog(scene.sid), 1, 0);
-    }
 
-    function onLove()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new LoveDialog(scene), 1, 0);
-    }
-    function onLoveRank()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        //global.director.pushView(new HeartRankDialog());
-        global.director.pushView(new RankDialog(HEART_RANK), 1, 0);
-    }
     function onBlood()
     {
         global.director.curScene.closeGlobalMenu(this);
@@ -169,12 +147,6 @@ class ChildMenuLayer extends MyNode
 
     
 
-    //soldier skill
-    function onSkill()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new SkillDialog(scene), 1, 0);
-    }
     function onAllDrug()
     {
         global.director.curScene.closeGlobalMenu(this);
@@ -195,13 +167,6 @@ class ChildMenuLayer extends MyNode
         scene.funcBuild.sureToUpgrade();
     }
     //点击神像训练士兵 
-    function onTrain()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        //scene.doTrain();
-        //没有士兵则无法练级
-        global.director.pushView(new TrainDialog(null), 1, 0);
-    }
     function onDrug()
     {
         global.director.curScene.closeGlobalMenu(this);

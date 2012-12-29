@@ -9,7 +9,7 @@ class FriendMenu extends MyNode
     function onRecharge()
     {
         var st = new Store(global.director.curScene);
-        st.changeTab(GOLD_PAGE);
+        st.changeTab(TREASURE_PAGE);
         global.director.pushView(st, 1, 0);
     }
 

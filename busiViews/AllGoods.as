@@ -323,12 +323,6 @@ class AllGoods extends MyNode
         showMultiPopBanner(addSilver);
 
     }
-    //升级装备 参数位置 
-    function onUpgrade(p)
-    {
-        var eid = data[p][1];
-        global.director.pushView(new UpgradeDialog(this, eid), 1, 0);
-    }
 
 
     var lastPoints;
