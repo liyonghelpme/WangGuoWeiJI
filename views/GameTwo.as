@@ -60,13 +60,13 @@ class RewardGoods extends MyNode
         //光滑bezier曲线
         bg.addaction(
         spawn(
-            expin(bezierby(
+            bezierby(
                 needFallTime,
                 startPos[0], startPos[1],
                 p31x+rdX, p31y,
                 p32x+rdX1, p32y,
                 tarPos[0], tarPos[1]
-            )), 
+            ), 
             repeat(rotateby(getParam("MoneyGameRotateTime"), 360)))
         );
     }

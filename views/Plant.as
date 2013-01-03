@@ -38,13 +38,6 @@ class Plant extends MyNode
 
     function getLeftTime()
     {
-        /*
-        //秒 客户端 需要时间 开始时间 
-        var needTime = data["time"];
-        var now = time()/1000;
-        var passTime = now-objectTime;
-        return needTime-passTime;
-        */
         return (data.get("time")*1000-passTime)/1000;
     }
     //计算开始工作的服务器时间单位秒
@@ -62,8 +55,8 @@ class Plant extends MyNode
     function getAccCost()
     {
         //LeftTime s
-        var leftTime = (data.get("time")*1000-passTime)/1000;
-        return max(leftTime/3600, 1); 
+        var leftTime = getLeftTime();
+        return calAccCost(leftTime);
     }
     function getState()
     {

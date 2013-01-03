@@ -93,28 +93,21 @@ function getFallObjValue(id, fallTimes)
 function getLoginReward(day)
 {
     var reward = dict();
-    if(day == 0)
-        reward.update("silver", 0);
-    else if(day%2 == 0)
+    for(var i = 0; i < len(LoginReward); i++)
     {
-        reward.update("crystal", 5+day);
+        if(LoginReward[i][0] > day)
+            break;
     }
-    else 
-    {
-        var income = getTotalIncome(global.user.getValue("level"));
-        income = income*20/100;
-        reward.update("silver", income);
-    }
-//    trace("login reward", reward);
+    i--;
+    reward.update("gold", LoginReward[i][1]);
     return reward;
 }
 
-
-
+//得到level级水晶矿产量
 function getProduction(level)
 {
-    var crystal = mineProduction.get("crystal")+mineProduction.get("levelCoff")*level;
-    return crystal;
+    var mData = getGain(MINE_PRODUCTION, level);
+    return mData["crystal"];
 }
 
 
@@ -227,4 +220,20 @@ function getNextBuildNum(id)
     var level = global.user.getValue("level");
     var need = (level+bLevel)/bLevel;
     return need*bLevel;
+}
+
+function calAccCost(leftTime)
+{
+    for(var i = 0; i < (len(AccCost)-1); i++)
+    {
+        if(AccCost[i][0] > i)
+            break;
+    }
+    i--;
+    var beginTime = AccCost[i][0];
+    var endTime = AccCost[i+1][0];
+    var beginGold = AccCost[i][1];
+    var endGold = AccCost[i+1][1];
+    var needGold = beginGold + leftTime*(endGold-beginGold)/(endTime-beginTime);
+    return needGold;
 }

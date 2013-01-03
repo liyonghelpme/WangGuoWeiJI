@@ -39,18 +39,8 @@ import busiViews.BuildLayer;
 import views.BuildLand;
 import views.SoldierMax;
 
-import mine.MineScene;
-import mine.MineMenu;
-import mine.MakeMine;
-import mine.CrystalIsland;
-import mine.MoveIsland;
-/*
-import views.CrystalIsland;
-import views.MineMenu;
-*/
-
 import views.MineFunc;
-import mine.UpgradeMine;
+import busiViews.UpgradeMine;
 
 import views.FallGoods;
 import views.FallObj;

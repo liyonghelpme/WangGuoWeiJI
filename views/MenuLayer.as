@@ -59,13 +59,11 @@ class MenuLayer extends MyNode
         expWord.bg.anchor(50, 50).pos(75, 28);
         expBanner.add(expWord.bg);
 
-        collectionbutton = bg.addsprite("collection.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, openGlory);
+        collectionbutton = bg.addsprite("mainRank.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, onRank);
 
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
         menubutton = bg.addsprite("menu_button.png").anchor(0, 0).pos(685, 380).size(112, 106).setevent(EVENT_TOUCH, onClicked, 0);
-        //bg.addlabel(getStr("rank", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(169, 461).color(100, 100, 100);
-
 
         rightMenu = new CastleRightMenu(this, []);
 
@@ -85,9 +83,9 @@ class MenuLayer extends MyNode
     {
         global.director.pushView(new TaskDialog(), 1, 0);
     }
-    function openGlory()
+    function onRank()
     {
-        global.director.pushView(new CollectionDialog(), 1, 0);
+        global.director.pushView(new RankDialog(CHALLENGE_RANK), 1, 0);
     }
     /*
     显示商店充值页面
@@ -109,7 +107,7 @@ class MenuLayer extends MyNode
         var w = str(global.user.rankOrder);
         if(global.user.rankOrder > 999)
             w = "999+";
-        gloryLevText = bg.addlabel(w, "fonts/heiti.ttf", 16).anchor(50, 50).pos(253, 461).color(100, 100, 100);
+        gloryLevText = bg.addlabel(w, "fonts/heiti.ttf", 16).anchor(50, 50).pos(169, 461).color(100, 100, 100);
     }
     //var building = 0;
     /*

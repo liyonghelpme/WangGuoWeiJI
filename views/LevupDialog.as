@@ -9,31 +9,28 @@ class LevupDialog extends MyNode
         var dia = bg.addsprite("dialogLevup.png").anchor(50, 50).pos(global.director.disSize[0]/2, global.director.disSize[1]/2);
         init();
         var but0 = dia.addsprite("roleNameBut1.png").pos(78, 326).size(173, 53).setevent(EVENT_TOUCH, closeDialog);
-but0.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).pos(86, 27).anchor(50, 50).color(100, 100, 100);
+        but0.addlabel(getStr("ok", null), "fonts/heiti.ttf", 25).pos(86, 27).anchor(50, 50).color(100, 100, 100);
 
         but0 = dia.addsprite("roleNameBut0.png").pos(291, 326).size(173, 53);
-but0.addlabel(getStr("share", null), "fonts/heiti.ttf", 25).pos(86, 27).anchor(50, 50).color(100, 100, 100);
+        but0.addlabel(getStr("share", null), "fonts/heiti.ttf", 25).pos(86, 27).anchor(50, 50).color(100, 100, 100);
 
         var OFFX = 212;
         var thing = getLevelupThing();
-        for(var i = 0; i < 2; i++)
+        for(var i = 0; i < 2 && i < len(thing); i++)
         {
             var kind = thing[i][0];
             var id = thing[i][1].get("id");
             var data = getData(kind, id);
             var picName = replaceStr(KindsPre[kind], ["[ID]", str(id)]);
-//            trace("picName", picName, kind, id);
             var pic = dia.addsprite(picName).pos(165+OFFX*i, 186).anchor(50, 50);//.size(109, 108);
             var sca = getSca(pic, [109, 108]);
             pic.scale(sca);
 
-dia.addlabel(data.get("name"), "fonts/heiti.ttf", 17).pos(165 + (OFFX * i), 250).anchor(50, 50).color(0, 0, 0);
+            dia.addlabel(data.get("name"), "fonts/heiti.ttf", 17).pos(165 + (OFFX * i), 250).anchor(50, 50).color(0, 0, 0);
         }
 
-        //dia.addsprite("soldier1.png").pos(377, 186).anchor(50, 50).size(109, 108);
-        //dia.addlabel("name", null, 17).pos(377, 250).anchor(50, 50).color(0, 0, 0);
 
-dia.addlabel(str(global.user.getValue("level") + 1), "fonts/heiti.ttf", 35).pos(502, 60).anchor(50, 50).color(100, 100, 100);
+        dia.addlabel(str(global.user.getValue("level") + 1), "fonts/heiti.ttf", 35).pos(502, 60).anchor(50, 50).color(100, 100, 100);
 
         showCastleDialog();
     }

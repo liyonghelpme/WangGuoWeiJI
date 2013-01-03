@@ -98,10 +98,13 @@ class Building extends MyNode
             funcBuild = new Castle(this);
 
 
-        if(funcs != LOVE_TREE)
+        if(funcs == MINE_KIND)
+        {
+            var mineData = getData(MINE_PRODUCTION, buildLevel);
+            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH, getHue(mineData["color"])).anchor(50, 100);
+        }
+        else
             changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
-        else//爱心树图片和等级相关
-            changeDirNode = bg.addsprite("build"+str(id+buildLevel)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
         
         //非本身颜色的建筑物颜色 根据编号设定颜色
         //1 采用标准特征色
@@ -600,6 +603,14 @@ class Building extends MyNode
                 func[1].append("acc");
             }
         }
+        if(funcs == MINE_KIND)
+        {
+            //0 1 2 
+            if(buildLevel < (len(mineProductionData)-1))
+            {
+                func[1].append("upgrade");//升级水晶矿
+            }
+        }
         global.director.pushView(new BuildWorkMenu(this, func[0], func[1]), 0, 0);
     }
     var showMenuYet = 0;
@@ -699,6 +710,7 @@ class Building extends MyNode
         var gold = funcBuild.getAccCost();
         var cost = dict([["gold", gold]]);
         var buyable = global.user.checkCost(cost);
+        trace("accCost", cost);
         if(buyable.get("ok") == 0)
         {
             global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr("gold", null), "[NUM]", str(gold)]), [100, 100, 100], null));
@@ -754,22 +766,12 @@ class Building extends MyNode
         {
             selled = 0; 
             global.director.curScene.closeGlobalMenu(this);
-            
             global.httpController.addRequest("buildingC/sellBuilding", dict([["uid", global.user.uid], ["bid", bid], ["silver", cost.get("silver", 0)]]), null, null);
-
-            //不使用飞行银币增加 使用黑色框 减去 人口 城堡防御力 增加银币
-            //global.director.curScene.addChild(new FlyObject(bg, cost, sellOver));
-
 
             //逐渐调整 跳出 多个条目
             var showData = dict([["silver", cost.get("silver")], ["people", -data.get("people")], ["cityDefense", -data.get("cityDefense") ]]);
             global.user.doAdd(showData);
-            //global.user.changeValue("people", -data.get("people"));//减去人口
-            //global.user.changeValue("cityDefense", -data.get("cityDefense"));//减去防御力
-
             showMultiPopBanner(showData);
-             
-            //map.sellBuild(this);//没有清除建筑物的底座
             map.removeBuilding(this);
             global.user.sellBuild(this);
         }

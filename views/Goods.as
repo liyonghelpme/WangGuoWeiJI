@@ -71,11 +71,9 @@ class Goods extends MyNode
             //普通农田显示 数量
             if(data["funcs"] == FARM_BUILD)
             {
-                if(objId == 0)
-                {
-                    panel.addlabel(str(getCurBuildNum(objId))+"/"+str(getBuildEnableNum(objId)[0]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
-                    showGain = 0;
-                }
+                //普通 魔法农田都显示 数量
+                panel.addlabel(str(getCurBuildNum(objId))+"/"+str(getBuildEnableNum(objId)[0]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+                showGain = 0;
             }
             else
             {
@@ -155,36 +153,21 @@ class Goods extends MyNode
             //获取物体的storeWords 如果没有则 按照普通方式处理
             if(showGain == 1)
             {
+                //药品显示技能的属性
+                if(objKind == DRUG)
+                {
+                    gain = getGain(SKILL, data["skillId"]);
+                }
                 var w;
                 var labelGain = gain.items();
-                var objKey = getGoodsKey(objKind, objId);
-                if(StoreWords.get(objKey) != null)
+
+                if(len(labelGain) > 0)
                 {
-                    w = getStr(StoreWords.get(objKey), null);   
-                    if(objKind == DRUG)
-                    {
-                        //药品显示技能类型属性
-                        //w = getStr("drugAttWord", ["[LEVEL]", data["levelName"], "[ATT]", w]);
-                    }
-                    else
-                        panel.addlabel(w, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
+                    var v = labelGain[0][1];
+                    var k = getStr(StoreAttWords[labelGain[0][0]], ["[NUM]", str(v)]);
+
+                    panel.addlabel(k, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
-                else
-                {
-                    if(len(labelGain) > 0)
-                    {
-                        var v = labelGain[0][1];
-                        var k = getStr(StoreAttWords[labelGain[0][0]], ["[NUM]", str(v)]);
-
-                        if(objKind == DRUG)
-                        {
-                            k = getStr("drugAttWord", ["[LEVEL]", data["levelName"], "[ATT]", k]);
-                        }
-                        panel.addlabel(k, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
-                    }
-                }
-
-
             }
         }
         return canBuy;
@@ -249,6 +232,7 @@ class Goods extends MyNode
     function setTab(g)
     {
         selTab = g;
+        curSel = null;
         //trace(getStr(store.words[g], null));
         title.texture(store.titles[g], UPDATE_SIZE);
 
@@ -349,18 +333,10 @@ class Goods extends MyNode
         }
 
 
-        if(needInertia)
-            flowNode.addaction(sequence(expout(moveby(getParam("inertiaTime"), 0, expMove)), callfunc(finishInertia)));
-        else
-        {
-            //accMove = 0;
-            var oldPos = flowNode.pos();
-            oldPos[1] = min(0, max(minPos, oldPos[1]));
-            flowNode.pos(oldPos[0], oldPos[1]);
-
-            var rg = getShowRange();
-            updateTab(rg);
-        }
+        //if(needInertia)
+        //    flowNode.addaction(sequence(moveby(getParam("inertiaTime"), 0, expMove)), callfunc(finishInertia));
+        //else
+        finishInertia();
     }
     function finishInertia()
     {

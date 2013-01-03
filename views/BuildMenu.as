@@ -1,7 +1,6 @@
 //建造和 规划菜单
 class BuildMenu extends MyNode
 {
-    //var curBuild = null;
     var scene;
     var building;
     var buttonNode;
@@ -45,15 +44,15 @@ class BuildMenu extends MyNode
     const W_X = 24;
     function setBuilding(b)
     {
+        trace("setBuilding", b);
         if(b != null)
         {
             opKind = b[0];
             building = b[1].data;
-            //curBuild = b[1];
         }
         else
         {
-            //curBuild = null;
+            building = null;
         }
 
 
@@ -140,8 +139,10 @@ class BuildMenu extends MyNode
     //农田建筑第一次卖出不设置为空 第二次卖出设置为空
     //第一次卖出 不设置 为空选项
     //第二次卖出才设置
+    //卖出建筑物
     function onSell()
     {
+        trace("onSell", scene.curBuild.selled);
         if(scene.curBuild.selled == 1)
             setBuilding(null);
         scene.onSell();   

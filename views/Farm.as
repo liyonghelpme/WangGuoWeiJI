@@ -12,7 +12,7 @@ class Farm extends FuncBuild
     */
     override function whenFree()
     {
-        global.director.pushView(new PlantChoose(baseBuild), 1, 0);
+        global.director.pushView(new PlantChoose(baseBuild), 0, 0);
         return 1;
     }
     override function getObjectId()
@@ -104,7 +104,7 @@ class Farm extends FuncBuild
         baseBuild.state = PARAMS["buildFree"];
         planting.removeSelf();
 
-        var rate = baseBuild.data.get("rate", 1);
+        var rate = baseBuild.data.get("rate", 100);
         var gain = getGain(PLANT, planting.id);
         //魔法农田经验 银币 rate 是2倍
         if(planting.getState() == ROT)//2倍时间没有收获则腐烂 收获1/3
@@ -116,7 +116,7 @@ class Farm extends FuncBuild
         for(var k = 0; k < len(keys); k++)
         {
             var v = gain[keys[k]];
-            v *= rate;
+            v *= rate/100;
             gain[keys[k]] = v;
         }
         trace("farmGain", gain);

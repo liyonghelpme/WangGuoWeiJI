@@ -704,14 +704,14 @@ function changeToSilver(data)
         var val = data.get(k);
         if(k == "gold")
         {
-            addSilver += val*PARAMS["gold2Silver"]/PARAMS["sellRate"];
+            addSilver += val*getParam("gold2Silver")/getParam("sellRate");
         }
         else if(k == "crystal")
         {
-            addSilver += val*PARAMS["crystal2Silver"]/PARAMS["sellRate"];
+            addSilver += val*getParam("crystal2Silver")/getParam("sellRate");
         }
         else if(k == "silver")
-            addSilver += val/SELL_RATE;
+            addSilver += val/getParam("sellRate");
     }
     data = dict([["silver", addSilver]]);
 
@@ -1243,8 +1243,10 @@ function showMultiPopBanner(showData)
         var w;
         if(v > 0)
             w = getStr("opSuc", ["[NUM]", "+"+str(v), "[KIND]", getStr(k, null)]);
-        else
+        else if(v < 0)
             w = getStr("opSuc", ["[NUM]", str(v), "[KIND]", getStr(k, null)]);
+        else
+            continue;
         global.director.curScene.dialogController.addBanner(new UpgradeBanner(w, [100, 100, 100], null));
     }
 }

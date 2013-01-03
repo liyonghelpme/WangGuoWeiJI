@@ -168,8 +168,8 @@ class FriendList extends MyNode
 
                     if(data[curNum].get("crystal") != null)
                     {
-                        panel.addlabel(getStr("getCrystal", ["[NUM]", str(data[curNum].get("crystal"))]), "fonts/heiti.ttf", 22).anchor(0, 50).pos(35, 22).color(28, 15, 4);
-                        panel.addsprite("crystal.png").anchor(0, 0).pos(71, 10).size(23, 24).color(100, 100, 100, 100);
+                        var temp = picNumWord(getStr("getCrystal", ["[KIND]", "crystal.png"]), 22, [28, 15, 4]).pos(35, 22);//文字相对于node是0 50
+                        panel.add(temp);
                     }
 
                     panel.addsprite("levelStar.png").anchor(0, 0).pos(85, 41).size(31, 31).color(100, 100, 100, 100);

@@ -186,7 +186,6 @@ class CastleScene extends MyNode
     function onSell()
     {
         curBuild.doSell();
-        //global.director.popView();
         if(curBuild.selled == 0)//当前农田已经卖出了 需要设置当前建筑为空
             curBuild = null;
     }

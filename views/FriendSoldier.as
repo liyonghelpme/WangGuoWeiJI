@@ -41,7 +41,6 @@ class FriendSoldier extends MoveSoldier
         id = privateData.get("id");
         data = getData(SOLDIER, id);
         map = m;
-        //var colStr = "blue";
 
         load_sprite_sheet("soldierm"+str(id)+".plist");
 
@@ -86,7 +85,6 @@ class FriendSoldier extends MoveSoldier
     {
         accMove = 0;
         lastPoints = n.node2world(x, y);
-        //map.touchBegan(n, e, p, x, y, points);
     }
     function touchMoved(n, e, p, x, y, points)
     {
@@ -95,7 +93,6 @@ class FriendSoldier extends MoveSoldier
         var difx = lastPoints[0] - oldPos[0];
         var dify = lastPoints[1] - oldPos[1];
         accMove += abs(difx)+abs(dify);
-        //map.touchMoved(n, e, p, x, y, points); 
     }
     /*
     拥有水晶 增加对应数量的水晶
@@ -106,7 +103,8 @@ class FriendSoldier extends MoveSoldier
         if(hasCry == 1)
         {
             hasCry = 0;
-            var cry = 1;
+            var rd = rand(getParam("FriendSolCryMaxLevel")-getParam("FriendSolCryBaseLevel"))+getParam("FriendSolCryBaseLevel");
+            var cry = rd*(global.user.getValue("level")+1);
             global.httpController.addRequest("friendC/helpFriendCry", dict([["uid", global.user.uid], ["kind", map.kind], ["crystal", cry]]), null, null);
             global.friendController.helpFriend(map.scene.getUid(), map.kind, cry);
             if(negtiveState != null)
@@ -120,11 +118,8 @@ class FriendSoldier extends MoveSoldier
 temp.addlabel("+" + str(1), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
 
-            //global.taskModel.doDayTaskByKey("friendStatus", 1);
-            //global.taskModel.doNewTaskByKey("friendStatus", 1);
             global.taskModel.doAllTaskByKey("friendStatus", 1);
         }
-        //map.touchEnded(n, e, p, x, y, points);
     }
 
 

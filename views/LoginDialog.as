@@ -1,7 +1,6 @@
 class LoginDialog extends MyNode
 {
     //与商店相同的编号
-    //const reward = [[SILVER, 1000], [GOLD, 1000], [CRYSTAL, 100], [SILVER, 2000]];
     /*
     根据用户当前连续登录的数据得到需要得到的奖励
     */
@@ -34,10 +33,6 @@ class LoginDialog extends MyNode
 
         bg.addsprite("whiteBox.png").anchor(0, 0).pos(412, 192).size(109, 153);
 
-
-        //bg.addsprite("白色框.png").anchor(0, 0).pos(0, 0).size(115, 159);
-        //bg.addsprite("被粘贴的图层.png").anchor(0, 0).pos(3, 3).size(109, 153);
-        //bg.addsprite("whiteBox.png").anchor(0, 0).pos(279, 192).size(115, 153);
         bg.addsprite("blueBox.png").anchor(0, 0).pos(279, 192).size(115, 153);
 
 

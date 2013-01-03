@@ -49,28 +49,31 @@ class FriendController
     }
 
     /*
+    访问木瓜好友或者普通好友可以通过消除他们士兵状态来获取水晶
     每次登录出现水晶的位置不同
     */
     function setPapayaCrystal()
     {
         var addCrystal = global.user.getValue("addPapayaCryNum");
-        var leftCrystal = PAPAYA_CRY - addCrystal;
+        var leftCrystal = getParam("PapayaCrystal") - addCrystal;
+        var leftFriendNum = (leftCrystal+getParam("MaxCryNum")-1)/getParam("MaxCryNum");
         var i;
         if(len(showFriend) == 0)
             return;
         for(i = 0; i < len(showFriend); i++)
             showFriend[i].pop("crystal");
-        for(i = 0; i < leftCrystal; i++)
+        for(i = 0; i < leftFriendNum; i++)
         {
             var p = rand(len(showFriend));
-            showFriend[p].update("crystal", 1);
+            showFriend[p].update("crystal", rand(getParam("MaxCryNum"))+1);
         }
     }
 
     function setRecommandCrystal()
     {
         var addCrystal = global.user.getValue("addFriendCryNum");
-        var leftCrystal = FRIEND_CRY - addCrystal;
+        var leftCrystal = getParam("FriendCrystal") - addCrystal;
+        var leftFriendNum = (leftCrystal+getParam("MaxCryNum")-1)/getParam("MaxCryNum");
         var i;
         if(len(recommandFriends) == 0)
             return;
@@ -78,10 +81,10 @@ class FriendController
         {
             recommandFriends[i].pop("crystal");
         }
-        for(i = 0; i < leftCrystal; i++)
+        for(i = 0; i < leftFriendNum; i++)//至少需要好友数量 获取水晶
         {
             var p = rand(len(recommandFriends));
-            recommandFriends[p].update("crystal", 1);
+            recommandFriends[p].update("crystal", rand(getParam("MaxCryNum"))+1);
         }
     }
 
@@ -115,7 +118,9 @@ class FriendController
         }
     }
 
-
+    /*
+    消除掉1个好友士兵的负面状态
+    */
     function helpFriend(uid, k, cry)
     {
         global.user.changeValue("crystal", cry);

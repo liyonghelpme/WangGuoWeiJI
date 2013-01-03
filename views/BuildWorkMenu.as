@@ -9,21 +9,22 @@ kind
 class BuildWorkMenu extends MyNode
 {
     var build;
-    var timeLabel = null;
-    var cw;
+    var cw = null;
     var banner;
     var left;
     var right;
-    function BuildWorkMenu(b, func1, func2)
+    function updateView()
     {
-        build = b;
-        bg = node();
-        banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
-        init();
-        //建筑信息
-        //var bData = getData(BUILD, build.id);
+        if(cw != null)
+        {
+            cw.removefromparent();
+            cw = null;
+        }
         var bData = build.data;
         var state = build.state;
+
+        var leftTime = build.getLeftTime();
+        var s = getWorkTime(leftTime);
 
         if(bData.get("funcs") == DECOR_BUILD)
         {
@@ -38,18 +39,18 @@ class BuildWorkMenu extends MyNode
         else if(bData.get("funcs") == FARM_BUILD)
         {
             var rate = bData["rate"];
-            if(rate > 1)
+            if(rate > getParam("farmRateNormal"))
             {
-                cw = colorWordsNode(getStr("magicFarm", ["[NAME]", build.getName(), "[TIME]", str(0)]), 21, [100, 100, 100], [89, 72, 18]);
+                cw = colorWordsNode(getStr("magicFarm", ["[NAME]", build.getName(), "[TIME]", s]), 21, [100, 100, 100], [89, 72, 18]);
             }
             else
             {
-                cw = colorWordsNode(getStr("normalFarm", ["[NAME]", build.getName(), "[TIME]", str(0)]), 21, [100, 100, 100], [89, 72, 18]);
+                cw = colorWordsNode(getStr("normalFarm", ["[NAME]", build.getName(), "[TIME]", s]), 21, [100, 100, 100], [89, 72, 18]);
             }
         }
         else if(bData.get("funcs") == MINE_KIND)
         {
-            cw = colorWordsNode(getStr("mineInfo", ["[LEV]", str(build.buildLevel), "[NAME]", build.getName(), "[TIME]", str(0)]), 21, [100, 100, 100], [89, 72, 18]);
+            cw = colorWordsNode(getStr("mineInfo", ["[LEV]", str(build.buildLevel+1), "[NAME]", build.getName(), "[TIME]", s]), 21, [100, 100, 100], [89, 72, 18]);
         }
         else if(bData.get("funcs") == LOVE_TREE)
         {
@@ -62,9 +63,8 @@ class BuildWorkMenu extends MyNode
         }
         else if(bData.get("funcs") == CASTLE_BUILD)
         {
-            cw = colorWordsNode(getStr("castleInfo", ["[LEV]", str(global.user.getValue("level")), "[NUM]", str(global.user.getValue("cityDefense"))]), 21, [100, 100, 100], [89, 72, 18]);
+            cw = colorWordsNode(getStr("castleInfo", ["[LEV]", str(global.user.getValue("level")+1), "[NUM]", str(global.user.getValue("cityDefense"))]), 21, [100, 100, 100], [89, 72, 18]);
             
-            //bg.addsprite("buildDefense.png").anchor(0, 0).pos(322, 21).size(27, 27);
             banner.addsprite("buildDefense.png").anchor(0, 0).pos(322, 21).setevent(EVENT_TOUCH, onDefense);
         }
         else if(bData.get("funcs") == CAMP)
@@ -78,26 +78,36 @@ class BuildWorkMenu extends MyNode
             else
             {
                 var sData = getData(SOLDIER, build.funcBuild.objectId);
-                cw = colorWordsNode(getStr("campInfo", ["[NAME]", str(sData.get("name")), "[TIME]", getWorkTime(build.getLeftTime())]), 21, [100, 100, 100], [89, 72, 18]);
+                cw = colorWordsNode(getStr("campInfo", ["[NAME]", str(sData.get("name")), "[TIME]", s]), 21, [100, 100, 100], [89, 72, 18]);
             }
+        }
+        else if(bData["funcs"] == GOD_BUILD)
+        {
+            cw = colorWordsNode(getStr("godInfo", ["[NUM]", str(global.user.getSolNum())]), 21, [100, 100, 100], [89, 72, 18]);
+        }
+        else if(bData["funcs"] == FORGE_SHOP)
+        {
+            cw = colorWordsNode(getStr("forgeInfo", ["[NUM]", str(global.user.getAllEquipNum())]), 21, [100, 100, 100], [89, 72, 18]);
+        }
+        else if(bData["funcs"] == DRUG_BUILD)
+        {
+            cw = colorWordsNode(getStr("drugInfo", ["[NUM]", str(global.user.getDrugTotalNum())]), 21, [100, 100, 100], [89, 72, 18]);
         }
         else 
         {
             cw = label(build.getName(), "fonts/heiti.ttf", 21);
-
         }
         cw.pos(31, 32).anchor(0, 50);
         banner.add(cw);
-
-        //bg.addsprite("buildTip.png").anchor(0, 0).pos(737, 14).size(38, 36);
-
-        banner.addsprite("buildTip.png").pos(737, 14).anchor(0, 0).setevent(EVENT_TOUCH, onInfo);
-
-
-        if(state == PARAMS["buildWork"])
-        {
-            timeLabel = cw;
-        }
+    }
+    function BuildWorkMenu(b, func1, func2)
+    {
+        build = b;
+        bg = node();
+        init();
+        banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
+        //建筑信息
+        updateView();
 
         left = new ChildMenuLayer(0, func1, build, func2);
         right = new ChildMenuLayer(1, func2, build, func1);
@@ -124,54 +134,8 @@ class BuildWorkMenu extends MyNode
                 clearChildMenu();
             passTime += diff;
         }
-
-
-        if(timeLabel != null)
-        {
-            var bData = build.data;
-
-            var leftTime = build.getLeftTime();
-            var s = getWorkTime(leftTime);
-
-            if(bData["funcs"] == FARM_BUILD)
-            {
-                timeLabel.removefromparent();
-                var rate = bData["rate"];
-                if(rate > 1)
-                    cw = colorWordsNode(getStr("magicFarm", ["[NAME]", build.getName(), "[TIME]", s]), 21, [100, 100, 100], [89, 72, 18]);
-                else
-                    cw = colorWordsNode(getStr("normalFarm", ["[NAME]", build.getName(), "[TIME]", s]), 21, [100, 100, 100], [89, 72, 18]);
-                timeLabel = cw;
-
-                cw.pos(31, 32).anchor(0, 50);
-                banner.add(cw);
-            }
-            else if(bData["funcs"] == MINE_KIND)
-            {
-                timeLabel.removefromparent();
-                cw = colorWordsNode(getStr("mineInfo", ["[LEV]", str(build.buildLevel), "[NAME]", build.getName(), "[TIME]", str(s)]), 21, [100, 100, 100], [89, 72, 18]);
-
-                timeLabel = cw;
-                cw.pos(31, 32).anchor(0, 50);
-                banner.add(cw);
-            }
-            else if(bData["funcs"] == CAMP)
-            {
-                timeLabel.removefromparent();
-
-                var sData = getData(SOLDIER, build.funcBuild.objectId);
-                cw = colorWordsNode(getStr("campInfo", ["[NAME]", str(sData.get("name")), "[TIME]", getWorkTime(build.getLeftTime())]), 21, [100, 100, 100], [89, 72, 18]);
-
-                timeLabel = cw;
-                cw.pos(31, 32).anchor(0, 50);
-                banner.add(cw);
-            }
-
-            //timeLabel.text(s);
-        }
-        else if(build.state == PARAMS["buildFree"])//农田空闲中 使用另一个文字
-        {
-        }
+        if(build.state == PARAMS["buildWork"])
+            updateView();
     }
     //关闭两个子菜单
     /*

@@ -14,7 +14,8 @@ class MinePlant extends MyNode
     }
     function getLeftTime()
     {
-        var needTime = mineProduction.get("time")*1000;
+        var mineData = getData(MINE_PRODUCTION, building.buildLevel);
+        var needTime = mineData.get("time")*1000;
         var leftTime = (needTime-passTime)/1000;
         //trace("LeftTime", needTime, passTime);
         return leftTime;
@@ -27,7 +28,8 @@ class MinePlant extends MyNode
     {
         super.enterScene();
         var now = time()/1000;
-        var needTime = mineProduction.get("time");
+        var mineData = getData(MINE_PRODUCTION, building.buildLevel);
+        var needTime = mineData.get("time");
 
         if((now-objectTime) > needTime)//矿不考虑 腐败问题
             passTime = needTime*1000;
@@ -39,7 +41,8 @@ class MinePlant extends MyNode
     function update(diff)
     {
         passTime += diff;
-        var needTime = mineProduction.get("time")*1000;
+        var mineData = getData(MINE_PRODUCTION, building.buildLevel);
+        var needTime = mineData.get("time")*1000;
         if(passTime >= needTime && curState == 0)//成熟但是状态没有更新 设置浮动的图标
         {
             curState = 1;
@@ -50,6 +53,17 @@ class MinePlant extends MyNode
     {
         global.timer.removeTimer(this);
         super.exitScene();
+    }
+    function getAccCost()
+    {
+        var leftTime = getLeftTime();
+        return calAccCost(leftTime);
+    }
+    function finish()
+    {
+        var leftTime = getLeftTime();
+        objectTime -= leftTime;
+        passTime += leftTime*1000;
     }
 }
 
@@ -128,8 +142,10 @@ class Mine extends FuncBuild
         global.httpController.addRequest("mineC/upgradeMine", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["cost", json_dumps(cost)]]), null, null); 
         global.user.doCost(cost);
         baseBuild.buildLevel += 1;
+        var mineData = getData(MINE_PRODUCTION, baseBuild.buildLevel);
+        baseBuild.changeDirNode.texture("build"+str(baseBuild.id)+".png", getHue(mineData["color"]));
+
         global.user.updateBuilding(baseBuild);
-        
         var it = cost.items();
         var temp = baseBuild.bg.addnode();
         var bSize = baseBuild.bg.size();
@@ -169,9 +185,10 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     }
     function getLevelUpCost()
     {
-        if(baseBuild.buildLevel < len(MINE_UPGRADE_COST))   
+        if(baseBuild.buildLevel < (len(mineProductionData)-1))   
         {
-            return MINE_UPGRADE_COST[baseBuild.buildLevel];
+            var mCost = getCost(MINE_PRODUCTION, baseBuild.buildLevel);
+            return mCost;
         }
         return dict();
     }
@@ -194,5 +211,22 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
             planting = new MinePlant(baseBuild, privateData);
             baseBuild.addChild(planting);
         }
+    }
+    override function getAccCost()
+    {
+        return planting.getAccCost();
+    }
+
+    override function doAcc()
+    {
+        var leftTime = planting.getLeftTime();
+        var cost = dict([["gold", planting.getAccCost()]]);
+        global.user.doCost(cost);
+        global.httpController.addRequest("buildingC/accWork", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["gold", planting.getAccCost()], ["leftTime", leftTime]]), null, null);
+        planting.finish();
+        global.user.updateBuilding(baseBuild);
+
+        var showData = cost; 
+        showMultiPopBanner(cost2Minus(showData));
     }
 }

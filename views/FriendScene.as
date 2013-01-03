@@ -57,6 +57,8 @@ class MovLayer extends MoveMap
         var sol = scene.soldiers;
         var key = sol.keys();
         var val = sol.values();
+        //访问好友有水晶可拿
+        //好友拥有的水晶数量
         for(var i = 0; i < len(val); i++)
         {
             var hasCry = 0;

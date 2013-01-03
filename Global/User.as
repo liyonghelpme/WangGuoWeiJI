@@ -1106,7 +1106,6 @@ class User
             var addV = add;
             var level = getValue("level");
             var oldLevel = level;
-            var addCityDefense = 0;
             while(1)
             {
                 var needExp = getLevelUpNeedExp(level);
@@ -1120,7 +1119,6 @@ class User
                             break;
                     }
                     i = min(i, len(levelDefense)-1);
-                    addCityDefense += levelDefense[i][1];
 
                     level += 1;
                 }
@@ -1128,27 +1126,13 @@ class User
                     break;
             }
             setValue("level", level);
-            changeValue("cityDefense", addCityDefense);
-            trace("levelUp", level, addCityDefense, v, needExp);
 
             if(level != oldLevel)
             {
-                var ret = global.msgCenter.checkCallback(LEVEL_UP);
                 //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
                 //不能计算升级奖励 因为post方法传送的dict存在问题不能正确解析key
-                if(ret == 0)
-                {
-//                    trace("not in business page!");
-                    global.msgCenter.sendMsg(LEVEL_UP, null);
-                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
-                }
-                //经验界面掉落 5 6 7 8 9 奖励
-                else
-                {
-                    global.msgCenter.sendMsg(LEVEL_UP, null);
-                    global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()], ["cityDefense", addCityDefense]]), null, null);
-                }
-
+                global.msgCenter.sendMsg(LEVEL_UP, null);
+                global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()]]), null, null);
                 addV = 0;
             }
             //增加经验没有升级

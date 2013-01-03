@@ -63,9 +63,6 @@ class FallGoods extends MyNode
     //得到当前屏幕中心 生成 若干 掉落物品
     function getLevelUpFallGoods()
     {
-        //var level = global.user.getValue("level");
-        //kind = 6 7 8 9 10
-
         var leftUp = buildLayer.bg.world2node(200, 100);
         var rightBottom = buildLayer.bg.world2node(global.director.disSize[0]-200, global.director.disSize[1]-100);
         var width = rightBottom[0]-leftUp[0];

@@ -8,25 +8,22 @@ class PlantChoose extends MyNode
     const InitOff = 113;
     function PlantChoose(b)
     {
-        //scene = s;
         building = b;
-        bg = node();
+        bg = node().size(global.director.disSize).setevent(EVENT_TOUCH|EVENT_MOVE|EVENT_UNTOUCH, doNothing);
+        init();
+
         bg.addsprite("plantChoice.png").pos(440, 0);
         var back = bg.addnode().pos(544, 39).size(219, 437).clipping(1);
         flowNode = back.addnode();
         bg.addsprite("plantShadow.png", ARGB_8888).pos(544, 39);
-        //var sc = 330*100/253;
-        //bg.addsprite("goodsChoice.png").pos(807, 119).scale(-sc, sc);
-        var pback = bg.addsprite("plantBack.png").pos(442, 43);
-        new Button(pback, onBack, null);
+        var pback = bg.addsprite("plantBack.png").pos(442, 43).setevent(EVENT_TOUCH, onBack);
 
         initPlant();
 
         showCastleDialog();
     }
-    function onBack(p)
+    function onBack(e, p, x, y, points)
     {
-        //global.director.popView();
         closeCastleDialog();
     }
     var minPos;

@@ -4,6 +4,29 @@ import json
 sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense', 'mapMonster', 'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
+
+sql = 'select * from gold'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+for i in res:
+    sql = "update gold set name = '%s' where id = %d" % (str(i['gaingold'])+' 金币', i['id'])
+    con.query(sql)
+
+sql = 'select * from silver'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+for i in res:
+    sql = "update silver set name = '%s' where id = %d" % (str(i['gainsilver'])+' 银币', i['id'])
+    con.query(sql)
+
+sql = 'select * from crystal'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+for i in res:
+    sql = "update crystal set name = '%s' where id = %d" % (str(i['gaincrystal'])+' 水晶', i['id'])
+    con.query(sql)
+
+
 sql = 'select * from prescriptionNum'
 con.query(sql)
 res = con.store_result().fetch_row(0, 1)
@@ -115,13 +138,17 @@ def hanData(name, data):
         print 'var', name, '=', 'dict(', json.dumps(res), ');'
         return []
 
+    """
     if name == 'mineProduction':
         res = []
         keys = []
         for i in f:
-            res = i.items()
-        print 'var', name, '=', 'dict(', json.dumps(res), ');'
+            keys = i.keys()
+            res.append(i.items())
+        print 'var', name+'Key', '=', json.dumps(keys), ';'
+        print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
         return []
+    """
     if name == 'equipLevel':
         for i in f:
             res = json.loads(i['levelCoff'])
@@ -577,16 +604,55 @@ print 'var', 'storeSoldier', '=', json.dumps(showId), ';'
 
 
 
+
+
 import codecs
 strFile = codecs.open('../data/String.as', 'w', 'utf8')
-con = 'const LANGUAGE = 0;\n'
-con +=  'var strings = dict([\n'
+strCon = 'const LANGUAGE = 0;\n'
+strCon +=  'var strings = dict([\n'
 for n in allNames:
     if type(n[1]) == type([]):
-        con +=  '["'+n[0]+'", ['+'"'+ n[1][0] + '", "'+ n[1][1]+'"]'+'],\n'
+        strCon +=  '["'+n[0]+'", ['+'"'+ n[1][0] + '", "'+ n[1][1]+'"]'+'],\n'
     else:
-        con += '["'+n[0]+'", "'+ n[1]+'"],\n'
-con += ']);'
-strFile.write(con)
+        strCon += '["'+n[0]+'", "'+ n[1]+'"],\n'
+strCon += ']);'
+strFile.write(strCon)
 strFile.close()
 
+StoreGoods = [
+        [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
+        [[0, 0], [0, 1], [0, 10], [0, 12], [0, 224], [0, 300]],
+        [[0, 100], [0, 140], [0, 142], [0, 144], [0, 102], [0, 104], [0, 106], [0, 108], [0, 110], [0, 112], [0, 114], [0, 116], [0, 118], [0, 120], [0, 122], [0, 124], [0, 128], [0, 130], [0, 132], [0, 134], [0, 136], [0, 138], [0, 146], [0, 148], [0, 150], [0, 152], [0, 154], [0, 156], [0, 158], [0, 160], [0, 162], [0, 164], [0, 178]],
+        [[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18], [1, 19], [1, 20], [1, 21], [1, 22], [1, 23], [1, 24], [1, 25], [1, 26], [1, 27], [1, 28], [1, 29], [1, 30], [1, 31], [1, 32], [1, 33], [1, 34], [1, 35], [1, 36], [1, 37], [1, 38], [1, 39], [1, 40], [1, 41], [1, 42], [1, 43], [1, 44], [1, 45], [1, 46], [1, 47], [1, 48], [1, 49], [1, 50], [1, 51], [1, 52], [1, 53], [1, 54], [1, 55], [1, 56], [1, 57], [1, 58], [1, 59], [1, 60], [1, 61], [1, 62], [1, 63], [1, 64], [1, 65], [1, 66], [1, 67], [1, 68], [1, 69], [1, 70], [1, 71], [1, 72], [1, 73], [1, 74], [1, 75], [1, 76], [1, 77], [1, 78], [1, 79], [1, 80], [1, 81], [1, 82], [1, 83], [1, 84], [1, 85], [1, 86], [1, 87], [1, 88], [1, 89], [1, 90], [1, 91], [1, 92], [1, 93], [1, 94], [1, 95], [1, 96], [1, 97], [1, 98], [1, 99], [1, 100], [1, 101], [1, 102], [1, 103], [1, 104], [1, 105], [1, 106], [1, 107], [1, 108], [1, 109], [1, 110], [1, 111], [1, 112], [1, 113], [1, 114], [1, 115], [1, 116], [1, 117], [1, 118], [1, 119], [1, 120], [1, 121], [1, 122], [1, 123], [1, 124], [1, 125], [1, 126], [1, 127], [1, 128], [1, 129], [1, 130], [1, 131], [1, 132], [1, 133]],
+
+        [[2, 1], [2, 4], [2, 10], [2, 13], [2, 21], [2, 24], [2, 31], [2, 34]],
+]
+
+print 'var', 'StoreGoods', '=', json.dumps(StoreGoods), ';'
+
+sql = 'select * from loginReward'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+LoginReward = []
+for i in res:
+    LoginReward.append([i['id'], i['gold']])
+print 'var', 'LoginReward', '=', json.dumps(LoginReward), ';'
+
+AccCost = []
+sql = 'select * from AccCost'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+for i in res:
+    AccCost.append([i['id'], i['gold']])
+print 'var', 'AccCost', '=', json.dumps(AccCost), ';'
+
+HARM_TABLE = [
+[100, 150, 100, 100],
+[100, 100, 150, 100],
+[150, 100, 100, 100],
+[100, 100, 100, 100],
+]
+print 'const', 'HARM_TABLE', '=', json.dumps(HARM_TABLE), ';'
+
+con.commit()
+con.close()

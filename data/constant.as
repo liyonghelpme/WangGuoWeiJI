@@ -217,17 +217,17 @@ var skillAnimate = dict([
 
 
 var buildFunc = dict([
-[FARM_BUILD, [["photo", "sell"], ["acc"]]],
+[FARM_BUILD, [["photo"], ["acc", "sell"]]],
 [HOUSE_BUILD, [["photo"], [ "sell" ]]],//"upgradeBuild"
 [DECOR_BUILD, [["photo"], ["sell"]]],
 [CASTLE_BUILD, [["photo"], ["tip"]]],
 [GOD_BUILD, [["photo"], ["soldier"]]],
 [DRUG_BUILD, [["photo"], ["allDrug"]]],
 [FORGE_SHOP, [["photo"], ["allEquip"]]],
-[MINE_KIND, [["photo", "sell"], ["upgrade"]]],
+[MINE_KIND, [["photo"], ["acc"]]],
 [LOVE_TREE, [["photo", "invite"], ["love", "loveRank"]]],//, "upgradeBuild"
 [RING_FIGHTING, [[], []]],
-[CAMP, [["photo", "sell"], ["call"]]],//accSoldier
+[CAMP, [["photo"], ["call"]]],//accSoldier
 ]);
 
 
@@ -616,7 +616,7 @@ var attEffect = dict([
 var addKey = ["people", "cityDefense", "attack", "defense", "health", "gainsilver", "gaincrystal", "gaingold", "exp", 
     "healthBoundary", "physicAttack", "physicDefense", "magicAttack", "magicDefense", "recoverSpeed",
     "percentHealth", "percentHealthBoundary", "percentAttack", "percentDefense", "effectLevel",
-    "attack", "defense",
+    "attack", "defense", "percentHealth",
     ];
 
 //getCost
@@ -660,6 +660,7 @@ const EXP_GAME_GOODS = 22;
 const EQUIP_SKILL = 23;
 const PARTICLES = 24;
 const LEVEL_MAX_FALL_GAIN = 25;
+const MINE_PRODUCTION = 26;
 
 var ParticleData = [];
 var ParticleKey = [];
@@ -693,6 +694,7 @@ var Keys = [
     equipSkillKey,
     ParticleKey,
     levelMaxFallGainKey,
+    mineProductionKey,
 ];
 var CostData = [
     buildingData,
@@ -721,6 +723,7 @@ var CostData = [
     equipSkillData,
     ParticleData,
     levelMaxFallGainData,
+    mineProductionData,
 ];
 
 //更新商店load_sprite_sheet
@@ -906,7 +909,6 @@ const MAP_ARRANGE = 2;
 
 
 const MAX_BUSI_SOLNUM = 50;
-const SELL_RATE = 10;
 
 /*
 士兵生命值回复 可以缓冲 1分钟再统一发送状态请求
@@ -956,10 +958,6 @@ const EMPTY_SEAT = -2;
 const ADD_NEIBOR_MAX = -3;
 const INVITE_FRIEND = -4;
 
-
-const FRIEND_CRY = 15;
-const PAPAYA_CRY = 10;
-const NEIBOR_CRY = 3;//3* neibornum
 
 const ADD_MAX_CAE = 10;
 const MINE_BUILD = 300;
@@ -1369,23 +1367,6 @@ const TASK_DOING = 0;
 const TASK_CAN_FINISH = 1;
 const TASK_REWARD_YET = 2;
 
-//const SCRIPT_DICT = 6;
-
-const HARM_TABLE = [
-[100, 150, 100, 100],
-[100, 100, 150, 100],
-[150, 100, 100, 100],
-[100, 100, 100, 100],
-];
-
-const DEBUG = 1;
-
-const MINE_UPGRADE_COST = [
-    dict([["silvier", 100]]),
-    dict([["silvier", 100]]),
-    dict([["silvier", 100]]),
-    dict([["silvier", 100]]),
-];
 
 const SOL_SHADOW_SIZE = dict([[1, 1], [2, 2], [3, 3]]);
 

@@ -33,9 +33,8 @@ class HealSkill extends MyNode
         if(passTime >= attackTime)//超过眩晕时间 技能结束 
         {
             var sData = getData(SKILL, skillId);
-            var healEffect = sData.get("effectTime");
+            var healEffect = tar.healthBoundary*sData.get("percentHealth")+sData["health"];
             tar.doHeal(healEffect);
-
             removeSelf();
         }
     }

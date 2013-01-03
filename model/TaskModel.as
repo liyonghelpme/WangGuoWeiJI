@@ -59,7 +59,7 @@ class TaskModel
     //const SLOW_TASK = 3000;
     function update(diff)
     {
-        if(initYet == 0 && initBuyTask && initCycleTask && initDayTask && initNewTask)
+        if(initYet == 0 && initBuyTask && initCycleTask && initNewTask)
         {
             initYet = 1;
             global.msgCenter.sendMsg(UPDATE_TASK, null);
@@ -80,7 +80,6 @@ class TaskModel
     {
         global.msgCenter.registerCallback(INITDATA_OVER, this);
         global.msgCenter.registerCallback(DO_NEW_TASK, this);
-        //global.msgCenter.registerCallback(NEW_TASK_NEXT_STEP, this);
         global.timer.addTimer(this);
     }
 
@@ -89,7 +88,6 @@ class TaskModel
     需要领取奖励的购买任务----》完成之后 显示在 任务对话框页面---》finishTask--->任务对话框更新显示
     */
     var initBuyTask = 0;
-    var initDayTask = 0;
     var newTaskStage = 0;
     //初始化 任务数据
     //当前新手任务完成状态-----> TASKID
@@ -159,7 +157,7 @@ class TaskModel
             }
             else//同一天多次登录 不用初始化 每日任务
             {
-                initDayTask = 1;
+
             }
         }
         //获取当前阶段没有完成的新手任务
