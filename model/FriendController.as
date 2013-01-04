@@ -92,11 +92,18 @@ class FriendController
     {
         return len(neibors);
     }
+    //每个邻居5个士兵 neiborMax*5 = 总水晶数量
+    //每个邻居最多需要消除状态数
+    //每个状态消除 增加水晶数
+    
+    //总士兵数量 = 5 * 邻居总数
+    //剩余士兵数量 = 总士兵数量 - 已经消除士兵数量
     function setNeiborCrystal()
     {
         var addCrystal = global.user.getValue("addNeiborCryNum");
         var neiborMax = global.user.getValue("neiborMax");
-        var leftCrystal = neiborMax*NEIBOR_CRY - addCrystal;
+        var leftCrystal = neiborMax*getParam("MaxCryNum") - addCrystal;
+        var leftNeiborNum = (leftCrystal+getParam("MaxCryNum")-1)/getParam("MaxCryNum");
         var i;
         var p;
         if(len(neibors) == 0)
@@ -105,16 +112,10 @@ class FriendController
         {
             neibors[i].pop("crystal");
         }
-        for(i = 0; i < leftCrystal; i += NEIBOR_CRY)
+        for(i = 0; i < leftNeiborNum; i++)
         {
             p = rand(len(neibors));
-            neibors[p].update("crystal", NEIBOR_CRY);
-        }
-        var rem = leftCrystal%3;
-        if(rem > 0)
-        {
-            p = rand(len(neibors));
-            neibors[p].update("crystal", rem);
+            neibors[p].update("crystal", rand(getParam("MaxCryNum"))+1);
         }
     }
 

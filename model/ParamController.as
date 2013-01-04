@@ -10,9 +10,25 @@ class ParamController
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
         global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
         global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
+        global.httpController.addRequest("getStaticData", dict(["did", "building"]), getStaticData, "building");
+    }
+    function getStaticData(rid, rcode, con, param)
+    {
+        if(rcode != -1)
+        {
+            con = json_loads(con);
+            if(param == "building")
+            {
+                buildingKey = con["key"]; 
+                buildingData = con["data"];
+                Keys[BUILD] = buildingKey;
+                CostData[BUILD] = dict(buildingData);
+            }
+        }
     }
     function fetchOver(rid, rcode, con, param)
     {
+        trace("fetchOver", rid, rcode, con, param);
         if(rcode != -1)
         {
             con = json_loads(con);

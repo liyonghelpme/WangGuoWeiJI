@@ -619,6 +619,12 @@ strCon += ']);'
 strFile.write(strCon)
 strFile.close()
 
+decor = []
+sql = 'select * from building where funcs = 2'
+con.query(sql)
+dec = con.store_result().fetch_row(0, 1)
+for i in dec:
+    decor.append([1, i['id']])
 StoreGoods = [
         [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
         [[0, 0], [0, 1], [0, 10], [0, 12], [0, 224], [0, 300]],
@@ -627,7 +633,7 @@ StoreGoods = [
 
         [[2, 1], [2, 4], [2, 10], [2, 13], [2, 21], [2, 24], [2, 31], [2, 34]],
 ]
-
+StoreGoods[3] = decor
 print 'var', 'StoreGoods', '=', json.dumps(StoreGoods), ';'
 
 sql = 'select * from loginReward'

@@ -568,14 +568,20 @@ class User
     function User()
     {
         lastColor = rand(3);//0 1 2 兵营随机颜色 0 本色 1 特征色本色 2 特征色变化色
-        papayaId = ppy_userid();
-        if(papayaId == null)
-            return;
-        papayaName = ppy_username();
+        if(DEBUG)
+        {
+            papayaId = 0;
+            papayaName = "测试游戏";
+        }
+        else
+        {
+            papayaId = ppy_userid();
+            if(papayaId == null)
+                return;
+            papayaName = ppy_username();
+        }
         db = c_opendb();
-
         tempSetData();
-        //updateList = [];
     }
     function getPeopleNum()
     {

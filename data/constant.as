@@ -1370,3 +1370,5 @@ const TASK_REWARD_YET = 2;
 
 const SOL_SHADOW_SIZE = dict([[1, 1], [2, 2], [3, 3]]);
 
+//测试中， 不使用木瓜帐号
+const DEBUG = 1;
