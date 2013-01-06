@@ -53,7 +53,9 @@ class FriendSoldier extends MoveSoldier
 
         bg.size(bSize).anchor(50, 100).pos(524, 303);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
-        shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
+
+        var ss = SOL_SHADOW_SIZE.get(data["sx"], 3);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
 
         changeDirNode.add(shadow, -1);
 
@@ -115,7 +117,7 @@ class FriendSoldier extends MoveSoldier
 
             var temp = bg.addnode();
             temp.addsprite("crystal.png").anchor(0, 50).pos(0, -30).size(30, 30);
-temp.addlabel("+" + str(1), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
+            temp.addlabel("+" + str(cry), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
 
             global.taskModel.doAllTaskByKey("friendStatus", 1);

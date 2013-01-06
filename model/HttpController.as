@@ -17,7 +17,7 @@ class HttpController
     }
     function addRequest(req, postData, handler, param)
     {
-//        trace("addRequest", req, handler, postData, param);
+        trace("addRequest", req, handler, postData, param);
         requestList.append([req, handler, postData, param]);
         doRequest();
     }

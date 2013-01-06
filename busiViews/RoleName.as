@@ -75,7 +75,7 @@ class RoleName extends MyNode
             warnText.visible(1);
             return;
         }
-        if(LANGUAGE == 0)
+        if(getParam("Language") == 0)
         {
             if(len(n) > 12)//3*4
             {

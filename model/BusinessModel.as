@@ -226,7 +226,7 @@ function calAccCost(leftTime)
 {
     for(var i = 0; i < (len(AccCost)-1); i++)
     {
-        if(AccCost[i][0] > i)
+        if(AccCost[i][0] > leftTime)
             break;
     }
     i--;
@@ -235,5 +235,9 @@ function calAccCost(leftTime)
     var beginGold = AccCost[i][1];
     var endGold = AccCost[i+1][1];
     var needGold = beginGold + leftTime*(endGold-beginGold)/(endTime-beginTime);
+    //至少消耗1个金币
+    if(leftTime > 0)    
+        needGold = max(needGold, 1);
+    printD(["calAccCost", needGold, leftTime]);
     return needGold;
 }

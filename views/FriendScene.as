@@ -59,6 +59,7 @@ class MovLayer extends MoveMap
         var val = sol.values();
         //访问好友有水晶可拿
         //好友拥有的水晶数量
+        trace("randSoldier cry", scene.crystal);
         for(var i = 0; i < len(val); i++)
         {
             var hasCry = 0;
@@ -73,11 +74,13 @@ class MovLayer extends MoveMap
     }
     function initBuildings()
     {
+        printD(["initBuildings", scene.buildings]);
         for(var i = 0; i < len(scene.buildings); i++)
         {
+
             var pdata = scene.buildings[i];
             var b = new Building(this, getData(BUILD, pdata["id"]), pdata);
-            b.setBid(-1);
+            b.setBid(FRIEND_MINE);
             b.setPos([pdata.get("px"), pdata.get("py")]);
             addChild(b);
 
@@ -153,6 +156,10 @@ class FriendScene extends MyNode
         {
             global.user.setLastVisitNeibor(curNum+1);
         }
+        else if(kind == VISIT_OTHER)
+        {
+            global.user.setLastVisitOther(curNum+1);
+        }
         //访问邻居但是数据没有初始化 好友模块在登录时应该初始化邻居数据  && kind == VISIT_NEIBOR
         //点击上方浮动岛屿 没有初始化 邻居数据时  需要等待
         initData();
@@ -180,6 +187,8 @@ class FriendScene extends MyNode
 
         if(kind == VISIT_NEIBOR)
             global.user.setLastVisitNeibor(curNum);
+        else if(kind == VISIT_OTHER)
+            global.user.setLastVisitOther(curNum);
 
         if(curNum >= len(friends))
         {
@@ -198,8 +207,12 @@ class FriendScene extends MyNode
     function makeFakeBuilding()
     {
         trace("building data", user);
-        buildings.append(dict([["id", PARAMS["mineId"]], ["px", 768], ["py", 352], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", mineLevel], ["color", 0] ]));
+        //访问没有获取到数据的好友
+        if(mineLevel != null)
+            buildings.append(dict([["id", PARAMS["mineId"]], ["px", 768], ["py", 352], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", mineLevel], ["color", 0] ]));
+
         //buildings.append(dict([ ["id", PARAMS["loveTreeId"]], ["px", 480], ["py", 416], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", heartLevel], ["color", 0]  ] ));
+        trace("buildings", buildings);
     }
 
     function helpOpen()

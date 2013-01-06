@@ -147,9 +147,6 @@ class BusiSoldier extends MyNode
         bg.size(bSize).anchor(50, 100).pos(oldPos);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
-        //shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
-        //.size(data.get("shadowSize"), 32);
-        //shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
 
         var ss = SOL_SHADOW_SIZE.get(data["sx"], 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);

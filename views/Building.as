@@ -78,8 +78,6 @@ class Building extends MyNode
         else if(funcs == DECOR_BUILD)
             funcBuild = new Decor(this);
         //取消static 木板建筑
-        //else if(funcs == STATIC_BOARD)
-        //    funcBuild = new StaticBuild(this); 
         //是否进入工作状态由用户等级决定----> Free 状态/工作状态 ----->
         //initWorking ---> level> and Not MoveState
         else if(funcs == MINE_KIND)
@@ -96,7 +94,6 @@ class Building extends MyNode
         }
         else 
             funcBuild = new Castle(this);
-
 
         if(funcs == MINE_KIND)
         {
@@ -129,10 +126,6 @@ class Building extends MyNode
 
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
-        //.pos(ZoneCenter[kind][0], ZoneCenter[kind][1]).anchor(50, 100);
-        
-
-
         dir = privateData.get("dir", 0);
         setState(privateData.get("state", PARAMS["buildMove"]));
         setDir(dir);
@@ -140,7 +133,6 @@ class Building extends MyNode
         var npos = normalizePos(bg.pos(), sx, sy);
         setPos(npos);
         setColPos();
-
 
         /*
         初始化农作物 工作状态
@@ -157,7 +149,6 @@ class Building extends MyNode
             aniNode = new BuildAnimate(this);
             changeDirNode.add(aniNode.bg);
         }
-
 
         //alphatouch 变向node
         changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -474,12 +465,15 @@ class Building extends MyNode
     var accMove = 0;
     function touchBegan(n, e, p, x, y, points)
     {
+
         accMove = 0;
         lastPoints = n.node2world(x, y);         
         
         //如果当前显示了菜单则再次点击是关闭菜单
         if(!showMenuYet)
             map.touchBegan(n, e, p, x, y, points); 
+        
+
 
 
         if(Planing)
@@ -631,6 +625,8 @@ class Building extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
+        
+
         var oldShowMenuYet = showMenuYet;
         var ret;
         if((state == PARAMS["buildMove"]) || Planing)

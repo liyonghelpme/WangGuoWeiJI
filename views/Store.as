@@ -15,7 +15,7 @@ class Store extends MyNode
     //5 crystal
     //6 plant
 
-    var allGoods = StoreGoods;
+    var allGoods;
     var pics = [
      "goodTreasure.png", "goodBuild.png", "goodDecor.png",  "goodWeapon.png", "goodMagic.png",
     ];
@@ -27,6 +27,7 @@ class Store extends MyNode
     var cryText;
     function Store(s)
     {
+        allGoods = StoreGoods;
         //be care of cycle reference problem
         //scene = s;
 

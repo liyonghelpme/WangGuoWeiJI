@@ -75,7 +75,7 @@ class FriendController
         var leftCrystal = getParam("FriendCrystal") - addCrystal;
         var leftFriendNum = (leftCrystal+getParam("MaxCryNum")-1)/getParam("MaxCryNum");
         var i;
-        if(len(recommandFriends) == 0)
+        if(recommandFriends == null)
             return;
         for(i = 0; i < len(recommandFriends); i++)
         {
@@ -121,24 +121,26 @@ class FriendController
 
     /*
     消除掉1个好友士兵的负面状态
+    每次弹出新的 好友界面刷新
     */
-    function helpFriend(uid, k, cry)
+    function realHelpFriend(uid, k, cry)
     {
-        global.user.changeValue("crystal", cry);
-        //点击下一个 将会得到下一个好友的数据 需要同步好友的水晶
-        //在士兵页面显示水晶的时候加上数量限制
         var i;
+        trace("realHelpFriend", uid, k, cry);
         if(k == VISIT_PAPAYA)
         {
             for(i = 0; i < len(showFriend); i++)
             {
                 if(showFriend[i]["uid"] == uid)
                 {
-                    showFriend[i]["crystal"] -= 1;
+                    showFriend[i]["crystal"] -= 1;i
+                    if(showFriend[i]["crystal"] == 0)
+                        showFriend[i].pop("crystal");
+                    global.user.changeValue("addPapayaCryNum", 1);
                     break;
                 }
             }
-            global.user.changeValue("addPapayaCryNum", 1);
+
         }
         else if(k == VISIT_NEIBOR)
         {
@@ -147,10 +149,12 @@ class FriendController
                 if(neibors[i]["uid"] == uid)
                 {
                     neibors[i]["crystal"] -= 1;
+                    if(neibors[i]["crystal"] == 0)
+                        neibors[i].pop("crystal");
+                    global.user.changeValue("addNeiborCryNum", 1);
                     break;
                 }
             }
-            global.user.changeValue("addNeiborCryNum", 1);
         }
         else if(k == VISIT_RECOMMAND)
         {
@@ -159,10 +163,29 @@ class FriendController
                 if(recommandFriends[i]["uid"] == uid)
                 {
                     recommandFriends[i]["crystal"] -= 1;
+                    if(recommandFriends[i]["crystal"] == 0)
+                        recommandFriends[i].pop("crystal");
+                    global.user.changeValue("addFriendCryNum", 1);
                     break;
                 }
             }
-            global.user.changeValue("addFriendCryNum", 1);
+        }
+    }
+    function helpFriend(uid, k, cry)
+    {
+        global.user.changeValue("crystal", cry);
+        //点击下一个 将会得到下一个好友的数据 需要同步好友的水晶
+        //在士兵页面显示水晶的时候加上数量限制
+        var i;
+        trace("help Friend eliminate crystal", uid, k, cry);
+        if(k == VISIT_OTHER)
+        {
+            realHelpFriend(uid, VISIT_PAPAYA, cry);
+            realHelpFriend(uid, VISIT_RECOMMAND, cry);
+        }
+        else
+        {
+            realHelpFriend(uid, k, cry);
         }
     }
 
@@ -573,6 +596,26 @@ class FriendController
             getPapa = 1;
         }
     }
+    function getOtherFriend()
+    {
+        var papaya = getPapayaList();
+        var recommand = getRecommand();
+        var data = copy(papaya);
+        if(len(papaya) >= getParam("MaxFriendNum"))
+        {
+        }
+        else
+        {
+            for(var i = 0; i < len(recommand) && len(data) < getParam("MaxFriendNum"); i++)
+            {
+                data.append(copy(recommand[i]));
+            }
+        }
+        return data;
+    }
+    //检测当前访问的uid好友是否是kind类型列表最后一位 
+    //不是返回下一位数据
+    //是返回null
     function getFriends(k)
     {
         if(k == VISIT_PAPAYA)
@@ -581,6 +624,8 @@ class FriendController
             return neibors;
         if(k == VISIT_RECOMMAND)
             return recommandFriends;
+        if(k == VISIT_OTHER)
+            return getOtherFriend(); 
         return [];
     }
     //fid level

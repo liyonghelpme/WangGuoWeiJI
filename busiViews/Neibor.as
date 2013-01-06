@@ -25,16 +25,22 @@ class Neibor extends FriendList
         data = global.friendController.getNeibors();
         //setCrystal();//只在邻居数据中增加水晶
         data = copy(data);
+        var i;
+        //设定每个好友的实际编号
+        for(i = 0; i < len(data); i++)
+        {
+            data[i].update("curNum", i);
+        }
 
         var neiborMax = global.user.getValue("neiborMax");
 
         if(neiborMax > len(data))
         {
-            for(var i = 0; i < (neiborMax-len(data)); i++)
-                data.append(dict([["uid", EMPTY_SEAT], ["id", -1], ["name", getStr("emptySeat", null)], ["level", 0]]));
+            for(i = 0; i < (neiborMax-len(data)); i++)
+                data.append(dict([["uid", EMPTY_SEAT], ["id", -1], ["name", getStr("emptySeat", null)], ["level", 0], ["curNum", -1]]));
         }
         //增加邻居上限
-        data.append(dict([["uid", ADD_NEIBOR_MAX], ["id", -1], ["name", getStr("addNeiborMax", null)], ["level", 0]]));
+        data.append(dict([["uid", ADD_NEIBOR_MAX], ["id", -1], ["name", getStr("addNeiborMax", null)], ["level", 0], ["curNum", -1]]));
         trace("neiborMax", neiborMax, len(data));
     }
     override function updateData()

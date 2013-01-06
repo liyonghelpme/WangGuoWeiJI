@@ -85,9 +85,11 @@ class FriendList extends MyNode
         accMove += abs(dify);
     }
 
-
+    //数据未初始化
     function touchEnded(n, e, p, x, y, points)
     {
+        if(data == null)    
+            return;
         var newPos = n.node2world(x, y);
         if(accMove < 10)
         {
@@ -109,6 +111,10 @@ class FriendList extends MyNode
         flowNode.pos(curPos);
         updateTab();
     }
+    //修正好友数据的编号
+    //otherPlayer： 第一格子显示 邀请好友图标 所以需要手动修正-1
+    //邻居页面不需要修正 因为邻居的空位功能图标在后面
+    //或者 查找用户的 UID 来确定位置
     function getRange()
     {
         var curPos = flowNode.pos();
@@ -141,7 +147,7 @@ class FriendList extends MyNode
                 panel.put(curNum);
 
                 var papayaId = data[curNum].get("id");
-                var level = data[curNum].get("level");
+                var level = data[curNum].get("level", 0);
                 var name = data[curNum].get("name");
                 
                 if(data[curNum].get("uid") == ADD_NEIBOR_MAX)
@@ -168,12 +174,12 @@ class FriendList extends MyNode
 
                     if(data[curNum].get("crystal") != null)
                     {
-                        var temp = picNumWord(getStr("getCrystal", ["[KIND]", "crystal.png"]), 22, [28, 15, 4]).pos(35, 22);//文字相对于node是0 50
+                        var temp = picNumWord(getStr("getCrystal", ["[KIND]", "crystal.png"]), 22, [28, 15, 4]).pos(74, 22).anchor(50, 0);//文字相对于node是0 50
                         panel.add(temp);
                     }
 
                     panel.addsprite("levelStar.png").anchor(0, 0).pos(85, 41).size(31, 31).color(100, 100, 100, 100);
-                    panel.addlabel(str(level), "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
+                    panel.addlabel(str(level+1), "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
                 }
 
                 if(curNum == selectNum)
@@ -242,16 +248,9 @@ class FriendList extends MyNode
     {
         global.director.popView();
         var papayaId = data[curNum].get("id");
-        var friendScene = new FriendScene(papayaId, curNum, friendKind, data[curNum].get("crystal"), data[curNum]);
+        //修正好友的编号
+        var friendScene = new FriendScene(papayaId, data[curNum]["curNum"], friendKind, data[curNum].get("crystal"), data[curNum]);
         global.director.emptyScene.addChildZ(friendScene, -1);
-        /*
-        if(scene.kind == FRIEND_DIA_HOME)
-        {
-            //global.director.pushScene(friendScene);
-        }
-        else if(scene.kind == FRIEND_DIA_INFRIEND)
-            //global.director.replaceScene(friendScene);
-        */
         global.director.pushView(new VisitDialog(friendScene, scene.kind), 1, 0);
     }
 

@@ -142,18 +142,29 @@ class CastlePage extends MyNode
         {
             day = 1;
         }
+
+
+
         var reward = null;
         //first login Today
         if(day >= 1)
         {
             //每天第一次登录清理推荐数据 
             global.user.db.remove("recommand");
-            //global.friendController.firstLogin();
-
             reward = getLoginReward(day);
-            if(global.taskModel.newTaskStage >= getParam("showFinish"))
-                global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
             
+            trace("getParam DEBUG", getParam("DEBUG"), getParam("debugLoginReward"), day);
+            if(getParam("DEBUG"))
+            {
+                //测试登录奖励
+                global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+            }
+            else
+            {
+                if(global.taskModel.newTaskStage >= getParam("showFinish"))
+                    global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+            }
+        
             //每周第一次登录 发送登录每天任务完成提示
         }
         trace("finishLoginReward", day);
@@ -166,11 +177,6 @@ class CastlePage extends MyNode
         }
         trace("finishBox onMap");
 
-        /*
-        dialogController.addCmd(dict([["cmd", "update"]]));
-        dialogController.addCmd(dict([["cmd", "heart"]]));
-        dialogController.addCmd(dict([["cmd", "loveUpgrade"], ["level", 0]]));
-        */
         //新手任务完成才检测是否下载图片
         if(global.taskModel.newTaskStage >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
         {

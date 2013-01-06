@@ -29,7 +29,7 @@ function getStr(key, rep)
 
     if(type(s) == type([]))
     {
-        s = s[LANGUAGE];
+        s = s[getParam("Language")];
     }
 //    trace("getStr", key, rep, s);
     if(type(rep) == type([]))
@@ -1104,12 +1104,14 @@ function showFullBack()
 
 function checkFirstLogin()
 {
+
     var loginTime = global.user.getValue("loginTime");
     var serverTime = global.user.serverTime;
     var lastDay = loginTime/(3600*24);
     var today = serverTime/(3600*24);
     var diff = today - lastDay;
     
+    trace("checkFirstLogin", diff);
     //连续两次登录相差:1天 多天
     return diff;
 }
@@ -1249,4 +1251,10 @@ function showMultiPopBanner(showData)
             continue;
         global.director.curScene.dialogController.addBanner(new UpgradeBanner(w, [100, 100, 100], null));
     }
+}
+//不支持变长度参数
+function printD(con)
+{
+    if(getParam("DEBUG"))
+        trace(con);
 }

@@ -171,9 +171,10 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
         //var userLevel = global.user.getValue("level");
         //等级足够开启建筑物
         //userLevel >= PARAMS["MineMinLevel"] && 
-        if(baseBuild.state != PARAMS["buildMove"])//非移动状态
+        //if(baseBuild.state != PARAMS["buildMove"])//非移动状态
+        if(baseBuild.state == PARAMS["buildWork"])
         {
-            baseBuild.setState(PARAMS["buildWork"]);
+            //baseBuild.setState(PARAMS["buildWork"]);
             var startTime = data.get("objectTime");//serverTime 秒为单位
             startTime = server2Client(startTime); 
             //trace("startTime", data.get("objectTime"), startTime);//objectTime 
@@ -203,9 +204,10 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
         var userLevel = global.user.getValue("level");
         //等级足够开启建筑物
         //userLevel >= PARAMS["MineMinLevel"] && 
-        if(baseBuild.state != PARAMS["buildMove"])//非移动状态
+        //if(baseBuild.state != PARAMS["buildMove"])//非移动状态
+        if(baseBuild.state == PARAMS["buildWork"])
         {
-            baseBuild.setState(PARAMS["buildWork"]);
+            //baseBuild.setState(PARAMS["buildWork"]);
             var startTime = time()/1000; 
             var privateData = dict([["objectTime", startTime]]);//客户端时间 
             planting = new MinePlant(baseBuild, privateData);

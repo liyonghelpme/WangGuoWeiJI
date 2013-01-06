@@ -25,20 +25,15 @@ class OtherPlayer extends FriendList
 
     //第一个位置邀请好友
     //得到100个推荐好友 和 所有的 我方好友之后 初始化结束
+    //设定每个好友数据的内部编号
     override function updateData()
     {
-        data = copy(papayaFriend);
-        if(len(papayaFriend) >= 100)
+        data = global.friendController.getOtherFriend();
+        for(var i = 0; i < len(data); i++)
         {
+            data[i].update("curNum", i);
         }
-        else
-        {
-            for(var i = 0; i < len(recommand) && len(data) < 100; i++)
-            {
-                data.append(recommand[i]);
-            }
-        }
-        data.insert(0, dict([["uid", INVITE_FRIEND], ["id", -1], ["name", getStr("emptySeat", null)], ["level", 0]]));
+        data.insert(0, dict([["uid", INVITE_FRIEND], ["id", -1], ["name", getStr("emptySeat", null)], ["level", 0], ["curNum", -1]]));
     }
 
     override function initData()

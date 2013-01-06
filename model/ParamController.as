@@ -10,7 +10,7 @@ class ParamController
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
         global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
         global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
-        global.httpController.addRequest("getStaticData", dict(["did", "building"]), getStaticData, "building");
+        global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
     }
     function getStaticData(rid, rcode, con, param)
     {

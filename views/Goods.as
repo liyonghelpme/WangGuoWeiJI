@@ -106,7 +106,7 @@ class Goods extends MyNode
             buildPic.texture(buildPicName, BLACK);
             panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
             
-            var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
+            var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [0, 100, 0]);
             cw.anchor(50, 50).pos(75, 97);
             panel.add(cw); 
 

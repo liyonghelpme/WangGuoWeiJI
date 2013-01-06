@@ -290,7 +290,7 @@ class CallSoldier extends MyNode
             var total = objectList[0][1]*sData["time"];
             var startTime = scene.funcBuild.objectTime;
             var leftTime =  total - (time()/1000 - startTime);
-            return (leftTime+3599)/3600;
+            return calAccCost(leftTime);
         }
         return 0;
     }

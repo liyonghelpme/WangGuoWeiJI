@@ -42,6 +42,7 @@ class FriendMenu extends MyNode
 
 
         var friends = global.friendController.getFriends(scene.kind);
+        trace("FriendMenu", scene.curNum, len(friends));
         if(scene.curNum == -1 || scene.curNum >= (len(friends)-1) )
         {
             temp = bg.addsprite("friendNextBut.png", GRAY).anchor(0, 0).pos(637, -1).size(142, 93).color(100, 100, 100, 100);
@@ -58,7 +59,7 @@ class FriendMenu extends MyNode
         temp = bg.addsprite(avatar_url(scene.user["id"])).anchor(0, 0).pos(28, 26).size(55, 55).color(100, 100, 100, 100);
         bg.addlabel(scene.user["name"], "fonts/heiti.ttf", 21).anchor(0, 50).pos(100, 35).color(100, 100, 100);
 
-        bg.addlabel(getStr("friLevel", ["[NUM]", str(scene.user["level"])]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(103, 67).color(0, 0, 0);
+        bg.addlabel(getStr("friLevel", ["[NUM]", str(scene.user["level"]+1)]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(103, 67).color(0, 0, 0);
         if(scene.kind == VISIT_RANK)
             bg.addlabel(getStr("friRank", ["[NUM]", str(scene.user["rank"])]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(251, 66).color(0, 0, 0);
         //是否gray

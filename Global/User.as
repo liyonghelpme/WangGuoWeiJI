@@ -27,6 +27,7 @@ class User
     var clientTime;
 
     var lastVisitNeibor = 0;
+    var lastVisitOther = 0;
 
     var maxGiftId = 0;
     var skills;
@@ -525,11 +526,22 @@ class User
             lastVisitNeibor = 0;
             db.put("lastVisitNeibor", lastVisitNeibor);
         }
+        lastVisitOther = db.get("lastVisitOther");
+        if(lastVisitOther == null)
+        {
+            lastVisitOther = 0;
+            db.put("lastVisitOther", lastVisitOther);
+        }
     }
     function setLastVisitNeibor(p)
     {
         lastVisitNeibor = p;
         db.put("lastVisitNeibor", lastVisitNeibor);
+    }
+    function setLastVisitOther(p)
+    {
+        lastVisitOther = 0;
+        db.put("lastVisitOther", lastVisitOther);
     }
 
 
@@ -568,18 +580,11 @@ class User
     function User()
     {
         lastColor = rand(3);//0 1 2 兵营随机颜色 0 本色 1 特征色本色 2 特征色变化色
-        if(DEBUG)
-        {
-            papayaId = 0;
-            papayaName = "测试游戏";
-        }
-        else
-        {
-            papayaId = ppy_userid();
-            if(papayaId == null)
-                return;
-            papayaName = ppy_username();
-        }
+        papayaId = ppy_userid();
+        if(papayaId == null)
+            return;
+        papayaName = ppy_username();
+
         db = c_opendb();
         tempSetData();
     }

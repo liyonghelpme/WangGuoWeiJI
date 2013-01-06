@@ -14,13 +14,6 @@ const InZone = 1;
 const NotSmallZone = 2;
 
 //需要与 PARAMS 中进行 数据进行同步
-/*
-const Moving = 0;
-const Free = 1;
-const Working = 2;
-const ShowMenuing = 4;
-const Wait_Lock = 5;
-*/
 
 
 //植物的生长状态
@@ -1371,4 +1364,6 @@ const TASK_REWARD_YET = 2;
 const SOL_SHADOW_SIZE = dict([[1, 1], [2, 2], [3, 3]]);
 
 //测试中， 不使用木瓜帐号
-const DEBUG = 1;
+
+//好友的水晶矿编号
+const FRIEND_MINE = -1;
