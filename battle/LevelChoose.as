@@ -93,37 +93,10 @@ class LevelChoose extends MyNode
     {
         scene.gotoIsland(0);//飞回 主界面
     }
-    /*
-    function initData()
-    {
-        data = [];
-
-        var enable = checkBigEnable(big);
-        for(var i = 0; i < 22; i++)
-        {
-            if(enable == 0)
-            {
-                if(i == 0)
-                    data.append([0, -1]);//0 not open 1 open -1 showData
-                else
-                    data.append([0, 0]);
-            }
-            else
-            {
-                if(i < 10)
-                    data.append([rand(4), 1]);
-                else 
-                {
-                    data.append([0, 0]);
-                }
-            }
-        }
-    }
-    */
     function updateStar()
     {
         var enable = checkBigEnable(big);
-        var total = PARAMS.get("smallNum")*3;
+        var total = PARAMS.get("smallNum")*getParam("levelMaxStar");
         if(enable)
         {
             var curStar = 0;
@@ -147,10 +120,11 @@ class LevelChoose extends MyNode
         data = [];
         var enable = checkBigEnable(big);
         var i;
+        //没有开启该关卡
         if(enable == 0)
         {
-            data.append([0, -1]);//0 not open 1 open -1 showData
-            for(i = 1; i < PARAMS.get("smallNum"); i++)
+            //data.append([0, -1]);//0 not open 1 open -1 showData
+            for(i = 0; i < PARAMS.get("smallNum"); i++)
             {
                 data.append([0, 0]);
             }
@@ -221,7 +195,7 @@ class LevelChoose extends MyNode
 
 
                 panel.addsprite("lock0.png").pos(26, 28).anchor(50, 50).size(25, 30);
-panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
+                panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
                 panel.addsprite("star.png").anchor(50, 50).pos(62, 70).size(33, 31);
                 var starLevel = stringLines(getStr("starLevel", ["[STAR]", str(mData.get("needStar")), "[LEV]", str(mData.get("needLevel"))]), 18, 21, [100, 100, 100], FONT_NORMAL);
                 panel.add(starLevel);

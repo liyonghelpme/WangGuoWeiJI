@@ -320,6 +320,7 @@ import model.SoldierAI;
 import model.SoldierModel;
 import model.BusinessModel;
 import model.RoundModel;
+import model.RoundMonsterGen;
 import model.RoundGridController;
 import model.MapGridController;
 

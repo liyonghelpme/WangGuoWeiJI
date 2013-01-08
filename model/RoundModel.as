@@ -1,3 +1,4 @@
+/*
 //Map big 已经-1  因为0是村子
 function getRoundMonster(big, small)
 {
@@ -16,11 +17,17 @@ function getRoundMonster(big, small)
     trace("mapMonster", res);
     return res;
 }
+*/
+//id = big *100 + small  比较合适 可以扩展
+function getRoundMonster(big, small)
+{
+    return realGenRoundMonster(big*getParam("MapMonsterNumCoff")+small);
+}
 //1 大关奖励 1个 
 //2 大关奖励 2 个
 function getMapReward(big, small)
 {
-    return dict([["crystal", big*10+small+1], ["silver", 10*(big*10+small+1)]]);
+    return getGain(ROUND_MAP_REWARD, big*getParam("MapMonsterNumCoff")+small);
 }
 
 /*
@@ -187,7 +194,7 @@ function getTotalStar(big)
 //0 1 2 3 4
 function checkBigEnable(big)
 {
-    if(big < 0)
+    if(big <= 0)
         return 1;
 
     var star = global.user.starNum;
@@ -196,9 +203,9 @@ function checkBigEnable(big)
     if(unlockLevel.count(big) > 0)
         return 1;
 
-    //满足等级 和 星星需求
-    var mData = getData(MAP_INFO, big);
-    if(mData.get("needLevel") <= global.user.getValue("level") && mData.get("needStar") <= getTotalStar(big-1))
+    //前一关卡所有小关都闯过
+    var lastRound = star[big-1];
+    if(lastRound[len(lastRound)-1] > 0)
         return 1;
 
     return 0;

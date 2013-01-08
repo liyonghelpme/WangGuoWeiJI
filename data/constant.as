@@ -654,6 +654,8 @@ const EQUIP_SKILL = 23;
 const PARTICLES = 24;
 const LEVEL_MAX_FALL_GAIN = 25;
 const MINE_PRODUCTION = 26;
+const ROUND_MONSTER_NUM = 27;
+const ROUND_MAP_REWARD = 28;
 
 var ParticleData = [];
 var ParticleKey = [];
@@ -688,7 +690,10 @@ var Keys = [
     ParticleKey,
     levelMaxFallGainKey,
     mineProductionKey,
+    RoundMonsterNumKey,
+    RoundMapRewardKey,
 ];
+
 var CostData = [
     buildingData,
     equipData,
@@ -717,6 +722,8 @@ var CostData = [
     ParticleData,
     levelMaxFallGainData,
     mineProductionData,
+    RoundMonsterNumData,
+    RoundMapRewardData,
 ];
 
 //更新商店load_sprite_sheet

@@ -23,21 +23,6 @@ class ChallengeFail extends MyNode
         board = bg.addsprite("dialogRoundOver.png").anchor(50, 50).pos(398, 201).size(542, 403).color(100, 100, 100, 100);
 
         //按照用户损失奖励 水晶和银币？ 失败 不应该奖励
-        /*
-        var its = param["reward"].items();
-        var rewStr = "";
-        for(i = 0; i < len(its); i++)
-        {   
-            if(i < (len(its)-1))
-            {
-                rewStr += str(its[i][1])+getStr(its[i][0], null)+"、";   
-            }
-            else
-                rewStr += str(its[i][1])+getStr(its[i][0], null);   
-        }
-
-        temp = bg.addlabel(getStr("youGetReward", ["[REWARDS]", rewStr]), "fonts/heiti.ttf", 17, FONT_NORMAL, 329, 0, ALIGN_LEFT).anchor(0, 0).pos(209, 245).color(11, 11, 11);
-        */
 
         var sols = param.get("deadSols");
         if(len(sols) > 0)
@@ -97,16 +82,7 @@ class ChallengeFail extends MyNode
     function tryAgain()
     {
         global.director.popScene();
-        var mon = getRoundMonster(map.kind, map.small);
-        var argument = dict([["big", map.kind], ["small", map.small], ["soldier", mon]]);
-        global.director.pushScene(new BattleScene(argument));
-        /*
-        map.kind,  map.small,
-            mon,
-            CHALLENGE_MON, null, null
-            )
-        );
-        */
+        global.director.pushScene(new BattleScene(map.scene.argument));
     }
     function onQuit()
     {

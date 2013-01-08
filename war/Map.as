@@ -15,7 +15,6 @@ class Map extends MyNode
     var walkZone = 
     [MAP_INITX+MAP_OFFX/2, MAP_INITY+MAP_OFFY, MAP_INITX+MAP_OFFX*12+MAP_OFFX/2, MAP_INITY+MAP_OFFY*5];
 
-
     /*
     gx*10000+gy = 士兵key
     */
@@ -186,9 +185,9 @@ class Map extends MyNode
     {
         var myDef = defenses[0];
         var leftHealth = myDef.health;
-        if(leftHealth == myDef.healthBoundary)
+        if(leftHealth >= myDef.healthBoundary*getParam("3Star"))
             return 3;
-        if(leftHealth >= myDef.healthBoundary*80/100)
+        if(leftHealth >= myDef.healthBoundary*getParam("2Star")/100)
             return 2;
         return 1;
     }
@@ -205,6 +204,12 @@ class Map extends MyNode
             challengeOver(0, 0, null, deadSols);
         else 
             challengeOver(1, getStar(), reward, deadSols);
+    }
+    function quitFail()
+    {
+        var deadSols = getAllDeadSol();
+        stopGame();
+        challengeOver(0, 0, null, deadSols);
     }
     /*
     color kind

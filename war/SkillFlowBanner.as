@@ -71,9 +71,6 @@ class SkillFlowBanner extends MyNode
     temp = bg.addsprite("mapSel.png").anchor(0, 0).pos(12, 403).size(71, 70).color(100, 100, 100, 100);
     */
 
-    const ARROW_WID = 56;
-    const ARROW_HEI = 56;
-    var arrow;
     function initView()
     {
         bg = node();
@@ -85,7 +82,6 @@ class SkillFlowBanner extends MyNode
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
 
-        arrow = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(INITX+ARROW_WID/2+OFFX*ITEM_NUM, INITY+ARROW_HEI/2).size(ARROW_WID, ARROW_HEI).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onArr);
     }
     var attributeList = null;
     function SkillFlowBanner(s)
@@ -247,8 +243,9 @@ class SkillFlowBanner extends MyNode
                 global.httpController.addRequest("soldierC/useDrugInRound", dict([["uid", global.user.uid], ["tid", drugData[selNum][0]]]), null, null);
                 global.user.changeGoodsNum(DRUG, drugData[selNum][0], -1);
                 var num = global.user.getGoodsNum(DRUG, drugData[selNum][0]);
-                if(num <= 0)
-                    drugData.pop(selNum);
+                //用光则变灰色
+                //if(num <= 0)
+                //    drugData.pop(selNum);
             }
             updateSkillPanel(soldier);
         }
@@ -299,7 +296,15 @@ class SkillFlowBanner extends MyNode
                 if(kind == SKILL)
                     ready = skillList[selNum][3];
                 else if(kind == DRUG)
+                {
                     ready = drugData[selNum][3];
+                    var num = global.user.getGoodsNum(DRUG, drugData[selNum][0]);
+                    if(num <= 0)//药品数量不足则不可点击
+                    {
+                        ready = 0;
+                    }
+                }
+
                 if(ready)//技能 药品已经准备完善
                 {
                     if(selSkill == child)//新选择如果和当前选择技能一致则取消技能
@@ -326,6 +331,7 @@ class SkillFlowBanner extends MyNode
 
     function touchMoved(n, e, p, x, y, points)
     {
+        /*
         var oldPos = lastPoints;
         lastPoints = n.node2world(x, y);
         var difx = lastPoints[0]-oldPos[0];
@@ -335,6 +341,7 @@ class SkillFlowBanner extends MyNode
         flowNode.pos(curPos);
 
         accMove += abs(difx);
+        */
     }
 
     var selSkill = null;
@@ -356,7 +363,7 @@ class SkillFlowBanner extends MyNode
             var selectNum = curSel.get()[1];
             //当前没有选择技能 则选择技能
             var w = "";
-            var sdata;
+            var sdata = null;
             if(kind == DRUG)
             {
                 var dData = getData(DRUG, drugData[selectNum][0]);
@@ -434,25 +441,6 @@ class SkillFlowBanner extends MyNode
         flowNode.removefromparent();
         flowNode = cl.addnode().pos(oldPos); 
 
-        //展开
-        if(arrState == 0)
-        {
-            arrow.scale(-100, 100);
-            //arrow.pos(622, 440);
-            if((len(skillList)+len(drugData)) < ITEM_NUM)
-            {
-                arrow.pos(INITX+ARROW_WID/2+(len(skillList)+len(drugData))*OFFX, INITY+ARROW_HEI/2); 
-            }
-            else
-                arrow.pos(INITX+ARROW_WID/2+ITEM_NUM*OFFX, INITY+ARROW_HEI/2);
-        }
-        else//收起 不显示菜单
-        {
-            arrow.scale(100, 100);
-            //arrow.pos(51, 440);
-            arrow.pos(INITX+ARROW_WID/2, INITY+ARROW_HEI/2);
-            return;
-        }
         //点击技能
         var panel;
         var ready;
@@ -463,6 +451,36 @@ class SkillFlowBanner extends MyNode
         var sca;
 
         var temp;
+
+        //先显示药品
+        //点击药品
+        for(i = 0; i < len(drugData); i++)
+        {
+            panel = flowNode.addsprite("mapUnSel.png").pos((i+len(skillList))*OFFX, 0);
+            allPanels.append(panel);//对应相应技能位置 面板
+
+            var num = global.user.getGoodsNum(DRUG, drugData[i][0]);
+            var filter = WHITE;
+            if(num <= 0)
+                filter = GRAY;
+
+            var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])]), filter).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
+            sca = getSca(drugPic, [67, 43]);
+            drugPic.scale(sca);
+
+            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
+            panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
+
+
+            ready = drugData[i][3];
+            if(!ready)//技能ID 与众不同
+            {
+                pSize = panel.prepare().size();
+                shadow = sprite("skillShadow.png").anchor(0, 100).pos(0, pSize[1]);
+                panel.add(shadow, 1, 1);//tag = 1
+            }
+            panel.put([DRUG, i]);
+        }
         
         for(i = 0; i < len(skillList); i++)
         {
@@ -492,29 +510,7 @@ class SkillFlowBanner extends MyNode
             if(sData["kind"] == MAKEUP_SKILL)
                 global.taskModel.showHintArrow(panel, panel.prepare().size(), MAKEUP_BUT);
         }
-        //点击药品
-        for(i = 0; i < len(drugData); i++)
-        {
-            panel = flowNode.addsprite("mapUnSel.png").pos((i+len(skillList))*OFFX, 0);
-            allPanels.append(panel);//对应相应技能位置 面板
 
-            var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
-            sca = getSca(drugPic, [67, 43]);
-            drugPic.scale(sca);
-            
-            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
-            panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
-
-
-            ready = drugData[i][3];
-            if(!ready)//技能ID 与众不同
-            {
-                pSize = panel.prepare().size();
-                shadow = sprite("skillShadow.png").anchor(0, 100).pos(0, pSize[1]);
-                panel.add(shadow, 1, 1);//tag = 1
-            }
-            panel.put([DRUG, i]);
-        }
 
     }
     //所有的技能菜单

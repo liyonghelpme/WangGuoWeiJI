@@ -659,4 +659,5 @@ var WORDS = dict([
 ["godInfo", "神像｜士兵数量:[[NUM]]"],
 ["forgetInfo", "铁匠铺｜装备数量:[[NUM]]"],
 ["drugInfo", "药店｜魔药数量:[[NUM]]"],
+["quitWillFail", "现在退出，战斗将会失败，再次点击确认"],
 ]);

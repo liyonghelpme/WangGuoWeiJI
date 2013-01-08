@@ -247,6 +247,7 @@ class RandPutSol(Task):
             
         
 #所有当前可以放置空间的士兵都被放置
+"""
 class IsAllPut(Task):
     def __init__(self, status):
         super(IsAllPut, self).__init__()
@@ -260,7 +261,19 @@ class IsAllPut(Task):
             if self.status.mons[m]['number'] > 0:
                 return False
         return True
+"""
 
+class HasFarAway(Task):
+    def __init__(self, status):
+        super(HasFarAway, self).__init__()
+        self.status = status
+    def run(self):
+        for m in self.status.mons:
+            mon = self.status.mons[m]
+            if mon['number'] > 0 and mon['range'] > 0:
+                return True
+        return False
+        
 #不是前线 且 有远程
 class CheckPosAndFarAway(Task):
     def __init__(self, status):
@@ -316,6 +329,8 @@ def realDo(r):
     seq1 = Sequence()
     notDec = Not()
     notDec1 = Not()
+    notDec2 = Not()
+    seq2 = Sequence()
 
     #isAllPut = IsAllPut(status)
     hasMonPutable1 = HasMonPutable(status)
@@ -327,6 +342,8 @@ def realDo(r):
     frontHasPos = FrontHasPos(status)
     frontPutMon = FrontPutMon(status)
     hasMonPutable = HasMonPutable(status)
+    frontHasPos2 = FrontHasPos(status)
+    hasFarAway = HasFarAway(status)
 
     root.addChild(sel)
     #sel.addChild(isAllPut)
@@ -336,7 +353,12 @@ def realDo(r):
     
     sel.addChild(seq)
     seq.addChild(sel1)
-    sel1.addChild(checkPosAndFarAway)#非前线 且有远程
+    #sel1.addChild(checkPosAndFarAway)#非前线 且有远程
+    sel1.addChild(seq2)
+    seq2.addChild(notDec2)
+    notDec2.addChild(frontHasPos2)
+    seq2.addChild(hasFarAway)
+
     sel1.addChild(findDefenser)
     seq.addChild(sel2)
     sel2.addChild(seq1)
@@ -352,7 +374,8 @@ def realDo(r):
     count = 0
     while not root.run():
         print '------'
-        count += 1
+        #count += 1
+        status.printBoard()
         if count >= 100:
             print "error", count
             status.printBoard()

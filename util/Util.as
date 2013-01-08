@@ -190,19 +190,10 @@ function getBuildGain(id)
 //KIND*100000+id = key --->data
 var dataPool = dict();
 
-/*
-function getObjKey(kind, id)
-{
-    return kind*10000+id;
-}
-function getObjKindId(v)
-{
-    return [v/10000, v%10000];
-}
-*/
 function getData(kind, id)
 {
     //trace("getData", kind, id);
+
     //var key = getObjKey(kind, id);
     var key = getGoodsKey(kind, id);
     var ret = dataPool.get(key, null);

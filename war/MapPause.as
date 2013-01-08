@@ -23,9 +23,23 @@ class MidMenu extends MyNode
         pause.continueGame();
         global.director.popView();
     }
+    function clearQuitState()
+    {
+        quitYet = 0;
+    }
+    var quitYet = 0;
     function onQuit()
     {
-        global.director.popScene();
+        if(quitYet == 0)
+        {
+            quitYet = 1;
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("quitWillFail", null), [100, 100, 100], clearQuitState));
+        }
+        else
+        {
+            global.director.popView();
+            pause.scene.map.quitFail();
+        }
     }
 }
 class MapPause extends MyNode

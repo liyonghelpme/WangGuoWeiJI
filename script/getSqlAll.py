@@ -1,7 +1,7 @@
 #coding:utf8
 import MySQLdb
 import json
-sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense', 'mapMonster', 'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain']
+sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
 
@@ -250,6 +250,29 @@ def hanData(name, data):
         print 'var', name, '=', json.dumps(res), ';'
         return [] 
      
+    if name == 'RoundMonsterNum':
+        res = {}
+        key = ['id', 'mons']
+        for i in f:
+            k = i['id']
+            v = [
+                [i['kind0'], i['num0']],
+                [i['kind1'], i['num1']],
+                [i['kind2'], i['num2']],
+                [i['kind3'], i['num3']],
+                [i['kind4'], i['num4']],
+            ]
+            temp = []
+            for p in v:
+                if p[0] != -1:
+                    temp.append(p)
+            res[k] = [k, temp]
+        res = res.items()
+        print 'var', name+'Key', '=', json.dumps(key), ';'
+        print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
+        return []
+
+    
     if name == 'mapMonster':#大地图 小关的怪兽位置 类型 等级
         res = {}
         key = []
