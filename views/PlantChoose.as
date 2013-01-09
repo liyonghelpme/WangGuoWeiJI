@@ -124,8 +124,7 @@ class PlantChoose extends MyNode
                     //资源不足 欠一种类型的资源
                     var key = cost.keys()[0];
 
-                    global.director.pushView(
-                        new MyWarningDialog(getStr("resNot", null), getStr("resLack", ["[NAME]", getStr(key, null),  "[NUM]", str(buyable[key])]),  null), 1, 0);
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr(key, null),  "[NUM]", str(buyable[key])]), [100, 100, 100], null));
 
                 }
                 //回调函数的上下文可能已经失去 

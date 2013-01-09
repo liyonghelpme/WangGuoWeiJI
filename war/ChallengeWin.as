@@ -73,7 +73,8 @@ class ChallengeWin extends MyNode
             else
                 rewStr += str(its[i][1])+getStr(its[i][0], null);   
         }
-        temp = bg.addlabel(getStr("youGetReward", ["[REWARDS]", rewStr]), "fonts/heiti.ttf", 17, FONT_NORMAL).color(11, 11, 11).pos(213, 207);
+        if(len(its) > 0)
+            temp = bg.addlabel(getStr("youGetReward", ["[REWARDS]", rewStr]), "fonts/heiti.ttf", 17, FONT_NORMAL).color(11, 11, 11).pos(213, 207);
 
         if(levelUpStr != null)
             temp = bg.addlabel(levelUpStr, "fonts/heiti.ttf", 17, FONT_NORMAL, 334, 0, ALIGN_LEFT).anchor(0, 0).pos(213, 237).color(11, 11, 11);

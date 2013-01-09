@@ -661,4 +661,5 @@ var WORDS = dict([
 ["drugInfo", "药店｜魔药数量:[[NUM]]"],
 ["quitWillFail", "现在退出，战斗将会失败，再次点击确认"],
 ["inTransferNow", "[NAME]开始转职"],
+["accCampSuc", "加速[NAME]生产成功"],
 ]);

@@ -287,7 +287,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             }
             map.mapGridController.clearSolMap(this); 
         }
-        else //if(curStatus == NO_STATUS)
+        else if(!showMenuYet)
             map.touchBegan(n, e, p, x, y, points);
     }
 
@@ -321,7 +321,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
                 map.touchMoved(n, e, p, x, y, points);
             }
         }
-        else //if(curStatus == NO_STATUS)
+        else if(!showMenuYet) 
             map.touchMoved(n, e, p, x, y, points); 
     }
     /*
@@ -431,6 +431,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     var showMenuYet = 0;
     function touchEnded(n, e, p, x, y, points)
     {
+        var oldShowMenuYet = showMenuYet;
         //正在建造 且为当前建筑
         if(Planing && global.director.curScene.curBuild == this )
         {
@@ -448,10 +449,11 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             if(accMove < 20)
                 global.director.curScene.showGlobalMenu(this, showGlobalMenu);
         }
-        //没有状态
-        //if(curStatus == NO_STATUS)
-        map.touchEnded(n, e, p, x, y, points);
-        //没有规划
+
+        if(!oldShowMenuYet)
+            map.touchEnded(n, e, p, x, y, points);
+        else
+            map.map.scene.closeGlobalMenu(this);//关闭全局菜单
     }
 
     function setName(n)

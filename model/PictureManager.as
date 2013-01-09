@@ -31,6 +31,7 @@ class PictureManager
     var download = 0;
     function startDownload(d, cb)
     {
+        trace("startDownload", d, cb);
         if(download)
             return;
         callback = cb;

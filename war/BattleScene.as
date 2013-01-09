@@ -221,7 +221,7 @@ class BattleScene extends MyNode
     {
         trace("getEneDefense", big, small);
         if(kind == CHALLENGE_MON)
-            return getData(ROUND_MAP_REWARD, big*getParam("MapMonsterNumCoff")+small)["defense"];//每个关卡的防御力
+            return getData(ROUND_MAP_REWARD, big*getParam("MapMonsterNumCoff")+small)["monDefense"];//每个关卡的防御力
         else if(kind == CHALLENGE_FRI || kind == CHALLENGE_NEIBOR || kind == CHALLENGE_FIGHT || kind == CHALLENGE_DEFENSE)
             return argument["cityDefense"];//param[4];
         else if(kind == CHALLENGE_SELF)

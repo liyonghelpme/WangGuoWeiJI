@@ -481,9 +481,6 @@ class Building extends MyNode
         //如果当前显示了菜单则再次点击是关闭菜单
         if(!showMenuYet)
             map.touchBegan(n, e, p, x, y, points); 
-        
-
-
 
         if(Planing)
         {
@@ -634,8 +631,6 @@ class Building extends MyNode
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        
-
         var oldShowMenuYet = showMenuYet;
         var ret;
         if((state == PARAMS["buildMove"]) || Planing)

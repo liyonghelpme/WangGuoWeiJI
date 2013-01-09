@@ -50,6 +50,7 @@ class ChallengeScene extends MyNode
         var mySolKey = allSoldier.keys();
         var downloadList = mySolKey;
 
+        var k;
         //敌方类型
         if(enemies != null)
         {
@@ -66,12 +67,14 @@ class ChallengeScene extends MyNode
             }
         }
 
+        trace("checkSolPic", downloadList);
         pictureManager.downloadList = downloadList;
         pictureManager.startDownload(0, finishDownload);
         return 0;
     }
     function finishDownload()
     {
+        trace("finishDownload");
         finishLoadPic = 1;
     }
     override function enterScene()
@@ -98,8 +101,6 @@ class ChallengeScene extends MyNode
     var finishLoadData = 0;
     function initData()
     {
-        //if(oid == global.user.uid)
-        //    global.httpController.addRequest("challengeC/challengeSelf", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
         if(kind == CHALLENGE_FRI)
             global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
         else if(kind == CHALLENGE_NEIBOR)
@@ -118,16 +119,21 @@ class ChallengeScene extends MyNode
         {
             global.httpController.addRequest("fightC/defenseOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null); 
         }
+        //没有下载数据 需要 立即根据数据检测图片
+        //需要下载
         else if(kind == CHALLENGE_TRAIN)
         {
-            finishLoadData = 1;
+            finishDataAndStartPic();
         }
         else if(kind == CHALLENGE_MON)
         {
-            finishLoadData = 1;
+            finishDataAndStartPic();
         }
-        //需要下载
-
+    }
+    function finishDataAndStartPic()
+    {
+        finishLoadData = 1;
+        checkSolPic();
     }
     //敌方士兵 enemies  monsters
     function loadingCallback()
@@ -222,11 +228,7 @@ class ChallengeScene extends MyNode
             else if(kind == CHALLENGE_DEFENSE)
             {
             }
-            //initOver = 1;
-            finishLoadData = 1;
+            finishDataAndStartPic();
         }
-        
-        //我方士兵 地方士兵
-        checkSolPic();
     }
 }

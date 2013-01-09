@@ -7,6 +7,10 @@ function getRoundMonster(big, small)
 //2 大关奖励 2 个
 function getMapReward(big, small)
 {
+    var curStar = global.user.getCurStar(big, small);
+    //不是第一次闯关胜利 没有奖励
+    if(curStar > 0)
+        return dict();
     return getGain(ROUND_MAP_REWARD, big*getParam("MapMonsterNumCoff")+small);
 }
 

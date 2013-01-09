@@ -148,7 +148,16 @@ class StandardTouchHandler
     function touchMoved(points)
     {
         var now = time();
-        if(now - touchEvents[len(touchEvents)-1][1] > 40)
+        if(touchEvents[len(touchEvents)-1] != null)
+        {
+            if(now - touchEvents[len(touchEvents)-1][1] > 40)
+            {
+                touchEvents.append([points, now]);
+                if(len(touchEvents) > 2)
+                    touchEvents.pop(0);
+            }
+        }
+        else
         {
             touchEvents.append([points, now]);
             if(len(touchEvents) > 2)

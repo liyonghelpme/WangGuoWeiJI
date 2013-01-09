@@ -321,6 +321,13 @@ class CallSoldier extends MyNode
         scene.funcBuild.adjustObjectTime(needTime);
         this.update(0);
         goods.updateTab();
+
+        var objectList = scene.objectList;
+        if(len(objectList) > 0)
+        {
+            var solData = getData(SOLDIER, objectList[0][0]);
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("accCampSuc", ["[NAME]", solData["name"]]), [100, 100, 100], null));
+        }
     }
     /*
     curSelSol[1] 只是记录 士兵购买等级是否 大于用户等级

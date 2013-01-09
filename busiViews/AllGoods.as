@@ -40,14 +40,14 @@ class AllGoods extends MyNode
         //药品只需要卖出一定数量即可 药品购买 卖出
         if(kind == DRUG)
         {
-            key = drugData.keys();
+            key = global.user.getAllDrug();
             for(i = 0; i < len(key); i++)
                 data.append([EQUIP_KIND, key[i]]);
         }
         //装备需要区分ID 装备只有购买 卖出 装备得区分
         else if(kind == EQUIP)
         {
-            key = equipData.keys();
+            key = global.user.getAllEquipKinds().keys();
             for(i = 0; i < len(key); i++)
                 data.append([EQUIP_KIND, key[i], 0]);//opened closed
         }
