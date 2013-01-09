@@ -6,11 +6,12 @@ class PictureManager
     //var curKind;
     var allKind = ["m", "fm", "a", "fa"];
     var needDownload = [];
-    var ALL_SOL_PICTURES = 
-[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 22, 23, 30, 31, 32, 33, 40, 41, 42, 43, 50, 51, 52, 53, 60, 61, 62, 63, 70, 71, 110, 100, 80, 81, 82, 83, 90, 91, 92, 93, 72, 73, 120, 130, 140, 150, 160, 170, 180, 190, 400, 401, 402, 403, 410, 411, 412, 413, 420, 421, 422, 423, 430, 431, 432, 433, 440, 441, 442, 443, 450, 451, 452, 453, 460, 461, 462, 463, 470, 471, 472, 473, 480, 481, 482, 483, 490, 491, 492, 493, 500, 501, 502, 503, 510, 511, 512, 513, 520, 521, 522, 523, 530, 531, 532, 533, 540, 541, 542, 543, 550, 551, 552, 553, 560, 561, 562, 563, 570, 571, 572, 573, 580, 581, 582, 583, 590, 591, 592, 593, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1100, 1110, 1120, 1130, 1140, 1150, 1160, 1170, 1180, 1190, 1200, 1210, 1220, 1230, 1240, 1250, 1260, 1270, 1280, 1290, 1300, 1310, 1320, 1330, 1340, 1350, 1360, 1370, 1380];
+    var downloadList = [];
+    var defaultDownload = 1;
+    var callback = null;
     function checkNeedDownload()
     {
-        if(curProcess < len(ALL_SOL_PICTURES) && global.user.getValue("level") >= getParam("downloadLevel"))
+        if(curProcess < len(downloadList) && global.user.getValue("level") >= getParam("downloadLevel"))
         {
             return 1;
         }
@@ -28,10 +29,18 @@ class PictureManager
 
     }
     var download = 0;
-    function startDownload()
+    function startDownload(d, cb)
     {
         if(download)
             return;
+        callback = cb;
+        defaultDownload = d;//是否默认全部下载 还是 闯关临时下载图片
+        //全部图片下载保存进度
+        if(!defaultDownload)
+            curProcess = 0;
+        else
+            curProcess = global.user.db.get("curProcess");    
+
         download = 1;
         global.myAction.addAct(this);
     }
@@ -54,24 +63,24 @@ class PictureManager
                 else
                 {
                     trace("curProcess", curProcess);
-                    if(curProcess < len(ALL_SOL_PICTURES))
+                    if(curProcess < len(downloadList))
                     {
                         for(var i = 0; i < len(allKind); i++)
                         {
-                            var name = "soldier"+allKind[i]+str(ALL_SOL_PICTURES[curProcess])+".plist";
+                            var name = "soldier"+allKind[i]+str(downloadList[curProcess])+".plist";
                             var ret0 = c_res_exist(name);
                             if(!ret0)
                             {
                                 needDownload.append(name);
                             }
-                            name = "soldier"+allKind[i]+str(ALL_SOL_PICTURES[curProcess])+".png";
+                            name = "soldier"+allKind[i]+str(downloadList[curProcess])+".png";
                             var ret1 = c_res_exist(name);
                             if(!ret1)
                             {
                                 needDownload.append(name);
                             }
                         }
-                        var solAttackEffect = magicAnimate.get(ALL_SOL_PICTURES[curProcess]);
+                        var solAttackEffect = magicAnimate.get(downloadList[curProcess]);
 
                         if(solAttackEffect != null)
                         {
@@ -99,13 +108,19 @@ class PictureManager
                         }
 
                         curProcess++;
-                        global.user.db.put("curProcess", curProcess);
+                        //默认下载情况下保存下载进度
+                        if(defaultDownload)
+                            global.user.db.put("curProcess", curProcess);
                     }
                     //curProcess 超过图片数量
                     else
                     {
                         global.myAction.removeAct(this);
-                        global.taskModel.doCycleTaskByKey("download", 1);
+                        //下载所有士兵图片任务
+                        if(defaultDownload)
+                            global.taskModel.doCycleTaskByKey("download", 1);
+                        if(callback != null)
+                            callback();
                     }
                 }
             }

@@ -32,7 +32,8 @@ class DownloadDialog extends MyNode
     }
     function onDownloadNow()
     {
-        global.pictureManager.startDownload();
+        global.pictureManager.downloadList = ALL_SOL_PICTURES;//所有士兵id 图片
+        global.pictureManager.startDownload(1, null);
         global.msgCenter.sendMsg(BEGIN_DOWNLOAD, null);
         global.director.popView();
     }

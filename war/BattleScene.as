@@ -143,6 +143,8 @@ class BattleScene extends MyNode
     k, sm, s, ki, par, eq
     */
     var argument;
+
+    var pictureManager;
     
     //kind double singleSid difficult user skills big small cityDefense 
 
@@ -174,6 +176,11 @@ class BattleScene extends MyNode
         initView();
         initYet = 1;
     }
+    //下载怪兽 和 士兵
+    //当前用户拥有的士兵
+    //当前关卡出现的怪兽
+    //check DownloadYet  in sqllite db
+    //allMonsters id
 
     var initYet = 0;
     function initView()

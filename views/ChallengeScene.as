@@ -42,92 +42,37 @@ class ChallengeScene extends MyNode
     }
     var needDownload = [];
     //我方士兵 地方士兵
+    var pictureManager;
     function checkSolPic()
     {
-        //全局已经在下载图片了 阻止这里下载图片
-        if(global.pictureManager.download)
-        {
-            finishLoadPic = 1;
-            return 1;
-        }
-        //我方士兵
-        var mySolIds = global.user.getAllSoldierKinds();
-        var allKind = ["m", "fm", "a", "fa"];
-        var k;
+        pictureManager = new PictureManager();
+        var allSoldier = global.user.getAllSoldierKinds();
+        var mySolKey = allSoldier.keys();
+        var downloadList = mySolKey;
+
         //敌方类型
         if(enemies != null)
         {
             for(k = 0; k < len(enemies); k++)
             {
-                mySolIds.update(enemies[k]["id"], 1);
+                downloadList.append(enemies[k]["id"]);
             }
         }
         if(kind == CHALLENGE_MON)
         {
             for(k = 0; k < len(user["mon"]); k++)
             {
-                mySolIds.update(user["mon"][k]["id"], 1);
-            }
-        }
-        //需要预测怪兽类型 
-        if(kind == CHALLENGE_TRAIN)
-        {
-        }
-
-        mySolIds = mySolIds.keys();
-        for(k = 0; k < len(mySolIds); k++)
-        {
-            for(var i = 0; i < len(allKind); i++)
-            {
-                var name = "soldier"+allKind[i]+str(mySolIds[k])+".plist";
-                var ret0 = c_res_exist(name);
-                if(!ret0)
-                {
-                    needDownload.append(name);
-                }
-                name = "soldier"+allKind[i]+str(mySolIds[k])+".png";
-                var ret1 = c_res_exist(name);
-                if(!ret1)
-                {
-                    needDownload.append(name);
-                }
-            }
-
-            var solAttackEffect = magicAnimate.get(mySolIds[k]);
-            //没有攻击特效的地方士兵 不用下载图片
-            if(solAttackEffect != null)
-            {
-                for(i = 0; i < len(solAttackEffect); i++)
-                {
-                    var ani = solAttackEffect[i];
-                    if(ani != -1)
-                    {
-                        var pics = pureMagicData.get(ani)[0];
-                        if(len(pics) > 0)
-                        {
-                            name = "s"+str(ani)+"e.plist";
-                            ret0 = c_res_exist(name);
-                            if(!ret0)
-                            {
-                                needDownload.append(name);
-                            }
-                            name = "s"+str(ani)+"e.png";
-                            ret1 = c_res_exist(name);
-                            if(!ret1)
-                                needDownload.append(name);
-                        }
-                    }
-                }
+                downloadList.append(user["mon"][k]["id"]);
             }
         }
 
-        if(len(needDownload) > 0)
-        {
-            return 0;
-        }
-
+        pictureManager.downloadList = downloadList;
+        pictureManager.startDownload(0, finishDownload);
+        return 0;
+    }
+    function finishDownload()
+    {
         finishLoadPic = 1;
-        return 1;
     }
     override function enterScene()
     {
@@ -140,15 +85,6 @@ class ChallengeScene extends MyNode
         global.myAction.removeAct(this);
         super.exitScene();
     }
-    var download = 0;
-    function startDownload()
-    {
-        if(download)
-            return;
-        download = 1;
-    }
-    var waitTime = 0;
-    var inConnect = 0;
     var finishLoadPic = 0;
     function update(diff)
     {
@@ -157,27 +93,6 @@ class ChallengeScene extends MyNode
             initOver = 1;
             return;
         }
-
-        waitTime += diff;
-        if(waitTime >= getParam("downloadTime") && !inConnect)
-        {
-            waitTime = 0;
-            if(len(needDownload) > 0)
-            {
-                var pic = needDownload.pop(0);
-                inConnect = 1;
-                request(pic, 0, onGet, null);
-            }
-            else
-            {
-                //global.myAction.removeAct(this);
-                finishLoadPic = 1;
-            }
-        }
-    }
-    function onGet()
-    {
-        inConnect = 0;
     }
 
     var finishLoadData = 0;
@@ -205,12 +120,10 @@ class ChallengeScene extends MyNode
         }
         else if(kind == CHALLENGE_TRAIN)
         {
-            //initOver = 1;
             finishLoadData = 1;
         }
         else if(kind == CHALLENGE_MON)
         {
-            //initOver = 1;
             finishLoadData = 1;
         }
         //需要下载
@@ -314,9 +227,6 @@ class ChallengeScene extends MyNode
         }
         
         //我方士兵 地方士兵
-        if(!checkSolPic())
-        {
-            startDownload();
-        }
+        checkSolPic();
     }
 }

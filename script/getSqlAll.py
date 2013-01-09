@@ -692,5 +692,14 @@ HARM_TABLE = [
 ]
 print 'const', 'HARM_TABLE', '=', json.dumps(HARM_TABLE), ';'
 
+#不包括城墙
+sql = 'select * from soldier where id >= 0 order by level, id'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+solIds = []
+for i in res:
+    solIds.append(i['id'])
+print 'var', 'ALL_SOL_PICTURES', '=', json.dumps(solIds), ';'
+
 con.commit()
 con.close()
