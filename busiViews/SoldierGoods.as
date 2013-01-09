@@ -150,6 +150,7 @@ class SoldierGoods extends MyNode
                 else
                 {
                     solPic = panel.addsprite("soldier"+str(id)+".png").anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
+                    solPic.blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 }
                 
                 sca = getSca(solPic, [125, 96]);

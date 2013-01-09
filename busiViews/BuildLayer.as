@@ -12,7 +12,6 @@ class BuildLayer extends MoveMap
         staticObstacle = obstacleBlock;
         mapGridController = new MapGridController(this);
         gridLayer = bg.addnode();
-        //blockBuilding = new MyNode();
     }
     var Planing = 0;
 
@@ -244,12 +243,8 @@ class BuildLayer extends MoveMap
             //调整Z值
             build.setPos([bdata.get("px"), bdata.get("py")]);
             //设置MAP数据 需要根据坐标设置冲突
-            //global.user.addBuilding(build);
-            //allBuildings.append(build);
 
             mapGridController.addBuilding(build);
-            //mapGridController.allBuildings.append(build);
-            //mapGridController.updateMap(build);
         }
     }
 

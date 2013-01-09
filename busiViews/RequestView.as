@@ -364,17 +364,13 @@ class RequestView extends MyNode
             {
                 var status = con.get("status");
                 if(status == 0)
-                {
-                    global.director.pushView(new MyWarningDialog(getStr("accRequestError", null), getStr("noUser", null), null), 1, 0);
-                }
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noUser", null), [100, 100, 100], null));        
                 else if(status == 1)
-                {
-                    global.director.pushView(new MyWarningDialog(getStr("accRequestError", null), getStr("yourNeiborMax", null), null), 1, 0);
-                }
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("yourNeiborMax", null), [100, 100, 100], null));        
                 else if(status == 2)
-                    global.director.pushView(new MyWarningDialog(getStr("accRequestError", null), getStr("friNeiborMax", null), null), 1, 0);
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("friNeiborMax", null), [100, 100, 100], null));        
                 else if(status == 3)
-                    global.director.pushView(new MyWarningDialog(getStr("accRequestError", null), getStr("neiborYet", null), null), 1, 0);
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("neiborYet", null), [100, 100, 100], null));        
             }
         }
     }

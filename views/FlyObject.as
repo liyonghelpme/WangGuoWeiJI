@@ -81,15 +81,28 @@ class FlyObject extends MyNode
                 var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT).anchor(50, 100);
                 var tar = TarPos.get(k, defaultPos);
                 var dis = sqrt(distance(coor2, tar));
-                //var rx = rand(40);
-                //var ry = rand(40); 
                 //trace("fly", j, cut);
                 //隐藏 等待 出现
+                var dir = rand(2);
+
+                var difx1 = rand(getParam("fallX"))+getParam("baseX");
+                var dify1 = rand(getParam("fallY"))+getParam("baseY");
+                var difx2 = rand(getParam("fallX1"))+getParam("baseX1");
+                var dify2 = rand(getParam("fallY1"))+getParam("baseY1");
+                
+                //150 -300
+                //100 100
+                if(dir == 1)
+                {
+                    difx1 = -difx1;
+                    difx2 = -difx2;
+                }
+
                 flyObj.addaction(sequence(itintto(0, 0, 0, 0), delaytime(waitTime), itintto(100, 100, 100, 100), sinein(bezierby(
-                            1500+dis*25,
+                            getParam("FlyTime")+dis*getParam("disTime"),
                             coor2[0], coor2[1], 
-                            coor2[0]+150, coor2[1]-300, 
-                            coor2[0]+100, coor2[1]+100, 
+                            coor2[0]+difx1, coor2[1]+dify1, 
+                            coor2[0]+difx2, coor2[1]+dify2, 
                             tar[0], tar[1])), callfunc(pickMe)));
                 if(j == (cut-1))
                     showVal = v-showVal*j;

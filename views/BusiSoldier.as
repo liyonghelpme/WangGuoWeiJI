@@ -77,13 +77,23 @@ class BusiSoldier extends MyNode
     {
         data = getData(SOLDIER, id);
         load_sprite_sheet("soldierm"+str(id)+".plist");
-        changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png");
+
+        //新人物可能初始的size = 0 因此可能有问题
+        changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", UPDATE_SIZE);
+        var bSize = changeDirNode.prepare().size();
+        if(bSize[0] > 0)
+        {
+            trace("bSize", bSize);
+            bg.size(bSize);
+            changeDirNode.pos(bSize[0]/2, bSize[1]);
+        }
+
         updateState();
         if(movAni != null)
         {
             movAni.stop();
         }
-        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
+        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
     }
 
 
@@ -369,10 +379,50 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         //else
         //    func2 = [];
           
-        if(career < 3 && !inTransfer)//0 1 2 3
+        if(career < getParam("MaxSolCareer") && !inTransfer && solOrMon==0)//0 1 2 3
             func2.append("transfer");
+        if(inTransfer)
+        {
+            func2.append("acc");
+        }
+
         //快速编译解决依赖关系
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
+    }
+
+    var acced = 0;
+    function doAcc()
+    {
+        var leftTime = getLeftTime();
+        var gold = calAccCost(leftTime);
+
+        var cost = dict([["gold", gold]]);
+        var buyable = global.user.checkCost(cost);
+        trace("accCost", cost);
+        if(buyable.get("ok") == 0)
+        {
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr("gold", null), "[NUM]", str(gold)]), [100, 100, 100], null));
+            return;            
+        }
+
+        if(inTransfer)
+        {
+            if(acced == 0)
+            {
+                acced += 1;
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToGenAcc", ["[NUM]", str(gold)]), [100, 100, 100], null));
+            }
+            else
+            {
+                acced = 0;
+                global.director.curScene.closeGlobalMenu(this);
+                 
+                //转职时间
+                transferStartTime -= leftTime;
+                global.user.updateSoldiers(this);
+                global.httpController.addRequest("soldierC/doAcc", dict([["uid", global.user.uid], ["sid", sid], ["leftTime", leftTime], ["gold", gold]]), null, null);
+            }
+        }
     }
     function closeGlobalMenu()
     {
@@ -600,7 +650,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     {
         if(inTransfer)
         {
-            var leftTime = data["transferTime"] - (time()/1000-server2Client(transferStartTime));
+            var leftTime = getLeftTime();
             if(leftTime <= 0)
                 finishTransfer();
         }
@@ -841,5 +891,17 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         inGame = 0;
         gameId = -1;
         bg.visible(1);
+    }
+
+    function getTransferCost()
+    {
+        var gold = data["transferGold"];
+        var crystal = data["transferCrystal"];
+        var cost = dict();
+        if(gold != 0)
+            cost.update("gold", gold);
+        if(crystal != 0)
+            cost.update("crystal", crystal);
+        return cost;
     }
 }

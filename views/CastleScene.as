@@ -149,13 +149,9 @@ class CastleScene extends MyNode
     var planView = null;
     function doPlan()
     {
-        //ml.beginBuild();
         ml.hideMenu();
         Planing = 1;
         mc.buildLayer.keepPos();
-
-        //mc.buildLayer.buildKeepPos();
-        //mc.buildLayer.soldierKeepPos();
 
         planView = new BuildMenu(this, null);
         global.director.pushView(planView, 0, 0);
@@ -174,7 +170,6 @@ class CastleScene extends MyNode
     function disableMenu()
     {
         if(realDisappear == 0)
-            //ml.beginBuild();
             ml.hideMenu();
     }
     function enableMenu()
@@ -322,7 +317,6 @@ class CastleScene extends MyNode
     {
         var building = getData(BUILD, id);
 
-        //ml.beginBuild();   
         ml.hideMenu();
         curBuild = mc.beginBuild(building);
         global.director.pushView(new BuildMenu(this, [PLAN_BUILDING, curBuild]), 0, 0);

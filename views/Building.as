@@ -122,6 +122,7 @@ class Building extends MyNode
 
         //新建筑需要确定初始化位置 
         //如果建筑物是平底的 则 高度需要补偿 否则高度正常
+        //当前屏幕中心位置对应的一个空地比较合适
         bg.size(bSize[0], bSize[1]+offY).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
 
         changeDirNode.pos(bSize[0]/2, bSize[1]);
@@ -154,6 +155,18 @@ class Building extends MyNode
         changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         changeDirNode.setevent(EVENT_MOVE, touchMoved);
         changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+    function setInitPos()
+    {
+        var disSize = copy(global.director.disSize);
+        //CastlePage 的bg world2node 屏幕中心对应的地图位置
+        trace("oldDisSize", disSize);
+        disSize = map.map.bg.world2node(disSize[0]/2, disSize[1]/2); 
+        trace("init building Pos", disSize);
+        
+        map.mapGridController.clearMap(this);//清理map 之后 再设置map
+        setPos(disSize);
+        map.mapGridController.updateMap(this);//重新设定map
     }
     function getObjectId()
     {
@@ -315,19 +328,15 @@ class Building extends MyNode
     */
     override function setPos(p)
     {
-//        trace("setPos", p);
         var curPos = p;
         var zOrd = curPos[1];
         if(state == PARAMS["buildMove"] || (Planing && global.director.curScene.curBuild == this))
             zOrd = MAX_BUILD_ZORD;
-//        trace("setZord", zOrd);
         bg.pos(p);
         var par = bg.parent();
         if(par == null)
             return;
         bg.removefromparent();
-        //if(funcs == FARM_BUILD && zOrd != MAX_BUILD_ZORD)
-        //    zOrd = 0;
         par.add(bg, zOrd);
     }
 

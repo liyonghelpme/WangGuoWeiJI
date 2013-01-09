@@ -6,6 +6,7 @@ class TransferDialog extends MyNode
         soldier = s;
         initView();
     }
+
     function initView()
     {
         bg = node();
@@ -41,10 +42,14 @@ class TransferDialog extends MyNode
         bg.addlabel(getStr("transferTime", ["[TIME]", getDayTime(curData["transferTime"])]), "fonts/heiti.ttf", 18).anchor(0, 50).pos(192, 337).color(28, 15, 4);
         bg.addlabel(getStr("transferSoldier", null), "fonts/heiti.ttf", 30).anchor(0, 50).pos(355, 93).color(32, 33, 40);
         bg.addlabel(getStr("inTransferNoWar", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(299, 147).color(43, 25, 9);
-        but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("onTransfer", ["[KIND]", "crystal.png", "[NUM]", str(curData["transferCrystal"])]), null, 27, FONT_NORMAL, [100, 100, 100], onTransfer, null);
+
+        var cost = soldier.getTransferCost();
+        var pic = cost.keys()[0]+".png";
+        var val = cost.values()[0];
+        but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("onTransfer", ["[KIND]", pic, "[NUM]", str(val)]), null, 27, FONT_NORMAL, [100, 100, 100], onTransfer, null);
         but0.bg.pos(299, 402);
         addChild(but0);
-        var buyable = global.user.checkCost(dict([["crystal", curData["transferCrystal"]]]));
+        var buyable = global.user.checkCost(cost);
         if(buyable["ok"] == 0)
         {
             but0.setGray();
@@ -65,11 +70,15 @@ class TransferDialog extends MyNode
     }
     function onTransfer()
     {
-        global.httpController.addRequest("soldierC/doTransfer", dict([["uid", global.user.uid], ["sid", soldier.sid]]), null, null);
+        global.httpController.addRequest("soldierC/doTransfer", dict([["uid", global.user.uid], ["sid", soldier.sid], ["cost", json_dumps(soldier.getTransferCost())]]), null, null);
         var curData = getData(SOLDIER, soldier.id);
-        global.user.doCost(dict([["crystal", curData["transferCrystal"]]]));
+        var cost = soldier.getTransferCost();
+        global.user.doCost(cost);
         soldier.doTransfer();
         global.director.popView();
+
+        showMultiPopBanner(cost2Minus(cost));
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inTransferNow", ["[NAME]", soldier.myName]), [100, 100, 100], null));
     }
     function onCancel()
     {

@@ -205,8 +205,24 @@ class Map extends MyNode
         else 
             challengeOver(1, getStar(), reward, deadSols);
     }
+    /*
+    所有士兵生命值 为0 死亡
+    参见 getAllDeadSol 的实现
+    */
+    function killAllSoldier()
+    {
+        for(var i = 0; i < len(mySoldiers); i++)
+        {
+            var sol = mySoldiers[i];
+            sol.health = 0;
+            sol.dead = 1;
+            global.user.updateSoldiers(sol);
+        }
+    }
+    //强制退出杀死所有士兵
     function quitFail()
     {
+        killAllSoldier();
         var deadSols = getAllDeadSol();
         stopGame();
         challengeOver(0, 0, null, deadSols);

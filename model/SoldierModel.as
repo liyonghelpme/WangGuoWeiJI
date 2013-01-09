@@ -2,6 +2,7 @@ function initEquipAttribute(sol, equips)
 {
     if(equips == null)
         return;
+    trace("initEquipAttribute", equips);//不存在的装备则删除
     for(var i = 0; i < len(equips); i++)
     {
         var eData = equips[i];

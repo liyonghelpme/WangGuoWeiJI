@@ -304,13 +304,18 @@ class CastlePage extends MyNode
         inBuilding = 1;
         curBuild = new Building(buildLayer, building, null);
         curBuild.setBid(global.user.getNewBid());
+        
+        //新建筑需要寻找当前屏幕中心位置的一片空地
+
+        curBuild.setInitPos();
 
         buildLayer.addBuilding(curBuild, MAX_BUILD_ZORD);
         var kind = building.get("kind");
         //所有调用moveToPoint 的地方记录 旧的位置和 比例尺
         oldScale = bg.scale();
         oldPos = bg.pos();
-        moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+        //moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+        moveToPoint(curBuild.getPos()[0], curBuild.getPos()[1]);
         return curBuild;
     }
     //spawn scale move

@@ -118,7 +118,6 @@ class PlantChoose extends MyNode
                 var needLevel = plantData.get("level");
                 if(level < needLevel)
                 {
-                    //global.director.pushView(new MyWarningDialog(getStr("levelNotTitle", null), getStr("plantLevel", ["[NAME]", plantData.get("name"), "[LEVEL]", str(needLevel)]), null), 1, 0);
                 }
                 else if(buyable.get("ok") == 0)
                 {
@@ -127,6 +126,7 @@ class PlantChoose extends MyNode
 
                     global.director.pushView(
                         new MyWarningDialog(getStr("resNot", null), getStr("resLack", ["[NAME]", getStr(key, null),  "[NUM]", str(buyable[key])]),  null), 1, 0);
+
                 }
                 //回调函数的上下文可能已经失去 
                 else

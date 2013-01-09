@@ -223,7 +223,7 @@ class DrugList extends MyNode
             var ret = global.user.checkSoldierEquip(soldier.sid, p);
             if(ret == 0)
             {
-                global.director.pushView(new MyWarningDialog(getStr("oneEquipTitle", null), getStr("oneEquipCon", null), null), 1, 0);
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("oneEquipCon", null), [100, 100, 100], null));
                 return;
             }
         }
@@ -238,8 +238,10 @@ class DrugList extends MyNode
         //增加物理魔法 生命值上限
         else if(kind == EQUIP)
         {
-            effect = getGain(kind, p);
+            var equipKind = global.user.getEquipData(p)["kind"];
+            effect = getGain(kind, equipKind);
             its = effect.items()[0];
+            trace("equip Gain", effect, kind, p, equipKind);
             global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("opSucDrug", ["[NAME]", soldier.myName, "[NUM]", str(its[1]), "[KIND]", getStr(its[0], null)]), [100, 100, 100], null));
         }
         global.user.useThing(kind, p, soldier);

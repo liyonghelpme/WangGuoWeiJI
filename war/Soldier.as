@@ -537,37 +537,10 @@ class Soldier extends MyNode
     {
         var i;
         //初始化技能列表 等级 冷却时间
-        /*
-        if(sid == ENEMY)
-        {
-            //得到怪兽或者敌人的技能列表
-            //敌人 或者 怪兽数据 不为0
-            if(monsterData != null && map.scene.skills != null)
-            {
-                skillList = map.scene.skills.get(monsterData.get("sid"), dict()).items(); 
-                for(i = 0; i < len(skillList); i++)
-                {
-                    skillList[i].append(0);//累计的 冷却时间
-                    skillList[i].append(1);//ready 是否准备好
-                }
-            }
-            else
-                skillList = [];
-        }
-        else
-        {
-            skillList = global.user.getSolSkills(sid).items();//skillId level
-            for(i = 0; i < len(skillList); i++)
-            {
-                skillList[i].append(0);//累计的 冷却时间
-                skillList[i].append(1);//ready 是否准备好
-            }
-            
-        }
-        */
         skillList = [];
 
         kind = data.get("kind");
+        
         sx = data.get("sx");
         sy = data.get("sy");
 
@@ -651,6 +624,12 @@ class Soldier extends MyNode
         //经营页面回复生命值 60s 一次
 
         data = getData(SOLDIER, id);
+        //英雄 且 升到顶级 则可以拖动放置之后变身
+        if(data["isHero"] && id%10 == getParam("MaxSolCareer"))
+        {
+            data = getData(SOLDIER, id+1);
+        }
+
         initData();
         shiftAni = moveto(0, 0, 0);
         setPrivateFunc();
@@ -703,7 +682,6 @@ class Soldier extends MyNode
         var ss = SOL_SHADOW_SIZE.get(sx, 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
-        //adjustPicSize();
 
         var suffix = "";
         if(sx >= 2)
@@ -998,8 +976,53 @@ class Soldier extends MyNode
     设置正常的zord
     清理 地图上显示的grid
     */
+    function doTransform()
+    {
+        trace("doTransform", id);
+        id++;
+        var skillId = heroSkill[id/10*10];
+        var skillAni = getSkillAnimate(skillId);
+        
+        var feaFil = FEA_BLUE;
+        if(color == ENECOLOR)
+            feaFil = FEA_RED;
+
+        var ani = getSolAnimate(id);
+        movAni = new SoldierAnimate(getParam("soldierMoveAniTime"), ani[0], ani[2], changeDirNode, fea, feaFil);
+        attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
+
+        transAni = new TransformAnimate(skillAni[1], skillAni[0], changeDirNode, this);
+        transAni.enterScene();
+        
+        backBanner.visible(0);
+        fea.visible(0);
+        shadow.visible(0);
+    }
+
+    function finishTransform()
+    {
+        trace("finish TransformAnimate");
+        load_sprite_sheet("soldierm"+str(id)+".plist");
+        load_sprite_sheet("soldiera"+str(id)+".plist");
+
+        load_sprite_sheet("soldierfm"+str(id)+".plist");
+        load_sprite_sheet("soldierfa"+str(id)+".plist");
+        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE);
+ 
+        var feaFil = FEA_BLUE;
+        if(color == ENECOLOR)
+            feaFil = FEA_RED;
+        //变身之后特征色消失
+        fea.texture("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil, UPDATE_SIZE);
+        shadow.visible(1);
+        backBanner.visible(1);
+        fea.visible(1);//重新设定图片和 特征色 
+        adjustPicSize();
+        transAni = null;
+    }
     function touchWorldEnded(n, e, p, x, y, points)
     {
+        trace("soldier touchWorldEnded");
         if(state == MAP_SOL_ARRANGE && color == MYCOLOR)
         {
             var oldMap = getSolMap(bg.pos(), sx, sy, offY);
@@ -1025,7 +1048,16 @@ class Soldier extends MyNode
                     return;
                 }
                 else
+                {
                     setPos(oldPos);
+                }
+            }
+
+            //英雄 且 没有变身
+            trace("finish Put soldier", id, data["isHero"]);
+            if(data["isHero"] && id%10==getParam("MaxSolCareer"))
+            {
+                doTransform();
             }
             setCol();//清理冲突状态
             map.setMap(this);
