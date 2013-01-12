@@ -28,6 +28,7 @@ class Building extends MyNode
     
 
     var bottom = null;
+    //[[id, number], [], ...]
     var objectList;
 
     /*

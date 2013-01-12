@@ -51,10 +51,11 @@ class AllGoods extends MyNode
             for(i = 0; i < len(key); i++)
                 data.append([EQUIP_KIND, key[i], 0]);//opened closed
         }
+        trace("initData", data);
         bubbleSort(data, cmp);
         while(len(data) < 4)
         {
-            data.apppend([ALL_EMPTY, -1]);
+            data.append([ALL_EMPTY, -1]);
         }
 
         //id number 

@@ -87,13 +87,8 @@ class SkillFlowBanner extends MyNode
     function SkillFlowBanner(s)
     {
         pausePage = s;
-        //bg = node();
-        //init();
         initView();
-        //cl = bg.addnode().size(TOTAL_WIDTH, 82).pos(9, 384).clipping(1);
-        //flowNode = cl.addnode();
         initDrug();
-        //setSoldier(null);
         updateSkillPanel(null);
         shadowWord = bg.addsprite("storeBlack.png").pos(10, 323).visible(0);
         words = null;
@@ -456,7 +451,7 @@ class SkillFlowBanner extends MyNode
         //点击药品
         for(i = 0; i < len(drugData); i++)
         {
-            panel = flowNode.addsprite("mapUnSel.png").pos((i+len(skillList))*OFFX, 0);
+            panel = flowNode.addsprite("mapUnSel.png").pos((i)*OFFX, 0);
             allPanels.append(panel);//对应相应技能位置 面板
 
             var num = global.user.getGoodsNum(DRUG, drugData[i][0]);
@@ -484,7 +479,7 @@ class SkillFlowBanner extends MyNode
         
         for(i = 0; i < len(skillList); i++)
         {
-            panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX, 0);
+            panel = flowNode.addsprite("mapUnSel.png").pos((i+len(drugData))*OFFX, 0);
             allPanels.append(panel);//对应相应技能位置 面板
             id = skillList[i][0];
             

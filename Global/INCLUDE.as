@@ -198,6 +198,7 @@ import battle.LevelChoose;
 
 //战斗页面
 import war.BattleScene;
+import war.ChallengeInfo;
 import war.MapBanner;
 //闯关地图
 import war.Map;
@@ -260,6 +261,7 @@ import war.MapDefense;
 
 
 import views.DialogController;
+import busiViews.ChallengeMsgDialog;
 import busiViews.NewTaskDialog2;
 import views.Mask;
 
@@ -276,12 +278,11 @@ import busiViews.NoTipDialog;
 
 
 //战斗结束奖励 对话框
-import views.TrainOverDialog;
-import views.ChallengeFight;
-import views.ChallengeNeibor;
-//import views.BreakDialog;
 import war.ChallengeFail;
 import war.ChallengeWin;
+
+import war.NewChallengeWin;
+import war.NewChallengeFail;
 
 
 import busiViews.CallSoldier;

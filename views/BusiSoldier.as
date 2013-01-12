@@ -482,7 +482,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         if(mid == UPDATE_EQUIP)
         {
             //更新装备状态
-            var eid = param[1];
+            var eid = param[1][0];
             if(global.user.getEquipData(eid).get("owner") == sid)
             {
                 updateState();

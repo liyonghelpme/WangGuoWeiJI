@@ -822,7 +822,7 @@ const TRANSFER_SOL = 22;
 const CALL_SOL = 23;
 const UPDATE_DRUG = 24;
 const BUY_DRUG = 25;
-const BUY_EQUIP = 26;
+//const BUY_EQUIP = 26;
 const UPDATE_MAIL = 27;
 const RATE_GAME = 28;
 const INIT_NEIBOR_OVER = 29;
@@ -847,6 +847,7 @@ const INIT_NEW_TASK_FIN = 44;
 const FINISH_STORY = 45;
 const SHOW_HINT_WORD = 46;//经营页面或者 战斗页面 有dialogController 的 对象显示 当前的 提示文字  检测当期的系统 stack为空 
 const CALL_SOL_FINISH = 47;
+const HAS_CHALLENGE_MSG = 48; 
 
 
 
@@ -901,14 +902,17 @@ const HARVEST_SOL = 130;
 const NAME_SOL = 131;
 
 
+//装备子消息类型
+const UPDATE_BUY_EQUIP = 0;
+const UPDATE_USE_EQUIP = 1;
+const UPDATE_UPGRADE_EQUIP = 2;
+
 
 //开始技能选择目标 释放技能选择目标结束
 const MAP_START_SKILL = 0;
 const MAP_FINISH_SKILL = 1;
 const MAP_ARRANGE = 2;
 
-
-const MAX_BUSI_SOLNUM = 50;
 
 /*
 士兵生命值回复 可以缓冲 1分钟再统一发送状态请求
@@ -922,6 +926,8 @@ const CHALLENGE_NEIBOR = 3;
 const CHALLENGE_TRAIN = 4;
 const CHALLENGE_FIGHT = 5;//挑战擂台
 const CHALLENGE_DEFENSE = 6;//防守擂台
+const CHALLENGE_OTHER = 7;
+const CHALLENGE_REVENGE = 8;
 
 
 const ENEMY = -1;
@@ -945,6 +951,7 @@ const NEW_TASK = 3;
 //邮件信息类型
 const NEIBOR_REQ = 0;
 const GIFT_REQ = 1;
+//挑战消息
 const OTHER_MSG = 2;
 
 const VISIT_PAPAYA = 0;
@@ -1179,15 +1186,6 @@ const BEGIN_REPEAT = 6;
 const END_REPEAT = 7;
 
 
-/*
-const CHALLENGE_MON = 0;
-const CHALLENGE_FRI = 1;
-const CHALLENGE_SELF = 2;//怪兽布局 由数据库monX monY 决定
-const CHALLENGE_NEIBOR = 3;
-const CHALLENGE_TRAIN = 4;
-const CHALLENGE_FIGHT = 5;//挑战擂台
-const CHALLENGE_DEFENSE = 6;//防守擂台
-*/
 //NOTIP 类型 tip编号 以及对应的标题 内容 以及闯关地图对应的 NOTIP类型
 const CHALLENGE_TIP = 0;
 const TRAIN_TIP = 1;
@@ -1274,11 +1272,6 @@ const HEART_RANK = 1;
 const FIGHT_RANK = 2;//attackRank defenseRank 大类型
 const INVITE_RANK = 3; 
 
-/*
-//RankBase
-const ATTACK_RANK = 3;
-const DEFENSE_RANK = 4;
-*/
 
 const RANK_KEY = [ChallengeRankKey, HeartRankKey, FightRankKey, InviteRankKey];
 const RANK_BUT = ["blueButton.png", "violetBut.png", "blueButton.png","blueButton.png"];
@@ -1295,7 +1288,8 @@ const Kind2Num = dict([
 
 const NEIBOR_REQ_KEY = ["uid", "papayaId", "name", "level", "time"];
 const GIFT_KEY = ["uid", "name", "kind", "tid", "eqLevel", "time", "gid"];
-const MSG_KEY = ["uid", "kind", "param", "time", "name", "mid"];
+//param 包含
+const MSG_KEY = ["uid", "kind", "param", "time", "name", "mid", "level"];
 
 const NEIBOR_KEY = ["uid", "id", "name", "level", "mineLevel", "challengeYet"];
 const INGAME_FRIEND_KEY = ["uid", "name", "level", "id"];

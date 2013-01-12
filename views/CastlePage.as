@@ -495,6 +495,7 @@ class CastlePage extends MyNode
         global.msgCenter.registerCallback(OPEN_BOX, this);
         global.msgCenter.registerCallback(SHOW_NEW_TASK_REWARD, this);
         global.msgCenter.registerCallback(SHOW_NEW_STAGE, this);
+        global.msgCenter.registerCallback(HAS_CHALLENGE_MSG, this);
         solNum.text(str(global.user.getSolNum()));
 
         //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
@@ -559,10 +560,11 @@ class CastlePage extends MyNode
         else if(msg[0] == SHOW_NEW_STAGE)
         {
             //有新手任务没有完成需要显示
-            //if(global.taskModel.checkShowNewTask())
-            //{
             dialogController.addCmd(dict([["cmd", "newTaskDialog"]]));
-            //}
+        }
+        else if(msg[0] == HAS_CHALLENGE_MSG)
+        {
+            dialogController.addCmd(dict([["cmd", "hasChallengeMsg"], ["challengeMsg", msg[1]]]));
         }
     }
     function remove(c)
@@ -597,6 +599,7 @@ class CastlePage extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(HAS_CHALLENGE_MSG, this);
         global.msgCenter.removeCallback(SHOW_NEW_STAGE, this);
         global.msgCenter.removeCallback(SHOW_NEW_TASK_REWARD, this);
         global.msgCenter.removeCallback(OPEN_BOX, this);

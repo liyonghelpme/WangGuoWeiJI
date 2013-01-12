@@ -198,8 +198,6 @@ class RequestView extends MyNode
 
         for(var i = rg[0]; i < rg[1]; i++)
         {
-             
-            //var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i).size(PANEL_WIDTH, PANEL_HEIGHT);
             var panel = flowNode.addnode().size(PANEL_WIDTH, PANEL_HEIGHT).pos(0, OFFY*i);
             panel.addsprite("messageSeperate.png").pos(-1, 60);
             now = TestTime.callobj("getTime", data[i][1]["time"]);
@@ -249,15 +247,12 @@ class RequestView extends MyNode
                 var okKind = data[i][1]["kind"];
                 if(okKind == PARAMS["MSG_CHALLENGE"])
                 {
-                    panel.addlabel(getStr("robCrystal", ["[NAME]", data[i][1]["name"], "[NUM]", str(data[i][1]["param"]), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
-                }
-                else if(okKind == PARAMS["MSG_HEART"])
-                {   
-                    panel.addlabel(getStr("sendHeart", ["[NAME]", data[i][1]["name"], "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
+                    var robNum = json_loads(data[i][1]["param"]);
+                    panel.addlabel(getStr("robCrystal", ["[NAME]", data[i][1]["name"], "[SIL]", str(robNum["silver"]), "[CRY]", str(robNum["crystal"]), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
                 }
                 if(!readYet)
                 {
-                    but0 = new NewButton("greenButton0.png", [75, 36], getStr("ok", null), null, 20, FONT_NORMAL, [100, 100, 100], onMsg, i);
+                    but0 = new NewButton("greenButton0.png", [75, 36], getStr("revenge", null), null, 20, FONT_NORMAL, [100, 100, 100], onRevange, i);
                     but0.bg.pos(722, 30);
                     panel.add(but0.bg);
                 }
@@ -335,8 +330,27 @@ class RequestView extends MyNode
             return;
         res[2] = 1;
         global.mailController.readMail(data[p][1]["mailId"]);
-        global.httpController.addRequest("friendC/readMessage", dict([["uid", global.user.uid], ["fid", res[1]["uid"]], ["mid", res[1]["mid"]]]), null, null);
         updateTab();
+        
+        //挑战消息不需要同步服务器 在用户登录的时候 就已经删除了消息 同时扣除了资源
+        if(res[1]["needRead"] == null)
+        {
+            global.httpController.addRequest("friendC/readMessage", dict([["uid", global.user.uid], ["fid", res[1]["uid"]], ["mid", res[1]["mid"]]]), null, null);
+        }
+    }
+    function onRevange()
+    {
+        var res = data[p];
+        if(res[2] == 1)
+            return;
+        res[2] = 1;
+        global.mailController.readMail(data[p][1]["mailId"]);
+        updateTab();
+        global.director.popView();
+        
+        //挑战消息不需要同步服务器 在用户登录的时候 就已经删除了消息 同时扣除了资源
+        var cs = new ChallengeScene(null, null, null, null, CHALLENGE_REVENGE, res[1]);
+        global.director.pushScene(cs);
     }
 
     //请求由对方发送过来 接受和 拒绝的uid 和 fid 需要是相反的

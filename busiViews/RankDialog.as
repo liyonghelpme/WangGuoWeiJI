@@ -19,11 +19,8 @@ class RankDialog extends MyNode
     计算上下行范围
     更新显示的内容
     */
-
-
     var showView;
     var kind;
-
 
     var blueArrow;
     var newRankTitle;
@@ -39,19 +36,38 @@ class RankDialog extends MyNode
         bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
         blueArrow = sprite("blueArrow.png").anchor(50, 50).pos(745, 403).size(32, 70).color(100, 100, 100, 100);
         bg.add(blueArrow, 1);
-        //if(kind == HEART_RANK)
-        but0 = new NewButton(RANK_BUT[kind], [113, 42], getStr("rankInfo", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
-        /*
-        else 
-            but0 = new NewButton("blueButton.png", [113, 42], getStr("rankInfo", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
-        */
+        but0 = new NewButton(RANK_BUT[kind], [113, 42], getStr("randChallenge", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
         but0.bg.pos(645, 43);
         addChild(but0);
         newRankTitle = bg.addsprite("newRankTitle.png").anchor(50, 50).pos(169, 43).size(174, 61).color(100, 100, 100, 100);
     }
+    function finishCallback()
+    {
+        sureToChallenge = 0;
+    }
+    var sureToChallenge = 0;
     function onRankInfo()
     {
-        global.director.pushView(new NoTipDialog(HEART_TIP), 1, 0);
+        //global.director.pushView(new NoTipDialog(HEART_TIP), 1, 0);
+        if(global.user.checkInProtect())
+        {
+            if(sureToChallenge == 0)
+            {
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inProtect", null), [100, 100, 100], finishCallback));
+                sureToChallenge = 1;
+                return;
+            }
+            else
+            {
+                sureToChallenge = 0;
+                global.httpController.addRequest("challengeC/clearProtectTime", dict([["uid", global.user.uid]]), null, null);
+                global.user.clearProtectTime();
+            }
+        }
+
+        global.director.popView();
+        var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
+        global.director.pushScene(cs);
     }
     function RankDialog(k)
     {
@@ -74,24 +90,9 @@ class RankDialog extends MyNode
         {
             newRankTitle.texture(RANK_TITLE[kind], UPDATE_SIZE); 
         }
-        /*
-        else if(kind == HEART_RANK)
-        {
-            newRankTitle.texture("heartRankTitle.png", UPDATE_SIZE); 
-        }
-        else if(kind == FIGHT_RANK)
-        {
-            newRankTitle.texture("defenseRankTitle.png", UPDATE_SIZE); 
-        }
-        else if(kind == INVITE_RANK)
-        {
-            
-        }
-        */
 
         showView = new RankBase(this, kind);
         addChild(showView);
-
     }
 
     function closeDialog()

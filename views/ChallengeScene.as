@@ -129,7 +129,66 @@ class ChallengeScene extends MyNode
         {
             finishDataAndStartPic();
         }
+        else if(kind == CHALLENGE_OTHER)
+        {
+            global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid]]), getRandChallenge, null);
+        }
+        else if(kind == CHALLENGE_REVENGE)
+        {
+            global.httpController.addRequest("challengeC/getRevenge", dict([["uid", global.user.uid], ["oid", user["uid"]]]), getRevenge, null);
+        }
     }
+    function getRevenge(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            if(con["id"] == 1)
+            {
+                kind = CHALLENGE_FRI;
+                user = con["user"];
+                oid = user["uid"];
+                papayaId = user["id"];
+                score = user["score"];
+                rank = user["rank"];
+                user["revenge"] = 1;
+
+                global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
+            }
+            else
+            {
+                global.director.popScene();
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noTarget", null), [100, 100, 100], null));
+            }
+        }
+    }
+    //每天最多挑战120个？
+    function getRandChallenge(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            if(con["id"] == 1)
+            {
+                var otherId = con["oid"];
+                kind = CHALLENGE_FRI;
+                user = con["user"];
+                oid = user["uid"];
+                papayaId = user["id"];
+                score = user["score"];
+                rank = user["rank"];
+
+                global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", otherId]]), getDataOver, null);
+            }
+            else
+            {
+                //获取挑战用户数据失败
+                global.director.popScene();
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noTarget", null), [100, 100, 100], null));
+            }
+        }
+    }
+
     function finishDataAndStartPic()
     {
         finishLoadData = 1;

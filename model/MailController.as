@@ -1,5 +1,6 @@
 class MailController 
 {
+    //[[KIND, data(dict)]]
     var mail = [];
     //未读取的mail
     //已经读取mail
@@ -46,6 +47,8 @@ class MailController
         {
             con = json_loads(con);
             var msg = con["msg"];
+            var challengeMsg = [];
+            var challengeIds = [];
             for(var i = 0; i < len(msg); i++)
             {
                 var d = dict();
@@ -54,7 +57,29 @@ class MailController
                     d.update(MSG_KEY[j], msg[i][j]);
                 }
                 d.update("mailId", mailId++);
+                if(d["kind"] == PARAMS["MSG_CHALLENGE"])
+                {
+                    d["needRead"] = 0;//不需要远程readMessage 登录时就处理弹出对话框 减去money
+                    challengeMsg.append(d);
+                    challengeIds.append([d["uid"], d["mid"]]);
+                }
                 mail.append([OTHER_MSG, d]);
+            }
+            if(len(challengeMsg) > 0)
+            {
+                var totalCost = dict([["silver", 0], ["crystal", 0]]);
+                for(i = 0; i < len(challengeMsg); i++)
+                {
+                    var rob = json_loads(challengeMsg[i]["param"]);
+                    totalCost["silver"] += rob["silver"];
+                    totalCost["crystal"] += rob["crystal"];
+                    //至少保留一定的资源
+                }
+                trace("checkRobCost", totalCost);
+                global.user.checkRobCost(totalCost);
+                global.user.doCost(totalCost);//掠夺资源
+                global.httpController.addRequest("challengeC/readChallengeMsg", dict([["uid", global.user.uid], ["msgs", json_dumps(challengeIds)], ["totalCost", json_dumps(totalCost)]]), null, null);
+                global.msgCenter.sendMsg(HAS_CHALLENGE_MSG, challengeMsg);
             }
             initMessage = 1;
         }

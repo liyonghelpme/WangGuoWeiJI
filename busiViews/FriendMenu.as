@@ -150,23 +150,6 @@ class FriendMenu extends MyNode
     //挑战结束返回好友页面
     //已经有一个 挑战排行榜
     //挑战邻居有什么意义
-    function onChallenge()
-    {
-        if(challenged == 0)
-        {
-            challenged += 1;
-            var cry = getChallengeNeiborCry(scene.user["uid"]);
-            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToChallenge", ["[NUM]", str(cry)]), [100, 100, 100], null));
-            return;
-        }
-        challenged = 0;
-        var user = scene.user;
-        var cs = new ChallengeScene(user.get("uid"), user.get("id"), 0, 0, CHALLENGE_NEIBOR, user);
-        global.director.pushScene(cs);
-        //global.director.pushView(new VisitDialog(cs), 1, 0);
-        //cs.initData();
-        updateRightMenu();
-    }
     function returnHome()
     {
         global.director.popScene();

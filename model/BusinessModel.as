@@ -238,6 +238,6 @@ function calAccCost(leftTime)
     //至少消耗1个金币
     if(leftTime > 0)    
         needGold = max(needGold, 1);
-    printD(["calAccCost", needGold, leftTime]);
+    //printD(["calAccCost", needGold, leftTime]);
     return needGold;
 }

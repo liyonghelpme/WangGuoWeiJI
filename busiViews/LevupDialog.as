@@ -30,7 +30,7 @@ class LevupDialog extends MyNode
         var OFFX = 213;
         var thing = getLevelupThing();
 
-        for(var i = 0; i < 2; i++)
+        for(var i = 0; i < 2 && i < len(thing); i++)
         {
             var kind = thing[i][0];
             var id = thing[i][1].get("id");

@@ -155,8 +155,10 @@ class BattleScene extends MyNode
         double = argument["double"];
         singleSid = argument["singleSid"];
         difficult = argument["difficult"];
-        //param = argument["param"];
         user = argument["user"];
+        //只有挑战排行榜才需要lostScore
+        if(kind == CHALLENGE_FRI)
+            user["lostScore"] = getLostScore();
 
         skills = dict();
         var sk = argument["skills"];//skills --->soldierId--->dict([skillId, skillLevel])
@@ -181,6 +183,7 @@ class BattleScene extends MyNode
     //当前关卡出现的怪兽
     //check DownloadYet  in sqllite db
     //allMonsters id
+    var challengeInfo;
 
     var initYet = 0;
     function initView()
@@ -190,6 +193,27 @@ class BattleScene extends MyNode
         dialogController = new DialogController(this);
         addChild(dialogController);
 
+
+
+        if(kind == CHALLENGE_TRAIN)
+            map = new Map(argument["big"], argument["small"], null, this, null);
+        else
+            map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equips"]);
+
+        addChild(map);
+
+        if(kind == CHALLENGE_FRI)
+        {
+            challengeInfo = new ChallengeInfo(this);
+            addChild(challengeInfo);
+        }
+        else
+            showHintDialog();
+
+
+    }
+    function showHintDialog()
+    {
         if(MAP_KIND_TIP.get(kind) != null)
         {
             if(checkTip(MAP_KIND_TIP[kind]) == null)
@@ -202,18 +226,55 @@ class BattleScene extends MyNode
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));
         dialogController.addCmd(dict([["cmd", "randomChoose"]]));
 
-        if(kind == CHALLENGE_TRAIN)
-            map = new Map(argument["big"], argument["small"], null, this, null);
-        else
-            map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equips"]);
-
-        addChild(map);
         banner = new MapBanner(this);
         addChild(banner);
-        if(singleSid != null)
+    }
+    //评估军队实力
+    function evaluePower()
+    {
+        var myPower = 0;
+        var enePower = 0;
+        var allMySol = global.user.getAllSoldierKinds().keys();
+        for(var i = 0; i < len(allMySol); i++)
         {
-            banner.putSoldierOnMap(singleSid);
+            var sData = getData(SOLDIER, allMySol[i]);
+            var rl = sData["level"]+1;
+            rl = rl*rl
+            myPower += rl;
         }
+        var eneSol = argument["soldier"]; 
+        for(i = 0; i < len(eneSol); i++)
+        {
+            sData = getData(SOLDIER, eneSol[i]["id"]); 
+            rl = sData["level"]+1;
+            rl = rl*rl;
+            enePower += rl;
+        }
+        return [myPower, enePower];
+    }
+    //挑战1个人 只有初始化的时候 会初始化积分 之后不能再 修改
+    function getLostScore()
+    {
+        var power = evaluePower();
+        var score = 0;
+        if(power[1] > 0)
+            score = getParam("BaseScore")*power[0]/power[1]
+        score = min(getParam("maxScore"), max(score, getParam("minScore")));
+        trace("lostScore", score, power);
+        return score;
+    }
+    function startChallenge()
+    {
+        challengeInfo.removeSelf();
+        showHintDialog();
+        global.httpController.addRequest("challengeC/realChallenge", dict([["uid", global.user.uid], ["fid", user["uid"]]]), null, null);
+    }
+
+    //寻找下一个目标
+    function startFindNext()
+    {
+        var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
+        global.director.replaceScene(cs);
     }
     
     //防御力的key = 10*big+small 

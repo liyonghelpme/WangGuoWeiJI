@@ -1,7 +1,18 @@
 //id = big *100 + small  比较合适 可以扩展
 function getRoundMonster(big, small)
 {
-    return realGenRoundMonster(big*getParam("MapMonsterNumCoff")+small);
+    var rid = big*getParam("MapMonsterNumCoff")+small;
+    var rnum = getData(ROUND_MONSTER_NUM, rid);
+    //id mons 
+    var mons = rnum["mons"];
+    var temp = [];
+    //复制一遍数据 用于内部修改
+    for(var i = 0; i < len(mons); i++)
+    {
+        temp.append([mons[i][0], mons[i][1]]);
+    }
+    trace("genRoundMonster", mons);
+    return realGenRoundMonster(temp);
 }
 //1 大关奖励 1个 
 //2 大关奖励 2 个
@@ -204,4 +215,10 @@ function checkInterSect(rect1, rect2)
 {
     //trace("checkInterSect", rect1, rect2);
     return rect1[0] < (rect2[0]+rect2[2]) && rect1[1] < (rect2[1]+rect2[3]) &&  rect2[0] < (rect1[0]+rect1[2]) && rect2[1] < (rect1[1]+rect1[3]);
+}
+
+function getRobReward(star, silver, crystal)
+{
+    var rate = getParam(str(star)+"StarRobRate");
+    return dict([["silver", silver*rate/100], ["crystal", crystal*rate/100]]);
 }

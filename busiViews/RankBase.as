@@ -42,8 +42,6 @@ class RankBase extends MyNode
             {
                 var sz = bg.size();
                 lock = node();
-                //bg.addsprite("heartLoading.png").anchor(0, 0).pos(396, 253).size(138, 19);
-                //bg.addsprite("heartLoad.png").anchor(0, 0).pos(310, 228).size(59, 65);
 
                 lock.addsprite().pos(310, 228).addaction(
                 repeat(
@@ -476,13 +474,6 @@ class RankBase extends MyNode
     /*
     如果新的数据不能显示 initYet == 0
     则停止更新tab 
-bg.addsprite("friendBlock.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
-bg.addsprite("人物头像.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
-bg.addsprite("levelStar.png").anchor(0, 0).pos(85, 41).size(31, 31).color(100, 100, 100, 100);
-bg.addlabel(getStr("44", null), "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
-bg.addlabel(getStr(" 守擂成功:1234567", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
-bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(71, 129).color(43, 25, 9);
-bg.addlabel(getStr("No.1", null), "fonts/heiti.ttf", 23).anchor(50, 50).pos(81, 24).color(29, 16, 4);
     */
     
     function updateTab()
@@ -529,14 +520,9 @@ bg.addlabel(getStr("No.1", null), "fonts/heiti.ttf", 23).anchor(50, 50).pos(81, 
                 panel.addsprite("levelStar.png").anchor(50, 50).pos(100, 56).size(31, 31).color(100, 100, 100, 100);
                 panel.addlabel(str(data[diff]["level"]) , "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
 
-/*
-bg.addlabel(getStr(" 守擂成功:1234567", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
-bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 127).color(43, 25, 9);
-*/
                 panel.addlabel(data[diff]["name"], "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 120).color(43, 25, 9);
 
-                var scoreLabel = panel.addlabel(getStr(" 守擂成功:1234567", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
-                scoreLabel.text(getStr(Kind2Num[rankKind], ["[NUM]", str(data[diff]["score"])]));
+                var scoreLabel = panel.addlabel(getStr(Kind2Num[rankKind], ["[NUM]", str(data[diff]["score"])]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
 
                 panel.put(curNum);
                 if(curNum == selectNum)
@@ -643,18 +629,8 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
         shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 79).size(144, 164).color(100, 100, 100, 100);
         if(rankKind == CHALLENGE_RANK)
         {
-            but0 = new NewButton("violetBut.png", [92, 39], getStr("challenge", null), null, 18, FONT_NORMAL, [100, 100, 100], onChallenge, curNum);
-            but0.bg.pos(75, 104);
-            shadow.add(but0.bg);
-
-            if(global.user.checkChallengeYet(uid))//挑战自身显示按钮 || uid == global.user.uid
-            {
-                but0.setGray();
-                but0.setCallback(null);
-            }
-
             but0 = new NewButton("violetBut.png", [92, 39], getStr("visit", null), null, 18, FONT_NORMAL, [100, 100, 100], onVisit, curNum);
-            but0.bg.pos(75, 53);
+            but0.bg.pos(75, 79);
             shadow.add(but0.bg);
         }
         else
@@ -667,21 +643,6 @@ bg.addlabel(getStr("usernameuser", null), "fonts/heiti.ttf", 18).anchor(50, 50).
     }
 
 
-    function onChallenge(curNum)
-    {
-        var beginRank = data[0]["rank"];
-        var diff = curNum-beginRank;
-        if(diff < 0 || diff >= len(data))
-            return;
-        global.director.popView();
-        var uid = data[diff]["uid"];
-        var papayaId = data[diff]["id"];
-        var score = data[diff]["score"];
-        var rank = data[diff]["rank"];
-
-        var cs = new ChallengeScene(uid, papayaId, score, rank, CHALLENGE_FRI, data[diff]);
-        global.director.pushScene(cs);
-    }
     function onVisit(curNum)
     {
         var beginRank = data[0]["rank"];

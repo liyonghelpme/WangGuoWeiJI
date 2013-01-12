@@ -54,7 +54,7 @@ class Arrow extends EffectBase
         bg.addaction(shiftAni);
         updateTime();
 
-        trace("addArrow", timeAll);
+        //trace("addArrow", timeAll);
 
         var p = sol.getPos();
         var off = getEffectOff(sol, tar);

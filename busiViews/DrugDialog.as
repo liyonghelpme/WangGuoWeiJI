@@ -90,6 +90,7 @@ class DrugDialog extends MyNode
         global.director.popView();
     }
 
+    //没有装备购买装备 回来之后继续使用装备
     function buyIt()
     {
         var store = new Store(global.director.curScene);

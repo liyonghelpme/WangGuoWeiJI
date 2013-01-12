@@ -55,6 +55,7 @@ function initSkillList(sol, equips)
 //检测是否装备了所有该套装装备
 function checkFullEquip(equips, suitId)
 {
+    trace("fullEquip", equips, suitId);
     var suits = getSuitAllEquips(suitId);
     suits = set(suits);
     return suits.issubset(equips); 

@@ -136,6 +136,10 @@ class DialogController extends MyNode
                     var randBut = scene.banner.randomBut;
                     global.taskModel.showHintArrow(randBut, randBut.prepare().size(), RANDOM_BUT);
                 }
+                else if(curCmd["cmd"] == "hasChallengeMsg")
+                {
+                    global.director.pushView(new ChallengeMsgDialog(curCmd["challengeMsg"]), 1, 0);
+                }
             }
         }
     }

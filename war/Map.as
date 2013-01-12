@@ -185,7 +185,7 @@ class Map extends MyNode
     {
         var myDef = defenses[0];
         var leftHealth = myDef.health;
-        if(leftHealth >= myDef.healthBoundary*getParam("3Star"))
+        if(leftHealth >= myDef.healthBoundary*getParam("3Star")/100)
             return 3;
         if(leftHealth >= myDef.healthBoundary*getParam("2Star")/100)
             return 2;
@@ -257,7 +257,7 @@ class Map extends MyNode
 
         if(soldier.color == MYCOLOR)//自上而下 自右而左
         {
-            for(xk = 5; xk > 1; xk--)
+            for(xk = 5; xk >= 1; xk--)
             {
                 if((xk+soldier.sx) > 6)
                     continue;
@@ -484,21 +484,15 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
         else//程序生成士兵的位置 挑战排行榜 挑战邻居
         {
-            for(i = 0; i < len(s); i++)
+            var otherSols = realGenChallengeSoldier(s);
+            for(i = 0; i < len(otherSols); i++)
             {
-                so = realAddSoldier(ENEMY, s[i]["id"], s[i], ENECOLOR);
+                so = realAddSoldier(ENEMY, otherSols[i]["id"], otherSols[i], ENECOLOR);
                 /*
                 设定人物位置会设定人物的zord 
                 所以要在添加了人物之后 设定位置
-
                 */
-
-                nPos = getInitPos(so);
-                if(nPos[0] == -1)
-                {
-                    realRemoveSoldier(so);
-                    break;
-                }
+                nPos = getSolPos(otherSols[i].get("monX")+7, otherSols[i].get("monY"), so.sx, so.sy, so.offY);
                 so.setPos(nPos); 
                 setMap(so);
             }
@@ -738,6 +732,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     
     [oid, papayaId, score, rank]
     */
+    //计算积分 水晶 和 银币奖励
     function challengeOver(win, star, reward, deads)
     {
         if(reward == null)
@@ -749,42 +744,19 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         //挑战RANK 或者 邻居 按照排名 得到奖励
         if(scene.kind == CHALLENGE_FRI) 
         {
-            var myRank = global.user.rankOrder;
-            var myScore = global.user.rankScore;
-
-            var eneRank = scene.argument["rank"];//param[3];
-            var eneScore = scene.argument["score"];//param[2];
-
-            var diff = eneRank-myRank;
-            for(var i = 0; i < len(challengeReward); i++)
+            if(star > 0)
             {
-                if(diff < challengeReward[i][0])
-                {
-                    break;
-                }
-            }
-            i = min(i, len(challengeReward)-1);
-            if(win == 1)
-            {
-                crystal = challengeReward[i][1];
-                
-                score = eneScore*challengeReward[i][2]/100;
-                score = min(MAX_SCORE-myScore, score);
+                var robReward = getRobReward(star, scene.user["silver"], scene.user["crystal"]);
+                score = scene.user["lostScore"];
             }
             else
             {
-                score = -myScore*challengeReward[i][3]/100;
+                robReward = dict();
+                score = -scene.user["lostScore"];
             }
+            
             global.user.updateRankScore(score); 
-            global.user.changeValue("crystal", crystal);
-
-        }
-        else if(scene.kind == CHALLENGE_NEIBOR)
-        {
-            var cry = 0;
-            if(win)
-                cry = getChallengeNeiborCry(scene.argument["oid"]);//param[0]
-            global.user.changeValue("crystal", cry);
+            global.user.doAdd(robReward);
         }
         trace("sceneKind", scene.kind, CHALLENGE_FRI);
         if(scene.kind == CHALLENGE_MON)
@@ -799,16 +771,13 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
         else if(scene.kind == CHALLENGE_FRI)
         {
-            //global.director.pushView(new ChallengeOver(win, star, crystal, score, this, deadInstance), 1, 0);
             //挑战邻居 有水晶 有 得分 
-            global.director.pushView(new ChallengeOver(this, dict([["win", win], ["star", star], ["reward", dict([["crystal", crystal], ["score", score]])], ["deadSols", deadInstance], ["type", CHALLENGE_FRI]])), 1, 0);
-            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["crystal", crystal], ["score", score], ["mid", global.user.getNewMsgId()]]), null, null);
-        }
-        else if(scene.kind == CHALLENGE_NEIBOR)
-        {
-            //global.director.pushView(new ChallengeNeibor(win, star, cry, 0, this, deadInstance), 1, 0);
-            global.director.pushView(new ChallengeOver(this, dict([["win", win], ["star", star], ["reward", dict([["crystal", crystal]])], ["deadSols", deadInstance], ["type", CHALLENGE_NEIBOR]])), 1, 0);
-            global.httpController.addRequest("friendC/challengeNeiborOver", dict([["uid", global.user.uid], ["fid", scene.argument["oid"]], ["sols", deadSols], ["crystal", cry], ["mid", global.user.getNewMsgId()]]), null, null);
+            if(win)
+                global.director.pushView(new NewChallengeWin(this, dict([["win", win], ["star", star], ["score", score], ["reward", robReward]])), 1, 0);
+            else
+                global.director.pushView(new NewChallengeFail(this, dict([["win", win], ["star", star], ["score", score], ["reward", robReward]])), 1, 0);
+                
+            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["reward", json_dumps(robReward)], ["score", score], ["mid", global.user.getNewMsgId()], ["win", win], ["revenge", scene.user.get("revenge", 0)]]), null, null);
         }
     }
     

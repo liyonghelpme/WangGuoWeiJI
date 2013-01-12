@@ -163,8 +163,6 @@ class CallSoldier extends MyNode
                     addChild(but0);
                     blueButton = but0;
 
-                    //cost = getCost(SOLDIER, id);
-                    //buyable = global.user.checkCost(cost);
                     if(!can)
                     {
                         blueButton.setGray();
@@ -337,16 +335,20 @@ class CallSoldier extends MyNode
         if(curSelSol != null)
         {
             var curSolNum = global.user.getSolNum();
+            var campNum = global.user.getCampProductNum();
+            curSolNum += campNum;
+            trace("curSolNum", curSolNum, campNum);
+
             var peopleNum = global.user.getPeopleNum();
             
             //士兵人数超出 超出经营最大人数
             //超出人口上限
-            if(curSolNum >= MAX_BUSI_SOLNUM)
+            if(curSolNum >= getParam("MaxBusiSolNum"))
             {
                 global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sorrySol", null), [100, 100, 100], null));
                 return;
             }
-            else if(curSolNum > peopleNum)
+            else if(curSolNum >= peopleNum)
             {
                 global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("buildHouse", null), [100, 100, 100], null));
                 return;

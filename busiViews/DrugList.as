@@ -103,7 +103,8 @@ class DrugList extends MyNode
         global.httpController.addRequest("soldierC/unloadThing", dict([["uid", global.user.uid], ["eid", data[curNum][1]]]), null, null);
 
         global.user.unloadThing(data[curNum][1]);
-        initData();
+        //initData();
+        updateData();
         updateTab();
     }
     function updateTab()
@@ -243,17 +244,84 @@ class DrugList extends MyNode
             its = effect.items()[0];
             trace("equip Gain", effect, kind, p, equipKind);
             global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("opSucDrug", ["[NAME]", soldier.myName, "[NUM]", str(its[1]), "[KIND]", getStr(its[0], null)]), [100, 100, 100], null));
+            
+
+            //脱下装备也提示套装失效
         }
         global.user.useThing(kind, p, soldier);
+
+        if(kind == EQUIP)
+        {
+            //如果士兵NAME 收集全套张则提示
+            var edata = global.user.getEquipData(p);
+            var ekind = edata.get("kind");
+            var eStaticData = getData(EQUIP, ekind);
+            var suit = eStaticData["suit"];
+            trace("equipSuit", edata, ekind, suit);
+            if(suit != 0)
+            {
+                var allEquips = global.user.getSoldierEquipData(soldier.sid);
+                var allEquipKinds = [];
+                for(var i = 0; i < len(allEquips); i++)
+                {
+                    allEquipKinds.append(allEquips[i]["kind"]);
+                }
+                ret = checkFullEquip(allEquipKinds, suit);
+                if(ret)
+                {
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("collectEquip", ["[SNAME]", soldier.myName, "[ENAME]", edata["name"]]), [100, 100, 100], null));
+                    //装备和技能
+                    var skillData = getData(EQUIP_SKILL, suit);
+                    skillData = getData(SKILL, skillData["skillId"]);
+                    trace("suit skllId", suit, skillData);
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("getSkill", ["[SNAME]", soldier.myName, "[SKNAME]", skillData["name"]]), [100, 100, 100], null));
+                }
+            }
+        }
     }
 
-
+    /*
+    更新装备数据 不改变装备位置
+    新购买的装备 显示在最后？ 还是显示在前面
+    BUY_EQUIP
+    SELL_EQUIP
+    USE_EQUIP
+    //使用装备 卸载装备 不调整装备位置
+    */
+    function updateData()
+    {
+        var key;
+        var i;
+        //kind level owner
+        if(kind == EQUIP)
+        {
+            for(i = 0; i < len(data); i++)
+            {
+                var eid = data[i][1];
+                if(eid != -1)
+                {
+                    var eData = global.user.getEquipData(eid);
+                    if(eData["owner"] != -1)
+                        data[i][0] = USE_EQUIP;
+                    else
+                        data[i][0] = FREE_EQUIP;
+                }
+            }
+        }
+    }
+    //士兵装备后 应该改变装备的状态 但是不应该调整装备的位置
     function receiveMsg(para)
     {
         var msgId = para[0];
         if(msgId == UPDATE_EQUIP)
         {
-            initData();
+            var subMsgId = para[1][1];
+            //使用装备 卸载装备
+            if(subMsgId == UPDATE_USE_EQUIP)
+                updateData();
+            //购买装备
+            else
+                initData();
             updateTab(); 
         }
         else if(msgId == BUY_DRUG)

@@ -35,6 +35,7 @@ class User
     var lastColor;
     var name;
     var invite;
+    var challengeState;
     
 
     function getAllBuildingKinds()
@@ -319,6 +320,19 @@ class User
     {
         return maxMessageId++;
     }
+    function clearProtectTime()
+    {
+        challengeState["protectTime"] = 0;
+    }
+    function checkInProtect()
+    {
+        var now = time()/1000;
+        var effectStart = now - getParam("ProtectTime");
+        //服务器保护模式开启时间
+        if(server2Client(challengeState["protectTime"]) > effectStart)
+            return 1;
+        return 0;
+    }
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
@@ -336,6 +350,7 @@ class User
             name = con["name"];
             //inviteCode = con["inviteCode"];
             invite = con["invite"];
+            challengeState = con["challengeState"];
 
             //在friendController 中 第一次登录初始化新的宝箱
             hasBox = con["hasBox"];
@@ -375,7 +390,6 @@ class User
             initEquips(con.get("equips"));
 
             herbs = initThings(con.get("herbs"));
-            //tasks = initThings(con.get("tasks"));
 
             challengeRecord = con.get("challengeRecord");
             rankScore = con.get("rank")[0];
@@ -383,9 +397,6 @@ class User
                 rankScore = MAX_SCORE;
             rankOrder = con.get("rank")[1];
 
-            //mine = con.get("mine");
-            //mine["id"] = MINE_BUILD; 
-            //mine["bid"] = MINE_BID;
 
             rated = db.get("rated");
             if(rated == null)
@@ -440,11 +451,13 @@ class User
             global.msgCenter.sendMsg(INITDATA_OVER, null);
         }
     }
+    //积分不小于0?
     function updateRankScore(add)
     {
         rankScore += add;
         if(rankScore > MAX_SCORE)
             rankScore = MAX_SCORE;
+        rankScore = max(0, rankScore);
     }
 
     function initData()
@@ -592,6 +605,22 @@ class User
     {
         return getValue("people");
     }
+    function getCampProductNum()
+    {
+        var allBuildings = buildings.values();
+        var countNum = 0;
+        for(var i = 0; i < len(allBuildings); i++)
+        {
+            var bd = getData(BUILD, allBuildings[i]["id"]);
+            if(bd["funcs"] == CAMP)
+            {
+                var objectList = allBuildings[i]["objectList"];
+                for(var j = 0; j < len(objectList); j++)
+                    countNum += objectList[j][1];
+            }
+        }
+        return countNum;
+    }
     //每个士兵占用一个人口
     function getSolNum()
     {
@@ -694,7 +723,7 @@ class User
         {
             equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
             db.put("equips", equips);
-            global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
+            global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_BUY_EQUIP]);
         }
         else
         {
@@ -803,7 +832,7 @@ class User
         //闯关结束 提示士兵阵亡
         if(soldier.dead)
         {
-            //清除士兵身上所有非套装suit == 0
+            //清除士兵身上所有非套装suit == -1
             killSoldier(soldier);
         }
         else
@@ -1078,7 +1107,7 @@ class User
             edata["owner"] = soldier.sid;
             db.put("equips", equips);
             soldier.useEquip(tid);
-            global.msgCenter.sendMsg(UPDATE_EQUIP, tid);
+            global.msgCenter.sendMsg(UPDATE_EQUIP, [tid, UPDATE_USE_EQUIP]);
             return 1;
         }
     }
@@ -1151,6 +1180,17 @@ class User
         setValue(key, v);
         if(key == "exp")
             global.msgCenter.sendMsg(UPDATE_EXP, addV);
+    }
+    //修改了传入到掠夺总资源参数
+    function checkRobCost(robCost)
+    {
+        var silver = getValue("silver");
+        var crystal = getValue("crystal");
+        var most = silver*getParam("robMostRate")/100;
+        robCost["silver"] = min(robCost["silver"], most);
+        most = crystal*getParam("robMostRate")/100;
+        robCost["crystal"] = min(robCost["crystal"], most);
+        return robCost;
     }
 
     //获取任何物品首先获得 相应类别 再 获取 对应id的值
@@ -1287,7 +1327,7 @@ class User
         var e = equips.get(eid);
         e["level"] += 1;
         db.put("equips", equips);
-        global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
+        global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_UPGRADE_EQUIP]);
     }
     function breakEquip(eid)
     {
@@ -1295,7 +1335,7 @@ class User
         e["level"] -= 1;
         e["level"] = max(e["level"], 0);
         db.put("equips", equips);
-        global.msgCenter.sendMsg(UPDATE_EQUIP, eid);
+        global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_UPGRADE_EQUIP]);
     }
 
     //全部卖出

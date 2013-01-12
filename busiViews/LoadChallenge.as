@@ -16,6 +16,7 @@ class LoadChallenge extends MyNode
         [CHALLENGE_TRAIN, "loadTrain.png"],
         [CHALLENGE_FIGHT, "loadChallenge.png"],
         [CHALLENGE_DEFENSE, "loadChallenge.png"],
+        [CHALLENGE_OTHER, "loadChallenge.png"],
     ]);
     function initView()
     {
