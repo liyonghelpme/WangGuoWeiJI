@@ -212,7 +212,6 @@ function getData(kind, id)
                 ret.update(k[i], getStr(datas[i], null));
             else
             {
-
                 ret.update(k[i], datas[i]);
             }
         }

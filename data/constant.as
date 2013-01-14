@@ -1077,7 +1077,6 @@ const HERO_SIZE = dict([
     [590, [164, 106]],
 ]);
 
-const SHOW_SCALE = 120;
 
 const WEAPON_SOL = 0;
 const DEFENSE_SOL = 1;

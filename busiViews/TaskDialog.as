@@ -156,6 +156,7 @@ class TaskDialog extends MyNode
     function initData()
     {
         tasks = [];
+        trace("initTaskDialog", global.taskModel.initYet);
         if(global.taskModel.initYet)
         {
             var finishTask = [];
@@ -220,11 +221,6 @@ class TaskDialog extends MyNode
                     }
                 }
 
-                var needFinishBuy = global.taskModel.needToFinishBuyTask;
-                for(i = 0; i < len(needFinishBuy); i++)
-                {
-                    finishTask.append([ONCE_TASK, ["buy", needFinishBuy[i]]]);//显示购买任务 类型 key 参数
-                }
 
                 //添加未完成的任务
 
@@ -245,6 +241,7 @@ class TaskDialog extends MyNode
             bubbleSort(unFinishTask, cmpTask);
             tasks = finishTask+unFinishTask;
         }
+        trace("finish Task Dialog Init", len(tasks));
     }
     const INIT_X = 90;
     const INIT_Y = 214;

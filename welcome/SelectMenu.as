@@ -16,7 +16,7 @@ class Hero extends MyNode
         var mapPos = HeroPos.get(hid);
         heroSize = HERO_SIZE[hid];
         //取消选择士兵
-        bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, null).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100).size(heroSize);
+        bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*getParam("SelectHeroShowScale")/100, getParam("SelectHeroShowScale")).anchor(50, 100).size(heroSize);
         init();
         var lp = HERO_LIGHT_POS[hid];
         full = bg.addsprite("hero"+str(hid)+"Full.png", ARGB_8888).pos(lp);
@@ -106,9 +106,8 @@ class SelectMenu extends MyNode
     function SelectMenu(s, cur)
     {
         scene = s;
-        //curStep = cur;
+        curStep = cur;
         //直接进入 
-        curStep = 0;
         word = getStr("selectHero", ["[NAME]", global.user.papayaName]);
 
         bg = node();
@@ -147,8 +146,7 @@ class SelectMenu extends MyNode
     var printFinish = 0;
     function printOver()
     {
-        //if(curStep == 2)
-        if(curStep == 0)
+        if(curStep == 2)
             printFinish = 1;
     }
 
@@ -372,11 +370,11 @@ class SelectMenu extends MyNode
     }
     function update(diff)
     {
-        if(printFinish && inGame == null)//打字结束 且 检测名字无误 进入游戏
+        if(printFinish && inGame == null && checkName)//打字结束 且 检测名字无误 进入游戏
         {
             inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(getParam("enterTime"), "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
-            //新手阶段结束
-            global.httpController.addRequest("finishNewStory", dict([["uid", global.user.uid]]), null, null);
+            //新手阶段结束 暂时关闭这个功能
+            //测试阶段不完成新手任务
         }
     }
     override function exitScene()

@@ -7,7 +7,7 @@ class ParamController
     {
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
-        global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
+        //global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
         global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
         global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
         global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
