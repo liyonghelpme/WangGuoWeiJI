@@ -97,6 +97,6 @@ class FallObj extends MyNode
         global.taskModel.doCycleTaskByKey("pick", 1);
         global.taskModel.doDayTaskByKey("pick", 1);
         global.taskModel.doNewTaskByKey("pick", 1);
-        player.stop();
+        //player.stop();
     }
 }

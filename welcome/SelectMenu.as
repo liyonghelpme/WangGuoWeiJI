@@ -13,11 +13,8 @@ class Hero extends MyNode
     {
         scene = s;
         hid = i;
-        
         var mapPos = HeroPos.get(hid);
-
         heroSize = HERO_SIZE[hid];
-
         //取消选择士兵
         bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, null).scale(HeroDir.get(hid)*SHOW_SCALE/100, SHOW_SCALE).anchor(50, 100).size(heroSize);
         init();
@@ -112,7 +109,7 @@ class SelectMenu extends MyNode
         //curStep = cur;
         //直接进入 
         curStep = 0;
-        word = getStr("selectHeroNew", ["[NAME]", global.user.papayaName]);
+        word = getStr("selectHero", ["[NAME]", global.user.papayaName]);
 
         bg = node();
         init();

@@ -29,7 +29,6 @@ class BattleEnd extends MyNode
     }
     function closeDialog()
     {
-        //global.director.popScene();
         global.director.replaceScene(new SelectHero());
     }
 }

@@ -81,6 +81,7 @@ class MenuLayer extends MyNode
     }
     function onTask()
     {
+        var player = global.controller.butMusic.play(0, 80, 80, 0, 100);
         global.director.pushView(new TaskDialog(), 1, 0);
     }
     function onRank()
@@ -445,6 +446,7 @@ class MenuLayer extends MyNode
     }
     
     function onClicked(n, e, param, x, y, points){
+        var player = global.controller.butMusic.play(0, 80, 80, 0, 100);
         if(param==0){
             if(showChildMenu == 0){
                 drawAllMenu();
