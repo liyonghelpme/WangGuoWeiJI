@@ -132,6 +132,19 @@ function getSolPos(mx, my, sx, sy, offY)
 }
 
 
+function getAllStar()
+{
+    var star = global.user.starNum;
+    var total = 0;
+    for(var big = 0; big < PARAMS.get("bigNum"); big++)
+    {
+        for(var small = 0; small < len(star[big]); small++)
+        {
+            total += star[big][small];
+        }
+    }
+    return total;
+}
 
 function getTotalStar(big)
 {
@@ -217,8 +230,15 @@ function checkInterSect(rect1, rect2)
     return rect1[0] < (rect2[0]+rect2[2]) && rect1[1] < (rect2[1]+rect2[3]) &&  rect2[0] < (rect1[0]+rect1[2]) && rect2[1] < (rect1[1]+rect1[3]);
 }
 
-function getRobReward(star, silver, crystal)
+function getRobReward(star, silver, crystal, powerCoff)
 {
+    //奖励 = 对方实力/我方实例 * 城墙生命值得分 * 资源总量
+    var coff = 100;
+    if(powerCoff[0] > 0)
+    {
+        coff = powerCoff[1]/powerCoff[0];
+        coff = min(100, coff);
+    }
     var rate = getParam(str(star)+"StarRobRate");
-    return dict([["silver", silver*rate/100], ["crystal", crystal*rate/100]]);
+    return dict([["silver", coff*silver*rate/10000], ["crystal", coff*crystal*rate/10000]]);
 }

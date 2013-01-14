@@ -1174,6 +1174,7 @@ class User
                 global.msgCenter.sendMsg(LEVEL_UP, null);
                 global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()]]), null, null);
                 addV = 0;
+                global.taskModel.doAllTaskByKey("levelUp", level);//升级任务是直接比较数值而不是 累计数值
             }
             //增加经验没有升级
         }

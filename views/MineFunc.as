@@ -131,6 +131,8 @@ class Mine extends FuncBuild
             //global.user.updateMine(baseBuild);
             global.user.updateBuilding(baseBuild);
 
+            global.taskModel.doAllTaskByKey("harvestCrystalMine", crystal);
+
             return 1;
         }
         return 0;

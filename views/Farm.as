@@ -26,10 +26,9 @@ class Farm extends FuncBuild
         if(planting.getState() >= MATURE)
         {
             harvestPlant();
-
-
             flowBanner.removefromparent();
             flowBanner = null;
+
             return 1;
         }
         return 0;
@@ -126,6 +125,8 @@ class Farm extends FuncBuild
         planting = null;
         global.user.updateBuilding(baseBuild);
         global.taskModel.doNewTaskByKey("plant", 1);
+
+        global.taskModel.doAllTaskByKey("harvestFarm", gain["silver"]);
     }
     function harvestPlant()
     {

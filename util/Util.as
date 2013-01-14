@@ -1138,17 +1138,20 @@ function dict2Http(d)
 function getCycleStageNum(tid, stage)
 {
     var tData = getData(TASK, tid);
-    if(tData["stageNum"] == -1 || tData["stageNum"] > stage )
-    {
-        return tData["num"]+tData["addNum"]*(stage+1);//base + addNum*stage
-    }
-    return -1; 
+    if(stage < len(tData["stageArray"]))
+        return tData["stageArray"][stage];
+    return -1;
 }
 
 function getCycleReward(tid, stage)
 {
-    var tData = getGain(TASK, tid);
-    return multiScalar(tData, (stage+1)*100);
+    var tData = getData(TASK, tid);
+    if(stage < len(tData["stageArray"]))
+    {
+        trace("getCycleReward", tid, stage, tData);
+        return dict([["gold", tData["goldArray"][stage]], ["exp", tData["expArray"][stage]]]);
+    }
+    return dict();
 }
 
 function doShare(w, link, pid, callback, param)

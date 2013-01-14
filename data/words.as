@@ -676,4 +676,8 @@ var WORDS = dict([
 ["challengeTip", "-使用魔药可以在战斗中施展技能\n-佩戴装备可以极大提升士兵属性\n-士兵转职之后属性将会极大提升"],
 ["inProtect", "挑战其他人将取消保护状态，再次点击确定"],
 ["noTarget", "没有找到匹配玩家"],
+["revenge", "复仇"],
+["totalRobNum", "总共损失:[SIL]{[KIND1]}[CRY]{[KIND2]}"],
+["conSucSavePrincess", "恭喜你取得了胜利！早日救出公主哦！"],
+["solTaskFinish", "该项任务已经完成"],
 ]);

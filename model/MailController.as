@@ -79,7 +79,7 @@ class MailController
                 global.user.checkRobCost(totalCost);
                 global.user.doCost(totalCost);//掠夺资源
                 global.httpController.addRequest("challengeC/readChallengeMsg", dict([["uid", global.user.uid], ["msgs", json_dumps(challengeIds)], ["totalCost", json_dumps(totalCost)]]), null, null);
-                global.msgCenter.sendMsg(HAS_CHALLENGE_MSG, challengeMsg);
+                global.msgCenter.sendMsg(HAS_CHALLENGE_MSG, [challengeMsg, totalCost]);
             }
             initMessage = 1;
         }

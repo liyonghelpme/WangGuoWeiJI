@@ -503,6 +503,10 @@ def hanData(name, data):
                 newCom.append(c.items())
             i['commandList'] = newCom
 
+            i['stageArray'] = json.loads(i['stageArray'])
+            i['goldArray'] = json.loads(i['goldArray'])
+            i['expArray'] = json.loads(i['expArray'])
+
             it = list(i.items())
             it = [list(k) for k in it]
             key = [k[0] for k in it]

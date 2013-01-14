@@ -23,6 +23,7 @@ class TaskModel
     var needToFinishBuyTask = null;
     var localCycleTask = null;
     var localDayTask = null;
+    var localSolTask = null;
     function getFinishNum()
     {
         if(initYet)
@@ -46,6 +47,13 @@ class TaskModel
             for(i = 0; i < len(key); i++)
             {
                 ret = checkCycleFinish(key[i]);
+                if(ret)
+                    count++;
+            }
+            key = localSolTask.keys();
+            for(i = 0; i < len(key); i++)
+            {
+                ret = checkSolTaskFinish(key[i]);
                 if(ret)
                     count++;
             }
@@ -132,18 +140,16 @@ class TaskModel
                 global.user.db.put("localCycleTask", localCycleTask);
             }
             checkAvailableCycleTask();
+
+            localSolTask = global.user.db.get("localSolTask");
+            if(localSolTask == null)
+            {
+                localSolTask = dict();
+                global.user.db.put("localSolTask", localSolTask);
+            }
+            checkAvailableSolTask();
             
             localDayTask = dict();
-            /*
-            //初始化 每日任务
-            localDayTask = global.user.db.get("localDayTask");
-            if(localDayTask == null)
-            {
-                localDayTask = dict();
-                global.user.db.put("localDayTask", localDayTask);
-            }
-            */
-
             //完成每日登录循环任务
             //第一次登录 没有初始化 localCycle 中的任务所以无法显示
             //显示 任务完成提示对话框 ----> 可以将需求发给 场景来处理
@@ -336,6 +342,7 @@ class TaskModel
             //curCmd++;
         }
     }
+
 
     function doAllTaskByKey(k, num)
     {
@@ -536,7 +543,7 @@ class TaskModel
         var task = newUserTask[tid];
         var taskData = getData(TASK, tid);
         var needNum = taskData["num"];
-        if(task["stage"] >= taskData["stageNum"])
+        if(task["stage"] >= len(taskData["stageArray"]))
             return TASK_REWARD_YET; 
         if(task["number"] >= needNum)
             return  TASK_CAN_FINISH;
@@ -551,12 +558,70 @@ class TaskModel
         var needNum = taskData["num"];
         //trace("checkNewTaskFin", tid, needNum, task["number"]);
         //新手任务 只有1个阶段 因此 只能执行一次
-        if(task["number"] >= needNum || task["stage"] < taskData["stageNum"])
+        if(task["number"] >= needNum || task["stage"] < len(taskData["stageArray"]))
         {
             return 1;
         }
         return 0;
     }
+    function checkAvailableSolTask()
+    {
+        var allTask = getAllDataList(TASK);
+        var needSyn = [];
+        for(var i = 0; i < len(allTask); i++)
+        {
+            if(allTask[i]["kind"] == SOL_TASK && localSolTask.get(allTask[i]["id"]) == null)
+            {
+                needSyn.append(allTask[i]["id"]);
+            }
+        }
+        if(len(needSyn) > 0)
+        {
+            global.httpController.addRequest("taskC/synTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)]]), synSolTaskOver, null);
+        }
+        else
+        {
+        }
+    }
+    /*
+    士兵任务特点：
+    外部依赖一个 列表 StoreSoldier 新增士兵？ 独立特征 需要不同---> key + 私有内容
+    任务stage 描述任务进度 CycleTask
+    购买完成任务 需要传入 购买士兵的id 
+    */
+    function getSolTask(tid)
+    {
+        return localSolTask[tid];        
+    }
+    function checkSolTaskFinish(tid)
+    {
+        var task = localSolTask[tid];
+        var needNum = getData(TASK, tid)["num"];
+        if(needNum != -1 && task["number"] >= needNum)
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+
+    var initSolTask = 0;
+    function synSolTaskOver(rid, rcode, con, param)
+    {
+        if(rcode != 0)
+        {
+            con = json_loads(con);
+            var ret = con["ret"];
+            //tid, number, stage
+            for(var i = 0; i < len(ret); i++)
+            {
+                localSolTask.update(ret[i][0], dict([["tid", ret[i][0]], ["number", ret[i][1]], ["stage", ret[i][2]]]));
+            }
+            global.user.db.put("localSolTask", localSolTask);
+            initSolTask = 1;
+        }
+    }
+
     //检测可用的新手任务
     //新手任务阶段
     //当前用户的新手任务
@@ -575,7 +640,7 @@ class TaskModel
         trace("syn New Task", len(needSyn));
         if(len(needSyn) > 0)
         {
-            global.httpController.addRequest("taskC/synNewTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)]]), synNewTaskOver, null);
+            global.httpController.addRequest("taskC/synTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)]]), synNewTaskOver, null);
         }
         //应该在初始化 新手任务完成的时候 命令 经营页面检测是否需要弹出对话框
         else
@@ -619,7 +684,7 @@ class TaskModel
         trace("synTask", len(needSyn));
         if(len(needSyn) > 0)
         {
-            global.httpController.addRequest("taskC/synCycleTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)] ]), synCycleTaskOver, null);
+            global.httpController.addRequest("taskC/synTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)] ]), synCycleTaskOver, null);
         }
         else
         {
@@ -694,6 +759,7 @@ class TaskModel
     //完成任务发送消息
     function finishBuyTask(kind, id)
     {
+        return;//完全取消购买任务
         if(newTaskStage < getParam("showFinish"))
             return;
         var tid = getGoodsKey(kind, id);
@@ -718,6 +784,16 @@ class TaskModel
         global.msgCenter.sendMsg(UPDATE_TASK, null);
     }
 
+    //模仿循环任务
+    function finishSolTask(tid)
+    {
+        var task = localSolTask[tid];
+        task["number"] = 0;
+        task["stage"] += 1;
+        task.pop("showYet");
+        global.user.db.put("localSolTask", localSolTask);
+        global.msgCenter.sendMsg(UPDATE_TASK, null);
+    }
     function finishCycleTask(tid)
     {
         var task = localCycleTask.get(tid);
@@ -744,6 +820,47 @@ class TaskModel
             }
         }
     }
+
+    function doSolTaskByKey(key, sid, num)
+    {
+        var allPossible = localSolTask.keys();
+        for(var i = 0; i < len(allPossible); i++)
+        {
+            var taskData = getData(TASK, allPossible[i]);
+            if(taskData["key"] == key)
+            {
+                doSolTask(allPossible[i], sid, num);
+                break;
+            }
+        }
+    }
+    function doSolTask(tid, sid, num)
+    {   
+        if(localSolTask.get(tid) != null)
+        {
+            var task = localSolTask[tid];
+            var stage = task["stage"];
+            if(stage < len(storeSoldier))
+            {
+                //当前需要购买的士兵 ID 和 完成的任务相同
+                if(storeSoldier[stage] == sid)
+                {
+                    task["number"] += num;
+                    var ret = checkSolTaskFinish(tid);
+                    var taskData = getData(TASK, tid);
+                    if(ret && task["showYet"] == null && taskData["showTaskFinish"])
+                    {
+                        task["showYet"] = 1;
+                        global.director.curScene.addChild(new TaskFinish(replaceStr(taskData["title"], ["[NUM]", str(getCycleStageNum(tid, task["stage"])) ])), MAX_BUILD_ZORD);
+                    }
+                    global.user.db.put("localSolTask", localSolTask);
+                    global.msgCenter.sendMsg(UPDATE_TASK, null);
+                    //使用循环任务的接口
+                    global.httpController.addRequest("taskC/doCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["num", num]]), null, null);
+                }
+            }
+        }
+    }
     /*
     每天第一次登录 初始化完任务模块 在进行登录任务完成判定
     showYet 控制是否显示 任务完成的奖励 模块
@@ -754,10 +871,15 @@ class TaskModel
         if(localCycleTask.get(tid) != null)
         {
             var task = localCycleTask[tid];
-            task["number"] += num;
-            var ret = checkCycleFinish(tid);
             var taskData = getData(TASK, tid);
+            //升级任务 需要直接比较数值而不是累加数值
+            if(taskData["compareData"])
+                task["number"] = num;
+            else
+                task["number"] += num;
+            var ret = checkCycleFinish(tid);
             trace("cycleTask", task, ret);
+
             if(ret && task.get("showYet") == null && taskData["showTaskFinish"])
             {
                 task["showYet"] = 1;

@@ -150,7 +150,7 @@ class Soldier extends MyNode
                 pushCommand(MOVE_CMD, null);
             
             inCommand = 1;
-            needTime = t;
+            needTime = t+rand(getParam("randAttTime"));
             commandTime = 0;
         }
     }
@@ -177,7 +177,7 @@ class Soldier extends MyNode
         {
             inCommand = 1;
             commandTime = 0;
-            needTime = attSpeed;
+            needTime = attSpeed+rand(getParam("randAttTime"));//随机攻击时间
             pushCommand(FINISH_ATTACK, null);
         }
         else
@@ -337,6 +337,13 @@ class Soldier extends MyNode
             //杀死敌方怪兽
             if(color == ENECOLOR && data["solOrMon"] == 1)
                 global.taskModel.doAllTaskByKey("killMonster", 1);
+            
+            //闯关中杀死敌人
+            if(color == ENECOLOR && map.scene.kind == CHALLENGE_FRI)
+            {
+                global.taskModel.doAllTaskByKey("killEnemy", 1);
+            }
+
             pushCommand(DEAD_CMD, null);
         }
         else

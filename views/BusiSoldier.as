@@ -239,6 +239,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         transferStartTime = client2Server(time()/1000);
         global.user.updateSoldiers(this);//更新士兵类型
         //global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
+        global.taskModel.doAllTaskByKey("solTransfer", 1);
     }
 
     //完成转职

@@ -112,6 +112,39 @@ class TreasureBox extends MyNode
             updateState();
         }
     }
+    function cmp(a, b)
+    {
+        var ea = getData(EQUIP, a);
+        var eb = getData(EQUIP, b);
+        return ea["level"] - eb["level"];
+    }
+    var boxReward = null;
+    function genBoxReward()
+    {
+        var reward = [];
+        var allDrugs = drugData.keys(); 
+        var rd = rand(len(allDrugs));
+        reward.append([DRUG, allDrugs[rd], 1]);
+        
+        var allEquip = equipData.keys();
+        var level = global.user.getValue("level");
+        bubbleSort(allEquip, cmp);
+
+        var levelEquip = [];
+        for(var i = 0; i < len(allEquip); i++)
+        {
+            var ed = getData(EQUIP, allEquip[i]);
+            if(ed["level"] <= level)
+            {
+                levelEquip.append(allEquip[i]);
+                if(len(levelEquip) > getParam("maxRandEquip"))
+                    levelEquip.pop(0);
+            }
+        }
+        rd = rand(len(levelEquip));
+        reward.append([EQUIP, levelEquip[rd], 1, global.user.getNewEid()]);
+        return reward;
+    }
     //正在开启宝箱 则阻塞 等待 服务器返回数据
     //阻止关闭
     var inOpen = 0;
@@ -120,25 +153,38 @@ class TreasureBox extends MyNode
         if(inOpen)
             return;
         inOpen = 1;
-        global.httpController.addRequest("friendC/openBox", dict([["uid", global.user.uid]]), openBoxOver, null);
+        boxReward = genBoxReward();
+        global.httpController.addRequest("friendC/openBox", dict([["uid", global.user.uid], ["reward", json_dumps(boxReward)]]), openBoxOver, null);
         global.taskModel.doCycleTaskByKey("openBox", 1);
 
     }
     //物品
     //资源
+    
+    //[kind id number]
     function openBoxOver(rid, rcode, con, param)
     {
         if(rcode != 0)
         {
             global.director.popView();
             con = json_loads(con);
-            var rewards = con["rewards"];
-            for(var i = 0; i < len(rewards); i++)
+            for(var i = 0; i < len(boxReward); i++)
             {
-                global.user.changeGoodsNum(rewards[i][0], rewards[i][1], rewards[i][2]);
+                var kind = boxReward[i][0];
+                var tid = boxReward[i][1];
+                var num = boxReward[i][2];
+                if(kind == EQUIP)
+                {
+                    var eid = boxReward[i][3];
+                    global.user.getNewEquip(eid, tid, 0); 
+                }
+                else
+                {
+                    global.user.changeGoodsNum(kind, tid, num);
+                }
             }
             global.user.openBox();
-            global.director.pushView(new BoxReward(rewards), 1, 0);
+            global.director.pushView(new BoxReward(boxReward), 1, 0);
             global.taskModel.doAllTaskByKey("openBox", 1);
         }
         inOpen = 0;

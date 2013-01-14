@@ -1,10 +1,14 @@
 
 class BattleEnd extends MyNode
 {
+    var dialogController;
     function BattleEnd()
     {
         bg = node();
         init();
+
+        dialogController = new DialogController(this);
+        addChild(dialogController);
         var prW = new BackWord(this, getStr("battleEnd0", null), 30, 15, [100, 100, 100], 800, 0, 4, closeDialog, FONT_BOLD);
         prW.setPos([69, 223]);
         var cmd = [];

@@ -746,7 +746,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             if(star > 0)
             {
-                var robReward = getRobReward(star, scene.user["silver"], scene.user["crystal"]);
+                var robReward = getRobReward(star, scene.user["silver"], scene.user["crystal"], scene.user["evaluePower"]);
                 score = scene.user["lostScore"];
             }
             else
@@ -762,9 +762,13 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         if(scene.kind == CHALLENGE_MON)
         {
             if(win)
-                global.director.pushView(new ChallengeWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward]])), 1, 0);
+            {
+                global.director.pushView(new RoundWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward]])), 1, 0);
+                //累计用户的星星数量比较星星总数
+                global.taskModel.doAllTaskByKey("roundStar", getAllStar());
+            }
             else
-                global.director.pushView(new ChallengeFail(this, dict([["deadSols", deadInstance], ["reward", reward]])), 1, 0);
+                global.director.pushView(new RoundFail(this, dict([["deadSols", deadInstance], ["reward", reward]])), 1, 0);
             global.user.doAdd(reward);
 
             global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", deadSols], ["reward", json_dumps(reward)], ["star", star], ["big", kind], ["small", small]]), null, null);
@@ -773,7 +777,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             //挑战邻居 有水晶 有 得分 
             if(win)
+            {
                 global.director.pushView(new NewChallengeWin(this, dict([["win", win], ["star", star], ["score", score], ["reward", robReward]])), 1, 0);
+                global.taskModel.doAllTaskByKey("challengeWin", 1);
+                global.taskModel.doAllTaskByKey("robSilver", robReward.get("silver", 0));
+                global.taskModel.doAllTaskByKey("robCrystal", robReward.get("crystal", 0));
+            }
             else
                 global.director.pushView(new NewChallengeFail(this, dict([["win", win], ["star", star], ["score", score], ["reward", robReward]])), 1, 0);
                 

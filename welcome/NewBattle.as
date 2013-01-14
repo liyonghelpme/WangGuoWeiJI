@@ -88,6 +88,7 @@ class NewBattle extends MyNode
     var initYet = 0;
     var map;
     var words = dict();
+    var dialogController;
     const SOL_KIND = [
         [190, 0],
         [190, 1],
@@ -120,6 +121,10 @@ class NewBattle extends MyNode
     {
         bg = node();
         init();
+        dialogController = new DialogController(this);
+        addChild(dialogController);
+
+
         map = bg.addsprite("battleBegin0.jpg");
 //temp = bg.addsprite("dialogBack1.png").anchor(0, 0).pos(495, 111).size(228, 106).color(100, 100, 100, 100);
 //temp = bg.addlabel(getStr(" 勇士们！拿起你们的剑！ 为了家园，为了尊严！ 杀死索伦！", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 188, 0, ALIGN_LEFT).anchor(0, 0).pos(518, 132).color(0, 0, 0);

@@ -121,6 +121,8 @@ class FriendSoldier extends MoveSoldier
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
 
             global.taskModel.doAllTaskByKey("friendStatus", 1);
+
+            global.taskModel.doAllTaskByKey("helpEliminate", 1);
         }
     }
 

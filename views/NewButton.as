@@ -50,7 +50,8 @@ class NewButton extends MyNode
     function touchEnded(n, e, p, x, y, points)
     {
         var po = n.node2world(x, y);
-        var ret = checkIn(bg, po);
+        //var ret = checkIn(bg, po);
+        var ret = 1;
 
         player.stop();
         bg.scale(oldSca);

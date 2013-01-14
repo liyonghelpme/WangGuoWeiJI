@@ -75,6 +75,7 @@ class FallObj extends MyNode
         onclicked();
     }
     
+    var player;
     function onclicked(){
         var fallData = getData(FALL_THING, kind);
         var reward = getFallObjValue(kind, fallTimes);
@@ -86,6 +87,7 @@ class FallObj extends MyNode
         bg.setevent(EVENT_TOUCH|EVENT_UNTOUCH|EVENT_MOVE, null);
         //bg.removefromparent();
         bg.visible(0);
+        player = global.controller.pickMusic.play(0, 80, 80, 0, 100);
     }
     function pickMe()
     {
@@ -95,5 +97,6 @@ class FallObj extends MyNode
         global.taskModel.doCycleTaskByKey("pick", 1);
         global.taskModel.doDayTaskByKey("pick", 1);
         global.taskModel.doNewTaskByKey("pick", 1);
+        player.stop();
     }
 }

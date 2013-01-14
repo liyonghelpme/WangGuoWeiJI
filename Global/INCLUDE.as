@@ -59,7 +59,6 @@ import busiViews.RoleName;
 import views.BusiSoldier;
 
 
-import views.TrainBanner;
 import views.ProfessionIntroDialog;
 
 //成功提示
@@ -85,25 +84,6 @@ import busiViews.RequestView;
 import busiViews.MoreView;
 
 import busiViews.AllGoods;
-
-//import busiViews.UpgradeDialog;
-//import busiViews.SkillDialog;
-
-//import busiViews.UpgradeSkillDialog;
-//import views.TrainDialog;
-
-
-//import views.HeartRankDialog;
-//import views.HeartRankBase;
-
-
-
-//import views.TrainScene; 统一使用battleScene
-import views.TrainTip;
-
-
-
-
 
 
 //大地图
@@ -278,8 +258,9 @@ import busiViews.NoTipDialog;
 
 
 //战斗结束奖励 对话框
-import war.ChallengeFail;
-import war.ChallengeWin;
+
+import war.RoundWin;
+import war.RoundFail;
 
 import war.NewChallengeWin;
 import war.NewChallengeFail;

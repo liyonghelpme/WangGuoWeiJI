@@ -224,6 +224,12 @@ class MapBanner extends MyNode
     var curChild = null;
     function touchBegan(n, e, p, x, y, points)
     {
+        //在开始挑战之前只能查看己方士兵
+        if(!scene.checkStartChallenge())
+        {
+            return;
+        }
+
         var newPos = n.node2world(x, y);
 
         lastPoints = newPos;
@@ -273,6 +279,11 @@ class MapBanner extends MyNode
     }
     function touchMoved(n, e, p, x, y, points)
     {
+        if(!scene.checkStartChallenge())
+        {
+            return;
+        }
+
         var nPos = n.node2world(x, y);
         var oldPos = lastPoints;
         lastPoints = nPos;
@@ -309,6 +320,9 @@ class MapBanner extends MyNode
     //如果放置失败 则 士兵 clearSoldier 自身 重新放置数据
     function touchEnded(n, e, p, x, y, points)
     {
+        if(!scene.checkStartChallenge())
+            return;
+
         //在点击之后更新panel
         var curPos = flowNode.pos();
         var cols = -len(data)*OFFX+WIDTH;

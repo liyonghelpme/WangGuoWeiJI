@@ -338,7 +338,7 @@ class RequestView extends MyNode
             global.httpController.addRequest("friendC/readMessage", dict([["uid", global.user.uid], ["fid", res[1]["uid"]], ["mid", res[1]["mid"]]]), null, null);
         }
     }
-    function onRevange()
+    function onRevange(p)
     {
         var res = data[p];
         if(res[2] == 1)

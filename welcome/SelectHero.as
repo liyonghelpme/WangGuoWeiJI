@@ -35,6 +35,7 @@ class SelectHero extends MyNode
     var heroPic = [];
     var mapNode;
     var map;
+    var dialogController;
     function getMapNormalScale()
     {
         //return 810*100/1200;
@@ -45,6 +46,9 @@ class SelectHero extends MyNode
     {
         bg = node();
         init();
+
+        dialogController = new DialogController(this);
+        addChild(dialogController);
 
         mapNode = new MyNode();
         map = sprite("battleEnd0.jpg", ARGB_8888);

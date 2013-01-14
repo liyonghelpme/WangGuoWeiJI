@@ -7,10 +7,13 @@
 */
 class WelcomeDialog extends MyNode
 {
+    var dialogController;
     function WelcomeDialog()
     {
         bg = node();
         init();
+        dialogController = new DialogController(this);
+        addChild(dialogController);
         var prW = new BackWord(this, getStr("welcomeWord", null), 30, 10, [100, 100, 100], 800, 0, 4, closeDialog, FONT_BOLD);//100ms 打字速度
         prW.setPos([43, 187]);
         //得到字符串包括换行符号 的总字符长度 totalNum 打印

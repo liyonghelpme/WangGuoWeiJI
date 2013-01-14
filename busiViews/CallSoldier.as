@@ -377,6 +377,9 @@ class CallSoldier extends MyNode
             this.update(0);
             goods.updateTab();
             global.httpController.addRequest("buildingC/campAddSoldier", dict([["uid", global.user.uid], ["bid", scene.bid], ["solId", id]]), null, null);
+
+            global.taskModel.doSolTaskByKey("buySol", id, 1);
+            global.taskModel.doAllTaskByKey("buySol", 1);//购买num个士兵任务
         }
     }
     function checkInQueue(id)

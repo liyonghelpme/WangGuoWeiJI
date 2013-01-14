@@ -158,7 +158,11 @@ class BattleScene extends MyNode
         user = argument["user"];
         //只有挑战排行榜才需要lostScore
         if(kind == CHALLENGE_FRI)
+        {
             user["lostScore"] = getLostScore();
+            user["evaluePower"] = evaluePower();//对方实力 / 我方实力 = 最多 100% 奖励值
+        }
+        //奖励 = 对方实力/我方实例 * 城墙生命值得分 * 资源总量
 
         skills = dict();
         var sk = argument["skills"];//skills --->soldierId--->dict([skillId, skillLevel])
@@ -209,8 +213,12 @@ class BattleScene extends MyNode
         }
         else
             showHintDialog();
-
-
+        showMapBanner();
+    }
+    function showMapBanner()
+    {
+        banner = new MapBanner(this);
+        addChild(banner);
     }
     function showHintDialog()
     {
@@ -225,9 +233,6 @@ class BattleScene extends MyNode
 
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));
         dialogController.addCmd(dict([["cmd", "randomChoose"]]));
-
-        banner = new MapBanner(this);
-        addChild(banner);
     }
     //评估军队实力
     function evaluePower()
@@ -263,11 +268,20 @@ class BattleScene extends MyNode
         trace("lostScore", score, power);
         return score;
     }
+    function checkStartChallenge()
+    {
+        if(kind == CHALLENGE_FRI && startChYet == 0)
+            return 0;
+        return 1;
+    }
+    //标记是否开始挑战
+    var startChYet = 0;
     function startChallenge()
     {
         challengeInfo.removeSelf();
         showHintDialog();
         global.httpController.addRequest("challengeC/realChallenge", dict([["uid", global.user.uid], ["fid", user["uid"]]]), null, null);
+        startChYet = 1;
     }
 
     //寻找下一个目标

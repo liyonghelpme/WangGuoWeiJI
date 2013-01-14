@@ -1,6 +1,7 @@
 class Controller
 {
     var butMusic = null;
+    var pickMusic = null;
     //初始化音乐资源
     function Controller()
     {
@@ -11,6 +12,7 @@ class Controller
         }
         else 
             finishDownload();
+        pickMusic = createsound("pick.mp3");
     }
     function finishDownload()
     {

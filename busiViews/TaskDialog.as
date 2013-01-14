@@ -175,8 +175,6 @@ class TaskDialog extends MyNode
                 tData = global.taskModel.getNewTask(newTask[i]);
                 taskD = getData(TASK, newTask[i]);
                 //不显示阶段任务
-                //if(taskD["stageTask"] == 0)
-                //{
                 //新手任务可以完成
                 ret = global.taskModel.checkNewTaskState(newTask[i]);
                 if(ret == TASK_CAN_FINISH)
@@ -186,11 +184,27 @@ class TaskDialog extends MyNode
                 //新手任务没有 获取过奖励
                 else if(ret == TASK_DOING) 
                     unFinishTask.append([NEW_TASK, newTask[i]]);
-                //}
             }
             //没有新手任务 则 显示下列任务
             if(len(newTask) == 0)
             {
+                var solTask = global.taskModel.localSolTask.keys(); 
+                for(i = 0; i < len(solTask); i++)
+                {
+                    tData = global.taskModel.getSolTask(solTask[i]);
+                    taskD = getData(TASK, tData["tid"]);
+                    //检测任务是否完成 没有 完成 放置在前面
+                    //购买士兵任务 全部完成则不显示了
+                    //if(tData["stage"] < len(storeSoldier))
+                    {
+                        if(global.taskModel.checkSolTaskFinish(solTask[i]))
+                            finishTask.append([SOL_TASK, solTask[i]]);
+                        else
+                            unFinishTask.append([SOL_TASK, solTask[i]]);
+                    }
+                }
+
+
                 //添加完成的任务
                 var cycleTask = global.taskModel.localCycleTask.keys();
                 for(i = 0; i < len(cycleTask); i++)
@@ -198,7 +212,7 @@ class TaskDialog extends MyNode
                     tData = global.taskModel.getCycleTask(cycleTask[i]);
                     taskD = getData(TASK, tData["tid"]);
                     //无限循环 或者 当前阶段 小于 总阶段数
-                    if(taskD["stageNum"] == -1 || tData["stage"] < taskD["stageNum"])
+                    if(tData["stage"] < len(taskD["stageArray"]))
                     {
                         tid = cycleTask[i];
                         if(global.taskModel.checkCycleFinish(tid))
@@ -219,7 +233,7 @@ class TaskDialog extends MyNode
                     tData = global.taskModel.getCycleTask(cycleTask[i]);
                     taskD = getData(TASK, tData["tid"]);
                     //无限循环 或者 当前阶段 小于 总阶段数
-                    if(taskD["stageNum"] == -1 || tData["stage"] < taskD["stageNum"])
+                    if(tData["stage"] < len(taskD["stageArray"]))
                     {
                         tid = cycleTask[i];
                         if(!global.taskModel.checkCycleFinish(tid))
@@ -292,6 +306,7 @@ class TaskDialog extends MyNode
             var num;
             var needNum;
 
+
             if(kind == ONCE_TASK)
             {
                 var key = t[1][0];
@@ -349,14 +364,47 @@ class TaskDialog extends MyNode
                 }
                 //登录显示的是累计的天数
                 //其它循环任务显示的需求的数字
-                if(taskData["key"] == "login")
-                    panel.addlabel(replaceStr(taskData["title"], ["[NUM]", str(tData["stage"])]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
-                else
-                    panel.addlabel(replaceStr(taskData["title"], ["[NUM]", str(getCycleStageNum(tid, tData["stage"]))]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
-                    
-                panel.addlabel(taskData["des"], "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
+                panel.addlabel(taskData["title"], "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
+                panel.addlabel(replaceStr(taskData["des"], ["[NUM]", str(getCycleStageNum(tid, tData["stage"]))]), "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
 
                 reward = getCycleReward(tid, tData["stage"]).items(); 
+                trace("cycleReward", reward);
+            }
+            //硬编码 购买士兵任务
+            else if(kind == SOL_TASK)
+            {
+                tid = t[1];
+                tData = global.taskModel.getSolTask(tid);
+                taskData = getData(TASK, tid);
+                stageNum = taskData["num"];
+                num = tData["number"];
+                //可以完成solTask
+                var stage = tData["stage"];
+                //购买任务士兵 任务 已经全部完成
+                if(stage >= len(storeSoldier))
+                {
+                    temp = panel.addlabel(getStr("solTaskFinish", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 90, 0, ALIGN_LEFT).anchor(0, 0).pos(389, 19).color(56, 54, 53);
+                }
+                else if(num >= stageNum)//任务可以完成
+                {
+                    but0 = new NewButton("greenButton0.png", [91, 37], getStr("finishTask", null), null, 20, FONT_NORMAL, [100, 100, 100], onFinishTask, i);
+                    but0.bg.pos(429, 34);
+                    panel.add(but0.bg);
+                    temp = panel.addsprite("hook.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
+                    panel.addlabel(getStr("taskNum", ["[NUM0]", str(stageNum), "[NUM1]", str(stageNum)]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
+                }
+                else//任务没有完成
+                {
+                    temp = panel.addsprite("taskExpIcon.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
+                    panel.addlabel(getStr("needExp", ["[EXP]", str(taskData["exp"])]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
+                    panel.addlabel(getStr("taskNum", ["[NUM0]", str(num), "[NUM1]", str(stageNum)]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(382, 22).color(96, 61, 21);
+                }
+                
+                panel.addlabel(taskData["title"], "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
+                if(stage < len(storeSoldier))
+                    panel.addlabel(replaceStr(taskData["des"], ["[NAME]", getData(SOLDIER, storeSoldier[stage])["name"]]), "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
+
+                reward = getGain(TASK, tid).items();
             }
             else if(kind == NEW_TASK)
             {
@@ -434,6 +482,17 @@ class TaskDialog extends MyNode
             global.taskModel.finishNewTask(tid);
             initData();
             updateTab();//更新 任务显示数据
+        }
+        //使用循环任务的完成接口
+        else if(tasks[curNum][0] == SOL_TASK)
+        {
+            tid = tasks[curNum][1];
+            reward = getGain(TASK, tid);
+            global.httpController.addRequest("taskC/finishCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(reward)]]), null, null);
+            global.user.doAdd(reward);
+            global.taskModel.finishSolTask(tid);
+            initData();
+            updateTab();
         }
     }
     override function enterScene()
