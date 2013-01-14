@@ -20,7 +20,6 @@ class TaskModel
     var initYet = 0;
     var newUserTask = null;
     var localCycleTask = null;
-    var localDayTask = null;
     var localSolTask = null;
     function getFinishNum()
     {
@@ -56,7 +55,7 @@ class TaskModel
                     count++;
             }
 
-            return len(needToFinishBuyTask)+count;//循环任务完成   
+            return count;//循环任务完成   
         }
         return 0;
     }
@@ -69,7 +68,7 @@ class TaskModel
         {
             initYet = 1;
             global.msgCenter.sendMsg(UPDATE_TASK, null);
-            trace("initTaskOver", len(localCycleTask), len(localSolTask), len(localDayTask), len(newUserTask));
+            trace("initTaskOver", len(localCycleTask), len(localSolTask), len(newUserTask));
         }
         //当前没有任务 显示 则 自动发现任务 执行
         if(initYet && !inCommand && newTaskStage < getParam("showFinish"))
@@ -540,6 +539,7 @@ class TaskModel
         }
         else
         {
+            initSolTask = 1;
         }
     }
     /*
@@ -670,40 +670,6 @@ class TaskModel
     //param 任务参数
     //buy kind ID
     //只要 key 就可以了
-    //新手阶段不完成其它任务
-    function finishTask(kind, key, id, param)
-    {
-        if(kind == ONCE_TASK)
-        {
-            if(key == "buy" && newTaskStage >= getParam("showFinish"))
-            {
-                finishBuyTask(param[0], param[1]);
-            }
-            
-        }
-
-    }
-    function finishBuildTask(buildId, num)
-    {
-        trace("建筑物 crash?", buildId, num);
-        //return;
-        var buildData = getData(BUILD, buildId);
-        var buildKind = buildData["funcs"];
-        trace("finishBuyTask", buildId, num);
-        if(buildKind == FARM_BUILD)
-            doAllTaskByKey("buyFarm", num);
-        else if(buildKind == CAMP)
-            doAllTaskByKey("buyCamp", num);
-        else if(buildKind == HOUSE_BUILD)
-            doAllTaskByKey("buyHouse", num);
-        else if(buildKind == DECOR_BUILD)
-        {
-            if(buildData["exp"] > 0)
-                doAllTaskByKey("buyExpDecor", num);
-            else
-                doAllTaskByKey("buyDefenseDecor", num);
-        }
-    }
     //模仿循环任务
     function finishSolTask(tid)
     {

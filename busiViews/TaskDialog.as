@@ -44,11 +44,6 @@ class TaskDialog extends MyNode
 
         用户私有任务数据： 任务id 完成数目 领取奖励是否
     */
-    function onDayTask()
-    {
-        if(len(global.taskModel.localDayTask) > 0)
-            global.director.pushView(new DailyTask(), 1, 0);
-    }
     function onTaskTip()
     {
     }
@@ -186,6 +181,7 @@ class TaskDialog extends MyNode
                 else if(ret == TASK_DOING) 
                     unFinishTask.append([NEW_TASK, newTask[i]]);
             }
+            trace("newTaskFinish", finishTask, unFinishTask);
             //没有新手任务 则 显示下列任务
             if(len(newTask) == 0)
             {

@@ -730,8 +730,6 @@ class User
             changeGoodsNum(kind, id, 1);
             global.msgCenter.sendMsg(BUY_MSG[kind], id);
         }
-        global.taskModel.finishTask(ONCE_TASK, "buy", 0, [kind, id]);
-
     }
     //建筑物对象实体
     function buyBuilding(build)
@@ -741,10 +739,6 @@ class User
         var gain = getGain(BUILD, build.id);
         doAdd(gain);
         updateBuilding(build); 
-
-        //global.taskModel.finishTask(ONCE_TASK, "buy", 0, [BUILD, build.id]);
-        global.taskModel.finishBuyTask(BUILD, build.id);
-        global.taskModel.finishBuildTask(build.id, 1);
 
         trace("finsh User buy Building");
     }

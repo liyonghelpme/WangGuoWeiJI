@@ -826,9 +826,7 @@ class Building extends MyNode
             removeLock();
             funcBuild.beginPlant(id); 
 
-            global.taskModel.finishTask(ONCE_TASK, "buy", 0, [PLANT, id]);
-            global.taskModel.doCycleTaskByKey("plant", 1);
-            global.taskModel.doDayTaskByKey("plant", 1);
+            global.taskModel.doAllTaskByKey("plant", 1);
         }
         else
         {
