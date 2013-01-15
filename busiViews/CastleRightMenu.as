@@ -37,7 +37,7 @@ class CastleRightMenu extends MyNode
     }
     function onDayTask()
     {
-        global.director.pushView(new DailyTask(), 1, 0); 
+        //global.director.pushView(new DailyTask(), 1, 0); 
     }
     function initView()
     {

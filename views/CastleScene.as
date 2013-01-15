@@ -259,9 +259,7 @@ class CastleScene extends MyNode
 
         global.user.buyBuilding(curBuild);
         trace("finishBuild");
-        global.taskModel.finishBuildTask(curBuild.id, 1);
         closeBuild();
-
         //在关闭 选择菜单之后再显示任务奖励菜单
     }
 

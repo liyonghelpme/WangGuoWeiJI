@@ -260,10 +260,6 @@ class MenuLayer extends MyNode
             }
             if(global.taskModel.initYet)
             {
-                if(len(global.taskModel.localDayTask) > 0)
-                {
-                    funcs.append("dayTask");
-                }
             }
         }
         //新手任务礼包没有结束 显示

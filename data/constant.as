@@ -1357,6 +1357,7 @@ const LEFT = 1;
 const RIGHT = 2;
 const UP = 3;
 
+//新手任务已经获取奖励但是这个新手阶段没有完成
 const TASK_DOING = 0;
 const TASK_CAN_FINISH = 1;
 const TASK_REWARD_YET = 2;

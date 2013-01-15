@@ -94,9 +94,7 @@ class FallObj extends MyNode
         removeSelf();
         map.pickObj(this);
         //测试任务完成 更新任务状态 
-        global.taskModel.doCycleTaskByKey("pick", 1);
-        global.taskModel.doDayTaskByKey("pick", 1);
-        global.taskModel.doNewTaskByKey("pick", 1);
+        global.taskModel.doAllTaskByKey("pick", 1);
         //player.stop();
     }
 }

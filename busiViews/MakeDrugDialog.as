@@ -194,9 +194,9 @@ class MakeDrug extends MyNode
         updateTab();
         
         if(kind == DRUG)
-            global.taskModel.doDayTaskByKey("makeDrug", 1);
+            global.taskModel.doAllTaskByKey("makeDrug", 1);
         if(kind == EQUIP)
-            global.taskModel.doDayTaskByKey("forge", 1);
+            global.taskModel.doAllTaskByKey("forge", 1);
     }
 }
 class Herb extends MyNode

@@ -11,7 +11,6 @@ class TreasureBox extends MyNode
         updateState();
         global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("helpSuc", null), [100, 100, 100], null));
 
-        //global.tashModel.doDayTaskByKey("helpOpenBox", 1);
         global.tashModel.doAllTaskByKey("helpOpenBox", 1);
     }
 //temp = bg.addsprite("friendBlock.png").anchor(0, 0).pos(196, 184).size(55, 55).color(100, 100, 100, 100);
@@ -155,8 +154,6 @@ class TreasureBox extends MyNode
         inOpen = 1;
         boxReward = genBoxReward();
         global.httpController.addRequest("friendC/openBox", dict([["uid", global.user.uid], ["reward", json_dumps(boxReward)]]), openBoxOver, null);
-        global.taskModel.doCycleTaskByKey("openBox", 1);
-
     }
     //物品
     //资源

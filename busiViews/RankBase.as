@@ -518,7 +518,7 @@ class RankBase extends MyNode
                 panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"])] ), "fonts/heiti.ttf", 23).anchor(0, 50).pos(63, 24).color(29, 16, 4);
 
                 panel.addsprite("levelStar.png").anchor(50, 50).pos(100, 56).size(31, 31).color(100, 100, 100, 100);
-                panel.addlabel(str(data[diff]["level"]) , "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
+                panel.addlabel(str(data[diff]["level"]+1) , "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
 
                 panel.addlabel(data[diff]["name"], "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 120).color(43, 25, 9);
 

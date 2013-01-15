@@ -826,8 +826,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
     function clearStatus()
     {
         //用户手动清除状态 可能系统已经清除状态了
-        global.taskModel.doCycleTaskByKey("eliminate", 1);
-        global.taskModel.doDayTaskByKey("eliminate", 1);
+        global.taskModel.doAllTaskByKey("eliminate", 1);
         if(status != null)
         {
             realClearStatus();

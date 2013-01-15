@@ -282,6 +282,8 @@ class BattleScene extends MyNode
         showHintDialog();
         global.httpController.addRequest("challengeC/realChallenge", dict([["uid", global.user.uid], ["fid", user["uid"]]]), null, null);
         startChYet = 1;
+        //显示右上角的按钮
+        banner.startChallenge();
     }
 
     //寻找下一个目标

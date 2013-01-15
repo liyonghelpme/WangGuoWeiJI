@@ -733,8 +733,15 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     [oid, papayaId, score, rank]
     */
     //计算积分 水晶 和 银币奖励
+    //是否已经计算游戏结束
+    //如果计算了 则防止再结束
+    var overYet = 0;
     function challengeOver(win, star, reward, deads)
     {
+        if(overYet)
+            return;
+
+        overYet = 1;
         if(reward == null)
             reward = dict();
         var crystal = 0;
@@ -763,6 +770,13 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             if(win)
             {
+                //更新星星得分
+                var curStar = global.user.getCurStar(kind, small);
+                if(curStar < star)
+                {
+                    global.user.updateStar(kind, small, star);
+                }
+
                 global.director.pushView(new RoundWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward]])), 1, 0);
                 //累计用户的星星数量比较星星总数
                 global.taskModel.doAllTaskByKey("roundStar", getAllStar());
@@ -792,6 +806,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     
     //训练则不能这样判定
     //闯关挑战 可以通过检测剩余士兵数量来判定游戏是否结束
+    //检测游戏结束 
     function checkGameOver()
     {
         //var v = soldiers.values(); 

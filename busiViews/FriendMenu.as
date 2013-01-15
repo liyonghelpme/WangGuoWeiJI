@@ -143,7 +143,6 @@ class FriendMenu extends MyNode
 
         updateRightMenu();
 
-        //global.tashModel.doDayTaskByKey("sendHeart", 1);
         global.taskModel.doAllTaskByKey("sendHeart", 1);
     }
     var challenged = 0;

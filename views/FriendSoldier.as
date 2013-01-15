@@ -102,11 +102,13 @@ class FriendSoldier extends MoveSoldier
     */
     function touchEnded(n, e, p, x, y, points)
     {
+        trace("hasCry", hasCry);
         if(hasCry == 1)
         {
             hasCry = 0;
             var rd = rand(getParam("FriendSolCryMaxLevel")-getParam("FriendSolCryBaseLevel"))+getParam("FriendSolCryBaseLevel");
             var cry = rd*(global.user.getValue("level")+1);
+            trace("helpEliminate", rd, cry);
             global.httpController.addRequest("friendC/helpFriendCry", dict([["uid", global.user.uid], ["kind", map.kind], ["crystal", cry]]), null, null);
             global.friendController.helpFriend(map.scene.getUid(), map.kind, cry);
             if(negtiveState != null)
@@ -119,8 +121,6 @@ class FriendSoldier extends MoveSoldier
             temp.addsprite("crystal.png").anchor(0, 50).pos(0, -30).size(30, 30);
             temp.addlabel("+" + str(cry), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
-
-            global.taskModel.doAllTaskByKey("friendStatus", 1);
 
             global.taskModel.doAllTaskByKey("helpEliminate", 1);
         }

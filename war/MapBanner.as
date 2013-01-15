@@ -45,7 +45,13 @@ class MapBanner extends MyNode
 
     var okBut;
     var randomBut;
-
+    var cancelBut;
+    function startChallenge()
+    {
+        bg.add(randomBut);
+        bg.add(cancelBut);
+        bg.add(okBut);
+    }
     /*
     将剩余士兵尽量全部放置到地面上
     每行一个逐个放置直到没有
@@ -58,20 +64,17 @@ class MapBanner extends MyNode
         var line;
         var temp;
         var sca;
-        
-        if(scene.kind == CHALLENGE_TRAIN)
+        //隐藏右上角的按钮 直到开始挑战时显示
+        if(scene.kind == CHALLENGE_FRI)
         {
-            temp = bg.addsprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
-            okBut = bg.addsprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
+            randomBut = sprite("random.png").anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
+            cancelBut = sprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
+            okBut = sprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
         }
         else
         {
             temp = bg.addsprite("random.png").anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
             randomBut = temp;
-            //第一次进入不显示 闯关提示
-            //不显示 选择士兵
-            //global.taskModel.showHintArrow(temp, temp.prepare().size(), RANDOM_BUT);
-
             temp = bg.addsprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
             okBut = bg.addsprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
         }
@@ -101,8 +104,6 @@ class MapBanner extends MyNode
         scene = sc;
         initView();
         initData();
-        
-
 
         shadowWord = bg.addsprite("storeBlack.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);//.visible(0);
         shadowWord.addaction(itintto(0, 0, 0, 0));

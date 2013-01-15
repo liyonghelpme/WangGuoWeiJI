@@ -143,6 +143,7 @@ function getAllStar()
             total += star[big][small];
         }
     }
+    trace("allStarNum", total);
     return total;
 }
 

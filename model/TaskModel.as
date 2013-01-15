@@ -501,7 +501,10 @@ class TaskModel
         var task = newUserTask[tid];
         var taskData = getData(TASK, tid);
         var needNum = taskData["num"];
-        if(task["stage"] >= len(taskData["stageArray"]))
+
+        //新手任务 检测 查看stageNum 而不是stageArray
+        trace("checkNewTaskState", tid);
+        if(task["stage"] >= taskData["stageNum"])
             return TASK_REWARD_YET; 
         if(task["number"] >= needNum)
             return  TASK_CAN_FINISH;

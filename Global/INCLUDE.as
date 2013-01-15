@@ -48,8 +48,6 @@ import views.FallObj;
 //菜单
 import views.MenuLayer;
 import busiViews.CastleRightMenu;
-import busiViews.DailyTask;
-import busiViews.DailyReward;
 
 
 import busiViews.RoleName;

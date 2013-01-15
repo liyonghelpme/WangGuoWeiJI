@@ -316,16 +316,18 @@ class CallSoldier extends MyNode
         global.httpController.addRequest("buildingC/accCampWork", dict([["uid", global.user.uid], ["bid", scene.bid], ["cost", json_dumps(cost)], ["needTime", needTime]]), null, null);
 
         global.user.doCost(cost);
-        scene.funcBuild.adjustObjectTime(needTime);
-        this.update(0);
-        goods.updateTab();
 
+        //需要在加速之前显示成功对话框获取正确的加速数据
         var objectList = scene.objectList;
         if(len(objectList) > 0)
         {
             var solData = getData(SOLDIER, objectList[0][0]);
             global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("accCampSuc", ["[NAME]", solData["name"]]), [100, 100, 100], null));
         }
+
+        scene.funcBuild.adjustObjectTime(needTime);
+        this.update(0);
+        goods.updateTab();
     }
     /*
     curSelSol[1] 只是记录 士兵购买等级是否 大于用户等级

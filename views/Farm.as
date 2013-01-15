@@ -126,7 +126,7 @@ class Farm extends FuncBuild
         global.user.updateBuilding(baseBuild);
         global.taskModel.doNewTaskByKey("plant", 1);
 
-        global.taskModel.doAllTaskByKey("harvestFarm", gain["silver"]);
+        global.taskModel.doAllTaskByKey("harvestFarm", gain.get("silver", 0));
     }
     function harvestPlant()
     {

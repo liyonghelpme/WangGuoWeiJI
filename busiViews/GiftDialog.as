@@ -31,9 +31,6 @@ class GiftDialog extends MyNode
     var map = dict([
         [EQUIP_ITEM, EQUIP],
         [DRUG_ITEM, DRUG],
-        [HERB_ITEM, HERB],
-        [TREASURE_ITEM, TREASURE_STONE],
-        [MAGIC_ITEM, MAGIC_STONE],
         ]
     );
 
@@ -67,9 +64,6 @@ class GiftDialog extends MyNode
         data = [
         [KIND_ITEM, EQUIP_ITEM, 0],
         [KIND_ITEM, DRUG_ITEM, 0],
-        [KIND_ITEM, HERB_ITEM, 0],
-        //[KIND_ITEM, TREASURE_ITEM, 0],
-        //[KIND_ITEM, MAGIC_ITEM, 0],
         ];
         while(len(data) < 5)
             data.append([EMPTY_GIFT, -1]);
@@ -106,7 +100,6 @@ class GiftDialog extends MyNode
     const kind2Str = dict([
         [EQUIP, "equip"],
         [DRUG, "drug"],
-        [HERB, "material"],
     ]);
     function updateTab()
     {
@@ -141,8 +134,12 @@ class GiftDialog extends MyNode
             if(data[i][0] == KIND_ITEM)
             {
                 num = global.user.getAllGoodsNum(map[data[i][1]]);
-
-                obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][1])], ["[ID]", str(0)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+                var minId = 0;
+                if(data[i][1] == EQUIP_ITEM)
+                    minId = min(equipData.keys());
+                else if(data[i][1] == DRUG_ITEM)
+                    minId = min(drugData.keys());
+                obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][1])], ["[ID]", str(minId)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
                 if(num == 0)
                     data[i][2] = 0;
 
@@ -187,15 +184,10 @@ class GiftDialog extends MyNode
                 temp = panel.addlabel(objData.get("name") + " " + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
                 if(data[i][0] == EQUIP_ITEM)
                 {
-                    var eqLevel = ed.get("level");
-
                     obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(id)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
-                    temp = panel.addsprite("skillLevel.png").anchor(50, 50).pos(59, 55).size(60, 14).color(100, 100, 100, 100);
-                    panel.addlabel(getStr("eqLevel", ["[LEV]", str(eqLevel)]), "fonts/heiti.ttf", 15).anchor(50, 50).pos(58, 56).color(49, 90, 48);
                     but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("sendIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onSendIt, i);
                     but0.bg.pos(629, 35);
                     panel.add(but0.bg);
-
                 }
                 //只显示数量非零的物品
                 else
@@ -246,18 +238,6 @@ class GiftDialog extends MyNode
             {
                 global.httpController.addRequest("goodsC/sendDrug", dict([["uid", global.user.uid], ["fid", neiborUid], ["did", data[p][1]], ["gid", giftId]]), null, null);
             }
-            else if(k == HERB_ITEM)
-            {
-                global.httpController.addRequest("goodsC/sendHerb", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["gid", giftId]]), null, null);
-            }
-            else if(k == TREASURE_ITEM)
-            {
-                global.httpController.addRequest("goodsC/sendTreasureStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["gid", giftId]]), null, null);
-            }
-            else if(k == MAGIC_ITEM)
-            {
-                global.httpController.addRequest("goodsC/sendMagicStone", dict([["uid", global.user.uid], ["fid", neiborUid], ["tid", data[p][1]], ["gid", giftId]]), null, null);
-            }
 
             global.user.changeGoodsNum(map.get(k), data[p][1], -1);
             num = global.user.getGoodsNum(map.get(k), data[p][1]);
@@ -269,7 +249,7 @@ class GiftDialog extends MyNode
             data.pop(p);
         updateTab();
 
-        global.tashModel.doDayTaskByKey("sendGift", 1);
+        global.taskModel.doAllTaskByKey("sendGift", 1);
     }
     //查看所有装备
     function onView(n, e, p, x, y, points)
