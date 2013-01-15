@@ -695,9 +695,8 @@ class Soldier extends MyNode
             suffix = "1";
 
         backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).scale(getParam("mapBloodScale"));
+        backBanner.visible(0);
 
-        if(color == ENECOLOR)
-            backBanner.visible(0);//初始敌人血条不显示
         var mInfo = getData(MAP_INFO, map.kind);
 
         redBlood = backBanner.addsprite("mapSolBloodRed"+suffix+".png").pos(2, 2);

@@ -450,7 +450,7 @@ function byte2Hundred(v)
 //{crystal.png} 10 购买
 //{[KIND]} [NUM] 购买
 //costBuy
-function picNumWord(w, sz, col)
+function picNumWord(w, sz, col, needShadow)
 {
     var n = node();
     var curX = 0;
@@ -468,8 +468,11 @@ function picNumWord(w, sz, col)
             var lSize = l.prepare().size();
             curX += lSize[0];
             height = max(height, lSize[1]);
-            var shadow = label(begin[0], "fonts/heiti.ttf", sz).anchor(0, 0).color(0, 0, 0).pos(1, 1);
-            l.add(shadow, -1);
+            if(needShadow)
+            {
+                var shadow = label(begin[0], "fonts/heiti.ttf", sz).anchor(0, 0).color(0, 0, 0).pos(1, 1);
+                l.add(shadow, -1);
+            }
         }
         if(len(begin) > 1)
         {

@@ -754,12 +754,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             if(star > 0)
             {
                 var robReward = getRobReward(star, scene.user["silver"], scene.user["crystal"], scene.user["evaluePower"]);
-                score = scene.user["lostScore"];
+                score = scene.user["winScore"];
             }
             else
             {
                 robReward = dict();
-                score = -scene.user["lostScore"];
+                score = -scene.user["failScore"];
             }
             
             global.user.updateRankScore(score); 

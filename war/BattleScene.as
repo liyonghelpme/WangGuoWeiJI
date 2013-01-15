@@ -159,7 +159,8 @@ class BattleScene extends MyNode
         //只有挑战排行榜才需要lostScore
         if(kind == CHALLENGE_FRI)
         {
-            user["lostScore"] = getLostScore();
+            user["winScore"] = getWinScore();
+            user["failScore"] = getFailScore();
             user["evaluePower"] = evaluePower();//对方实力 / 我方实力 = 最多 100% 奖励值
         }
         //奖励 = 对方实力/我方实例 * 城墙生命值得分 * 资源总量
@@ -234,7 +235,7 @@ class BattleScene extends MyNode
         dialogController.addCmd(dict([["cmd", "chooseSol"]]));
         dialogController.addCmd(dict([["cmd", "randomChoose"]]));
     }
-    //评估军队实力
+    //评估军队实力 线性评估 平方增长太快了
     function evaluePower()
     {
         var myPower = 0;
@@ -244,7 +245,7 @@ class BattleScene extends MyNode
         {
             var sData = getData(SOLDIER, allMySol[i]);
             var rl = sData["level"]+1;
-            rl = rl*rl
+            //rl = rl*rl
             myPower += rl;
         }
         var eneSol = argument["soldier"]; 
@@ -252,20 +253,32 @@ class BattleScene extends MyNode
         {
             sData = getData(SOLDIER, eneSol[i]["id"]); 
             rl = sData["level"]+1;
-            rl = rl*rl;
+            //rl = rl*rl;
             enePower += rl;
         }
         return [myPower, enePower];
     }
     //挑战1个人 只有初始化的时候 会初始化积分 之后不能再 修改
-    function getLostScore()
+    //胜利积分 = 敌方/我方
+    function getWinScore()
     {
         var power = evaluePower();
         var score = 0;
         if(power[1] > 0)
-            score = getParam("BaseScore")*power[0]/power[1]
+            score = getParam("BaseScore")*power[0]/power[1];
         score = min(getParam("maxScore"), max(score, getParam("minScore")));
-        trace("lostScore", score, power);
+        trace("winScore", score, power);
+        return score;
+    }
+    //失败积分 = 我方/地方
+    function getFailScore()
+    {
+        var power = evaluePower();
+        var score = 0;
+        if(power[0] > 0)
+            score = getParam("BaseScore")*power[1]/power[0];
+        score = min(getParam("maxScore"), max(score, getParam("minScore")));
+        trace("FailScore", score, power);
         return score;
     }
     function checkStartChallenge()

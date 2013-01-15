@@ -174,7 +174,7 @@ class FriendList extends MyNode
 
                     if(data[curNum].get("crystal") != null)
                     {
-                        var temp = picNumWord(getStr("getCrystal", ["[KIND]", "crystal.png"]), 22, [28, 15, 4]).pos(74, 22).anchor(50, 0);//文字相对于node是0 50
+                        var temp = picNumWord(getStr("getCrystal", ["[KIND]", "crystal.png"]), 22, [28, 15, 4], 1).pos(74, 22).anchor(50, 0);//文字相对于node是0 50
                         panel.add(temp);
                     }
 

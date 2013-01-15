@@ -10,7 +10,7 @@ class ShadowWords extends MyNode
         wColor = col;
         bg = node();
         init();
-        picWord = picNumWord(w, wSize, wColor);
+        picWord = picNumWord(w, wSize, wColor, 1);
         picWord.pos(0, picWord.size()[1]/2);
         bg.add(picWord);
         bg.size(picWord.size());
@@ -19,7 +19,7 @@ class ShadowWords extends MyNode
     function setWords(w)
     {
         picWord.removefromparent();
-        picWord = picNumWord(w, wSize, wColor);
+        picWord = picNumWord(w, wSize, wColor, 1);
         picWord.pos(0, picWord.size()[1]/2);
         bg.add(picWord);
         bg.size(picWord.size());
