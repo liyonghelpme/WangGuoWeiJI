@@ -36,9 +36,11 @@ class Neibor extends FriendList
 
         if(neiborMax > len(data))
         {
-            for(i = 0; i < (neiborMax-len(data)); i++)
+            var needEmpty = neiborMax-len(data);
+            for(i = 0; i < needEmpty; i++)
                 data.append(dict([["uid", EMPTY_SEAT], ["id", -1], ["name", getStr("emptySeat", null)], ["level", 0], ["curNum", -1]]));
         }
+        trace("updateNeiborMax", neiborMax);
         //增加邻居上限
         data.append(dict([["uid", ADD_NEIBOR_MAX], ["id", -1], ["name", getStr("addNeiborMax", null)], ["level", 0], ["curNum", -1]]));
         trace("neiborMax", neiborMax, len(data));

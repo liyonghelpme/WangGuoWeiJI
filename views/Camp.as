@@ -6,11 +6,73 @@
 //计时方式:
 //  id--->needTime 
 // startTime += 
+class FastCallback extends MyNode
+{
+    var workNode;
+    var switchTime = 0;
+    function FastCallback(w)
+    {
+        workNode = w;
+        bg = node();
+        init();
+    }
+    override function enterScene()
+    {
+        super.enterScene();
+        global.myAction.addAct(this);
+    }
+    function update(diff)
+    {
+        var solId;
+        var sid;
+        var newName;
+        if(len(workNode.cacheShowSoldier) > 0)
+        {
+            switchTime += diff;
+            if(switchTime >= getParam("SwitchTime"))
+            {
+                switchTime = 0;
+                var singleSol = workNode.cacheShowSoldier.pop(0);
+                sid = singleSol[0];
+                solId = singleSol[1];
+                newName = singleSol[2];
+                var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid);
+                newSol.setName(newName);
+                global.user.updateSoldiers(newSol);
+                global.msgCenter.sendMsg(BUYSOL, newSol.sid);
+            }
+        }
+        else
+        {
+            workNode.removeCallback();
+        }
+    }
+    override function exitScene()
+    {
+        global.myAction.removeAct(this);
+        super.exitScene();
+    }
+}
 class CampWorkNode extends MyNode
 {
     var func;
     var flowBanner = null;
     var cacheShowSoldier = [];
+    var fastCallback = null;
+    function removeCallback()
+    {
+        fastCallback.removeSelf();
+        fastCallback = null;
+    }
+    function startCallback()
+    {
+        if(fastCallback == null)
+        {
+            fastCallback = new FastCallback(this);
+            fastCallback.switchTime = getParam("SwitchTime");
+            addChild(fastCallback);
+        }
+    }
     function CampWorkNode(f)
     {
         trace("init Camp Node");
@@ -29,7 +91,7 @@ class CampWorkNode extends MyNode
         var sid;
         var newName;
 
-        trace("readyList", func.baseBuild.readyList, flowBanner, func.baseBuild.objectList);
+        //trace("readyList", func.baseBuild.readyList, flowBanner, func.baseBuild.objectList);
         //有士兵需要收获
         if(len(func.baseBuild.readyList) > 0 && flowBanner == null)
         {
@@ -38,17 +100,6 @@ class CampWorkNode extends MyNode
             flowBanner.addaction(sequence(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
         }
         //购买士兵 信号移动到士兵所在位置
-        if(len(cacheShowSoldier) > 0)
-        {
-            var singleSol = cacheShowSoldier.pop(0);
-            sid = singleSol[0];
-            solId = singleSol[1];
-            newName = singleSol[2];
-            var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid);
-            newSol.setName(newName);
-            global.user.updateSoldiers(newSol);
-            global.msgCenter.sendMsg(BUYSOL, newSol.sid);
-        }
         if(len(func.baseBuild.objectList) > 0)
         {
             var harvestYet = 0;
@@ -133,7 +184,7 @@ class Camp extends FuncBuild
             var readies = baseBuild.readyList.items();
             //kind number
             var solList = [];
-            for(var i = 0; i < 1; i++)
+            for(var i = 0; i < len(readies); i++)
             {
                 var r = readies[i];
                 for(var j = 0; j < r[1]; j++)
@@ -149,6 +200,7 @@ class Camp extends FuncBuild
             baseBuild.readyList = dict();
             global.user.updateBuilding(baseBuild);
 
+            workNode.startCallback();
             return 1;
         }
         return 0;

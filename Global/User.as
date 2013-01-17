@@ -418,14 +418,6 @@ class User
             //资源更新 需要 更新本地数据库
             db.put("resource", resource);
             //闯关星 和 资源分开
-            //db.put("starNum", starNum);
-            db.put("buildings", buildings);
-            db.put("soldiers", soldiers);
-            db.put("drugs", drugs);
-            db.put("equips", equips);
-            db.put("herbs", herbs);
-            //db.put("tasks", tasks);
-            db.put("treasureStone", treasureStone);
             
             checkLoveTreeLevel();//爱心足够升级爱心树
 
@@ -622,6 +614,9 @@ class User
                 var objectList = allBuildings[i]["objectList"];
                 for(var j = 0; j < len(objectList); j++)
                     countNum += objectList[j][1];
+                var readyList = allBuildings[i]["readyList"];
+                var readyNum = readyList.values();
+                countNum += sum(readyNum);
             }
         }
         return countNum;
@@ -709,7 +704,6 @@ class User
     function makeEquip(eid, id)
     {
         equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
-        db.put("equips", equips);
         setValue(NOTIFY, 1);
     }
     
@@ -727,7 +721,6 @@ class User
         if(kind == EQUIP)
         {
             equips.update(eid, dict([["kind", id], ["level", 0], ["owner", -1]]));
-            db.put("equips", equips);
             global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_BUY_EQUIP]);
         }
         else
@@ -751,7 +744,6 @@ class User
     function getNewEquip(eid, id, level)
     {
         equips.update(eid, dict([["kind", id], ["level", level], ["owner", -1]]));
-        db.put("equips", equips);
     }
 
     function getNewEid()
@@ -773,13 +765,11 @@ class User
     //var bkeys = ["id", "px", "py", "state", "dir", "objectId", "objectTime"];
     function updateBuildingDB()
     {
-        db.put("buildings", buildings);
     }
 
     function sellBuild(build)
     {
         buildings.pop(build.bid);
-        db.put("buildings", buildings);
     }
     //历史修改
     function tempUpdateBuilding(build)
@@ -796,7 +786,6 @@ class User
 
         trace("updateBuilding", build, build.id, build.bid, build.getPos(), build.state, build.dir, build.getObjectId(), build.getStartTime());
         buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor], ["objectList", build.objectList], ["readyList", build.readyList]]));
-        db.put("buildings", buildings);
     }
     /*
     这些值是本地的 偶尔需要写回到远程数据库 
@@ -805,7 +794,6 @@ class User
     function setValue(key, value)
     {
         resource.update(key, value);
-        //db.put("resource", resource);
         global.msgCenter.sendMsg(UPDATE_RESOURCE, null);
     }
     function getNewSid()
@@ -838,8 +826,6 @@ class User
         {
             soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["inTransfer", soldier.inTransfer], ["addAttack", soldier.transferStartTime] ]));
         }
-        //updateSoldierDB();
-        db.put("soldiers", soldiers);
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);
     }
     function killSoldier(soldier)
@@ -856,8 +842,6 @@ class User
         }
         soldiers.pop(soldier.sid);//去除士兵数据
 
-        db.put("equips", equips);
-        //global.msgCenter.sendMsg(SOL_UNLOADTHING, sid);
     }
     /*
     如果该士兵显示出来则更新状态
@@ -1049,7 +1033,6 @@ class User
         var edata = equips.get(tid);
         var sid = edata.get("owner");
         edata["owner"] = -1;
-        db.put("equips", equips);
         
         global.httpController.addRequest("soldierC/unloadThing", dict([["uid", uid], ["eid", tid]]), null, null);
         global.msgCenter.sendMsg(SOL_UNLOADTHING, sid);
@@ -1063,7 +1046,6 @@ class User
         var v = drugs.get(id, 0);
         v += num;
         drugs[id] = v;
-        db.put("drugs", drugs);
         global.msgCenter.sendMsg(UPDATE_DRUG, id);
     }
     function changeHerbNum(id, num)
@@ -1071,7 +1053,6 @@ class User
         var v = herbs.get(id, 0);
         v += num;
         herbs[id] = v;
-        db.put("herbs", herbs);
 
         setValue(NOTIFY, 1);
     }
@@ -1105,7 +1086,6 @@ class User
 
             var edata = equips.get(tid);
             edata["owner"] = soldier.sid;
-            db.put("equips", equips);
             soldier.useEquip(tid);
             global.msgCenter.sendMsg(UPDATE_EQUIP, [tid, UPDATE_USE_EQUIP]);
             return 1;
@@ -1127,9 +1107,7 @@ class User
             if(eData["owner"] == soldier.sid)
                 eData["owner"] = -1;
         }
-        db.put("equips", equips);
         soldiers.pop(soldier.sid);
-        db.put("soldiers", soldiers);
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);//卖出士兵
     }
 
@@ -1327,7 +1305,6 @@ class User
     {
         var e = equips.get(eid);
         e["level"] += 1;
-        db.put("equips", equips);
         global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_UPGRADE_EQUIP]);
     }
     function breakEquip(eid)
@@ -1335,7 +1312,6 @@ class User
         var e = equips.get(eid);
         e["level"] -= 1;
         e["level"] = max(e["level"], 0);
-        db.put("equips", equips);
         global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_UPGRADE_EQUIP]);
     }
 

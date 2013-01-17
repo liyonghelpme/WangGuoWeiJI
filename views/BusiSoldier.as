@@ -224,7 +224,7 @@ class BusiSoldier extends MyNode
         {
             var g = it[i];
             temp.addsprite(g[0]+".png").anchor(0, 50).pos(0, curY).size(30, 30);
-temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY).color(0, 0, 0);
+            temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY).color(getParam("FlyObjRed"), getParam("FlyObjGreen"), getParam("FlyObjBlue"));
             curY -= 30;
         }
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));

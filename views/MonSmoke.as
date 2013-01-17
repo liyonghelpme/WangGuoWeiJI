@@ -33,20 +33,19 @@ class MonSmoke extends MyNode
         bg = sprite().pos(tar.getPos()).anchor(50, 100);
          
         var ani = getSkillAnimate(skillId);
-        attackTime = ani[1];//动画时间
-        //cus = new MyAnimate(ani[1], ani[0], bg);
-        cus = new OneAnimate(ani[1], ani[0], bg, "", 0);
-        //tar.doSave();
+        attackTime = getParam("smokeTime");//动画时间
+        cus = new OneAnimate(getParam("smokeTime"), ani[0], bg, "", 0);
         
         //怪兽脚底的绿色光环
         var bSize = tar.bg.size();
+        /*
         appearStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
         appearStar.addaction(repeat(animate(1500, 
             "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", "greenStar11.png", "greenStar12.png", "greenStar13.png", "greenStar14.png", "greenStar15.png", "greenStar16.png", "greenStar17.png", "greenStar18.png"
             , UPDATE_SIZE))
         );
-
         tar.bg.add(appearStar, -1);
+        */
     }
 
     function update(diff)
@@ -55,7 +54,7 @@ class MonSmoke extends MyNode
         if(passTime >= attackTime)//超过眩晕时间 技能结束 
         {
             removeSelf();
-            appearStar.removefromparent();
+            //appearStar.removefromparent();
             if(callback != null)
             {
                 callback();   

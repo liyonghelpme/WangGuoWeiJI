@@ -99,6 +99,7 @@ class Mine extends FuncBuild
     }
 
     //空闲状态 水晶矿没有开启
+    //水晶框没有空闲状态 只有工作状态
     override function whenFree()
     {
         global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("notOpenMine", ["[LEV]", str(PARAMS["MineMinLevel"])]), [100, 100, 100], null));
@@ -203,10 +204,11 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     }
     override function finishBuild()
     {
-        var userLevel = global.user.getValue("level");
         //等级足够开启建筑物
         //userLevel >= PARAMS["MineMinLevel"] && 
         //if(baseBuild.state != PARAMS["buildMove"])//非移动状态
+        //建造结束 水晶框状态进入 工作状态
+        baseBuild.setState(PARAMS["buildWork"]);
         if(baseBuild.state == PARAMS["buildWork"])
         {
             //baseBuild.setState(PARAMS["buildWork"]);

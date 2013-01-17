@@ -259,8 +259,6 @@ class CastleScene extends MyNode
             return;
 
         var p = curBuild.getPos();
-        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["color", curBuild.buildColor]]), null, null);
-
         var id = curBuild.id; //building.get("id");
 
         var cost = getCost(BUILD, id);
@@ -276,6 +274,11 @@ class CastleScene extends MyNode
 
         global.user.buyBuilding(curBuild);
         trace("finishBuild");
+
+
+        //等待CastlePage finishBuild 来改变建筑状态
+        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["state", curBuild.state], ["color", curBuild.buildColor]]), null, null);
+
         closeBuild();
         //在关闭 选择菜单之后再显示任务奖励菜单
     }
