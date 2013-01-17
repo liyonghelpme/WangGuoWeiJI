@@ -848,6 +848,9 @@ const FINISH_STORY = 45;
 const SHOW_HINT_WORD = 46;//经营页面或者 战斗页面 有dialogController 的 对象显示 当前的 提示文字  检测当期的系统 stack为空 
 const CALL_SOL_FINISH = 47;
 const HAS_CHALLENGE_MSG = 48; 
+const PAUSE_GAME = 49;
+const RESUME_GAME = 50;
+const MOVE_TO_POINT = 51;
 
 
 
@@ -1226,6 +1229,7 @@ const BUY_RES = dict([
     ["silver", "buySilver"],
     ["crystal", "buyCrystal"],
     ["gold", "buyGold"],
+    ["papaya", "buyPapaya"],
 ]);
 
 //页面ID
@@ -1322,6 +1326,10 @@ const LOAD_ROUND = 1;
 const LOAD_TRAIN = 2;
 
 const TRAIN_CENTER = [465, 720];
+const RANDOM_SOL_ZONE = [200, 498, 500, 300];
+const RANDOM_SOL_POS = [
+[430, 566], [300, 626], [290, 758], [416, 834], [560, 776], [570, 630],
+];
 
 
 

@@ -224,7 +224,7 @@ var WORDS = dict([
 ["moreThings", "你拥有多个物品，点击展开查看详细信息"],
 ["noThing", "没有该类物品"],
 ["sendIt", "赠 送"],
-["friSendEquip", "[NAME]赠送你一件装备[ENAME]等级[LEVEL]。 [YEAR]/[MON]/[DAY] [HOUR]:[MIN]"],
+["friSendEquip", "[NAME]赠送你一件装备[ENAME]。 [YEAR]/[MON]/[DAY] [HOUR]:[MIN]"],
 ["friSendOthers", "[NAME]赠送你[ONAME]。[YEAR]/[MON]/[DAY] [HOUR]:[MIN]"],
 ["skillLevel", "Lv. [LEV]"],
 ["giveup", "放 弃"],
@@ -680,4 +680,6 @@ var WORDS = dict([
 ["totalRobNum", "总共损失:[SIL]{[KIND1]}[CRY]{[KIND2]}"],
 ["conSucSavePrincess", "恭喜你取得了胜利！早日救出公主哦！"],
 ["solTaskFinish", "该项任务已经完成"],
+["buyPapaya", "购买木瓜币"],
+["forgeInfo", "铁匠铺｜装备数量:[[NUM]]"],
 ]);

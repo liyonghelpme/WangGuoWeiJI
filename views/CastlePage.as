@@ -314,7 +314,6 @@ class CastlePage extends MyNode
         //所有调用moveToPoint 的地方记录 旧的位置和 比例尺
         oldScale = bg.scale();
         oldPos = bg.pos();
-        //moveToPoint(ZoneCenter[kind][0], ZoneCenter[kind][1]);
         moveToPoint(curBuild.getPos()[0], curBuild.getPos()[1]);
         return curBuild;
     }
@@ -350,15 +349,14 @@ class CastlePage extends MyNode
         var bPos = build.getPos();
         bPos[1] -= bSize[1]/2;
         moveToPoint(bPos[0], bPos[1]);
-        
     }
     //结束后不调整尺寸和 位置
+    //应该先 调整scale 再 保存位置
     function moveToCertainPos(s, p)
     {
-        oldScale = s;
-        oldPos = p;
-
+        oldScale = bg.scale();
         touchDelegate.scaleToMax(s);
+        oldPos = bg.pos();
         moveToPoint(p[0], p[1]);
     }
     function moveToNormal(build)
@@ -388,6 +386,7 @@ class CastlePage extends MyNode
             oldPos = null;
         }
     }
+    //外部不应该直接调用moveToPoint 需要保存内部状态
     //var inMove = 0;
     function moveToPoint(tarX, tarY)
     {
@@ -496,6 +495,7 @@ class CastlePage extends MyNode
         global.msgCenter.registerCallback(SHOW_NEW_TASK_REWARD, this);
         global.msgCenter.registerCallback(SHOW_NEW_STAGE, this);
         global.msgCenter.registerCallback(HAS_CHALLENGE_MSG, this);
+        global.msgCenter.registerCallback(MOVE_TO_POINT, this);
         solNum.text(str(global.user.getSolNum()));
 
         //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
@@ -511,8 +511,11 @@ class CastlePage extends MyNode
     //士兵卖出 也更新士兵状态
     function receiveMsg(msg)
     {
-//        trace("receiveMsg", msg);
-        if(msg[0] == BUYSOL)
+        if(msg[0] == MOVE_TO_POINT)
+        {
+            moveToCertainPos(100, msg[1]);
+        }
+        else if(msg[0] == BUYSOL)
         {
             solNum.text(str(global.user.getSolNum()));
             var sid = msg[1];
@@ -521,8 +524,9 @@ class CastlePage extends MyNode
                 var sdata = global.user.getSoldierData(sid);
                 var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, sdata.get("id")), sdata, sid);
                 buildLayer.addSoldier(newSol);
-
+                newSol.setRandomInitPos();
                 newSol.setSmoke();
+                moveToCertainPos(100, newSol.getPos());
             }
         }
         else if(msg[0] == LEVEL_UP)
@@ -599,6 +603,7 @@ class CastlePage extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(MOVE_TO_POINT, this);
         global.msgCenter.removeCallback(HAS_CHALLENGE_MSG, this);
         global.msgCenter.removeCallback(SHOW_NEW_STAGE, this);
         global.msgCenter.removeCallback(SHOW_NEW_TASK_REWARD, this);

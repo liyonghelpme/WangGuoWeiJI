@@ -102,8 +102,8 @@ class BuildMenu extends MyNode
         if(opKind == PLAN_SOLDIER)//规划士兵
         {
             trace("SolbuildOk", buildOk);
-            buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-            buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+            buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+            buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
             buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
         }
         else if(opKind == PLAN_BUILDING)//规划建筑物
@@ -112,16 +112,25 @@ class BuildMenu extends MyNode
 
             if(building.get("changeDir") == 0)//不能旋转
             {
-
+                var butNum = 2;
                 if(kind == FARM_ZONE)//农田
                 {
                     if(inPlan)
                     {
                         buttonNode.addsprite("buildSell0.png").anchor(0, 0).pos(726, 8).size(48, 48).setevent(EVENT_TOUCH, onSell);
+                        butNum = 3;
                     }
                 }
-                buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-                buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+                if(butNum == 3)
+                {
+                    buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+                    buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+                }
+                else
+                {
+                    buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+                    buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+                }
 
                 buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
             }

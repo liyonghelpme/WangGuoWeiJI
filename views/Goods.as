@@ -283,6 +283,8 @@ class Goods extends MyNode
     {
         curSel = null;
         store.buy(param); 
+        shadow.removefromparent();
+        shadow = null;
     }
     //var greenBut = null;
     var curSel = null;

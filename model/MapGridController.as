@@ -146,6 +146,8 @@ class MapGridController
     function addBuilding(chd)
     {
         allBuildings.append(chd);
+        //先清理再更新map 防止外部设定map
+        clearMap(chd);
         updateMap(chd);
     }
 

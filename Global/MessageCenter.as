@@ -13,6 +13,16 @@ class MessageCenter
     function MessageCenter()
     {
         callbacks = dict();//MSG_ID callBacks[]
+        export("onpause", onPause);
+        export("onresume", onResume);
+    }
+    function onPause()
+    {
+        sendMsg(PAUSE_GAME, null);
+    }
+    function onResume()
+    {
+        sendMsg(RESUME_GAME, null);
     }
     //应该避免在相应消息的时候删除消息代理
     //而应该在退出场景的时候删除消息代理, 但是可能存在某个对象处理消息----> 导致另一个对象退出场景---->

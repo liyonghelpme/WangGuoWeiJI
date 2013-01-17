@@ -100,10 +100,8 @@ class DrugList extends MyNode
     */
     function onUnloadIt(curNum)
     {
-        global.httpController.addRequest("soldierC/unloadThing", dict([["uid", global.user.uid], ["eid", data[curNum][1]]]), null, null);
-
+        //global.httpController.addRequest("soldierC/unloadThing", dict([["uid", global.user.uid], ["eid", data[curNum][1]]]), null, null);
         global.user.unloadThing(data[curNum][1]);
-        //initData();
         updateData();
         updateTab();
     }

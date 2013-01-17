@@ -48,26 +48,13 @@ class RankDialog extends MyNode
     var sureToChallenge = 0;
     function onRankInfo()
     {
-        //global.director.pushView(new NoTipDialog(HEART_TIP), 1, 0);
-        if(global.user.checkInProtect())
+        sureToChallenge = gotoRandChallenge(sureToChallenge, finishCallback);
+        if(sureToChallenge == 0)
         {
-            if(sureToChallenge == 0)
-            {
-                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inProtect", null), [100, 100, 100], finishCallback));
-                sureToChallenge = 1;
-                return;
-            }
-            else
-            {
-                sureToChallenge = 0;
-                global.httpController.addRequest("challengeC/clearProtectTime", dict([["uid", global.user.uid]]), null, null);
-                global.user.clearProtectTime();
-            }
+            global.director.popView();
+            var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
+            global.director.pushScene(cs);
         }
-
-        global.director.popView();
-        var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
-        global.director.pushScene(cs);
     }
     function RankDialog(k)
     {

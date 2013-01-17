@@ -57,7 +57,11 @@ class CastleScene extends MyNode
         global.msgCenter.registerCallback(NEW_USER, this);
         global.msgCenter.registerCallback(BEGIN_BUILD, this);
         global.msgCenter.registerCallback(FINISH_STORY, this);
+        global.msgCenter.registerCallback(PAUSE_GAME, this);
+        global.msgCenter.registerCallback(RESUME_GAME, this);
+        global.controller.playMedia("business.mp3");
     }
+
     var realDisappear = 0;
     var inSen = 0;
     function senBegan(acc)
@@ -128,21 +132,34 @@ class CastleScene extends MyNode
         {
             beginBuild(param[1]);
         }
+        else if(msid == RESUME_GAME)
+        {
+            global.controller.playMedia("business.mp3");
+        }
+        else if(msid == PAUSE_GAME)
+        {
+            global.controller.pauseMedia("business.mp3");
+        }
         
     }
     override function exitScene()
     {
+        global.controller.pauseMedia("business.mp3");
+
         global.sensorController.removeCallback(this);
         //c_sensor(SENSOR_ACCELEROMETER);
         bg.setevent(EVENT_KEYDOWN, null);
         //global.staticScene = null;
         global.timer.removeTimer(this);
 
+        global.msgCenter.removeCallback(PAUSE_GAME, this);
+        global.msgCenter.removeCallback(RESUME_GAME, this);
         global.msgCenter.removeCallback(FINISH_STORY, this);
         global.msgCenter.removeCallback(BEGIN_BUILD, this);
         global.msgCenter.removeCallback(SHOW_DIALOG, this);
         global.msgCenter.removeCallback(INITDATA_OVER, this);
         global.msgCenter.removeCallback(NEW_USER, this);
+
         super.exitScene();
     }
 

@@ -87,7 +87,7 @@ class FallObj extends MyNode
         bg.setevent(EVENT_TOUCH|EVENT_UNTOUCH|EVENT_MOVE, null);
         //bg.removefromparent();
         bg.visible(0);
-        player = global.controller.pickMusic.play(0, 80, 80, 0, 100);
+        player = global.controller.playSound("pick.mp3");
     }
     function pickMe()
     {

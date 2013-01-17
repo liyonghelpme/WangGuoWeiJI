@@ -47,6 +47,7 @@ class Building extends MyNode
 
     var featureColor = null;
     var shadow = null;
+    var readyList = null;
     function Building(m, d, privateData)
     {
         bid = -1;
@@ -71,6 +72,7 @@ class Building extends MyNode
 
         objectList = privateData.get("objectList", []);
         buildLevel = privateData.get("level", 0);
+        readyList = privateData.get("readyList", dict());
 
         if(funcs == FARM_BUILD)
             funcBuild = new Farm(this);
@@ -165,9 +167,11 @@ class Building extends MyNode
         disSize = map.map.bg.world2node(disSize[0]/2, disSize[1]/2); 
         trace("init building Pos", disSize);
         
-        map.mapGridController.clearMap(this);//清理map 之后 再设置map
+        //新建筑在BuildLayer 中加入 MapGridController 的时候 已经设定map了，此处不用设定map
+        //map.mapGridController.clearMap(this);//清理map 之后 再设置map
         setPos(disSize);
-        map.mapGridController.updateMap(this);//重新设定map
+        //map.mapGridController.updateMap(this);//重新设定map
+        setColPos();
     }
     function getObjectId()
     {
@@ -354,28 +358,17 @@ class Building extends MyNode
     function setColPos()
     {
         colNow = 0;
-        //var z = buildCheckInZone();
-        //var ret = checkInZone(bg.pos());
-        /*
-        if(ret == 0)
+        var other = map.checkCollision(this);
+        //trace("collision result", other);
+        if(other != null)
         {
             setColor(NotBigZone);
             colNow = 1;
         }
-        */
-        //else
-        //{
-            var other = map.checkCollision(this);
-            if(other != null)
-            {
-                setColor(NotBigZone);
-                colNow = 1;
-            }
-            else
-            {
-                setColor(InZone);
-            }
-        //}
+        else
+        {
+            setColor(InZone);
+        }
     }
     /*
     进入规划模式， 保存旧的坐标 
@@ -413,6 +406,11 @@ class Building extends MyNode
     水晶矿的建筑物 检测当前是否处于Planing状态
 
     每次进入场景 以及变换状态
+
+    设定状态 setState
+    设定bottom
+    设定位置
+    设定color颜色
     */
     function setState(s)
     {
@@ -473,12 +471,17 @@ class Building extends MyNode
     每次touchBegan 向 父亲节点传播
     */
     var accMove = 0;
+
+    var touchOffX = 0;
+    var touchOffY = 0;
     function touchBegan(n, e, p, x, y, points)
     {
-
         accMove = 0;
-        lastPoints = n.node2world(x, y);         
-        
+        touchOffX = bg.size()[0]/2-x;
+        touchOffY = bg.size()[1]-y;
+        trace("touchOffX", touchOffX, touchOffY);
+
+        lastPoints = n.node2world(x+touchOffX, y+touchOffY);         
         //如果当前显示了菜单则再次点击是关闭菜单
         if(!showMenuYet)
             map.touchBegan(n, e, p, x, y, points); 
@@ -494,7 +497,6 @@ class Building extends MyNode
                 }
             }
         }
-
         /*
         规划状态 如果点击 则需要更新
         */
@@ -503,7 +505,6 @@ class Building extends MyNode
             dirty = 1;
             map.mapGridController.clearMap(this);
         }
-
     }
     function finishPlan()
     {
@@ -513,22 +514,19 @@ class Building extends MyNode
         {
             finishBottom();
             setZord(null);
-            //bottom.removefromparent();
-            //bottom = null;
         }
     }
     function setColor(inZ)
     {
+        //trace("setColPos", inZ);
         if(bottom == null)
             return;
         if(inZ != InZone)
         {
-            //bg.color(93, 4, 1, 30);//red
             bottom.texture("red2.png");
         }
         else
         {
-            //bg.color(3, 93, 81, 30);//green
             bottom.texture("green2.png");
         }
     }
@@ -559,9 +557,8 @@ class Building extends MyNode
     */
     function touchMoved(n, e, p, x, y, points)
     {
-
         var oldPos = lastPoints;
-        lastPoints = n.node2world(x, y);
+        lastPoints = n.node2world(x+touchOffX, y+touchOffY);
         var difx = lastPoints[0] - oldPos[0];
         var dify = lastPoints[1] - oldPos[1];
         if(state == PARAMS["buildMove"] || Planing)

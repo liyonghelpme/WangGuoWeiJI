@@ -125,7 +125,7 @@ class ChildMenuLayer extends MyNode
         global.director.curScene.closeGlobalMenu(this);
         scene.clearStatus();
         global.director.curScene.showGame(scene, GATHER_GAME);
-        global.director.pushView(new GameFour(), 0, 0);
+        //global.director.pushView(new GameFour(), 0, 0);
     }
     function onMoney()
     {
@@ -141,8 +141,7 @@ class ChildMenuLayer extends MyNode
         scene.clearStatus();
 
         global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
-        //global.director.pushView(new GameOne(scene, INSPIRE_STATUS), 0, 0);
-        global.director.pushView(new GameThree(scene), 0, 0);
+        //global.director.pushView(new GameThree(scene), 0, 0);
     }
 
     
@@ -218,7 +217,7 @@ class ChildMenuLayer extends MyNode
     function onCollection()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new CollectionDialog(), 1, 0);
+        //global.director.pushView(new CollectionDialog(), 1, 0);
     }
     const OFFY = 100;
     const MIDY = 200;
@@ -243,8 +242,9 @@ class ChildMenuLayer extends MyNode
         scene = s;
         functions = funcs;
         var height = len(functions)*OFFY;
-        var h2 = len(otherFunc)*OFFY;
-        var mH = max(height, h2);
+        //var h2 = len(otherFunc)*OFFY;
+        //var mH = max(height, h2);
+        var mH = height;
         offset = MIDY-mH/2;
         bg=sprite("dark0.png").scale(100,100).size(DARK_WIDTH, height);
         if(index == 0){
@@ -261,7 +261,7 @@ class ChildMenuLayer extends MyNode
             var model = buts.get(funcs[i]);
 
             var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(DARK_WIDTH/2, OFFY/2+OFFY*i);
-            new Button(button, model[1], null);
+            button.setevent(EVENT_TOUCH, model[1], null);
             if(funcs[i] == "mail")
             {
                 var num = global.mailController.getMailNum();

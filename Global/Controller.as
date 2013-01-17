@@ -1,21 +1,56 @@
 class Controller
 {
-    var butMusic = null;
-    var pickMusic = null;
     //初始化音乐资源
+    
+    const SOUND = 0;
+    const MEDIA = 1;
+    var names = [["but.mp3", SOUND], ["pick.mp3", SOUND], ["business.mp3", MEDIA], ["fight.mp3", MEDIA]];
+    var musics = dict();
     function Controller()
     {
-        var exist = fetch("but.mp3");
-        if(exist == null)
+        for(var i = 0; i < len(names); i++)
         {
-            request("but.mp3", 0, finishDownload);
+            var exist = fetch(names[i][0]);
+            if(exist == null)
+            {
+                request(names[i][0], 0, finishDownload, names[i]);
+            }
+            else
+            {
+                finishDownload(null, 1, names[i]);
+            }
         }
-        else 
-            finishDownload();
-        pickMusic = createsound("pick.mp3");
     }
-    function finishDownload()
+    function finishDownload(fp, ret, param)
     {
-        butMusic = createsound("but.mp3");
+        if(ret)
+        {
+            if(param[1] == SOUND)
+                musics[param[0]] = createsound(param[0]);
+            else if(param[1] == MEDIA)
+                musics[param[0]] = createaudio(param[0]);
+        }
     }
+    function playSound(name)
+    {
+        if(musics.get(name) != null)
+            return musics.get(name).play(0, 80, 80, 0, 100);
+        return null;
+    }
+    function stopSound(name)
+    {
+    }
+    function playMedia(name)
+    {
+        if(musics.get(name) != null)
+            return musics[name].play(-1);
+        return null;
+    }
+    function pauseMedia(name)
+    {
+        if(musics.get(name) != null)
+            return musics[name].pause();
+        return null;
+    }
+
 }

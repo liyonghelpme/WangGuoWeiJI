@@ -20,8 +20,6 @@ import busiViews.MakeDrugDialog;
 
 import busiViews.SoldierDialog;
 import busiViews.AllSoldier;
-import busiViews.DeadSoldier;
-import busiViews.TransferSoldier;
 
 import busiViews.DrugDialog;
 import busiViews.DrugList;
@@ -69,11 +67,8 @@ import busiViews.DetailDialog;
 
 import views.ChildMenuLayer;
 import busiViews.TransferDialog;
-import views.GameFour;
 import views.GameTwo;
-import views.GameThree;
 import views.FlowReward;
-//import views.GameOne;
 import busiViews.InviteIntro;
 import busiViews.InviteInput;
 
@@ -94,12 +89,6 @@ import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
 
-import fight.FightingScene;
-import fight.FightMap;
-import fight.FightMenu;
-import fight.MakeArenaDialog;
-import fight.FightSoldier;
-
 import views.MoveMap;
 import views.MoveSoldier;
 
@@ -109,7 +98,6 @@ import views.Camp;
 
 
 import views.SellDialog;
-import views.AccDialog;
 
 import busiViews.FriendDialog;
 import busiViews.Neibor;
@@ -120,26 +108,11 @@ import busiViews.SearchDialog;
 import busiViews.InviteDialog;
 import busiViews.InviteList;
 
-
-
-//import views.FriendDialog;
-//import views.FriendList;
-//import views.GiftDialog;
 import busiViews.GiftDialog;
 
 import views.FlowScene;
 import views.FlowMenu;
 import views.FlowIsland;
-
-
-
-import views.ResourceWarningDialog;
-
-
-
-//import views.GloryDialog;
-import busiViews.CollectionDialog;
-import busiViews.CollectionList;
 
 import views.Farm;
 import views.Plant;
@@ -290,11 +263,7 @@ import views.LoginDialog;
 import busiViews.LoadChallenge;
 
 //菜单使用的按钮对象
-import views.Button;
 import views.UpgradeBanner;
-
-
-
 
 import model.SoldierAI;
 import model.SoldierModel;

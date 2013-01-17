@@ -241,3 +241,11 @@ function calAccCost(leftTime)
     //printD(["calAccCost", needGold, leftTime]);
     return needGold;
 }
+
+function getNewName()
+{
+    var rd = rand(len(soldierName));
+    var sname = getStr(soldierName[rd][0], "");
+    soldierName.pop(rd);
+    return sname;
+}

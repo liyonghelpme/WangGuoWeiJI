@@ -102,9 +102,27 @@ class BattleScene extends MyNode
 
         bg.setevent(EVENT_KEYDOWN, quitMap);
         bg.focus(1);
+        global.controller.playMedia("fight.mp3");
+        global.msgCenter.registerCallback(PAUSE_GAME, this);
+        global.msgCenter.registerCallback(RESUME_GAME, this);
+    }
+    function receiveMsg(param)
+    {
+        var msid = param[0];
+        if(msid == RESUME_GAME)
+        {
+            global.controller.playMedia("fight.mp3");
+        }
+        else if(msid == PAUSE_GAME)
+        {
+            global.controller.pauseMedia("fight.mp3");
+        }
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(PAUSE_GAME, this);
+        global.msgCenter.removeCallback(RESUME_GAME, this);
+        global.controller.pauseMedia("fight.mp3");
         sceneSlowTimer.removeTimer(this);
         super.exitScene();
         sceneSlowTimer.stop();

@@ -40,7 +40,8 @@ class NewButton extends MyNode
     var player = null;
     function touchBegan(n, e, p, x, y, points)
     {
-        player = global.controller.butMusic.play(0, 80, 80, 0, 100);
+        player = global.controller.playSound("but.mp3");
+
         oldSca = bg.scale();
         bg.scale(oldSca[0]*80/100, oldSca[1]*80/100);
     }

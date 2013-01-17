@@ -105,18 +105,15 @@ class BusiSoldier extends MyNode
     改变位置的shift不变
     添加子节点不变
     */
-    var backBanner;
-    var bloodBanner;
 
     function initHealth()
     {
-        var bx = bloodTotalLen*health/healthBoundary;
-        bloodBanner.size(bx, bloodHeight);
     }
     //购买士兵 以烟雾显示
     //烟雾显示 一定时间
     //控制士兵不能乱跑 命名结束 之后 才可以
     var oldState = null;
+    var chooseStar = null;
     function setSmoke()
     {
         bg.addaction(fadein(1000));
@@ -125,9 +122,16 @@ class BusiSoldier extends MyNode
         state = SOL_NAME;
         clearMoveState();//停止移动
         map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], finishName), MAX_BUILD_ZORD);
+
+        var bSize = bg.size();
+        chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+        chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
+        bg.add(chooseStar, -1);
     }
     function finishName()
     {
+        chooseStar.removefromparent();
+        chooseStar = null;
         state = oldState;
         oldState = null;
     }
@@ -140,10 +144,10 @@ class BusiSoldier extends MyNode
         map = m;
         speed = getParam("busiSoldierSpeed");
         id = data.get("id");
-        //var colStr = "red";
         load_sprite_sheet("soldierm"+str(id)+".plist");
-
-        bg = node().scale(PARAMS["SOL_SHOW_SIZE"]);
+        
+        //有些士兵尺寸调整
+        bg = node().scale(PARAMS["SOL_SHOW_SIZE"]*data["solSca"]/100);
         init();
         changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
@@ -190,8 +194,6 @@ class BusiSoldier extends MyNode
             bloodScaX = 139*100/139;
         }
 
-        backBanner = bg.addsprite("mapSolBloodBan.png").pos(bSize[0]/2, -10).anchor(50, 100).scale(bloodScaX, bloodScaY).visible(0);
-        bloodBanner = backBanner.addsprite("mapSolBlood.png").pos(2, 2);
 
         initHealth();
 
@@ -372,7 +374,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
             
         var career = id%10;
 
-        var func2 = ["equip"];
+        var func2 = [];
         if(curStatus != NO_STATUS)
         {
             func2.append("menu"+str(curStatus));
@@ -386,6 +388,7 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         {
             func2.append("acc");
         }
+        func2.append("equip");
 
         //快速编译解决依赖关系
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
@@ -544,6 +547,22 @@ temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY
         setTarDir();
         //设定新的目的位置
         state = SOL_POS;
+    }
+    function clearMap()
+    {
+        map.mapGridController.clearSolMap(this);
+    }
+    function setMap()
+    {
+        curMap = map.mapGridController.updateMap(this);
+    }
+    function setRandomInitPos()
+    {
+        clearMap();
+        var px = rand(RANDOM_SOL_ZONE[2])+RANDOM_SOL_ZONE[0];
+        var py = rand(RANDOM_SOL_ZONE[3])+RANDOM_SOL_ZONE[1];
+        setPos([px, py]);
+        setMap();
     }
 
 

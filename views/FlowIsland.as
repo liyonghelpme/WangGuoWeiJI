@@ -7,7 +7,7 @@ class FlowIsland extends MyNode
     {
         scene = s;
         kind = k;
-        bg = sprite("island"+str(kind)+".jpg");
+        bg = sprite("island"+str(kind)+".png");
         init();
         bg.prepare();
         touchDelegate = new StandardTouchHandler();

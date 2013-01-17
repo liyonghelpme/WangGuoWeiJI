@@ -10,6 +10,7 @@ class CampWorkNode extends MyNode
 {
     var func;
     var flowBanner = null;
+    var cacheShowSoldier = [];
     function CampWorkNode(f)
     {
         trace("init Camp Node");
@@ -17,18 +18,37 @@ class CampWorkNode extends MyNode
         bg = node();
         init();
     }
-    function getNewName()
-    {
-        var rd = rand(len(soldierName));
-        var sname = getStr(soldierName[rd][0], "");
-        soldierName.pop(rd);
-        return sname;
-    }
+
+
     //每个兵营都初始化一次名字？
     //加速时间 <= 0 进入完成状态
     //考虑 加速时间到 时建筑物 打开招募对话框 自动关闭
     function update(diff)
     {
+        var solId;
+        var sid;
+        var newName;
+
+        trace("readyList", func.baseBuild.readyList, flowBanner, func.baseBuild.objectList);
+        //有士兵需要收获
+        if(len(func.baseBuild.readyList) > 0 && flowBanner == null)
+        {
+            var bSize = func.baseBuild.bg.size();
+            flowBanner = func.baseBuild.bg.addsprite("callFlow.png").pos(bSize[0]/2, -5).anchor(50, 100);
+            flowBanner.addaction(sequence(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
+        }
+        //购买士兵 信号移动到士兵所在位置
+        if(len(cacheShowSoldier) > 0)
+        {
+            var singleSol = cacheShowSoldier.pop(0);
+            sid = singleSol[0];
+            solId = singleSol[1];
+            newName = singleSol[2];
+            var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid);
+            newSol.setName(newName);
+            global.user.updateSoldiers(newSol);
+            global.msgCenter.sendMsg(BUYSOL, newSol.sid);
+        }
         if(len(func.baseBuild.objectList) > 0)
         {
             var harvestYet = 0;
@@ -44,24 +64,20 @@ class CampWorkNode extends MyNode
                 trace("finish camp", leftTime, objectList);
                 if(leftTime <= 0 && len(objectList) > 0)
                 {
-                    var solId = objectList[0][0];
-                    var sid = global.user.getNewSid();
-                    var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid);
-                    var newName = getNewName();
-                    newSol.setName(newName);
-                    global.user.updateSoldiers(newSol);
-                    global.msgCenter.sendMsg(BUYSOL, newSol.sid);
-                    
-                    global.httpController.addRequest("buildingC/campHarvestSoldier", dict([["uid", global.user.uid], ["bid", func.baseBuild.bid], ["solId",  solId], ["sid", sid], ["name", newName]]), null, null);//收获之后 命名士兵
-                    
+                    //加入到readyList 中去
+                    solId = objectList[0][0];
+                    global.httpController.addRequest("buildingC/campReadySoldier", dict([["uid", global.user.uid], ["bid", func.baseBuild.bid], ["solId",  solId]]), null, null);//收获之后 命名士兵
                     trace("objectList Num", objectList[0]);
                     objectList[0][1] -= 1;
                     if(objectList[0][1] <= 0)
                         objectList.pop(0);
+                    
+                    var num = func.baseBuild.readyList.get(solId, 0);
+                    num++;
+                    func.baseBuild.readyList.update(solId, num);
 
                     global.user.updateBuilding(func.baseBuild);
                     harvestYet = 1;
-
                     totalNeedTime += needTime;
                     func.objectTime += needTime;
                 }
@@ -85,6 +101,14 @@ class CampWorkNode extends MyNode
         global.timer.removeTimer(this);
         super.exitScene();
     }
+    function clearFlowBanner()
+    {
+        if(flowBanner != null)
+        {
+            flowBanner.removefromparent();
+            flowBanner = null;
+        }
+    }
 }
 class Camp extends FuncBuild
 {
@@ -98,17 +122,54 @@ class Camp extends FuncBuild
         //需要等待baseBuild init结束才能
         baseBuild.addChild(workNode);
     }
+    //如果有士兵可以收获则 返回1
+    //一次收获1个士兵
+    function harvestSoldier()
+    {
+        //每次只出现一个
+        if(len(baseBuild.readyList) > 0)
+        {
+            workNode.clearFlowBanner();
+            var readies = baseBuild.readyList.items();
+            //kind number
+            var solList = [];
+            for(var i = 0; i < 1; i++)
+            {
+                var r = readies[i];
+                for(var j = 0; j < r[1]; j++)
+                {
+                    var solId = r[0];
+                    var sid = global.user.getNewSid();
+                    var newName = getNewName();
+                    workNode.cacheShowSoldier.append([sid, solId, newName]);
+                    solList.append([sid, solId, newName]);
+                }
+            }
+            global.httpController.addRequest("buildingC/campHarvestSoldier", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["sols",  json_dumps(solList)]]), null, null);//收获之后 命名士兵
+            baseBuild.readyList = dict();
+            global.user.updateBuilding(baseBuild);
+
+            return 1;
+        }
+        return 0;
+    }
+    override function whenFree()
+    {
+        return harvestSoldier();
+    }
     //BUYSOL 信号发出 自动移动 当前屏幕
     override function whenBusy()
     {
         //工作时 点击士兵一次性收获多个?
-        return 0;
+        return harvestSoldier();
     }
     /*
     兵营总是在工作状态
     检测objectList
     队列不空则工作 
     兵营没有工作状态
+
+    如果readyList 不空则显示可以收获 注意数量不为0
     */
     override function initWorking(data)
     {
@@ -116,10 +177,10 @@ class Camp extends FuncBuild
             return null;
         if(len(baseBuild.objectList) > 0)
         {
-            //baseBuild.state = PARAMS["buildWork"];
             objectId = 0;
             objectTime = server2Client(data.get("objectTime")); 
         }
+        
     }
 
     //需要自己计算剩余时间

@@ -243,3 +243,23 @@ function getRobReward(star, silver, crystal, powerCoff)
     var rate = getParam(str(star)+"StarRobRate");
     return dict([["silver", coff*silver*rate/10000], ["crystal", coff*crystal*rate/10000]]);
 }
+
+//修改传入的上下文状态
+function gotoRandChallenge(sureToChallenge, finishCallback)
+{
+    if(global.user.checkInProtect())
+    {
+        if(sureToChallenge == 0)
+        {
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inProtect", null), [100, 100, 100], finishCallback));
+            sureToChallenge = 1;
+        }
+        else
+        {
+            sureToChallenge = 0;
+            global.httpController.addRequest("challengeC/clearProtectTime", dict([["uid", global.user.uid]]), null, null);
+            global.user.clearProtectTime();
+        }
+    }
+    return sureToChallenge;
+}

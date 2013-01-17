@@ -356,10 +356,8 @@ function normalizePos(p, sx, sy)
     x -= (sx+sy)*SIZEX/2;
     y -= (sx+sy)*SIZEY;
 
-    //x -= FullZone[0];
-    //y -= FullZone[1];
-    var q1 = x/SIZEX;
-    var q2 = y/SIZEY;
+    var q1 = (x+SIZEX/2)/SIZEX;
+    var q2 = (y+SIZEY/2)/SIZEY;
     if(((q1+sx)%2) != ((q2+1)%2))//q1+sx q2+1 要求建筑物最上方的菱形对齐 
     {
         q2++;
@@ -370,7 +368,6 @@ function normalizePos(p, sx, sy)
     x += (sx+sy)*SIZEX/2;
     y += (sx+sy)*SIZEY;
     return [x, y];
-    //return [x+FullZone[0], y+FullZone[1]];
 }
 //0 1 2 3 4 5
 //0村庄 所以初始化用户数据大关=1 0 0
@@ -1088,9 +1085,9 @@ function getLoveTreeLeftNum(treeLevel)
 
 function showFullBack()
 {
-    var tc = showTimeColor();
-    trace("full", tc);
-    var temp = sprite("dialogLoginBack.png", tc, ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, getParam("loginBackOpacity"));
+    //var tc = showTimeColor();tc, 
+    //trace("full", tc);
+    var temp = sprite("dialogLoginBack.png", ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, getParam("loginBackOpacity"));
     temp.addsprite("dialogLoginStar0.png", ARGB_8888);
     return temp;
 }

@@ -81,12 +81,22 @@ class MenuLayer extends MyNode
     }
     function onTask()
     {
-        var player = global.controller.butMusic.play(0, 80, 80, 0, 100);
+        var player = global.controller.playSound("but.mp3");
         global.director.pushView(new TaskDialog(), 1, 0);
+    }
+    var sureToChallenge = 0;
+    function finishCallback()
+    {
+        sureToChallenge = 0;
     }
     function onRank()
     {
-        global.director.pushView(new RankDialog(CHALLENGE_RANK), 1, 0);
+        sureToChallenge = gotoRandChallenge(sureToChallenge, finishCallback);
+        if(sureToChallenge == 0)
+        {
+            var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
+            global.director.pushScene(cs);
+        }
     }
     /*
     显示商店充值页面
@@ -102,13 +112,12 @@ class MenuLayer extends MyNode
     var gloryText;
     function initText()
     {
-
         silverText = bg.addlabel(getStr("1", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(333, 461).color(100, 100, 100);
         goldText =  bg.addlabel(getStr("2", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(588, 461).color(100, 100, 100);
         var w = str(global.user.rankOrder);
         if(global.user.rankOrder > 999)
             w = "999+";
-        gloryLevText = bg.addlabel(w, "fonts/heiti.ttf", 16).anchor(50, 50).pos(169, 461).color(100, 100, 100);
+        gloryLevText = bg.addlabel(w, "fonts/heiti.ttf", 23).anchor(50, 50).pos(169, 461).color(100, 100, 100);
     }
     //var building = 0;
     /*
@@ -442,7 +451,7 @@ class MenuLayer extends MyNode
     }
     
     function onClicked(n, e, param, x, y, points){
-        var player = global.controller.butMusic.play(0, 80, 80, 0, 100);
+        var player = global.controller.playSound("but.mp3");
         if(param==0){
             if(showChildMenu == 0){
                 drawAllMenu();

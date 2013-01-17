@@ -47,9 +47,9 @@ class AllGoods extends MyNode
         //装备需要区分ID 装备只有购买 卖出 装备得区分
         else if(kind == EQUIP)
         {
-            key = global.user.getAllEquipKinds().keys();
+            key = global.user.getAllEquips();
             for(i = 0; i < len(key); i++)
-                data.append([EQUIP_KIND, key[i], 0]);//opened closed
+                data.append([DETAIL_EQUIP, key[i], 0]);
         }
         trace("initData", data);
         bubbleSort(data, cmp);
@@ -180,7 +180,6 @@ class AllGoods extends MyNode
             var objData;
             objData = getData(kind, id);
 
-
             var num = 0;
             if(data[i][0] == EQUIP_KIND)
             {
@@ -218,6 +217,22 @@ class AllGoods extends MyNode
                         panel.addlabel(getStr("closeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                     }
                 }
+                else if(data[i][0] == DETAIL_EQUIP)
+                {
+                    //右侧按钮
+                    but0 = new NewButton("roleNameBut1.png", [74, 37], getStr("sell", null), null, 18, FONT_NORMAL, [100, 100, 100], onSell, i);
+                    but0.bg.pos(654, 35);
+                    panel.add(but0.bg);
+                     
+                    var equipOwner = ed.get("owner");
+                    if(equipOwner != -1)
+                    {
+                        //左侧按钮
+                        but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("unloadIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onUnload, i);
+                        but0.bg.pos(573, 36);
+                        panel.add(but0.bg);
+                    }
+                }
             }
             else if(kind == DRUG)
             {
@@ -227,6 +242,12 @@ class AllGoods extends MyNode
                 }
             }
         }
+    }
+    //卸下装备
+    function onUnload(n, e, curNum, x, y, points)
+    {
+        global.user.unloadThing(data[curNum][1]);
+        updateTab();
     }
     //查看所有装备
     function onView(n, e, p, x, y, points)
@@ -242,7 +263,6 @@ class AllGoods extends MyNode
                     data[p][2] = 1;
                     var allEquips = global.user.getKindEquip(data[p][1]); 
                     trace("allEquips", allEquips);
-
                     for(var i = 0; i < len(allEquips); i++)//在
                     {
                         data.insert(p+1, [DETAIL_EQUIP, allEquips[i], 0]);

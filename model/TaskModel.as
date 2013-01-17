@@ -37,8 +37,8 @@ class TaskModel
                 if(ret == TASK_CAN_FINISH)
                     count++;
             }
-            if(len(newTask) > 0)
-                return count;
+            //if(len(newTask) > 0)
+            //    return count;
 
             var key = localCycleTask.keys();
             for(i = 0; i < len(key); i++)
@@ -71,7 +71,7 @@ class TaskModel
             trace("initTaskOver", len(localCycleTask), len(localSolTask), len(newUserTask));
         }
         //当前没有任务 显示 则 自动发现任务 执行
-        if(initYet && !inCommand && newTaskStage < getParam("showFinish"))
+        if(initYet && !inCommand && newTaskStage < getParam("showFinish") && !getParam("stopNewTask"))
         {
             delayTime += diff;
             if(delayTime >= getParam("slowTask"))

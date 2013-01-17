@@ -193,7 +193,6 @@ class MoveMap extends MyNode
     function checkCollision(build)
     {
         var inZ = checkInFlow(buildZone, build.getPos());
-        //var inZ = checkBuildInZone(build.getPos()[0], build.getPos()[1], build.sx, build.sy);
         if(!inZ)
             return 1;
 

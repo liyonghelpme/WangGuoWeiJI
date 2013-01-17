@@ -311,7 +311,7 @@ class LevelChoose extends MyNode
         {
             oldScale = curTouch.scale();
             curTouch.scale(oldScale[0]*80/100, oldScale[1]*80/100);
-            player = global.controller.butMusic.play(0, 80, 80, 0, 100);
+            player = global.controller.playSound("but.mp3");
         }
     }
     function touchMoved(n, e, p, x, y, points)
@@ -333,7 +333,6 @@ class LevelChoose extends MyNode
         {
             curTouch.scale(oldScale);
             curTouch = null;
-            player.stop();
             player = null;
         }
 

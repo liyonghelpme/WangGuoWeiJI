@@ -48,8 +48,7 @@ class MapLayer extends MyNode
             var enable = checkBigEnable(i-1);
             if(enable)
             {
-                island[i].color(100,100,100,100);
-                new Button(island[i], onClicked, i);
+                island[i].color(100,100,100,100).setevent(EVENT_TOUCH, onClicked, i);
             }
             else
             {
@@ -59,8 +58,8 @@ class MapLayer extends MyNode
                 island[i].add(lock, LOCK_Z, LOCK_TAG);
                 if(inSmall && curSmall == i)
                     lock.visible(0);
-
-                new Button(island[i], onClicked, i);
+                
+                island[i].setevent(EVENT_TOUCH, onClicked, i);
             }
         }
     }
@@ -100,7 +99,7 @@ class MapLayer extends MyNode
     进入子菜单移除lock
     进入全局菜单加上lock
     */
-    function onClicked(param)
+    function onClicked(n, e, param, x, y, points)
     {
 //        trace("mapOnclick", param);
         if(param == 0)

@@ -103,7 +103,7 @@ class MapScene extends MyNode
     var dialogController;
     
     function MapScene(){
-        bg = sprite("map_background0.jpg", ARGB_8888).size(801,481);
+        bg = sprite("map_background0.png", ARGB_8888).size(801,481);
         init();
         dialogController = new DialogController(this);
         islandLayer = new MapLayer(this);

@@ -48,6 +48,11 @@ class User
         }
         return res;
     }
+
+    function getAllEquips()
+    {
+        return equips.keys();
+    }
     function getAllEquipKinds()
     {
         var e = equips.values();
@@ -790,7 +795,7 @@ class User
             return;
 
         trace("updateBuilding", build, build.id, build.bid, build.getPos(), build.state, build.dir, build.getObjectId(), build.getStartTime());
-        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor], ["objectList", build.objectList]]));
+        buildings.update(build.bid, dict([["id", build.id], ["px", build.getPos()[0]], ["py", build.getPos()[1]], ["state", build.state], ["dir", build.dir], ["objectId", build.getObjectId()], ["objectTime", build.getStartTime()], ["level", build.buildLevel], ["color", build.buildColor], ["objectList", build.objectList], ["readyList", build.readyList]]));
         db.put("buildings", buildings);
     }
     /*
@@ -1046,6 +1051,7 @@ class User
         edata["owner"] = -1;
         db.put("equips", equips);
         
+        global.httpController.addRequest("soldierC/unloadThing", dict([["uid", uid], ["eid", tid]]), null, null);
         global.msgCenter.sendMsg(SOL_UNLOADTHING, sid);
     }
     //士兵必须是活的才可以转职

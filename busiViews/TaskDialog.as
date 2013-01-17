@@ -164,23 +164,28 @@ class TaskDialog extends MyNode
 
             //有新手任务则不显示 其他 任务 
             //不显示 新手阶段任务
-            var newTask = global.taskModel.getDoNewTask();
-            trace("newTask", newTask);
-            for(i = 0; i < len(newTask); i++)
+            if(!getParam("stopNewTask"))
             {
-                tData = global.taskModel.getNewTask(newTask[i]);
-                taskD = getData(TASK, newTask[i]);
-                //不显示阶段任务
-                //新手任务可以完成
-                ret = global.taskModel.checkNewTaskState(newTask[i]);
-                if(ret == TASK_CAN_FINISH)
+                var newTask = global.taskModel.getDoNewTask();
+                trace("newTask", newTask);
+                for(i = 0; i < len(newTask); i++)
                 {
-                    finishTask.append([NEW_TASK, newTask[i]]); 
+                    tData = global.taskModel.getNewTask(newTask[i]);
+                    taskD = getData(TASK, newTask[i]);
+                    //不显示阶段任务
+                    //新手任务可以完成
+                    ret = global.taskModel.checkNewTaskState(newTask[i]);
+                    if(ret == TASK_CAN_FINISH)
+                    {
+                        finishTask.append([NEW_TASK, newTask[i]]); 
+                    }
+                    //新手任务没有 获取过奖励
+                    else if(ret == TASK_DOING) 
+                        unFinishTask.append([NEW_TASK, newTask[i]]);
                 }
-                //新手任务没有 获取过奖励
-                else if(ret == TASK_DOING) 
-                    unFinishTask.append([NEW_TASK, newTask[i]]);
             }
+            else
+                newTask = [];
             trace("newTaskFinish", finishTask, unFinishTask);
             //没有新手任务 则 显示下列任务
             if(len(newTask) == 0)
@@ -288,8 +293,8 @@ class TaskDialog extends MyNode
             var reward;
 
             var RINIT_X = 538;
-            var RINIT_Y = 16;
-            var R_OFFY = 36;
+            var RINIT_Y = 18;
+            var R_OFFY = 34;
             var R_HEIGHT = 38;
             var R_TOT_HEIGHT = 68;
             var tid;
@@ -428,9 +433,11 @@ class TaskDialog extends MyNode
             var height = R_OFFY*(len(reward)-1)+R_HEIGHT;
             var curY = R_TOT_HEIGHT/2-height/2+RINIT_Y;
 
+//temp = bg.addsprite("crystal.png").anchor(0, 0).pos(609, 247).size(38, 38).color(100, 100, 100, 100);
+//temp = bg.addsprite("gold.png").anchor(0, 0).pos(607, 212).size(38, 39).color(100, 100, 100, 100);
             for(var r = 0; r < len(reward); r++)
             {
-                temp = panel.addsprite(reward[r][0]+".png").anchor(50, 50).pos(RINIT_X, curY).size(38, 39).color(100, 100, 100, 100);
+                temp = panel.addsprite(reward[r][0]+".png").anchor(50, 50).pos(RINIT_X, curY).size(30, 30).color(100, 100, 100, 100);
                 panel.addlabel(str(reward[r][1]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(RINIT_X+22, curY).color(96, 61, 21);
                 curY += R_OFFY;
             }

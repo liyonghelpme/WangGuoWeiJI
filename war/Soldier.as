@@ -657,8 +657,8 @@ class Soldier extends MyNode
         lastSta = stateWord.addlabel("上个状态", null, 30).color(100, 0, 0).pos(40, -40);
         leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
         stateWord.visible(0);
-
-        bg.scale(getParam("mapSolScale"));
+        //有些士兵图片太大了 调整尺寸 调整sx sy
+        bg.scale(getParam("mapSolScale")*data["solSca"]/100);
         var bSize = [0, 0];
         changeDirNode = node();
 
