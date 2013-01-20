@@ -44,7 +44,7 @@ class Farm extends FuncBuild
             var sca = strictSca(pl, [52, 31]);
             pl.scale(sca);
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
-            global.taskModel.showHintArrow(baseBuild.bg, baseBuild.bg.size(), HARVEST_ICON);
+            //global.taskModel.showHintArrow(baseBuild.bg, baseBuild.bg.size(), HARVEST_ICON);
         }
     }
     override function initWorking(data)
@@ -54,6 +54,8 @@ class Farm extends FuncBuild
             return;
         if(baseBuild.state != PARAMS["buildWork"])
             return;
+
+        trace("initWorking", data);
         var id = data.get("objectId"); 
         var plant = getData(PLANT, id);//getPlant(id);
         
@@ -61,7 +63,8 @@ class Farm extends FuncBuild
         var startTime = data.get("objectTime");//serverTime 秒为单位
         startTime = server2Client(startTime); 
         
-        var privateData = dict([["objectTime", startTime]]);//采用客户端计时
+        //是否加速过农作物 用于新手任务放置腐败
+        var privateData = dict([["objectTime", startTime], ["acced", data.get("acced", 0)]]);//采用客户端计时
 
         planting = new Plant(baseBuild, plant, privateData);
         baseBuild.addChild(planting);
@@ -103,34 +106,25 @@ class Farm extends FuncBuild
         baseBuild.state = PARAMS["buildFree"];
         planting.removeSelf();
 
-        var rate = baseBuild.data.get("rate", 100);
-        var gain = getGain(PLANT, planting.id);
         //魔法农田经验 银币 rate 是2倍
-        if(planting.getState() == ROT)//2倍时间没有收获则腐烂 收获1/3
-        {
-            gain = dict([["exp", gain["exp"]]]);
-        }
+        trace("farmGain", plantGain);
 
-        var keys = gain.keys();
-        for(var k = 0; k < len(keys); k++)
-        {
-            var v = gain[keys[k]];
-            v *= rate/100;
-            gain[keys[k]] = v;
-        }
-        trace("farmGain", gain);
-
-        global.director.curScene.addChild(new FlyObject(baseBuild.bg, gain, harvestOver));
+        global.director.curScene.addChild(new FlyObject(baseBuild.bg, plantGain, harvestOver));
 
         planting = null;
         global.user.updateBuilding(baseBuild);
         global.taskModel.doNewTaskByKey("plant", 1);
-
-        global.taskModel.doAllTaskByKey("harvestFarm", gain.get("silver", 0));
+        
+        //完成收获农作物
+        global.taskModel.doAllTaskByKey("harvestFarm", plantGain.get("silver", 0));
     }
+    //存储农作物的收获 用于 之后的客户端显示
+    var plantGain = null;
     function harvestPlant()
     {
-        global.httpController.addRequest("buildingC/harvestPlant", dict([["uid", global.user.uid], ["bid", baseBuild.bid]]), doHarvest, null);
+        plantGain = planting.getPlantGain();
+        //收获农作物 新手任务数值是要同步的
+        global.httpController.addRequest("buildingC/harvestPlant", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["gain", json_dumps(plantGain)]]), doHarvest, null);
         baseBuild.waitLock("harvesting");
     }
     function harvestOver()

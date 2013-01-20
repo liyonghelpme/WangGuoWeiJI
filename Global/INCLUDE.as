@@ -18,7 +18,7 @@ import busiViews.TaskDialog;
 import views.TipDialog;
 import busiViews.MakeDrugDialog;
 
-import busiViews.SoldierDialog;
+import busiViews.NewSoldierDialog;
 import busiViews.AllSoldier;
 
 import busiViews.DrugDialog;
@@ -215,6 +215,7 @@ import views.DialogController;
 import busiViews.ChallengeMsgDialog;
 import busiViews.NewTaskDialog2;
 import views.Mask;
+import busiViews.NewTaskMask;
 
 //import views.ScoreDialog;
 //import views.LevupDialog;

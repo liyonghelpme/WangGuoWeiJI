@@ -29,9 +29,11 @@ class Director
     var stack;
     var quitState = 0;
     var emptyScene;//最底层帮助进行场景切换
+    var taskHintDebug;
     function Director()
     {
 //        trace("init director");
+        taskHintDebug = label("",  null, 20).color(0, 0, 0).pos(10, 10);
         stack = [];
         disSize = [800, 480];
         v_scale(disSize[0], disSize[1]);
@@ -166,7 +168,17 @@ class Director
         curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
         curScene.bg.focus(1);
         curScene.enterScene();
-
+        trace("replaceScene");
+        if(getParam("debugNewTask"))
+        {
+            taskHintDebug.removefromparent();
+            curScene.bg.add(taskHintDebug, MASK_ZORD);
+        }
+    }
+    function updateTaskHint(w)
+    {
+        trace("updateTaskHint", w);
+        taskHintDebug.text(w);
     }
     function getPid()
     {

@@ -149,7 +149,11 @@ class SoldierGoods extends MyNode
                 }
                 else
                 {
-                    solPic = panel.addsprite("soldier"+str(id)+".png").anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
+                    var col = ARGB_4444;
+                    if(sData["needArgb"])
+                        col = ARGB_8888;
+
+                    solPic = panel.addsprite("soldier"+str(id)+".png", col).anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
                     solPic.blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 }
                 

@@ -9,6 +9,7 @@ class SoldierAnimate
     var accTime;
     var duration;
     var colFea;
+    var start = 0;
     function SoldierAnimate(d, a0, a1, b, f, col)
     {
         bg = b;
@@ -22,6 +23,7 @@ class SoldierAnimate
     function enterScene()
     {
         global.myAction.addAct(this);
+        start = 1;
     }
     function update(diff)
     {
@@ -33,11 +35,13 @@ class SoldierAnimate
     }
     function clearAnimation()
     {
+        start = 0;
         global.myAction.removeAct(this);
         accTime = 0;
     }
     function exitScene()
     {
+        start = 0;
         global.myAction.removeAct(this);
     }
 }

@@ -85,8 +85,18 @@ function initAttackAndDefense(sol)
     sol.defenseType = sData["defenseType"];
     sol.attSpeed = sData["attSpeed"];
     sol.attRange = sData["range"];
+    //士兵的怪兽私有数据部位null
+    if(sol.monsterData != null)
+    {
+        if(sol.monsterData.get("weak", 0) != 0)
+        {
+            sol.health = 10;
+            sol.healthBoundary = 10;
+        }
+    }
     printSol(sol);
 }
+
 function printSol(sol)
 {
     trace("solData", sol.health, sol.healthBoundary, sol.attack, sol.defense, sol.attackType, sol.defenseType, sol.attSpeed, sol.attRange);

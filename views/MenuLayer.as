@@ -59,7 +59,7 @@ class MenuLayer extends MyNode
         expWord.bg.anchor(50, 50).pos(75, 28);
         expBanner.add(expWord.bg);
 
-        collectionbutton = bg.addsprite("mainRank.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, onRank);
+        collectionbutton = bg.addsprite("challengeIcon.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, onRank);
 
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
@@ -161,8 +161,8 @@ class MenuLayer extends MyNode
         updateTaskState();
         updateRightMenu();
 
-        global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON);
-        global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
+        global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
+        //global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
 
     function updateExp(add)
@@ -272,10 +272,6 @@ class MenuLayer extends MyNode
             }
         }
         //新手任务礼包没有结束 显示
-        else if(global.taskModel.checkShowNewTaskGift())
-        {
-            funcs.append("newUserGift"); 
-        }
 
         if(len(funcs) > 0)
         {
@@ -305,11 +301,11 @@ class MenuLayer extends MyNode
         else if(msgId == RATE_GAME)
             updateRightMenu();
         else if(msgId == MENU_ICON)
-            global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON);
+            global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
         else if(msgId == INIT_NEW_TASK_FIN)
             updateRightMenu(); 
-        else if(msgId == CHECK_TASK_ICON)
-            global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
+        //else if(msgId == CHECK_TASK_ICON)
+        //    global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
     function updateTaskState()
     {
@@ -452,13 +448,11 @@ class MenuLayer extends MyNode
     
     function onClicked(n, e, param, x, y, points){
         var player = global.controller.playSound("but.mp3");
-        if(param==0){
-            if(showChildMenu == 0){
-                drawAllMenu();
-            }
-            else{
-                cancelAllMenu();
-            }
+        if(showChildMenu == 0){
+            drawAllMenu();
+        }
+        else{
+            cancelAllMenu();
         }
     }
 }

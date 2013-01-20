@@ -30,7 +30,6 @@ class ChildMenuLayer extends MyNode
     ["collection", ["menu_button_collection.png", onCollection]],
     ["tip", ["menu_button_tip.png", onTip]],
 
-    ["relive", ["menu_button_relive.png", onRelive]],
     ["transfer", ["menu_button_transfer.png", onTransfer]],
 
     ["forge", ["menu_button_forge.png", onForge]],
@@ -42,13 +41,10 @@ class ChildMenuLayer extends MyNode
     ["gather", ["menu_button_gather.png", onGather]],
     ["upgrade", ["menu_button_upgrade.png", onUpgrade]],
 
-    ["allDrug", ["menu_button_allDrug.png", onAllDrug]],
+    ["allDrug", ["menu_button_allMagic.png", onAllDrug]],
     ["allEquip", ["menu_button_allEquip.png", onAllEquip]],
 
     //士兵状态
-    //["menu0", ["menu0.png", onBlood]],
-    ["menu1", ["menu1.png", onHeart]],
-    ["menu2", ["menu2.png", onTranStatus]],
     
 
     ["menu10", ["menu_button_game0.png", onInspire]],
@@ -89,12 +85,6 @@ class ChildMenuLayer extends MyNode
         //global.director.pushView(new GameOne(scene, HEART_STATUS), 0, 0);
 
         global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
-    }
-    function onTranStatus()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        scene.clearStatus();
-        global.director.pushView(new SoldierDialog(2), 1, 0);
     }
 
     var playGatherNow = 0;
@@ -195,11 +185,6 @@ class ChildMenuLayer extends MyNode
         global.director.pushView(new DrugDialog(scene, EQUIP), 1, 0);
     }
 
-    function onRelive()
-    {
-        global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new SoldierDialog(1), 1, 0);
-    }
     function onTransfer()
     {
         global.director.curScene.closeGlobalMenu(this);
@@ -212,7 +197,7 @@ class ChildMenuLayer extends MyNode
     function onSoldier()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new SoldierDialog(0), 1, 0);
+        global.director.pushView(new NewSoldierDialog(), 1, 0);
     }
     function onCollection()
     {
@@ -246,7 +231,13 @@ class ChildMenuLayer extends MyNode
         //var mH = max(height, h2);
         var mH = height;
         offset = MIDY-mH/2;
-        bg=sprite("dark0.png").scale(100,100).size(DARK_WIDTH, height);
+        var fn;
+        if(len(functions) == 1)
+            fn = "dark0.png";
+        else
+            fn = "dark3.png";
+        trace("currentFn", fn);
+        bg=sprite(fn).scale(100,100).size(DARK_WIDTH, height);
         if(index == 0){
             bg.anchor(0, 0).pos(-DARK_WIDTH, offset);
             //bg.anchor(0, 0).pos(0, offset);
@@ -298,10 +289,10 @@ class ChildMenuLayer extends MyNode
         if(callBut != null)
         {
             trace("showCallBut");
-            global.taskModel.showHintArrow(callBut, callBut.prepare().size(), CALL_IN_CAMP);
+            global.taskModel.showHintArrow(callBut, callBut.prepare().size(), CALL_IN_CAMP, onCall);
         }
         if(mapBut != null)
-            global.taskModel.showHintArrow(mapBut, mapBut.prepare().size(), MAP_ICON);
+            global.taskModel.showHintArrow(mapBut, mapBut.prepare().size(), MAP_ICON, onMap);
         trace("statusIcon", statusIcon);
         if(statusIcon != null)
             global.taskModel.showHintArrow(statusIcon, statusIcon.prepare().size(), STATUS_ICON);

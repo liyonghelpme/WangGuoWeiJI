@@ -1,5 +1,6 @@
 class BusiSoldier extends MyNode
 {
+    var monsterData = null;
     var dead = 0;
     var attack;
     var defense;
@@ -162,7 +163,7 @@ class BusiSoldier extends MyNode
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
 
-        var ss = SOL_SHADOW_SIZE.get(data["sx"], 3);
+        var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
 
         changeDirNode.add(shadow, -1);

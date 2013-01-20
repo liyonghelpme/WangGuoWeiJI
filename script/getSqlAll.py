@@ -1,7 +1,7 @@
 #coding:utf8
 import MySQLdb
 import json
-sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward']
+sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward', 'mapMonster']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
 
@@ -704,6 +704,23 @@ solIds = []
 for i in res:
     solIds.append(i['id'])
 print 'var', 'ALL_SOL_PICTURES', '=', json.dumps(solIds), ';'
+
+"""
+sql = 'select * from NewUserMonster'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+newUser = []
+for i in res:
+    i = dict(i)
+    it = list(i.items())
+    it = [list(k) for k in it]
+    #it[4][1] = 'build'+str(i['id'])
+    key = [k[0] for k in it]
+    a = [k[1] for k in it]
+    newUser.append([i['sid'], a])
+print 'var', 'NewUserMonsterKey', '=', json.dumps(key), ';'
+print 'var', 'NewUserMonsterData', '=', 'dict(', json.dumps(newUser), ');'
+"""
 
 con.commit()
 con.close()

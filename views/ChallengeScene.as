@@ -42,15 +42,37 @@ class ChallengeScene extends MyNode
     }
     var needDownload = [];
     //我方士兵 地方士兵
+    //新手任务闯关的怪兽 和 士兵不同
+    //color 怪兽增加一个属性color 1 为怪兽默认为 1
     var pictureManager;
     function checkSolPic()
     {
-        pictureManager = new PictureManager();
+        var k;
+        var downloadList = [];
+        if(global.taskModel.checkInNewTask())
+        {
+            pictureManager = new PictureManager();
+            var newMonster = getNewMonsters();
+            for(k = 0; k < len(newMonster); k++)
+            {
+                downloadList.append(newMonster[k]["id"]);
+            }
+            var newSoldiers = getNewSoldiers();
+            for(k = 0; k < len(newSoldiers); k++)
+            {
+                downloadList.append(newSoldiers[k]["id"]);
+            }
+            pictureManager.downloadList = downloadList;
+            pictureManager.startDownload(0, finishDownload);
+            return 0;
+        }
+
+
         var allSoldier = global.user.getAllSoldierKinds();
         var mySolKey = allSoldier.keys();
-        var downloadList = mySolKey;
+        downloadList = mySolKey;
 
-        var k;
+
         //敌方类型
         if(enemies != null)
         {
@@ -101,6 +123,7 @@ class ChallengeScene extends MyNode
     var finishLoadData = 0;
     function initData()
     {
+        //新手任务阶段的闯关怪兽 和 我方布局是确定的由策划设计 
         if(kind == CHALLENGE_FRI)
             global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null);
         else if(kind == CHALLENGE_NEIBOR)

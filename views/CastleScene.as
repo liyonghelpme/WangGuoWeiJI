@@ -60,6 +60,12 @@ class CastleScene extends MyNode
         global.msgCenter.registerCallback(PAUSE_GAME, this);
         global.msgCenter.registerCallback(RESUME_GAME, this);
         global.controller.playMedia("business.mp3");
+        
+        //显示遮挡罩子
+        if(global.taskModel.checkInNewTask())
+        {
+            global.director.curScene.addChildZ(new NewTaskMask(null, null), SCENE_MASK_ZORD);
+        }
     }
 
     var realDisappear = 0;
@@ -324,7 +330,7 @@ class CastleScene extends MyNode
         if(hideTime >= 10000)
         {
             hideTime = 0;
-            if(!isBuildOrPlan())
+            if(!isBuildOrPlan() && !global.taskModel.checkInNewTask())
                 ml.hideMenu(1000);
         }
     }

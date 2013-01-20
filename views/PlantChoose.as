@@ -45,14 +45,11 @@ class PlantChoose extends MyNode
             flowNode.add(panel, zOrd);
             panel.addsprite("Wplant"+str(i)+".png").pos(169, 48).anchor(50, 50);
 
-
-            panel.addlabel(getTimeStr(planting.get("time")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(19, 32).color(0, 0, 0);
-            panel.addsprite("silver.png").anchor(50, 50).pos(26, 71).size(32, 31).color(100, 100, 100, 100);
-            panel.addlabel(str(planting.get("gainsilver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(45, 72).color(0, 0, 0);
-
-            panel.addsprite("exp.png").anchor(0, 0).pos(51, 34).size(32, 31).color(100, 100, 100, 100);
-            panel.addlabel(str(planting.get("exp")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(83, 50).color(0, 0, 0);
-
+            panel.addlabel(getWorkTime(planting.get("time")), "fonts/heiti.ttf", 24).anchor(0, 50).pos(16, 84).color(0, 0, 0);
+            panel.addlabel(str(planting.get("exp")), "fonts/heiti.ttf", 24).anchor(0, 50).pos(47, 20).color(0, 0, 0);
+            temp = panel.addsprite("exp.png").anchor(0, 0).pos(10, 7).size(30, 30).color(100, 100, 100, 100);
+            panel.addlabel(str(planting.get("gainsilver")), "fonts/heiti.ttf", 24).anchor(0, 50).pos(48, 54).color(0, 0, 0);
+            temp = panel.addsprite("silver.png").anchor(0, 0).pos(11, 38).size(30, 30).color(100, 100, 100, 100);
 
             var needLevel = planting.get("level");
             if(needLevel > level)

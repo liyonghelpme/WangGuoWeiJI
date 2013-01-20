@@ -25,7 +25,7 @@ jz.addlabel(getStr("mapIsland" + str(i), null), "fonts/heiti.ttf", 15).anchor(50
     override function enterScene()
     {
         super.enterScene();
-        global.taskModel.showHintArrow(retBut.bg, retBut.bg.prepare().size(), BACK_BUSI);
+        //global.taskModel.showHintArrow(retBut.bg, retBut.bg.prepare().size(), BACK_BUSI);
     }
     function onBack()
     {

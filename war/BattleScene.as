@@ -105,7 +105,13 @@ class BattleScene extends MyNode
         global.controller.playMedia("fight.mp3");
         global.msgCenter.registerCallback(PAUSE_GAME, this);
         global.msgCenter.registerCallback(RESUME_GAME, this);
+
+        if(global.taskModel.checkInNewTask())
+        {
+            global.director.curScene.addChildZ(new NewTaskMask(null, null), SCENE_MASK_ZORD);
+        }
     }
+
     function receiveMsg(param)
     {
         var msid = param[0];
@@ -166,9 +172,14 @@ class BattleScene extends MyNode
     
     //kind double singleSid difficult user skills big small cityDefense 
 
+    //新手任务阶段 出现
     function BattleScene(arg)
     {
         argument = arg;
+        if(global.taskModel.checkInNewTask())
+        {
+            argument["soldier"] = getAllNew();
+        }
         kind = argument["kind"];
         double = argument["double"];
         singleSid = argument["singleSid"];
@@ -216,8 +227,6 @@ class BattleScene extends MyNode
         dialogController = new DialogController(this);
         addChild(dialogController);
 
-
-
         if(kind == CHALLENGE_TRAIN)
             map = new Map(argument["big"], argument["small"], null, this, null);
         else
@@ -234,6 +243,8 @@ class BattleScene extends MyNode
             showHintDialog();
         showMapBanner();
     }
+    
+    //确定开始游戏 不用选择士兵
     function showMapBanner()
     {
         banner = new MapBanner(this);
@@ -241,17 +252,22 @@ class BattleScene extends MyNode
     }
     function showHintDialog()
     {
-        if(MAP_KIND_TIP.get(kind) != null)
+        //新手任务不提示
+        if(!global.taskModel.checkInNewTask())
         {
-            if(checkTip(MAP_KIND_TIP[kind]) == null)
+            if(MAP_KIND_TIP.get(kind) != null)
             {
-                trace("noTip", MAP_KIND_TIP[kind]);
-                dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
+                if(checkTip(MAP_KIND_TIP[kind]) == null)
+                {
+                    trace("noTip", MAP_KIND_TIP[kind]);
+                    dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
+                }
             }
-        }
 
-        dialogController.addCmd(dict([["cmd", "chooseSol"]]));
-        dialogController.addCmd(dict([["cmd", "randomChoose"]]));
+            dialogController.addCmd(dict([["cmd", "chooseSol"]]));
+        }
+        else
+            dialogController.addCmd(dict([["cmd", "randomChoose"]]));
     }
     //评估军队实力 线性评估 平方增长太快了
     function evaluePower()

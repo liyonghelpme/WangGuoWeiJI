@@ -54,7 +54,7 @@ class FriendSoldier extends MoveSoldier
         bg.size(bSize).anchor(50, 100).pos(524, 303);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
-        var ss = SOL_SHADOW_SIZE.get(data["sx"], 3);
+        var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
 
         changeDirNode.add(shadow, -1);

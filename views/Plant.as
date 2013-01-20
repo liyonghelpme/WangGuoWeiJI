@@ -22,6 +22,7 @@ class Plant extends MyNode
             objectTime = privateData.get("objectTime");
         else
             objectTime = time()/1000;
+        acced = privateData["acced"];
 
         building = b;
         data = d;
@@ -34,6 +35,25 @@ class Plant extends MyNode
         init();
 
         curState = 0;
+    }
+
+    function getPlantGain()
+    {
+        var rate = building.data.get("rate", 100);
+        var gain = getGain(PLANT, id);
+        if(getState() == ROT)//2倍时间没有收获则腐烂 收获1/3
+        {
+            gain = dict([["exp", gain["exp"]]]);
+        }
+
+        var keys = gain.keys();
+        for(var k = 0; k < len(keys); k++)
+        {
+            var v = gain[keys[k]];
+            v *= rate/100;
+            gain[keys[k]] = v;
+        }
+        return gain;
     }
 
     function getLeftTime()

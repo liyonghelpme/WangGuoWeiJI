@@ -44,8 +44,8 @@ class CallSoldier extends MyNode
         temp = bg.addsprite("conTitSol.png").anchor(50, 50).pos(514, 112).size(181, 44).color(100, 100, 100, 100);
         goods = new SoldierGoods(this);
         addChild(goods);
-
-        setSoldier([0, 1]);//购买等级是否达标
+        //士兵商店第一个士兵
+        setSoldier([goods.data[0], 1]);//购买等级是否达标
     }
     function closeDialog()
     {
@@ -354,6 +354,16 @@ class CallSoldier extends MyNode
             else if(curSolNum >= peopleNum)
             {
                 global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("buildHouse", null), [100, 100, 100], null));
+                return;
+            }
+            if(len(scene.objectList) > getParam("MaxQueueLen"))
+            {
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("campQueueEx", ["[NUM]", str(getParam("MaxQueueLen"))]), [100, 100, 100], null));
+                return;
+            }
+            if(len(scene.readyList) > getParam("MaxReadyLen"))
+            {
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("campReadyEx", ["[NUM]", str(getParam("MaxReadyLen"))]), [100, 100, 100], null));
                 return;
             }
   

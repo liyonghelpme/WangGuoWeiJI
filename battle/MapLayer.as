@@ -5,6 +5,10 @@ class MapLayer extends MyNode
     var LockPos = [[0, 0], [189, 164], [232, 141], [269, 166], [336, 146], [232, 180]];
     var islandLayer;
     const LOCK_TAG = 1;
+    function enterNewRound()
+    {
+        onClicked(null, null, 1, null, null, null);
+    }
     function initLock()
     {
 
@@ -20,7 +24,7 @@ class MapLayer extends MyNode
         island[4] = islandLayer.addsprite("map_island4.png",ARGB_8888, ALPHA_TOUCH).size(519,428).anchor(0,0).pos(994,220).rotate(0);
         island[5] = islandLayer.addsprite("map_island5.png",ARGB_8888, ALPHA_TOUCH).size(524,439).anchor(0,0).pos(550,14).rotate(0);
 
-        global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND);
+        global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND, enterNewRound);
 
         var i=0;
         //big small

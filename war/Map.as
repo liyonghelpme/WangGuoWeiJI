@@ -472,12 +472,12 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var nPos;
         //根据monX monY 确定位置
         //0-12
-        if(scene.kind == CHALLENGE_SELF || scene.kind == CHALLENGE_MON)
+        if(scene.kind == CHALLENGE_MON)
         {
             for(i = 0; i < len(s); i++)
             {
-                so = realAddSoldier(ENEMY, s[i]["id"], s[i], ENECOLOR);
-                nPos = getSolPos(s[i].get("monX")+7, s[i].get("monY"), so.sx, so.sy, so.offY);
+                so = realAddSoldier(ENEMY, s[i]["id"], s[i], s[i].get("color", ENECOLOR));
+                nPos = getSolPos(s[i].get("monX"), s[i].get("monY"), so.sx, so.sy, so.offY);
                 so.setPos(nPos);
                 setMap(so);
             }
@@ -772,7 +772,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             {
                 //更新星星得分
                 var curStar = global.user.getCurStar(kind, small);
-                if(curStar < star)
+                if(curStar < star && !global.taskModel.checkInNewTask())//没有在新手任务阶段
                 {
                     global.user.updateStar(kind, small, star);
                 }

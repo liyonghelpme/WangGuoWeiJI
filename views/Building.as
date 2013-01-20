@@ -48,6 +48,7 @@ class Building extends MyNode
     var featureColor = null;
     var shadow = null;
     var readyList = null;
+    var farmState;
     function Building(m, d, privateData)
     {
         bid = -1;
@@ -60,6 +61,12 @@ class Building extends MyNode
         funcs = data.get("funcs");
         bg = node();
         init();//尽早初始化 node
+
+        if(getParam("debugFarm"))
+        {
+            farmState = label("", null, 20).color(0, 0, 0).pos(10, -10);
+            bg.add(farmState);
+        }
 
         //购买建筑 随机颜色
         if(privateData == null)
@@ -168,9 +175,7 @@ class Building extends MyNode
         trace("init building Pos", disSize);
         
         //新建筑在BuildLayer 中加入 MapGridController 的时候 已经设定map了，此处不用设定map
-        //map.mapGridController.clearMap(this);//清理map 之后 再设置map
         setPos(disSize);
-        //map.mapGridController.updateMap(this);//重新设定map
         setColPos();
     }
     function getObjectId()
@@ -196,27 +201,38 @@ class Building extends MyNode
         if(aniNode != null)
             aniNode.enterScene();
 
-        if(funcs == CAMP && state == PARAMS["buildFree"])
+        if(funcs == CAMP)
         {
             global.msgCenter.removeCallback(CALL_SOL, this);
             global.msgCenter.removeCallback(MOVE_TO_CAMP, this);
-
 
             global.msgCenter.registerCallback(CALL_SOL, this);
             global.msgCenter.registerCallback(MOVE_TO_CAMP, this);
 
         }
 
-        if(funcs == FARM_BUILD && state == PARAMS["buildFree"])
+        if(funcs == FARM_BUILD)
         {
             global.msgCenter.removeCallback(MOVE_TO_FARM, this);
             global.msgCenter.registerCallback(MOVE_TO_FARM, this);
+        }
+        
+        if(funcs == MINE_KIND)
+        {
+            global.msgCenter.removeCallback(HARVEST_MINE, this);
+            global.msgCenter.registerCallback(HARVEST_MINE, this);
         }
     }
     var inTask = 0;
     //空闲建筑 则 工作
     //重新进入 场景 需要主动 的显示
     //消息激励 来 出现 兵营的 arrow 或者 士兵商店提示
+    //显示全局菜单
+    function newCall()
+    {
+        global.director.curScene.showGlobalMenu(this, showGlobalMenu);
+    }
+
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -233,22 +249,51 @@ class Building extends MyNode
             if(state == PARAMS["buildFree"])
             {
                 map.map.moveToBuild(this); 
-                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_CAMP);
+                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_CAMP, );
             }
         }
         //多个农田怎么办？ 最后一个肯定会存在
+        //多个农田都可以收获但是只收获1个
         else if(msgId == MOVE_TO_FARM)
         {
-            if(state == PARAMS["buildFree"])
-            {
-                map.map.moveToBuild(this); 
-                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_FARM);
-            }
+
+            //伪造工作数据 工作时间
+            //acc = 1 防止 腐败
+            setState(PARAMS["buildWork"]);
+            var now = time()/1000;
+            now = client2Server(now);
+            //收获的农作物不获得任何经验
+            var pdata = getData(PLANT, 0);
+            now -= pdata["time"];
+
+            trace("MOVE_TO_FARM", now);
+
+            funcBuild.initWorking(dict([["state", PARAMS["buildWork"]], ["objectId", 0], ["objectTime", now], ["acced", 1]]));
+            global.user.updateBuilding(this);
+            map.map.moveToBuild(this); 
+            global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_FARM, newHarvest);
         }
+        else if(msgId == HARVEST_MINE)
+        {
+            setState(PARAMS["buildWork"]);
+            funcBuild.initWorking(dict([["state", PARAMS["buildWork"]], ["objectTime", 0]]));
+            global.user.updateBuilding(this);
+            map.map.moveToBuild(this);
+            global.taskModel.showHintArrow(bg, bg.size(), HARVEST_MINE, harvestMine);
+        }
+    }
+    function harvestMine()
+    {
+        funcBuild.whenBusy();
+    }
+    function newHarvest()
+    {
+        funcBuild.whenBusy();
     }
 
     override function exitScene()
     {
+        global.msgCenter.removeCallback(HARVEST_MINE, this);
         global.msgCenter.removeCallback(MOVE_TO_FARM, this);
         global.msgCenter.removeCallback(CALL_SOL, this);
         global.msgCenter.removeCallback(MOVE_TO_CAMP, this);
@@ -437,7 +482,8 @@ class Building extends MyNode
             }
             //half transparent + color
         }
-
+        if(getParam("debugFarm"))
+            farmState.text("state"+str(state));
     }
 
     /*

@@ -11,6 +11,16 @@ class ParamController
         global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
         global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
         global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
+        global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
+    }
+    function getMapMonster(rid, rcode, con, param)
+    {
+        if(rcode != -1)
+        {
+            con = json_loads(con);
+            mapMonsterKey = con["mapMonsterKey"];
+            mapMonsterData = dict(con["mapMonsterData"]);
+        }
     }
     function getStaticData(rid, rcode, con, param)
     {

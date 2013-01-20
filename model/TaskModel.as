@@ -1,16 +1,4 @@
 /*
-const TASK_COFF = 100000;
-function getBuyTaskKindAndId(tid)
-{
-    return [tid/TASK_COFF, tid%TASK_COFF];
-}
-function getBuyTaskTid(kind, id)
-{
-    return kind*TASK_COFF+id;
-}
-*/
-/*
-/*
 确保所有 修改 localCycleTask 的地方 都 自动存储到了本地数据库
 
 login 循环任务 用户第一次登录的时候 因为没有初始化localCycleTask 因此不能完成之后 只有同步服务器数据之后 才可以进行
@@ -171,10 +159,38 @@ class TaskModel
             }
         }
     }
-    function realShowHintArrow(pic, bSize, cmd)
+    //检测是否在 inCommand 或者 hasNewCommand 有新手任务
+    function checkInNewTask()
+    {
+        if(newTaskStage < getParam("showFinish"))
+        {
+            return 1;//新手阶段没有完成
+        }
+
+        if(inCommand)
+            return 1;
+
+        var allNew = getCurNewTask();
+        for(var i = 0; i < len(allNew); i++)
+        {
+            //未完成 且 新手任务 没有被领取
+            var ret = checkNewTaskState(allNew[i]);
+            if(ret == TASK_DOING)
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    
+    //传入的 MyNode 可以相应相应的touch时间touchEvent 已经相应的回调函数
+    //但是点击完成之后 触发回调函数 需要处理 回调函数没有参数
+    //菜单按钮
+    function realShowHintArrow(pic, bSize, cmd, callbackFunc)
     {
         //trace("realshowHintArrow", pic, bSize, cmd, commandList, curCmd, inCommand);
 
+        //从经营页面场景---》战斗场景----》经营场景 不再提示箭头
         if(inCommand)
         {
             var find = -1;
@@ -208,6 +224,8 @@ class TaskModel
             //查找命令 等于当前命令 
             //如果当前命令 已经最大 curCmd == len(commandList) 则清空 命令历史 重新开始
             //if(find == curCmd || curCmd == len(commandList))
+
+            //if(find <= curCmd)//需求的命令就是当前命令
             {
                 doCmdYet.update(commandList[find]["msgId"], 1);
                 curCmd = find+1;
@@ -233,6 +251,7 @@ class TaskModel
                     hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2+offX, bSize[1]+5+offY).anchor(50, 100).rotate(180).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
                 }
+                global.director.curScene.addChildZ(new NewTaskMask(pic, callbackFunc), MASK_ZORD);
                 //其它情况不显示箭头
                 //默认显示向上箭头
                 
@@ -243,14 +262,24 @@ class TaskModel
                     global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr(commandList[find]["tip"], null), [100, 100, 100], null));
                 }
 
+                if(getParam("debugNewTask"))
+                {
+                    var step = str(find+1)+":curCmd"+str(curCmd);
+                    if((find+1) < len(commandList))
+                    {
+                        step += str(commandList[find+1]["msgId"])+":";
+                        if(commandList[find+1].get("tip") != null)
+                            step += getStr(commandList[find+1].get("tip"), null);
+                    }
+                    global.director.updateTaskHint(step);
+                }
             }
         }
     }
 
-    function showHintArrow(pic, bSize, cmd)
+    function showHintArrow(pic, bSize, cmd, cb)
     {
-        //trace("showHintArrow", pic, bSize, cmd, commandList, curCmd, inCommand);
-        realShowHintArrow(pic, bSize, cmd);
+        realShowHintArrow(pic, bSize, cmd, cb);
     }
     function getCurNewTid()
     {
@@ -300,14 +329,6 @@ class TaskModel
 
         doCmdYet = dict();
         trace("taskCommandList", commandList);
-        //检测 是否有经营页面的处理？
-        //if(tData["stageTask"])
-        //{
-        //    global.msgCenter.sendMsg(SHOW_NEW_TASK_REWARD, null);
-            //global.director.pushView(new NewTaskReward(), 1, 0);//getStageReward
-        //}
-        //else if(tData["tipTask"])
-        //else
         realDoNewTask();
     }
     //检测任务类型 如果是 阶段奖励任务 则 立即显示
@@ -322,7 +343,12 @@ class TaskModel
             curCmd++;
             //先存储命令 以便其它模块来 确认 前趋 命令 执行结束
             doCmdYet.update(commandList[tempCmd]["msgId"], 1);
-            global.msgCenter.sendMsg(commandList[tempCmd]["msgId"], null);
+            //oneMsg 只发送1次消息
+            if(commandList[tempCmd].get("oneMsg", 0))
+                global.msgCenter.sendOneMsg(commandList[tempCmd]["msgId"], null);
+            else
+                global.msgCenter.sendMsg(commandList[tempCmd]["msgId"], null);
+                
             //curCmd++;
         }
     }
@@ -330,6 +356,7 @@ class TaskModel
 
     function doAllTaskByKey(k, num)
     {
+        trace("doAllTaskByKey", k, num);
         if(newTaskStage < getParam("showFinish"))
             doNewTaskByKey(k, num);
         else
@@ -414,8 +441,6 @@ class TaskModel
 
     function finishNewTask(tid)
     {
-        //var task = newUserTask[tid];
-        //task["stage"]++;
         getNewTaskReward(tid);
         global.user.db.put("newUserTask", newUserTask);
         global.msgCenter.sendMsg(UPDATE_TASK, null);
@@ -474,6 +499,7 @@ class TaskModel
         bubbleSort(curNewTask, cmpTaskId);//按照显示优先级 tid 排序
         return curNewTask;
     }
+    //按照任务ID 排序 新手任务
     function getCurNewTask()
     {
         var allTask = getAllDataList(TASK);
@@ -495,9 +521,15 @@ class TaskModel
     {
         return newUserTask.get(tid)["number"];
     }
+
+    //bug:
     //任务三种状态 正在做 可以完成 已经完成
     function checkNewTaskState(tid)
     {
+        //未初始化数据
+        if(initNewTask == 0)
+            return TASK_REWARD_YET;
+        trace("checkNewTaskState", tid)
         var task = newUserTask[tid];
         var taskData = getData(TASK, tid);
         var needNum = taskData["num"];

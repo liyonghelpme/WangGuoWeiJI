@@ -1,3 +1,58 @@
+function getNewMonsters()
+{
+    var data = mapMonsterData.get(0);
+    var res = [];
+    for(var i = 0; i < len(data); i++)
+    {
+        var r = dict();
+        for(var j = 0; j < len(mapMonsterKey); j++)
+        {
+            r.update(mapMonsterKey[j], data[i][j]);
+        }
+        if(r["color"] == 1)
+        {
+            r["weak"] = 1;//新手任务的怪兽生命值应该弱小一点
+            res.append(r);
+        }
+    }
+    return res;
+}
+function getNewSoldiers()
+{
+    var data = mapMonsterData.get(0);
+    var res = [];
+    for(var i = 0; i < len(data); i++)
+    {
+        var r = dict();
+        for(var j = 0; j < len(mapMonsterKey); j++)
+        {
+            r.update(mapMonsterKey[j], data[i][j]);
+        }
+        if(r["color"] == 0)
+            res.append(r);
+    }
+    return res;
+}
+function getAllNew()
+{
+    var data = mapMonsterData.get(0);
+    var res = [];
+    for(var i = 0; i < len(data); i++)
+    {
+        var r = dict();
+        for(var j = 0; j < len(mapMonsterKey); j++)
+        {
+            r.update(mapMonsterKey[j], data[i][j]);
+        }
+        if(r["color"] == 1)
+        {
+            r["weak"] = 1;//新手任务的怪兽生命值应该弱小一点
+        }
+        res.append(r);
+    }
+    return res;
+}
+
 //id = big *100 + small  比较合适 可以扩展
 function getRoundMonster(big, small)
 {
@@ -19,6 +74,10 @@ function getRoundMonster(big, small)
 function getMapReward(big, small)
 {
     var curStar = global.user.getCurStar(big, small);
+    //新手闯关奖励0
+    if(global.taskModel.checkInNewTask())
+        return dict();
+
     //不是第一次闯关胜利 没有奖励
     if(curStar > 0)
         return dict();

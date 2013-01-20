@@ -46,6 +46,8 @@ const FLAG_Z = 1;
 const LOCK_Z = 2;
 
 const MAX_BUILD_ZORD = 100000;
+const SCENE_MASK_ZORD = 150000;
+const MASK_ZORD = 200000;
 
 //buildFunc
 const FARM_BUILD = 0;
@@ -657,6 +659,7 @@ const MINE_PRODUCTION = 26;
 const ROUND_MONSTER_NUM = 27;
 const ROUND_MAP_REWARD = 28;
 
+
 var ParticleData = [];
 var ParticleKey = [];
 
@@ -851,6 +854,7 @@ const HAS_CHALLENGE_MSG = 48;
 const PAUSE_GAME = 49;
 const RESUME_GAME = 50;
 const MOVE_TO_POINT = 51;
+const FINISH_NEW_TASK = 52;
 
 
 
@@ -903,6 +907,10 @@ const MOVE_SOL_PICK_FALL = 128;
 const ACC_SOL = 129;
 const HARVEST_SOL = 130;
 const NAME_SOL = 131;
+
+const HARVEST_MINE = 132;
+const HARVEST_MINE_FINISH = 133;
+
 
 
 //装备子消息类型

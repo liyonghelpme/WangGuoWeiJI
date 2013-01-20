@@ -154,7 +154,7 @@ class CastlePage extends MyNode
             reward = getLoginReward(day);
             
             trace("getParam DEBUG", getParam("DEBUG"), getParam("debugLoginReward"), day);
-            if(getParam("DEBUG"))
+            if(getParam("DEBUG") && getParam("debugLogin"))
             {
                 //测试登录奖励
                 global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
@@ -499,11 +499,6 @@ class CastlePage extends MyNode
         solNum.text(str(global.user.getSolNum()));
 
         //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
-        trace("reEnterScene");
-        if(global.taskModel.checkNewTaskCurCmd(NOW_IN_BUSI))
-        {
-            global.taskModel.doAllTaskByKey("newRoundWin", 1);
-        }
     }
 
     //购买士兵 只是增加士兵数量

@@ -218,7 +218,8 @@ class MapPause extends MyNode
     var inPause = 0;
     function onPause()
     {
-        if(inPause == 0)
+        //不再新手任务过程中可以点击停止按钮
+        if(inPause == 0 && !global.taskModel.checkInNewTask())
         {
             inPause = 1; 
             scene.stopGame();

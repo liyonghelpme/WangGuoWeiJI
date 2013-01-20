@@ -106,4 +106,9 @@ class MapDefense extends MyNode
             map.roundGridController.setMap(MAP_WIDTH, i, sx, sy, this);
         }
     }
+
+    function checkMoveToTargetPos()
+    {
+        return 1;
+    }
 }

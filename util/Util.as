@@ -192,7 +192,8 @@ var dataPool = dict();
 
 function getData(kind, id)
 {
-    //trace("getData", kind, id);
+    if(getParam("debugData"))
+        trace("getData", kind, id);
 
     //var key = getObjKey(kind, id);
     var key = getGoodsKey(kind, id);

@@ -4,12 +4,13 @@ class Controller
     
     const SOUND = 0;
     const MEDIA = 1;
-    var names = [["but.mp3", SOUND], ["pick.mp3", SOUND], ["business.mp3", MEDIA], ["fight.mp3", MEDIA]];
+    var names = [["but.mp3", SOUND], ["pick.mp3", SOUND], ["business.mp3", MEDIA], ["fight.mp3", MEDIA], ["print0.mp3", SOUND], ["print1.mp3", SOUND]];
     var musics = dict();
     function Controller()
     {
         for(var i = 0; i < len(names); i++)
         {
+
             var exist = fetch(names[i][0]);
             if(exist == null)
             {
@@ -19,6 +20,7 @@ class Controller
             {
                 finishDownload(null, 1, names[i]);
             }
+
         }
     }
     function finishDownload(fp, ret, param)

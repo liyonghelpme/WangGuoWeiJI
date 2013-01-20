@@ -80,10 +80,19 @@ class Soldier extends MyNode
         if(len(commandList) == 0)
             pushCommand(FIND_ENEMY, null);
     }
+    //如果两者之间的距离刚好是射程，则要判定是否在远端并且已经移动到了目标位置 A-> _  _  _  <-B  判定自己是否已经移动到目标位置
+    //移动到目标位置
+    //需要位置 和 当前位置 相同
+    function checkMoveToTargetPos()
+    {
+       var needPos = getSolPos(curMap[0], curMap[1], sx, sy, data["offY"]);
+       return (needPos[0]-bg.pos()[0]) == 0;
+    }
     //鲁棒的移动
     //移动到目的地 
     //还在半路
     //只有持续性命令可以被中断
+    //行走1半被打断了
     function doMove(diff)
     {
         //命令被中断了
@@ -100,7 +109,9 @@ class Soldier extends MyNode
         //目标相离 距离
         //相交
         var cheDis = checkTarDistance();
-        if(cheDis)
+        var iInPos = checkMoveToTargetPos();
+        var tInPos = tar.checkMoveToTargetPos();//城墙
+        if(cheDis && iInPos && tInPos)//我移动到目标位置 目标也移动到目标位置 开始攻击
         {
             pushCommand(BEGIN_ATTACK, null);
             return;
@@ -132,9 +143,10 @@ class Soldier extends MyNode
             if(hasCol)
             {
                 nextMap = copy(curMap);
-                if(len(commandList) == 0)
-                    pushCommand(MOVE_CMD, null);
-                return;    
+                //if(len(commandList) == 0)
+                //    pushCommand(MOVE_CMD, null);
+                //接着移动
+                //return;    
             }
             clearMap();
             curMap = copy(nextMap);
@@ -145,6 +157,16 @@ class Soldier extends MyNode
             var t = dist*1000/speed;
             shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
+            if(dist == 0)
+            {
+                clearAnimation();//移动距离为0
+            }
+            else//如果动画停止 则 重新开启移动动画
+            {
+                if(movAni.start == 0)
+                    movAni.enterScene();
+            }
+
             //没有新的命令继续 移动
             if(len(commandList) == 0)
                 pushCommand(MOVE_CMD, null);
@@ -428,15 +450,17 @@ class Soldier extends MyNode
     var lastCommand = 0;
     function update(diff)
     {
-        if(len(commandList) > 0)
+        if(getParam("DEBUG") && getParam("testRoundState"))
         {
-            lastSta.text(STA[lastCommand]);
-            lastCommand = commandList[0][0];
-            staLabel.text(STA[commandList[0][0]]);
-
+            if(len(commandList) > 0)
+            {
+                lastSta.text(STA[lastCommand]);
+                lastCommand = commandList[0][0];
+                staLabel.text(STA[commandList[0][0]]);
+            }
+            else
+                staLabel.text("无命令");
         }
-        else
-            staLabel.text("无命令");
         if(checkState(diff))
             return;
         updateState(diff);
@@ -652,11 +676,13 @@ class Soldier extends MyNode
         bg = node();
         init();
 
-        stateWord = bg.addnode();
-        staLabel =  stateWord.addlabel("状态", null, 30).color(0, 0, 0).pos(20, -20);
-        lastSta = stateWord.addlabel("上个状态", null, 30).color(100, 0, 0).pos(40, -40);
-        leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
-        stateWord.visible(0);
+        if(getParam("DEBUG") && getParam("testRoundState"))
+        {
+            stateWord = bg.addnode();
+            staLabel =  stateWord.addlabel("状态", null, 30).color(0, 0, 0).pos(20, -20);
+            lastSta = stateWord.addlabel("上个状态", null, 30).color(100, 0, 0).pos(40, -40);
+            leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
+        }
         //有些士兵图片太大了 调整尺寸 调整sx sy
         bg.scale(getParam("mapSolScale")*data["solSca"]/100);
         var bSize = [0, 0];
@@ -686,7 +712,7 @@ class Soldier extends MyNode
 
         var shadowOffY = data["shadowOffY"];
 
-        var ss = SOL_SHADOW_SIZE.get(sx, 3);
+        var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
         shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
 
@@ -1378,7 +1404,7 @@ class Soldier extends MyNode
         changeDirNode.pos(bSize[0]/2, bSize[1]);
         var shadowOffY = data["shadowOffY"];
 
-        var ss = SOL_SHADOW_SIZE.get(sx, 3);
+        var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
         shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
 
         backBanner.pos(bSize[0]/2, data["bloodHeight"]);

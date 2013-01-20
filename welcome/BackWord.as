@@ -53,7 +53,6 @@ class BackWord extends MyNode
     var curLine;
 
     var totalNum;
-    var sound;
     
     //音效存在问题 不能 有效播放
     //var player;
@@ -85,18 +84,10 @@ class BackWord extends MyNode
     }
     var toPlay = 1;
     //父亲节点  字符串  字符大小 行高度  字符颜色  每行字符区域宽度 每行字符区域高度  打字tick*50ms 回调函数 粗体/斜体/正常体 
-    function closeSound()
-    {
-        toPlay = 0;
-    }
-    function openSound()
-    {
-        toPlay = 1;
-    }
     function BackWord(sc, w, sz, h, c, wid, hei, n, cb, ft)
     {
         font = ft;
-        sound = createaudio("print.mp3");
+
         accTick = 0;
         tick = n;
         curPos = 0;
@@ -160,12 +151,15 @@ class BackWord extends MyNode
             accTick += 1;
             if(accTick == tick)
             {
+                //0 1 print
+                var r = rand(2);
+                var pn = "print"+str(r)+".mp3";
+                trace("rand music", pn);
+                global.controller.playSound(pn);
                 accTick = 0;
                 if(startYet == 0)
                 {
                     startYet = 1;
-                    if(toPlay)
-                        sound.play(-1);
                 }
                 var line = word[curLine];
 
@@ -226,8 +220,6 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         {
             accTick = 0;
             startYet = 0;
-            if(toPlay)
-                sound.pause();
             curCmd++;
         }
     }
@@ -262,6 +254,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         }
         //trace("set", curLine, curPos, curWordPos, totalNum);
     }
+    var curId = 0;
     //打字到固定文字长度结束
     function executePrint()
     {
@@ -277,11 +270,14 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
             if(accTick == tick)
             {
                 accTick = 0;
+                var pn = "print"+str(curId)+".mp3";
+                curId++;
+                curId %= 2;
+                trace("rand music", pn);
+                global.controller.playSound("print0.mp3");
                 if(startYet == 0)
                 {
                     startYet = 1;
-                    if(toPlay)
-                        sound.play(-1);
                 }
                 var line = word[curLine];
                 //通过curPos 判断空格 忽略行首空格
@@ -339,8 +335,6 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         {
             accTick = 0;
             startYet = 0;
-            if(toPlay)
-                sound.pause();
             curCmd++;
         }
     }
@@ -462,7 +456,6 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
     }
     override function exitScene()
     {
-        sound.stop();
 
         global.myAction.removeAct(this);
         super.exitScene();

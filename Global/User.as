@@ -811,8 +811,8 @@ class User
     //修改士兵状态 通知
     function updateSoldiers(soldier)
     {
-        //怪兽 敌方士兵 不更新数据
-        if(soldier.sid == -1)
+        //怪兽 敌方士兵 不更新数据 新手人物测试士兵 ID < 0
+        if(soldier.sid < 0)
         {
             return;
         }
@@ -1110,7 +1110,13 @@ class User
         soldiers.pop(soldier.sid);
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);//卖出士兵
     }
-
+    //改变用户经验
+    function changeExpLevel(level)
+    {
+        trace("changeExpLevel", level);
+        var needExp = getLevelUpNeedExp(level);
+        changeValue("exp", needExp);
+    }
     /*
     改变用户经验 有可能自动升级
     */

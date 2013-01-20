@@ -87,7 +87,7 @@ class FallObj extends MyNode
         bg.setevent(EVENT_TOUCH|EVENT_UNTOUCH|EVENT_MOVE, null);
         //bg.removefromparent();
         bg.visible(0);
-        player = global.controller.playSound("pick.mp3");
+
     }
     function pickMe()
     {
@@ -95,6 +95,5 @@ class FallObj extends MyNode
         map.pickObj(this);
         //测试任务完成 更新任务状态 
         global.taskModel.doAllTaskByKey("pick", 1);
-        //player.stop();
     }
 }

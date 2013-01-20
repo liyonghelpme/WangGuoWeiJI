@@ -74,6 +74,11 @@ class MapCloud extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
+
+        if(global.taskModel.checkInNewTask())
+        {
+            global.director.curScene.addChildZ(new NewTaskMask(null, null), SCENE_MASK_ZORD);
+        }
     }
     override function exitScene()
     {

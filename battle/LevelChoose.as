@@ -162,6 +162,7 @@ class LevelChoose extends MyNode
         }
     }
     //var allPanels = [];
+    var newRoundPanel = null;
     function updateTab()
     {
         //allPanels = [];
@@ -268,9 +269,14 @@ class LevelChoose extends MyNode
             }
             if(i == 0)
             {
-                global.taskModel.showHintArrow(panel, panel.prepare().size(), FIRST_LEVEL);
+                newRoundPanel = panel;
+                global.taskModel.showHintArrow(panel, panel.prepare().size(), FIRST_LEVEL, onNewRound);
             }
         }
+    }
+    function onNewRound()
+    {
+        attackNow(0);    
     }
     function onUnlock()
     {

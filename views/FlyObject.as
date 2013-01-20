@@ -98,7 +98,7 @@ class FlyObject extends MyNode
                     difx2 = -difx2;
                 }
 
-                flyObj.addaction(sequence(itintto(0, 0, 0, 0), delaytime(waitTime), itintto(100, 100, 100, 100), sinein(bezierby(
+                flyObj.addaction(sequence(itintto(0, 0, 0, 0), delaytime(waitTime), callfunc(playSound),  itintto(100, 100, 100, 100), sinein(bezierby(
                             getParam("FlyTime")+dis*getParam("disTime"),
                             coor2[0], coor2[1], 
                             coor2[0]+difx1, coor2[1]+dify1, 
@@ -111,6 +111,10 @@ class FlyObject extends MyNode
                 waitTime += 200;
             }
         }
+    }
+    function playSound()
+    {
+        global.controller.playSound("pick.mp3");
     }
     function pickMe(n)
     {

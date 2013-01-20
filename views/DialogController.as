@@ -130,11 +130,15 @@ class DialogController extends MyNode
                 }
                 else if(curCmd["cmd"] == "newTaskReward")
                     global.director.pushView(new NewTaskReward(), 1, 0);
-                //闯关页面的随机按钮显示 箭头
+                //闯关页面的随机按钮显示 箭头 BattleScene 中检测是否是 新手任务阶段 如果是则显示randomBut 上的Arrow 
                 else if(curCmd["cmd"] == "randomChoose")
                 {
-                    var randBut = scene.banner.randomBut;
-                    global.taskModel.showHintArrow(randBut, randBut.prepare().size(), RANDOM_BUT);
+                    //在新手任务阶段
+                    if(global.taskModel.checkInNewTask())
+                    {
+                        var okBut = scene.banner.okBut;
+                        global.taskModel.showHintArrow(okBut, okBut.prepare().size(), RANDOM_BUT, scene.banner.onOk);
+                    }
                 }
                 else if(curCmd["cmd"] == "hasChallengeMsg")
                 {
