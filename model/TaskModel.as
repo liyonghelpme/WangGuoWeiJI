@@ -491,7 +491,7 @@ class TaskModel
         var curNewTask = [];
         for(var i = 0; i < len(allTask); i++)
         {
-            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == newTaskStage && allTask[i]["stageTask"] == 0 && allTask[i]["tipTask"] == 0)
+            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == newTaskStage && allTask[i]["stageTask"] == 0 && allTask[i]["tipTask"] == 0 && allTask[i]["deleted"] == 0)
             {
                 curNewTask.append(allTask[i]["id"]);
             }
@@ -506,7 +506,7 @@ class TaskModel
         var curNewTask = [];
         for(var i = 0; i < len(allTask); i++)
         {
-            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == newTaskStage)
+            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == newTaskStage && allTask[i]["deleted"] == 0)
             {
                 curNewTask.append(allTask[i]["id"]);
             }
@@ -744,14 +744,17 @@ class TaskModel
 
     function doSolTaskByKey(key, sid, num)
     {
-        var allPossible = localSolTask.keys();
-        for(var i = 0; i < len(allPossible); i++)
+        if(newTaskStage >= getParam("showFinish"))
         {
-            var taskData = getData(TASK, allPossible[i]);
-            if(taskData["key"] == key)
+            var allPossible = localSolTask.keys();
+            for(var i = 0; i < len(allPossible); i++)
             {
-                doSolTask(allPossible[i], sid, num);
-                break;
+                var taskData = getData(TASK, allPossible[i]);
+                if(taskData["key"] == key)
+                {
+                    doSolTask(allPossible[i], sid, num);
+                    break;
+                }
             }
         }
     }

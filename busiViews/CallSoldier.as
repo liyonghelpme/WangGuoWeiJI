@@ -58,6 +58,25 @@ class CallSoldier extends MyNode
         goldText.text(str(res.get("gold")));
         cryText.text(str(res.get("crystal")));
     }
+    //新手任务调用
+    var inCall = 0;
+    function sureToCall()
+    {
+        inCall = 1;
+    }
+    var inAcc = 0;
+    function sureCall()
+    {
+        inCall = 0;
+        inAcc = 1;
+        onCallSol();
+    }
+    function accNow()
+    {
+        onAccCall(); 
+        scene.showHarvestArrow();
+    }
+    //没有检测当前状态和下一个状态是否相同相同则 不用 更新
     function update(diff)
     {
         var line;
@@ -77,7 +96,6 @@ class CallSoldier extends MyNode
         {
             var id = curSelSol[0];
             //var can = curSelSol[1];
-
 
             var cost;
             var buyable;
@@ -117,6 +135,8 @@ class CallSoldier extends MyNode
                 but0.bg.pos(130, 435);
                 addChild(but0);
                 blueButton = but0;
+                if(inCall)
+                    global.taskModel.showHintArrow(blueButton.bg, blueButton.bg.size(), SURE_TO_CALL, sureCall);
 
                 //cost = getCost(SOLDIER, id);
                 //buyable = global.user.checkCost(SOLDIER, cost); 
@@ -150,6 +170,9 @@ class CallSoldier extends MyNode
                     but0.bg.pos(177, 435);
                     addChild(but0);
                     redButton = but0;
+                    if(inAcc)
+                        global.taskModel.showHintArrow(redButton.bg, redButton.bg.size(), ACC_SOL, accNow);
+
                     cost = dict([["gold", getAccCost()]]);
                     buyable = global.user.checkCost(cost);
                     if(buyable["ok"] == 0)
@@ -391,6 +414,7 @@ class CallSoldier extends MyNode
             goods.updateTab();
             global.httpController.addRequest("buildingC/campAddSoldier", dict([["uid", global.user.uid], ["bid", scene.bid], ["solId", id]]), null, null);
 
+            //完成购买士兵任务
             global.taskModel.doSolTaskByKey("buySol", id, 1);
             global.taskModel.doAllTaskByKey("buySol", 1);//购买num个士兵任务
         }

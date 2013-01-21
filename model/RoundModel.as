@@ -1,6 +1,9 @@
-function getNewMonsters()
+const MAP_COFF = 10;
+
+function getNewMonsters(big, small)
 {
-    var data = mapMonsterData.get(0);
+    var rid = big*MAP_COFF+small;
+    var data = mapMonsterData.get(rid);
     var res = [];
     for(var i = 0; i < len(data); i++)
     {
@@ -17,9 +20,10 @@ function getNewMonsters()
     }
     return res;
 }
-function getNewSoldiers()
+function getNewSoldiers(big, small)
 {
-    var data = mapMonsterData.get(0);
+    var rid = big*MAP_COFF+small;
+    var data = mapMonsterData.get(rid);
     var res = [];
     for(var i = 0; i < len(data); i++)
     {
@@ -33,9 +37,10 @@ function getNewSoldiers()
     }
     return res;
 }
-function getAllNew()
+function getAllNew(big, small)
 {
-    var data = mapMonsterData.get(0);
+    var rid = big*MAP_COFF+small;
+    var data = mapMonsterData.get(rid);
     var res = [];
     for(var i = 0; i < len(data); i++)
     {

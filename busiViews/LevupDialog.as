@@ -58,10 +58,23 @@ class LevupDialog extends MyNode
         but0 = new NewButton("roleNameBut1.png", [174, 54], getStr("ok", null), null, 27, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(519, 402);
         addChild(but0);
+
+        var okBut = but0;
+        global.taskModel.showHintArrow(okBut, okBut.prepare().size(), RANDOM_BUT, okLevel);
     }
+    function okLevel()
+    {
+        global.director.popView();
+        global.taskModel.doAllTaskByKey("showNewStage"+str(global.taskModel.newTaskStage), 1);
+    }
+
     function onShare()
     {
-        
+        global.direct.popView();
+        doShare(getStr("enjoyGame", ["[NAME]", global.user.name]), null, null, null, null);
+    }
+    function newsFeedResponse()
+    {
     }
     function LevupDialog(c)
     {
@@ -74,18 +87,5 @@ class LevupDialog extends MyNode
 
         var cp = cmd.get("castlePage");
         cp.fallGoods.getLevelUpFallGoods();
-//        trace("fallThing", cp);
-
-        /*
-        var level = global.user.getValue("level");
-        if(level == 4 || level == 6 || level == 10)
-        {
-            if(global.user.rated == 0)
-            {
-                cp.dialogController.addCmd(dict([["cmd", "rate"]])); 
-            }
-        }
-        */
     }
-
 }

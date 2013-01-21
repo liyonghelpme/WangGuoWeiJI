@@ -116,8 +116,6 @@ class NewTaskDialog2 extends MyNode
     function closeDialog()
     {
         global.director.popView();
-        //var tid = global.taskModel.getCurNewTid();
-        //var tData = getData(TASK, tid);
         global.taskModel.doAllTaskByKey("showNewStage"+str(global.taskModel.newTaskStage), 1);
     }
 }

@@ -60,6 +60,7 @@ class MenuLayer extends MyNode
         expBanner.add(expWord.bg);
 
         collectionbutton = bg.addsprite("challengeIcon.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, onRank);
+        //global.taskModel.showHintArrow(collectionbutton, collectionbutton.prepare().size(), CHALLENGE_BUT, onRank);
 
         rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
@@ -154,14 +155,14 @@ class MenuLayer extends MyNode
         global.msgCenter.registerCallback(MENU_ICON, this);
         global.msgCenter.registerCallback(INIT_NEW_TASK_FIN, this);
         global.msgCenter.registerCallback(CHECK_TASK_ICON, this);
-
+        global.msgCenter.registerCallback(CHALLENGE_BUT, this);
 
         updateValue(global.user.resource);
         updateExp(0);
         updateTaskState();
         updateRightMenu();
 
-        global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
+        //global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
         //global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
 
@@ -304,6 +305,9 @@ class MenuLayer extends MyNode
             global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
         else if(msgId == INIT_NEW_TASK_FIN)
             updateRightMenu(); 
+        else if(msgId == CHALLENGE_BUT)
+            global.taskModel.showHintArrow(collectionbutton, collectionbutton.prepare().size(), CHALLENGE_BUT, onRank);
+
         //else if(msgId == CHECK_TASK_ICON)
         //    global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
@@ -328,6 +332,7 @@ class MenuLayer extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(CHALLENGE_BUT, this);
         global.msgCenter.removeCallback(CHECK_TASK_ICON, this);
         global.msgCenter.removeCallback(INIT_NEW_TASK_FIN, this);
         global.msgCenter.removeCallback(MENU_ICON, this);

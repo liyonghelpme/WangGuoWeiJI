@@ -152,8 +152,10 @@ class BackWord extends MyNode
             if(accTick == tick)
             {
                 //0 1 print
-                var r = rand(2);
-                var pn = "print"+str(r)+".mp3";
+
+                var pn = "print"+str(curId)+".mp3";
+                curId++;
+                curId %= 2;
                 trace("rand music", pn);
                 global.controller.playSound(pn);
                 accTick = 0;
@@ -274,7 +276,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                 curId++;
                 curId %= 2;
                 trace("rand music", pn);
-                global.controller.playSound("print0.mp3");
+                global.controller.playSound(pn);
                 if(startYet == 0)
                 {
                     startYet = 1;

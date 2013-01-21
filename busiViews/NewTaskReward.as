@@ -60,8 +60,7 @@ class NewTaskReward extends MyNode
     {
         global.director.popView();
 
-        //var tid = global.taskModel.getCurNewTid();
-        //var tData = getData(TASK, tid);
+        global.msgCenter.sendMsg(FINISH_NEW_TASK, null);//新手任务完成清理所有的NewTaskMask
         global.taskModel.doNewTaskByKey("finish"+str(global.taskModel.newTaskStage), 1);
     }
 }

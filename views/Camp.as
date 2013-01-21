@@ -201,10 +201,16 @@ class Camp extends FuncBuild
             global.user.updateBuilding(baseBuild);
 
             workNode.startCallback();
+            if(global.taskModel.checkInNewTask())
+            {
+                global.user.changeExpLevel(2);
+                global.taskModel.doAllTaskByKey("call", 1);//完成完整的招募士兵任务
+            }
             return 1;
         }
         return 0;
     }
+
     override function whenFree()
     {
         return harvestSoldier();

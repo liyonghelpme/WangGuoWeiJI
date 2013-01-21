@@ -49,19 +49,22 @@ class ChallengeScene extends MyNode
     {
         var k;
         var downloadList = [];
+        //新手任务 阶段 
+        //闯关
+        //挑战
         if(global.taskModel.checkInNewTask())
         {
+            if(kind == CHALLENGE_MON)
+                enemies = getAllNew(0, 0);
+            else if(kind == CHALLENGE_FRI)
+                enemies = getAllNew(0, 1);
+
             pictureManager = new PictureManager();
-            var newMonster = getNewMonsters();
-            for(k = 0; k < len(newMonster); k++)
+            for(k = 0; k < len(enemies); k++)
             {
-                downloadList.append(newMonster[k]["id"]);
+                downloadList.append(enemies[k]["id"]);
             }
-            var newSoldiers = getNewSoldiers();
-            for(k = 0; k < len(newSoldiers); k++)
-            {
-                downloadList.append(newSoldiers[k]["id"]);
-            }
+
             pictureManager.downloadList = downloadList;
             pictureManager.startDownload(0, finishDownload);
             return 0;
@@ -154,7 +157,13 @@ class ChallengeScene extends MyNode
         }
         else if(kind == CHALLENGE_OTHER)
         {
-            global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid]]), getRandChallenge, null);
+            //新手任务阶段 挑战其它人
+            if(global.taskModel.checkInNewTask())
+            {
+                newChallenge();
+            }
+            else
+                global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid]]), getRandChallenge, null);
         }
         else if(kind == CHALLENGE_REVENGE)
         {
@@ -184,6 +193,21 @@ class ChallengeScene extends MyNode
                 global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("noTarget", null), [100, 100, 100], null));
             }
         }
+    }
+    function newChallenge()
+    {
+        kind = CHALLENGE_FRI;
+        user = dict([["uid", -1], ["id", 0], ["score", 0], ["rank", 0], ["name", "Enemy"], ["level", 0], ["cityDefense", 10], ["silver", 0], ["crystal", 0]]);
+        oid = user["uid"];
+        papayaId = user["id"];
+        score = user["score"];
+        rank = user["rank"];
+        cityDefense = 10;
+        enemies = getAllNew(0, 1);
+        equips = dict();
+        skills = dict();
+
+        finishDataAndStartPic();
     }
     //每天最多挑战120个？
     function getRandChallenge(rid, rcode, con, param)
@@ -226,6 +250,10 @@ class ChallengeScene extends MyNode
         {
             argument.update("big", 5);
             argument.update("small", 0);
+            if(global.taskModel.checkInNewTask())
+            {
+                argument.udpate("soldier", getAllNew(0, 1));
+            }
             global.director.replaceScene(new BattleScene(argument));
             //5, 0, enemies, CHALLENGE_FRI, [oid, papayaId, score, rank, cityDefense, skills, null], equips));
         }
@@ -241,14 +269,12 @@ class ChallengeScene extends MyNode
             argument.update("big", 5);
             argument.update("small", 0);
             global.director.replaceScene(new BattleScene(argument));
-            //5, 0, enemies, CHALLENGE_FIGHT, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
         }
         else if(kind == CHALLENGE_DEFENSE)
         {
             argument.update("big", 5);
             argument.update("small", 0);
             global.director.replaceScene(new BattleScene(argument));
-            //5, 0, enemies, CHALLENGE_DEFENSE, [oid, papayaId, score, rank, cityDefense, skills, user], equips));
         }
         else if(kind == CHALLENGE_TRAIN)
         {
@@ -265,6 +291,10 @@ class ChallengeScene extends MyNode
             argument.update("big", user["big"]);
             argument.update("small", user["small"]);
             argument.update("soldier", user["mon"]);
+            if(global.taskModel.checkInNewTask())
+            {
+                argument.update("soldier", getAllNew(0, 0));//新手任务闯关
+            }
             global.director.replaceScene(new BattleScene(argument));
         }
     }

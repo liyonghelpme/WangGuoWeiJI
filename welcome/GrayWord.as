@@ -37,7 +37,7 @@ class GrayWord extends MyNode
 
     //var totalWord;
     var totalNum;
-    var sound;
+    //var sound;
     
     //音效存在问题 不能 有效播放
     //var player;
@@ -47,7 +47,7 @@ class GrayWord extends MyNode
     function GrayWord(sc, w, sz, h, c, wid, hei, n, cb, step)
     {
         curLine = step;
-        sound = createaudio("print.mp3");
+        //sound = createaudio("print.mp3");
         accTick = 0;
         tick = n;
         curPos = 0;
@@ -108,6 +108,7 @@ class GrayWord extends MyNode
     */
     //var playing = 0;
     var startPrint = 0;
+    var curId = 0;
     function update(diff)
     {
         accTick += 1;
@@ -125,10 +126,15 @@ class GrayWord extends MyNode
                 //打当前行字
                 if(curPos < len(line))
                 {
+                    var pn = "print"+str(curId)+".mp3";
+                    curId++;
+                    curId %= 2;
+                    global.controller.playSound(pn);
+
                     if(startPrint == 0)
                     {
                         startPrint = 1;
-                        sound.play(-1);
+                        //sound.play(-1);
                     }
                     var o = ord(line[curPos]);
                     if(o < 128)
@@ -168,7 +174,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, A
                     if(startPrint == 1)
                     {
                         startPrint = 0;
-                        sound.pause();
+                        //sound.pause();
                     }
 
                     if(callback != null)
@@ -180,7 +186,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, A
                 if(startPrint == 1)
                 {
                     startPrint = 0;
-                    sound.pause();
+                    //sound.pause();
                 }
                 if(callback != null)
                     callback();
@@ -189,7 +195,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, A
     }
     override function exitScene()
     {
-        sound.stop();
+        //sound.stop();
 
         global.myAction.removeAct(this);
         super.exitScene();

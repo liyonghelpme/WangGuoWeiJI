@@ -686,4 +686,6 @@ var WORDS = dict([
 ["campQueueEx", "兵营招募士兵队列种类超过[NUM]！"],
 ["campReadyEx", "兵营收获士兵队列长度超过[NUM]，请收获后训练士兵！"],
 ["taskTip132", "点击水晶矿"],
+["taskTip134", "点击挑战按钮"],
+["taskTip135", "点击挑战按钮"],
 ]);

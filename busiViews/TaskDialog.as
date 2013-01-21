@@ -164,6 +164,7 @@ class TaskDialog extends MyNode
 
             //有新手任务则不显示 其他 任务 
             //不显示 新手阶段任务
+            //任务对话框不显示新手任务
             if(!getParam("stopNewTask"))
             {
                 var newTask = global.taskModel.getDoNewTask();

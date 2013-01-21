@@ -233,6 +233,12 @@ class Building extends MyNode
         global.director.curScene.showGlobalMenu(this, showGlobalMenu);
     }
 
+    function showHarvestArrow()
+    {
+        map.map.moveToBuild(this);
+        global.taskModel.showHintArrow(bg, bg.size(), HARVEST_SOL, funcBuild.whenBusy());
+    }
+
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -249,7 +255,7 @@ class Building extends MyNode
             if(state == PARAMS["buildFree"])
             {
                 map.map.moveToBuild(this); 
-                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_CAMP, );
+                global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_CAMP, newCall);
             }
         }
         //多个农田怎么办？ 最后一个肯定会存在
@@ -627,6 +633,7 @@ class Building extends MyNode
                 map.touchMoved(n, e, p, x, y, points);
         }
     }
+
 
     function showGlobalMenu()
     {

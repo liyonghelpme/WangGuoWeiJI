@@ -51,6 +51,8 @@ class MapBanner extends MyNode
         bg.add(randomBut);
         bg.add(cancelBut);
         bg.add(okBut);
+        
+        global.taskModel.showHintArrow(okBut, okBut.prepare().size(), CHALLENGE_OK_BUT, onOk);
     }
     /*
     将剩余士兵尽量全部放置到地面上
@@ -85,17 +87,14 @@ class MapBanner extends MyNode
     function receiveMsg(param)
     {   
         var msgId = param[0];
-        //if(msgId == OK_BUT)
-        //    global.taskModel.showHintArrow(okBut, okBut.prepare().size(), OK_BUT);
     }
     override function enterScene()
     {
         super.enterScene();
-        //global.msgCenter.registerCallback(OK_BUT, this);
+
     }
     override function exitScene()
     {
-        //global.msgCenter.removeCallback(OK_BUT, this);
         super.exitScene();
     }
 
@@ -129,7 +128,6 @@ class MapBanner extends MyNode
             data[removed[i]][1] = 1;
         }
         updateTab();
-        global.taskModel.showHintArrow(okBut, okBut.prepare().size(), OK_BUT);
     }
     /*
     点击某个士兵 之后士兵出现在场景中 

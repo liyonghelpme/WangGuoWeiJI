@@ -108,6 +108,7 @@ class BattleScene extends MyNode
 
         if(global.taskModel.checkInNewTask())
         {
+            trace("BattleScene NewTaskMask");
             global.director.curScene.addChildZ(new NewTaskMask(null, null), SCENE_MASK_ZORD);
         }
     }
@@ -176,10 +177,6 @@ class BattleScene extends MyNode
     function BattleScene(arg)
     {
         argument = arg;
-        if(global.taskModel.checkInNewTask())
-        {
-            argument["soldier"] = getAllNew();
-        }
         kind = argument["kind"];
         double = argument["double"];
         singleSid = argument["singleSid"];
@@ -227,10 +224,8 @@ class BattleScene extends MyNode
         dialogController = new DialogController(this);
         addChild(dialogController);
 
-        if(kind == CHALLENGE_TRAIN)
-            map = new Map(argument["big"], argument["small"], null, this, null);
-        else
-            map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equips"]);
+        trace("Map Soldier", argument["soldier"]);
+        map = new Map(argument["big"], argument["small"], argument["soldier"], this, argument["equips"]);
 
         addChild(map);
 
@@ -263,15 +258,20 @@ class BattleScene extends MyNode
                     dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
                 }
             }
-
             dialogController.addCmd(dict([["cmd", "chooseSol"]]));
         }
         else
+        {
             dialogController.addCmd(dict([["cmd", "randomChoose"]]));
+        }
     }
     //评估军队实力 线性评估 平方增长太快了
     function evaluePower()
     {
+        //新手任务阶段没有积分奖励
+        if(global.taskModel.checkInNewTask())
+            return [0, 0];
+
         var myPower = 0;
         var enePower = 0;
         var allMySol = global.user.getAllSoldierKinds().keys();

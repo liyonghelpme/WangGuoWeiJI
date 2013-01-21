@@ -482,17 +482,23 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 setMap(so);
             }
         }
+        //挑战好友 新手任务布局是确定的
         else//程序生成士兵的位置 挑战排行榜 挑战邻居
         {
-            var otherSols = realGenChallengeSoldier(s);
+            var otherSols;
+            if(!global.taskModel.checkInNewTask()){
+                otherSols = realGenChallengeSoldier(s);
+            } else
+                otherSols = s;
+
             for(i = 0; i < len(otherSols); i++)
             {
-                so = realAddSoldier(ENEMY, otherSols[i]["id"], otherSols[i], ENECOLOR);
+                so = realAddSoldier(ENEMY, otherSols[i]["id"], otherSols[i], s[i].get("color", ENECOLOR));
                 /*
                 设定人物位置会设定人物的zord 
                 所以要在添加了人物之后 设定位置
                 */
-                nPos = getSolPos(otherSols[i].get("monX")+7, otherSols[i].get("monY"), so.sx, so.sy, so.offY);
+                nPos = getSolPos(otherSols[i].get("monX"), otherSols[i].get("monY"), so.sx, so.sy, so.offY);
                 so.setPos(nPos); 
                 setMap(so);
             }
@@ -785,7 +791,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 global.director.pushView(new RoundFail(this, dict([["deadSols", deadInstance], ["reward", reward]])), 1, 0);
             global.user.doAdd(reward);
 
-            global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", deadSols], ["reward", json_dumps(reward)], ["star", star], ["big", kind], ["small", small]]), null, null);
+            if(!global.taskModel.checkInNewTask()) 
+                global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", deadSols], ["reward", json_dumps(reward)], ["star", star], ["big", kind], ["small", small]]), null, null);
         }
         else if(scene.kind == CHALLENGE_FRI)
         {
@@ -799,8 +806,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             }
             else
                 global.director.pushView(new NewChallengeFail(this, dict([["win", win], ["star", star], ["score", score], ["reward", robReward]])), 1, 0);
-                
-            global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["reward", json_dumps(robReward)], ["score", score], ["mid", global.user.getNewMsgId()], ["win", win], ["revenge", scene.user.get("revenge", 0)]]), null, null);
+            if(!global.taskModel.checkInNewTask()) 
+                global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["reward", json_dumps(robReward)], ["score", score], ["mid", global.user.getNewMsgId()], ["win", win], ["revenge", scene.user.get("revenge", 0)]]), null, null);
         }
     }
     
