@@ -1,40 +1,75 @@
 const LANGUAGE = 0;
 var strings = dict([
-["building0", ["普通农田", ""]],
-["building1", ["魔法农田", ""]],
-["building10", ["普通民居", ""]],
-["building12", ["高级民居", ""]],
-["building100", ["树A", ""]],
-["building140", ["风车屋", ""]],
-["building142", ["马车", ""]],
-["building144", ["魔法水晶", ""]],
-["building200", ["城堡", ""]],
-["building202", ["神像", ""]],
-["building204", ["药店", ""]],
-["building206", ["铁匠铺", ""]],
-["building102", ["树B", ""]],
-["building104", ["树C", ""]],
-["building106", ["军帐篷", ""]],
-["building108", ["凯旋旗", ""]],
-["building110", ["喷泉", ""]],
-["building112", ["围栏", ""]],
-["building114", ["门柱", ""]],
-["building116", ["店铺", ""]],
-["building118", ["椅子", ""]],
-["building120", ["剑靶", ""]],
-["building122", ["木桌", ""]],
-["building124", ["木桶", ""]],
-["building128", ["水井", ""]],
-["building130", ["伐木场", ""]],
-["building132", ["箭靶", ""]],
-["building134", ["稻草车", ""]],
-["building136", ["灯柱", ""]],
-["building138", ["运木马车", ""]],
-["building146", ["牛", ""]],
-["building148", ["石头", ""]],
-["building162", ["蜗牛", ""]],
-["building164", ["路牌", ""]],
-["building300", ["水晶矿", ""]],
+["building0", ["普通农田", "Farmland
+"]],
+["building1", ["魔法农田", "Magic Farmland
+"]],
+["building10", ["普通民居", "House
+"]],
+["building12", ["高级民居", "Advanced House
+"]],
+["building100", ["树A", "Tree A
+"]],
+["building140", ["风车屋", "Windmill
+"]],
+["building142", ["马车", "Carriage
+"]],
+["building144", ["魔法水晶", "Magical Crystal
+"]],
+["building200", ["城堡", "Castle
+"]],
+["building202", ["神像", "Statue
+"]],
+["building204", ["药店", "Medicine Shop
+"]],
+["building206", ["铁匠铺", "Blacksmith
+"]],
+["building102", ["树B", "Tree B
+"]],
+["building104", ["树C", "Tree C
+"]],
+["building106", ["军帐篷", "Army Tent
+"]],
+["building108", ["凯旋旗", "Flag
+"]],
+["building110", ["喷泉", "Fountain
+"]],
+["building112", ["围栏", "Fence
+"]],
+["building114", ["门柱", "Gatepost
+"]],
+["building116", ["店铺", "Shop
+"]],
+["building118", ["椅子", "Bench
+"]],
+["building120", ["剑靶", "Sword Target
+"]],
+["building122", ["木桌", "Table
+"]],
+["building124", ["木桶", "Bucket
+"]],
+["building128", ["水井", "Well
+"]],
+["building130", ["伐木场", "Lumber Mill
+"]],
+["building132", ["箭靶", "Shooting Target
+"]],
+["building134", ["稻草车", "Hay cart
+"]],
+["building136", ["灯柱", "Lamp Post
+"]],
+["building138", ["运木马车", "Lumber Cart
+"]],
+["building146", ["牛", "Ox
+"]],
+["building148", ["石头", "Stone
+"]],
+["building162", ["蜗牛", "Snail
+"]],
+["building164", ["路牌", "Road Sign
+"]],
+["building300", ["水晶矿", "Crystal Mine
+"]],
 ["building208", ["爱心树", ""]],
 ["building209", ["爱心树", ""]],
 ["building210", ["爱心树", ""]],
@@ -50,14 +85,22 @@ var strings = dict([
 ["building220", ["爱心树", ""]],
 ["building221", ["爱心树", ""]],
 ["building222", ["爱心树", ""]],
-["building166", ["格斗场", "Ring Fighting"]],
-["building224", ["兵营", ""]],
-["building170", ["南瓜灯", ""]],
-["building172", ["树桩", ""]],
-["building174", ["草墩", ""]],
-["building176", ["稻草人", ""]],
-["building178", ["奶牛", ""]],
-["building168", ["指示牌", ""]],
+["building166", ["格斗场", "Coliseum
+"]],
+["building224", ["兵营", "Army Base
+"]],
+["building170", ["南瓜灯", "Pumpkin Lantern
+"]],
+["building172", ["树桩", "Wood Stump
+"]],
+["building174", ["草墩", "Hay Stack
+"]],
+["building176", ["稻草人", "Scarecrow
+"]],
+["building178", ["奶牛", "Cow
+"]],
+["building168", ["指示牌", "Sign Post
+"]],
 ["crystal0", ["10000 水晶", ""]],
 ["crystal1", ["100000 水晶", ""]],
 ["crystal2", ["1000000 水晶", ""]],
@@ -77,76 +120,146 @@ var strings = dict([
 ["drugDes24", ""],
 ["drugDes31", ""],
 ["drugDes34", ""],
-["equip1", ["项链A", ""]],
-["equip2", ["项链B", ""]],
-["equip3", ["项链C", ""]],
-["equip4", ["项链D", ""]],
-["equip5", ["靴子A", ""]],
-["equip6", ["靴子B", ""]],
-["equip7", ["靴子C", ""]],
-["equip8", ["镰刀", ""]],
-["equip9", ["铠甲C", ""]],
-["equip10", ["铠甲A", ""]],
-["equip11", ["铠甲B", ""]],
-["equip12", ["盾牌A", ""]],
-["equip13", ["盾牌B", ""]],
-["equip14", ["盾牌C", ""]],
-["equip15", ["狼牙棒", ""]],
-["equip16", ["火把", ""]],
-["equip17", ["流星锤", ""]],
-["equip18", ["法杖B", ""]],
-["equip19", ["法杖A", ""]],
-["equip20", ["枪", ""]],
-["equip21", ["木棒", ""]],
-["equip22", ["斧头", ""]],
-["equip23", ["手套B", ""]],
-["equip24", ["手套A", ""]],
-["equip25", ["弓箭", ""]],
-["equip26", ["头盔A", ""]],
-["equip27", ["头盔B", ""]],
-["equip28", ["头盔C", ""]],
-["equip29", ["大锤", ""]],
-["equip30", ["剑", ""]],
-["equip31", ["刀", ""]],
-["equip32", ["戒指A", ""]],
-["equip33", ["戒指B", ""]],
-["equip34", ["宝剑A", ""]],
-["equip35", ["宝剑B", ""]],
-["equip36", ["弓箭A", ""]],
-["equip37", ["弓箭B", ""]],
-["equip38", ["法袍A", ""]],
-["equip39", ["法袍B", ""]],
-["equip40", ["法袍C", ""]],
-["equip41", ["凤凰戒指", ""]],
-["equip42", ["凤凰盾牌", ""]],
-["equip43", ["凤凰铠甲", ""]],
-["equip44", ["凤凰靴子", ""]],
-["equip45", ["凤凰法杖", ""]],
-["equip46", ["青龙宝刀", ""]],
-["equip47", ["青龙戒指", ""]],
-["equip48", ["青龙盔甲", ""]],
-["equip49", ["青龙盾牌", ""]],
-["equip50", ["青龙靴子", ""]],
-["equip51", ["白虎戒指", ""]],
-["equip52", ["白虎拳套", ""]],
-["equip53", ["白虎铠甲", ""]],
-["equip54", ["白虎盾牌", ""]],
-["equip55", ["白虎靴子", ""]],
-["equip56", ["玄武戒指", ""]],
-["equip57", ["玄武盔甲", ""]],
-["equip58", ["玄武盾牌", ""]],
-["equip59", ["玄武靴子", ""]],
-["equip60", ["玄武宝剑", ""]],
-["equip61", ["神圣头盔", ""]],
-["equip62", ["神圣弓箭", ""]],
-["equip63", ["神圣靴子", ""]],
-["equip64", ["神圣护甲", ""]],
-["equip65", ["神圣戒指", ""]],
-["equip66", ["爱心法袍", ""]],
-["equip67", ["爱心戒指", ""]],
-["equip68", ["爱心魔杖", ""]],
-["equip69", ["爱心靴子", ""]],
-["equip70", ["爱心盾牌", ""]],
+["equip1", ["项链A", "Necklace A
+"]],
+["equip2", ["项链B", "Necklace B
+"]],
+["equip3", ["项链C", "Necklace C
+"]],
+["equip4", ["项链D", "Necklace D
+"]],
+["equip5", ["靴子A", "Boots A
+"]],
+["equip6", ["靴子B", "Boots B
+"]],
+["equip7", ["靴子C", "Boots C
+"]],
+["equip8", ["镰刀", "Scythe
+"]],
+["equip9", ["铠甲C", "Armor C
+"]],
+["equip10", ["铠甲A", "Armor A
+"]],
+["equip11", ["铠甲B", "Armor B
+"]],
+["equip12", ["盾牌A", "Shield A
+"]],
+["equip13", ["盾牌B", "Shield B
+"]],
+["equip14", ["盾牌C", "Shield C
+"]],
+["equip15", ["狼牙棒", "Mace
+"]],
+["equip16", ["火把", "Torch
+"]],
+["equip17", ["流星锤", "Hammer
+"]],
+["equip18", ["法杖B", "Mage Staff B
+"]],
+["equip19", ["法杖A", "Mage Staff A
+"]],
+["equip20", ["枪", "Spear
+"]],
+["equip21", ["木棒", "Cudgel
+"]],
+["equip22", ["斧头", "Axe
+"]],
+["equip23", ["手套B", "Gloves B
+"]],
+["equip24", ["手套A", "Gloves A
+"]],
+["equip25", ["弓箭", "Bow and Arrows
+"]],
+["equip26", ["头盔A", "Helmet A
+"]],
+["equip27", ["头盔B", "Helmet B
+"]],
+["equip28", ["头盔C", "Helmet C
+"]],
+["equip29", ["大锤", "Sledge Hammer
+"]],
+["equip30", ["剑", "Sword
+"]],
+["equip31", ["刀", "Blade
+"]],
+["equip32", ["戒指A", "Ring A
+"]],
+["equip33", ["戒指B", "Ring B
+"]],
+["equip34", ["宝剑A", "Prized Sword A
+"]],
+["equip35", ["宝剑B", "Prized Sword B
+"]],
+["equip36", ["弓箭A", "Bow & Arrow A
+"]],
+["equip37", ["弓箭B", "Bow & Arrow B
+"]],
+["equip38", ["法袍A", "Robe A
+"]],
+["equip39", ["法袍B", "Robe B
+"]],
+["equip40", ["法袍C", "Robe C
+"]],
+["equip41", ["凤凰戒指", "Phoenix Ring
+"]],
+["equip42", ["凤凰盾牌", "Phoenix Shield
+"]],
+["equip43", ["凤凰铠甲", "Phoenix Amor
+"]],
+["equip44", ["凤凰靴子", "Phoenix Boots
+"]],
+["equip45", ["凤凰法杖", "Phoenix Staff
+"]],
+["equip46", ["青龙宝刀", "Dragon Blade
+"]],
+["equip47", ["青龙戒指", "Dragon Ring
+"]],
+["equip48", ["青龙盔甲", "Dragon Armor
+"]],
+["equip49", ["青龙盾牌", "Dragon Shield
+"]],
+["equip50", ["青龙靴子", "Dragon Boots
+"]],
+["equip51", ["白虎戒指", "Tiger Ring
+"]],
+["equip52", ["白虎拳套", "Tiger Knuckles 
+"]],
+["equip53", ["白虎铠甲", "Tiger Armor
+"]],
+["equip54", ["白虎盾牌", "Tiger Shield
+"]],
+["equip55", ["白虎靴子", "Tiger Boots
+"]],
+["equip56", ["玄武戒指", "Basaltic Ring
+"]],
+["equip57", ["玄武盔甲", "Basaltic Armor
+"]],
+["equip58", ["玄武盾牌", "Basaltic Shield
+"]],
+["equip59", ["玄武靴子", "Basaltic Boots
+"]],
+["equip60", ["玄武宝剑", "Basaltic Sword
+"]],
+["equip61", ["神圣头盔", "Sacred Helmet
+"]],
+["equip62", ["神圣弓箭", "Sacred Bow 
+"]],
+["equip63", ["神圣靴子", "Sacred Boots
+"]],
+["equip64", ["神圣护甲", "Sacred Armor
+"]],
+["equip65", ["神圣戒指", "Sacred Ring
+"]],
+["equip66", ["爱心法袍", "Robe of Heart
+"]],
+["equip67", ["爱心戒指", "Ring of Heart
+"]],
+["equip68", ["爱心魔杖", "Staff of Heart
+"]],
+["equip69", ["爱心靴子", "Boots of Heart
+"]],
+["equip70", ["爱心盾牌", "Shield of Heart
+"]],
 ["equipDes1", ""],
 ["equipDes2", ""],
 ["equipDes3", ""],
@@ -340,178 +453,350 @@ var strings = dict([
 ["silver0", ["10000 银币", ""]],
 ["silver1", ["100000 银币", ""]],
 ["silver2", ["1000000 银币", ""]],
-["soldier0", ["单手剑士", ""]],
-["soldier1", ["单手剑士", ""]],
-["soldier2", ["单手剑士", ""]],
-["soldier3", ["单手剑士", ""]],
-["soldier10", ["吸血鬼", ""]],
-["soldier11", ["吸血鬼", ""]],
-["soldier12", ["吸血鬼", ""]],
-["soldier13", ["吸血鬼", ""]],
-["soldier20", ["弓箭手", ""]],
-["soldier21", ["弓箭手", ""]],
-["soldier22", ["弓箭手", ""]],
-["soldier23", ["弓箭手", ""]],
-["soldier30", ["大地骑士", ""]],
-["soldier31", ["大地骑士", ""]],
-["soldier32", ["大地骑士", ""]],
-["soldier33", ["大地骑士", ""]],
-["soldier40", ["森林精灵", ""]],
-["soldier41", ["森林精灵", ""]],
-["soldier42", ["森林精灵", ""]],
-["soldier43", ["森林精灵", ""]],
-["soldier50", ["飓风泰坦", ""]],
-["soldier51", ["飓风泰坦", ""]],
-["soldier52", ["飓风泰坦", ""]],
-["soldier53", ["飓风泰坦", ""]],
-["soldier60", ["火系魔法师", ""]],
-["soldier61", ["火系魔法师", ""]],
-["soldier62", ["火系魔法师", ""]],
-["soldier63", ["火系魔法师", ""]],
-["soldier70", ["猎龙人", ""]],
-["soldier71", ["猎龙人", ""]],
-["soldier110", ["人鱼", ""]],
-["soldier100", ["森林狼人", ""]],
-["soldier80", ["矮人", ""]],
-["soldier81", ["矮人", ""]],
-["soldier82", ["矮人", ""]],
-["soldier83", ["矮人", ""]],
-["soldier90", ["智天使", ""]],
-["soldier91", ["智天使", ""]],
-["soldier92", ["智天使", ""]],
-["soldier93", ["智天使", ""]],
-["soldier72", ["猎龙人", ""]],
-["soldier73", ["猎龙人", ""]],
-["soldier120", ["食人魔", ""]],
-["soldier130", ["小恶魔", ""]],
-["soldier140", ["木乃伊", ""]],
-["soldier150", ["树人", ""]],
-["soldier160", ["石头人", ""]],
-["soldier170", ["邪灵法师", ""]],
-["soldier180", ["雪人", ""]],
-["soldier190", ["骷髅兵", ""]],
-["soldier400", ["斧战士", ""]],
-["soldier401", ["斧战士", ""]],
-["soldier402", ["斧战士", ""]],
-["soldier403", ["斧战士", ""]],
-["soldier410", ["暗精灵", ""]],
-["soldier411", ["暗精灵", ""]],
-["soldier412", ["暗精灵", ""]],
-["soldier413", ["暗精灵", ""]],
-["soldier420", ["堕落天使", ""]],
-["soldier421", ["堕落天使", ""]],
-["soldier422", ["堕落天使", ""]],
-["soldier423", ["堕落天使", ""]],
-["soldier430", ["魔剑士", ""]],
-["soldier431", ["魔剑士", ""]],
-["soldier432", ["魔剑士", ""]],
-["soldier433", ["魔剑士", ""]],
-["soldier440", ["龙骑士", ""]],
-["soldier441", ["龙骑士", ""]],
-["soldier442", ["龙骑士", ""]],
-["soldier443", ["龙骑士", ""]],
-["soldier450", ["熔岩泰坦", ""]],
-["soldier451", ["熔岩泰坦", ""]],
-["soldier452", ["熔岩泰坦", ""]],
-["soldier453", ["熔岩泰坦", ""]],
-["soldier460", ["绿巨人", ""]],
-["soldier461", ["绿巨人", ""]],
-["soldier462", ["绿巨人", ""]],
-["soldier463", ["绿巨人", ""]],
-["soldier470", ["神圣骑士", ""]],
-["soldier471", ["神圣骑士", ""]],
-["soldier472", ["神圣骑士", ""]],
-["soldier473", ["神圣骑士", ""]],
-["soldier480", ["德鲁伊", ""]],
-["soldier481", ["德鲁伊", ""]],
-["soldier482", ["德鲁伊", ""]],
-["soldier483", ["德鲁伊", ""]],
-["soldier490", ["水系魔法师", ""]],
-["soldier491", ["水系魔法师", ""]],
-["soldier492", ["水系魔法师", ""]],
-["soldier493", ["水系魔法师", ""]],
-["soldier500", ["土系魔法师", ""]],
-["soldier501", ["土系魔法师", ""]],
-["soldier502", ["土系魔法师", ""]],
-["soldier503", ["土系魔法师", ""]],
-["soldier510", ["风系魔法师", ""]],
-["soldier511", ["风系魔法师", ""]],
-["soldier512", ["风系魔法师", ""]],
-["soldier513", ["风系魔法师", ""]],
-["soldier520", ["雷系魔法师", ""]],
-["soldier521", ["雷系魔法师", ""]],
-["soldier522", ["雷系魔法师", ""]],
-["soldier523", ["雷系魔法师", ""]],
-["soldier530", ["巫师", ""]],
-["soldier531", ["巫师", ""]],
-["soldier532", ["巫师", ""]],
-["soldier533", ["巫师", ""]],
-["soldier540", ["赛亚人", ""]],
-["soldier541", ["赛亚人", ""]],
-["soldier542", ["赛亚人", ""]],
-["soldier543", ["赛亚人", ""]],
-["soldier550", ["火精灵", ""]],
-["soldier551", ["火精灵", ""]],
-["soldier552", ["火精灵", ""]],
-["soldier553", ["火精灵", ""]],
-["soldier560", ["火枪地精", ""]],
-["soldier561", ["火枪地精", ""]],
-["soldier562", ["火枪地精", ""]],
-["soldier563", ["火枪地精", ""]],
-["soldier570", ["幻影射手", ""]],
-["soldier571", ["幻影射手", ""]],
-["soldier572", ["幻影射手", ""]],
-["soldier573", ["幻影射手", ""]],
-["soldier580", ["火箭地精", ""]],
-["soldier581", ["火箭地精", ""]],
-["soldier582", ["火箭地精", ""]],
-["soldier583", ["火箭地精", ""]],
-["soldier590", ["凤凰骑士", ""]],
-["soldier591", ["凤凰骑士", ""]],
-["soldier592", ["凤凰骑士", ""]],
-["soldier593", ["凤凰骑士", ""]],
-["soldier1010", ["强盗", ""]],
-["soldier1020", ["兽人", ""]],
-["soldier1030", ["森林魅影", ""]],
-["soldier1040", ["森林蜘蛛", ""]],
-["soldier1050", ["森林巨兽", ""]],
-["soldier1060", ["半人马", ""]],
-["soldier1070", ["金刚", ""]],
-["soldier1080", ["哥布林", ""]],
-["soldier1090", ["土匪", ""]],
-["soldier1100", ["猫女", ""]],
-["soldier1110", ["土匪头子", ""]],
-["soldier1120", ["牛头人", ""]],
-["soldier1130", ["翼人", ""]],
-["soldier1140", ["平原霸王龙", ""]],
-["soldier1150", ["水系钢铁人", ""]],
-["soldier1160", ["水系巨兽", ""]],
-["soldier1170", ["黑袍射手", ""]],
-["soldier1180", ["水系霸王龙", ""]],
-["soldier1190", ["水系钢铁王", ""]],
-["soldier1200", ["恶魔", ""]],
-["soldier1210", ["西斯", ""]],
-["soldier1220", ["水系魅影", ""]],
-["soldier1230", ["西方邪恶龙", ""]],
-["soldier1240", ["洞穴霸王龙", ""]],
-["soldier1250", ["洞穴蜘蛛", ""]],
-["soldier1260", ["洞穴狼人", ""]],
-["soldier1270", ["洞穴巨兽", ""]],
-["soldier1280", ["洞穴钢铁人", ""]],
-["soldier1290", ["洞穴钢铁王", ""]],
-["soldier1300", ["骷髅将军", ""]],
-["soldier1310", ["暗夜魔王", ""]],
-["soldier1320", ["地狱三头犬", ""]],
-["soldier1330", ["雪山蜘蛛", ""]],
-["soldier1340", ["雪山狼人", ""]],
-["soldier1350", ["雪山猿人", ""]],
-["soldier1360", ["钢铁侠", ""]],
-["soldier1370", ["雪山魅影", ""]],
-["soldier1380", ["黑暗魔君", ""]],
-["soldier444", ["龙骑士", ""]],
-["soldier484", ["大地之熊", ""]],
-["soldier594", ["凤凰", ""]],
-["soldier554", ["火精灵", ""]],
+["soldier0", ["单手剑士", "Swordsman
+"]],
+["soldier1", ["单手剑士", "Swordsman
+"]],
+["soldier2", ["单手剑士", "Swordsman
+"]],
+["soldier3", ["单手剑士", "Swordsman
+"]],
+["soldier10", ["吸血鬼", "Vampire
+"]],
+["soldier11", ["吸血鬼", "Vampire
+"]],
+["soldier12", ["吸血鬼", "Vampire
+"]],
+["soldier13", ["吸血鬼", "Vampire
+"]],
+["soldier20", ["弓箭手", "Archer
+"]],
+["soldier21", ["弓箭手", "Archer
+"]],
+["soldier22", ["弓箭手", "Archer
+"]],
+["soldier23", ["弓箭手", "Archer
+"]],
+["soldier30", ["大地骑士", "Earth Rider
+"]],
+["soldier31", ["大地骑士", "Earth Rider
+"]],
+["soldier32", ["大地骑士", "Earth Rider
+"]],
+["soldier33", ["大地骑士", "Earth Rider
+"]],
+["soldier40", ["森林精灵", "Forest Elf
+"]],
+["soldier41", ["森林精灵", "Forest Elf
+"]],
+["soldier42", ["森林精灵", "Forest Elf
+"]],
+["soldier43", ["森林精灵", "Forest Elf
+"]],
+["soldier50", ["飓风泰坦", "Hurricane Titan
+"]],
+["soldier51", ["飓风泰坦", "Hurricane Titan
+"]],
+["soldier52", ["飓风泰坦", "Hurricane Titan
+"]],
+["soldier53", ["飓风泰坦", "Hurricane Titan
+"]],
+["soldier60", ["火系魔法师", "Fire Mage
+"]],
+["soldier61", ["火系魔法师", "Fire Mage
+"]],
+["soldier62", ["火系魔法师", "Fire Mage
+"]],
+["soldier63", ["火系魔法师", "Fire Mage
+"]],
+["soldier70", ["猎龙人", "Dragon Hunter
+"]],
+["soldier71", ["猎龙人", "Dragon Hunter
+"]],
+["soldier110", ["人鱼", "Mermaid
+"]],
+["soldier100", ["森林狼人", "Werewolf
+"]],
+["soldier80", ["矮人", "Dwarf
+"]],
+["soldier81", ["矮人", "Dwarf
+"]],
+["soldier82", ["矮人", "Dwarf
+"]],
+["soldier83", ["矮人", "Dwarf
+"]],
+["soldier90", ["智天使", "Cherubim
+"]],
+["soldier91", ["智天使", "Cherubim
+"]],
+["soldier92", ["智天使", "Cherubim
+"]],
+["soldier93", ["智天使", "Cherubim
+"]],
+["soldier72", ["猎龙人", "Dragon Hunter
+"]],
+["soldier73", ["猎龙人", "Dragon Hunter
+"]],
+["soldier120", ["食人魔", "Ogre
+"]],
+["soldier130", ["小恶魔", "Little Devil
+"]],
+["soldier140", ["木乃伊", "Mummy
+"]],
+["soldier150", ["树人", "Treant
+"]],
+["soldier160", ["石头人", "Stone Giant
+"]],
+["soldier170", ["邪灵法师", "Necromancer
+"]],
+["soldier180", ["雪人", "Snow Man
+"]],
+["soldier190", ["骷髅兵", "Skelesoldier
+"]],
+["soldier400", ["斧战士", "Axe Soldier
+"]],
+["soldier401", ["斧战士", "Axe Soldier
+"]],
+["soldier402", ["斧战士", "Axe Soldier
+"]],
+["soldier403", ["斧战士", "Axe Soldier
+"]],
+["soldier410", ["暗精灵", "Dark Elf
+"]],
+["soldier411", ["暗精灵", "Dark Elf
+"]],
+["soldier412", ["暗精灵", "Dark Elf
+"]],
+["soldier413", ["暗精灵", "Dark Elf
+"]],
+["soldier420", ["堕落天使", "Fallen Angel
+"]],
+["soldier421", ["堕落天使", "Fallen Angel
+"]],
+["soldier422", ["堕落天使", "Fallen Angel
+"]],
+["soldier423", ["堕落天使", "Fallen Angel
+"]],
+["soldier430", ["魔剑士", "Sword Mage
+"]],
+["soldier431", ["魔剑士", "Sword Mage
+"]],
+["soldier432", ["魔剑士", "Sword Mage
+"]],
+["soldier433", ["魔剑士", "Sword Mage
+"]],
+["soldier440", ["龙战士", "Dragon Warrior
+"]],
+["soldier441", ["龙战士", "Dragon Warrior
+"]],
+["soldier442", ["龙战士", "Dragon Warrior
+"]],
+["soldier443", ["龙战士", "Dragon Warrior
+"]],
+["soldier450", ["熔岩泰坦", "Lava Titan
+"]],
+["soldier451", ["熔岩泰坦", "Lava Titan
+"]],
+["soldier452", ["熔岩泰坦", "Lava Titan
+"]],
+["soldier453", ["熔岩泰坦", "Lava Titan
+"]],
+["soldier460", ["绿巨人", "Green Giant
+"]],
+["soldier461", ["绿巨人", "Green Giant
+"]],
+["soldier462", ["绿巨人", "Green Giant
+"]],
+["soldier463", ["绿巨人", "Green Giant
+"]],
+["soldier470", ["神圣骑士", "Sacred Knight
+"]],
+["soldier471", ["神圣骑士", "Sacred Knight
+"]],
+["soldier472", ["神圣骑士", "Sacred Knight
+"]],
+["soldier473", ["神圣骑士", "Sacred Knight
+"]],
+["soldier480", ["德鲁伊", "Druid
+"]],
+["soldier481", ["德鲁伊", "Druid
+"]],
+["soldier482", ["德鲁伊", "Druid
+"]],
+["soldier483", ["德鲁伊", "Druid
+"]],
+["soldier490", ["水系魔法师", "Water Mage
+"]],
+["soldier491", ["水系魔法师", "Water Mage
+"]],
+["soldier492", ["水系魔法师", "Water Mage
+"]],
+["soldier493", ["水系魔法师", "Water Mage
+"]],
+["soldier500", ["土系魔法师", "Earth Mage
+"]],
+["soldier501", ["土系魔法师", "Earth Mage
+"]],
+["soldier502", ["土系魔法师", "Earth Mage
+"]],
+["soldier503", ["土系魔法师", "Earth Mage
+"]],
+["soldier510", ["风系魔法师", "Wind Mage
+"]],
+["soldier511", ["风系魔法师", "Wind Mage
+"]],
+["soldier512", ["风系魔法师", "Wind Mage
+"]],
+["soldier513", ["风系魔法师", "Wind Mage
+"]],
+["soldier520", ["雷系魔法师", "Thunder Mage
+"]],
+["soldier521", ["雷系魔法师", "Thunder Mage
+"]],
+["soldier522", ["雷系魔法师", "Thunder Mage
+"]],
+["soldier523", ["雷系魔法师", "Thunder Mage
+"]],
+["soldier530", ["巫师", "Sorcerer
+"]],
+["soldier531", ["巫师", "Sorcerer
+"]],
+["soldier532", ["巫师", "Sorcerer
+"]],
+["soldier533", ["巫师", "Sorcerer
+"]],
+["soldier540", ["赛亚人", "Saiyan
+"]],
+["soldier541", ["赛亚人", "Saiyan
+"]],
+["soldier542", ["赛亚人", "Saiyan
+"]],
+["soldier543", ["赛亚人", "Saiyan
+"]],
+["soldier550", ["火精灵", "Fire Fairy
+"]],
+["soldier551", ["火精灵", "Fire Fairy
+"]],
+["soldier552", ["火精灵", "Fire Fairy
+"]],
+["soldier553", ["火精灵", "Fire Fairy
+"]],
+["soldier560", ["火枪地精", "Musket Goblin
+"]],
+["soldier561", ["火枪地精", "Musket Goblin
+"]],
+["soldier562", ["火枪地精", "Musket Goblin
+"]],
+["soldier563", ["火枪地精", "Musket Goblin
+"]],
+["soldier570", ["幻影射手", "Phantom Archer
+"]],
+["soldier571", ["幻影射手", "Phantom Archer
+"]],
+["soldier572", ["幻影射手", "Phantom Archer
+"]],
+["soldier573", ["幻影射手", "Phantom Archer
+"]],
+["soldier580", ["火箭地精", "Rocket Goblin
+"]],
+["soldier581", ["火箭地精", "Rocket Goblin
+"]],
+["soldier582", ["火箭地精", "Rocket Goblin
+"]],
+["soldier583", ["火箭地精", "Rocket Goblin
+"]],
+["soldier590", ["凤凰战士", "Phoenix Warrior
+"]],
+["soldier591", ["凤凰战士", "Phoenix Warrior
+"]],
+["soldier592", ["凤凰战士", "Phoenix Warrior
+"]],
+["soldier593", ["凤凰战士", "Phoenix Warrior
+"]],
+["soldier1010", ["强盗", "Robber
+"]],
+["soldier1020", ["兽人", "Beast Man
+"]],
+["soldier1030", ["森林魅影", "Forest Phantom
+"]],
+["soldier1040", ["森林蜘蛛", "Forest Spider
+"]],
+["soldier1050", ["森林巨兽", "Forest Beast
+"]],
+["soldier1060", ["半人马", "Centaur
+"]],
+["soldier1070", ["金刚", "King Kong
+"]],
+["soldier1080", ["哥布林", "Goblin
+"]],
+["soldier1090", ["土匪", "Bandit
+"]],
+["soldier1100", ["猫女", "Cat Girl
+"]],
+["soldier1110", ["土匪头子", "Bandit Leader
+"]],
+["soldier1120", ["牛头人", "Tauren
+"]],
+["soldier1130", ["翼人", "Harpy
+"]],
+["soldier1140", ["平原霸王龙", "Plain T-Rex
+"]],
+["soldier1150", ["水系钢铁人", "Aquatic Ironman
+"]],
+["soldier1160", ["水系巨兽", "Aquatic Beast
+"]],
+["soldier1170", ["黑袍射手", "Robe Archer
+"]],
+["soldier1180", ["水系霸王龙", "Aquatic T-Rex
+"]],
+["soldier1190", ["水系钢铁王", "Aquatic Iron King
+"]],
+["soldier1200", ["恶魔", "Demon
+"]],
+["soldier1210", ["西斯", "Sith
+"]],
+["soldier1220", ["水系魅影", "Aquatic Phantom
+"]],
+["soldier1230", ["西方邪恶龙", "Evil Dragon
+"]],
+["soldier1240", ["洞穴霸王龙", "Cave T-Rex
+"]],
+["soldier1250", ["洞穴蜘蛛", "Cave Spider
+"]],
+["soldier1260", ["洞穴狼人", "Cave Werewolf
+"]],
+["soldier1270", ["洞穴巨兽", "Cave Monster
+"]],
+["soldier1280", ["洞穴钢铁人", "Cave Ironman
+"]],
+["soldier1290", ["洞穴钢铁王", "Cave Iron King
+"]],
+["soldier1300", ["骷髅将军", "Skelegeneral 
+"]],
+["soldier1310", ["暗夜魔王", "Night Stalker
+"]],
+["soldier1320", ["地狱三头犬", "Cerberus 
+"]],
+["soldier1330", ["雪山蜘蛛", "Snow Spider
+"]],
+["soldier1340", ["雪山狼人", "Snow Werewolf
+"]],
+["soldier1350", ["雪山猿人", "Snow Ape
+"]],
+["soldier1360", ["钢铁侠", "Iron Man
+"]],
+["soldier1370", ["雪山魅影", "Snow Phantom
+"]],
+["soldier1380", ["黑暗魔君", "Dark Lord
+"]],
+["soldier444", ["龙", "Dragon
+"]],
+["soldier484", ["大地之熊", "Earth Bear
+"]],
+["soldier594", ["凤凰", "Phoenix
+"]],
+["soldier554", ["火之灵", "Fire Spirit
+"]],
 ["soldier-2", ["城墙", ""]],
 ["title0", "购买[NAME]"],
 ["title1", "登录天数"],
@@ -534,9 +819,9 @@ var strings = dict([
 ["title21", "赠送邻居礼物"],
 ["title22", "帮助好友开宝箱"],
 ["title24", "招募士兵"],
-["title25", "闯关拯救公主"],
+["title25", "前往拯救公主"],
 ["title27", "新手任务完成"],
-["title28", "种植收获农作物"],
+["title28", "收获农作物"],
 ["title74", "收获水晶矿"],
 ["title29", "捡起掉落物品"],
 ["title30", "清除士兵状态"],
@@ -654,7 +939,7 @@ var strings = dict([
 ["des71", "掠夺[NUM]个银币"],
 ["des72", "掠夺[NUM]个水晶"],
 ["des73", "获取[NUM]颗闯关星星"],
-["des75", "挑战排行榜其它用户"],
+["des75", "挑战排行榜玩家"],
 ["des76", "任务描述"],
 ["des77", "任务描述"],
 ["des78", "任务描述"],
@@ -677,15 +962,23 @@ var strings = dict([
 ["magicStoneDes3", ""],
 ["skills0", ["红色冲击波", "0"]],
 ["skills1", ["蓝色冲击波", "0"]],
-["skills2", ["刀气", "0"]],
-["skills3", ["火焰球", "0"]],
-["skills4", ["火焰雨", "0"]],
-["skills5", ["闪电", "0"]],
-["skills6", ["流星", "0"]],
-["skills7", ["流星雨", "0"]],
-["skills8", ["眩晕", "0"]],
+["skills2", ["刀气", "Bladekee
+"]],
+["skills3", ["单个火焰", "Single Flame
+"]],
+["skills4", ["火焰雨", "Flame Shower
+"]],
+["skills5", ["蓝色闪电", "Blue Lightening
+"]],
+["skills6", ["单个流星", "Single Meteor
+"]],
+["skills7", ["流星雨", "Meteor Shower
+"]],
+["skills8", ["眩晕", "Dizzy
+"]],
 ["skills9", ["拯救", "0"]],
-["skills10", ["单体治疗", "0"]],
+["skills10", ["补血", "Healing
+"]],
 ["skills11", ["群体治疗", "0"]],
 ["skills12", ["龙变身", "0"]],
 ["skills13", ["火人变身", "0"]],
