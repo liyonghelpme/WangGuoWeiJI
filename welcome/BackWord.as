@@ -96,7 +96,9 @@ class BackWord extends MyNode
 
         scene = sc;
         totalNum = 0;
+        trace("BackWord is", w);
         word = w.split("\n");
+        trace("BackWord is", word);
         
         callback = cb;
 
