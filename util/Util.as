@@ -739,6 +739,7 @@ function getAllDataList(kind)
 
 //按照等级来分类 数据
 //可以初始化时构造level更新数组
+//升级士兵 只有 id % 10 == 0 的类型
 function getAllData(kind)
 {
     var datas = dict();
@@ -746,6 +747,10 @@ function getAllData(kind)
     for(var i = 0; i < len(key); i++)
     {
         var d = getData(kind, key[i]);
+        if(kind == SOLDIER && key[i]%10 != 0)
+        {
+            continue;
+        }
         var lev = datas.get(d.get("level"), []);
         lev.append([kind, d]);
         datas.update(d.get("level"), lev);

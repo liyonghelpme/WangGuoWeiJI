@@ -248,14 +248,16 @@ class MenuLayer extends MyNode
         var ret = global.taskModel.checkShowThreeIcon()
         if(ret)
         {
-            if(rated != 1)
-            {
-                funcs.append("rate");
-            }
             if(global.user.getValue("level") < getParam("inviteShowLevel"))
             {
                 funcs.append("invite");
             }
+
+            if(rated != 1)
+            {
+                funcs.append("rate");
+            }
+
             //没有反馈过 则 显示反馈图标
             if(global.user.db.get("feedback") != 1)
             {

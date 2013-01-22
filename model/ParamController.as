@@ -5,6 +5,7 @@ class ParamController
     var AnimateParams = dict();
     function ParamController()
     {
+        global.httpController.addRequest("getString", dict(), getString, null);
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
@@ -12,6 +13,16 @@ class ParamController
         global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
         global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
         global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
+    }
+    function getString(rid, rcode, con, param)
+    {
+        if(rcode != -1)
+        {
+            con = json_loads(con);
+            //strings = dict(con["strings"]);
+            //先不改物品名称
+            WORDS = dict(con["WORDS"]);
+        }
     }
     function getMapMonster(rid, rcode, con, param)
     {

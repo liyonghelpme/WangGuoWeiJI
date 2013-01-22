@@ -9,7 +9,8 @@ for i in res:
     commandList = json.loads(i['commandList'])
     for c in commandList:
         if c.get('tip') != None:
-            sql = "insert into Strings(`key`, `chinese`) values ('%s', '%s') on duplicate key update chinese='%s' "  % ('taskTip'+str(c['msgId']), c['tip'].encode('utf8'), c['tip'].encode('utf8'))
+            #sql = "insert into Strings(`key`, `chinese`) values ('%s', '%s') on duplicate key update chinese='%s' "  % ('taskTip'+str(c['msgId']), c['tip'].encode('utf8'), c['tip'].encode('utf8'))
+            sql = "insert ignore into Strings(`key`, `chinese`) values ('%s', '%s') "  % ('taskTip'+str(c['msgId']), c['tip'].encode('utf8'))
             print sql
             con.query(sql)
 

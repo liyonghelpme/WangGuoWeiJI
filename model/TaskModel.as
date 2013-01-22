@@ -52,7 +52,7 @@ class TaskModel
     //const SLOW_TASK = 3000;
     function update(diff)
     {
-        if(initYet == 0 && initCycleTask && initNewTask && initSolTask)
+        if(initYet == 0 && initCycleTask && initNewTask && initSolTask && initDataYet)
         {
             initYet = 1;
             global.msgCenter.sendMsg(UPDATE_TASK, null);
@@ -72,6 +72,7 @@ class TaskModel
 
     function TaskModel()
     {
+        global.msgCenter.registerCallback(INIT_TASK_DATA, this);//获取任务数据
         global.msgCenter.registerCallback(INITDATA_OVER, this);
         global.msgCenter.registerCallback(DO_NEW_TASK, this);
         global.timer.addTimer(this);
@@ -88,17 +89,13 @@ class TaskModel
     //同时完成多个新手任务
     //完成一个阶段 才能进入下一个阶段
     //当前新手任务的阶段
+    var initDataYet = 0;
     function receiveMsg(param)
     {
         var msid = param[0];
-        if(msid == INITDATA_OVER)
-        {
-            //初始化新手任务 阶段 和 所有任务 完成状态 ---> 完成则更新阶段
-            //newTaskStage = global.user.getValue("newTaskStage");
-            if(checkInNewTask())
-            {
-                global.director.setMask(1);
-            }
+        //login 结束之后 立即开始初始化 任务数据
+        //完成新手剧情之后就可以进入游戏
+        if(msid == INIT_TASK_DATA) {
             if(getParam("debugTask")) {
                 newUserTask = null;
                 localCycleTask = null;
@@ -108,6 +105,7 @@ class TaskModel
                 localCycleTask = global.user.db.get("localCycleTask");
                 localSolTask = global.user.db.get("localSolTask");
             }
+
             if(newUserTask == null)
             {
                 newUserTask = dict();
@@ -130,6 +128,14 @@ class TaskModel
                 global.user.db.put("localSolTask", localSolTask);
             }
             checkAvailableSolTask();
+
+        } else if(msid == INITDATA_OVER) {
+            //初始化新手任务 阶段 和 所有任务 完成状态 ---> 完成则更新阶段
+            //newTaskStage = global.user.getValue("newTaskStage");
+            if(checkInNewTask())
+            {
+                global.director.setMask(1);
+            }
             
             //完成每日登录循环任务
             //第一次登录 没有初始化 localCycle 中的任务所以无法显示
@@ -147,6 +153,9 @@ class TaskModel
 
             }
             trace("init all task", initCycleTask, initSolTask);
+
+            //需要初始化数据之后 才可以发送任务
+            initDataYet = 1;
         }
         //获取当前阶段没有完成的新手任务
         else if(msid == DO_NEW_TASK)
@@ -848,7 +857,7 @@ class TaskModel
     //显示新手任务3个图标 打分
     function checkShowThreeIcon()
     {
-        if(global.user.getValue("newTaskStage") >= getParam("showStart") && global.user.getValue("newTaskStage") < getParam("showFinish"))
+        if(global.user.getValue("newTaskStage") >= getParam("showStart"))
             return 1;
         return 0;
     }

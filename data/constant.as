@@ -584,6 +584,7 @@ const PAUSE_GAME = 49;
 const RESUME_GAME = 50;
 const MOVE_TO_POINT = 51;
 const FINISH_NEW_TASK = 52;
+const INIT_TASK_DATA = 53;//只是初始化任务 数据但是不初始化任务模块
 
 
 

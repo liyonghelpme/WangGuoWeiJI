@@ -864,8 +864,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     function disappearSoldier(so)
     {
         removeSoldier(so);
-        if(scene.kind != CHALLENGE_TRAIN)
-            checkGameOver();
+        checkGameOver();
     }
     function saveSoldier(so)
     {
