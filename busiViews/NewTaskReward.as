@@ -48,6 +48,9 @@ class NewTaskReward extends MyNode
         but0 = new NewButton("roleNameBut1.png", [174, 54], getStr("ok", null), null, 27, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(519, 402);
         addChild(but0);
+        var okBut = but0;
+        global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), SHOW_NEW_TASK_REWARD, onOk);
+
         temp = bg.addsprite("leftBalloon.png").anchor(0, 0).pos(41, 73).size(136, 302).color(100, 100, 100, 100);
         temp = bg.addsprite("rightBalloon.png").anchor(0, 0).pos(664, 43).size(120, 343).color(100, 100, 100, 100);
     }
@@ -60,7 +63,7 @@ class NewTaskReward extends MyNode
     {
         global.director.popView();
 
-        global.msgCenter.sendMsg(FINISH_NEW_TASK, null);//新手任务完成清理所有的NewTaskMask
-        global.taskModel.doNewTaskByKey("finish"+str(global.taskModel.newTaskStage), 1);
+        //global.msgCenter.sendMsg(FINISH_NEW_TASK, null);//新手任务完成清理所有的NewTaskMask
+        global.taskModel.doNewTaskByKey("finish"+str(global.user.getValue("newTaskStage")), 1);
     }
 }

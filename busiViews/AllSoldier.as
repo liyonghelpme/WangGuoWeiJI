@@ -171,20 +171,24 @@ class AllSoldier extends MyNode
 
                 panel.addlabel(name, "fonts/heiti.ttf", 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
 
-
-                var initX = 23;
-                var initY = 159;
-                for(var k = 0; k < 4; k++)
+                var sData = getData(SOLDIER, id);
+                if(sData["solOrMon"] == 0)
                 {
-                    var filter = WHITE;
-                    if(k > level)
-                        filter = GRAY;
-                    if(k < 3)
-                        panel.addsprite("soldierLev0.png", filter).pos(initX, initY);
-                    else
-                        panel.addsprite("soldierLev1.png", filter).pos(initX, initY);
-                    initX += 27;
+                    var initX = 23;
+                    var initY = 159;
+                    for(var k = 0; k < 4; k++)
+                    {
+                        var filter = WHITE;
+                        if(k > level)
+                            filter = GRAY;
+                        if(k < 3)
+                            panel.addsprite("soldierLev0.png", filter).pos(initX, initY);
+                        else
+                            panel.addsprite("soldierLev1.png", filter).pos(initX, initY);
+                        initX += 27;
+                    }
                 }
+
                 panel.put(curNum);
             }
         }

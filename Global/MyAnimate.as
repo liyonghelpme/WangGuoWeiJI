@@ -64,46 +64,44 @@ class MyAnimate
     //var lastTime;
     var accTime;
     var duration;
+
+    var realAni = null;
+    //循环播放动画
     function MyAnimate(d, a, b)
     {
         bg = b;
         duration = d;
         ani = a;
-        //cus = customaction(duration, start, update);
-        //lastTime = time();
         accTime = 0;
 
-
+        realAni = repeat(animate(duration, ani, ARGB_8888, UPDATE_SIZE));
     }
     function setAni(a)
     {
         ani = a[0];
         duration = a[1];
         accTime = 0;
+        realAni.stop();
+        realAni = repeat(animate(duration, ani, ARGB_8888, UPDATE_SIZE));
     }
     function enterScene()
     {
-        //trace("custome animate enter scene");
         global.myAction.addAct(this);
+        bg.addaction(realAni);
     }
     function update(diff)
     {
-        //var now = time();
-        //var diff = now - lastTime;
-        //lastTime = now;
-        //trace("update ", diff);
         accTime += diff;
         accTime %= duration;
-        var curFrame = accTime*len(ani)/duration;
-        bg.texture(ani[curFrame], ARGB_8888, UPDATE_SIZE);
     }
     function exitScene()
     {
-//        trace("custom animate exit scene");
+        realAni.stop();
         global.myAction.removeAct(this);
     }
 }
 //选择英雄页面 英雄的 闪光动画  英雄图片上面有一个贴层 用于显示全闪光 也就是分离size 和 图内容， 但是动画的时候 需要调整这个背景的size和图内容
+//一次性动画
 class LightAnimate
 {
     var bg;
@@ -113,6 +111,8 @@ class LightAnimate
     var restore = 0;
     var oldTexture;
     var callback;//动画结束调用回调函数 处理
+
+    var realAni = null;
     function LightAnimate(d, a, b, old, re, cb)
     {
         restore = re;
@@ -122,26 +122,23 @@ class LightAnimate
         ani = a;
         accTime = 0;
         callback = cb;
+        realAni = animate(duration, ani, ARGB_8888, UPDATE_SIZE);
     }
 
-    /*
-    function reverseAni()
-    {
-        ani.reverse();
-        accTime = 0;
-    }
-    */
     function setAni(a, re)
     {
         restore = re;
-
         ani = a[0];
         duration = a[1];
         accTime = 0;
+
+        realAni.stop();
+        realAni = animate(duration, ani, ARGB_8888, UPDATE_SIZE);
     }
     function enterScene()
     {
         global.myAction.addAct(this);
+        bg.addaction(realAni);
     }
     function update(diff)
     {
@@ -158,15 +155,14 @@ class LightAnimate
                 callback();
             return;
         }
-        accTime %= duration;
-        var curFrame = accTime*len(ani)/duration;
-        bg.texture(ani[curFrame], ARGB_8888, UPDATE_SIZE);
     }
     function exitScene()
     {
+        realAni.stop();
         global.myAction.removeAct(this);
     }
 }
+//传入数组动画 ani 
 class OneAnimate
 {
     var bg;
@@ -175,6 +171,8 @@ class OneAnimate
     var duration;
     var restore = 0;
     var oldTexture;
+
+    var realAni = null;
     function OneAnimate(d, a, b, old, re)
     {
         restore = re;
@@ -183,15 +181,9 @@ class OneAnimate
         duration = d;
         ani = a;
         accTime = 0;
+        realAni = animate(duration, ani, ARGB_8888, UPDATE_SIZE);
     }
 
-    /*
-    function reverseAni()
-    {
-        ani.reverse();
-        accTime = 0;
-    }
-    */
     function setAni(a, re)
     {
         restore = re;
@@ -199,10 +191,14 @@ class OneAnimate
         ani = a[0];
         duration = a[1];
         accTime = 0;
+        realAni.stop();
+        realAni = animate(duration, ani, ARGB_8888, UPDATE_SIZE);
     }
     function enterScene()
     {
         global.myAction.addAct(this);
+        realAni.stop();
+        bg.addaction(realAni);
     }
     function update(diff)
     {
@@ -217,12 +213,10 @@ class OneAnimate
                 bg.texture(ani[len(ani)-1], ARGB_8888, UPDATE_SIZE);
             return;
         }
-        accTime %= duration;
-        var curFrame = accTime*len(ani)/duration;
-        bg.texture(ani[curFrame], ARGB_8888, UPDATE_SIZE);
     }
     function exitScene()
     {
+        realAni.stop();
         global.myAction.removeAct(this);
     }
 }

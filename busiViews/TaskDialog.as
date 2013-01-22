@@ -263,7 +263,7 @@ class TaskDialog extends MyNode
         cl.setevent(EVENT_TOUCH, touchBegan);
         cl.setevent(EVENT_MOVE, touchMoved);
         cl.setevent(EVENT_UNTOUCH, touchEnded);
-        global.taskModel.doNewTaskByKey("checkTask", 1);
+        //global.taskModel.doNewTaskByKey("checkTask", 1);
 
         initData();
         updateTab();
@@ -500,6 +500,7 @@ class TaskDialog extends MyNode
     {
         super.enterScene();
         global.msgCenter.registerCallback(UPDATE_EXP, this);
+        global.taskModel.doAllTaskByKey("showTaskDialog", 1);
     }
 
     function receiveMsg(param)

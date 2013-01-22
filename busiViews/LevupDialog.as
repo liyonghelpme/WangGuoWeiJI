@@ -59,13 +59,14 @@ class LevupDialog extends MyNode
         but0.bg.pos(519, 402);
         addChild(but0);
 
+        //进入下一个新手任务
         var okBut = but0;
-        global.taskModel.showHintArrow(okBut, okBut.prepare().size(), RANDOM_BUT, okLevel);
+        global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), LEVEL_UP_NOW, okLevel);
     }
     function okLevel()
     {
         global.director.popView();
-        global.taskModel.doAllTaskByKey("showNewStage"+str(global.taskModel.newTaskStage), 1);
+        global.taskModel.doAllTaskByKey("levelUpNow"+str(global.user.getValue("level")), 1);//当前等级编号
     }
 
     function onShare()

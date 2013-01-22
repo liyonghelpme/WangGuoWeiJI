@@ -13,7 +13,6 @@ class TreasureBox extends MyNode
 
         global.tashModel.doAllTaskByKey("helpOpenBox", 1);
     }
-//temp = bg.addsprite("friendBlock.png").anchor(0, 0).pos(196, 184).size(55, 55).color(100, 100, 100, 100);
     //帮助别人开启宝箱初始化头像
     function initHead()
     {
@@ -87,7 +86,7 @@ class TreasureBox extends MyNode
             else//没有人空位
             {
                 temp.addsprite("unkownFriendHead.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onSelfOpen);
-                but0 = new NewButton("greenButton0.png", [60, 23], getStr("oneGold", ["[NUM]", str(PARAMS["selfOpenGold"])]), null, 15, FONT_NORMAL, [0, 0, 0], onSelfOpen, null);
+                but0 = new NewButton("greenButton0.png", [60, 23], getStr("oneGold", ["[NUM]", str(getParam("selfOpenGold"))]), null, 15, FONT_NORMAL, [0, 0, 0], onSelfOpen, null);
                 but0.bg.pos(29, 71);
                 temp.add(but0.bg);
             }
@@ -106,6 +105,7 @@ class TreasureBox extends MyNode
         else
         {
             opened = 0;
+            global.user.doCost(dict([["gold", getParam("selfOpenGold")]]));
             global.httpController.addRequest("friendC/selfOpen", dict([["uid", global.user.uid]]), null, null);
             global.user.selfOpen();
             updateState();
@@ -121,9 +121,14 @@ class TreasureBox extends MyNode
     function genBoxReward()
     {
         var reward = [];
-        var allDrugs = drugData.keys(); 
-        var rd = rand(len(allDrugs));
-        reward.append([DRUG, allDrugs[rd], 1]);
+
+        //药水数量少于最大限制可以获得新药水
+        if(global.user.getDrugTotalNum() < getParam("maxDrugNum"))
+        {
+            var allDrugs = drugData.keys(); 
+            var rd = rand(len(allDrugs));
+            reward.append([DRUG, allDrugs[rd], 1]);
+        }
         
         var allEquip = equipData.keys();
         var level = global.user.getValue("level");

@@ -156,6 +156,17 @@ class Director
         stack.append(view);
 //        trace("push Page", len(stack));
     }
+    var needMask = 0;
+    function setMask(m)
+    {
+        needMask = m;
+        if(needMask == 0)
+            removeNewTaskMask();
+        //新手剧情完成之后 首先出现 经营场景接着才是初始化数据 信号发送这时候 需要检测经营页面是否已经显示了Mask 没有则显示
+        else if(GlobalNewTaskMask == null){//如果当前显示的场景没有添加Mask 则添加
+            showNewTaskMask(null, null);
+        }
+    }
     function replaceScene(view)
     {
         curScene.removeSelf();
@@ -167,6 +178,14 @@ class Director
         getscene().add(curScene.bg, 0);
         curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
         curScene.bg.focus(1);
+
+        //罩子自动阻挡系统
+        //自动遮挡场景
+        if(needMask)
+        {
+            showNewTaskMask(null, null);
+        }
+
         curScene.enterScene();
         trace("replaceScene");
         if(getParam("debugNewTask"))
@@ -174,6 +193,8 @@ class Director
             taskHintDebug.removefromparent();
             curScene.bg.add(taskHintDebug, MASK_ZORD);
         }
+        //切换场景时新场景也需要有 Mask 怎么办？
+
     }
     function updateTaskHint(w)
     {

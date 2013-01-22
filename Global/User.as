@@ -431,6 +431,9 @@ class User
             if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
             {
                 //global.msgCenter.sendMsg(LOAD_PROCESS, 80);
+                //新手阶段不初始化其它数据 只有在新手剧情结束的时候才初始化其它数据 
+                //放置数据bug
+                //TaskModel 会设定Director罩子启用
                 global.msgCenter.sendMsg(NEW_USER, null);
                 return;
             }
@@ -502,7 +505,9 @@ class User
             loadTip = 0;
             db.put("loadTip", loadTip);
         }
+        //设定 新手任务状态为0 用于TaskModel 初始化使用
         resource = dict();
+        setValue("newTaskStage", 0);
         buildings = dict();
         soldiers = dict();
         drugs = dict();
@@ -1155,7 +1160,10 @@ class User
             {
                 //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
                 //不能计算升级奖励 因为post方法传送的dict存在问题不能正确解析key
-                global.msgCenter.sendMsg(LEVEL_UP, null);
+                //不在新手过程中 可以弹出升级对话框 
+                if(!global.taskModel.checkInNewTask())
+                    global.msgCenter.sendMsg(LEVEL_UP, null);
+
                 global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()]]), null, null);
                 addV = 0;
                 global.taskModel.doAllTaskByKey("levelUp", level);//升级任务是直接比较数值而不是 累计数值

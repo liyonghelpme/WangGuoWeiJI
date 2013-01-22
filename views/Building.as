@@ -236,7 +236,7 @@ class Building extends MyNode
     function showHarvestArrow()
     {
         map.map.moveToBuild(this);
-        global.taskModel.showHintArrow(bg, bg.size(), HARVEST_SOL, funcBuild.whenBusy());
+        global.taskModel.showHintArrow(bg, bg.size(), HARVEST_SOL, funcBuild.whenBusy);
     }
 
     function receiveMsg(param)

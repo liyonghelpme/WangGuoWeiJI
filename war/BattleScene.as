@@ -106,11 +106,6 @@ class BattleScene extends MyNode
         global.msgCenter.registerCallback(PAUSE_GAME, this);
         global.msgCenter.registerCallback(RESUME_GAME, this);
 
-        if(global.taskModel.checkInNewTask())
-        {
-            trace("BattleScene NewTaskMask");
-            global.director.curScene.addChildZ(new NewTaskMask(null, null), SCENE_MASK_ZORD);
-        }
     }
 
     function receiveMsg(param)

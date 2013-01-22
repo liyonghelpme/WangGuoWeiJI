@@ -102,9 +102,9 @@ class MapPause extends MyNode
             bg.addlabel(global.user.name, "fonts/heiti.ttf", 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
             temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(51, 41).size(68, 63).color(100, 100, 100, 100);
             //自己头像
-            temp = bg.addsprite(avatar_url(global.user.papayaId)).anchor(50, 50).pos(52, 41).color(100, 100, 100, 100);
+            temp = bg.addsprite("boss"+str(global.user.getValue("heroId"))+".png").anchor(50, 50).pos(52, 41).color(100, 100, 100, 100).scale(-100, 100);
             sca = getSca(temp, [63, 56]);
-            temp.scale(sca);
+            temp.scale(-sca, sca);
             leftText = bg.addlabel("", "fonts/heiti.ttf", 28).anchor(0, 50).pos(91, 29).color(0, 0, 0);
 
             //转向放置
@@ -125,7 +125,7 @@ class MapPause extends MyNode
             //或者构建一个底层的库用于快速获取服务器返回的用户信息----->uid---->information
             //User Information Manager
             if(scene.kind == CHALLENGE_MON)//怪兽暂时用bossId
-                temp = bg.addsprite("soldier"+str(1380)+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
+                temp = bg.addsprite("boss"+str(1380)+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
             else
                 temp = bg.addsprite("soldier"+str(scene.user["heroId"])+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
 

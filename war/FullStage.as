@@ -47,7 +47,7 @@ class FullStage extends EffectBase
     {
         var tPos = tar.getPos();
         var dist = abs(bg.pos()[0]-tPos[0]);
-        timeAll[FLY_NOW] = dist*1000/speed;        
+        timeAll[FLY_NOW] = max(dist*1000/speed, getParam("minFlyTime"));        
 
 
         var fullStage = getEffectAni(sol.id);

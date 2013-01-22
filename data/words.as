@@ -688,4 +688,5 @@ var WORDS = dict([
 ["taskTip132", "点击水晶矿"],
 ["taskTip134", "点击挑战按钮"],
 ["taskTip135", "点击挑战按钮"],
+["taskTip139", "点击任务按钮"],
 ]);

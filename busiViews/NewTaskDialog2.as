@@ -103,11 +103,11 @@ class NewTaskDialog2 extends MyNode
         addChild(but0);
         bg.addlabel(getStr("finishNewTask", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(401, 137).color(47, 26, 30);
         bg.addlabel(getStr("newTaskReward", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(404, 118).color(30, 17, 5);
-        temp = bg.addsprite("newTask"+str(global.taskModel.newTaskStage)+".png", ARGB_8888).anchor(50, 50).pos(413, 54).color(100, 100, 100, 100);
+        temp = bg.addsprite("newTask"+str(global.user.getValue("newTaskStage"))+".png", ARGB_8888).anchor(50, 50).pos(413, 54).color(100, 100, 100, 100);
 
-        if(global.taskModel.newTaskStage == 0)
+        if(global.user.getValue("newTaskStage") == 0)
             initStageOneView();
-        else if(global.taskModel.newTaskStage == 1)
+        else if(global.user.getValue("newTaskStage") == 1)
             initStageTwoView();
     }
     /*
@@ -116,6 +116,6 @@ class NewTaskDialog2 extends MyNode
     function closeDialog()
     {
         global.director.popView();
-        global.taskModel.doAllTaskByKey("showNewStage"+str(global.taskModel.newTaskStage), 1);
+        global.taskModel.doAllTaskByKey("showNewStage"+str(global.user.getValue("newTaskStage")), 1);
     }
 }

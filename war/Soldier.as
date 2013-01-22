@@ -88,6 +88,15 @@ class Soldier extends MyNode
        var needPos = getSolPos(curMap[0], curMap[1], sx, sy, data["offY"]);
        return (needPos[0]-bg.pos()[0]) == 0;
     }
+    function checkTarInRange()
+    {
+        var tarPos = getSolPos(tar.curMap[0], tar.curMap[1], tar.sx, tar.sy, tar.data["offY"]);
+        if((curMap[0]+sx+attRange) == tar.curMap[0] || curMap[0] == (tar.curMap[0]+tar.sx+attRange))//刚好移动到攻击边界
+        {
+            return tar.checkMoveToTargetPos();
+        }
+        return 1;
+    }
     //鲁棒的移动
     //移动到目的地 
     //还在半路
@@ -110,7 +119,7 @@ class Soldier extends MyNode
         //相交
         var cheDis = checkTarDistance();
         var iInPos = checkMoveToTargetPos();
-        var tInPos = tar.checkMoveToTargetPos();//城墙
+        var tInPos = checkTarInRange();//检测攻击目标
         if(cheDis && iInPos && tInPos)//我移动到目标位置 目标也移动到目标位置 开始攻击
         {
             pushCommand(BEGIN_ATTACK, null);
@@ -690,7 +699,11 @@ class Soldier extends MyNode
 
         if(id != getParam("mapDefenseId"))
         {
-            changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100);
+            var fil = ARGB_8888;
+            //if(data["needArgb"])
+            //    fil = ARGB_8888;
+
+            changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", fil).anchor(50, 100);
             changeDirNode.prepare();
             bSize = changeDirNode.size();
 
@@ -1039,7 +1052,9 @@ class Soldier extends MyNode
 
         load_sprite_sheet("soldierfm"+str(id)+".plist");
         load_sprite_sheet("soldierfa"+str(id)+".plist");
-        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE);
+
+        var fil = ARGB_8888;
+        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE, fil);
  
         var feaFil = FEA_BLUE;
         if(color == ENECOLOR)
@@ -1262,7 +1277,9 @@ class Soldier extends MyNode
         attTime = 0;
         movAni.clearAnimation();
         attAni.clearAnimation();
-        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE);
+
+        var fil = ARGB_8888;
+        changeDirNode.texture("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", UPDATE_SIZE, fil);
     }
     var deadTime = 0;
     var DEAD_TIME = getParam("solDeadTime");

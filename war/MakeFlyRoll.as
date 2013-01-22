@@ -32,7 +32,7 @@ class MakeFlyRoll extends EffectBase
     {
         var tPos = tar.getPos();
         var dist = abs(bg.pos()[0]-tPos[0]);
-        timeAll[FLY_NOW] = dist*1000/speed;   
+        timeAll[FLY_NOW] = max(dist*1000/speed, getParam("minFlyTime"));   
 
         bg.texture("s"+str(sol.id)+"e0.png", UPDATE_SIZE);
 

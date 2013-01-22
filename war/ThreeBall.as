@@ -31,7 +31,7 @@ class ThreeBall extends EffectBase
     {
         var tPos = tar.getPos();
         var dist = abs(bg.pos()[0]-tPos[0]);
-        timeAll[FLY_NOW] = dist*1000/speed;        
+        timeAll[FLY_NOW] = max(dist*1000/speed, getParam("minFlyTime"));        
 
         shiftAni = moveto(timeAll[FLY_NOW], tPos[0], bg.pos()[1]);
         bg.addaction(shiftAni);

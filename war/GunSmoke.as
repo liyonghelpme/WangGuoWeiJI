@@ -24,7 +24,7 @@ class GunSmoke extends EffectBase
     {
         var tPos = tar.getPos();
         var dist = abs(bg.pos()[0]-tPos[0]);
-        timeAll[FLY_NOW] = dist*1000/speed;        
+        timeAll[FLY_NOW] = max(dist*1000/speed, getParam("minFlyTime"));        
 
         var n = timeAll[FLY_NOW]/300*360;
         n += timeAll[FLY_NOW]%300*360/300;

@@ -156,13 +156,14 @@ class MenuLayer extends MyNode
         global.msgCenter.registerCallback(INIT_NEW_TASK_FIN, this);
         global.msgCenter.registerCallback(CHECK_TASK_ICON, this);
         global.msgCenter.registerCallback(CHALLENGE_BUT, this);
+        global.msgCenter.registerCallback(OPEN_TASK_DIALOG, this);
 
         updateValue(global.user.resource);
         updateExp(0);
         updateTaskState();
         updateRightMenu();
 
-        //global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
+        global.taskModel.showHintArrow(menubutton, menubutton.prepare().size(), MENU_ICON, onClicked);
         //global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
     }
 
@@ -285,6 +286,10 @@ class MenuLayer extends MyNode
         if(downloadIcon != null)
             downloadIcon.bg.visible(1);
     }
+    /*
+    两种可能 第一次进入 新手剧情 新手任务
+    在经营页面同步完新手数据
+    */
     function receiveMsg(param)
     {
         var msgId = param[0];
@@ -307,9 +312,8 @@ class MenuLayer extends MyNode
             updateRightMenu(); 
         else if(msgId == CHALLENGE_BUT)
             global.taskModel.showHintArrow(collectionbutton, collectionbutton.prepare().size(), CHALLENGE_BUT, onRank);
-
-        //else if(msgId == CHECK_TASK_ICON)
-        //    global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), TASK_ICON);
+        else if(msgId == OPEN_TASK_DIALOG)
+            global.taskModel.showHintArrow(taskbutton, taskbutton.prepare().size(), OPEN_TASK_DIALOG, onTask);
     }
     function updateTaskState()
     {
@@ -332,6 +336,7 @@ class MenuLayer extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(OPEN_TASK_DIALOG, this);
         global.msgCenter.removeCallback(CHALLENGE_BUT, this);
         global.msgCenter.removeCallback(CHECK_TASK_ICON, this);
         global.msgCenter.removeCallback(INIT_NEW_TASK_FIN, this);
@@ -356,7 +361,7 @@ class MenuLayer extends MyNode
         updateValue(global.user.resource);
         updateExp(0);
 
-        if(global.taskModel.newTaskStage >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
+        if(global.user.getValue("newTaskStage") >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
         {
             downloadIcon = new DownloadIcon(this);
             addChild(downloadIcon);

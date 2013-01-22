@@ -59,7 +59,7 @@ class TaskModel
             trace("initTaskOver", len(localCycleTask), len(localSolTask), len(newUserTask));
         }
         //当前没有任务 显示 则 自动发现任务 执行
-        if(initYet && !inCommand && newTaskStage < getParam("showFinish") && !getParam("stopNewTask"))
+        if(initYet && !inCommand && global.user.getValue("newTaskStage") < getParam("showFinish") && !getParam("stopNewTask"))
         {
             delayTime += diff;
             if(delayTime >= getParam("slowTask"))
@@ -81,7 +81,7 @@ class TaskModel
     已经完成的购买任务
     需要领取奖励的购买任务----》完成之后 显示在 任务对话框页面---》finishTask--->任务对话框更新显示
     */
-    var newTaskStage = 0;
+    //var newTaskStage = 0;
     //初始化 任务数据
     //当前新手任务完成状态-----> TASKID
     //任务状态存储在服务器段 task中
@@ -94,8 +94,20 @@ class TaskModel
         if(msid == INITDATA_OVER)
         {
             //初始化新手任务 阶段 和 所有任务 完成状态 ---> 完成则更新阶段
-            newTaskStage = global.user.getValue("newTaskStage");
-            newUserTask = global.user.db.get("newUserTask");
+            //newTaskStage = global.user.getValue("newTaskStage");
+            if(checkInNewTask())
+            {
+                global.director.setMask(1);
+            }
+            if(getParam("debugTask")) {
+                newUserTask = null;
+                localCycleTask = null;
+                localSolTask = null;
+            } else {
+                newUserTask = global.user.db.get("newUserTask");
+                localCycleTask = global.user.db.get("localCycleTask");
+                localSolTask = global.user.db.get("localSolTask");
+            }
             if(newUserTask == null)
             {
                 newUserTask = dict();
@@ -105,7 +117,6 @@ class TaskModel
             checkAvailableNewUserTask();
 
             //初始化循环任务 和 一次性任务
-            localCycleTask = global.user.db.get("localCycleTask");
             if(localCycleTask == null)
             {
                 localCycleTask = dict();
@@ -113,7 +124,6 @@ class TaskModel
             }
             checkAvailableCycleTask();
 
-            localSolTask = global.user.db.get("localSolTask");
             if(localSolTask == null)
             {
                 localSolTask = dict();
@@ -146,12 +156,14 @@ class TaskModel
     function findAvailableNewTask()
     {
         var allNew = getCurNewTask();
-        //trace("findAvailableNewTask", len(allNew));
+        if(getParam("debugNewTask"))
+            trace("findAvailableNewTask", len(allNew));
         for(var i = 0; i < len(allNew); i++)
         {
             //未完成 且 新手任务 没有被领取
             var ret = checkNewTaskState(allNew[i]);
-            //trace("alNew", allNew[i], ret);
+            if(getParam("debugNewTask"))
+                trace("alNew", allNew[i], ret);
             if(ret == TASK_DOING)
             {
                 startNewTask(allNew[i]);
@@ -162,23 +174,9 @@ class TaskModel
     //检测是否在 inCommand 或者 hasNewCommand 有新手任务
     function checkInNewTask()
     {
-        if(newTaskStage < getParam("showFinish"))
+        if(global.user.getValue("newTaskStage") < getParam("showFinish"))
         {
             return 1;//新手阶段没有完成
-        }
-
-        if(inCommand)
-            return 1;
-
-        var allNew = getCurNewTask();
-        for(var i = 0; i < len(allNew); i++)
-        {
-            //未完成 且 新手任务 没有被领取
-            var ret = checkNewTaskState(allNew[i]);
-            if(ret == TASK_DOING)
-            {
-                return 1;
-            }
         }
         return 0;
     }
@@ -251,7 +249,8 @@ class TaskModel
                     hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2+offX, bSize[1]+5+offY).anchor(50, 100).rotate(180).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
                 }
-                global.director.curScene.addChildZ(new NewTaskMask(pic, callbackFunc), MASK_ZORD);
+                trace("showNewTaskMask", pic, callbackFunc, commandList);
+                showNewTaskMask(pic, callbackFunc);
                 //其它情况不显示箭头
                 //默认显示向上箭头
                 
@@ -357,7 +356,7 @@ class TaskModel
     function doAllTaskByKey(k, num)
     {
         trace("doAllTaskByKey", k, num);
-        if(newTaskStage < getParam("showFinish"))
+        if(global.user.getValue("newTaskStage") < getParam("showFinish"))
             doNewTaskByKey(k, num);
         else
         {
@@ -415,8 +414,16 @@ class TaskModel
             //完成阶段任务 更新任务阶段
             if(taskData["stageTask"])
             {
-                newTaskStage++;
-                global.httpController.addRequest("taskC/updateNewTaskStage", dict([["uid", global.user.uid], ["newTaskStage", newTaskStage]]), null, null);
+                global.user.changeValue("newTaskStage", 1);
+                trace("stageTask", global.user.getValue("newTaskStage"));
+                //新手任务阶段结束 == 2 则删除所有的Mask
+                if(global.user.getValue("newTaskStage") == getParam("showFinish"))
+                {
+                    global.director.setMask(0);//关闭新手mask
+                    global.msgCenter.sendMsg(FINISH_NEW_TASK, null);
+                }
+
+                global.httpController.addRequest("taskC/updateNewTaskStage", dict([["uid", global.user.uid], ["newTaskStage", global.user.getValue("newTaskStage")]]), null, null);
                 global.msgCenter.sendMsg(INIT_NEW_TASK_FIN, null);
             }
             global.httpController.addRequest("taskC/doCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["num", num]]), null, null);
@@ -477,7 +484,7 @@ class TaskModel
     */
     function checkShowNewTask()
     {
-        if(newTaskStage <= getParam("showNewTaskStage"))
+        if(global.user.getValue("newTaskStage") < getParam("showNewTaskStage"))
         {
             var tasks = getCurNewTask();
             return len(tasks) > 0;
@@ -491,7 +498,7 @@ class TaskModel
         var curNewTask = [];
         for(var i = 0; i < len(allTask); i++)
         {
-            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == newTaskStage && allTask[i]["stageTask"] == 0 && allTask[i]["tipTask"] == 0 && allTask[i]["deleted"] == 0)
+            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == global.user.getValue("newTaskStage") && allTask[i]["stageTask"] == 0 && allTask[i]["tipTask"] == 0 && allTask[i]["deleted"] == 0)
             {
                 curNewTask.append(allTask[i]["id"]);
             }
@@ -506,7 +513,7 @@ class TaskModel
         var curNewTask = [];
         for(var i = 0; i < len(allTask); i++)
         {
-            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == newTaskStage && allTask[i]["deleted"] == 0)
+            if(allTask[i]["kind"] == NEW_TASK && allTask[i]["newTaskPeriod"] == global.user.getValue("newTaskStage") && allTask[i]["deleted"] == 0)
             {
                 curNewTask.append(allTask[i]["id"]);
             }
@@ -534,8 +541,8 @@ class TaskModel
         var taskData = getData(TASK, tid);
         var needNum = taskData["num"];
 
-        //新手任务 检测 查看stageNum 而不是stageArray
-        trace("checkNewTaskState", tid);
+        //新手任务 检测 查看stageNum 而不是stageArray 新手任务不用检测stageNum 数量 但是默认还是给1
+        trace("checkNewTaskState", tid, task, taskData);
         if(task["stage"] >= taskData["stageNum"])
             return TASK_REWARD_YET; 
         if(task["number"] >= needNum)
@@ -744,7 +751,7 @@ class TaskModel
 
     function doSolTaskByKey(key, sid, num)
     {
-        if(newTaskStage >= getParam("showFinish"))
+        if(global.user.getValue("newTaskStage") >= getParam("showFinish"))
         {
             var allPossible = localSolTask.keys();
             for(var i = 0; i < len(allPossible); i++)
@@ -841,18 +848,18 @@ class TaskModel
     //显示新手任务3个图标 打分
     function checkShowThreeIcon()
     {
-        if(newTaskStage >= getParam("showStart") && newTaskStage < getParam("showFinish"))
+        if(global.user.getValue("newTaskStage") >= getParam("showStart") && global.user.getValue("newTaskStage") < getParam("showFinish"))
             return 1;
         return 0;
     }
     //显示新手礼包
     function checkShowNewTaskGift()
     {
-        return newTaskStage < getParam("showStart");
+        return global.user.getValue("newTaskStage") < getParam("showStart");
     }
     //新手阶段任务完成
     function checkNewTaskFinish()
     {
-        return newTaskStage >= getParam("showFinish");
+        return global.user.getValue("newTaskStage") >= getParam("showFinish");
     }
 }

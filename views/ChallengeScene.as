@@ -52,6 +52,7 @@ class ChallengeScene extends MyNode
         //新手任务 阶段 
         //闯关
         //挑战
+        pictureManager = new PictureManager();
         if(global.taskModel.checkInNewTask())
         {
             if(kind == CHALLENGE_MON)
@@ -59,7 +60,6 @@ class ChallengeScene extends MyNode
             else if(kind == CHALLENGE_FRI)
                 enemies = getAllNew(0, 1);
 
-            pictureManager = new PictureManager();
             for(k = 0; k < len(enemies); k++)
             {
                 downloadList.append(enemies[k]["id"]);

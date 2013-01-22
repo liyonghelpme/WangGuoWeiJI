@@ -722,5 +722,22 @@ print 'var', 'NewUserMonsterKey', '=', json.dumps(key), ';'
 print 'var', 'NewUserMonsterData', '=', 'dict(', json.dumps(newUser), ');'
 """
 
+sql = 'select * from AttackEffectAnimate'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+ani = []
+for i in res:
+    ani.append([i['id'], [json.loads(i['animation']), i['time'], [0, 0], i['scale']]])
+print 'var', 'pureMagicData', '=', 'dict(', json.dumps(ani), ');' 
+
+
+sql = 'select * from soldierMagic'
+con.query(sql)
+magic = con.store_result().fetch_row(0, 1)
+mgList = []
+for i in magic:
+    mgList.append([i['id'], [i['make'], i['fly'], i['bomb']]])
+print 'var', 'magicAnimate', '=', 'dict(', json.dumps(mgList), ');'
+
 con.commit()
 con.close()

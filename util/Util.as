@@ -1252,3 +1252,24 @@ function printD(con)
     if(getParam("DEBUG"))
         trace(con);
 }
+
+var GlobalNewTaskMask = null;
+function showNewTaskMask(d, c)
+{
+    trace("showNewTaskMask", d, c);
+    if(GlobalNewTaskMask == null)
+    {
+        GlobalNewTaskMask = new NewTaskMask(null, null);
+    }
+    GlobalNewTaskMask.setDelegate(d, c);
+    GlobalNewTaskMask.removeSelf();
+    global.director.curScene.addChildZ(GlobalNewTaskMask, MASK_ZORD);
+}
+function removeNewTaskMask()
+{
+    if(GlobalNewTaskMask != null)
+    {
+        GlobalNewTaskMask.removeSelf();
+        GlobalNewTaskMask = null;
+    }
+}

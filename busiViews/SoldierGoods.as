@@ -186,7 +186,7 @@ class SoldierGoods extends MyNode
 
                 panel.addlabel(sData["name"], "fonts/heiti.ttf", 21).anchor(50, 50).pos(74, 25).color(29, 16, 4);
                 //用户招募第一个士兵 panel 防止箭头被遮挡
-                if(curNum == 0)
+                if(curNum == 0 && store.inCall == 0 && store.inAcc == 0)
                 {
                     panel.removefromparent();
                     flowNode.add(panel, 2);

@@ -229,6 +229,7 @@ class BusiSoldier extends MyNode
             curY -= 30;
         }
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
+        global.controller.playSound("pick.mp3");
     }
     /*
     修改士兵的id

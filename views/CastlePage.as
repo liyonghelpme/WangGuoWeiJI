@@ -161,7 +161,7 @@ class CastlePage extends MyNode
             }
             else
             {
-                if(global.taskModel.newTaskStage >= getParam("showFinish"))
+                if(global.user.getValue("newTaskStage") >= getParam("showFinish"))
                     global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
             }
         
@@ -178,7 +178,7 @@ class CastlePage extends MyNode
         trace("finishBox onMap");
 
         //新手任务完成才检测是否下载图片
-        if(global.taskModel.newTaskStage >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
+        if(global.user.getValue("newTaskStage") >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
         {
             dialogController.addCmd(dict([["cmd", "download"]])); 
         }
@@ -496,6 +496,7 @@ class CastlePage extends MyNode
         global.msgCenter.registerCallback(SHOW_NEW_STAGE, this);
         global.msgCenter.registerCallback(HAS_CHALLENGE_MSG, this);
         global.msgCenter.registerCallback(MOVE_TO_POINT, this);
+        global.msgCenter.registerCallback(LEVEL_UP_NOW, this);
         solNum.text(str(global.user.getSolNum()));
 
         //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
@@ -565,6 +566,9 @@ class CastlePage extends MyNode
         {
             dialogController.addCmd(dict([["cmd", "hasChallengeMsg"], ["challengeMsg", msg[1]]]));
         }
+        else if(msg[0] == LEVEL_UP_NOW)
+            dialogController.addCmd(dict([["cmd", "levup"], ["castlePage", this]]));
+
     }
     function remove(c)
     {
@@ -598,6 +602,7 @@ class CastlePage extends MyNode
     }
     override function exitScene()
     {
+        global.msgCenter.removeCallback(LEVEL_UP_NOW, this);
         global.msgCenter.removeCallback(MOVE_TO_POINT, this);
         global.msgCenter.removeCallback(HAS_CHALLENGE_MSG, this);
         global.msgCenter.removeCallback(SHOW_NEW_STAGE, this);

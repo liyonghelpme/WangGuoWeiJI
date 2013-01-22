@@ -60,12 +60,6 @@ class CastleScene extends MyNode
         global.msgCenter.registerCallback(PAUSE_GAME, this);
         global.msgCenter.registerCallback(RESUME_GAME, this);
         global.controller.playMedia("business.mp3");
-        
-        //显示遮挡罩子
-        if(global.taskModel.checkInNewTask())
-        {
-            global.director.curScene.addChildZ(new NewTaskMask(null, null), SCENE_MASK_ZORD);
-        }
     }
 
     var realDisappear = 0;
@@ -104,6 +98,9 @@ class CastleScene extends MyNode
         inSen = 0;
     }
 
+    function showSceneMask()
+    {
+    }
     function receiveMsg(param)
     {
 //        trace("receiveMsg", param);
@@ -123,6 +120,7 @@ class CastleScene extends MyNode
             global.msgCenter.sendMsg(LOAD_PROCESS, 85);
             ml.initDataOver();
             global.msgCenter.sendMsg(LOAD_PROCESS, 100);
+            showSceneMask();
         }
         //加载新手 页面
         //这里的 不能 100 Loading 页面自删除存在bug

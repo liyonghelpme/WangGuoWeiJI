@@ -92,6 +92,8 @@ function initAttackAndDefense(sol)
         {
             sol.health = 10;
             sol.healthBoundary = 10;
+            sol.attack = 1;
+            sol.defense = 0;
         }
     }
     printSol(sol);

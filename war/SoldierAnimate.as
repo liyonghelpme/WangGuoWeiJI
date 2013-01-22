@@ -10,6 +10,7 @@ class SoldierAnimate
     var duration;
     var colFea;
     var start = 0;
+    var realAni = null;
     function SoldierAnimate(d, a0, a1, b, f, col)
     {
         bg = b;
@@ -19,29 +20,37 @@ class SoldierAnimate
         accTime = 0;
         fea = f;
         colFea = col;
+
+        realAni = repeat(animate(duration, ani0, ARGB_8888, UPDATE_SIZE)); 
     }
     function enterScene()
     {
         global.myAction.addAct(this);
+        if(!start)
+        {
+            bg.addaction(realAni);
+        }
         start = 1;
     }
     function update(diff)
     {
         accTime += diff;
         accTime %= duration;
-        var curFrame = accTime*len(ani0)/duration;
-        bg.texture(ani0[curFrame], ARGB_8888, UPDATE_SIZE);
-        fea.texture(ani1[curFrame], ARGB_8888, colFea, UPDATE_SIZE);
+        //var curFrame = accTime*len(ani0)/duration;
+        //bg.texture(ani0[curFrame], ARGB_8888, UPDATE_SIZE);
+        //fea.texture(ani1[curFrame], ARGB_8888, colFea, UPDATE_SIZE);
     }
     function clearAnimation()
     {
         start = 0;
+        realAni.stop();
         global.myAction.removeAct(this);
         accTime = 0;
     }
     function exitScene()
     {
         start = 0;
+        realAni.stop();
         global.myAction.removeAct(this);
     }
 }
