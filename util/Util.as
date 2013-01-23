@@ -288,15 +288,6 @@ function getDayTime(t)
     return res;
 }
 
-
-function checkInTrain(p)
-{   
-    //trace("checkInTrain", p, TrainZone);
-    var difx = p[0] - TrainZone[0];
-    var dify = p[1] - TrainZone[1];
-    return difx > 0 && difx < TrainZone[2] && dify > 0 && dify < TrainZone[3]; 
-}
-
 /*
 返回菱形拼图的左上角第一块的中心的编号
 自动调整x y值 使其奇偶性相同

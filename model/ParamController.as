@@ -58,6 +58,7 @@ class ParamController
             con = json_loads(con);
             AnimateParams = con;
             initYet = 1;
+            global.msgCenter.sendMsg(FETCH_PARAM_OVER, null);
         }
     }
     function getAllSolIds(rid, rcode, con, param)

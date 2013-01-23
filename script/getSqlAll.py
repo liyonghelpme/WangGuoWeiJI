@@ -9,21 +9,21 @@ sql = 'select * from gold'
 con.query(sql)
 res = con.store_result().fetch_row(0, 1)
 for i in res:
-    sql = "update gold set name = '%s' where id = %d" % (str(i['gaingold'])+' 金币', i['id'])
+    sql = "update gold set name = '%s', engName='%s' where id = %d" % (str(i['gaingold'])+' 金币', str(i['gaingold'])+' Gold', i['id'])
     con.query(sql)
 
 sql = 'select * from silver'
 con.query(sql)
 res = con.store_result().fetch_row(0, 1)
 for i in res:
-    sql = "update silver set name = '%s' where id = %d" % (str(i['gainsilver'])+' 银币', i['id'])
+    sql = "update silver set name = '%s', engName='%s' where id = %d" % (str(i['gainsilver'])+' 银币', str(i['gainsilver'])+' Silver', i['id'])
     con.query(sql)
 
 sql = 'select * from crystal'
 con.query(sql)
 res = con.store_result().fetch_row(0, 1)
 for i in res:
-    sql = "update crystal set name = '%s' where id = %d" % (str(i['gaincrystal'])+' 水晶', i['id'])
+    sql = "update crystal set name = '%s', engName='%s' where id = %d" % (str(i['gaincrystal'])+' 水晶', str(i['gaincrystal'])+' Crystal', i['id'])
     con.query(sql)
 
 

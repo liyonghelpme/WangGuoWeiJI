@@ -3,8 +3,8 @@ class BuildLayer extends MoveMap
     var map;
     function BuildLayer(m)
     {
-        moveZone = TrainZone;   
-        buildZone = FullZone;
+        moveZone = [[getParam("TrainZoneX"), getParam("TrainZoneY"), getParam("TrainZoneWidth"), getParam("TrainZoneHeight") ]];   
+        buildZone = [[getParam("FullZoneX"), getParam("FullZoneY"), getParam("FullZoneWidth"), getParam("FullZoneHeight")]];
         map = m;
         bg = node();
         init();
@@ -47,6 +47,7 @@ class BuildLayer extends MoveMap
         global.msgCenter.registerCallback(SOL_TRANSFER, this);
         global.msgCenter.registerCallback(SOL_UNLOADTHING, this);
         global.msgCenter.registerCallback(SQUARE_SOL, this);
+        global.msgCenter.registerCallback(FETCH_PARAM_OVER, this);
         global.timer.addTimer(this); 
     }
     var passTime = getParam("UpdateStatusTime");
@@ -81,8 +82,10 @@ class BuildLayer extends MoveMap
     */
     function receiveMsg(msg)
     {
-//        trace("receiveMsg", msg);
-        if(msg[0] == RELIVE_SOL)
+        if(msg[0] == FETCH_PARAM_OVER) {
+            moveZone = [[getParam("TrainZoneX"), getParam("TrainZoneY"), getParam("TrainZoneWidth"), getParam("TrainZoneHeight") ]];   
+            buildZone = [[getParam("FullZoneX"), getParam("FullZoneY"), getParam("FullZoneWidth"), getParam("FullZoneHeight")]];
+        } else if(msg[0] == RELIVE_SOL)
         {
             //sid sdata
             var sdata = msg[1];
@@ -168,6 +171,8 @@ class BuildLayer extends MoveMap
     {
         global.timer.removeTimer(this);
         global.user.storeOldPos(mapGridController.allSoldiers);
+
+        global.msgCenter.removeCallback(FETCH_PARAM_OVER, this);
         global.msgCenter.removeCallback(RELIVE_SOL, this);
         global.msgCenter.removeCallback(SOL_TRANSFER, this);
         global.msgCenter.removeCallback(SOL_UNLOADTHING, this);

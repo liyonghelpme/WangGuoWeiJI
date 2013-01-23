@@ -4,7 +4,7 @@ class PictureManager
     var inConnect = 0;
     var curProcess;
     //var curKind;
-    var allKind = ["m", "fm", "a", "fa"];
+    var allKind = ["m",  "a"];//"fm","fa"
     var needDownload = [];
     var downloadList = [];
     var defaultDownload = 1;
@@ -66,6 +66,7 @@ class PictureManager
                     trace("curProcess", curProcess);
                     if(curProcess < len(downloadList))
                     {
+                        //move attack feature move feature move
                         for(var i = 0; i < len(allKind); i++)
                         {
                             var name = "soldier"+allKind[i]+str(downloadList[curProcess])+".plist";
@@ -81,6 +82,7 @@ class PictureManager
                                 needDownload.append(name);
                             }
                         }
+                        //战斗特效
                         var solAttackEffect = magicAnimate.get(downloadList[curProcess]);
 
                         if(solAttackEffect != null)
@@ -105,6 +107,19 @@ class PictureManager
                                             needDownload.append(name);
                                     }
                                 }
+                            }
+                        }
+                        //变身技能 变身动画
+                        var solId = downloadList[curProcess];
+                        var sdata = getData(SOLDIER, solId);
+                        if(sdata["isHero"] == 1)
+                        {
+                            var heroId = solId/10*10+4;
+                            //当前处理的ID 和 英雄ID 不同
+                            //且英雄ID 没有 加入下载队列中
+                            if(solId != heroId && downloadList.index(heroId) == -1)
+                            {
+                                downloadList.append(heroId);
                             }
                         }
 

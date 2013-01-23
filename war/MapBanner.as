@@ -182,13 +182,17 @@ class MapBanner extends MyNode
         var rg = getRange();
         var temp;
 
+        var accNum = 0;
         for(var i = rg[0]; i < rg[1]; i++)
         {
+            if(data[i][1] == 1)//不显示已经放置的士兵
+                continue;
+
             var panel;
             if(data[i][1] == 0)
-                panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
+                panel = flowNode.addsprite("mapUnSel.png").pos(accNum*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
             else
-                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
+                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(accNum*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
                 
 
             var sdata = global.user.getSoldierData(data[i][0]);
@@ -214,6 +218,7 @@ class MapBanner extends MyNode
             solPic.scale(-sca, sca);
 
             panel.put(i);
+            accNum++;
         }
     }
 
@@ -311,6 +316,8 @@ class MapBanner extends MyNode
                 
                 controlSoldier.touchWorldBegan(controlSoldier.bg, e, null, nPos[0], nPos[1], points);
                 data[i][1] = 1;
+                //data.pop(i);//弹出这个士兵 取消之后重新放置士兵
+                //标记1的士兵不显示
             }
         }
     }

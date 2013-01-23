@@ -278,19 +278,26 @@ class SkillFlowBanner extends MyNode
             accMove = 0;
             lastPoints = n.node2world(x, y);
 
+            /*
+            //地方士兵不显示技能列表
             if(soldier != null && soldier.color == ENECOLOR)
             {
                 return;
             }
+            */
             var child = checkInChild(flowNode, lastPoints);
             if(child != null)
             {
                 var kind = child.get()[0];
                 var selNum = child.get()[1];
                 var ready;
-                if(kind == SKILL)
-                    ready = skillList[selNum][3];
-                else if(kind == DRUG)
+                if(kind == SKILL) {
+                    //点击敌方士兵 不能释放对方的技能
+                    if(soldier != null && soldier.color == ENECOLOR)
+                        ready = 0;
+                    else
+                        ready = skillList[selNum][3];
+                } else if(kind == DRUG)
                 {
                     ready = drugData[selNum][3];
                     var num = global.user.getGoodsNum(DRUG, drugData[selNum][0]);
@@ -460,7 +467,7 @@ class SkillFlowBanner extends MyNode
                 filter = GRAY;
 
             var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])]), filter).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
-            sca = getSca(drugPic, [67, 43]);
+            sca = getSca(drugPic, [getParam("drugScale"), getParam("drugScale")]);
             drugPic.scale(sca);
 
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);

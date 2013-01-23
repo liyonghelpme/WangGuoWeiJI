@@ -123,23 +123,7 @@ const RBINV = m_color(
 
 initX initY SIZEX SIZEY
 */
-const FullZone = [
-//[2205, 486, 723, 363],
-[987, 498, 1914, 438],
-//[1209, 483, 678, 543],
-];
-//limit soldier move zone
-const TrainZone = [[100, 498, 2400, 400]];
-
 //then check in which zone
-const FarmZone = [
-[2193, 432, 735, 393],
-[2298, 801, 531, 177],
-[2082, 729, 138, 96],
-[2118, 450, 87, 69],
-];
-
-
 
 //id coin crystal cae possible
 //0-9 id
@@ -585,6 +569,7 @@ const RESUME_GAME = 50;
 const MOVE_TO_POINT = 51;
 const FINISH_NEW_TASK = 52;
 const INIT_TASK_DATA = 53;//只是初始化任务 数据但是不初始化任务模块
+const FETCH_PARAM_OVER = 54;
 
 
 
