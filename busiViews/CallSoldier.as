@@ -69,8 +69,28 @@ class CallSoldier extends MyNode
     {
         inCall = 0;
         inAcc = 1;
-        onCallSol();
+        callNow();
     }
+    function callNow()
+    {
+        var id = curSelSol[0]; 
+        var cost = getCost(SOLDIER, id);
+
+        global.user.doCost(cost);
+        var objectList = scene.objectList;
+        if(len(objectList) == 0)
+        {
+            global.httpController.addRequest("buildingC/campUpdateWorkTime", dict([["uid", global.user.uid], ["bid", scene.bid]]), null, null);
+            scene.funcBuild.startWork();
+        }
+
+        scene.funcBuild.addSoldier(id);
+        this.update(0);
+        goods.updateTab();
+        global.httpController.addRequest("buildingC/campAddSoldier", dict([["uid", global.user.uid], ["bid", scene.bid], ["solId", id]]), null, null);
+
+    }
+
     function accNow()
     {
         onAccCall(); 

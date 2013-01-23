@@ -363,6 +363,10 @@ class TaskDialog extends MyNode
                 }
                 //登录显示的是累计的天数
                 //其它循环任务显示的需求的数字
+                if(getParam("debugTask"))
+                {
+                    trace("taskData", taskData);
+                }
                 panel.addlabel(taskData["title"], "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
                 panel.addlabel(replaceStr(taskData["des"], ["[NUM]", str(getCycleStageNum(tid, tData["stage"]))]), "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
 

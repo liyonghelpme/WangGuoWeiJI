@@ -189,7 +189,7 @@ class AllGoods extends MyNode
                     co = [99, 42, 47];
             }
             if(kind == DRUG || data[i][0] != EQUIP_KIND)
-                temp = panel.addlabel(objData.get("name") + " " + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+                temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("name")]), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
             
             if(kind == EQUIP)
             {

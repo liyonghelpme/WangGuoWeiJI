@@ -5,8 +5,10 @@ class ParamController
     var AnimateParams = dict();
     function ParamController()
     {
-        global.httpController.addRequest("getString", dict(), getString, null);
+        //fetchParams 必须是第一个发送的 请求 获取 所有参数
         global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
+
+        global.httpController.addRequest("getString", dict(), getString, null);
         global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
         global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
         global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
@@ -22,6 +24,7 @@ class ParamController
             //strings = dict(con["strings"]);
             //先不改物品名称
             WORDS = dict(con["WORDS"]);
+            strings = dict(con["names"]);
         }
     }
     function getMapMonster(rid, rcode, con, param)

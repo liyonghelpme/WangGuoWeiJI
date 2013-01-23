@@ -513,8 +513,8 @@ def hanData(name, data):
             a = [k[1] for k in it]
             res.append([i['id'], a])
 
-        names = [['title'+str(i['id']), i['title']] for i in f]
-        names += [ ['des'+str(i['id']), i['des']] for i in f]
+        names = [['title'+str(i['id']), [i['title'], i['engTitle']]] for i in f]
+        names += [ ['des'+str(i['id']), [i['des'], i['engDes']]] for i in f]
         print 'var', name+'Key', '=', json.dumps(key), ';'
         print 'var', name+'Data', '=', 'dict(', json.dumps(res), ');'
         return names

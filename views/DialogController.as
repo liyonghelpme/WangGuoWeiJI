@@ -76,9 +76,9 @@ class DialogController extends MyNode
                     global.director.pushView(new LevupDialog(curCmd), 1, 0);
                 else if(curCmd.get("cmd") == "update")
                 {
-                    var find = getUpdateObject();
-                    if(find != null)
-                        global.director.pushView(new UpdateDialog(find[0], find[1]), 1, 0);
+                    //var find = getUpdateObject();
+                    //if(find != null)
+                    //    global.director.pushView(new UpdateDialog(find[0], find[1]), 1, 0);
                 }
                 else if(curCmd.get("cmd") == "heart")
                 {

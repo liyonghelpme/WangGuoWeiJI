@@ -63,7 +63,7 @@ import views.ResourceBanner;
 
 
 import busiViews.SoldierMenu;
-import busiViews.DetailDialog;
+//import busiViews.DetailDialog;
 
 import views.ChildMenuLayer;
 import busiViews.TransferDialog;
@@ -258,7 +258,7 @@ import views.Goods;
 import views.ResLackBanner;
 
 import busiViews.LoadChallenge;
-import views.UpdateDialog;
+//import views.UpdateDialog;
 
 import views.LoginDialog;
 import busiViews.LoadChallenge;
@@ -326,12 +326,14 @@ import data.String;
 global.timer = new Timer(1000);
 
 global.httpController = new HttpController();
+global.paramController = new ParamController();
+
 global.msgCenter = new MessageCenter();
 global.director = new Director();
 global.touchManager = new TouchManager();
 global.controller = new Controller();
 global.myAction = new MyAction();
-global.paramController = new ParamController();
+
 
 
 //friend  task mail fight  castleScene

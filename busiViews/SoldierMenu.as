@@ -70,7 +70,7 @@ class SoldierMenu extends MyNode
     function onDetail()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new DetailDialog(soldier), 1, 0);
+        //global.director.pushView(new DetailDialog(soldier), 1, 0);
     }
     var removed = 0;
     var passTime = 0;

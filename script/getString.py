@@ -12,7 +12,8 @@ f = codecs.open('../data/words.as', 'w', 'utf8')
 f.write('var WORDS = dict([\n')
 for i in rows:
     v = i['chinese'].replace('\n', '\\n')
-    f.write('["%s", "%s"],\n' % (i['key'], v))
+    e = i['english'].replace('\n', '\\n')
+    f.write('["%s", ["%s", "%s"]],\n' % (i['key'], v, e))
 
 f.write(']);')
 f.close()

@@ -234,7 +234,7 @@ class AllSoldier extends MyNode
         {
             var id = soldier[1]["id"];
             var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
-            global.director.pushView(new DetailDialog(busiSol), 1, 0);
+            //global.director.pushView(new DetailDialog(busiSol), 1, 0);
         }
     }
 

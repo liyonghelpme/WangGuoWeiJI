@@ -11,16 +11,22 @@ class Controller
         for(var i = 0; i < len(names); i++)
         {
 
-            var exist = fetch(names[i][0]);
-            if(exist == null)
+            if(getParam("debugSound"))
             {
-                request(names[i][0], 0, finishDownload, names[i]);
+                request(names[i][0], 1, finishDownload, names[i]);
             }
             else
             {
-                finishDownload(null, 1, names[i]);
+                var exist = fetch(names[i][0]);
+                if(exist == null)
+                {
+                    request(names[i][0], 0, finishDownload, names[i]);
+                }
+                else
+                {
+                    finishDownload(null, 1, names[i]);
+                }
             }
-
         }
     }
     function finishDownload(fp, ret, param)
