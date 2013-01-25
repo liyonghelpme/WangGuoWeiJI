@@ -395,7 +395,7 @@ class RequestView extends MyNode
             return;
         res[2] = 1;
         global.mailController.readMail(data[p][1]["mailId"]);
-        global.httpController.addRequest("friendC/acceptNeibor", dict([["uid", global.user.uid], ["fid", res[1]["uid"]]]), null, null);
+        global.httpController.addRequest("friendC/refuseNeibor", dict([["uid", global.user.uid], ["fid", res[1]["uid"]]]), null, null);
         updateTab();
     }
 }
