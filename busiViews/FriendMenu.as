@@ -133,18 +133,6 @@ class FriendMenu extends MyNode
     //这里的userdata 和 全局引用的是 一个 userData 所以 能够 更新全局数据 变更本地数据 
     //更新右侧按钮时 从全局获取数据---> 不用关心本地数据
     //保证一份数据 防止数据不一致
-    function onSendHeart()
-    {
-        var user = scene.user;
-        global.friendController.sendHeart(user["uid"]);
-        global.httpController.addRequest("friendC/sendHeart", dict([["uid", global.user.uid], ["fid", user.get("uid")], ["mid", global.user.getNewMsgId()]]), null, null);
-
-        global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("freeHeart", null), [100, 100, 100], null));
-
-        updateRightMenu();
-
-        global.taskModel.doAllTaskByKey("sendHeart", 1);
-    }
     var challenged = 0;
     //挑战结束返回好友页面
     //已经有一个 挑战排行榜

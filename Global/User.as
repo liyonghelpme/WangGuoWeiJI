@@ -274,41 +274,6 @@ class User
             skills.update(k[0], v);
         }
     }
-    function checkLoveTreeLevel()
-    {
-        var key = buildings.keys();
-        var loveLevel = 0;
-        var loveBid;
-        for(var i = 0; i < len(key); i++)
-        {
-            var k = key[i];
-            var v = buildings[k];
-            if(v["id"] == PARAMS["loveTreeId"])
-            {
-                loveBid = k;
-                loveLevel = v["level"];
-                break;
-            }
-        }
-        if(loveLevel < len(loveTreeHeart))
-        {
-            var accNum = getValue("accNum");
-            var expectedLevel = loveLevel;
-            var needHeart = loveTreeHeart[expectedLevel];
-            while(accNum >= needHeart)
-            {
-                expectedLevel++;
-                needHeart = loveTreeHeart[expectedLevel];
-            }
-            if(expectedLevel > loveLevel)
-            {
-                global.msgCenter.sendMsg(UPGRADE_LOVE_TREE, loveLevel);
-                global.httpController.addRequest("friendC/upgradeLoveTree", dict([["uid", uid], ["bid", loveBid], ["level", expectedLevel]]), null, null);
-                buildings[loveBid]["level"] = expectedLevel;
-            }
-        }
-
-    }
     var treasureStone;
     var week;
     var updateState;
@@ -419,7 +384,6 @@ class User
             db.put("resource", resource);
             //闯关星 和 资源分开
             
-            checkLoveTreeLevel();//爱心足够升级爱心树
 
             initYet = 1;        
             /*
