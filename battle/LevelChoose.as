@@ -285,7 +285,7 @@ class LevelChoose extends MyNode
         var buyable = global.user.checkCost(cost);
         if(buyable.get("ok") == 0)
         {
-            global.director.curScene.dialogContrller.addBanner(new UpgradeBanner(getStr("lack", ["[NUM]", str(buyable.get("gold")), "[NAME]", getStr("gold", null)]), [100, 100, 100], null));
+            global.director.curScene.dialogContrller.addBanner(new UpgradeBanner(getStr("resLack", ["[NUM]", str(buyable.get("gold")), "[NAME]", getStr("gold", null)]), [100, 100, 100], null));
             return;
         }
         

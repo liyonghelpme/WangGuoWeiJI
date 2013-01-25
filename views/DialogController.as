@@ -102,7 +102,7 @@ class DialogController extends MyNode
                 }
                 else if(curCmd.get("cmd") == "roleName")
                 {
-                    global.director.pushView(new RoleName(null, curCmd["sol"]), 1, 0);
+                    //global.director.pushView(new RoleName(null, curCmd["sol"]), 1, 0);
                 }
                 //测试爱心对话框使用
                 else if(curCmd.get("cmd") == "love")

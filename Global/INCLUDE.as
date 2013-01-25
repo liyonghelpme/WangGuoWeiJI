@@ -47,15 +47,8 @@ import views.FallObj;
 import views.MenuLayer;
 import busiViews.CastleRightMenu;
 
-
-import busiViews.RoleName;
-
-
 //人物对话框
 import views.BusiSoldier;
-
-
-import views.ProfessionIntroDialog;
 
 //成功提示
 

@@ -338,17 +338,8 @@ class User
             var temp = con.get("skills");//soldierId  skillId level
             initSkill(temp);
 
-
             resource = con.get("resource");
 
-            var heart = con.get("heart");
-            resource.update("weekNum", heart["weekNum"]);
-            resource.update("accNum", heart["accNum"]);
-            resource.update("liveNum", heart["liveNum"]);
-            //resource.update("heartExp", heart["heartExp"]);
-            heartRank = heart.get("rank");
-            
-            //con.get("starNum")
             initStarNum();
 
             initBuildings(con.get("buildings"));
