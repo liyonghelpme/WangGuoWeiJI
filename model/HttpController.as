@@ -60,13 +60,6 @@ class HttpController
         trace("report Error");
     }
 
-    var buffers = dict();
-    function cacheHealthRecover(req)
-    {
-        var v = buffers.get(req.get("sid"), 0);
-        v += req.get("addHealth");
-        buffers.update(req.get("sid"), v);
-    }
     var passTime = 0;
     function update(diff)
     {
@@ -75,16 +68,7 @@ class HttpController
         if(passTime >= 60000)
         {
             passTime = 0;
-            synHealth();
+            //synHealth();
         }
-    }
-    function synHealth()
-    {
-        var item = buffers.items();
-        for(var i = 0; i < len(item); i++)
-        {
-            addRequest("soldierC/recoverHealth", dict([["uid", global.user.uid], ["sid", item[i][0]], ["addHealth", item[i][1]]]), null, null);
-        }
-        buffers = dict();
     }
 }
