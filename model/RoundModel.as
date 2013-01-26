@@ -57,6 +57,26 @@ function getAllNew(big, small)
     }
     return res;
 }
+function getDebugSoldier()
+{
+    var solKey = soldierData.keys();
+    bubbleSort(solKey, cmpInt);
+    var curSoldier = global.user.currentSoldierId;
+    var zoneSize = getParam("zoneSize");
+    var startId = curSoldier;
+    var countNum = 0;
+    var tempId = [];
+    for(var i = 0; i < len(solKey) && countNum < zoneSize; i++)
+    {
+        if(solKey[i] >= startId)
+        {
+            tempId.append([solKey[i], 1]);
+            countNum++;
+        }
+    }
+    return realGenRoundMonster(tempId);
+}
+
 
 //id = big *100 + small  比较合适 可以扩展
 function getRoundMonster(big, small)
@@ -65,6 +85,7 @@ function getRoundMonster(big, small)
     var rnum = getData(ROUND_MONSTER_NUM, rid);
     //id mons 
     var mons = rnum["mons"];
+    //solId number
     var temp = [];
     //复制一遍数据 用于内部修改
     for(var i = 0; i < len(mons); i++)

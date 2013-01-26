@@ -16,6 +16,10 @@ class ParamController
         global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
         global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
     }
+    function updateParams()
+    {
+
+    }
     function getString(rid, rcode, con, param)
     {
         if(rcode != -1)
@@ -59,6 +63,7 @@ class ParamController
             AnimateParams = con;
             initYet = 1;
             global.msgCenter.sendMsg(FETCH_PARAM_OVER, null);
+            global.user.currentSoldierId = getParam("currentSoldier");
         }
     }
     function getAllSolIds(rid, rcode, con, param)

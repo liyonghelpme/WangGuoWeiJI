@@ -631,7 +631,7 @@ var WORDS = dict([
 ["waitCall", ["等待招募[NAME]\n等待时间 [TIME]", "Waiting [NAME]\nTime Left [TIME]"]],
 ["callingSol", ["招募中...", "Recruiting"]],
 ["callInQueue", ["等待招募[NUM]", "Waiting [NUM]"]],
-["deadSols", ["阵亡士兵：[NAMES]", "Soldiers died: [NAMES]"]],
+["deadSols", ["阵亡士兵：[NAMES]", "Troops expended: [NAMES]"]],
 ["youGetReward", ["你获得[REWARDS]", "You got [REWARDS]"]],
 ["tooManyDrug", ["携带药品数量大于[NUM]个！", "You've carried more than [NUM] bottles of potion!"]],
 ["HouseTooCon", ["抱歉，你需要升到第[LEV]级才可以购买更多民居", ""]],
@@ -673,4 +673,6 @@ var WORDS = dict([
 ["taskTip134", ["点击挑战按钮", ""]],
 ["taskTip135", ["点击挑战按钮", ""]],
 ["taskTip139", ["点击任务按钮", ""]],
+["taskReward", ["获得奖励 [[NUM][KIND]]", "Get [[NUM][KIND]]"]],
+["getTaskReward", ["获得奖励 [[NUM][KIND]]", "Get [[NUM][KIND]]"]],
 ]);

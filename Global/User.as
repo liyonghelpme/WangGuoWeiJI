@@ -4,6 +4,9 @@ TODO:
 */
 class User
 {
+    //当前测试的士兵ID
+    var currentSoldierId=0;
+
     var uid=-1;
     var papayaId;
     var papayaName;

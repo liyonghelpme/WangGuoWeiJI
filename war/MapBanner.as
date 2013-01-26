@@ -407,6 +407,32 @@ class MapBanner extends MyNode
     }
     function onCancel()
     {
-        global.director.popScene();
+        //调试挑战怪兽
+        if(getParam("debugChallenge")) {
+            var solKey = soldierData.keys();
+            bubbleSort(solKey, cmpInt);
+            var curSoldier = global.user.currentSoldierId;
+            var zoneSize = getParam("zoneSize");
+            var countNum = 0;
+            var startId = curSoldier;
+            for(var i = 0; i < len(solKey) && countNum < zoneSize; i++)
+            {
+                if(solKey[i] >= startId)
+                {
+                    countNum++;
+                }
+            }
+            var newId = 10000;
+            if(i < len(solKey))
+                newId = solKey[i];
+
+            global.user.currentSoldierId = newId;
+            global.httpController.addRequest("updateCurrentSoldierId", dict([["sid", global.user.currentSoldierId]]), null, null);
+            global.director.popScene();
+            global.director.pushScene(
+                new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, dict())
+            );
+        } else
+            global.director.popScene();
     }
 }

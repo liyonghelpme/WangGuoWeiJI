@@ -141,16 +141,6 @@ class ChallengeScene extends MyNode
 
             global.httpController.addRequest("fightC/attackArena", dict([["uid", global.user.uid], ["oid", oid], ["crystal", cost.get("crystal", 0)], ["gold", cost.get("gold", 0)]]), getDataOver, null); 
         }
-        else if(kind == CHALLENGE_DEFENSE)
-        {
-            global.httpController.addRequest("fightC/defenseOther", dict([["uid", global.user.uid], ["oid", oid]]), getDataOver, null); 
-        }
-        //没有下载数据 需要 立即根据数据检测图片
-        //需要下载
-        else if(kind == CHALLENGE_TRAIN)
-        {
-            finishDataAndStartPic();
-        }
         else if(kind == CHALLENGE_MON)
         {
             finishDataAndStartPic();
@@ -158,17 +148,25 @@ class ChallengeScene extends MyNode
         else if(kind == CHALLENGE_OTHER)
         {
             //新手任务阶段 挑战其它人
-            if(global.taskModel.checkInNewTask())
-            {
+            if(global.taskModel.checkInNewTask()) {
                 newChallenge();
-            }
-            else
+            } else if(getParam("debugChallenge")) {
+                debugChallange();           
+            } else
                 global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid]]), getRandChallenge, null);
         }
         else if(kind == CHALLENGE_REVENGE)
         {
             global.httpController.addRequest("challengeC/getRevenge", dict([["uid", global.user.uid], ["oid", user["uid"]]]), getRevenge, null);
         }
+    }
+
+    function debugChallange()
+    {
+        trace("debugChallange");
+        kind = CHALLENGE_MON;
+        user = dict([["big", 0], ["small", 0], ["mon", getDebugSoldier()]]);//调试怪兽的数量
+        finishDataAndStartPic();
     }
     function getRevenge(rid, rcode, con, param)
     {
