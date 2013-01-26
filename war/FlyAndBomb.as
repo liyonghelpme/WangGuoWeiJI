@@ -16,11 +16,12 @@ class FlyAndBomb extends EffectBase
         bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);
         init();
         shiftAni = moveto(0, 0, 0);
-        initState();
         if(getParam("debugAttack"))
         {
             labelText = bg.addlabel("", null, 20).color(rand(100), 0, 0).scale(-100, 100);
         }
+
+        initState();
     }
     override function initState()
     {

@@ -11,14 +11,24 @@ class PictureManager
     var callback = null;
     function checkNeedDownload()
     {
-        if(curProcess < len(downloadList) && global.user.getValue("level") >= getParam("downloadLevel"))
+        if(getParam("debugDownload"))
+            trace("checkNeedDownload", curProcess, len(downloadList));
+        if(curProcess < len(downloadList))
         {
             return 1;
         }
         return 0;
     }
+    function getCurProgress()
+    {
+        if(getParam("debugDownload"))
+            trace("getCurProgress", curProcess, len(downloadList));
+        return curProcess*100/len(downloadList);
+    }
     function PictureManager()
     {
+        //默认是所有图片 不同场景初始化不同的downloadList
+        downloadList = ALL_SOL_PICTURES;
         curProcess = global.user.db.get("curProcess");    
         //curKind = 0;
         if(curProcess == null)
@@ -39,8 +49,11 @@ class PictureManager
         //全部图片下载保存进度
         if(!defaultDownload)
             curProcess = 0;
+        //全部下载 downloadList = ALL
         else
+        {
             curProcess = global.user.db.get("curProcess");    
+        }
 
         download = 1;
         global.myAction.addAct(this);

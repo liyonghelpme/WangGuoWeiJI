@@ -74,6 +74,7 @@ class MenuLayer extends MyNode
     }
     function removeDownloadIcon()
     {
+        trace("removeDownloadIcon");
         if(downloadIcon != null)
         {
             downloadIcon.removeSelf();
@@ -229,15 +230,25 @@ class MenuLayer extends MyNode
             rightMenu.removeSelf();
             rightMenu = null;
         }
+
+        trace("remove DownloadIcon", downloadIcon);
         if(downloadIcon != null)
         {
-            downloadIcon.bg.visible(0);
+
+            downloadIcon.removeSelf();
+            downloadIcon = null;
         }
 
         //显示子菜单 隐藏 打分图标
         if(showChildMenu == 1)
-        {
             return;
+
+        //完成新手任务 没有显示下载图标 且没有下载完成
+        if(global.user.getValue("newTaskStage") >= getParam("showFinish") && downloadIcon == null && global.pictureManager.checkNeedDownload())
+        {
+            trace("update Right Menu add DownloadIcon");
+            downloadIcon = new DownloadIcon(this);
+            addChild(downloadIcon);
         }
 
         var rated = global.user.db.get("rated");
@@ -286,7 +297,7 @@ class MenuLayer extends MyNode
             rightMenu.bg.addaction(sequence(itintto(0, 0, 0, 0), delaytime(100), fadein(300)));
         }
         if(downloadIcon != null)
-            downloadIcon.bg.visible(1);
+            downloadIcon.bg.addaction(sequence(itintto(0, 0, 0, 0), delaytime(100), fadein(300)));
     }
     /*
     两种可能 第一次进入 新手剧情 新手任务
@@ -299,7 +310,7 @@ class MenuLayer extends MyNode
         {
             updateValue(global.user.resource);
         }
-        else if(msgId == UPDATE_TASK )
+        else if(msgId == UPDATE_TASK )//更新任务时更新右侧菜单
         {
             updateTaskState();
             updateRightMenu();
@@ -362,12 +373,15 @@ class MenuLayer extends MyNode
     {
         updateValue(global.user.resource);
         updateExp(0);
-
-        if(global.user.getValue("newTaskStage") >= getParam("showFinish") && global.pictureManager.checkNeedDownload())
+        trace("show Download Icon", global.user.getValue("newTaskStage"));
+        /*
+        if(global.user.getValue("newTaskStage") >= getParam("showFinish"))
         {
+            trace("initDataOver add Download");
             downloadIcon = new DownloadIcon(this);
             addChild(downloadIcon);
         }
+        */
     }
     function updateValue(res)
     {

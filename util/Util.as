@@ -1242,6 +1242,23 @@ function showMultiPopBanner(showData)
         global.director.curScene.dialogController.addBanner(new UpgradeBanner(w, [100, 100, 100], null));
     }
 }
+function showTaskMultiReward(showData)
+{
+    var its = showData.items();
+    for(var i = 0; i < len(its); i++)
+    {
+        var k = its[i][0];
+        var v = its[i][1];
+        var w;
+        if(v > 0)
+            w = getStr("getTaskReward", ["[NUM]", "+"+str(v), "[KIND]", getStr(k, null)]);
+        else if(v < 0)
+            w = getStr("getTaskReward", ["[NUM]", str(v), "[KIND]", getStr(k, null)]);
+        else
+            continue;
+        global.director.curScene.dialogController.addBanner(new UpgradeBanner(w, [100, 100, 100], null));
+    }
+}
 //不支持变长度参数
 function printD(con)
 {

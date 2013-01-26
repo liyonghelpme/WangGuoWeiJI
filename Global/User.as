@@ -786,7 +786,7 @@ class User
         }
         else
         {
-            soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["inTransfer", soldier.inTransfer], ["addAttack", soldier.transferStartTime] ]));
+            soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["inTransfer", soldier.inTransfer], ["transferStartTime", soldier.transferStartTime] ]));
         }
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);
     }

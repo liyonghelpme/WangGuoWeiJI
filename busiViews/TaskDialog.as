@@ -480,6 +480,8 @@ class TaskDialog extends MyNode
             global.taskModel.finishCycleTask(tid);
             initData();
             updateTab();
+            //显示多个任务奖励         
+            showTaskMultiReward(reward);
         }//每日任务不再这里显示
         else if(tasks[curNum][0] == NEW_TASK)
         {
@@ -498,6 +500,7 @@ class TaskDialog extends MyNode
             global.taskModel.finishSolTask(tid);
             initData();
             updateTab();
+            showTaskMultiReward(reward);
         }
     }
     override function enterScene()

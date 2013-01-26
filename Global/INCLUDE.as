@@ -27,6 +27,7 @@ import busiViews.DrugList;
 
 //经营页面
 import views.CastlePage;
+import busiViews.SoldierNumBanner;
 import busiViews.NewTaskReward;
 import busiViews.BoxOnMap;
 import busiViews.DownloadDialog;

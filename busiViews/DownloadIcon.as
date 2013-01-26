@@ -21,6 +21,7 @@ class DownloadIcon extends MyNode
         var cl = bg.addnode().size(117, 37).pos(41, 28).clipping(1);
         processBar = cl.addsprite("downloadProcessBar.png").anchor(0, 0).pos(0, 0).size(109, 21).color(100, 100, 100, 100);
         temp = bg.addsprite("downloadIcon.png").anchor(0, 0).pos(12, 10).size(56, 55).color(100, 100, 100, 100);
+        this.update(0);//立即更新进度
     }
     function onDownload()
     {
@@ -29,13 +30,15 @@ class DownloadIcon extends MyNode
     }
     function update(diff)
     {
-        var cur = global.pictureManager.curProcess;
-        var total = len(global.pictureManager.ALL_SOL_PICTURES);
-        var pro = (100-cur*100/total)*TOTAL_LEN/100;
+        var curProgress = global.pictureManager.getCurProgress();
+        var pro = (100-curProgress)*TOTAL_LEN/100+getParam("progressBarBaseOff");
         processBar.pos(-pro, 0);
-        if(cur >= total)
+        if(getParam("debugDownload"))
+            trace("downloading ", curProgress, pro, processBar.pos());
+        if(curProgress >= 100)
         {
-            menu.removeDownloadIcon();
+            //menu.removeDownloadIcon();
+            removeSelf();
         }
     }
     override function enterScene()

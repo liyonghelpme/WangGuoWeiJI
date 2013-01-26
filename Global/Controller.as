@@ -4,7 +4,7 @@ class Controller
     
     const SOUND = 0;
     const MEDIA = 1;
-    var names = [["but.mp3", SOUND], ["pick.mp3", SOUND], ["business.mp3", MEDIA], ["fight.mp3", MEDIA], ["print0.mp3", SOUND], ["print1.mp3", SOUND]];
+    var names = [["but.mp3", SOUND], ["pick.mp3", SOUND], ["business.mp3", MEDIA], ["fight0.mp3", MEDIA], ["fight1.mp3", MEDIA], ["print0.mp3", SOUND], ["print1.mp3", SOUND]];
     var musics = dict();
     function Controller()
     {

@@ -64,7 +64,7 @@ class Building extends MyNode
 
         if(getParam("debugFarm"))
         {
-            farmState = label("", null, 20).color(0, 0, 0).pos(10, -10);
+            farmState = label("", null, 20).color(0, 0, 0).pos(10, -30);
             bg.add(farmState);
         }
 
@@ -105,13 +105,14 @@ class Building extends MyNode
         else 
             funcBuild = new Castle(this);
 
+        trace("buildSca", data["buildSca"]);
         if(funcs == MINE_KIND)
         {
             var mineData = getData(MINE_PRODUCTION, buildLevel);
-            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH, getHue(mineData["color"])).anchor(50, 100);
+            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH, getHue(mineData["color"])).anchor(50, 100).scale(data["buildSca"]);
         }
         else
-            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100);
+            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100).scale(data["buildSca"]);
         
         //非本身颜色的建筑物颜色 根据编号设定颜色
         //1 采用标准特征色
@@ -313,9 +314,9 @@ class Building extends MyNode
     {
         dir = d;
         if(dir == 0)
-            changeDirNode.scale(100, 100);
+            changeDirNode.scale(data["buildSca"], data["buildSca"]);
         else 
-            changeDirNode.scale(-100, 100);
+            changeDirNode.scale(-data["buildSca"], data["buildSca"]);
 
         var bSize = bg.size();
         var shadowDir = dir;
@@ -353,9 +354,9 @@ class Building extends MyNode
 
         dir = 1-dir;
         if(dir == 0)
-            changeDirNode.scale(100, 100);
+            changeDirNode.scale(data["buildSca"], data["buildSca"]);
         else 
-            changeDirNode.scale(-100, 100);
+            changeDirNode.scale(-data["buildSca"], data["buildSca"]);
         
         global.user.updateBuilding(this);
     }
@@ -489,7 +490,7 @@ class Building extends MyNode
             //half transparent + color
         }
         if(getParam("debugFarm"))
-            farmState.text("state"+str(state));
+            farmState.text("state"+str(data["buildSca"]));
     }
 
     /*

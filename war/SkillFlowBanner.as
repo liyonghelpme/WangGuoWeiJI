@@ -470,7 +470,7 @@ class SkillFlowBanner extends MyNode
             sca = getSca(drugPic, [getParam("drugScale"), getParam("drugScale")]);
             drugPic.scale(sca);
 
-            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
+            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, getParam("magicOpacity"));
             panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
 

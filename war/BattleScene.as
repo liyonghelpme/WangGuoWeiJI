@@ -35,6 +35,7 @@ class BattleScene extends MyNode
     var dialogController;
 
     var skills = null;
+    var curMusic = 0;
     function cancelSkill()
     {
         skillSoldier = null;
@@ -102,10 +103,9 @@ class BattleScene extends MyNode
 
         bg.setevent(EVENT_KEYDOWN, quitMap);
         bg.focus(1);
-        global.controller.playMedia("fight.mp3");
+        global.controller.playMedia("fight"+str(curMusic)+".mp3");
         global.msgCenter.registerCallback(PAUSE_GAME, this);
         global.msgCenter.registerCallback(RESUME_GAME, this);
-
     }
 
     function receiveMsg(param)
@@ -113,18 +113,18 @@ class BattleScene extends MyNode
         var msid = param[0];
         if(msid == RESUME_GAME)
         {
-            global.controller.playMedia("fight.mp3");
+            global.controller.playMedia("fight"+str(curMusic)+".mp3");
         }
         else if(msid == PAUSE_GAME)
         {
-            global.controller.pauseMedia("fight.mp3");
+            global.controller.pauseMedia("fight"+str(curMusic)+".mp3");
         }
     }
     override function exitScene()
     {
         global.msgCenter.removeCallback(PAUSE_GAME, this);
         global.msgCenter.removeCallback(RESUME_GAME, this);
-        global.controller.pauseMedia("fight.mp3");
+        global.controller.pauseMedia("fight"+str(curMusic)+".mp3");
         sceneSlowTimer.removeTimer(this);
         super.exitScene();
         sceneSlowTimer.stop();
@@ -350,6 +350,10 @@ class BattleScene extends MyNode
     //结束布阵就进入rank 但是如何表现回去的箭头任务
     function finishArrange()
     {
+        global.controller.pauseMedia("fight"+str(curMusic)+".mp3");
+        curMusic = 1;
+        global.controller.playMedia("fight"+str(curMusic)+".mp3");
+
         banner.removeSelf();
         banner = null;
         map.finishArrange();

@@ -30,12 +30,16 @@ class MailDialog extends MyNode
         but0.bg.pos(772, 27);
         addChild(but0);
 
-        but0 = new NewButton("roleNameBut0.png", [119, 44], getStr("moreGame", null), null, 21, FONT_NORMAL, [100, 100, 100], switchView, 1);
+
+        but0 = new NewButton("blueButton.png", [119, 44], getStr("friendReq", null), null, 21, FONT_NORMAL, [100, 100, 100], switchView, 0);
         but0.bg.pos(532, 37);
         addChild(but0);
-        but0 = new NewButton("blueButton.png", [119, 44], getStr("friendReq", null), null, 21, FONT_NORMAL, [100, 100, 100], switchView, 0);
+
+        but0 = new NewButton("roleNameBut0.png", [119, 44], getStr("moreGame", null), null, 21, FONT_NORMAL, [100, 100, 100], switchView, 1);
         but0.bg.pos(662, 37);
         addChild(but0);
+
+
         temp = bg.addsprite("messageTitle.png").anchor(0, 0).pos(31, 20).size(140, 33).color(100, 100, 100, 100);
     }
     function MailDialog()

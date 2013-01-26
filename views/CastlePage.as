@@ -120,7 +120,7 @@ class CastlePage extends MyNode
     {
         trace("beginInit castlePage");
         buildLayer.initDataOver();
-        solNum.text(str(global.user.getSolNum()));
+        solNum.updateSolNum(str(global.user.getSolNum()));
         trace("finish buildLayer");
         /*
         检测是否今天第一次登录 以及连续登录次数
@@ -172,7 +172,7 @@ class CastlePage extends MyNode
         trace("box", global.user.hasBox);
         if(global.user.hasBox)
         {
-            box = new BoxOnMap();
+            box = new BoxOnMap(this);
             addChild(box);
         }
         trace("finishBox onMap");
@@ -185,7 +185,8 @@ class CastlePage extends MyNode
         trace("finishDownload");
 
     }
-
+    
+    
     function CastlePage(s, showLoading)
     {
         scene = s;
@@ -199,6 +200,7 @@ class CastlePage extends MyNode
 
         var flow0 = bg.addsprite("flow0.png").pos(0, 48).setevent(EVENT_TOUCH, goFlow, 0);
         var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100);
+
         banner.addlabel("50", "fonts/heiti.ttf", 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
 
         bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0))).setevent(EVENT_TOUCH, visitNeibor);
@@ -221,8 +223,11 @@ class CastlePage extends MyNode
         //px - (1+1)*32/2 = pYN  / 32 = 26
         //py - (1+1)*16 = pYN / 16 = 48
         //260048 特殊的固定建筑 不能移动 也不能任意的点击 由客户端确定的建筑
-        banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).setevent(EVENT_TOUCH, onBanner);
-        solNum = banner.addlabel("50", "fonts/heiti.ttf", 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
+        //banner = bg.addsprite("build126.png").pos(864+30+30, 800).anchor(50, 100).setevent(EVENT_TOUCH, onBanner);
+        solNum = new SoldierNumBanner(this); 
+        addChild(solNum);
+
+        //solNum = banner.addlabel("50", "fonts/heiti.ttf", 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
 
         buildLayer = new BuildLayer(this);
         addChild(buildLayer);
@@ -497,7 +502,7 @@ class CastlePage extends MyNode
         global.msgCenter.registerCallback(HAS_CHALLENGE_MSG, this);
         global.msgCenter.registerCallback(MOVE_TO_POINT, this);
         global.msgCenter.registerCallback(LEVEL_UP_NOW, this);
-        solNum.text(str(global.user.getSolNum()));
+        solNum.updateSolNum(str(global.user.getSolNum()));
 
         //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
     }
@@ -513,7 +518,7 @@ class CastlePage extends MyNode
         }
         else if(msg[0] == BUYSOL)
         {
-            solNum.text(str(global.user.getSolNum()));
+            solNum.updateSolNum(str(global.user.getSolNum()));
             var sid = msg[1];
             if(sid != null)//不是卖出士兵
             {
@@ -541,7 +546,7 @@ class CastlePage extends MyNode
         {
             if(global.user.hasBox && box == null)
             {
-                box = new BoxOnMap();
+                box = new BoxOnMap(this);
                 addChild(box);
             }
         }

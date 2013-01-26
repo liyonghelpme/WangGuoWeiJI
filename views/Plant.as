@@ -18,11 +18,14 @@ class Plant extends MyNode
     function Plant(b, d, privateData)
     {
         //客户端时间
-        if(privateData != null)
+        if(privateData != null) {
             objectTime = privateData.get("objectTime");
-        else
+            acced = privateData["acced"];
+        } else {
             objectTime = time()/1000;
-        acced = privateData["acced"];
+            acced = 0;
+        }
+
 
         building = b;
         data = d;
