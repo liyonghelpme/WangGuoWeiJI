@@ -395,6 +395,12 @@ class Building extends MyNode
             return;
         bg.removefromparent();
         par.add(bg, zOrd);
+
+        if(getParam("debugFarm"))
+        {
+            var map = getPosMap(sx, sy, p[0], p[1]);
+            farmState.text("State:"+str(state)+"Pos:"+str(map[2])+","+str(map[3]));
+        }
     }
 
     /*
@@ -490,7 +496,10 @@ class Building extends MyNode
             //half transparent + color
         }
         if(getParam("debugFarm"))
-            farmState.text("state"+str(data["buildSca"]));
+        {
+            var map = getPosMap(sx, sy, bg.pos()[0], bg.pos()[1]);
+            farmState.text("State:"+str(state)+"Pos:"+str(map[2])+","+str(map[3]));
+        }
     }
 
     /*

@@ -85,7 +85,10 @@ class AllGoods extends MyNode
 
 
         temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
-        temp = bg.addlabel(getStr("equipDialog", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 369, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
+        if(kind == EQUIP)
+            temp = bg.addlabel(getStr("equipDialog", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
+        else if(kind == DRUG)
+            temp = bg.addlabel(getStr("drugDialog", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
 
         but0 = new NewButton("violetBut.png", [113, 42], getStr("buyDrug", null), null, 20, FONT_NORMAL, [100, 100, 100], buyIt, null);
         but0.bg.pos(667, 125);
@@ -108,11 +111,9 @@ class AllGoods extends MyNode
     {
         if(kind == DRUG)
         {
-            global.director.pushView(new MakeDrugDialog(MAKE_DRUG), 1, 0);
         }
         else if(kind == EQUIP)
         {
-            global.director.pushView(new MakeDrugDialog(MAKE_EQUIP), 1, 0);
         }
     }
     function AllGoods(k)

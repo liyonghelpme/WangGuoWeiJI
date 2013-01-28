@@ -14,7 +14,7 @@ class WelcomeDialog extends MyNode
         init();
         dialogController = new DialogController(this);
         addChild(dialogController);
-        var prW = new BackWord(this, getStr("welcomeWord", null), 30, 10, [100, 100, 100], 800, 0, 4, closeDialog, FONT_BOLD);//100ms 打字速度
+        var prW = new BackWord(this, getStr("welcomeWord", null), 30, 10, [100, 100, 100], getParam("printWidth"), 0, getParam("printTick"), closeDialog, FONT_BOLD);//100ms 打字速度
         prW.setPos([43, 187]);
         //得到字符串包括换行符号 的总字符长度 totalNum 打印
         prW.setCommand([[PRINT, getWordLen(getStr("welcomeWord", null))], [WAIT_PRINT, 1000]]);

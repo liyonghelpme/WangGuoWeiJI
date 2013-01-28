@@ -51,7 +51,7 @@ class SoldierGoods extends MyNode
         if(curTouch != null)
         {
             oldScale = curTouch.scale();
-            curTouch.scale(oldScale[0]*80/100, oldScale[1]*80/100);
+            curTouch.scale(oldScale[0]*getParam("butScale")/100, oldScale[1]*getParam("butScale")/100);
             player = global.controller.playSound("but.mp3");
         }
     }

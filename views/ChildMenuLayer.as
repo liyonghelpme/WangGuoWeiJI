@@ -73,7 +73,6 @@ class ChildMenuLayer extends MyNode
     {
         global.director.curScene.closeGlobalMenu(this);
         scene.clearStatus();
-        global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
     }
     //显示药店
     function onHeart()
@@ -84,7 +83,6 @@ class ChildMenuLayer extends MyNode
         //global.director.curScene.showGame(scene, SOL_GAME);//当前士兵游戏
         //global.director.pushView(new GameOne(scene, HEART_STATUS), 0, 0);
 
-        global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
     }
 
     var playGatherNow = 0;
@@ -159,7 +157,6 @@ class ChildMenuLayer extends MyNode
     function onDrug()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new DrugDialog(scene, DRUG), 1, 0);
     }
     /*
     鼓舞士兵
@@ -411,12 +408,12 @@ class ChildMenuLayer extends MyNode
     function onForge()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new MakeDrugDialog(MAKE_EQUIP), 1, 0);
+        //global.director.pushView(new MakeDrugDialog(MAKE_EQUIP), 1, 0);
     }
     function onMakeDrug()
     {
         global.director.curScene.closeGlobalMenu(this);
-        global.director.pushView(new MakeDrugDialog(MAKE_DRUG), 1, 0);
+        //global.director.pushView(new MakeDrugDialog(MAKE_DRUG), 1, 0);
     }
     /*
     关闭建筑的全局 控制view

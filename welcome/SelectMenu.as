@@ -146,7 +146,7 @@ class SelectMenu extends MyNode
         menuNode = node();
         bg.add(menuNode, MENU);
         
-        stepTip = new GrayWord(this, word, 22, 5, [100, 100, 100], 800, 0, 6, printOver, curStep);//passLine 70 70 70
+        stepTip = new GrayWord(this, word, 22, 5, [100, 100, 100], 800, 0, getParam("grayWordSpeed"), printOver, curStep);//passLine 70 70 70
         stepTip.setPos([37, 50])
         addChildZ(stepTip, ENTER);
 

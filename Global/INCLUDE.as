@@ -16,7 +16,6 @@ import busiViews.SettingDialog;
 
 import busiViews.TaskDialog;
 import views.TipDialog;
-import busiViews.MakeDrugDialog;
 
 import busiViews.NewSoldierDialog;
 import busiViews.AllSoldier;

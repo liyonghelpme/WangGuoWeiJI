@@ -387,8 +387,8 @@ class User
             //分支路径-----> 新手
             //正常： 初始任务 礼物 建筑物数据 
             global.msgCenter.sendMsg(INIT_TASK_DATA, null);// 开始初始化任务数据
-
-            if(newState == 0)//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
+            
+            if(newState == 0 || getParam("debugNewStory"))//未完成新手任务 则进入新手欢迎页面 替换当前的经营页面
             {
                 //global.msgCenter.sendMsg(LOAD_PROCESS, 80);
                 //新手阶段不初始化其它数据 只有在新手剧情结束的时候才初始化其它数据 

@@ -337,7 +337,7 @@ class FriendController
         {
             var diff = checkFirstLogin();
             //清理完服务器邻居数据 再 获取邻居数据
-            if(diff >= 1)//每天第一次登录清理数据
+            if(diff >= 1 || getParam("debugBox"))//每天第一次登录清理数据 或者测试宝箱生成
             {
                 firstLogin(); 
             }

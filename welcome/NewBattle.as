@@ -126,14 +126,9 @@ class NewBattle extends MyNode
 
 
         map = bg.addsprite("battleBegin0.jpg");
-//temp = bg.addsprite("dialogBack1.png").anchor(0, 0).pos(495, 111).size(228, 106).color(100, 100, 100, 100);
-//temp = bg.addlabel(getStr(" 勇士们！拿起你们的剑！ 为了家园，为了尊严！ 杀死索伦！", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 188, 0, ALIGN_LEFT).anchor(0, 0).pos(518, 132).color(0, 0, 0);
-//temp = bg.addsprite("dialogBack0.png").anchor(0, 0).pos(98, 85).size(180, 115).color(100, 100, 100, 100);
 
         dia0 = bg.addsprite("dialogBack0.png").pos(98, 85).visible(0);
-//temp = bg.addsprite("说话框1.png").anchor(0, 0).pos(98, 85).size(180, 115).color(100, 100, 100, 100);
         dia1 = bg.addsprite("dialogBack1.png").pos(495, 111).visible(0);
-//temp = bg.addsprite("说话框2.png").anchor(0, 0).pos(495, 111).size(228, 106).color(100, 100, 100, 100);
 
         
         /*
@@ -279,7 +274,8 @@ class NewBattle extends MyNode
                             dia0.visible(1);
 //w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_NORMAL, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
 //temp = bg.addlabel(getStr("   哼哼！尊敬的国  王陛下,快把公主交   出来吧！", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 146, 0, ALIGN_LEFT).anchor(0, 0).pos(12, 25).color(0, 0, 0);
-                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_NORMAL, 146, 0, ALIGN_LEFT).anchor(0, 0).pos(12, 25).color(0, 0, 0);
+//temp = bg.addlabel(getStr("dearKing", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 153, 0, ALIGN_LEFT).anchor(0, 0).pos(22, 20).color(0, 0, 0);
+                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_NORMAL, 153, 0, ALIGN_LEFT).anchor(0, 0).pos(22, 20).color(0, 0, 0);
 
                             dia0.stop();
                             dia0.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));

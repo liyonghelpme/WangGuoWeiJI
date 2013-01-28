@@ -16,10 +16,11 @@ class BoxReward extends MyNode
         temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
         bg.addlabel(getStr("mysteriousGift", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(408, 93).color(32, 33, 40);
         bg.addlabel(getStr("nextBoxRich", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(417, 147).color(43, 25, 9);
-        bg.addlabel(getStr("conForGift", null), "fonts/heiti.ttf", 18).anchor(0, 50).pos(212, 208).color(28, 15, 4);
+        temp = bg.addlabel(getStr("conForGift", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 271, 0, ALIGN_LEFT).anchor(0, 0).pos(212, 200).color(28, 15, 4);
 
+//bg.addlabel(getStr("boxReward", null), "fonts/heiti.ttf", 20).anchor(0, 0).pos(214, 242).color(20, 52, 27);
         var INITX = 214;
-        var INITY = 236;
+        var INITY = 250;
         var OFFY = 25;
 
         for(var i = 0; i < len(rewards); i++)

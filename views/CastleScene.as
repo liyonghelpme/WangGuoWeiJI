@@ -130,7 +130,10 @@ class CastleScene extends MyNode
             //删除loading页面
             trace("newUser CastleScene 本身替换了默认场景 导致底部为空 最好采用pushScene方式 来避免");
             //global.director.popView();
-            global.director.replaceScene(new WelcomeDialog());
+            if(getParam("debugSelect"))
+                global.director.replaceScene(new SelectHero());
+            else
+                global.director.replaceScene(new WelcomeDialog());
         }
         else if(msid == BEGIN_BUILD)
         {

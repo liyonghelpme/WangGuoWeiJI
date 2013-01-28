@@ -86,7 +86,7 @@ class TreasureBox extends MyNode
             else//没有人空位
             {
                 temp.addsprite("unkownFriendHead.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onSelfOpen);
-                but0 = new NewButton("greenButton0.png", [60, 23], getStr("oneGold", ["[NUM]", str(getParam("selfOpenGold"))]), null, 15, FONT_NORMAL, [0, 0, 0], onSelfOpen, null);
+                but0 = new NewButton("greenButton0.png", [60, 23], getStr("oneGold", ["[NUM]", str(getParam("selfOpenGold")), "[KIND]", "gold.png"]), null, 15, FONT_NORMAL, [0, 0, 0], onSelfOpen, null);
                 but0.bg.pos(29, 71);
                 temp.add(but0.bg);
             }
@@ -105,7 +105,9 @@ class TreasureBox extends MyNode
         else
         {
             opened = 0;
-            global.user.doCost(dict([["gold", getParam("selfOpenGold")]]));
+            var cost = dict([["gold", getParam("selfOpenGold")]]);
+            global.user.doCost(cost);
+            showMultiPopBanner(cost2Minus(cost));
             global.httpController.addRequest("friendC/selfOpen", dict([["uid", global.user.uid]]), null, null);
             global.user.selfOpen();
             updateState();

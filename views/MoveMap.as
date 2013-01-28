@@ -66,13 +66,27 @@ class MoveMap extends MyNode
             gridLayer.removefromparent();
             gridLayer = bg.addnode();
             var k = mapGridController.mapDict.keys();
+            var x;
+            var y;
+            var p;
+            var sp;
             for(var i = 0; i < len(k); i++)
             {
-                var x = k[i]/10000;
-                var y = k[i]%10000;
-                var p = setBuildMap([1, 1, x, y]);
+                x = k[i]/10000;
+                y = k[i]%10000;
+                p = setBuildMap([1, 1, x, y]);
 
-                var sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+                sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+            }
+
+            k = staticObstacle.keys();
+            for(i = 0; i < len(k); i++)
+            {
+                x = k[i]/10000;
+                y = k[i]%10000;
+                p = setBuildMap([1, 1, x, y]);
+
+                sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
             }
         }
     }

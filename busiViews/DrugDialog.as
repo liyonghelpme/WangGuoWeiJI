@@ -49,7 +49,7 @@ class DrugDialog extends MyNode
         im.scale(sca);
 
         temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
-        temp = bg.addlabel(getStr("drugDes", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 369, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
+        temp = bg.addlabel(getStr("drugDes", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
         if(kind == EQUIP)
             temp.text(getStr("equipDialog", null));
 
@@ -66,11 +66,9 @@ class DrugDialog extends MyNode
     {
         if(kind == DRUG)
         {
-            global.director.pushView(new MakeDrugDialog(MAKE_DRUG), 1, 0);
         }
         else if(kind == EQUIP)
         {
-            global.director.pushView(new MakeDrugDialog(MAKE_EQUIP), 1, 0);
         }
     }
 

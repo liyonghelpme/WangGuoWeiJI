@@ -151,7 +151,7 @@ class BackWord extends MyNode
         if(totalNum > par)
         {
             accTick += 1;
-            if(accTick == tick)
+            if(accTick >= tick)
             {
                 //0 1 print
 
@@ -271,7 +271,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
         if(totalNum < par)
         {
             accTick += 1;
-            if(accTick == tick)
+            if(accTick >= tick)
             {
                 accTick = 0;
                 var pn = "print"+str(curId)+".mp3";
