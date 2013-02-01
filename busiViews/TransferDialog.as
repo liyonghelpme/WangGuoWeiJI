@@ -36,12 +36,14 @@ class TransferDialog extends MyNode
             ]
             ), 
         18, 20, [28, 15, 4], FONT_NORMAL );
-        line.pos(525, 195);
+        line.pos(512, 195);
         bg.add(line);
 
         bg.addlabel(getStr("transferTime", ["[TIME]", getDayTime(curData["transferTime"])]), "fonts/heiti.ttf", 18).anchor(0, 50).pos(192, 337).color(28, 15, 4);
-        bg.addlabel(getStr("transferSoldier", null), "fonts/heiti.ttf", 30).anchor(0, 50).pos(355, 93).color(32, 33, 40);
-        bg.addlabel(getStr("inTransferNoWar", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(299, 147).color(43, 25, 9);
+
+        bg.addlabel(getStr("transferSoldier", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(410, 92).color(32, 33, 40);
+        bg.addlabel(getStr("inTransferNoWar", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(410, 146).color(43, 25, 9);
+
 
         var cost = soldier.getTransferCost();
         var pic = cost.keys()[0]+".png";
