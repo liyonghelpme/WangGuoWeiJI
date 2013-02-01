@@ -34,6 +34,14 @@ class RoundWin extends MyNode
         temp = bg.addsprite("silver.png").anchor(0, 0).pos(268, 227).size(30, 30).color(100, 100, 100, 100);
         bg.addlabel(str(param["reward"].get("crystal", 0)), "fonts/heiti.ttf", 22).anchor(0, 50).pos(307, 281).color(18, 11, 6);
         temp = bg.addsprite("crystal.png").anchor(0, 0).pos(271, 266).size(29, 29).color(100, 100, 100, 100);
+        
+        var rewardEquip = param["rewardEquip"];
+        for(var i = 0; i < len(rewardEquip); i++)
+        {
+            temp = bg.addsprite("equip"+str(rewardEquip[i]["kind"])+".png", ARGB_8888).anchor(50, 50).pos(454, 264).color(100, 100, 100, 100);
+            sca = getSca(temp, [90, 90]);
+            temp.scale(sca);
+        }
 
         global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), SHARE_WIN, returnBusiness);
     }

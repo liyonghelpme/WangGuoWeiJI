@@ -21,7 +21,7 @@ class UpgradeMine extends MyNode
         bg.addlabel(getStr("upgradeMineInc", ["[NUM]", str(getParam("mineIncNum"))]), "fonts/heiti.ttf", 21).anchor(50, 50).pos(409, 325).color(28, 15, 4);
         bg.addlabel(getStr("upgradeMineTit", null), "fonts/heiti.ttf", 32).anchor(50, 50).pos(408, 101).color(32, 33, 40);
 
-        var mineCost = getCost(MINE_PRODUCTION, mine.buildLevel);
+        var mineCost = mine.funcBuild.getLevelUpCost();
         but0 = new NewButton("roleNameBut0.png", [157, 49], getStr("upgradeButWord", ["[KIND]", "silver.png", "[NUM]", str(mineCost["silver"])]), null, 25, FONT_NORMAL, [100, 100, 100], onUpgrade, null);
         but0.bg.pos(307, 383);
         addChild(but0);

@@ -480,20 +480,24 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 nPos = getSolPos(s[i].get("monX"), s[i].get("monY"), so.sx, so.sy, so.offY);
                 so.setPos(nPos);
                 setMap(so);
+                so.putOnMap();
             }
         }
         //挑战好友 新手任务布局是确定的
         else//程序生成士兵的位置 挑战排行榜 挑战邻居
         {
             var otherSols;
+            //不再新手任务过程中 使用 获取的士兵
             if(!global.taskModel.checkInNewTask()){
                 otherSols = realGenChallengeSoldier(s);
             } else
                 otherSols = s;
 
+
+            trace("otherSols", otherSols);
             for(i = 0; i < len(otherSols); i++)
             {
-                so = realAddSoldier(ENEMY, otherSols[i]["id"], otherSols[i], s[i].get("color", ENECOLOR));
+                so = realAddSoldier(ENEMY, otherSols[i]["id"], otherSols[i], otherSols[i].get("color", ENECOLOR));
                 /*
                 设定人物位置会设定人物的zord 
                 所以要在添加了人物之后 设定位置
@@ -501,6 +505,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 nPos = getSolPos(otherSols[i].get("monX"), otherSols[i].get("monY"), so.sx, so.sy, so.offY);
                 so.setPos(nPos); 
                 setMap(so);
+                so.putOnMap();//执行变身动画
             }
         }
     }
@@ -713,6 +718,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 }
                 so.setPos(nPos);
                 setMap(so);
+                so.putOnMap();//士兵进入地图准备
                 
                 removed.append(i);
             }
@@ -754,6 +760,11 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var score = 0;
         var deadSols = deads[0];
         var deadInstance = deads[1];
+
+        var allDeadHero = getAllDeadHero();
+        var deadHero = allDeadHero[0];
+        var deadHeroInstance = allDeadHero[1];
+
         //挑战RANK 或者 邻居 按照排名 得到奖励
         if(scene.kind == CHALLENGE_FRI) 
         {
@@ -774,6 +785,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         trace("sceneKind", scene.kind, CHALLENGE_FRI);
         if(scene.kind == CHALLENGE_MON)
         {
+            var rewardEquip = [];//eid--->kind
             if(win)
             {
                 //更新星星得分
@@ -781,9 +793,19 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 if(curStar < star && !global.taskModel.checkInNewTask())//没有在新手任务阶段
                 {
                     global.user.updateStar(kind, small, star);
+                    //第一次闯关成功 且是本大关最后一个关卡
+                    if(small == (PARAMS["smallNum"]-1))
+                    {
+                        var mData = getData(MAP_INFO, kind);
+                        var newEid = global.user.getNewEid();
+                        if(mData["getEquip"] != -1)
+                        {
+                            var newEquip = global.user.getNewEquip(newEid, mData["getEquip"], 0);
+                            rewardEquip.append(newEquip);
+                        }
+                    }
                 }
-
-                global.director.pushView(new RoundWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward]])), 1, 0);
+                global.director.pushView(new RoundWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward], ["rewardEquip", rewardEquip]])), 1, 0);
                 //累计用户的星星数量比较星星总数
                 global.taskModel.doAllTaskByKey("roundStar", getAllStar());
             }
@@ -792,7 +814,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             global.user.doAdd(reward);
 
             if(!global.taskModel.checkInNewTask()) 
-                global.httpController.addRequest("soldierC/challengeOver", dict([["uid", global.user.uid], ["sols", deadSols], ["reward", json_dumps(reward)], ["star", star], ["big", kind], ["small", small]]), null, null);
+                global.httpController.addRequest("challengeC/challengeOver", dict([["uid", global.user.uid], ["sols", json_dumps(deadSols)], ["reward", json_dumps(reward)], ["star", star], ["big", kind], ["small", small], ["rewardEquip", json_dumps(rewardEquip)], ["deadHero", json_dumps(deadHero)]]), null, null);
         }
         else if(scene.kind == CHALLENGE_FRI)
         {
@@ -807,7 +829,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             else
                 global.director.pushView(new NewChallengeFail(this, dict([["win", win], ["star", star], ["score", score], ["reward", robReward]])), 1, 0);
             if(!global.taskModel.checkInNewTask()) 
-                global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["reward", json_dumps(robReward)], ["score", score], ["mid", global.user.getNewMsgId()], ["win", win], ["revenge", scene.user.get("revenge", 0)]]), null, null);
+                global.httpController.addRequest("challengeC/challengeResult", dict([["uid", global.user.uid], ["fid", scene.user["uid"]], ["sols", deadSols], ["reward", json_dumps(robReward)], ["score", score], ["mid", global.user.getNewMsgId()], ["win", win], ["revenge", scene.user.get("revenge", 0)], ["deadHero", json_dumps(deadHero)]]), null, null);
         }
     }
     
@@ -843,7 +865,24 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 challengeOver(1, getStar(), reward, deadSols);
         }
     }
-
+    
+    //英雄死亡
+    function getAllDeadHero()
+    {
+        var deadSols = [];
+        var deadInstance = [];
+        for(var i = 0; i < len(mySoldiers); i++)
+        {
+            var sol = mySoldiers[i];
+            if(sol.dead == 1 && sol.data["isHero"])
+            {
+                deadSols.append(sol.sid);
+                deadInstance.append(sol);
+            }
+        }
+        return [deadSols, deadInstance];
+    }
+    //普通的死亡士兵
     function getAllDeadSol()
     {
         var deadSols = [];
@@ -851,7 +890,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         for(var i = 0; i < len(mySoldiers); i++)
         {
             var sol = mySoldiers[i];
-            if(sol.dead == 1)
+            if(sol.dead == 1 && !sol.data["isHero"])
             {
                 deadSols.append(sol.sid);
                 deadInstance.append(sol);
@@ -1145,48 +1184,51 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         var skill = null;
         //直线 范围攻击 在地图上
         //单体攻击在 士兵身上 但是相对位置不同
+        var skyOrEarth = data["skyOrEarth"];
+        var zOrd = 0;
+        if(skyOrEarth == 0)
+            zOrd = MAX_BUILD_ZORD;
         if(data["kind"] == LINE_SKILL)
         {
             skill = new LineSkill(this, attacker, target, skillId, skillLevel); 
-            addChildZ(skill, MAX_BUILD_ZORD);
+            addChildZ(skill, zOrd);
         }
         else if(data["kind"] == SINGLE_ATTACK_SKILL)
         {
             skill = new SingleSkill(this, attacker, target, skillId, skillLevel);
-            addChildZ(skill, MAX_BUILD_ZORD);
+            addChildZ(skill, zOrd);
         }
         else if(data["kind"] == MULTI_ATTACK_SKILL)
         {
             skill = new MultiSkill(this, attacker, target, skillId, skillLevel);
-            addChildZ(skill, MAX_BUILD_ZORD);
+            addChildZ(skill, zOrd);//地面性质技能 和 天空性质技能 决定贴图的层次
         }
         else if(data["kind"] == SPIN_SKILL)
         {
             skill = new SpinSkill(this, attacker, target, skillId, skillLevel);
-            addChildZ(skill, MAX_BUILD_ZORD);
+            addChildZ(skill, zOrd);
         }
         else if(data["kind"] == HEAL_SKILL || data["kind"] == MULTI_HEAL_SKILL)
         {
             skill = new HealSkill(this, attacker, target, skillId, skillLevel);//显示的图片是默认的治疗图片
-            target.addChildZ(skill, MAX_BUILD_ZORD);
+            target.addChildZ(skill, zOrd);
         }
         //单体技能加在士兵身上
         else if(data["kind"] == SAVE_SKILL)
         {
             skill = new SaveSkill(this, attacker, target, skillId, skillLevel);
-            addChildZ(skill, MAX_BUILD_ZORD);
+            addChildZ(skill, zOrd);
         }
         else if(data["kind"] == USE_DRUG_SKILL)
         {
             skill = new UseDrugSkill(this, attacker, target, scene.drugId);
-            target.addChildZ(skill, MAX_BUILD_ZORD);
+            target.addChildZ(skill, zOrd);
         }
         else if(data["kind"] == MAKEUP_SKILL)//变身技能
         {
             attacker.doMakeUp(skillId, skillLevel);
         }
 
-        //addChildZ(skill, MAX_BUILD_ZORD);
     }
     function hideBlood()
     {
@@ -1194,14 +1236,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         {
             var sol = soldierInstance[i];
             sol.hideBlood();
-        }
-    }
-    function showBlood()
-    {
-        for(var i = 0; i < len(soldierInstance); i++)
-        {
-            var sol = soldierInstance[i];
-            sol.showBlood();
         }
     }
     var curMovSol = null;

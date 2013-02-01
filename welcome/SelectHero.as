@@ -169,15 +169,14 @@ class SelectHero extends MyNode
                         if(c[1][2] == 0)
                         {
                             dia0.visible(1);
-//temp = bg.addlabel(getStr("w0", null), "fonts/heiti.ttf", 22, FONT_NORMAL, 180, 0, ALIGN_LEFT).anchor(0, 0).pos(22, 17).color(100, 100, 100);
-                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_BOLD, 180, 0, ALIGN_LEFT).color(0, 0, 0).pos(22, 17);
+                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_BOLD, getParam("dia0Width"), 0, ALIGN_LEFT).color(0, 0, 0).pos(getParam("dia0X"), 17);
                             dia0.stop();
                             dia0.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }
                         else if(c[1][2] == 1)
                         {
                             dia1.visible(1);
-                            w = dia1.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_BOLD, 256, 0, ALIGN_LEFT).color(0, 0, 0).pos(17, 29);
+                            w = dia1.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_BOLD, getParam("dia1Width"), 0, ALIGN_LEFT).color(0, 0, 0).pos(getParam("dia1X"), getParam("dia1Y"));
                             dia1.stop();
                             dia1.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }

@@ -51,22 +51,7 @@ class MapPause extends MyNode
     var rightText;
     
     var skillFlowBanner;
-    var blood = 0;
-    var bloodBut;
-    function onBlood()
-    {
-        if(blood == 0)
-        {
-            scene.map.hideBlood();
-            bloodBut.texture("showBlood.png", GRAY);
-        }
-        else
-        {
-            scene.map.showBlood();
-            bloodBut.texture("showBlood.png");
-        }
-        blood = 1-blood;
-    }
+
     var leftRed;
     var rightRed;
 

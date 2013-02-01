@@ -112,7 +112,18 @@ class Store extends MyNode
         global.director.popView(); 
     }
     //allGoods item tab item
-
+    function storeBuyGold(pid, ret, tid, receipt, param)
+    {
+        trace("storeBuyGold", pid, ret, tid, receipt, param);
+        if(ret == 1)
+        {
+            var buyNum = goldGain;
+            global.httpController.addRequest("finishPay", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(buyNum)]]), null, null);
+            global.user.doAdd(buyNum);
+        }
+    }
+    
+    var goldGain = null;
     function buy(gi)
     {
         var item = allGoods[gi[0]][gi[1]]; 
@@ -124,6 +135,19 @@ class Store extends MyNode
         var ret;
 
         cost = getCost(kind, id);
+        //使用木瓜币 购买金币
+        if(kind == GOLD)
+        {
+            var buyNum = getGain(kind, id);
+            goldGain = buyNum;
+            if(getParam("debugPay"))
+                start_payment(getStr("storeBuyGold", ["[NUM]", str(buyNum["gold"])]), "", "", 1, storeBuyGold);
+            else
+                start_payment(getStr("storeBuyGold", ["[NUM]", str(buyNum["gold"])]), "", "", cost["papaya"], storeBuyGold);
+            return;
+        }
+
+
         buyable = global.user.checkCost(cost);
 
 //        trace("buy Cost", cost, buyable);
@@ -146,7 +170,7 @@ class Store extends MyNode
             {
                 if(ret[1] == 0)//只超过等级上限
                 {
-                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr(KIND2NAME[data["funcs"]]+"TooCon", ["[LEV]", str(getNextBuildNum(id) + 1)]), [100, 100, 100], null));
+                    global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("buildTooCon", ["[LEV]", str(getNextBuildNum(id) + 1), "[NAME]", data["name"]]), [100, 100, 100], null));
                 }
                 else//超过总量上限
                     global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("buildMax", null), [100, 100, 100], null));

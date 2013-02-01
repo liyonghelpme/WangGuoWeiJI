@@ -63,9 +63,12 @@ class BuildWorkMenu extends MyNode
         }
         else if(bData.get("funcs") == CASTLE_BUILD)
         {
-            cw = colorWordsNode(getStr("castleInfo", ["[LEV]", str(global.user.getValue("level")+1), "[NUM]", str(global.user.getValue("cityDefense"))]), 21, [100, 100, 100], [89, 72, 18]);
+            if(global.user.checkInProtect())
+                cw = colorWordsNode(getStr("castleInfo1", ["[LEV]", str(global.user.getValue("level")+1), "[NUM]", str(global.user.getValue("cityDefense")), "[TIME]", getWorkTime(global.user.getProtectLeftTime()) ]), 21, [100, 100, 100], [89, 72, 18]);
+            else
+                cw = colorWordsNode(getStr("castleInfo", ["[LEV]", str(global.user.getValue("level")+1), "[NUM]", str(global.user.getValue("cityDefense"))]), 21, [100, 100, 100], [89, 72, 18]);
             
-            banner.addsprite("buildDefense.png").anchor(0, 0).pos(322, 21).setevent(EVENT_TOUCH, onDefense);
+            //banner.addsprite("buildDefense.png").anchor(0, 0).pos(322, 21).setevent(EVENT_TOUCH, onDefense);
         }
         else if(bData.get("funcs") == CAMP)
         {
@@ -135,6 +138,8 @@ class BuildWorkMenu extends MyNode
             passTime += diff;
         }
         if(build.state == PARAMS["buildWork"])
+            updateView();
+        else if(build.funcs == CASTLE_BUILD)
             updateView();
     }
     //关闭两个子菜单

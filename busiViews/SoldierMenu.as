@@ -33,6 +33,9 @@ class SoldierMenu extends MyNode
         trace("inTransfer", soldier.inTransfer);
         if(soldier.inTransfer)
             timeLabel = bg.addlabel(getStr("transferLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
+        if(soldier.inDead)
+            timeLabel = bg.addlabel(getStr("reliveLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
+            
         
         var solOrMon = soldier.data["solOrMon"];
         if(solOrMon == 0)
@@ -82,8 +85,12 @@ class SoldierMenu extends MyNode
                 clearChildMenu();
             passTime += diff;
         }
-        if(timeLabel != null)
-            timeLabel.text(getStr("transferLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]));
+        if(timeLabel != null) {
+            if(soldier.inTransfer)
+                timeLabel.text(getStr("transferLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]));
+            if(soldier.inDead)
+                timeLabel.text(getStr("reliveLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]));
+        }
     }
     override function enterScene()
     {

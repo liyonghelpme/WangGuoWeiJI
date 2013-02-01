@@ -126,7 +126,7 @@ class DialogController extends MyNode
                 }
                 else if(curCmd["cmd"] == "newTaskDialog")
                 {
-                    global.director.pushView(new NewTaskDialog2(), 1, 0);
+                    //global.director.pushView(new NewTaskDialog2(), 1, 0);
                 }
                 else if(curCmd["cmd"] == "newTaskReward")
                     global.director.pushView(new NewTaskReward(), 1, 0);
@@ -147,8 +147,19 @@ class DialogController extends MyNode
             }
         }
     }
+    //清理新手任务状态
+    function clearBanner()
+    {
+        trace("bannerStack", len(bannerStack));
+        for(var i = 0; i < len(bannerStack); i++) {
+            bannerStack[i][0].removeSelf();
+        }
+        bannerStack = [];
+    }
     override function exitScene()
     {
+        trace("exit DialogBanner");
+        clearBanner();
         global.timer.removeTimer(this);
         super.exitScene();
     }

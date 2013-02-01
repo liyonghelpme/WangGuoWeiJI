@@ -83,7 +83,7 @@ class MenuLayer extends MyNode
     }
     function onTask()
     {
-        var player = global.controller.playSound("but.mp3");
+        global.controller.playSound("but.mp3");
         global.director.pushView(new TaskDialog(), 1, 0);
     }
     var sureToChallenge = 0;
@@ -473,7 +473,7 @@ class MenuLayer extends MyNode
     }
     
     function onClicked(n, e, param, x, y, points){
-        var player = global.controller.playSound("but.mp3");
+        global.controller.playSound("but.mp3");
         if(showChildMenu == 0){
             drawAllMenu();
         }

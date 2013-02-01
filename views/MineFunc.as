@@ -116,14 +116,13 @@ class Mine extends FuncBuild
     {
         if(planting.curState == 1)//成熟则收获
         {
-            var crystal = getProduction(baseBuild.buildLevel);
-            global.httpController.addRequest("mineC/harvest", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["crystal", crystal]]), null, null);
+            var gain = getProduction(baseBuild.buildLevel);
+            global.httpController.addRequest("mineC/harvest", dict([["uid", global.user.uid], ["bid", baseBuild.bid], ["gain", json_dumps(gain)]]), null, null);
             flowBanner.removefromparent();
             flowBanner = null;
             planting.removeSelf();
             planting = null;
             
-            var gain = dict([["crystal", crystal]]);
             global.director.curScene.addChild(new FlyObject(baseBuild.bg, gain, null));
 
             planting = new MinePlant(baseBuild, dict([["objectTime", time()/1000]]));
@@ -132,7 +131,7 @@ class Mine extends FuncBuild
             //global.user.updateMine(baseBuild);
             global.user.updateBuilding(baseBuild);
 
-            global.taskModel.doAllTaskByKey("harvestCrystalMine", crystal);
+            global.taskModel.doAllTaskByKey("harvestCrystalMine", gain["crystal"]);
 
             return 1;
         }
@@ -191,7 +190,7 @@ var word = temp.addlabel("-" + str(it[0][1]), "fonts/heiti.ttf", 25).anchor(0, 5
     {
         if(baseBuild.buildLevel < (len(mineProductionData)-1))   
         {
-            var mCost = getCost(MINE_PRODUCTION, baseBuild.buildLevel);
+            var mCost = getLevelCost(BUILD, baseBuild.id, baseBuild.buildLevel+1);//当前等级的 下一个等级需要的花销
             return mCost;
         }
         return dict();

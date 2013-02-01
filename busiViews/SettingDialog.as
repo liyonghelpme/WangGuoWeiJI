@@ -29,22 +29,30 @@ class SettingDialog extends MyNode
 
         button = bg.addsprite("onButton.png").anchor(0, 0).pos(511, 189).size(108, 41).color(100, 100, 100, 100).setevent(EVENT_TOUCH, switchMusic);
         bg.addlabel(getStr("systemSetting", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(421, 91).color(32, 33, 40);
+        updateMusic();
     }
     function SettingDialog()
     {
-        music = 0;
+        music = global.user.getMusic();
         initView();
     }
     function closeDialog()
     {
         global.director.popView();
     }
-    function switchMusic()
+    function updateMusic()
     {
-        music = 1 - music;
-        if(music == 1)
+        music = global.user.getMusic();
+        if(music == 0)
             button.texture("onButton.png");
         else
             button.texture("offButton.png");
+    }
+    function switchMusic()
+    {
+        global.user.switchMusic();
+        updateMusic();
+        //获取当前所有活跃的音效 和 音乐 然后关闭
+        global.msgCenter.sendMsg(SWITCH_MUSIC, null);
     }
 }

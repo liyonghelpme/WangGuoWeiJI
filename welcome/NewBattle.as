@@ -272,10 +272,7 @@ class NewBattle extends MyNode
                         if(c[1][2] == 0)
                         {
                             dia0.visible(1);
-//w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_NORMAL, 176, 0, ALIGN_LEFT).color(0, 0, 0).pos(23, 27);
-//temp = bg.addlabel(getStr("   哼哼！尊敬的国  王陛下,快把公主交   出来吧！", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 146, 0, ALIGN_LEFT).anchor(0, 0).pos(12, 25).color(0, 0, 0);
-//temp = bg.addlabel(getStr("dearKing", null), "fonts/heiti.ttf", 17, FONT_NORMAL, 153, 0, ALIGN_LEFT).anchor(0, 0).pos(22, 20).color(0, 0, 0);
-                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_NORMAL, 153, 0, ALIGN_LEFT).anchor(0, 0).pos(22, 20).color(0, 0, 0);
+                            w = dia0.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_NORMAL, getParam("dia0Width"), 0, ALIGN_LEFT).anchor(0, 0).pos(getParam("dia0X"), 20).color(0, 0, 0);
 
                             dia0.stop();
                             dia0.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
@@ -283,8 +280,7 @@ class NewBattle extends MyNode
                         else if(c[1][2] == 1)
                         {
                             dia1.visible(1);
-//w = dia1.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 21, FONT_NORMAL, 245, 0, ALIGN_LEFT).color(0, 0, 0).pos(25, 25);
-                            w = dia1.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_NORMAL, 188, 0, ALIGN_LEFT).anchor(0, 0).pos(23, 21).color(0, 0, 0);
+                            w = dia1.addlabel(getStr(c[1][1], null), "fonts/heiti.ttf", 17, FONT_NORMAL, 188, 0, ALIGN_LEFT).anchor(0, 0).pos(getParam("dia1X"), 21).color(0, 0, 0);
                             dia1.stop();
                             dia1.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
                         }

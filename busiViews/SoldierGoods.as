@@ -40,7 +40,6 @@ class SoldierGoods extends MyNode
 
     var curTouch = null;
     var oldScale;
-    var player;
     function touchBegan(n, e, p, x, y, points)
     {
         var newPos = n.node2world(x, y);
@@ -52,7 +51,7 @@ class SoldierGoods extends MyNode
         {
             oldScale = curTouch.scale();
             curTouch.scale(oldScale[0]*getParam("butScale")/100, oldScale[1]*getParam("butScale")/100);
-            player = global.controller.playSound("but.mp3");
+            global.controller.playSound("but.mp3");
         }
     }
     function touchMoved(n, e, p, x, y, points)
@@ -74,8 +73,6 @@ class SoldierGoods extends MyNode
         {
             curTouch.scale(oldScale);
             curTouch = null;
-            player.stop();
-            player = null;
         }
 
         var newPos = n.node2world(x, y);

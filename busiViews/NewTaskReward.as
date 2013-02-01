@@ -25,7 +25,7 @@ class NewTaskReward extends MyNode
         temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
         bg.addlabel(getStr("newTaskRewardTit", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(423, 93).color(32, 33, 40);
         bg.addlabel(getStr("getGift", null), "fonts/heiti.ttf", 18).anchor(0, 50).pos(212, 208).color(28, 15, 4);
-        bg.addlabel(getStr("newTaskFinStage"+str(tData["newTaskPeriod"]), null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(414, 147).color(43, 25, 9);
+        bg.addlabel(getStr("newTaskFinStage", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(414, 147).color(43, 25, 9);
 
         var curX = 214;
         var curY = 231;

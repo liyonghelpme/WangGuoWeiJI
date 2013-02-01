@@ -39,7 +39,6 @@ class User
     var name;
     var invite;
     var challengeState;
-    
 
     function getAllBuildingKinds()
     {
@@ -133,6 +132,22 @@ class User
         maxEid += 1;
 //        trace("equips", equips, maxEid, eq);
 
+    }
+    function getMusic()
+    {
+        var music = db.get("music");
+        if(music == null)
+        {
+            music = 0;
+            db.put("music", 0);
+        }
+        return music;
+    }
+    function switchMusic()
+    {
+        var music = db.get("music");
+        music = 1-music;
+        db.put("music", music);
     }
 
     function initStarNum()
@@ -306,6 +321,13 @@ class User
             return 1;
         return 0;
     }
+    function getProtectLeftTime()
+    {
+        var now = time()/1000;
+        var effectStart = now - getParam("ProtectTime");
+        var leftTime = getParam("ProtectTime")-(now-server2Client(challengeState["protectTime"]));
+        return max(leftTime, 0);
+    }
     //sendMsg 需要castlePage 响应 
     function initDataOver(rid, rcode, con, param)
     {
@@ -450,7 +472,7 @@ class User
     function getLoadTip()
     {
         loadTip += 1;
-        loadTip %= PARAMS["MAX_LOAD_TIP_NUM"];
+        loadTip %= getParam("MaxLoadTipNum");
         db.put("loadTip", loadTip);
         return loadTip;
     }
@@ -550,17 +572,23 @@ class User
     {
         lastColor += 1;
         lastColor %= 3;
+        db.put("lastColor", lastColor);
         return lastColor;
     }
     function User()
     {
-        lastColor = rand(3);//0 1 2 兵营随机颜色 0 本色 1 特征色本色 2 特征色变化色
         papayaId = ppy_userid();
         if(papayaId == null)
             return;
         papayaName = ppy_username();
 
         db = c_opendb();
+        //0 1 2 兵营随机颜色 0 本色 1 特征色本色 2 特征色变化色
+        lastColor = db.get("lastColor");
+        if(lastColor == null) {
+            lastColor = 0;
+            db.put("lastColor", lastColor);
+        }
         tempSetData();
     }
     function getPeopleNum()
@@ -705,10 +733,13 @@ class User
 
         trace("finsh User buy Building");
     }
-
+    //收到礼物 或者 闯过一小关获得装备
     function getNewEquip(eid, id, level)
     {
-        equips.update(eid, dict([["kind", id], ["level", level], ["owner", -1]]));
+        var newEquip = dict([["kind", id], ["level", level], ["owner", -1], ["eid", eid]]);
+        equips.update(eid, newEquip);
+        global.msgCenter.sendMsg(UPDATE_EQUIP, [eid, UPDATE_BUY_EQUIP]);
+        return newEquip;
     }
 
     function getNewEid()
@@ -782,14 +813,15 @@ class User
             return;
         }
         //闯关结束 提示士兵阵亡
-        if(soldier.dead)
+        //普通士兵死亡  英雄留存
+        if(soldier.dead && !soldier.data["isHero"])
         {
             //清除士兵身上所有非套装suit == -1
             killSoldier(soldier);
         }
         else
         {
-            soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["inTransfer", soldier.inTransfer], ["transferStartTime", soldier.transferStartTime] ]));
+            soldiers.update(soldier.sid, dict([["id", soldier.id], ["name", soldier.myName], ["inTransfer", soldier.inTransfer], ["transferStartTime", soldier.transferStartTime], ["inDead", soldier.inDead], ["deadStartTime", soldier.deadStartTime] ]));//服务器上死亡时间
         }
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);
     }
@@ -1076,11 +1108,12 @@ class User
         global.msgCenter.sendMsg(UPDATE_SOL, soldier);//卖出士兵
     }
     //改变用户经验
+    //控制用户的等级
     function changeExpLevel(level)
     {
-        trace("changeExpLevel", level);
-        var needExp = getLevelUpNeedExp(level);
-        changeValue("exp", needExp);
+        trace("changeExpLevel", level);//设定用户等级
+        setValue("level", level);
+        setValue("exp", 0);
     }
     /*
     改变用户经验 有可能自动升级
@@ -1224,6 +1257,10 @@ class User
             var value = its[i][1];
             if(key == "free")
                 continue;
+            if(key == "papaya")
+            {
+                continue;//不检测木瓜比数量
+            }
             var cur = resource.get(key, 0);
             if(cur < value)
             {

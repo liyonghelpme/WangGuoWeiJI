@@ -293,15 +293,12 @@ class FriendList extends MyNode
         if(uid == ADD_NEIBOR_MAX)
         {
             but0 = new NewButton("roleNameBut0.png", [129, 39], "", null, 18, FONT_NORMAL, [100, 100, 100], onAddGoldSeat, curNum);
-            but0.bg.pos(74, 126);
+            but0.bg.pos(72, 82);
             shadow.add(but0.bg);
 
             but0.bg.addlabel(getStr("addGoldSeat", ["[NUM]", str(PARAMS["addSeatGold"])]), "fonts/heiti.ttf", 18).pos(31, 19).anchor(0, 50);
             but0.bg.addsprite("gold.png").anchor(0, 0).pos(4, 6).size(27, 27).color(100, 100, 100, 100);
 
-            var line = colorLines(getStr("addFreeSeat", ["[LEV]", str(10)]), 20, 22 );
-            line.pos(32, 46);
-            shadow.add(line);
         }
         else if(uid == EMPTY_SEAT)
         {

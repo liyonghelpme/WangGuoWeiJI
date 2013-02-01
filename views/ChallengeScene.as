@@ -215,7 +215,6 @@ class ChallengeScene extends MyNode
             con = json_loads(con);
             if(con["id"] == 1)
             {
-                var otherId = con["oid"];
                 kind = CHALLENGE_FRI;
                 user = con["user"];
                 oid = user["uid"];
@@ -223,7 +222,7 @@ class ChallengeScene extends MyNode
                 score = user["score"];
                 rank = user["rank"];
 
-                global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", otherId]]), getDataOver, null);
+                global.httpController.addRequest("challengeC/challengeOther", dict([["uid", global.user.uid], ["oid", user["uid"]]]), getDataOver, null);
             }
             else
             {

@@ -32,7 +32,7 @@ class MapBanner extends MyNode
         for(var i = 0; i < len(sols); i++)
         {
             var sdata = sols[i][1];
-            if(sdata.get("inTransfer", 0) == 0)//soldierId 不再转职中
+            if(sdata.get("inTransfer", 0) == 0 && !sdata["inDead"])//soldierId 不再转职中
             {
                 data.append([sols[i][0], 0]);//是否已经放置
             }
@@ -343,8 +343,7 @@ class MapBanner extends MyNode
         }
         //有我方士兵 没有我方士兵
         controlSoldier = null;
-
-        updateTab();
+        onMove(null, null, 0, null, null, null);
     }
 
     //点击banner set
@@ -381,7 +380,13 @@ class MapBanner extends MyNode
         var oldPos = flowNode.pos();
         oldPos[0] += p*ITEM_NUM*OFFX;
 
-        var total = len(data);
+        var total = 0;
+        for(var i = 0; i < len(data); i++)
+        {
+            if(data[i][1] == 0)
+                total++;
+        }
+
         oldPos[0] = min(0, max(-total*OFFX+WIDTH, oldPos[0])); 
         flowNode.pos(oldPos);
         if(oldPos[0] >= 0)

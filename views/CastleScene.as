@@ -284,7 +284,7 @@ class CastleScene extends MyNode
 
 
         //等待CastlePage finishBuild 来改变建筑状态
-        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["state", curBuild.state], ["color", curBuild.buildColor]]), null, null);
+        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["state", curBuild.state], ["color", curBuild.buildColor], ["cost", json_dumps(getCost(BUILD, curBuild.id))]]), null, null);
 
         closeBuild();
         //在关闭 选择菜单之后再显示任务奖励菜单

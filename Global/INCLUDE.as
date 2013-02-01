@@ -206,7 +206,7 @@ import war.MapDefense;
 
 import views.DialogController;
 import busiViews.ChallengeMsgDialog;
-import busiViews.NewTaskDialog2;
+//import busiViews.NewTaskDialog2;
 import views.Mask;
 import busiViews.NewTaskMask;
 
@@ -321,6 +321,7 @@ global.timer = new Timer(1000);
 global.httpController = new HttpController();
 global.paramController = new ParamController();
 
+//Message 要比Controller 先初始化
 global.msgCenter = new MessageCenter();
 global.director = new Director();
 global.touchManager = new TouchManager();

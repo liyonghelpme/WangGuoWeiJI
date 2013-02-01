@@ -139,9 +139,17 @@ function checkInChild(bg, pos)
 */
 //costKey 不包含level的需求，因此在检测需求的时候需要确认level存在
 //doCost不包含level
+//建筑物还有numCost 这样的属性 需要特殊对待
+//user 中checkCost
+//商店显示cost的时候
 function getCost(kind, id)
 {
-//    trace("getCost", kind, id);
+    return getLevelCost(kind, id, 0);
+}
+function getLevelCost(kind, id, level)
+{
+    if(getParam("debugData"))
+        trace("getCost", kind, id);
     var build = getData(kind, id);
     var cost = dict();
     for(var i = 0; i < len(costKey); i++)
@@ -150,8 +158,27 @@ function getCost(kind, id)
         if(v > 0)
             cost.update(costKey[i], v);
     }
+
+    //建筑物 需要根据数量 等级计算开销
+    //普通建筑都是0级别购买 
+    //水晶矿升级 是 另外的 方式
+    if(kind == BUILD) {
+        if(build["hasNum"]) {
+            var curNum = getCurLevelBuildNum(id, level);
+            //升级建筑物 建筑物的数量不变
+            curNum = min(len(build["numCost"][level])-1, curNum);
+
+            var c = build["numCost"][level][curNum];//0 级别
+            for(i = 0; i < len(costKey); i++) {
+                v = c.get(costKey[i], 0);
+                if(v > 0)
+                    cost.update(costKey[i], v);
+            }
+        }
+    }
     return cost;
 }
+
 /*
 如果key中包含有gain 则需要替换掉gain
 */
@@ -308,15 +335,26 @@ function getBuildMap(build)
 
 建筑物的位置是 anchor 50 100 
 建筑物菱形 所在的矩形的 左上角的位置--> + sx +1 得到最上子菱形位置编号
+getPosMap 这个函数不可靠 需要确保 px py 可靠位置
+//normal 之后的位置
 */
 function getPosMap(sx, sy, px, py)
 {
+    var normal = normalizePos([px, py], sx, sy);
+    px = normal[0];
+    py = normal[1];
+
     px -= (sx+sy)*SIZEX/2;
     py -= (sx+sy)*SIZEY;
 
     px /= SIZEX;
     py /= SIZEY;
+
     //trace("getBuildMap", px+sx, py+1);
+    //要保证奇数偶数特性
+    //左上角的基数偶数特性是不确定的 3 3 是 不同
+    //if(px%2 != py%2)
+    //    px++;
     return [sx, sy, px+sx, py+1];
 }
 /*
@@ -1251,12 +1289,17 @@ function showTaskMultiReward(showData)
         var k = its[i][0];
         var v = its[i][1];
         var w;
-        if(v > 0)
-            w = getStr("getTaskReward", ["[NUM]", "+"+str(v), "[KIND]", getStr(k, null)]);
-        else if(v < 0)
-            w = getStr("getTaskReward", ["[NUM]", str(v), "[KIND]", getStr(k, null)]);
+        if(i == 0)
+        {
+            if(v > 0)
+                w = getStr("getTaskReward", ["[NUM]", "+"+str(v), "[KIND]", getStr(k, null)]);
+            else if(v < 0)
+                w = getStr("getTaskReward", ["[NUM]", str(v), "[KIND]", getStr(k, null)]);
+            else
+                continue;
+        }
         else
-            continue;
+            w = ", "+getStr("afterTaskReward", ["[NUM]", "+"+str(v), "[KIND]", getStr(k, null)]);
         totalWord += w;
     }
     global.director.curScene.dialogController.addBanner(new UpgradeBanner(totalWord, [100, 100, 100], null));
@@ -1287,4 +1330,9 @@ function removeNewTaskMask()
         GlobalNewTaskMask.removeSelf();
         GlobalNewTaskMask = null;
     }
+}
+function checkHeroTransform(id)
+{
+    var data = getData(SOLDIER, id);
+    return (data["isHero"] && id%10==getParam("MaxSolCareer"));
 }

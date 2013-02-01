@@ -23,6 +23,11 @@ class NewButton extends MyNode
         word.bg.pos(bs[0]/2, bs[1]/2).anchor(50, 50);
         addChild(word);
 
+        var wSize = word.bg.size();
+        var width = max(bs[0], wSize[0]+getParam("butWidth"));
+        bg.size(width, bs[1]);
+        word.bg.pos(width/2, bs[1]/2);
+
 
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
@@ -37,10 +42,9 @@ class NewButton extends MyNode
         bg.texture(pc);
     }
 
-    var player = null;
     function touchBegan(n, e, p, x, y, points)
     {
-        player = global.controller.playSound("but.mp3");
+        global.controller.playSound("but.mp3");
 
         oldSca = bg.scale();
         bg.scale(oldSca[0]*80/100, oldSca[1]*80/100);
@@ -54,7 +58,6 @@ class NewButton extends MyNode
         //var ret = checkIn(bg, po);
         var ret = 1;
 
-        player.stop();
         bg.scale(oldSca);
 
         if(ret)

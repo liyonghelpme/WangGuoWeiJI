@@ -33,7 +33,7 @@ class GroundBomb extends EffectBase
         var ani = pureMagicData[groundBomb[2]];
         cus = new OneAnimate(ani[1], ani[0], bg, "", 0);
         timeAll[BOMB_NOW] = ani[1];
-        bg.pos(tar.getPos());
+        bg.pos(tar.getGroundBombPos(sol));
     }
     
 

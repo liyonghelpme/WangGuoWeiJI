@@ -11,6 +11,10 @@ class BusiSoldier extends MyNode
     var inTransfer;
     var transferStartTime;
 
+    var inDead;
+    var deadStartTime;
+
+
     //在同时处理建筑物和士兵的模块 通过这个标志区分两者
     //或者传递参数的时候， 通过明显的变量区分
     var isBuilding = 0;
@@ -55,9 +59,40 @@ class BusiSoldier extends MyNode
             privateData = dict();
         }
         inTransfer = privateData.get("inTransfer", 0);
+        inDead = privateData.get("inDead", 0);
         transferStartTime = privateData.get("transferStartTime", 0);
+        deadStartTime = privateData.get("deadStartTime", 0);
+
         initAttackAndDefense(this);
         initEquipAttribute(this, global.user.getSoldierEquipData(sid));
+
+
+    }
+    function showChooseStar()
+    {
+        var bSize = bg.size();
+        if(chooseStar != null)
+        {
+            chooseStar.removefromparent();
+            chooseStar = null;
+        }
+        chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+        if(inDead)
+            chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
+        else if(inTransfer)
+            chooseStar.addaction(repeat(animate(1500, "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", UPDATE_SIZE)));
+        else
+            chooseStar.addaction(repeat(animate(1500, "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", UPDATE_SIZE)));
+            
+        bg.add(chooseStar, -1);
+    }
+    function initDeadState()
+    {
+        if(inDead)
+        {
+            oldState = state;
+            showChooseStar();
+        }
     }
 
     function updateState()
@@ -124,10 +159,7 @@ class BusiSoldier extends MyNode
         clearMoveState();//停止移动
         map.addChildZ(new MonSmoke(map, null, this, PARAMS["smokeSkillId"], finishName), MAX_BUILD_ZORD);
 
-        var bSize = bg.size();
-        chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
-        chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
-        bg.add(chooseStar, -1);
+        showChooseStar();
     }
     function finishName()
     {
@@ -150,6 +182,9 @@ class BusiSoldier extends MyNode
         //有些士兵尺寸调整
         bg = node().scale(PARAMS["SOL_SHOW_SIZE"]*data["solSca"]/100);
         init();
+        if(getParam("debugSoldier"))
+            stateLabel = bg.addlabel("", null, 25).pos(0, -20).color(0, 0, 0);
+
         changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
 
         var bSize = changeDirNode.prepare().size();
@@ -197,6 +232,7 @@ class BusiSoldier extends MyNode
 
 
         initHealth();
+        initDeadState();//根据当前状态 进入死亡状态
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
@@ -235,6 +271,7 @@ class BusiSoldier extends MyNode
     修改士兵的id
     修改士兵的攻击力 防御力 经验
     修改士兵的显示状态
+    转职显示足底五角星
     */
     function doTransfer()
     {
@@ -244,6 +281,7 @@ class BusiSoldier extends MyNode
         global.user.updateSoldiers(this);//更新士兵类型
         //global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
         global.taskModel.doAllTaskByKey("solTransfer", 1);
+        showChooseStar();
     }
 
     //完成转职
@@ -255,6 +293,7 @@ class BusiSoldier extends MyNode
         id += 1;
         updateTransData();
         global.user.updateSoldiers(this);
+        chooseStar.removefromparent();
 
         oldState = state;
         state = SOL_IN_TRANSFER;
@@ -267,11 +306,16 @@ class BusiSoldier extends MyNode
         state = oldState;
         oldState = null;
     }
-
+    //外部调用统一的getLeftTime 即可
     function getLeftTime()
     {
-        var leftTime = data["transferTime"] - (time()/1000-server2Client(transferStartTime));
-        return max(leftTime, 0);
+        if(inTransfer) {
+            var leftTime = data["transferTime"] - (time()/1000-server2Client(transferStartTime));
+            return max(leftTime, 0);
+        }
+        if(inDead)
+            return getDeadLeftTime();
+        return 0;
     }
     var accMove = 0;
     var lastPoints;
@@ -384,16 +428,53 @@ class BusiSoldier extends MyNode
         //else
         //    func2 = [];
           
-        if(career < getParam("MaxSolCareer") && !inTransfer && solOrMon==0)//0 1 2 3
+        if(career < getParam("MaxSolCareer") && !inTransfer && solOrMon==0 && !inDead)//0 1 2 3
             func2.append("transfer");
+
         if(inTransfer)
         {
             func2.append("acc");
+        }
+        if(inDead)
+        {
+            func2.append("accDead");
         }
         func2.append("equip");
 
         //快速编译解决依赖关系
         global.director.pushView(new SoldierMenu(this, func1, func2), 0, 0); 
+    }
+    function doAccDead()
+    {
+        var leftTime = getDeadLeftTime();
+        var gold = calAccCost(leftTime);
+
+        var cost = dict([["gold", gold]]);
+        var buyable = global.user.checkCost(cost);
+        if(buyable.get("ok") == 0)
+        {
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("resLack", ["[NAME]", getStr("gold", null), "[NUM]", str(gold)]), [100, 100, 100], null));
+            return;            
+        }
+        if(inDead)
+        {
+            if(acced == 0)
+            {
+                acced = 1;
+                global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("sureToGenAcc", ["[NUM]", str(gold)]), [100, 100, 100], null));
+            }
+            else
+            {
+                acced = 0;
+                global.director.curScene.closeGlobalMenu(this);
+                 
+                //转职时间
+                deadStartTime -= leftTime;
+
+                global.user.updateSoldiers(this);
+                global.httpController.addRequest("soldierC/accReliveHero", dict([["uid", global.user.uid], ["sid", sid], ["leftTime", leftTime], ["cost", json_dumps(cost)]]), null, null);
+            }
+        }
     }
 
     var acced = 0;
@@ -589,8 +670,11 @@ class BusiSoldier extends MyNode
     function getTar()
     {
         var curPos = bg.pos();
+        //根据当前的位置 normal之后 寻找合适的位置
         var posMap = getPosMap(sx, sy, curPos[0], curPos[1]);  
         posMap = [posMap[2], posMap[3]];
+        //根据当前的curMap 计算预测的位置 而getPosMap 是根据坐标计算有可能出错
+        //var posMap = [curMap[0], curMap[1]];
         var allPos = [
             [posMap[0]+0, posMap[1]+-2],
             [posMap[0]+-1, posMap[1]+-1],
@@ -670,13 +754,38 @@ class BusiSoldier extends MyNode
         shiftAni = moveto(t, tar[0], tar[1]);
         bg.addaction(shiftAni);
     }
+    function getDeadLeftTime()
+    {
+        var leftTime = data["reliveTime"] - (time()/1000-server2Client(deadStartTime));
+        return max(leftTime, 0);
+    }
+    function finishDead()
+    {
+        global.httpController.addRequest("soldierC/reliveHero", dict([["uid", global.user.uid], ["sid", sid]]), null, null);
+        inDead = 0;
+        deadStartTime = 0;
+        global.user.updateSoldiers(this);
+        //state = SOL_FREE;
+        chooseStar.removefromparent();
+    }
+    var stateLabel;
     function update(diff)
     {
+        if(getParam("debugSoldier"))
+            stateLabel.text("inTran"+str(inTransfer)+":inDead"+str(inDead));
+        var leftTime;
         if(inTransfer)
         {
-            var leftTime = getLeftTime();
+            leftTime = getLeftTime();
             if(leftTime <= 0)
                 finishTransfer();
+        }
+
+        if(inDead)
+        {
+            leftTime = getDeadLeftTime();
+            if(leftTime <= 0)
+                finishDead();
         }
 
         if(Planing)//规划中停止移动

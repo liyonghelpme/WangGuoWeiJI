@@ -40,6 +40,13 @@ class MapDefense extends MyNode
         bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(d);
         init();
     }
+    //地面爆炸位置
+    function getGroundBombPos(att)
+    {
+        var x = bg.pos()[0];
+        var y = att.bg.pos()[1];
+        return [x, y];
+    }
     function setDefense(val)
     {
         trace("setDefense", val);

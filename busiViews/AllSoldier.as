@@ -80,7 +80,6 @@ class AllSoldier extends MyNode
 
     var curTouch = null;
     var oldScale;
-    var player;
     function touchBegan(n, e, p, x, y, points)
     {
         accMove = 0;
@@ -90,7 +89,7 @@ class AllSoldier extends MyNode
         {
             oldScale = curTouch.scale();
             curTouch.scale(oldScale[0]*80/100, oldScale[1]*80/100);
-            player = global.controller.playSound("but.mp3");
+            global.controller.playSound("but.mp3");
         }
     }
     function touchMoved(n, e, p, x, y, points)
@@ -117,7 +116,6 @@ class AllSoldier extends MyNode
         {
             curTouch.scale(oldScale);
             curTouch = null;
-            player = null;
         }
 
         var newPos = n.node2world(x, y);

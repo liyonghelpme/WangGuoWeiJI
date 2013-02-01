@@ -43,6 +43,9 @@ class Soldier extends MyNode
     //保持状态的一致性
     var inTransfer = 0;
     var transferStartTime = 0; 
+    var inDead = 0;
+    var deadStartTime = 0;
+
     var mapSolId = 0;
 
     var commandList = [];
@@ -349,6 +352,9 @@ class Soldier extends MyNode
         if(!dead)
         {
             dead = 1;
+            inDead = 1;
+            deadStartTime = client2Server(time()/1000);//获取当前服务器上的时间
+
             health = 0;
             clearMap();
             
@@ -609,6 +615,8 @@ class Soldier extends MyNode
         }
         inTransfer = privateData.get("inTransfer", 0);
         transferStartTime = privateData.get("transferStartTime", 0);
+        inDead = privateData.get("inDead", 0);
+        deadStartTime = privateData.get("deadStartTime", 0);
 
         initAttackAndDefense(this);
         initEquipAttribute(this, myEquips);
@@ -761,6 +769,13 @@ class Soldier extends MyNode
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);
     }
+    function showBackBanner()
+    {
+        if(health < healthBoundary)
+            backBanner.visible(1);
+        else
+            backBanner.visible(0);
+    }
     function showBlood()
     {
         backBanner.visible(1);
@@ -832,15 +847,6 @@ class Soldier extends MyNode
         //攻击类型 物理
         //攻击类型 魔法 由 catergory决定
         var attackKind = sol.data["attackKind"];
-        if(attackKind == PHYSIC_ATTACK)//近战远程 物理溅血
-        {
-            //var bl = sprite().pos(50, 50).pos(cs[0]/2, cs[1]/2).addaction(sequence(animate(700, "hurt0.png", "hurt1.png","hurt2.png","hurt3.png","hurt4.png","hurt5.png","hurt6.png", UPDATE_SIZE), callfunc(removeTempNode)));
-            //changeDirNode.add(bl, 10);
-        }
-        else//魔法攻击显示变色
-        {
-            //changeDirNode.addaction(sequence(tintto(500, 100, 0, 0), tintto(500, 100, 100, 100)));        
-        }
 
         if(hurt[1])
         {
@@ -855,6 +861,7 @@ class Soldier extends MyNode
         bg.add(bWord);
         bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
         
+        //不应该停止士兵的攻击
         if(hurt[1])
         {
             beginSpinState(getParam("criticalHitStopTime"));
@@ -864,10 +871,7 @@ class Soldier extends MyNode
 
         //未死亡 显示学条
         if(!dead)
-            if(health < healthBoundary)
-                backBanner.visible(1);
-            else
-                backBanner.visible(0);
+            showBackBanner();
     }
 
     //不能在callfunc中调用
@@ -896,11 +900,7 @@ class Soldier extends MyNode
         bg.add(bWord);
         bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
 
-
-        if(health < healthBoundary)
-            backBanner.visible(1);
-        else
-            backBanner.visible(0);
+        showBackBanner();
     }
 
 
@@ -1021,6 +1021,10 @@ class Soldier extends MyNode
     设置正常的zord
     清理 地图上显示的grid
     */
+    function getGroundBombPos(att)
+    {
+        return bg.pos();
+    }
     function doTransform()
     {
         trace("doTransform", id);
@@ -1062,10 +1066,19 @@ class Soldier extends MyNode
         //变身之后特征色消失
         fea.texture("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil, UPDATE_SIZE);
         shadow.visible(1);
-        backBanner.visible(1);
+        showBackBanner();
         fea.visible(1);//重新设定图片和 特征色 
         adjustPicSize();
         transAni = null;
+    }
+    function putOnMap()
+    {
+        //英雄 且 没有变身
+        trace("finish Put soldier", id, data["isHero"]);
+        if(checkHeroTransform(id))
+        {
+            doTransform();
+        }
     }
     function touchWorldEnded(n, e, p, x, y, points)
     {
@@ -1099,13 +1112,7 @@ class Soldier extends MyNode
                     setPos(oldPos);
                 }
             }
-
-            //英雄 且 没有变身
-            trace("finish Put soldier", id, data["isHero"]);
-            if(data["isHero"] && id%10==getParam("MaxSolCareer"))
-            {
-                doTransform();
-            }
+            putOnMap();
             setCol();//清理冲突状态
             map.setMap(this);
             map.removeGrid();
@@ -1171,10 +1178,7 @@ class Soldier extends MyNode
             nameBanner = null;
         }
         //生命值小于上限则显示血条
-        if(health < healthBoundary)
-            backBanner.visible(1);
-        else 
-            backBanner.visible(0);
+        showBackBanner();
         pushCommand(FIND_ENEMY, null);
     }
     function getDir()

@@ -44,10 +44,10 @@ class InviteInput extends MyNode
             global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("inputYet", null), [100, 100, 100], null));
             return;
         }
-        if(global.user.getValue("level") >= PARAMS["inviteLevel"])
+        if(global.user.getValue("level") >= getParam("inviteLevel"))
         {
             global.director.popView();
-            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("level3Input", ["[LEV]", str(PARAMS["inviteLevel"])]), [100, 100, 100], null));
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("level3Input", ["[LEV]", str(getParam("inviteLevel"))]), [100, 100, 100], null));
             return;
         }
 

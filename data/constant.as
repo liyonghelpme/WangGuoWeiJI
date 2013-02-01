@@ -30,6 +30,7 @@ const SOL_WAIT = 2;
 const SOL_POS = 3;
 const SOL_NAME = 4;
 const SOL_IN_TRANSFER = 5;
+const SOL_IN_DEAD = 6;
 
 const INSPIRE = 1; 
 
@@ -199,7 +200,7 @@ var buildFunc = dict([
 [FARM_BUILD, [["photo"], ["acc", "sell"]]],
 [HOUSE_BUILD, [["photo"], [ "sell" ]]],//"upgradeBuild"
 [DECOR_BUILD, [["photo"], ["sell"]]],
-[CASTLE_BUILD, [["photo"], ["tip"]]],
+[CASTLE_BUILD, [["photo"], []]],
 [GOD_BUILD, [["photo"], ["soldier"]]],
 [DRUG_BUILD, [["photo"], ["allDrug"]]],
 [FORGE_SHOP, [["photo"], ["allEquip"]]],
@@ -321,10 +322,9 @@ var attEffect = dict([
 ]);
 
 //getGain 复活等级
-var addKey = ["people", "cityDefense", "attack", "defense", "health", "gainsilver", "gaincrystal", "gaingold", "exp", 
-    "healthBoundary", "physicAttack", "physicDefense", "magicAttack", "magicDefense", "recoverSpeed",
-    "percentHealth", "percentHealthBoundary", "percentAttack", "percentDefense", "effectLevel",
-    "attack", "defense", "percentHealth",
+var addKey = ["people", "cityDefense", "attack", "defense", "gainsilver", "gaincrystal", "gaingold", "exp", 
+    "healthBoundary",
+    "percentHealth",
     ];
 
 //getCost
@@ -475,7 +475,7 @@ dict(
 [
 //[260048, 1], [250047, 1], [240046, 1],  [260046, 1], [250045, 1], [270045, 1], [270047, 1], [280046, 1],
 [320064, 1], [310065, 1], [310063, 1], [310067, 1], [330063, 1], [320066, 1], [320068, 1], 
-[330065, 1],
+[330065, 1], [620044, 1], [630045, 1], [620046, 1],
 
 [680062, 1], [690061, 1], [690063, 1], [680062, 1], [680064, 1], [690065, 1],
 [680066, 1], [690067, 1],
@@ -576,6 +576,7 @@ const MOVE_TO_POINT = 51;
 const FINISH_NEW_TASK = 52;
 const INIT_TASK_DATA = 53;//只是初始化任务 数据但是不初始化任务模块
 const FETCH_PARAM_OVER = 54;
+const SWITCH_MUSIC = 55;
 
 
 
@@ -939,9 +940,10 @@ const MAP_KIND_TIP = dict([
     [CHALLENGE_TRAIN, TRAIN_TIP],
     [CHALLENGE_FIGHT, FIGHT_TIP],
     [CHALLENGE_DEFENSE, FIGHT_TIP],
+    [CHALLENGE_OTHER, CHALLENGE_TIP],
 ]);
 
-
+//兵营建筑的色相 0默认 1特征色 2变色 三种
 const COLOR_INDEX = dict([
 [1, 0],
 [2, -163],

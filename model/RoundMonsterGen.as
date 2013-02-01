@@ -41,7 +41,11 @@ class WorldStatus
     function putSol(m)
     {
         trace("putSol", m, mons);
-        var mon = getData(SOLDIER, m);
+        var newM = m;
+        if(checkHeroTransform(m)) {
+            newM = m+1;
+        }
+        var mon = getData(SOLDIER, newM);
         var sx = mon["sx"];
         var sy = mon["sy"];
         var find = 0;
@@ -118,7 +122,11 @@ class WorldStatus
     function checkPutable(m)
     {
         trace("checkPutable", m, mons);
-        var mon = getData(SOLDIER, m);
+        var newM = m;
+        if(checkHeroTransform(m)) {
+            newM = m+1;    
+        }
+        var mon = getData(SOLDIER, newM);
         var sx = mon["sx"];
         var sy = mon["sy"];
         for(var x = 0; x < 5; x++)
@@ -412,7 +420,9 @@ function realGenChallengeSoldier(sols)
         num++;
         kinds[sols[i]["id"]] = num;
     }
+
     kinds = kinds.items();
+    trace("soldiers", kinds);
     return realGenRoundMonster(kinds);
 }
 //检测没有前线

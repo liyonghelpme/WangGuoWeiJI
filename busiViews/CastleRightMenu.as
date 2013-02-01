@@ -19,7 +19,6 @@ class CastleRightMenu extends MyNode
     ]);
     function onNewUserGift()
     {
-        global.director.pushView(new NewTaskDialog2(), 1, 0);
     }
     function onInvite()
     {

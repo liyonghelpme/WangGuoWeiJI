@@ -142,13 +142,13 @@ class DrugList extends MyNode
                 id = useData.get("kind");
             }
 
-            temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+            temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
             sca = getSca(temp, [68, 56]);
             temp.scale(sca);
 
             var objData;
             objData = getData(kind, id);
-            temp = panel.addlabel(objData.get("name") + " " + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+            temp = panel.addlabel(objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
 
             if(kind == DRUG)
             {

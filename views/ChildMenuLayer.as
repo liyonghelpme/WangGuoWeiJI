@@ -23,6 +23,7 @@ class ChildMenuLayer extends MyNode
 
 
     ["acc", ["menu_button_acc.png", onAcc]],
+    ["accDead", ["menu_button_acc.png", onAccDead]],
     ["sell", ["menu_button_sell.png", onSell]],
 
     ["story", ["menu_button_story.png", onStory]],
@@ -402,9 +403,13 @@ class ChildMenuLayer extends MyNode
     */
     function onAcc()
     {
-        //global.director.curScene.closeGlobalMenu(this);
         scene.doAcc();
     }
+    function onAccDead()
+    {
+        scene.doAccDead();
+    }
+
     function onForge()
     {
         global.director.curScene.closeGlobalMenu(this);

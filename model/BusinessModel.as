@@ -107,7 +107,7 @@ function getLoginReward(day)
 function getProduction(level)
 {
     var mData = getGain(MINE_PRODUCTION, level);
-    return mData["crystal"];
+    return mData;
 }
 
 
@@ -172,9 +172,6 @@ function getUpdateObject()
 }
 
 //根据funcs来确定名字
-const KIND2NAME = dict([
-[FARM_BUILD, "Farm"], [HOUSE_BUILD, "House"], [MINE_KIND, "Mine"], [CAMP, "Camp"],
-]);
 //根据建筑ID 得到 建筑的funcs
 function getCurBuildNum(id)
 {
@@ -183,28 +180,40 @@ function getCurBuildNum(id)
     var val = global.user.buildings.values();
     for(var i = 0; i < len(val); i++)
     {
-        var bd = getData(BUILD, val[i]["id"]);
-        if(bd["funcs"] == bData["funcs"])
-        {
+        if(val[i]["id"] == id)
             count++;
-        }
     }
     return count;
 }
+//得到当前需要升级的等级的建筑的数量
+function getCurLevelBuildNum(id, level)
+{
+    var bData = getData(BUILD, id);
+    var count = 0;
+    var val = global.user.buildings.values();
+    for(var i = 0; i < len(val); i++)
+    {
+        if(val[i]["id"] == id && val[i]["level"] == level)
+            count++;
+    }
+    return count;
+}
+
 function getBuildEnableNum(id)
 {
     var bData = getData(BUILD, id);
     var level = global.user.getValue("level");
-    var name = KIND2NAME[bData["funcs"]];
-    if(name == null)//没有限制
+    if(!bData["hasNum"])
         return [999999, 0, 0];
+
     //K 级解锁1个
-    var num = getParam("init"+name+"Num")+level/getParam(name+"Level");
+    var num = bData["initNum"]+level/bData["numLevel"];
     var upBound = 0;
-    if(num >= getParam("max"+name+"Num"))
+    if(num >= len(bData["numCost"][0]))
         upBound = 1;
+
     //trace("getBuildEnableNum", num, upBound);
-    return [min(num, getParam("max"+name+"Num")), upBound, 1];//最大限制 总量存在限制
+    return [min(num, len(bData["numCost"][0])), upBound, 1];//最大限制 总量存在限制
 }
 function checkBuildNum(id)
 {
@@ -216,7 +225,7 @@ function checkBuildNum(id)
 function getNextBuildNum(id)
 {
     var bData = getData(BUILD, id);
-    var bLevel = getParam(KIND2NAME[bData["funcs"]]+"Level");
+    var bLevel = bData["numLevel"];
     var level = global.user.getValue("level");
     var need = (level+bLevel)/bLevel;
     return need*bLevel;

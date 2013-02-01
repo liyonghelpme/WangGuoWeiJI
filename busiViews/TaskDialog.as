@@ -79,12 +79,12 @@ class TaskDialog extends MyNode
         if(levelObj != null)
         {
             sData = getData(SOLDIER, levelObj);
-            temp = expNode.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(levelObj)]), BLACK ).anchor(50, 50).pos(669, 152).color(100, 100, 100, 100);
+            temp = expNode.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(levelObj)]), BLACK, ARGB_8888).anchor(50, 50).pos(669, 152).color(100, 100, 100, 100);
             sca = getSca(temp, [51, 56]);
             temp.scale(sca);
             temp = expNode.addlabel(sData["name"], "fonts/heiti.ttf", 20).anchor(50, 50).pos(674, 101).color(0, 0, 0);
             temp = expNode.addsprite("taskLevelBack.png").anchor(0, 0).pos(669, 163).size(38, 21).color(100, 100, 100, 100);
-            temp = expNode.addlabel(str(level+2+1), "fonts/heiti.ttf", 35).anchor(50, 50).pos(688, 174).color(76, 97, 34);
+            temp = expNode.addlabel(str(level+2+1), "fonts/heiti.ttf", getParam("LevelSize")).anchor(50, 50).pos(688, 174).color(76, 97, 34);
         }
         var thirdExp = getLevelUpNeedExp(level+1);
         temp = expNode.addlabel(getStr("needExp", ["[EXP]", str(thirdExp)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(675, 198).color(0, 0, 0);
@@ -96,12 +96,12 @@ class TaskDialog extends MyNode
         if(levelObj != null)
         {
             sData = getData(SOLDIER, levelObj);
-            temp = expNode.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(levelObj)]), BLACK).anchor(50, 50).pos(473, 152).color(100, 100, 100, 100);
+            temp = expNode.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(levelObj)]), BLACK, ARGB_8888).anchor(50, 50).pos(473, 152).color(100, 100, 100, 100);
             sca = getSca(temp, [51, 56]);
             temp.scale(sca);
             temp = expNode.addlabel(sData["name"], "fonts/heiti.ttf", 20).anchor(50, 50).pos(474, 100).color(0, 0, 0);
             temp = expNode.addsprite("taskLevelBack.png").anchor(0, 0).pos(473, 163).size(38, 21).color(100, 100, 100, 100);
-            temp = expNode.addlabel(str(level+1+1), "fonts/heiti.ttf", 35).anchor(50, 50).pos(492, 174).color(76, 97, 34);
+            temp = expNode.addlabel(str(level+1+1), "fonts/heiti.ttf", getParam("LevelSize")).anchor(50, 50).pos(492, 174).color(76, 97, 34);
         }
         var nextExp = expNode.addlabel(getStr("needExp", ["[EXP]", str(needExp)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(479, 198).color(0, 0, 0);
         temp = expNode.addsprite("taskDialogLock.png").anchor(0, 0).pos(442, 163).size(19, 21).color(100, 100, 100, 100);
@@ -112,7 +112,7 @@ class TaskDialog extends MyNode
         if(levelObj != null)
         {
             sData = getData(SOLDIER, levelObj);
-            temp = expNode.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(levelObj)])).anchor(50, 50).pos(288, 152).color(100, 100, 100, 100);
+            temp = expNode.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(levelObj)]), ARGB_8888).anchor(50, 50).pos(288, 152).color(100, 100, 100, 100);
             sca = getSca(temp, [52, 57]);
             temp.scale(sca);
             temp = expNode.addlabel(sData["name"], "fonts/heiti.ttf", 20).anchor(50, 50).pos(287, 100).color(0, 0, 0);

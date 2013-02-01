@@ -123,11 +123,7 @@ class Building extends MyNode
             fc = getHue(fc);
             featureColor = changeDirNode.addsprite("build"+str(id)+"_f.png", fc);
         }
-        var offY = 0;
-        if(data.get("isoView") == 1)
-        {
-            offY = (sy+sx)*SIZEY/2;
-        }
+        var offY = data["offY"];
 
         var bSize = changeDirNode.prepare().size();
 
@@ -322,22 +318,18 @@ class Building extends MyNode
         var shadowDir = dir;
         if(data["symmetry"])
             shadowDir = 0;
+        if(shadow != null) {
+            shadow.removefromparent();
+            shadow = null;
+        }
         if(data["hasShadow"])
         {
-            if(shadow == null) 
-            {
-                if(!data["isoView"])
-                {
-                    shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png").color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]);
-                }
-                else
-                {
-                    var offY = (sy+sx)*SIZEY/2;
-                    shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png").color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]-offY);
-                }
+            if(!data["isoView"]) {
+                shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]);
+            } else {
+                var offY = (sy+sx)*SIZEY/2;
+                shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]-offY);
             }
-            else
-                shadow.texture("build"+str(id)+"Shadow"+str(shadowDir)+".png");
             if(!data["upShadow"])
                 bg.add(shadow, -1);
             else
@@ -349,16 +341,13 @@ class Building extends MyNode
     {
         if(data.get("changeDir") == 0)
             return;
-
         dirty = 1;
-
         dir = 1-dir;
-        if(dir == 0)
-            changeDirNode.scale(data["buildSca"], data["buildSca"]);
-        else 
-            changeDirNode.scale(-data["buildSca"], data["buildSca"]);
-        
-        global.user.updateBuilding(this);
+        setDir(dir);
+
+        //不是新建筑 则 可以同步建筑数据
+        if(state != PARAMS["buildMove"]) 
+            global.user.updateBuilding(this);
     }
     //remove OldPosition map 
     //set NewPosition map
@@ -399,7 +388,7 @@ class Building extends MyNode
         if(getParam("debugFarm"))
         {
             var map = getPosMap(sx, sy, p[0], p[1]);
-            farmState.text("State:"+str(state)+"Pos:"+str(map[2])+","+str(map[3]));
+            farmState.text("State:"+str(state)+"Pos:"+str(map[2])+","+str(map[3])+"Color:"+str(buildColor)+":activeScore"+str(global.user.challengeState["activeScore"])+":protectTime:"+str(global.user.challengeState["protectTime"]));
         }
     }
 

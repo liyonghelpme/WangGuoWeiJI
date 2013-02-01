@@ -60,10 +60,10 @@ class TransferDialog extends MyNode
         but0.bg.pos(519, 402);
         addChild(but0);
 
-        temp = bg.addsprite("soldier"+str(curKind)+".png").anchor(50, 50).pos(253, 255).color(100, 100, 100, 100);
+        temp = bg.addsprite("soldier"+str(curKind)+".png", ARGB_8888).anchor(50, 50).pos(253, 255).color(100, 100, 100, 100);
         sca = getSca(temp, [125, 122]);
         temp.scale(sca);
-        temp = bg.addsprite("soldier"+str(curKind+1)+".png").anchor(50, 50).pos(427, 255).color(100, 100, 100, 100);
+        temp = bg.addsprite("soldier"+str(curKind+1)+".png", ARGB_8888).anchor(50, 50).pos(427, 255).color(100, 100, 100, 100);
         sca = getSca(temp, [125, 122]);
         temp.scale(sca);
         temp = bg.addsprite("taskArrow.png").anchor(50, 50).pos(341, 261).size(40, 34).color(100, 100, 100, 100).rotate(-90);

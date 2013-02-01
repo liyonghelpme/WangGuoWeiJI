@@ -322,11 +322,15 @@ function getRobReward(star, silver, crystal, powerCoff)
     var coff = 100;
     if(powerCoff[0] > 0)
     {
-        coff = powerCoff[1]/powerCoff[0];
+        coff = powerCoff[1]*100/powerCoff[0];
         coff = min(100, coff);
     }
     var rate = getParam(str(star)+"StarRobRate");
-    return dict([["silver", coff*silver*rate/10000], ["crystal", coff*crystal*rate/10000]]);
+    trace("getRobReward", powerCoff, rate, silver, crystal, star);
+    //数值太大了用浮点数计算即可
+
+    var TestTime = getclass("com.liyong.testTime.TestTime");
+    return dict([["silver", TestTime.callobj("floor", coff/100.0*silver*rate/100)], ["crystal", TestTime.callobj("floor", coff/100.0*crystal*rate/100)]]);
 }
 
 //修改传入的上下文状态

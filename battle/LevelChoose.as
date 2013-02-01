@@ -307,7 +307,6 @@ class LevelChoose extends MyNode
     var accMove;
     var curTouch;
     var oldScale;
-    var player = null;
     function touchBegan(n, e, p, x, y, points)
     {
         accMove = 0;
@@ -317,7 +316,7 @@ class LevelChoose extends MyNode
         {
             oldScale = curTouch.scale();
             curTouch.scale(oldScale[0]*getParam("butScale")/100, oldScale[1]*getParam("butScale")/100);
-            player = global.controller.playSound("but.mp3");
+            global.controller.playSound("but.mp3");
         }
     }
     function touchMoved(n, e, p, x, y, points)
@@ -339,7 +338,6 @@ class LevelChoose extends MyNode
         {
             curTouch.scale(oldScale);
             curTouch = null;
-            player = null;
         }
 
         if(accMove < 10)//点击选关

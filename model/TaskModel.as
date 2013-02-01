@@ -132,7 +132,7 @@ class TaskModel
         } else if(msid == INITDATA_OVER) {
             //初始化新手任务 阶段 和 所有任务 完成状态 ---> 完成则更新阶段
             //newTaskStage = global.user.getValue("newTaskStage");
-            if(checkInNewTask())
+            if(checkInNewTask() && !getParam("stopNewTask"))//没有关闭新手任务功能
             {
                 global.director.setMask(1);
             }

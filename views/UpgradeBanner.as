@@ -21,7 +21,7 @@ class UpgradeBanner extends MyNode
         */
         var wSize = word.size();
         var bSize = bg.prepare().size();
-        bg.size(max(wSize[0]+10, bSize[0]), bSize[1]);
+        bg.size(max(wSize[0]+getParam("bannerWidth"), bSize[0]), bSize[1]);
         var nBsize = bg.size();
         word.pos(nBsize[0]/2, nBsize[1]/2);
 

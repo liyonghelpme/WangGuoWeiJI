@@ -250,7 +250,7 @@ class BattleScene extends MyNode
                 if(checkTip(MAP_KIND_TIP[kind]) == null)
                 {
                     trace("noTip", MAP_KIND_TIP[kind]);
-                    dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));
+                    dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", CHALLENGE_TIP]]));//只需要1个tip即可不用其它的
                 }
             }
             dialogController.addCmd(dict([["cmd", "chooseSol"]]));
@@ -293,19 +293,20 @@ class BattleScene extends MyNode
     {
         var power = evaluePower();
         var score = 0;
-        if(power[1] > 0)
-            score = getParam("BaseScore")*power[0]/power[1];
+        if(power[0] > 0)
+            score = getParam("BaseScore")*power[1]/power[0];
         score = min(getParam("maxScore"), max(score, getParam("minScore")));
         trace("winScore", score, power);
         return score;
     }
     //失败积分 = 我方/地方
+    //我越强大得到的积分越少
     function getFailScore()
     {
         var power = evaluePower();
         var score = 0;
-        if(power[0] > 0)
-            score = getParam("BaseScore")*power[1]/power[0];
+        if(power[1] > 0)
+            score = getParam("BaseScore")*power[0]/power[1];
         score = min(getParam("maxScore"), max(score, getParam("minScore")));
         trace("FailScore", score, power);
         return score;

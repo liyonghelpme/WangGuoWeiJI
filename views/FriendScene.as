@@ -77,7 +77,6 @@ class MovLayer extends MoveMap
         printD(["initBuildings", scene.buildings]);
         for(var i = 0; i < len(scene.buildings); i++)
         {
-
             var pdata = scene.buildings[i];
             var b = new Building(this, getData(BUILD, pdata["id"]), pdata);
             b.setBid(FRIEND_MINE);
@@ -208,8 +207,9 @@ class FriendScene extends MyNode
     {
         trace("building data", user);
         //访问没有获取到数据的好友
+        //768, 352
         if(mineLevel != null)
-            buildings.append(dict([["id", PARAMS["mineId"]], ["px", 768], ["py", 352], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", mineLevel], ["color", 0] ]));
+            buildings.append(dict([["id", PARAMS["mineId"]], ["px", getParam("minePx")], ["py", getParam("minePy")], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", mineLevel], ["color", 0] ]));
 
         //buildings.append(dict([ ["id", PARAMS["loveTreeId"]], ["px", 480], ["py", 416], ["state", PARAMS["buildFriend"]], ["dir", 0], ["objectId", -1], ["objectTime", 0], ["level", heartLevel], ["color", 0]  ] ));
         trace("buildings", buildings);

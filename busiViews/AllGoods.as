@@ -174,7 +174,7 @@ class AllGoods extends MyNode
                 id = ed.get("kind");
             }
 
-            temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+            temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
             sca = getSca(temp, [68, 56]);
             temp.scale(sca);
             
