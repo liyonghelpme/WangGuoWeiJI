@@ -118,12 +118,13 @@ class Store extends MyNode
         if(ret == 1)
         {
             var buyNum = goldGain;
-            global.httpController.addRequest("finishPay", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(buyNum)]]), null, null);
+            global.httpController.addRequest("finishPay", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(buyNum)], ["papaya", costPapaya]]), null, null);
             global.user.doAdd(buyNum);
         }
     }
     
     var goldGain = null;
+    var costPapaya = null;
     function buy(gi)
     {
         var item = allGoods[gi[0]][gi[1]]; 
@@ -140,10 +141,13 @@ class Store extends MyNode
         {
             var buyNum = getGain(kind, id);
             goldGain = buyNum;
+
+            costPapaya = cost["papaya"];
             if(getParam("debugPay"))
                 start_payment(getStr("storeBuyGold", ["[NUM]", str(buyNum["gold"])]), "", "", 1, storeBuyGold);
             else
                 start_payment(getStr("storeBuyGold", ["[NUM]", str(buyNum["gold"])]), "", "", cost["papaya"], storeBuyGold);
+            global.httpController.addRequest("logC/tryPay", dict([["uid", global.user.uid], ["papaya", cost["papaya"]]]), null, null);
             return;
         }
 
