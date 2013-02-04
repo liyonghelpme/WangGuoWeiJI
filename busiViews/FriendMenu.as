@@ -76,12 +76,7 @@ class FriendMenu extends MyNode
         //好友是否有宝箱 只能挑战邻居
         //非邻居不能挑战
         var funcs = [];
-        if(scene.kind == VISIT_NEIBOR)
-        {
-            var neibor = global.friendController.getNeiborData(scene.user["uid"]);
-            funcs = [ ["challenge", neibor["challengeYet"]]];
-        }
-
+        //没有挑战邻居功能
         if(scene.hasBox)
             funcs.insert(0, ["box", 0]);
 

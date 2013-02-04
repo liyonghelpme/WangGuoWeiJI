@@ -12,8 +12,8 @@ class FriendRightMenu extends MyNode
     
     const buts = dict([
         ["box", ["friendBox.png", onBox, onBoxYet]],
-        ["heart", ["friendHeart.png", onHeart, onHeartYet]],
-        ["challenge", ["friendChallenge.png", onChallenge, onChallengeYet]],
+        //["heart", ["friendHeart.png", onHeart, onHeartYet]],
+        //["challenge", ["friendChallenge.png", onChallenge, onChallengeYet]],
     ]); 
     function onBoxYet()
     {
@@ -37,7 +37,7 @@ class FriendRightMenu extends MyNode
     }
     function onChallenge()
     {
-        menu.onChallenge();
+        //menu.onChallenge();
     }
     /*
     直接setevent 加model[1] 不能奏效
@@ -56,6 +56,8 @@ class FriendRightMenu extends MyNode
         for(var i = 0; i < len(funcs); i++)
         {
             var model = buts[funcs[i][0]];
+            if(model == null)
+                continue;
             var temp;
             trace("model", model);
             if(funcs[i][1] == 0)

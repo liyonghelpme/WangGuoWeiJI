@@ -140,8 +140,6 @@ class InviteList extends MyNode
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
                 if(data[curNum].get("invited", 0) == 0)
                 {
-
-
                     var but0 = new NewButton("violetBut.png", [92, 33], getStr("invite", null), null, 18, FONT_NORMAL, [100, 100, 100], onInvite, curNum);
                     but0.bg.pos(77, 152);
                     panel.add(but0.bg);
@@ -160,7 +158,7 @@ class InviteList extends MyNode
     {
         var papayaId = data[curNum]["id"];
         ppy_query("send_notification", dict([["message", getStr("inviteGame", null)], ["uid", papayaId]]), null);
-        global.httpController.addRequest("friendC/inviteFriend", dict([["uid", global.user.uid], ["oid", papayaId]]), inviteSuc, null);
+        global.httpController.addRequest("friendC/inviteFriend", dict([["uid", global.user.uid], ["oid", papayaId], ["silver", getParam("inviteRewardSilver")]]), inviteSuc, null);
         global.friendController.inviteFriend(papayaId);
         data[curNum]["invited"] = 1;
         updateTab();
@@ -173,7 +171,7 @@ class InviteList extends MyNode
             con = json_loads(con);
             if(con["id"] != 0)
             {
-                var gain = dict([["silver", PARAMS["inviteSilver"]]]);
+                var gain = dict([["silver", getParam("inviteRewardSilver")]]);
                 global.user.doAdd(gain);
             }
         }

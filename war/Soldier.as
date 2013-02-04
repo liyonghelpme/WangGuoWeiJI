@@ -346,18 +346,21 @@ class Soldier extends MyNode
             commandTime = 0;
         }
     }
+    function setDeadState()
+    {
+        dead = 1;
+        inDead = 1;
+        health = 0;
+        deadStartTime = client2Server(time()/1000);//获取当前服务器上的时间
+    }
     var dead = 0;
     function doDead(diff)
     {
         if(!dead)
         {
-            dead = 1;
-            inDead = 1;
-            deadStartTime = client2Server(time()/1000);//获取当前服务器上的时间
+            setDeadState();
 
-            health = 0;
             clearMap();
-            
             shadow.visible(0);
             backBanner.visible(0);
             shiftAni.stop();

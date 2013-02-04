@@ -54,6 +54,7 @@ class RoundWin extends MyNode
         //改变当前用户经验到2级
         global.user.changeExpLevel(1);
         global.taskModel.doAllTaskByKey("newRoundWin", 1);
+        global.httpController.addRequest("logC/finishNewStage", dict([["uid", global.user.uid], ["stage", 1]]), null, null);
     }
     function onShare()
     {

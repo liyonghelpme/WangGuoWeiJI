@@ -55,7 +55,7 @@ class PlantChoose extends MyNode
             if(needLevel > level)
             {
                 panel.addsprite("dialogRankShadow.png").size(230, 106);
-                var words = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [0, 100, 0]);
+                var words = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
                 words.anchor(50, 50).pos(115, 53);
                 panel.add(words);
 

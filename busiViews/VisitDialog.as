@@ -3,6 +3,7 @@ class VisitDialog extends MyNode
     var friendScene;
     var tipWord;
     var kind;
+    var back;
     function initView()
     {
         bg = node();
@@ -12,9 +13,13 @@ class VisitDialog extends MyNode
         var temp;
         var sca;
         temp = bg.addsprite("dialogVisitFriend.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
+        back = temp;
         temp.addsprite().anchor(50, 50).pos(231, 247).addaction(repeat(animate(2000, "visitAni0.png", "visitAni1.png", "visitAni2.png", "visitAni3.png", "visitAni4.png", "visitAni5.png", "visitAni6.png", "visitAni7.png", "visitAni8.png", "visitAni9.png", "visitAni8.png", "visitAni7.png")));
         var tid = global.user.getNextTip();
-        tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
+        //tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
+
+        back.addlabel(getStr("tips1", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(233, 324).color(100, 100, 100);
+        back.addlabel(getStr("Flying", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(232, 31).color(100, 100, 100);
     }
     function VisitDialog(fc, k)
     {
@@ -58,7 +63,7 @@ class VisitDialog extends MyNode
         {
             passTime -= 3000;
             var tid = global.user.getNextTip();
-            tipWord.text(getStr("tips"+str(tid), null));
+            //tipWord.text(getStr("tips"+str(tid), null));
         }
     }
     override function exitScene()

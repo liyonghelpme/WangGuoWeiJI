@@ -43,6 +43,7 @@ class NewChallengeWin extends MyNode
         global.director.popScene();
         global.user.changeExpLevel(3);
         global.taskModel.doAllTaskByKey("challengeNow", 1);
+        global.httpController.addRequest("logC/finishNewStage", dict([["uid", global.user.uid], ["stage", 3]]), null, null);
     }
     function onShare()
     {

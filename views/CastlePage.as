@@ -184,6 +184,10 @@ class CastlePage extends MyNode
         }
         trace("finishDownload");
 
+        if(getParam("debugNewReward"))
+        {
+            dialogController.addCmd(dict([["cmd", "newTaskReward"]]));
+        }
     }
     
     
@@ -380,7 +384,7 @@ class CastlePage extends MyNode
     //如果没有进入游戏则可以恢复到原来的位置
     function closeGlobalMenu()
     {
-        if(oldScale != null)
+        if(oldScale != null && !movToAni)
         {
             //touchDelegate.scaleToOld(oldScale, oldPos);
             clearAnimation();
@@ -395,6 +399,12 @@ class CastlePage extends MyNode
     //var inMove = 0;
     function moveToPoint(tarX, tarY)
     {
+        //小心如果其它功能强制需要移动 例如新手任务 则 不能阻止这个操作
+        //主要是为了避免地图拖出边界的问题
+        //地图出边界应该在move结束自动调整一下
+        //if(movToAni != null )
+        //    return;
+
         var worldPos = bg.node2world(tarX, tarY);
         var sSize = global.director.disSize;
         var difx = sSize[0]/2-worldPos[0];
@@ -434,6 +444,11 @@ class CastlePage extends MyNode
         //inMove = 0;
         movToAni = null;
         trace("clearMovToAni", movToAni);
+        adjustPosAndScale();
+    }
+    //调整地图位置和缩放比例
+    function adjustPosAndScale()
+    {
     }
 
     function finishBuild()
@@ -458,10 +473,14 @@ class CastlePage extends MyNode
     var touchBuild = null;
     function touchBegan(n, e, p, x, y, points)
     {
-        scene.clearHideTime();
-        scene.closeGlobalMenu(this);
-        trace("movToAni", movToAni);
+        //不应该清楚菜单的显示
+        if(!movToAni)
+        {
+            scene.clearHideTime();
+            scene.closeGlobalMenu(this);
+        }
 
+        trace("movToAni", movToAni);
         //在游戏2中 需要设定士兵的 移动目标位置
         if(scene.inGame)
         {
@@ -477,12 +496,12 @@ class CastlePage extends MyNode
     }
     function touchMoved(n, e, p, x, y, points)
     {
-        if(!scene.inGame && movToAni == null)
+        if(!scene.inGame && movToAni == null && !scene.checkHasMenu())
             touchDelegate.tMoved(n, e, p, x, y, points);
     }
     function touchEnded(n, e, p, x, y, points)
     {
-        if(!scene.inGame && movToAni == null)
+        if(!scene.inGame && movToAni == null && !scene.checkHasMenu())
             touchDelegate.tEnded(n, e, p, x, y, points);
     }
     //从 闯关页面 返回到 经营 页面 完成 闯关任务

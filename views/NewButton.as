@@ -47,7 +47,7 @@ class NewButton extends MyNode
         global.controller.playSound("but.mp3");
 
         oldSca = bg.scale();
-        bg.scale(oldSca[0]*80/100, oldSca[1]*80/100);
+        bg.scale(oldSca[0]*getParam("butScale")/100, oldSca[1]*getParam("butScale")/100);
     }
     function touchMoved(n, e, p, x, y, points)
     {

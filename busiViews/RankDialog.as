@@ -63,15 +63,7 @@ class RankDialog extends MyNode
 
         if(kind == CHALLENGE_RANK)
         {
-            var challengeNum = global.user.getValue("challengeNum");
-            if(challengeNum >= PARAMS["newRank"])
-            {
-                newRankTitle.texture("challengeRankTitle.png", UPDATE_SIZE);
-            }
-            else
-            {
-                newRankTitle.texture("newRankTitle.png", UPDATE_SIZE);
-            }
+            newRankTitle.texture("challengeRankTitle.png", UPDATE_SIZE);
         }
         else
         {

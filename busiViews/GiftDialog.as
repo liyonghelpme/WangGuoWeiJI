@@ -181,7 +181,10 @@ class GiftDialog extends MyNode
                 }
                 trace("objData", data[i][0], id);
                 objData = getData(map[data[i][0]], id);
-                temp = panel.addlabel(objData.get("name") + " " + objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+                
+                //装备描述没有名字 药水描述有名字？Potion
+                temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("name")]), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+
                 if(data[i][0] == EQUIP_ITEM)
                 {
                     obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(id)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
@@ -333,7 +336,6 @@ class GiftDialog extends MyNode
     }
 
     //升级装备 降级装备
-    /*
     function receiveMsg(para)
     {
         var msgId = para[0];
@@ -341,22 +343,21 @@ class GiftDialog extends MyNode
         {
             updateTab(); 
         }
-        else if(msgId == UPDATE_TREASURE)//变更宝石数量
+        else if(msgId == UPDATE_DRUG)//变更宝石数量
         {
-            
+            updateTab(); 
         }
     }
-    */
     override function enterScene()
     {
         super.enterScene();
-        //if(kind == EQUIP)
-        //    global.msgCenter.registerCallback(UPDATE_EQUIP, this);
+        global.msgCenter.registerCallback(UPDATE_DRUG, this);
+        global.msgCenter.registerCallback(UPDATE_EQUIP, this);
     }
     override function exitScene()
     {
-        //if(kind == EQUIP)
-        //    global.msgCenter.removeCallback(UPDATE_EQUIP, this);
+        global.msgCenter.removeCallback(UPDATE_EQUIP, this);
+        global.msgCenter.removeCallback(UPDATE_DRUG, this);
         super.exitScene();
     }
 }

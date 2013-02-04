@@ -52,8 +52,6 @@ import views.BusiSoldier;
 
 //成功提示
 
-import views.ResourceBanner;
-
 
 import busiViews.SoldierMenu;
 //import busiViews.DetailDialog;
@@ -78,7 +76,6 @@ import views.CastleScene;
 //采用组合的方式 将farm相关的行为 实现在farm中
 import views.Building;
 import views.BuildAnimate;
-import views.PopBanner;
 import views.BuildMenu;
 import views.BuildWorkMenu;
 
@@ -88,9 +85,6 @@ import views.MoveSoldier;
 import views.Camp;
 
 
-
-
-import views.SellDialog;
 
 import busiViews.FriendDialog;
 import busiViews.Neibor;
@@ -193,8 +187,6 @@ import war.UseDrugSkill;
 
 
 import views.CloseAttackEffect;
-import war.ChallengeOver;
-
 
 import views.MoveObject;
 import war.MapPause;
@@ -251,7 +243,6 @@ import views.Goods;
 import views.ResLackBanner;
 
 import busiViews.LoadChallenge;
-//import views.UpdateDialog;
 
 import views.LoginDialog;
 import busiViews.LoadChallenge;
@@ -282,7 +273,6 @@ import Global.MessageCenter;
 import Global.SensorController;
 import Global.Director;
 import Global.Controller;
-//import views.QuitBanner;
 import Global.Timer;
 import views.Dark;
 import views.StandardTouchHandler;

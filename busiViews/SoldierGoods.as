@@ -140,7 +140,7 @@ class SoldierGoods extends MyNode
                 {
                     solPic = panel.addsprite("soldier"+str(id)+".png", BLACK).anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
                     temp = panel.addsprite("storeShadow.png").anchor(50, 50).pos(71, 93).size(PANEL_WIDTH, PANEL_HEIGHT).color(100, 100, 100, 47);
-                    var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [0, 100, 0]);
+                    var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
                     cw.anchor(50, 50).pos(78, 92);
                     panel.add(cw); 
                 }

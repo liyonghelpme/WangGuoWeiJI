@@ -214,8 +214,7 @@ class Map extends MyNode
         for(var i = 0; i < len(mySoldiers); i++)
         {
             var sol = mySoldiers[i];
-            sol.health = 0;
-            sol.dead = 1;
+            sol.setDeadState();
             global.user.updateSoldiers(sol);
         }
     }

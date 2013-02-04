@@ -473,6 +473,7 @@ class MenuLayer extends MyNode
     }
     
     function onClicked(n, e, param, x, y, points){
+        scene.clearHideTime(); 
         global.controller.playSound("but.mp3");
         if(showChildMenu == 0){
             drawAllMenu();

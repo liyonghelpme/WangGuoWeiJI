@@ -113,7 +113,7 @@ class SkillFlowBanner extends MyNode
             attributeList.removefromparent();
             attributeList = null;
         }
-        if(soldier != null)
+        if(soldier != null && getParam("debugSkill"))
         {
             attributeList = stringLines(getStr("solAtt", 
                                         ["[HEAL]", str(soldier.health), 

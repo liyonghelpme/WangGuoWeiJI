@@ -205,6 +205,7 @@ class Camp extends FuncBuild
             {
                 global.user.changeExpLevel(2);
                 global.taskModel.doAllTaskByKey("call", 1);//完成完整的招募士兵任务
+                global.httpController.addRequest("logC/finishNewStage", dict([["uid", global.user.uid], ["stage", 2]]), null, null);
             }
             return 1;
         }

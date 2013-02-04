@@ -371,6 +371,10 @@ class CastleScene extends MyNode
 
     没有打开全局菜单 也没有进行建造或者规划
     */
+    function checkHasMenu()
+    {
+        return curMenuBuild != null;
+    }
     function showGlobalMenu(build, callback)
     {
         if(curMenuBuild == null && curBuild == null)
