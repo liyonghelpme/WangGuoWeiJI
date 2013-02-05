@@ -27,7 +27,7 @@ class RoundFail extends MyNode
         but0 = new NewButton("roleNameBut1.png", [125, 41], getStr("ok", null), null, 20, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(492, 368);
         addChild(but0);
-        temp = bg.addsprite("roundFail.png").anchor(50, 50).pos(415, 93).size(118, 42).color(100, 100, 100, 100);
+        temp = bg.addsprite("roundFail.png").anchor(50, 50).pos(415, 93).color(100, 100, 100, 100);
         temp = bg.addsprite("roundTip.png").anchor(0, 0).pos(206, 142).size(64, 47).color(100, 100, 100, 100);
     }
     function onTryAgain()

@@ -25,7 +25,7 @@ class NoTipDialog extends MyNode
         bg.addlabel(getStr(TIP_WORD[kind], null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(420, 94).color(100, 100, 100);
         
         var w = getStr(TIP_CON[kind], null);
-        line = stringLines(w, 17, 25, [0, 0, 0], FONT_NORMAL);
+        line = stringLines(w, 20, 30, [0, 0, 0], FONT_NORMAL);
         line.pos(206, 191);
         bg.add(line);
     }

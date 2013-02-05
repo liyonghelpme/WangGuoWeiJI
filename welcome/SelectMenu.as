@@ -333,7 +333,8 @@ class SelectMenu extends MyNode
 
                 //-40
                 sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onSure);
-                backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(98, 135).setevent(EVENT_TOUCH, cancelHero);
+                //相对于第一个按钮的20的横向偏移
+                backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(sureBut.pos()[0]+sureBut.prepare().size()[0]+20, sureBut.pos()[1]).setevent(EVENT_TOUCH, cancelHero);
             }
         }
         else if(curStep == 1)
@@ -341,7 +342,7 @@ class SelectMenu extends MyNode
             heroDes = menuNode.addsprite("heroDesBack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H); 
             heroDes.addsprite("heroName0.png").pos(22, 19);
             sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onInput);
-            backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(98, 135).setevent(EVENT_TOUCH, onBack);
+            backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(sureBut.pos()[0]+sureBut.prepare().size()[0]+20, sureBut.pos()[1]).setevent(EVENT_TOUCH, onBack);
             //723 165 - 200 120 = 523 45
             inputView = v_create(V_INPUT_VIEW, BLOCK_X+INPUT_X, BLOCK_Y+INPUT_Y, 233, 50);
             v_root().addview(inputView);

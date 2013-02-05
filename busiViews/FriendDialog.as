@@ -29,7 +29,7 @@ class FriendDialog extends MyNode
         but0.bg.pos(650, 43);
         addChild(but0);
 
-        bg.addsprite("dialogFriendTitle.png").anchor(0, 0).pos(65, 10).size(181, 58).color(100, 100, 100, 100);
+        bg.addsprite("dialogFriendTitle.png").anchor(0, 0).pos(65, 10).color(100, 100, 100, 100);
         showTitle = bg.addsprite("dialogNeibor.png").anchor(50, 50).pos(398, 108).color(100, 100, 100, 100);
         
         views = [new Neibor(this), new OtherPlayer(this)];

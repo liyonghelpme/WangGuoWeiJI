@@ -30,7 +30,7 @@ class NewChallengeWin extends MyNode
         okBut = but0;
         global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), CHALLENGE_WIN_OK, finishNew);
 
-        temp = bg.addsprite("roundWin.png").anchor(50, 50).pos(414, 89).size(120, 41).color(100, 100, 100, 100);
+        temp = bg.addsprite("roundWin.png").anchor(50, 50).pos(414, 89).color(100, 100, 100, 100);
         bg.addlabel(str(param["reward"]["silver"]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(301, 229).color(18, 11, 6);
         temp = bg.addsprite("silver.png").anchor(0, 0).pos(262, 215).size(30, 30).color(100, 100, 100, 100);
         bg.addlabel(str(param["reward"]["crystal"]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(301, 262).color(18, 11, 6);

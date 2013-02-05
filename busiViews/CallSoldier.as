@@ -40,7 +40,7 @@ class CallSoldier extends MyNode
         silverText = bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(318, 43).color(100, 100, 100);
         goldText = bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(474, 44).color(100, 100, 100);
         cryText = bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(621, 44).color(100, 100, 100);
-        temp = bg.addsprite("titCamp.png").anchor(0, 0).pos(71, 10).size(174, 62).color(100, 100, 100, 100);
+        temp = bg.addsprite("titCamp.png").anchor(0, 0).pos(71, 10).color(100, 100, 100, 100);
         temp = bg.addsprite("conTitSol.png", UPDATE_SIZE).anchor(50, 50).pos(514, 112).color(100, 100, 100, 100);
         goods = new SoldierGoods(this);
         addChild(goods);

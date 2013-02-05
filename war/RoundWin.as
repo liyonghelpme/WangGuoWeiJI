@@ -29,7 +29,7 @@ class RoundWin extends MyNode
         addChild(but0);
         okBut = but0;
 
-        temp = bg.addsprite("roundWin.png").anchor(50, 50).pos(414, 92).size(120, 41).color(100, 100, 100, 100);
+        temp = bg.addsprite("roundWin.png").anchor(50, 50).pos(414, 92).color(100, 100, 100, 100);
         bg.addlabel(str(param["reward"].get("silver", 0)), "fonts/heiti.ttf", 22).anchor(0, 50).pos(307, 243).color(18, 11, 6);
         temp = bg.addsprite("silver.png").anchor(0, 0).pos(268, 227).size(30, 30).color(100, 100, 100, 100);
         bg.addlabel(str(param["reward"].get("crystal", 0)), "fonts/heiti.ttf", 22).anchor(0, 50).pos(307, 281).color(18, 11, 6);
