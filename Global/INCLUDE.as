@@ -278,7 +278,6 @@ import views.Dark;
 import views.StandardTouchHandler;
 import Global.MyAnimate;
 
-import model.FightModel;
 
 import Global.TouchManager;
 import model.TaskModel;
@@ -329,7 +328,6 @@ global.sensorController = new SensorController();
 global.friendController = new FriendController();
 global.taskModel = new TaskModel();
 global.mailController = new MailController();
-global.fightModel = new FightModel();
 global.bannerController = new BannerController();
 
 

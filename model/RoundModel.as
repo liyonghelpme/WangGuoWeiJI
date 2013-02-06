@@ -37,6 +37,22 @@ function getNewSoldiers(big, small)
     }
     return res;
 }
+function getDebugMonster(big, small)
+{
+    var rid = big*MAP_COFF+small;
+    var data = mapMonsterData.get(rid);
+    var res = [];
+    for(var i = 0; i < len(data); i++)
+    {
+        var r = dict();
+        for(var j = 0; j < len(mapMonsterKey); j++)
+        {
+            r.update(mapMonsterKey[j], data[i][j]);
+        }
+        res.append(r);
+    }
+    return res;
+}
 function getAllNew(big, small)
 {
     var rid = big*MAP_COFF+small;

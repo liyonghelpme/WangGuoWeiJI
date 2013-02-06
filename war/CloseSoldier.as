@@ -61,8 +61,9 @@ class CloseSoldier
         {
             var bomb = new AttackBombEffect();
             //攻击地方身体上出现
-            var midX = sol.tar.getPos()[0];
-            var midY = sol.tar.getPos()[1]-sol.offY-sol.sy*MAP_OFFY/2;
+            var solPos = sol.tar.getSolPos(this);
+            var midX = solPos[0];
+            var midY = solPos[1]-sol.offY-sol.sy*MAP_OFFY/2;
 
             bomb.setPos([midX+getParam("randBombX")/2-rand(getParam("randBombX")), midY+getParam("randBombY")/2-rand(getParam("randBombY"))]);
             sol.map.addChildZ(bomb, MAX_BUILD_ZORD); 

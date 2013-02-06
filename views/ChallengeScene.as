@@ -152,6 +152,8 @@ class ChallengeScene extends MyNode
                 newChallenge();
             } else if(getParam("debugChallenge")) {
                 debugChallange();           
+            } else if(getParam("debugMonster")) {
+                debugMonster();
             } else
                 global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid]]), getRandChallenge, null);
         }
@@ -161,6 +163,13 @@ class ChallengeScene extends MyNode
         }
     }
 
+    function debugMonster()
+    {
+        kind = CHALLENGE_MON;
+
+        user = dict([["big", 0], ["small", 0], ["mon", getDebugMonster(0, 2)]]);//调试怪兽的数量
+        finishDataAndStartPic();
+    }
     function debugChallange()
     {
         trace("debugChallange");

@@ -691,12 +691,13 @@ for i in res:
     AccCost.append([i['id'], i['gold']])
 print 'var', 'AccCost', '=', json.dumps(AccCost), ';'
 
-HARM_TABLE = [
-[100, 150, 100, 100],
-[100, 100, 150, 100],
-[150, 100, 100, 100],
-[100, 100, 100, 100],
-]
+HARM_TABLE = []
+sql = 'select * from HARM_TABLE'
+con.query(sql)
+res = con.store_result().fetch_row(0, 0)
+for i in res:
+    HARM_TABLE.append(i)
+
 print 'const', 'HARM_TABLE', '=', json.dumps(HARM_TABLE), ';'
 
 #不包括城墙

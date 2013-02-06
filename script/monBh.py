@@ -12,7 +12,7 @@ def getRoundMons():
     solName = {}
     for i in res:
         solName[i['name'].encode('utf8')] = i
-    f = open('monster.csv').readlines()
+    f = open('monMap.csv').readlines()
     roundMon = []
     for i in f:
         i = i.split(',')

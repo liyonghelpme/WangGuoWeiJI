@@ -24,6 +24,7 @@ class MapDefense extends MyNode
     var curMap = [0, 0];
     //城墙是 编号-2 的 士兵
     var id = getParam("mapDefenseId");
+    var offY = 0;
     function MapDefense(m, i, d)
     {
         map = m;
@@ -42,6 +43,12 @@ class MapDefense extends MyNode
     }
     //地面爆炸位置
     function getGroundBombPos(att)
+    {
+        var x = bg.pos()[0];
+        var y = att.bg.pos()[1];
+        return [x, y];
+    }
+    function getClosePos(att)
     {
         var x = bg.pos()[0];
         var y = att.bg.pos()[1];

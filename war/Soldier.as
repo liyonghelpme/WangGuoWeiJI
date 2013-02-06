@@ -403,6 +403,9 @@ class Soldier extends MyNode
     function clearCommand()
     {
         commandList = [];
+        commandTime = 0;
+        needTime = 0;
+        inCommand = 0;
     }
     //增加生命值数量
     function doHeal(heal)
@@ -1024,6 +1027,10 @@ class Soldier extends MyNode
     设置正常的zord
     清理 地图上显示的grid
     */
+    function getClosePos(att)
+    {
+        return bg.pos();
+    }
     function getGroundBombPos(att)
     {
         return bg.pos();

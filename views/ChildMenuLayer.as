@@ -42,7 +42,7 @@ class ChildMenuLayer extends MyNode
     ["gather", ["menu_button_gather.png", onGather]],
     ["upgrade", ["menu_button_upgrade.png", onUpgrade]],
 
-    ["allDrug", ["menu_button_allMagic.png", onAllDrug]],
+    ["allDrug", ["menu_button_drug.png", onAllDrug]],
     ["allEquip", ["menu_button_allEquip.png", onAllEquip]],
 
     //士兵状态
