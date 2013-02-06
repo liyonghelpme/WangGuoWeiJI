@@ -261,7 +261,6 @@ import model.MapGridController;
 import views.MyWarningDialog;
 import views.ShadowWords;
 import views.NewButton;
-import views.BannerController;
 
 
 
@@ -328,7 +327,6 @@ global.sensorController = new SensorController();
 global.friendController = new FriendController();
 global.taskModel = new TaskModel();
 global.mailController = new MailController();
-global.bannerController = new BannerController();
 
 
 
