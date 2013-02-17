@@ -33,7 +33,7 @@ import busiViews.DownloadDialog;
 import busiViews.DownloadIcon;
 
 import busiViews.BuildLayer;
-import views.BuildLand;
+import busiViews.BuildLand;
 import views.SoldierMax;
 
 import views.MineFunc;
@@ -48,7 +48,7 @@ import views.MenuLayer;
 import busiViews.CastleRightMenu;
 
 //人物对话框
-import views.BusiSoldier;
+import busiViews.BusiSoldier;
 
 //成功提示
 
@@ -59,7 +59,6 @@ import busiViews.SoldierMenu;
 import views.ChildMenuLayer;
 import busiViews.TransferDialog;
 import views.GameTwo;
-import views.FlowReward;
 import busiViews.InviteIntro;
 import busiViews.InviteInput;
 
@@ -74,10 +73,10 @@ import busiViews.AllGoods;
 import views.CastleScene;
 //建筑物
 //采用组合的方式 将farm相关的行为 实现在farm中
-import views.Building;
-import views.BuildAnimate;
-import views.BuildMenu;
-import views.BuildWorkMenu;
+import busiViews.Building;
+import busiViews.BuildAnimate;
+import busiViews.BuildMenu;
+import busiViews.BuildWorkMenu;
 
 import views.MoveMap;
 import views.MoveSoldier;
@@ -184,9 +183,6 @@ import war.SaveSkill;
 import war.UseDrugSkill;
 
 
-
-
-import views.CloseAttackEffect;
 
 import views.MoveObject;
 import war.MapPause;
