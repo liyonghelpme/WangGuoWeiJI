@@ -350,7 +350,7 @@ class CastlePage extends MyNode
         oldScale = bg.scale();
         var sm = 150;
         if(build.isBuilding == 0)//士兵 缩放 200
-            sm = 200;
+            sm = getParam("MoveSolScale");
         touchDelegate.scaleToMax(sm);
 
         oldPos = bg.pos();

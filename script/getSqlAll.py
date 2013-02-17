@@ -49,6 +49,13 @@ def hanData(name, data):
             i['name'] = name+str(i['id'])
         if i.get('engName') != None:
             i.pop('engName')
+        
+        if i.get('hasNum') != None:
+            if i['hasNum']:
+                i['numCost'] = json.loads(i['numCost'])
+            else:
+                i['numCost'] = '[]'
+
         it = list(i.items())
         it = [list(k) for k in it]
         #it[4][1] = 'build'+str(i['id'])
@@ -630,10 +637,16 @@ for r in res:
         showId.append(r['id'])
 
 print 'var', 'storeSoldier', '=', json.dumps(showId), ';'
-    
 
+sql = 'select * from soldier where isHero = 0 order by level'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+showId = []
+for r in res:
+    if r['id'] % 10 == 0:
+        showId.append(r['id'])
 
-
+print 'var', 'taskSoldier', '=', json.dumps(showId), ';'
 
 
 import codecs
@@ -742,6 +755,15 @@ mgList = []
 for i in magic:
     mgList.append([i['id'], [i['make'], i['fly'], i['bomb']]])
 print 'var', 'magicAnimate', '=', 'dict(', json.dumps(mgList), ');'
+
+
+sql = 'select * from GameParam'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+GameParam = []
+for i in res:
+    GameParam.append([i['key'], i['value']])
+print 'var', 'GameParam', '=', 'dict(', json.dumps(GameParam), ');'
 
 con.commit()
 con.close()

@@ -57,7 +57,7 @@ class BuildLayer extends MoveMap
     function update(diff)
     {
         passTime += diff;
-        if(passTime > getParam("UpdateStatusTime"))
+        if(passTime > getParam("UpdateStatusTime") || getParam("debugStatus"))//测试士兵状态生成
         {
             passTime = 0;
 
@@ -66,7 +66,6 @@ class BuildLayer extends MoveMap
             var i;
             for(i = 0; i < len(soldiers); i++)
                 soldiers[i].clearRandomStatus();
-
 
             //生成随机奖励金银币状态
             for(i  = 0; i < len(soldiers) && i < getParam("MaxStatusSolNum"); i++)

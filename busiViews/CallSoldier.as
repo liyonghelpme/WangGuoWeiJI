@@ -187,7 +187,7 @@ class CallSoldier extends MyNode
                     infoLabel = line;
 
                     but0 = new NewButton("violetBut.png", [103, 37], getStr("accCall", ["[KIND]", "gold.png", "[NUM]", str(getAccCost())]), null, 17, FONT_NORMAL, [100, 100, 100], onAccCall, null);
-                    but0.bg.pos(177, 435);
+                    but0.bg.pos(180, 435);
                     addChild(but0);
                     redButton = but0;
                     if(inAcc)

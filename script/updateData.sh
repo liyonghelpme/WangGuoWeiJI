@@ -1,4 +1,5 @@
 #!/bin/bash
+python updateEquipDes.py
 python updateBuildingCost.py
 #writeCommandTip 只在第一次加入的时候 自动更新新的tip 到Strings中  重复的将自动忽略
 #暂时不更新技能数据

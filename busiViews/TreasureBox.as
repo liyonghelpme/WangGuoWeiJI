@@ -123,11 +123,22 @@ class TreasureBox extends MyNode
     function genBoxReward()
     {
         var reward = [];
+        var temp;
+        var i;
 
         //药水数量少于最大限制可以获得新药水
+        //不奖励 金币 > 0 的装备 药水
         if(global.user.getDrugTotalNum() < getParam("maxDrugNum"))
         {
             var allDrugs = drugData.keys(); 
+            temp = [];
+            for(i = 0; i < len(allDrugs); i++)
+            {
+                var dData = getData(DRUG, allDrugs[i]);
+                if(dData["gold"] == 0)
+                    temp.append(allDrugs[i]);
+            }
+            allDrugs = temp;
             var rd = rand(len(allDrugs));
             reward.append([DRUG, allDrugs[rd], 1]);
         }
@@ -137,10 +148,10 @@ class TreasureBox extends MyNode
         bubbleSort(allEquip, cmp);
 
         var levelEquip = [];
-        for(var i = 0; i < len(allEquip); i++)
+        for(i = 0; i < len(allEquip); i++)
         {
             var ed = getData(EQUIP, allEquip[i]);
-            if(ed["level"] <= level)
+            if(ed["level"] <= level && ed["gold"] == 0)
             {
                 levelEquip.append(allEquip[i]);
                 if(len(levelEquip) > getParam("maxRandEquip"))

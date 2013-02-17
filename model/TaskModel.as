@@ -780,10 +780,10 @@ class TaskModel
         {
             var task = localSolTask[tid];
             var stage = task["stage"];
-            if(stage < len(storeSoldier))
+            if(stage < len(taskSoldier))
             {
                 //当前需要购买的士兵 ID 和 完成的任务相同
-                if(storeSoldier[stage] == sid)
+                if(taskSoldier[stage] == sid)
                 {
                     task["number"] += num;
                     var ret = checkSolTaskFinish(tid);

@@ -6,15 +6,23 @@ class ParamController
     function ParamController()
     {
         //fetchParams 必须是第一个发送的 请求 获取 所有参数
-        global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
+        //查看没有debug状态下的参数
+        AnimateParams = GameParam; 
+        if(getParam("DEBUG"))
+        {
+            global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
+            global.httpController.addRequest("getString", dict(), getString, null);
+            global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
+            global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
+            global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
+            global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
+            global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
+            global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
+        }
+        else
+        {
 
-        global.httpController.addRequest("getString", dict(), getString, null);
-        global.httpController.addRequest("fetchAnimate", dict(), fetchAni, null);
-        global.httpController.addRequest("getTaskData", dict(), fetchTask, null);
-        global.httpController.addRequest("getAllSolIds", dict(), getAllSolIds, null);
-        global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
-        global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
-        global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
+        }
     }
     function updateParams()
     {

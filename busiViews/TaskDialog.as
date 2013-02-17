@@ -198,7 +198,6 @@ class TaskDialog extends MyNode
                     taskD = getData(TASK, tData["tid"]);
                     //检测任务是否完成 没有 完成 放置在前面
                     //购买士兵任务 全部完成则不显示了
-                    //if(tData["stage"] < len(storeSoldier))
                     {
                         if(global.taskModel.checkSolTaskFinish(solTask[i]))
                             finishTask.append([SOL_TASK, solTask[i]]);
@@ -384,7 +383,7 @@ class TaskDialog extends MyNode
                 //可以完成solTask
                 var stage = tData["stage"];
                 //购买任务士兵 任务 已经全部完成
-                if(stage >= len(storeSoldier))
+                if(stage >= len(taskSoldier))
                 {
                     temp = panel.addlabel(getStr("solTaskFinish", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 90, 0, ALIGN_LEFT).anchor(0, 0).pos(389, 19).color(56, 54, 53);
                 }
@@ -404,8 +403,8 @@ class TaskDialog extends MyNode
                 }
                 
                 panel.addlabel(taskData["title"], "fonts/heiti.ttf", 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
-                if(stage < len(storeSoldier))
-                    panel.addlabel(replaceStr(taskData["des"], ["[NAME]", getData(SOLDIER, storeSoldier[stage])["name"]]), "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
+                if(stage < len(taskSoldier))
+                    panel.addlabel(replaceStr(taskData["des"], ["[NAME]", getData(SOLDIER, taskSoldier[stage])["name"]]), "fonts/heiti.ttf", 15).anchor(0, 50).pos(92, 51).color(56, 54, 53); 
 
                 reward = getGain(TASK, tid).items();
             }
