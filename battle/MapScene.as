@@ -74,11 +74,11 @@ class MapCloud extends MyNode
     {
         super.enterScene();
         global.timer.addTimer(this);
-        global.controller.playMedia("fight0.mp3");
+        //global.controller.playMedia("fight0.mp3");
     }
     override function exitScene()
     {
-        global.controller.pauseMedia("fight0.mp3");
+        //global.controller.pauseMedia("fight0.mp3");
         global.timer.removeTimer(this);
         super.exitScene();
     }

@@ -556,6 +556,8 @@ class Building extends MyNode
             dirty = 1;
             map.mapGridController.clearMap(this);
         }
+
+        global.controller.playSound("but.mp3");
     }
     function finishPlan()
     {

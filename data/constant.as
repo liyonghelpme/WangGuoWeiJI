@@ -238,7 +238,7 @@ function ani1()
 
 function ani2(t)
 {
-    return animate(t, "m2a.plist/m2a0.png", "m2a.plist/m2a1.png", "m2a.plist/m2a2.png", "m2a.plist/m2a3.png", "m2a.plist/m2a4.png", "m2a.plist/m2a5.png", "m2a.plist/m2a6.png", "m2a.plist/m2a7.png", "m2a.plist/m2a8.png", "m2a.plist/m2a9.png", "m2a.plist/m2a10.png", "m2a.plist/m2a11.png", "m2a.plist/m2a12.png", "m2a.plist/m2a13.png", "m2a.plist/m2a14.png", "m2a.plist/m2a15.png", "m2a.plist/m2a16.png", "m2a.plist/m2a17.png", "m2a.plist/m2a18.png");
+    return animate(t, "m2a.plist/m2a0.png", "m2a.plist/m2a1.png", "m2a.plist/m2a2.png", "m2a.plist/m2a3.png", "m2a.plist/m2a4.png", "m2a.plist/m2a5.png", "m2a.plist/m2a6.png", "m2a.plist/m2a7.png", "m2a.plist/m2a8.png", "m2a.plist/m2a9.png", "m2a.plist/m2a10.png", "m2a.plist/m2a11.png", "m2a.plist/m2a12.png");
 }
 
 
@@ -250,7 +250,9 @@ function ani3()
 
 function ani4(t)
 {
-    return animate(t, "m4a.plist/m4a0.png", "m4a.plist/m4a1.png", "m4a.plist/m4a2.png", "m4a.plist/m4a3.png", "m4a.plist/m4a4.png", "m4a.plist/m4a5.png", "m4a.plist/m4a6.png", "m4a.plist/m4a7.png", "m4a.plist/m4a8.png", "m4a.plist/m4a9.png", "m4a.plist/m4a10.png", "m4a.plist/m4a11.png", "m4a.plist/m4a12.png", "m4a.plist/m4a13.png", "m4a.plist/m4a14.png", "m4a.plist/m4a15.png", "m4a.plist/m4a16.png", "m4a.plist/m4a17.png", "m4a.plist/m4a18.png", "m4a.plist/m4a19.png");
+    return animate(t, 
+"m4a.plist/m4a1.png", "m4a.plist/m4a2.png", "m4a.plist/m4a3.png", "m4a.plist/m4a4.png", "m4a.plist/m4a5.png", "m4a.plist/m4a6.png", "m4a.plist/m4a7.png", "m4a.plist/m4a8.png", "m4a.plist/m4a9.png", "m4a.plist/m4a10.png"
+    , UPDATE_SIZE);
 }
 
 var mapAnimate = dict([
@@ -260,6 +262,8 @@ var mapAnimate = dict([
     [3, [ani3, [777, 58]]],
     [4, [ani4, [479, 223, 327, 164, 554, 129]]],
 ]);
+
+var maxLakeBoundary = [103, 18, 595, 223];
 
 /*
 kind = 0 农田
@@ -486,6 +490,7 @@ dict(
 
 );
 
+/*
 var mapInfo = dict([
     [0, [[-5, 68], [775, 60]]],
     [1, [[0, 77], [770, 65]]],
@@ -494,6 +499,7 @@ var mapInfo = dict([
     [4, [[1, 48], [760, 75]]],
     [5, [[0, 0], [738, 41]]],
 ]);
+*/
 
 const MAP_INITY = 87;
 const MAP_INITX = 0;

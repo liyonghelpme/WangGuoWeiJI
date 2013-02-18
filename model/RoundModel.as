@@ -368,3 +368,9 @@ function gotoRandChallenge(sureToChallenge, finishCallback)
     }
     return sureToChallenge;
 }
+
+function getMapDefense(kind)
+{
+    var data = getData(MAP_INFO, kind);
+    return [[data["leftX"], data["leftY"]], [data["rightX"], data["rightY"]]];
+}

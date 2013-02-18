@@ -79,7 +79,7 @@ class AllGoods extends MyNode
         addChild(but0);
         temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("allEquipTitle.png").anchor(50, 50).pos(169, 43).size(185, 60).color(100, 100, 100, 100);
+        temp = bg.addsprite("allEquipTitle.png").anchor(50, 50).pos(getParam("equipTitleOffX"), 43).size(185, 60).color(100, 100, 100, 100);
         if(kind == DRUG)
             temp.texture("allDrugTitle.png", UPDATE_SIZE);
 

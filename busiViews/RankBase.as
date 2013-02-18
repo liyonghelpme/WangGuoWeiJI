@@ -511,11 +511,11 @@ class RankBase extends MyNode
                 //排行的量是一致的
                 var papayaId = data[diff]["id"];
                 var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
-                panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
+                panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
 
                 panel.addsprite("dialogRankCup.png").anchor(0, 0).pos(22, 8).size(35, 32).color(100, 100, 100, 100);
-                panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"])] ), "fonts/heiti.ttf", 23).anchor(0, 50).pos(63, 24).color(29, 16, 4);
+                panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"]+1)] ), "fonts/heiti.ttf", 23).anchor(0, 50).pos(63, 24).color(29, 16, 4);
 
                 panel.addsprite("levelStar.png").anchor(50, 50).pos(100, 56).size(31, 31).color(100, 100, 100, 100);
                 panel.addlabel(str(data[diff]["level"]+1) , "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);

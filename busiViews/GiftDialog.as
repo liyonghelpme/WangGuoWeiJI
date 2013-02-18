@@ -49,9 +49,6 @@ class GiftDialog extends MyNode
         addChild(but0);
         temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
 
-        but0 = new NewButton("blueButton.png", [113, 42], getStr("giftTip", null), null, 20, FONT_NORMAL, [100, 100, 100], onGiftTip, null);
-        but0.bg.pos(652, 43);
-        addChild(but0);
         temp = bg.addsprite("giftTitle.png").anchor(50, 50).pos(161, 40).size(174, 73).color(100, 100, 100, 100);
     }
     function onGiftTip()
@@ -61,10 +58,23 @@ class GiftDialog extends MyNode
     {
         var key;
         var i;
-        data = [
-        [KIND_ITEM, EQUIP_ITEM, 0],
-        [KIND_ITEM, DRUG_ITEM, 0],
-        ];
+        var allObjs;
+        data = [];
+
+        allObjs = global.user.getAllGoods(map[EQUIP_ITEM]);
+        for(i = 0; i < len(allObjs); i++)
+        {
+            data.append([EQUIP_ITEM, allObjs[i]]);
+        }
+
+        allObjs = global.user.getAllGoods(map[DRUG_ITEM]);
+        for(i = 0; i < len(allObjs); i++)
+        {
+            data.append([DRUG_ITEM, allObjs[i]]);
+        }
+
+
+
         while(len(data) < 5)
             data.append([EMPTY_GIFT, -1]);
 

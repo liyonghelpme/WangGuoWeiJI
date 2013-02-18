@@ -137,7 +137,7 @@ class TaskDialog extends MyNode
         but0.bg.pos(772, 27);
         addChild(but0);
         temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
-        temp = bg.addsprite("taskTitle.png").anchor(50, 50).pos(157, 43).color(100, 100, 100, 100);
+        temp = bg.addsprite("taskTitle.png").anchor(50, 50).pos(getParam("taskTitleOffX"), 43).color(100, 100, 100, 100);
         updateExpBar();
 
     }

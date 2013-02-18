@@ -144,19 +144,45 @@ class Map extends MyNode
         {
             animateLayer = node();
             bg.add(animateLayer, 1000);
-            var ani = getMapAnimate(kind);
-            for(var i = 0; i < len(ani); i++)
+        }
+    }
+    function clearBubble(n)
+    {
+        bubbles.remove(n);
+        n.removefromparent();
+    }
+    var passTime = getParam("newBubbleTime");
+    var bubbles = [];
+    //随机生成 lake中的气泡
+    //气泡运行一段时间自动消除
+    function genBubble(diff)
+    {
+        var mData = getData(MAP_INFO, kind);
+        if(mData["hasAnimation"])
+        {
+            passTime += diff;
+            if(passTime >= getParam("newBubbleTime")+rand(getParam("randNewBubble")))
             {
-                var allPos = ani[i][1];
-                for(var j = 0; j < len(allPos); j += 2)
+                passTime = 0;
+                if(len(bubbles) < getParam("bubbleTotal"))
                 {
-                    var a = sprite().pos(allPos[j], allPos[j+1]);
-                    a.addaction(repeat(ani[i][0](getParam("bubbleTime"))));
+                    var ani = getMapAnimate(kind);
+                    var n = rand(len(ani));
+
+                    var allPos = ani[n][1];
+
+                    var randX = rand(maxLakeBoundary[2]-maxLakeBoundary[0])+maxLakeBoundary[0];
+                    var randY = rand(maxLakeBoundary[3]-maxLakeBoundary[1])+maxLakeBoundary[1];
+
+                    var a = sprite().pos(randX, randY);
+                    a.addaction(sequence(ani[n][0](getParam("bubbleTime")), callfunc(clearBubble)));
                     animateLayer.add(a);
+                    bubbles.append(a);
                 }
             }
         }
     }
+
     var gridLayer;
     function Map(k, sm, s, sc, eq)
     {
@@ -932,7 +958,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     var defenses = [];
     function initDefense()
     {
-        var defense = mapInfo.get(kind);
+        var defense = getMapDefense(kind);
         var d = new MapDefense(this, MYCOLOR, defense[0]);
         var i;
         var row;
@@ -961,6 +987,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
     {
         if(scene.initYet && !initYet)
             initYet = 1;
+        if(initYet)
+            genBubble(diff);
     }
     
     function stopGame()

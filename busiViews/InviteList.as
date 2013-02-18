@@ -135,7 +135,7 @@ class InviteList extends MyNode
 
                 var papayaId = data[curNum].get("id");
                 var name = data[curNum].get("name");
-                panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
+                panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
                 panel.addlabel(name, "fonts/heiti.ttf", 16).anchor(50, 50).pos(76, 25).color(28, 15, 4);
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
                 if(data[curNum].get("invited", 0) == 0)

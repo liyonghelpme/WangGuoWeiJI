@@ -1,6 +1,8 @@
 #coding:utf8
-import MySQLdb
 import json
+from helpJson import MyEncoder
+import MySQLdb
+
 sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward', 'mapMonster']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
@@ -37,6 +39,7 @@ nums = {}
 for i in res:
     nums[i['id']] = i
 
+        
 
 def hanData(name, data):
     names = []
@@ -54,7 +57,7 @@ def hanData(name, data):
             if i['hasNum']:
                 i['numCost'] = json.loads(i['numCost'])
             else:
-                i['numCost'] = '[]'
+                i['numCost'] = []
 
         it = list(i.items())
         it = [list(k) for k in it]
@@ -65,11 +68,48 @@ def hanData(name, data):
             res.append([i['id'], a])
     #equipId skillId
             
+
+    if name == 'building':
+        names = []
+
+
+        key = []
+        res = []
+        for i in f:
+            i = dict(i)
+            if i.get('name') != None and i.get('id') != None:
+                i['name'] = name+str(i['id'])
+            if i.get('engName') != None:
+                i.pop('engName')
+            
+            if i.get('hasNum') != None:
+                if i['hasNum']:
+                    i['numCost'] = json.loads(i['numCost'])
+                else:
+                    i['numCost'] = []
+
+            it = list(i.items())
+            it = [list(k) for k in it]
+            #it[4][1] = 'build'+str(i['id'])
+            key = [k[0] for k in it]
+            a = [k[1] for k in it]
+            if i.get('id') != None:
+                res.append([i['id'], a])
+
         
-    #if name == 'mapBlood':
-    #    res = []
-    #    for i in f:
-    #        res.append()
+        print 'var', name+'Key', '=', json.dumps(key), ';'
+        print 'var', name+'Data', '=', 'dict(', json.dumps(res, cls=MyEncoder), ');'
+
+        if f[0].get('name', None) != None:
+            if f[0].get('engName') != None:
+                names = [ [name+str(i['id']), [i['name'], i.get('engName')]] for i in f]
+            else:
+                names = [ [name+str(i['id']), i['name']] for i in f]
+                
+        else:
+            names = []
+        return names
+        
     if name == 'StoreAttWords':
         names = []
         res = []
@@ -755,6 +795,7 @@ mgList = []
 for i in magic:
     mgList.append([i['id'], [i['make'], i['fly'], i['bomb']]])
 print 'var', 'magicAnimate', '=', 'dict(', json.dumps(mgList), ');'
+
 
 
 sql = 'select * from GameParam'

@@ -121,6 +121,8 @@ class CastleScene extends MyNode
             ml.initDataOver();
             global.msgCenter.sendMsg(LOAD_PROCESS, 100);
             showSceneMask();
+
+            global.controller.playMedia("business.mp3");
         }
         //加载新手 页面
         //这里的 不能 100 Loading 页面自删除存在bug

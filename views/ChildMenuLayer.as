@@ -220,6 +220,11 @@ class ChildMenuLayer extends MyNode
     var statusIcon = null;
     var position;
     var offset;
+    function touchOnNow(n, e, p, x, y, points)
+    {
+        global.controller.playSound("but.mp3");
+        p(); 
+    }
     function ChildMenuLayer(index, funcs, s, otherFunc){
         position = index;
         scene = s;
@@ -250,7 +255,7 @@ class ChildMenuLayer extends MyNode
             var model = buts.get(funcs[i]);
 
             var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(DARK_WIDTH/2, OFFY/2+OFFY*i);
-            button.setevent(EVENT_TOUCH, model[1], null);
+            button.setevent(EVENT_TOUCH, touchOnNow, model[1]);
             if(funcs[i] == "mail")
             {
                 var num = global.mailController.getMailNum();

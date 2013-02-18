@@ -33,7 +33,7 @@ class TreasureBox extends MyNode
                 curX = 0;
             }
 
-            temp = headNode.addsprite("friendBlock.png").anchor(0, 0).pos(curX, curY).size(55, 55).color(100, 100, 100, 100);
+            temp = headNode.addsprite("friendBlock.png").anchor(50, 50).pos(curX+55/2, curY+55/2).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
             if(i < len(scene.helperList))//显示当前已经有的好友
             { 
                 temp.addlabel(scene.papayaIdName[i][1], "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
@@ -73,7 +73,7 @@ class TreasureBox extends MyNode
                 curX = 0;
             }
 
-            temp = headNode.addsprite("friendBlock.png").anchor(0, 0).pos(curX, curY).size(55, 55).color(100, 100, 100, 100);
+            temp = headNode.addsprite("friendBlock.png").anchor(50, 50).pos(curX+55/2, curY+55/2).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
             if(i < len(global.user.helperList))//显示当前已经有的好友
             { 
                 temp.addlabel(global.user.papayaIdName[i][1], "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(100, 100, 100);

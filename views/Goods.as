@@ -59,7 +59,7 @@ class Goods extends MyNode
         //显示属性位置 缩放
 
         var showGain = data.get("showGain", 1);
-        var buildPic = panel.addsprite(buildPicName).pos(74, 88).anchor(50, 50);
+        var buildPic = panel.addsprite(buildPicName, ARGB_8888).pos(74, 88).anchor(50, 50);
         var ret;
         if(objKind == BUILD)
         {

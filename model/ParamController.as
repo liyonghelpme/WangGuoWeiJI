@@ -8,7 +8,8 @@ class ParamController
         //fetchParams 必须是第一个发送的 请求 获取 所有参数
         //查看没有debug状态下的参数
         AnimateParams = GameParam; 
-        if(getParam("DEBUG"))
+        trace("inDebug", GameParam["DEBUG"]);
+        if(GameParam["DEBUG"])
         {
             global.httpController.addRequest("fetchParams", dict(), fetchOver, null);
             global.httpController.addRequest("getString", dict(), getString, null);
@@ -18,6 +19,7 @@ class ParamController
             global.httpController.addRequest("getAllFallGoods", dict(), getAllFallGoods, null);
             global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
             global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
+            global.httpController.addRequest("getStaticData", dict([["did", "mapBlood"]]), getStaticData, "mapBlood");
         }
         else
         {
@@ -59,6 +61,13 @@ class ParamController
                 buildingData = con["data"];
                 Keys[BUILD] = buildingKey;
                 CostData[BUILD] = dict(buildingData);
+            }
+            else if(param == "mapBlood")
+            {
+                mapBloodKey = con["key"];
+                mapBloodData = con["data"];
+                Keys[MAP_INFO] = mapBloodKey;
+                CostData[MAP_INFO] = dict(mapBloodData);
             }
         }
     }

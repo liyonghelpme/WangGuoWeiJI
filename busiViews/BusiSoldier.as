@@ -338,7 +338,8 @@ class BusiSoldier extends MyNode
         }
         else if(!showMenuYet)
             map.touchBegan(n, e, p, x, y, points);
-        global.controller.playSound("clickSol.mp3");
+        global.controller.playSound("but.mp3");
+        
     }
 
     function setBottom()

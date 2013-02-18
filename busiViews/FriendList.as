@@ -157,6 +157,7 @@ class FriendList extends MyNode
                 }
                 else if(data[curNum].get("uid") == EMPTY_SEAT)
                 {
+                    panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
                     panel.addsprite("unkownFriendHead.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
                     panel.addlabel(getStr("addPlayerNeibor", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
                 }
@@ -167,7 +168,7 @@ class FriendList extends MyNode
                 }
                 else if(friendKind == VISIT_NEIBOR || friendKind == VISIT_OTHER)
                 {
-                    panel.addsprite("friendBlock.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
+                    panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
 
                     panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
                     panel.addlabel(name, "fonts/heiti.ttf", 20).anchor(50, 50).pos(76, 132).color(43, 25, 9);
@@ -192,7 +193,7 @@ class FriendList extends MyNode
     }
     function onAddGoldSeat()
     {
-        var cost = dict([["gold", PARAMS["addSeatGold"]]]);
+        var cost = dict([["gold", getParam("addSeatGold")]]);
         var buyable = global.user.checkCost(cost);
         if(buyable.get("ok") == 0)
         {
@@ -292,13 +293,9 @@ class FriendList extends MyNode
         shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 78).size(144, 164).color(100, 100, 100, 100);
         if(uid == ADD_NEIBOR_MAX)
         {
-            but0 = new NewButton("roleNameBut0.png", [129, 39], "", null, 18, FONT_NORMAL, [100, 100, 100], onAddGoldSeat, curNum);
+            but0 = new NewButton("roleNameBut0.png", [129, 39], getStr("addGoldSeat", ["[KIND]", "gold.png", "[NUM]", str(getParam("addSeatGold"))]), null, 18, FONT_NORMAL, [100, 100, 100], onAddGoldSeat, curNum);
             but0.bg.pos(72, 82);
             shadow.add(but0.bg);
-
-            but0.bg.addlabel(getStr("addGoldSeat", ["[NUM]", str(PARAMS["addSeatGold"])]), "fonts/heiti.ttf", 18).pos(31, 19).anchor(0, 50);
-            but0.bg.addsprite("gold.png").anchor(0, 0).pos(4, 6).size(27, 27).color(100, 100, 100, 100);
-
         }
         else if(uid == EMPTY_SEAT)
         {

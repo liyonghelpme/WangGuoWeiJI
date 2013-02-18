@@ -44,13 +44,15 @@ class MapDefense extends MyNode
     //地面爆炸位置
     function getGroundBombPos(att)
     {
-        var x = bg.pos()[0];
+        var defPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+        var x = defPos[0];
         var y = att.bg.pos()[1];
         return [x, y];
     }
     function getClosePos(att)
     {
-        var x = bg.pos()[0];
+        var defPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+        var x = defPos[0];
         var y = att.bg.pos()[1];
         return [x, y];
     }
