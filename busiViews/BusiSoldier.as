@@ -65,8 +65,7 @@ class BusiSoldier extends MyNode
 
         initAttackAndDefense(this);
         initEquipAttribute(this, global.user.getSoldierEquipData(sid));
-
-
+        initTransferState();
     }
     function showChooseStar()
     {
@@ -78,11 +77,13 @@ class BusiSoldier extends MyNode
         }
         chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
         if(inDead)
-            chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
+            chooseStar.addaction(repeat(
+            getRedStarAni()
+            ));
         else if(inTransfer)
-            chooseStar.addaction(repeat(animate(1500, "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", UPDATE_SIZE)));
+            chooseStar.addaction(repeat(getGreenStarAni()));
         else
-            chooseStar.addaction(repeat(animate(1500, "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", UPDATE_SIZE)));
+            chooseStar.addaction(repeat(getGreenStarAni()));
             
         bg.add(chooseStar, -1);
     }
@@ -169,6 +170,10 @@ class BusiSoldier extends MyNode
         oldState = null;
     }
 
+    function getChangeDirNodeScale()
+    {
+        return getParam("SOL_SHOW_SIZE")*data["solSca"]/100;
+    }
     function BusiSoldier(m, d, privateData, s)
     {
         trace("init BusiSoldier", m, d, privateData, s);
@@ -180,12 +185,12 @@ class BusiSoldier extends MyNode
         load_sprite_sheet("soldierm"+str(id)+".plist");
         
         //有些士兵尺寸调整
-        bg = node().scale(PARAMS["SOL_SHOW_SIZE"]*data["solSca"]/100);
+        bg = node(); //.scale(PARAMS["SOL_SHOW_SIZE"]*data["solSca"]/100);
         init();
         if(getParam("debugSoldier"))
             stateLabel = bg.addlabel("", null, 25).pos(0, -20).color(0, 0, 0);
 
-        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
 
         var bSize = changeDirNode.prepare().size();
 
@@ -198,10 +203,12 @@ class BusiSoldier extends MyNode
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
 
+        var shadowOffX = data["shadowOffX"];
+        var shadowOffY = data["shadowOffY"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50);
 
-        changeDirNode.add(shadow, -1);
+        bg.add(shadow, -1);
         initData(privateData);
 
 
@@ -234,9 +241,9 @@ class BusiSoldier extends MyNode
         initHealth();
         initDeadState();//根据当前状态 进入死亡状态
 
-        bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
-        bg.setevent(EVENT_MOVE, touchMoved);
-        bg.setevent(EVENT_UNTOUCH, touchEnded);
+        changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
+        changeDirNode.setevent(EVENT_MOVE, touchMoved);
+        changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
     }
     function setSid(s)
     {
@@ -267,6 +274,13 @@ class BusiSoldier extends MyNode
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
         global.controller.playSound("pick.mp3");
     }
+    function initTransferState()
+    {
+        if(inTransfer)
+        {
+            showChooseStar();
+        }
+    }
     /*
     修改士兵的id
     修改士兵的攻击力 防御力 经验
@@ -279,9 +293,8 @@ class BusiSoldier extends MyNode
         inTransfer = 1;
         transferStartTime = client2Server(time()/1000);
         global.user.updateSoldiers(this);//更新士兵类型
-        //global.msgCenter.sendMsg(TRANSFER_SOL, sid);//发送士兵转职消息
         global.taskModel.doAllTaskByKey("solTransfer", 1);
-        showChooseStar();
+        initTransferState();
     }
 
     //完成转职
@@ -510,6 +523,7 @@ class BusiSoldier extends MyNode
                 transferStartTime -= leftTime;
                 global.user.updateSoldiers(this);
                 global.httpController.addRequest("soldierC/doAcc", dict([["uid", global.user.uid], ["sid", sid], ["leftTime", leftTime], ["gold", gold]]), null, null);
+                global.user.doCost(cost);
             }
         }
     }
@@ -661,11 +675,13 @@ class BusiSoldier extends MyNode
 
     function setTarDir()
     {
+        var oldSca = changeDirNode.scale();
+        oldSca[0] = abs(oldSca[0]);
         var difx = newTar[0] - bg.pos()[0];
-        if(difx < 0)
-            changeDirNode.scale(100, 100);
-        else
-            changeDirNode.scale(-100, 100);
+        if(difx > 0)
+            changeDirNode.scale(-oldSca[0], oldSca[0]);
+        else 
+            changeDirNode.scale(oldSca[0], oldSca[0]);
     }
 
     //8 目标位置
@@ -721,11 +737,13 @@ class BusiSoldier extends MyNode
     */
     function setDir()
     {
+        var oldSca = changeDirNode.scale();
+        oldSca[0] = abs(oldSca[0]);
         var difx = tar[0] - bg.pos()[0];
-        if(difx < 0)
-            changeDirNode.scale(100, 100);
-        else
-            changeDirNode.scale(-100, 100);
+        if(difx > 0)
+            changeDirNode.scale(-oldSca[0], oldSca[0]);
+        else 
+            changeDirNode.scale(oldSca[0], oldSca[0]);
 
         var bSize = changeDirNode.size();
         var shadowOffX = data["shadowOffX"];

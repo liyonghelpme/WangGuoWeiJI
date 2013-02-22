@@ -45,7 +45,7 @@ class RankBase extends MyNode
 
                 lock.addsprite().pos(310, 228).addaction(
                 repeat(
-                    animate(1000, "heartLoad0.png", "heartLoad1.png", "heartLoad2.png", "heartLoad3.png", "heartLoad4.png", "heartLoad5.png", "heartLoad6.png", "heartLoad7.png", "heartLoad8.png", "heartLoad9.png")
+                    getHeartLoad()
                 )); 
                 lock.addsprite("heartLoading.png").pos(396, 253);
                 bg.parent().add(lock, 10);

@@ -153,47 +153,27 @@ const BUILD_ANI_OBJ = 0;
 const BUILD_ANI_ROT = 1;
 const BUILD_ANI_ANI = 2;
 var buildAnimate = dict([
-    [1, [["mb0.png", "mb1.png", "mb2.png", "mb3.png", "mb4.png", "mb5.png", "mb6.png", "mb7.png"], [62, 49], 2000, 0, [50, 100]]],
+    [1, [
+    ["mb.plist/mb0.png", "mb.plist/mb1.png", "mb.plist/mb2.png", "mb.plist/mb3.png", "mb.plist/mb4.png", "mb.plist/mb5.png", "mb.plist/mb6.png", "mb.plist/mb7.png"]
+    , [62, 49], 2000, 0, [50, 100], "mb.plist"]],
     [140, [["f0.png"], [87, 37], 2000, 1, [50, 50]]],
     [141, [["f1.png"], [87, 37], 2000, 1, [50, 50]]],
-    [202, [["god0.png", "god1.png","god2.png","god3.png","god4.png","god5.png","god6.png","god7.png","god8.png"], [101, 0], 2000, 0, [50, 50]]],
+    [202, [
+["god.plist/god0.png", "god.plist/god1.png", "god.plist/god2.png", "god.plist/god3.png", "god.plist/god4.png", "god.plist/god5.png", "god.plist/god6.png", "god.plist/god7.png", "god.plist/god8.png"]
+    , [101, 0], 2000, 0, [50, 50], "god.plist"]],
     [203, [["god0.png", "god1.png","god2.png","god3.png","god4.png","god5.png","god6.png","god7.png","god8.png"], [28, 0], 2000, 0, [50, 50]]],
-    [204, [["drugStore0.png",  "drugStore1.png","drugStore2.png","drugStore3.png","drugStore4.png","drugStore5.png","drugStore6.png","drugStore7.png","drugStore8.png","drugStore9.png"], [31, -60], 2000, 0, [0, 0]]],
-    [205, [["drugStore0.png",  "drugStore1.png","drugStore2.png","drugStore3.png","drugStore4.png","drugStore5.png","drugStore6.png","drugStore7.png","drugStore8.png","drugStore9.png"], [109, -60], 2000, 0, [0, 0]]],
-    [206, [["forgeShop0.png", "forgeShop1.png", "forgeShop2.png", "forgeShop3.png", "forgeShop4.png", "forgeShop5.png", "forgeShop6.png", "forgeShop7.png", "forgeShop8.png", "forgeShop9.png" ], [31, -60], 2000, 0, [0, 0]]],
-    [207, [["forgeShop0.png", "forgeShop1.png", "forgeShop2.png", "forgeShop3.png", "forgeShop4.png", "forgeShop5.png", "forgeShop6.png", "forgeShop7.png", "forgeShop8.png", "forgeShop9.png"], [109, -60], 2000, 0, [0, 0]]],
+    [204, [
+    ["drugStore.plist/drugStore0.png", "drugStore.plist/drugStore1.png", "drugStore.plist/drugStore2.png", "drugStore.plist/drugStore3.png", "drugStore.plist/drugStore4.png", "drugStore.plist/drugStore5.png", "drugStore.plist/drugStore6.png", "drugStore.plist/drugStore7.png", "drugStore.plist/drugStore8.png", "drugStore.plist/drugStore9.png"],
+    [31, -60], 2000, 0, [0, 0], "drugStore.plist"]],
+    [206, [
+    ["forgeShop.plist/forgeShop0.png", "forgeShop.plist/forgeShop1.png", "forgeShop.plist/forgeShop2.png", "forgeShop.plist/forgeShop3.png", "forgeShop.plist/forgeShop4.png", "forgeShop.plist/forgeShop5.png", "forgeShop.plist/forgeShop6.png", "forgeShop.plist/forgeShop7.png", "forgeShop.plist/forgeShop8.png", "forgeShop.plist/forgeShop9.png"],
+    , [31, -60], 2000, 0, [0, 0], "forgeShop.plist"]],
+
     [162, [["build162.png", "build162a1.png", "build162a2.png", "build162a3.png", "build162a4.png"], [0, 0], 2000, 2, [0, 0]]],
 ]);
 
 //skillId
 //animate time plistFile
-var skillAnimate = dict([
-    [0, [["skill0.plist/skill0a0.png", "skill0.plist/skill0a1.png", "skill0.plist/skill0a2.png", "skill0.plist/skill0a3.png", "skill0.plist/skill0a4.png", "skill0.plist/skill0a5.png", "skill0.plist/skill0a6.png", "skill0.plist/skill0a7.png", "skill0.plist/skill0a8.png", "skill0.plist/skill0a9.png", "skill0.plist/skill0a10.png"], 1500, "skill0.plist"]] ,
-    [1, [["skill1.plist/skill1a0.png", "skill1.plist/skill1a1.png", "skill1.plist/skill1a2.png", "skill1.plist/skill1a3.png", "skill1.plist/skill1a4.png", "skill1.plist/skill1a5.png", "skill1.plist/skill1a6.png", "skill1.plist/skill1a7.png", "skill1.plist/skill1a8.png", "skill1.plist/skill1a9.png", "skill1.plist/skill1a10.png"], 1500, "skill1.plist"]] ,
-    [2, [["skill2.plist/skill2a0.png", "skill2.plist/skill2a1.png", "skill2.plist/skill2a2.png", "skill2.plist/skill2a3.png", "skill2.plist/skill2a4.png", "skill2.plist/skill2a5.png", "skill2.plist/skill2a6.png", "skill2.plist/skill2a7.png", "skill2.plist/skill2a8.png", "skill2.plist/skill2a9.png"], 1500, "skill2.plist"]] ,
-    [3, [["skill3.plist/skill3a0.png", "skill3.plist/skill3a1.png", "skill3.plist/skill3a2.png", "skill3.plist/skill3a3.png", "skill3.plist/skill3a4.png", "skill3.plist/skill3a5.png", "skill3.plist/skill3a6.png", "skill3.plist/skill3a7.png", "skill3.plist/skill3a8.png", "skill3.plist/skill3a9.png"], 1500, "skill3.plist"]] ,
-    [4, [["skill4.plist/skill4a0.png", "skill4.plist/skill4a1.png", "skill4.plist/skill4a2.png", "skill4.plist/skill4a3.png", "skill4.plist/skill4a4.png", "skill4.plist/skill4a5.png", "skill4.plist/skill4a6.png", "skill4.plist/skill4a7.png"], 1500, "skill4.plist"]] ,
-    [5, [["skill5.plist/skill5a0.png", "skill5.plist/skill5a1.png", "skill5.plist/skill5a2.png", "skill5.plist/skill5a3.png", "skill5.plist/skill5a4.png", "skill5.plist/skill5a5.png", "skill5.plist/skill5a6.png", "skill5.plist/skill5a7.png", "skill5.plist/skill5a8.png", "skill5.plist/skill5a9.png"], 1500, "skill5.plist"]] ,
-    [6, [["skill6.plist/skill6a0.png", "skill6.plist/skill6a1.png", "skill6.plist/skill6a2.png", "skill6.plist/skill6a3.png", "skill6.plist/skill6a4.png", "skill6.plist/skill6a5.png", "skill6.plist/skill6a6.png", "skill6.plist/skill6a7.png", "skill6.plist/skill6a8.png", "skill6.plist/skill6a9.png"], 1500, "skill6.plist"]] ,
-    [7, [["skill7.plist/skill7a0.png", "skill7.plist/skill7a1.png", "skill7.plist/skill7a2.png", "skill7.plist/skill7a3.png", "skill7.plist/skill7a4.png", "skill7.plist/skill7a5.png", "skill7.plist/skill7a6.png", "skill7.plist/skill7a7.png", "skill7.plist/skill7a8.png", "skill7.plist/skill7a9.png"], 1500, "skill7.plist"]] ,
-    [8, [["skill8.plist/skill8a0.png", "skill8.plist/skill8a1.png", "skill8.plist/skill8a2.png", "skill8.plist/skill8a3.png", "skill8.plist/skill8a4.png", "skill8.plist/skill8a5.png", "skill8.plist/skill8a6.png", "skill8.plist/skill8a7.png", "skill8.plist/skill8a8.png", "skill8.plist/skill8a9.png"], 1500, "skill8.plist"]] ,
-
-    [9, [["skill9.plist/skill9a0.png", "skill9.plist/skill9a1.png", "skill9.plist/skill9a2.png", "skill9.plist/skill9a3.png", "skill9.plist/skill9a4.png", "skill9.plist/skill9a5.png", "skill9.plist/skill9a6.png", "skill9.plist/skill9a7.png", "skill9.plist/skill9a8.png", "skill9.plist/skill9a9.png", "skill9.plist/skill9a10.png", "skill9.plist/skill9a11.png", "skill9.plist/skill9a12.png", "skill9.plist/skill9a13.png", "skill9.plist/skill9a14.png", "skill9.plist/skill9a15.png"], 1500, "skill9.plist"]] ,
-
-    [10, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png"], 1500, "skill10.plist"]] ,
-
-    [11, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png"], 1500, "skill10.plist"]] ,
-
-    [16, [["skill10.plist/skill10a0.png", "skill10.plist/skill10a1.png", "skill10.plist/skill10a2.png", "skill10.plist/skill10a3.png", "skill10.plist/skill10a4.png", "skill10.plist/skill10a5.png", "skill10.plist/skill10a6.png", "skill10.plist/skill10a7.png", "skill10.plist/skill10a8.png"], 1500, "skill10.plist"]] ,
-
-
-    [12, [["skill12.plist/skill12a0.png", "skill12.plist/skill12a1.png", "skill12.plist/skill12a2.png", "skill12.plist/skill12a3.png", "skill12.plist/skill12a4.png", "skill12.plist/skill12a5.png", "skill12.plist/skill12a6.png", "skill12.plist/skill12a7.png", "skill12.plist/skill12a8.png", "skill12.plist/skill12a9.png", "skill12.plist/skill12a10.png", "skill12.plist/skill12a11.png", "skill12.plist/skill12a12.png"], 1500, "skill12.plist"]] ,
-    [13, [["skill13.plist/skill13a0.png", "skill13.plist/skill13a1.png", "skill13.plist/skill13a2.png", "skill13.plist/skill13a3.png", "skill13.plist/skill13a4.png", "skill13.plist/skill13a5.png", "skill13.plist/skill13a6.png", "skill13.plist/skill13a7.png", "skill13.plist/skill13a8.png", "skill13.plist/skill13a9.png", "skill13.plist/skill13a10.png", "skill13.plist/skill13a11.png", "skill13.plist/skill13a12.png", "skill13.plist/skill13a13.png", "skill13.plist/skill13a14.png"], 1500, "skill13.plist"]] ,
-    [14, [["skill14.plist/skill14a0.png", "skill14.plist/skill14a1.png", "skill14.plist/skill14a2.png", "skill14.plist/skill14a3.png", "skill14.plist/skill14a4.png", "skill14.plist/skill14a5.png", "skill14.plist/skill14a6.png", "skill14.plist/skill14a7.png", "skill14.plist/skill14a8.png", "skill14.plist/skill14a9.png", "skill14.plist/skill14a10.png", "skill14.plist/skill14a11.png"], 1500, "skill14.plist"]] ,
-    [15, [["skill15.plist/skill15a0.png", "skill15.plist/skill15a1.png", "skill15.plist/skill15a2.png", "skill15.plist/skill15a3.png", "skill15.plist/skill15a4.png", "skill15.plist/skill15a5.png", "skill15.plist/skill15a6.png", "skill15.plist/skill15a7.png", "skill15.plist/skill15a8.png", "skill15.plist/skill15a9.png", "skill15.plist/skill15a10.png", "skill15.plist/skill15a11.png"], 1500, "skill15.plist"]] ,
-
-
-]);
 
 
 var buildFunc = dict([
@@ -501,12 +481,14 @@ var mapInfo = dict([
 ]);
 */
 
+/*
 const MAP_INITY = 87;
 const MAP_INITX = 0;
 const MAP_OFFX = 62;
 const MAP_OFFY = 62;
 const MAP_WIDTH = 12;
 const MAP_HEIGHT = 5;
+*/
 
 const MIN_SOL_ZORD = 0;
 const MAX_SOL_ZORD = 100000;

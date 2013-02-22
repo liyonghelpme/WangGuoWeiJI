@@ -84,6 +84,8 @@ class User
         maxBid = -1;
         for(var i = 0; i < len(keys); i++)
         {
+            var bd = b.get(keys[i]);
+            bd["readyList"] = dict(bd["readyList"]);//[[]] ---> 转化称字典
             buildings.update(int(keys[i]), b.get(keys[i]));
             if(int(keys[i]) > maxBid)
                 maxBid = int(keys[i]);

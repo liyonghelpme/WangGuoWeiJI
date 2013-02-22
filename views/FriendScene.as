@@ -276,10 +276,12 @@ class FriendScene extends MyNode
         global.timer.addTimer(this);
         if(kind == VISIT_NEIBOR)
             global.taskModel.doAllTaskByKey("visitNeibor", 1);
+        global.controller.playMedia("business.mp3");
     }
 
     override function exitScene()
     {
+        global.controller.pauseMedia("business.mp3");
         global.timer.removeTimer(this);
         super.exitScene();
     }

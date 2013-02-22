@@ -32,7 +32,7 @@ class MapDefense extends MyNode
         if(color == MYCOLOR)
             curMap = [0, 0];
         else
-            curMap = [MAP_WIDTH, 0];
+            curMap = [getParam("MAP_WIDTH"), 0];
         //城墙属性类型100
         //data = dict([["category", 100], []]);
         data = getData(SOLDIER, getParam("mapDefenseId"));
@@ -112,15 +112,7 @@ class MapDefense extends MyNode
 
     function setMap()
     {
-        var i = 0;
-        if(color == MYCOLOR)
-        {
-            map.roundGridController.setMap(0, i, sx, sy, this);
-        }
-        else
-        {
-            map.roundGridController.setMap(MAP_WIDTH, i, sx, sy, this);
-        }
+        map.roundGridController.setMap(curMap[0], curMap[1], sx, sy, this);
     }
 
     function checkMoveToTargetPos()

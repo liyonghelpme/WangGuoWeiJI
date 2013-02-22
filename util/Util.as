@@ -1336,3 +1336,25 @@ function checkHeroTransform(id)
     var data = getData(SOLDIER, id);
     return (data["isHero"] && id%10==getParam("MaxSolCareer"));
 }
+
+function getGreenStarAni()
+{
+    load_sprite_sheet("greenStar.plist");
+    return animate(1500, 
+["greenStar.plist/greenStar0.png", "greenStar.plist/greenStar2.png", "greenStar.plist/greenStar4.png", "greenStar.plist/greenStar6.png", "greenStar.plist/greenStar8.png", "greenStar.plist/greenStar10.png", "greenStar.plist/greenStar12.png", "greenStar.plist/greenStar14.png"]
+            , UPDATE_SIZE);
+}
+
+function getHeartLoad()
+{
+    load_sprite_sheet("heartLoad.plist");
+    return animate(1000, 
+    ["heartLoad.plist/heartLoad0.png", "heartLoad.plist/heartLoad1.png", "heartLoad.plist/heartLoad2.png", "heartLoad.plist/heartLoad3.png", "heartLoad.plist/heartLoad4.png", "heartLoad.plist/heartLoad5.png", "heartLoad.plist/heartLoad6.png", "heartLoad.plist/heartLoad7.png", "heartLoad.plist/heartLoad8.png", "heartLoad.plist/heartLoad9.png"]);
+}
+function getRedStarAni()
+{
+    load_sprite_sheet("redStar.plist");
+    return animate(1500, 
+    ["redStar.plist/redStar0.png", "redStar.plist/redStar1.png", "redStar.plist/redStar5.png", "redStar.plist/redStar6.png", "redStar.plist/redStar7.png", "redStar.plist/redStar8.png", "redStar.plist/redStar9.png", "redStar.plist/redStar10.png"]
+    );
+}

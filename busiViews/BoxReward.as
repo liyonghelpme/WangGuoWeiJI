@@ -53,6 +53,7 @@ class BoxReward extends MyNode
     function onShare()
     {
         doShare(getStr("shareOpenBox", ["[NAME]", global.user.name]), null, null, null, null);
+        global.director.popView();
     }
     function onOk()
     {

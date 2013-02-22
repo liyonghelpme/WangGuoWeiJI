@@ -2,6 +2,8 @@ class RoundFail extends MyNode
 {
     var map;
     var param;
+    var okBut;
+
     function RoundFail(m, p)
     {
         map = m;
@@ -27,9 +29,26 @@ class RoundFail extends MyNode
         but0 = new NewButton("roleNameBut1.png", [125, 41], getStr("ok", null), null, 20, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(492, 368);
         addChild(but0);
+        okBut = but0;
+
         temp = bg.addsprite("roundFail.png").anchor(50, 50).pos(415, 93).color(100, 100, 100, 100);
         temp = bg.addsprite("roundTip.png").anchor(0, 0).pos(206, 142).size(64, 47).color(100, 100, 100, 100);
+
+        global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), SHARE_WIN, returnBusiness);
     }
+
+    function returnBusiness()
+    {
+        global.director.popScene();//闯关场景
+        global.director.popScene();//选关场景 
+
+        trace(" 返回经营场景 reEnterScene");
+        //改变当前用户经验到2级
+        global.user.changeExpLevel(1);
+        global.taskModel.doAllTaskByKey("newRoundWin", 1);
+        global.httpController.addRequest("logC/finishNewStage", dict([["uid", global.user.uid], ["stage", 1]]), null, null);
+    }
+
     function onTryAgain()
     {
         global.director.popScene();

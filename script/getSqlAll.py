@@ -806,5 +806,20 @@ for i in res:
     GameParam.append([i['key'], i['value']])
 print 'var', 'GameParam', '=', 'dict(', json.dumps(GameParam), ');'
 
+"""
+sql = 'select * from RoundMonsterNum'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+for i in res:
+"""
+    
+sql = 'select * from skillAnimate'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+skillAnimate = []
+for i in res:
+    skillAnimate.append([i['id'], [json.loads(i['ani']), i['time'], i['plist']]])
+print 'var', 'skillAnimate', '=', 'dict(', json.dumps(skillAnimate), ');'
+
 con.commit()
 con.close()

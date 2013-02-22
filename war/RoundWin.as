@@ -43,18 +43,6 @@ class RoundWin extends MyNode
             temp.scale(sca);
         }
 
-        global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), SHARE_WIN, returnBusiness);
-    }
-    function returnBusiness()
-    {
-        global.director.popScene();//闯关场景
-        global.director.popScene();//选关场景 
-
-        trace(" 返回经营场景 reEnterScene");
-        //改变当前用户经验到2级
-        global.user.changeExpLevel(1);
-        global.taskModel.doAllTaskByKey("newRoundWin", 1);
-        global.httpController.addRequest("logC/finishNewStage", dict([["uid", global.user.uid], ["stage", 1]]), null, null);
     }
     function onShare()
     {

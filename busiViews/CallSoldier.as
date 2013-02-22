@@ -371,7 +371,8 @@ class CallSoldier extends MyNode
         scene.funcBuild.adjustObjectTime(needTime);
         this.update(0);
         goods.updateTab();
-        global.director.popView();
+        if(!getParam("debugTrain"))
+            global.director.popView();
     }
     /*
     curSelSol[1] 只是记录 士兵购买等级是否 大于用户等级

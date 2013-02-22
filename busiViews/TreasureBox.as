@@ -237,6 +237,7 @@ class TreasureBox extends MyNode
     {
         doShare(getStr("shareBox", ["[NAME]", global.user.name]), null, null, null, null);
         global.taskModel.doAllTaskByKey("askOpen", 1);
+        global.director.popView();
     }
     var openBut;
     function initView()

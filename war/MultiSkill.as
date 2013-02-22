@@ -37,7 +37,7 @@ class MultiSkill extends MyNode
         attackTime = attackPeriod;//初次释放 需要立即造成伤害？ 或者需要吟唱时间？
 
         startPos = getSkillPos(leftUp[0], leftUp[1], 1, 1, 0, 0);
-        skillRange = [sx*MAP_OFFX, sy*MAP_OFFY];
+        skillRange = [sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY")];
 
 
         bg = sprite().pos(getSkillPos(leftUp[0], leftUp[1], sx, sy, data["offX"], data["offY"])).anchor(0, 0);

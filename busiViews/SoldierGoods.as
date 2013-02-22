@@ -76,6 +76,7 @@ class SoldierGoods extends MyNode
         }
 
         var newPos = n.node2world(x, y);
+
         if(accMove < 10)
         {
             var child = checkInChild(flowNode, newPos);
@@ -98,7 +99,7 @@ class SoldierGoods extends MyNode
         var lowRow = -curPos[1]/OFFY;
         var upRow = (-curPos[1]+HEIGHT+OFFY-1)/OFFY;
         var rowNum = (len(data)+ITEM_NUM-1)/ITEM_NUM;
-        return [max(0, lowRow-ROW_NUM), min(rowNum, upRow+ROW_NUM)];
+        return [max(0, lowRow-1), min(rowNum, upRow+1)];
     }
     function updateTab()
     {

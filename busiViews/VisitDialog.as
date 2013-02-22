@@ -14,7 +14,10 @@ class VisitDialog extends MyNode
         var sca;
         temp = bg.addsprite("dialogVisitFriend.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
         back = temp;
-        temp.addsprite().anchor(50, 50).pos(231, 247).addaction(repeat(animate(2000, "visitAni0.png", "visitAni1.png", "visitAni2.png", "visitAni3.png", "visitAni4.png", "visitAni5.png", "visitAni6.png", "visitAni7.png", "visitAni8.png", "visitAni9.png", "visitAni8.png", "visitAni7.png")));
+        load_sprite_sheet("visitAni.plist");
+        temp.addsprite().anchor(50, 50).pos(231, 247).addaction(repeat(animate(500, 
+            ["visitAni.plist/visitAni0.png", "visitAni.plist/visitAni1.png", "visitAni.plist/visitAni2.png"]
+        )));
         var tid = global.user.getNextTip();
         //tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
 

@@ -20,10 +20,19 @@ class ParamController
             global.httpController.addRequest("getStaticData", dict([["did", "building"]]), getStaticData, "building");
             global.httpController.addRequest("getMapMonster", dict(), getMapMonster, null);
             global.httpController.addRequest("getStaticData", dict([["did", "mapBlood"]]), getStaticData, "mapBlood");
+            global.httpController.addRequest("getSkillAnimate", dict(), getSkill, null);
         }
         else
         {
 
+        }
+    }
+    function getSkill(rid, rcode, con, param)
+    {
+        if(rcode != -1)
+        {
+            con = json_loads(con);
+            skillAnimate = dict(con["data"]);
         }
     }
     function updateParams()

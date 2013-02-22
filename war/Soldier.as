@@ -128,23 +128,20 @@ class Soldier extends MyNode
             pushCommand(BEGIN_ATTACK, null);
             return;
         }
-        else
-        {
+        //else if(!iInPos) {//我没有移动到目标位置
+        //} 
+        else {
             var tPos = tar.getPos();
             var dist = tPos[0]-bg.pos()[0];
-            if(dist > 0)
-            {
+            if(dist > 0) {
                 nextMap[0] += 1;
-            }
-            else
-            {
+            } else {
                 nextMap[0] -= 1;
             }
 
             var hasCol = 0;
             var colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
-            for(var i = 0; i < len(colObjects); i++)
-            {
+            for(var i = 0; i < len(colObjects); i++) {
                 if(colObjects[i] != this)//防止和自己冲突
                 {
                     hasCol = 1;
@@ -169,11 +166,9 @@ class Soldier extends MyNode
             var t = dist*1000/speed;
             shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
             bg.addaction(shiftAni);
-            if(dist == 0)
-            {
+            if(dist == 0){
                 clearAnimation();//移动距离为0
-            }
-            else//如果动画停止 则 重新开启移动动画
+            } else//如果动画停止 则 重新开启移动动画
             {
                 if(movAni.start == 0)
                     movAni.enterScene();
@@ -642,6 +637,14 @@ class Soldier extends MyNode
 
     var leftTimeLab;
     var stateWord;
+    function getChangeDirNodeScale()
+    {
+        return getParam("mapSolScale")*data["solSca"]/100;
+    }
+    function getBloodHeightOff()
+    {
+        return sy*getParam("MAP_OFFY"); 
+    }
     function Soldier(m, d, s, md)
     {
         speed = getParam("soldierSpeed");
@@ -707,7 +710,8 @@ class Soldier extends MyNode
             leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
         }
         //有些士兵图片太大了 调整尺寸 调整sx sy
-        bg.scale(getParam("mapSolScale")*data["solSca"]/100);
+        //bg.scale(getParam("mapSolScale")*data["solSca"]/100);
+
         var bSize = [0, 0];
         changeDirNode = node();
 
@@ -717,7 +721,7 @@ class Soldier extends MyNode
             //if(data["needArgb"])
             //    fil = ARGB_8888;
 
-            changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", fil).anchor(50, 100);
+            changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", fil, ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
             changeDirNode.prepare();
             bSize = changeDirNode.size();
 
@@ -738,17 +742,22 @@ class Soldier extends MyNode
 
 
         var shadowOffY = data["shadowOffY"];
-
+        var shadowOffX = data["shadowOffX"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50);
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
 
         var suffix = "";
         if(sx >= 2)
             suffix = "1";
 
-        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).scale(getParam("mapBloodScale"));
-        backBanner.visible(0);
+        
+        var chSca = getChangeDirNodeScale();
+        var hDiff = bg.size()[1]*(100-chSca)/100;//data["bloodHeight"]+hDiff
+
+        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).scale(getParam("mapBloodScale"));
+        if(!getParam("debugBlood"))
+            backBanner.visible(0);
 
         var mInfo = getData(MAP_INFO, map.kind);
 
@@ -771,9 +780,10 @@ class Soldier extends MyNode
         trace("setDir");
         setDir();
 
-        bg.setevent(EVENT_TOUCH, touchBegan);
-        bg.setevent(EVENT_MOVE, touchMoved);
-        bg.setevent(EVENT_UNTOUCH, touchEnded);
+        changeDirNode.setevent(EVENT_TOUCH, touchBegan);
+        changeDirNode.setevent(EVENT_MOVE, touchMoved);
+        changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
+        
     }
     function showBackBanner()
     {
@@ -832,7 +842,7 @@ class Soldier extends MyNode
         {
             bWord = sprite("miss.png");
             bg.add(bWord);
-            bWord.pos(bSize[0]/2, -5).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
+            bWord.pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
             return;
         }
         var add = -hurt[0];
@@ -865,7 +875,7 @@ class Soldier extends MyNode
             bWord.scale(getParam("harmNumSize")*100/bWord.size()[1]);
         }
         bg.add(bWord);
-        bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
+        bWord.pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
         
         //不应该停止士兵的攻击
         if(hurt[1])
@@ -904,7 +914,7 @@ class Soldier extends MyNode
             bWord.scale(22*100/bWord.size()[1]);
         }
         bg.add(bWord);
-        bWord.pos(bSize[0]/2, data["bloodHeight"]).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
+        bWord.pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
 
         showBackBanner();
     }
@@ -937,7 +947,9 @@ class Soldier extends MyNode
             {
                 bSize = bg.size();
                 chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
-                chooseStar.addaction(repeat(animate(1500, "redStar0.png", "redStar1.png", "redStar2.png", "redStar3.png", "redStar4.png", "redStar5.png", "redStar6.png", "redStar7.png", "redStar8.png", "redStar9.png", "redStar10.png", UPDATE_SIZE)));
+                chooseStar.addaction(repeat(
+                getRedStarAni()
+                ));
                 bg.add(chooseStar, -1);
             }
             else if(skillKind == LINE_SKILL || skillKind == MULTI_ATTACK_SKILL)
@@ -1204,13 +1216,12 @@ class Soldier extends MyNode
             //var tpos = tarMovePos;
             var mpos = bg.pos();
             var difx = tpos[0] - mpos[0];
-            if(difx > 0)
-            {
-                changeDirNode.scale(-100, 100);
-            }
-            else
-            {
-                changeDirNode.scale(100, 100);
+            var oldSca = changeDirNode.scale();
+            oldSca[0] = abs(oldSca[0]);
+            if(difx > 0) {
+                changeDirNode.scale(-oldSca[0], oldSca[0]);
+            } else {
+                changeDirNode.scale(oldSca[0], oldSca[0]);
             }
         }
     }
@@ -1219,23 +1230,25 @@ class Soldier extends MyNode
 
         if(tar == null)
         {
-            if(color == MYCOLOR)
-                changeDirNode.scale(-100, 100);
-            else
-                changeDirNode.scale(100, 100);
+            var oldSca = changeDirNode.scale();
+            oldSca[0] = abs(oldSca[0]);
+            if(color == MYCOLOR){
+                changeDirNode.scale(-oldSca[0], oldSca[0]);
+            } else {
+                changeDirNode.scale(oldSca[0], oldSca[0]);
+            }
         }
         else
         {
             var tpos = tar.getPos();
             var mpos = bg.pos();
             var difx = tpos[0] - mpos[0];
-            if(difx > 0)
-            {
-                changeDirNode.scale(-100, 100);
-            }
-            else
-            {
-                changeDirNode.scale(100, 100);
+            oldSca = changeDirNode.scale();
+            oldSca[0] = abs(oldSca[0]);
+            if(difx > 0){
+                changeDirNode.scale(-oldSca[0], oldSca[0]);
+            } else {
+                changeDirNode.scale(oldSca[0], oldSca[0]);
             }
         }
         //调整阴影位置
@@ -1304,9 +1317,12 @@ class Soldier extends MyNode
         stopNow = 1;
         shiftAni.stop();
     }
+    //正在移动过程中 停止之后 再重新开始 查找敌人
     function continueGame()
     {
         stopNow = 0;
+        //统一重新查找 会导致游戏停顿
+        //pushCommand(FIND_ENEMY, null);//重新发现敌人
     }
 
     function checkTarState()
@@ -1379,9 +1395,7 @@ class Soldier extends MyNode
     {
         var bSize = bg.size();
         greenStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
-        greenStar.addaction(repeat(animate(1500, 
-            "greenStar0.png", "greenStar1.png", "greenStar2.png", "greenStar3.png", "greenStar4.png", "greenStar5.png", "greenStar6.png", "greenStar7.png", "greenStar8.png", "greenStar9.png", "greenStar10.png", "greenStar11.png", "greenStar12.png", "greenStar13.png", "greenStar14.png", "greenStar15.png", "greenStar16.png", "greenStar17.png", "greenStar18.png"
-            , UPDATE_SIZE)));
+        greenStar.addaction(repeat(getGreenStarAni()));
 
         bg.add(greenStar, -1);
     }

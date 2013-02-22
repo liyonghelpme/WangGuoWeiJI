@@ -61,7 +61,7 @@ class MoveMap extends MyNode
 
     function updateMapGrid()
     {
-        if(getParam("DEBUG"))
+        if(getParam("debugBlock"))
         {
             gridLayer.removefromparent();
             gridLayer = bg.addnode();

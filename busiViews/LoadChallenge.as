@@ -10,14 +10,14 @@ class LoadChallenge extends MyNode
     }
     var tipStr;
     var backMap = dict([
-        [CHALLENGE_MON, "loadRound.png"],
-        [CHALLENGE_FRI, "loadChallenge.png"],
-        [CHALLENGE_NEIBOR, "loadChallenge.png"],
+        [CHALLENGE_MON, "loadRound.jpg"],
+        [CHALLENGE_FRI, "loadChallenge.jpg"],
+        [CHALLENGE_NEIBOR, "loadChallenge.jpg"],
         [CHALLENGE_TRAIN, "loadTrain.png"],
-        [CHALLENGE_FIGHT, "loadChallenge.png"],
-        [CHALLENGE_DEFENSE, "loadChallenge.png"],
-        [CHALLENGE_OTHER, "loadChallenge.png"],
-        [CHALLENGE_REVENGE, "loadChallenge.png"],
+        [CHALLENGE_FIGHT, "loadChallenge.jpg"],
+        [CHALLENGE_DEFENSE, "loadChallenge.jpg"],
+        [CHALLENGE_OTHER, "loadChallenge.jpg"],
+        [CHALLENGE_REVENGE, "loadChallenge.jpg"],
     ]);
     function initView()
     {

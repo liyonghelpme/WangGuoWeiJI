@@ -63,7 +63,7 @@ class CloseSoldier
             //攻击地方身体上出现
             var solPos = sol.tar.getClosePos(sol);
             var midX = solPos[0];
-            var midY = solPos[1]-sol.offY-sol.sy*MAP_OFFY/2;
+            var midY = solPos[1]-sol.offY-sol.sy*getParam("MAP_OFFY")/2;
             //var midY = solPos[1];
 
             bomb.setPos([midX+getParam("randBombX")/2-rand(getParam("randBombX")), midY+getParam("randBombY")/2-rand(getParam("randBombY"))]);

@@ -29,7 +29,7 @@ class WorldStatus
         var val = solIdMons.values();
         for(var i = 0; i < len(val); i++)
         {
-            val[i]["monX"] += 7;
+            val[i]["monX"] += (getParam("MAP_WIDTH")+1)/2+1;
         }
         return val;
     }
@@ -129,9 +129,9 @@ class WorldStatus
         var mon = getData(SOLDIER, newM);
         var sx = mon["sx"];
         var sy = mon["sy"];
-        for(var x = 0; x < 5; x++)
+        for(var x = 0; x < getParam("MAP_WIDTH")/2-1; x++)
         {
-            for(var y = 0; y < 5; y++)
+            for(var y = 0; y < getParam("MAP_HEIGHT"); y++)
             {
                 var col = 0;
                 //所有网格不冲突 可以放置
@@ -139,7 +139,7 @@ class WorldStatus
                 {
                     for(var my = 0; my < sy; my++)
                     {
-                        if(board.get((x+mx)*X_GRID_COFF+(y+my)) != null || (x+mx) >= 5 || (y+my) >= 5 )
+                        if(board.get((x+mx)*X_GRID_COFF+(y+my)) != null || (x+mx) >= getParam("MAP_WIDTH")/2-1 || (y+my) >= getParam("MAP_HEIGHT") )
                         {
                             col = 1;
                             break;
@@ -148,8 +148,15 @@ class WorldStatus
                     if(col)
                         break;
                 }
-                if(!col)
-                    return 1;
+                if(!col) {//boss hero 不能放置到row = 0 的位置 不能贴上测 贴下侧
+                    if(mon["isBoss"]) {
+                        if(y != 0 && (y+sy) < getParam("MAP_HEIGHT"))
+                            return 1;
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }
             }
         }
         return 0;
@@ -292,8 +299,11 @@ class FrontPutMon extends Task
             var mid = status.mons[i][0];
             var mNumber = status.mons[i][1];
             var mon = getData(SOLDIER, mid);
-            if(mon["range"] == 0 && mon["sx"] == 1 && mon["sy"] == 1 && mNumber > 0)//近战怪兽数量 > 0 
-                return 1;
+            if(mon["range"] == 0 &&  mNumber > 0)//近战怪兽数量 > 0 
+            {
+                if(status.checkPutable(mid))
+                    return 1;
+            }
         }
         return 0;
     }
@@ -403,7 +413,8 @@ class HasFarAway extends Task
             var mon = getData(SOLDIER, mid);
             if(mNumber > 0 && mon["range"] > 0)
             {
-                return 1;
+                if(status.checkPutable(mid))//远程可以放置在当前的位置上面
+                    return 1;
             }
         }
         return 0;

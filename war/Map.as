@@ -13,7 +13,7 @@ class Map extends MyNode
     var scene;
     //var curStar;
     var walkZone = 
-    [MAP_INITX+MAP_OFFX/2, MAP_INITY+MAP_OFFY, MAP_INITX+MAP_OFFX*12+MAP_OFFX/2, MAP_INITY+MAP_OFFY*5];
+    [getParam("MAP_INITX")+getParam("MAP_OFFX")/2, getParam("MAP_INITY")+getParam("MAP_OFFY"), getParam("MAP_INITX")+getParam("MAP_OFFX")*getParam("MAP_WIDTH")+getParam("MAP_OFFX")/2, getParam("MAP_INITY")+getParam("MAP_OFFY")*getParam("MAP_HEIGHT")];
 
     /*
     gx*10000+gy = 士兵key
@@ -48,11 +48,11 @@ class Map extends MyNode
     //start + length <= Max
     function checkInBoundary(sol, oldMap)
     {
-        return (oldMap[0] >= 1 && oldMap[0] <= (6-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-sol.sy))
+        return (oldMap[0] >= 1 && oldMap[0] <= (getParam("MAP_WIDTH")/2-sol.sx) && oldMap[1] >= 0 && oldMap[1] <= (getParam("MAP_HEIGHT")-sol.sy))
     }
     function checkSkillInBoundary(si, oldMap)
     {
-        return (oldMap[0] >= 1 && oldMap[0] <= (MAP_WIDTH-si[0]) && oldMap[1] >= 0 && oldMap[1] <= (MAP_HEIGHT-si[1]))
+        return (oldMap[0] >= 1 && oldMap[0] <= (getParam("MAP_WIDTH")-si[0]) && oldMap[1] >= 0 && oldMap[1] <= (getParam("MAP_HEIGHT")-si[1]))
     }
 
     function moveGrid(sol)
@@ -67,14 +67,12 @@ class Map extends MyNode
 
         var gp = getGridPos(oldMap);
 
-        //newMap[0] = max(1, min(6-sx, newMap[0]));
-        //newMap[1] = max(0, min(5-sy, newMap[1]));
         if(gridRow == null)
-            gridRow = bg.addsprite("occGrid0.png").pos(MAP_INITX, gp[1]).size(MAP_OFFX*6, MAP_OFFY*sol.sy);
-        gridRow.pos(MAP_INITX, gp[1]);
+            gridRow = bg.addsprite("occGrid0.png").pos(getParam("MAP_INITX"), gp[1]).size(getParam("MAP_WIDTH")/2*getParam("MAP_OFFX"), getParam("MAP_OFFY")*sol.sy);
+        gridRow.pos(getParam("MAP_INITX"), gp[1]);
         if(gridCol == null)
-            gridCol = bg.addsprite("occGrid0.png").pos(gp[0], MAP_INITY).size(MAP_OFFX*sol.sx, MAP_OFFY*5);
-        gridCol.pos(gp[0], MAP_INITY);
+            gridCol = bg.addsprite("occGrid0.png").pos(gp[0], getParam("MAP_INITY")).size(getParam("MAP_OFFX")*sol.sx, getParam("MAP_OFFY")*getParam("MAP_HEIGHT"));
+        gridCol.pos(gp[0], getParam("MAP_INITY"));
     }
     var monEquips;
     function getEnemyEquips(sid)
@@ -97,9 +95,9 @@ class Map extends MyNode
     var gridSp = null;
     function initView()
     {
-        bg = sprite("map"+str(kind)+".png", ARGB_8888).pos(0, 0);//.pos(MAP_INITX, global.director.disSize[1]/2-3*MAP_OFFY-MAP_INITY);
+        bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(0, 0);//.pos(getParam("MAP_INITX"), global.director.disSize[1]/2-3*getParam("MAP_OFFY")-getParam("MAP_INITY"));
         init(); 
-        grid = bg.addnode().pos(MAP_INITX, MAP_INITY).size(6*MAP_OFFX, 5*MAP_OFFY).clipping(1);//.color(100, 100, 100, 100);
+        grid = bg.addnode().pos(getParam("MAP_INITX"), getParam("MAP_INITY")).size(getParam("MAP_WIDTH")/2*getParam("MAP_OFFX"), getParam("MAP_HEIGHT")*getParam("MAP_OFFY")).clipping(1);//.color(100, 100, 100, 100);
         updateShadow();
     }
     function updateShadow()
@@ -126,7 +124,7 @@ class Map extends MyNode
             0, 0, 100, 0, 0,
             0, 0, 0, 30, 0
         );
-        gridSp = grid.addsprite("mapGrid.png", ARGB_8888, fil);//.color(100, 100, 100, 100);//.color(100, 100, 100, 50)
+        gridSp = grid.addsprite("mapGrid.jpg", ARGB_8888, fil).size(getParam("MAP_WIDTH")/2*getParam("MAP_OFFX"), getParam("MAP_HEIGHT")*getParam("MAP_OFFY"));
 
         var bSize = bg.size();
          var mData = getData(MAP_INFO, kind);
@@ -284,12 +282,12 @@ class Map extends MyNode
         {
             for(xk = 5; xk >= 1; xk--)
             {
-                if((xk+soldier.sx) > 6)
+                if((xk+soldier.sx) > (getParam("MAP_WIDTH")+1)/2)
                     continue;
 
-                for(yk = 0; yk < 5; yk++)
+                for(yk = 0; yk < getParam("MAP_HEIGHT"); yk++)
                 {
-                    if((yk+soldier.sy) > 5)
+                    if((yk+soldier.sy) > getParam("MAP_HEIGHT"))
                         continue;
 
                     col = 0;    
@@ -314,13 +312,13 @@ class Map extends MyNode
         }
         else
         {
-            for(xk = 7; xk < 12; xk++)
+            for(xk = (getParam("MAP_WIDTH")+1)/2+1; xk < getParam("MAP_WIDTH"); xk++)
             {
-                if((xk+soldier.sx) > 12)
+                if((xk+soldier.sx) > getParam("MAP_WIDTH"))
                     continue;
-                for(yk = 0; yk < 5; yk++)
+                for(yk = 0; yk < getParam("MAP_HEIGHT"); yk++)
                 {
-                    if((yk+soldier.sy) > 5)
+                    if((yk+soldier.sy) > getParam("MAP_HEIGHT"))
                         continue;
 
                     col = 0;    
@@ -480,10 +478,10 @@ class Map extends MyNode
         {
             var sol = mySoldiers[i];
             var map = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-            var p = getGridPos([MAP_WIDTH/2, map[1]]);//行中间显示
+            var p = getGridPos([getParam("MAP_WIDTH")/2, map[1]]);//行中间显示
             if(sol.state == MAP_SOL_DEAD || sol.state == MAP_SOL_SAVE)
                 sol.leftMonNum = 0;
-var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).pos(p[0] + (MAP_OFFX / 2), p[1] + (MAP_OFFY / 2)).anchor(50, 50);
+var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).pos(p[0] + (getParam("MAP_OFFX") / 2), p[1] + (getParam("MAP_OFFY") / 2)).anchor(50, 50);
             leftNum.append(w);
         }
     }
@@ -548,7 +546,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 var y = k[i]%10000;
 
                 var p = getSolPos(x, y, 1, 1, 0);
-                var sp = gridLayer.addsprite("gridNew.png").size(MAP_OFFX, MAP_OFFY).pos(p).anchor(50, 100);
+                var sp = gridLayer.addsprite("gridNew.png").size(getParam("MAP_OFFX"), getParam("MAP_OFFY")).pos(p).anchor(50, 100);
             }
         }
     }
@@ -682,9 +680,9 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
         var so = realAddSoldier(ENEMY, sData["id"], dict([["level", sol.level]]), ENECOLOR);
         var oldMap = getSolMap(sol.getPos(), sol.sx, sol.sy, sol.offY);
-        var x = rand(MAP_WIDTH-so.sx);//随机横坐标
-        var y = min(oldMap[1], MAP_HEIGHT-so.sy);//纵坐标保证不超越下边界
-        var maxW = MAP_WIDTH-so.sx;
+        var x = rand(getParam("MAP_WIDTH")-so.sx);//随机横坐标
+        var y = min(oldMap[1], getParam("MAP_HEIGHT")-so.sy);//纵坐标保证不超越下边界
+        var maxW = getParam("MAP_WIDTH")-so.sx;
 
         //var row = soldiers.get(oldMap[1]);//当前士兵所在行 不应该有冲突
 
@@ -1038,7 +1036,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             
         if(skillGrid == null)
         {
-            skillGrid = bg.addsprite("occGrid0.png").size(MAP_OFFX*sx, MAP_OFFY*sy);
+            skillGrid = bg.addsprite("occGrid0.png").size(getParam("MAP_OFFX")*sx, getParam("MAP_OFFY")*sy);
             //bg.add(grid);
             //grid.clipping(0);
         }

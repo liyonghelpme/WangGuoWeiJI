@@ -8,6 +8,11 @@ class BuildAnimate extends MyNode
     {
         build = b;
         var ani = getAni(build.data.get("id"));
+        trace("buildAnimate", ani);
+        if(build.data["hasPlist"]){
+            load_sprite_sheet(ani[5]);
+        }
+
         var aniKind = ani[3];
 //        trace("building animate", ani);
         if(aniKind != BUILD_ANI_ANI)
@@ -38,7 +43,8 @@ class BuildAnimate extends MyNode
     切换旋转动画的纹理和旋转方向
 
     建筑物菜单也可以旋转建筑物
-    */
+
+    deprecate 不需要变换动画的位置了 
     function changeDir()
     {
         var ani = getAni(build.data.get("id")+build.dir);
@@ -60,6 +66,8 @@ class BuildAnimate extends MyNode
 
 
     }
+    */
+
     override function enterScene()
     {
 //        trace("animate enter scene");

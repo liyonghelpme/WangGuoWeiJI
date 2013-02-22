@@ -35,7 +35,7 @@ class EarthQuake extends EffectBase
         var ani = pureMagicData[earthQuake[2]];
         cus = new MyAnimate(ani[1], ani[0], bg);
         timeAll[BOMB_NOW] = ani[1];
-        bg.pos(tar.getPos());
+        bg.pos(tar.getGroundBombPos(sol));
         updateTime();
     }
         

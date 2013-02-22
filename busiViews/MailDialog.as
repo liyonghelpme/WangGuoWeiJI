@@ -25,7 +25,7 @@ class MailDialog extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("messageBack.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+        temp = bg.addsprite("messageBack.jpg").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);
         addChild(but0);
@@ -75,10 +75,7 @@ class MailDialog extends MyNode
                 if(lock == null)
                 {
                     lock = node();
-                    lock.addsprite().pos(310, 228).addaction(
-                    repeat(
-                        animate(1000, "heartLoad0.png", "heartLoad1.png", "heartLoad2.png", "heartLoad3.png", "heartLoad4.png", "heartLoad5.png", "heartLoad6.png", "heartLoad7.png", "heartLoad8.png", "heartLoad9.png")
-                    )); 
+                    lock.addsprite().pos(310, 228).addaction(repeat(getHeartLoad())); 
                     lock.addsprite("heartLoading.png").pos(396, 253);
                     bg.add(lock, 10);
                 }

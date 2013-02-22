@@ -29,24 +29,44 @@ class Water extends MyNode
 {
     function Water()
     {
+        load_sprite_sheet("rl0_.plist");
+        load_sprite_sheet("rl1_.plist");
+        load_sprite_sheet("rl2_.plist");
+        load_sprite_sheet("rl3_.plist");
+        load_sprite_sheet("rl4_.plist");
+
         bg = node();
         var left = bg.addnode().pos(610, 362);
         var l0 = left.addsprite().pos(42, 21).addaction(repeat(animate(
             2000, 
-            "rl1_0.png", "rl2_0.png", "rl3_0.png", "rl4_0.png", "rl5_0.png", "rl6_0.png", "rl7_0.png", "rl8_0.png" )));
+            ["rl0_.plist/rl0_1.png", "rl0_.plist/rl0_2.png", "rl0_.plist/rl0_3.png", "rl0_.plist/rl0_4.png", "rl0_.plist/rl0_5.png", "rl0_.plist/rl0_6.png", "rl0_.plist/rl0_7.png"]
+            )));
+
         var l1 = left.addsprite().pos(338, 75).addaction(repeat(animate(
             2000,
-            "rl1_1.png", "rl2_1.png", "rl3_1.png", "rl4_1.png", "rl5_1.png", "rl6_1.png", "rl7_1.png", "rl8_1.png" )));
+            
+["rl1_.plist/rl1_1.png", "rl1_.plist/rl1_2.png", "rl1_.plist/rl1_3.png", "rl1_.plist/rl1_4.png", "rl1_.plist/rl1_5.png", "rl1_.plist/rl1_6.png", "rl1_.plist/rl1_7.png"]
+            )));
 
         var l2 = left.addsprite().pos(297, 315).addaction(repeat(animate(
             2000,
-            "rl1_2.png", "rl2_2.png", "rl3_2.png", "rl4_2.png", "rl5_2.png", "rl6_2.png", "rl7_2.png", "rl8_2.png" )));
+            
+["rl2_.plist/rl2_1.png", "rl2_.plist/rl2_2.png", "rl2_.plist/rl2_3.png", "rl2_.plist/rl2_4.png", "rl2_.plist/rl2_5.png", "rl2_.plist/rl2_6.png", "rl2_.plist/rl2_7.png"]
+            )));
         var l3 = left.addsprite().pos(372, 406).addaction(repeat(animate(
             2000,
-            "rl1_3.png", "rl2_3.png", "rl3_3.png", "rl4_3.png", "rl5_3.png", "rl6_3.png", "rl7_3.png", "rl8_3.png" )));
+            
+["rl3_.plist/rl3_1.png", "rl3_.plist/rl3_2.png", "rl3_.plist/rl3_3.png", "rl3_.plist/rl3_4.png", "rl3_.plist/rl3_5.png", "rl3_.plist/rl3_6.png", "rl3_.plist/rl3_7.png"]
+            )));
         var l4 = left.addsprite().pos(358, 628).addaction(repeat(animate(
             2000,
-            "rl1_4.png", "rl2_4.png", "rl3_4.png", "rl4_4.png", "rl5_4.png", "rl6_4.png", "rl7_4.png", "rl8_4.png" )));
+["rl4_.plist/rl4_1.png", "rl4_.plist/rl4_2.png", "rl4_.plist/rl4_3.png", "rl4_.plist/rl4_4.png", "rl4_.plist/rl4_5.png", "rl4_.plist/rl4_6.png", "rl4_.plist/rl4_7.png"]
+            )));
+        load_sprite_sheet("rr0_.plist");
+        load_sprite_sheet("rr1_.plist");
+        load_sprite_sheet("rr2_.plist");
+        load_sprite_sheet("rr3_.plist");
+
         var rPos = [
         [239, 224],
         [134, 339],
@@ -56,19 +76,21 @@ class Water extends MyNode
         var right = bg.addnode().pos(1825, 363);
         var r0 = right.addsprite().pos(rPos[0]).addaction(repeat(animate(
             2000,
-            "rr1_0.png", "rr2_0.png","rr3_0.png","rr4_0.png","rr5_0.png","rr6_0.png","rr7_0.png","rr8_0.png"
+["rr0_.plist/rr0_1.png", "rr0_.plist/rr0_2.png", "rr0_.plist/rr0_3.png", "rr0_.plist/rr0_4.png", "rr0_.plist/rr0_5.png", "rr0_.plist/rr0_6.png", "rr0_.plist/rr0_7.png"]
         )));
         var r1 = right.addsprite().pos(rPos[1]).addaction(repeat(animate(
             2000,
-            "rr1_1.png", "rr2_1.png","rr3_1.png","rr4_1.png","rr5_1.png","rr6_1.png","rr7_1.png","rr8_1.png"
+
+["rr1_.plist/rr1_1.png", "rr1_.plist/rr1_2.png", "rr1_.plist/rr1_3.png", "rr1_.plist/rr1_4.png", "rr1_.plist/rr1_5.png", "rr1_.plist/rr1_6.png", "rr1_.plist/rr1_7.png"]
         )));
         var r2 = right.addsprite().pos(rPos[2]).addaction(repeat(animate(
             2000,
-            "rr1_2.png", "rr2_2.png","rr3_2.png","rr4_2.png","rr5_2.png","rr6_2.png","rr7_2.png","rr8_2.png"
+["rr2_.plist/rr2_1.png", "rr2_.plist/rr2_2.png", "rr2_.plist/rr2_3.png", "rr2_.plist/rr2_4.png", "rr2_.plist/rr2_5.png", "rr2_.plist/rr2_6.png", "rr2_.plist/rr2_7.png"]
         )));
         var r3 = right.addsprite().pos(rPos[3]).addaction(repeat(animate(
             2000,
-            "rr1_3.png", "rr2_3.png","rr3_3.png","rr4_3.png","rr5_3.png","rr6_3.png","rr7_3.png","rr8_3.png"
+
+["rr3_.plist/rr3_1.png", "rr3_.plist/rr3_2.png", "rr3_.plist/rr3_3.png", "rr3_.plist/rr3_4.png", "rr3_.plist/rr3_5.png", "rr3_.plist/rr3_6.png", "rr3_.plist/rr3_7.png"]
         )));
     }
 }
@@ -77,6 +99,7 @@ class Sky extends MyNode
     function Sky()
     {
         bg = node();
+        init();
         bg.addsprite("sky0.png", RGB_565).pos(0, 0);
         bg.addsprite("sky1.png", RGB_565).pos(1000, 0);
         bg.addsprite("sky2.png", RGB_565).pos(2000, 0);

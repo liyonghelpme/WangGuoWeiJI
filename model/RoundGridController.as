@@ -68,10 +68,11 @@ class RoundGridController
                 var it = mapDict.get(k);
                 if(it != null)
                 {
-                    //不和防御建筑判断冲突
-                    for(var t = 0; t < len(it); t++)
-                        if(it[t].state != MAP_SOL_DEFENSE)
-                            colObjs.append(it[t]);
+                    //不和防御建筑判断冲突  布局士兵的时候？
+                    //for(var t = 0; t < len(it); t++)
+                    //    if(it[t].state != MAP_SOL_DEFENSE)
+                    //        colObjs.append(it[t]);
+                    colObjs += it;
                 }
 
             }

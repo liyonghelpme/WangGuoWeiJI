@@ -56,7 +56,7 @@ class FriendMenu extends MyNode
         temp = bg.addsprite("friendInfo.png").anchor(0, 0).pos(15, 13).size(440, 79).color(100, 100, 100, 100);
 
         
-        temp = bg.addsprite(avatar_url(scene.user["id"])).anchor(0, 0).pos(28, 26).size(55, 55).color(100, 100, 100, 100);
+        temp = bg.addsprite(avatar_url(scene.user["id"])).anchor(50, 50).pos(getParam("friendHeadX"), getParam("friendHeadY")).size(55, 55).color(100, 100, 100, 100);
         bg.addlabel(scene.user["name"], "fonts/heiti.ttf", 21).anchor(0, 50).pos(100, 35).color(100, 100, 100);
 
         bg.addlabel(getStr("friLevel", ["[NUM]", str(scene.user["level"]+1)]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(103, 67).color(0, 0, 0);

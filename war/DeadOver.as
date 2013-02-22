@@ -30,7 +30,7 @@ class DeadOver extends MyNode
             dir = -90
         else
             dir = 90;
-        changeDirNode.anchor(50, 50).pos(curPos[0], curPos[1]-cs[1]/2);
+        changeDirNode.anchor(50, 50).pos(curPos[0], curPos[1]);
         changeDirNode.texture("soldier"+str(soldier.id)+"dead.png", UPDATE_SIZE);
 
         /*

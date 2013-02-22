@@ -187,6 +187,9 @@ class LevelChoose extends MyNode
             var row = inPage / ITEM_NUM;
             var col = inPage % ITEM_NUM;
 
+            var rid = big*getParam("MapMonsterNumCoff")+i;
+            var rnum = getData(ROUND_MONSTER_NUM, rid);
+            var mId = rnum["mons"][0][0];
 
             var zord = 0;
             //未解锁大关 第一个块
@@ -215,13 +218,9 @@ class LevelChoose extends MyNode
                 panel = sprite("bluePanel0.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
                 if(data[i][0] > 0)
                 {
-                    mon = panel.addsprite("soldier0.png").pos(79, 84).anchor(50, 50);
+                    mon = panel.addsprite("soldier"+str(mId)+".png", ARGB_8888).pos(79, 84).anchor(50, 50);
                     sca = getSca(mon, [164, 42]);
                     mon.scale(sca);
-
-                    var bSize = mon.prepare().size();
-                    var shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(64, 32);
-                    mon.add(shadow, -1);
                 }
 
                 //是否获得分
@@ -229,7 +228,7 @@ class LevelChoose extends MyNode
                 var sb;
                 if(data[i][0] == 0)
                 {
-                    mon = panel.addsprite("soldier0.png").pos(79, 107).anchor(50, 50);
+                    mon = panel.addsprite("soldier"+str(mId)+".png", ARGB_8888).pos(79, 107).anchor(50, 50);
                     sca = getSca(mon, [164, 67]);
                     mon.scale(sca);
                 }

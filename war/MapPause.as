@@ -110,9 +110,9 @@ class MapPause extends MyNode
             //或者构建一个底层的库用于快速获取服务器返回的用户信息----->uid---->information
             //User Information Manager
             if(scene.kind == CHALLENGE_MON)//怪兽暂时用bossId
-                temp = bg.addsprite("boss"+str(1380)+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
+                temp = bg.addsprite("boss"+str(mInfo["bossId"])+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
             else
-                temp = bg.addsprite("soldier"+str(scene.user["heroId"])+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
+                temp = bg.addsprite("boss"+str(scene.user["heroId"])+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
 
             sca = getSca(temp, [60, 59]);
             temp.scale(sca);

@@ -29,12 +29,14 @@ class MapBanner extends MyNode
     {
         data = [];
         var sols = global.user.soldiers.items();
+        var p = 0;
         for(var i = 0; i < len(sols); i++)
         {
             var sdata = sols[i][1];
             if(sdata.get("inTransfer", 0) == 0 && !sdata["inDead"])//soldierId 不再转职中
             {
-                data.append([sols[i][0], 0]);//是否已经放置
+                data.append([sols[i][0], 0, p]);//是否已经放置
+                p++;
             }
         }
     }
@@ -151,15 +153,29 @@ class MapBanner extends MyNode
         updateTab();
     }
 
+    function getShowData()
+    {
+        var showData = [];
+        for(var i = 0; i < len(data); i++){
+            if(data[i][1] == 0)
+                showData.append(data[i]);
+        }
+        return showData;
+    }
+    //数据显示在 data的最后面就可以了
     function getRange()
     {
         var oldPos = flowNode.pos(); 
         var lowCol = -oldPos[0]/OFFX;
         var upCol = (-oldPos[0]+WIDTH+OFFX-1)/OFFX;
-        var total = len(data);
-//        trace("getRange", data);
-        return [max(0, lowCol-1), min(upCol+1, total)];
 
+        var showData = getShowData();
+        var total = len(showData);
+
+        trace("getRange", data);
+        var r0 = max(0, lowCol-1);
+        var r1 = min(upCol+1, total);
+        return [r0, r1];
     }
     //但是数据显示的时候需要小心
     //因为人物会突然重新出现
@@ -181,26 +197,25 @@ class MapBanner extends MyNode
 
         var rg = getRange();
         var temp;
-
-        var accNum = 0;
+    
+        var showData = getShowData();
+        //使用showData 作为数据
         for(var i = rg[0]; i < rg[1]; i++)
         {
-            if(data[i][1] == 1)//不显示已经放置的士兵
-                continue;
 
             var panel;
-            if(data[i][1] == 0)
-                panel = flowNode.addsprite("mapUnSel.png").pos(accNum*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
+            if(showData[i][1] == 0)
+                panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
             else
-                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(accNum*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
+                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
                 
 
-            var sdata = global.user.getSoldierData(data[i][0]);
+            var sdata = global.user.getSoldierData(showData[i][0]);
             //0 30 60 90
             var id = sdata.get("id");
             var solPic;
 
-            if(data[i][1] == 0)
+            if(showData[i][1] == 0)
             {
                 solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(36, 34).anchor(50, 50);
             }
@@ -217,8 +232,7 @@ class MapBanner extends MyNode
             var sca = getSca(solPic, [71, 70]);
             solPic.scale(-sca, sca);
 
-            panel.put(i);
-            accNum++;
+            panel.put(showData[i][2]);//在data 中的编号 showData的长度总是变化的
         }
     }
 
@@ -378,16 +392,13 @@ class MapBanner extends MyNode
     function onMove(n, e, p, x, y, points)
     {
         var oldPos = flowNode.pos();
-        oldPos[0] += p*ITEM_NUM*OFFX;
+        var showData = getShowData();
+        var total = len(showData);
+        var minPos = -total*OFFX+WIDTH;
+        if(oldPos[0] > minPos || p > 0 )//超出最小 则只能向右移动
+            oldPos[0] += p*ITEM_NUM*OFFX;
+        oldPos[0] = min(0, oldPos[0]); 
 
-        var total = 0;
-        for(var i = 0; i < len(data); i++)
-        {
-            if(data[i][1] == 0)
-                total++;
-        }
-
-        oldPos[0] = min(0, max(-total*OFFX+WIDTH, oldPos[0])); 
         flowNode.pos(oldPos);
         if(oldPos[0] >= 0)
             leftArr.texture("mapMenuArr.png", GRAY);    

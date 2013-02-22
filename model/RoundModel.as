@@ -12,11 +12,14 @@ function getNewMonsters(big, small)
         {
             r.update(mapMonsterKey[j], data[i][j]);
         }
-        if(r["color"] == 1)
-        {
-            r["weak"] = 1;//新手任务的怪兽生命值应该弱小一点
-            res.append(r);
+        if(small == 0) { //闯关失败
+            if(r["color"] == 0)
+                r["weak"] = 1;//新手任务的怪兽生命值应该弱小一点
+        } else if(small == 1) {//挑战 胜利
+            if(r["color"] == 1)
+                r["weak"] = 1;
         }
+        res.append(r);
     }
     return res;
 }
@@ -65,9 +68,13 @@ function getAllNew(big, small)
         {
             r.update(mapMonsterKey[j], data[i][j]);
         }
-        if(r["color"] == 1)
-        {
-            r["weak"] = 1;//新手任务的怪兽生命值应该弱小一点
+
+        if(small == 0) { //闯关失败
+            if(r["color"] == 0)
+                r["weak"] = 1;//新手任务的怪兽生命值应该弱小一点
+        } else if(small == 1) {//挑战 胜利
+            if(r["color"] == 1)
+                r["weak"] = 1;
         }
         res.append(r);
     }
@@ -144,10 +151,10 @@ y 0 - 4
 */
 function getSolMap(p, sx, sy, offY)
 {
-    var ix = p[0]+MAP_OFFX/2-MAP_INITX-MAP_OFFX/2*sx;
-    var xk = ix/MAP_OFFX;
-    var iy = p[1]+MAP_OFFY/2-MAP_INITY-MAP_OFFY*sy-offY;
-    var yk = iy/MAP_OFFY;
+    var ix = p[0]+getParam("MAP_OFFX")/2-getParam("MAP_INITX")-getParam("MAP_OFFX")/2*sx;
+    var xk = ix/getParam("MAP_OFFX");
+    var iy = p[1]+getParam("MAP_OFFY")/2-getParam("MAP_INITY")-getParam("MAP_OFFY")*sy-offY;
+    var yk = iy/getParam("MAP_OFFY");
 
     return [xk, yk];
 }
@@ -157,10 +164,10 @@ function getSolMap(p, sx, sy, offY)
 //根据手指 50 50 计算 技能网格的左上角位置
 function getSkillMap(p, sx, sy, offY)
 {
-    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
-    var xk = ix/MAP_OFFX;
-    var iy = p[1]-MAP_INITY-MAP_OFFY/2*sy-offY;
-    var yk = iy/MAP_OFFY;
+    var ix = p[0]-getParam("MAP_INITX")-getParam("MAP_OFFX")/2*sx;
+    var xk = ix/getParam("MAP_OFFX");
+    var iy = p[1]-getParam("MAP_INITY")-getParam("MAP_OFFY")/2*sy-offY;
+    var yk = iy/getParam("MAP_OFFY");
 
     return [xk, yk];
 }
@@ -173,18 +180,18 @@ function getSkillMap(p, sx, sy, offY)
 */
 function getGridPos(gridId)
 {
-    var x = gridId[0]*MAP_OFFX+MAP_INITX;
-    var y = gridId[1]*MAP_OFFY+MAP_INITY;
+    var x = gridId[0]*getParam("MAP_OFFX")+getParam("MAP_INITX");
+    var y = gridId[1]*getParam("MAP_OFFY")+getParam("MAP_INITY");
     return [x, y];
 }
 //计算群体技能的左上角网格得到的 0 0 的位置偏移位置
 //群体技能应该有偏移值
 function getSkillPos(mx, my, sx, sy, offX, offY)
 {
-    //+MAP_OFFX/2*sx
-    //+MAP_OFFY*sy
-    mx = mx*MAP_OFFX+MAP_INITX+offX;
-    my = my*MAP_OFFY+MAP_INITY+offY;
+    //+getParam("MAP_OFFX")/2*sx
+    //+getParam("MAP_OFFY")*sy
+    mx = mx*getParam("MAP_OFFX")+getParam("MAP_INITX")+offX;
+    my = my*getParam("MAP_OFFY")+getParam("MAP_INITY")+offY;
     return [mx, my];
 }
 
@@ -207,12 +214,12 @@ function getSkillPos(mx, my, sx, sy, offX, offY)
 */
 function getPosSolMap(p, sx, sy)
 {
-    var ix = p[0]-MAP_INITX-MAP_OFFX/2*sx;
-    var xk = ix/MAP_OFFX;
+    var ix = p[0]-getParam("MAP_INITX")-getParam("MAP_OFFX")/2*sx;
+    var xk = ix/getParam("MAP_OFFX");
     //var xk = min(MAP_WIDTH-sx, max(0, k));
 
-    var iy = p[1]-MAP_INITY-MAP_OFFY/2*sy;
-    var yk = iy/MAP_OFFY;
+    var iy = p[1]-getParam("MAP_INITY")-getParam("MAP_OFFY")/2*sy;
+    var yk = iy/getParam("MAP_OFFY");
     //var yk = min(MAP_HEIGHT-sy, max(0, k));
 
     return [xk, yk];
@@ -227,8 +234,8 @@ function getPosSolMap(p, sx, sy)
 function getSolPos(mx, my, sx, sy, offY)
 {
 //    trace("getSolPos", offY);
-    mx = mx*MAP_OFFX+MAP_OFFX/2*sx+MAP_INITX;
-    my = my*MAP_OFFY+MAP_OFFY*sy+MAP_INITY+offY;
+    mx = mx*getParam("MAP_OFFX")+getParam("MAP_OFFX")/2*sx+getParam("MAP_INITX");
+    my = my*getParam("MAP_OFFY")+getParam("MAP_OFFY")*sy+getParam("MAP_INITY")+offY;
     return [mx, my];
 }
 

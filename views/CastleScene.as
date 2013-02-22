@@ -141,6 +141,8 @@ class CastleScene extends MyNode
         {
             beginBuild(param[1]);
         }
+        //退出程序自动关闭音乐
+        /*
         else if(msid == RESUME_GAME)
         {
             global.controller.playMedia("business.mp3");
@@ -149,7 +151,7 @@ class CastleScene extends MyNode
         {
             global.controller.pauseMedia("business.mp3");
         }
-        
+        */
     }
     override function exitScene()
     {
