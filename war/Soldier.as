@@ -877,7 +877,7 @@ class Soldier extends MyNode
         bg.add(bWord);
         bWord.pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
         
-        //不应该停止士兵的攻击
+        //不应该停止士兵的攻击  会停顿一下发现敌人
         if(hurt[1])
         {
             beginSpinState(getParam("criticalHitStopTime"));
