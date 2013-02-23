@@ -33,6 +33,10 @@ class FriendSoldier extends MoveSoldier
     var hasCry;
     var negtiveState = null;
     var sid;
+    function getChangeDirNodeScale()
+    {
+        return getParam("SOL_SHOW_SIZE")*data["solSca"]/100;
+    }
     function FriendSoldier(d, m, hasC, si)
     {
         sid = si;
@@ -44,10 +48,10 @@ class FriendSoldier extends MoveSoldier
 
         load_sprite_sheet("soldierm"+str(id)+".plist");
 
-        bg = node().scale(showSize);
+        bg = node();//.scale(showSize);
         init();
 
-        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
 
         var bSize = changeDirNode.prepare().size();
 
@@ -55,7 +59,7 @@ class FriendSoldier extends MoveSoldier
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE"));
 
         changeDirNode.add(shadow, -1);
 
@@ -66,18 +70,22 @@ class FriendSoldier extends MoveSoldier
 
         showNegtiveState();
 
-        bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
-        bg.setevent(EVENT_MOVE, touchMoved);
-        bg.setevent(EVENT_UNTOUCH, touchEnded);
+        changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
+        changeDirNode.setevent(EVENT_MOVE, touchMoved);
+        changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
     }
 
 
+    function getBloodHeightOff()
+    {
+        return data["sy"]*getParam("MAP_OFFY"); 
+    }
     function showNegtiveState()
     {
         if(hasCry == 1)
         {
-            var bsize = bg.size();
-            negtiveState = bg.addsprite("soldierMorale.png").pos(bsize[0]/2, -5).anchor(50, 100);
+            var bSize = bg.size();
+            negtiveState = bg.addsprite("soldierMorale.png").pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
         }
     }
 

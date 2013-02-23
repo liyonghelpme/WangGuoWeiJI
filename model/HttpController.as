@@ -3,6 +3,7 @@ class HttpController
     var baseUrl;
     var requestList;
     var busy = 0;
+    var curReq = null;
     //基于事件的异步请求
 
     var registerHandler;
@@ -32,9 +33,16 @@ class HttpController
             var postData = req[2];
             var param = req[3];
             trace("doRequest", req, baseUrl+cmd);
+            curReq = cmd;
             var id = http_request(baseUrl+cmd, callbackHandler, postData, 15000, param);
             registerHandler.update(id, req);
         }
+    }
+    function checkDataOver(rid, rcode, con, param)
+    {
+        con = json_loads(con);
+        //if(con["id"] == 0)
+        //    global.director.pushView(new MyWarningDialog(getStr("dataError", null), getStr("dataError", null), null), 1, 0);
     }
     function callbackHandler(rid, rcode, con, param)
     {
@@ -52,7 +60,15 @@ class HttpController
             global.director.pushView(new MyWarningDialog(getStr("netError", null), getStr("netErrorCon", null), null), 1, 0);
         }
         if(handler != null)
-            handler(rid, rcode, con, param);    
+            handler(rid, rcode, con, param); 
+        
+        //可能客户端 修改了数据 但是 请求还没有发送到服务器处理 所以数据可能还不正确，因此需要等待前面的请求都处理之后才能处理这个数据确认请求
+        //就能避免 客户端修改 数据 服务器没有修改数据 
+        if(getParam("debugHttp") && curReq != "checkData" && global.user.uid != -1) {
+            var localData = dict([["gold", global.user.getValue("gold")], ["silver", global.user.getValue("silver")], ["crystal", global.user.getValue("crystal")]]);
+            addRequest("checkData", dict([["uid", global.user.uid], ["cmd", curReq], ["data", json_dumps(localData)]]), checkDataOver, null);
+        }
+
         doRequest();
     }
     function errorHandler(rid, rcode, con, param)

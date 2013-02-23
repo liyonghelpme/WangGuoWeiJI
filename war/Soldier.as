@@ -682,7 +682,7 @@ class Soldier extends MyNode
 
         data = getData(SOLDIER, id);
         //英雄 且 升到顶级 则可以拖动放置之后变身
-        if(data["isHero"] && id%10 == getParam("MaxSolCareer"))
+        if(checkHeroTransform(id))
         {
             data = getData(SOLDIER, id+1);
         }

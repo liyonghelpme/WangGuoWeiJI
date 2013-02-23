@@ -280,9 +280,9 @@ class Map extends MyNode
 
         if(soldier.color == MYCOLOR)//自上而下 自右而左
         {
-            for(xk = 5; xk >= 1; xk--)
+            for(xk = (getParam("MAP_WIDTH")/2)-1; xk >= 1; xk--)
             {
-                if((xk+soldier.sx) > (getParam("MAP_WIDTH")+1)/2)
+                if((xk+soldier.sx) > (getParam("MAP_WIDTH")/2))
                     continue;
 
                 for(yk = 0; yk < getParam("MAP_HEIGHT"); yk++)
@@ -733,6 +733,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 var sid = data[i][0];
                 var sdata = global.user.getSoldierData(sid);
                 var so = realAddSoldier(sid, sdata["id"], null, MYCOLOR);
+
                 var nPos = getInitPos(so);
                 if(nPos[0] == -1)
                 {

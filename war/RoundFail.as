@@ -19,7 +19,7 @@ class RoundFail extends MyNode
         var temp;
         var sca;
         temp = bg.addsprite("dialogRoundOver.png").anchor(50, 50).pos(405, 210).size(434, 317).color(100, 100, 100, 100);
-        line = stringLines(getStr("challengeTip", null), 16, 20, [40, 37, 37], FONT_NORMAL );
+        line = maxWidthLine(getStr("challengeTip", null), 16, getParam("tipOffY"), [40, 37, 37], getParam("failTipWidth"));
         line.pos(255, 199);
         bg.add(line);
         temp = bg.addsprite("dialogBoss.png", ARGB_8888).anchor(0, 0).pos(517, 199).size(150, 166).color(100, 100, 100, 100);

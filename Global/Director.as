@@ -30,6 +30,7 @@ class Director
     var quitState = 0;
     var emptyScene;//最底层帮助进行场景切换
     var taskHintDebug;
+    var fpsLabel = null;
     function Director()
     {
 //        trace("init director");
@@ -48,6 +49,7 @@ class Director
         curScene.bg.setevent(EVENT_KEYDOWN, quitGame);
         curScene.bg.focus(1);
         curScene.enterScene();
+        global.timer.addTimer(this);
     }
 
     function clearQuitState()
@@ -193,8 +195,20 @@ class Director
             curScene.bg.add(taskHintDebug, MASK_ZORD);
         }
         //切换场景时新场景也需要有 Mask 怎么办？
-
+        if(getParam("debugFps"))
+        {
+            if(fpsLabel != null)
+                fpsLabel.removefromparent();
+            fpsLabel = curScene.bg.addlabel("", null, 30).color(100, 100, 100).pos(10, 10);
+        }
     }
+    function update(diff)
+    {
+        if(fpsLabel != null)
+            fpsLabel.text(str(getfps()));
+    }
+
+
     function updateTaskHint(w)
     {
         trace("updateTaskHint", w);

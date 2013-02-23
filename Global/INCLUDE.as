@@ -15,7 +15,7 @@ import views.FriendSoldier;
 import busiViews.SettingDialog;
 
 import busiViews.TaskDialog;
-import views.TipDialog;
+import busiViews.TipDialog;
 
 import busiViews.NewSoldierDialog;
 import busiViews.AllSoldier;

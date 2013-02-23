@@ -6,6 +6,39 @@ import MySQLdb
 sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward', 'mapMonster']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
+def writeRoundTip():
+    roundTip = [1, 7, 9]
+    challengeTip = [1, 7, 9]
+    failTip = [0, 2]
+    tips = [
+        roundTip, challengeTip, failTip,
+    ]
+    roundCon = 'noTip'
+    challengeCon = 'challengeCon'
+    failCon = 'challengeTip'
+    cons = [
+        roundCon, challengeCon, failCon
+    ]
+    for t in xrange(0, len(tips)):
+        content = ['', '']
+        cid = 1
+        for i in tips[t]:
+            sql = 'select * from Strings where `key` = "tip%d"' % (i)
+            con.query(sql)
+            r = con.store_result().fetch_row(0, 1)
+            
+
+            content[0] += str(cid)+"."+r[0]['chinese'].encode('utf8')
+            content[1] += str(cid)+"."+r[0]['english'].encode('utf8')
+            if cid != len(tips[t]):
+                content[0] += '\\\\'+'n'
+                content[1] += '\\\\'+'n'
+            cid += 1
+        sql = 'update Strings set chinese = "%s", english = "%s" where `key` = "%s"' % (content[0], content[1], cons[t])
+        #print sql
+        con.query(sql)
+
+writeRoundTip()
         
 
 

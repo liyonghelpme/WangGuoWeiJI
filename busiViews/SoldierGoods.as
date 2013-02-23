@@ -29,6 +29,21 @@ class SoldierGoods extends MyNode
         cl.setevent(EVENT_UNTOUCH, touchEnded);
 
         initData();
+        if(store.inCall == 0 && store.inAcc == 0 && global.taskModel.checkInNewTask())
+        {
+            var row = 0;
+            for(var i = 0; i < len(data); i++)
+            {
+                //新手任务需要显示的士兵  ---》调整位置 调整显示的数据
+                if(data[i] == getParam("newTaskBuySoldier"))
+                {
+                    row = i/ITEM_NUM;
+                    break;
+                }
+            }
+            trace("SoldierGoods", row, len(data));
+            newTaskAdjustFlowPos(row);
+        }
         updateTab();
     }
     function initData()
@@ -110,6 +125,7 @@ class SoldierGoods extends MyNode
         var oldPos = flowNode.pos();    
         flowNode.removefromparent();
         flowNode = cl.addnode().pos(oldPos);
+
         var userLevel = global.user.getValue("level");
 
         var rg = getRange();
@@ -184,10 +200,11 @@ class SoldierGoods extends MyNode
 
                 panel.addlabel(sData["name"], "fonts/heiti.ttf", 21).anchor(50, 50).pos(74, 25).color(29, 16, 4);
                 //用户招募第一个士兵 panel 防止箭头被遮挡
-                if(curNum == 0 && store.inCall == 0 && store.inAcc == 0)
+                if(id == getParam("newTaskBuySoldier") && store.inCall == 0 && store.inAcc == 0 && global.taskModel.checkInNewTask())
                 {
                     panel.removefromparent();
                     flowNode.add(panel, 2);
+
                     global.taskModel.showHintArrow(panel, panel.prepare().size(), CALL_SOLDIER, onCall);
                 }
             
@@ -195,9 +212,15 @@ class SoldierGoods extends MyNode
             }
         }
     }
+    function newTaskAdjustFlowPos(row)
+    {
+        trace("newTaskAdjustFlowPos", row);
+        var oldPos = flowNode.pos();
+        flowNode.pos(oldPos[0], -row*OFFY);//向上移动移动一行
+    }
     function onCall()
     {
-        store.setSoldier([data[0], 1]);//第一个士兵
+        store.setSoldier([getParam("newTaskBuySoldier"), 1]);//第一个士兵
         store.sureToCall();
     }
 }

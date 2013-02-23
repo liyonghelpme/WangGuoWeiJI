@@ -180,7 +180,7 @@ var buildFunc = dict([
 [FARM_BUILD, [["photo"], ["acc", "sell"]]],
 [HOUSE_BUILD, [["photo"], [ "sell" ]]],//"upgradeBuild"
 [DECOR_BUILD, [["photo"], ["sell"]]],
-[CASTLE_BUILD, [["photo"], []]],
+[CASTLE_BUILD, [["photo"], ["tip"]]],
 [GOD_BUILD, [["photo"], ["soldier"]]],
 [DRUG_BUILD, [["photo"], ["allDrug"]]],
 [FORGE_SHOP, [["photo"], ["allEquip"]]],
@@ -914,20 +914,12 @@ const END_REPEAT = 7;
 
 
 //NOTIP 类型 tip编号 以及对应的标题 内容 以及闯关地图对应的 NOTIP类型
-const CHALLENGE_TIP = 0;
-const TRAIN_TIP = 1;
-const FIGHT_TIP = 2;
-const HEART_TIP = 3;
-const TIP_WORD = ["roundTip", "trainTitle", "fightTitle", "heartTip"];
-const TIP_CON = ["noTip", "trainTipLine", "fightTip", "heartCon"];
+const ROUND_TIP = 0;
+const CHALLENGE_TIP = 1;
+const TIP_WORD = ["roundTip", "challengeTitle"];
+const TIP_CON = ["noTip", "challengeCon"];
 const MAP_KIND_TIP = dict([
-    [CHALLENGE_MON, CHALLENGE_TIP],
-    [CHALLENGE_FRI, CHALLENGE_TIP],
-    [CHALLENGE_SELF, CHALLENGE_TIP],
-    [CHALLENGE_NEIBOR, CHALLENGE_TIP],
-    [CHALLENGE_TRAIN, TRAIN_TIP],
-    [CHALLENGE_FIGHT, FIGHT_TIP],
-    [CHALLENGE_DEFENSE, FIGHT_TIP],
+    [CHALLENGE_MON, ROUND_TIP],
     [CHALLENGE_OTHER, CHALLENGE_TIP],
 ]);
 

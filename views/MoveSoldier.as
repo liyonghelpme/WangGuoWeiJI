@@ -56,11 +56,22 @@ class MoveSoldier extends MyNode
 
     function setDir()
     {
+        var oldSca = changeDirNode.scale();
+        oldSca[0] = abs(oldSca[0]);
         var difx = tar[0] - bg.pos()[0];
-        if(difx < 0)
-            changeDirNode.scale(100, 100);
+        if(difx > 0)
+            changeDirNode.scale(-oldSca[0], oldSca[0]);
+        else 
+            changeDirNode.scale(oldSca[0], oldSca[0]);
+
+        var bSize = changeDirNode.size();
+        var shadowOffX = data["shadowOffX"];
+        var shadowOffY = data["shadowOffY"];
+
+        if(changeDirNode.scale()[0] < 0)
+            shadow.pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY);
         else
-            changeDirNode.scale(-100, 100);
+            shadow.pos(bSize[0]/2-shadowOffX, bSize[1]+shadowOffY);
     }
 
     function getTar()

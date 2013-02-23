@@ -206,7 +206,7 @@ class BusiSoldier extends MyNode
         var shadowOffX = data["shadowOffX"];
         var shadowOffY = data["shadowOffY"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50);
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE"));
 
         bg.add(shadow, -1);
         initData(privateData);
@@ -931,6 +931,11 @@ class BusiSoldier extends MyNode
     }
     var curStatus = NO_STATUS;
     var status = null;
+
+    function getBloodHeightOff()
+    {
+        return data["sy"]*getParam("MAP_OFFY"); 
+    }
     function showCurStatus()
     {
         if(curStatus == NO_STATUS)
@@ -941,10 +946,10 @@ class BusiSoldier extends MyNode
             status = null;
         }
 
-        var bsize = bg.size();
+        var bSize = bg.size();
         var pic;
         var rd;
-        status = bg.addsprite("soldierStatus.png").pos(bsize[0]/2, -5).anchor(50, 100);
+        status = bg.addsprite("soldierStatus.png").pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
         if(curStatus == EXP_GAME)
         {
             rd = rand(PARAMS["ExpGameNum"]);

@@ -7,7 +7,7 @@ class User
     //当前测试的士兵ID
     var currentSoldierId=0;
 
-    var uid=-1;
+    var uid = -1;
     var papayaId;
     var papayaName;
 
@@ -1391,15 +1391,6 @@ class User
     {
         unlockLevel.append(big);
         db.put("unlockLevel", unlockLevel);
-    }
-    function getNextTip()
-    {
-        var tid = db.get("tid");
-        if(tid == null)
-            tid = 0;
-        tid %= PARAMS["MAX_TIP_NUM"];
-        db.put("tid", tid+1);
-        return tid;
     }
     function genNewBox()
     {

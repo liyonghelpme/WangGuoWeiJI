@@ -19,6 +19,7 @@ class LoadChallenge extends MyNode
         [CHALLENGE_OTHER, "loadChallenge.jpg"],
         [CHALLENGE_REVENGE, "loadChallenge.jpg"],
     ]);
+    var tipBack;
     function initView()
     {
         bg = node();
@@ -28,11 +29,22 @@ class LoadChallenge extends MyNode
         var temp;
         var sca;
         temp = bg.addsprite(backMap[kind]).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        temp = bg.addsprite("loadTip.png").anchor(0, 0).pos(288, 412).size(481, 55).color(100, 100, 100, 100);
+        temp = bg.addsprite("loadTip.png").anchor(50, 50).pos(534, 439).size(481, 55).color(100, 100, 100, 100);
+        tipBack = temp;
+
         var tid = global.user.getLoadTip();
-        tipStr = bg.addlabel(getStr("tip"+str(tid), null), "fonts/heiti.ttf", 21).anchor(50, 50).pos(534, 439).color(100, 100, 100);
+        tipStr = bg.addlabel(getStr("tip"+str(tid), null), "fonts/heiti.ttf", 21, FONT_NORMAL, 440, 0,  ALIGN_CENTER).anchor(50, 50).pos(534, 439).color(100, 100, 100);
         temp = bg.addsprite("loadingCircle.png").anchor(50, 50).pos(763, 37).size(50, 57).color(100, 100, 100, 100).addaction(repeat(rotateby(2000, 360)));
         temp = bg.addsprite("loadingWord.png").anchor(0, 0).pos(607, 23).size(129, 29).color(100, 100, 100, 100);
+        
+        adjustWord();
+    }
+    function adjustWord()
+    {
+        var tipSize = tipStr.prepare().size();
+        var backHeight = max(getParam("tipPadY")*2+tipSize[1], getParam("tipMinY"));
+        var oldSize = tipBack.size();
+        tipBack.size(oldSize[0], backHeight);
     }
     var showYet = 0;
     var passTime = 0;
@@ -51,6 +63,7 @@ class LoadChallenge extends MyNode
             var tid = global.user.getLoadTip();
             tipStr.text(getStr("tip"+str(tid), null));
             showYet = 1;
+            adjustWord();
         }
         if(showYet && scene.initOver)
         {

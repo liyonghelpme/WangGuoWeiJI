@@ -247,10 +247,13 @@ class Building extends MyNode
                 global.director.pushView(new CallSoldier(this), 1, 0);
             }
         }
+        //修正生产士兵 和 ready士兵 为空
         else if(msgId == MOVE_TO_CAMP)
         {
             if(state == PARAMS["buildFree"])
             {
+                objectList = [];
+                readyList = dict();
                 map.map.moveToBuild(this); 
                 global.taskModel.showHintArrow(bg, bg.size(), MOVE_TO_CAMP, newCall);
             }

@@ -18,10 +18,9 @@ class VisitDialog extends MyNode
         temp.addsprite().anchor(50, 50).pos(231, 247).addaction(repeat(animate(500, 
             ["visitAni.plist/visitAni0.png", "visitAni.plist/visitAni1.png", "visitAni.plist/visitAni2.png"]
         )));
-        var tid = global.user.getNextTip();
-        //tipWord = bg.addlabel(getStr("tips"+str(tid), null), "fonts/heiti.ttf", 17).anchor(50, 50).pos(405, 366).color(100, 100, 100);
 
-        back.addlabel(getStr("tips1", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(233, 324).color(100, 100, 100);
+        var tid = global.user.getLoadTip();
+        tipWord = back.addlabel(getStr("tip"+str(tid), null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(233, 324).color(100, 100, 100);
         back.addlabel(getStr("Flying", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(232, 31).color(100, 100, 100);
     }
     function VisitDialog(fc, k)
@@ -65,8 +64,8 @@ class VisitDialog extends MyNode
         if(passTime >= 3000)
         {
             passTime -= 3000;
-            var tid = global.user.getNextTip();
-            //tipWord.text(getStr("tips"+str(tid), null));
+            var tid = global.user.getLoadTip();
+            tipWord.text(getStr("tip"+str(tid), null));
         }
     }
     override function exitScene()

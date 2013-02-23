@@ -23,7 +23,6 @@ class BuildLayer extends MoveMap
         initBuilding();
         removeSoldiers();
         initSoldiers();
-
     }
     /*
     避免在receivMsg 的时候 删除代理
