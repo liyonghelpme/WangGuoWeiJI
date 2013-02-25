@@ -63,6 +63,7 @@ class Soldier extends MyNode
     {
         clearAnimation();
         shiftAni.stop();
+        bg.linearvelocity(0, 0);
         attAni.enterScene();
         pushCommand(ATTACK_CMD, null);
     }
@@ -72,11 +73,9 @@ class Soldier extends MyNode
             return;
         tar = getTar();
         //trace("findTar", tar, data["name"]);
-        if(tar != null)
-        {
+        if(tar != null) {
             clearAnimation();
             movAni.enterScene();
-            nextMap = copy(curMap);//移动的下一个位置 和当前位置重叠
             setDir();
             pushCommand(MOVE_CMD, null);
         }
@@ -86,101 +85,51 @@ class Soldier extends MyNode
     //如果两者之间的距离刚好是射程，则要判定是否在远端并且已经移动到了目标位置 A-> _  _  _  <-B  判定自己是否已经移动到目标位置
     //移动到目标位置
     //需要位置 和 当前位置 相同
-    function checkMoveToTargetPos()
-    {
-       var needPos = getSolPos(curMap[0], curMap[1], sx, sy, data["offY"]);
-       return (needPos[0]-bg.pos()[0]) == 0;
-    }
-    function checkTarInRange()
-    {
-        var tarPos = getSolPos(tar.curMap[0], tar.curMap[1], tar.sx, tar.sy, tar.data["offY"]);
-        if((curMap[0]+sx+attRange) == tar.curMap[0] || curMap[0] == (tar.curMap[0]+tar.sx+attRange))//刚好移动到攻击边界
-        {
-            return tar.checkMoveToTargetPos();
-        }
-        return 1;
-    }
     //鲁棒的移动
     //移动到目的地 
     //还在半路
     //只有持续性命令可以被中断
     //行走1半被打断了
+    var error = 0;
     function doMove(diff)
     {
         //命令被中断了
         if(len(commandList) > 0)
             return;
-        shiftAni.stop();
         var ret = checkTarState();
         if(ret)
         {
             pushCommand(FIND_ENEMY, null);
             return;
         }
-        //和目标相交 
-        //目标相离 距离
-        //相交
         var cheDis = checkTarDistance();
-        var iInPos = checkMoveToTargetPos();
-        var tInPos = checkTarInRange();//检测攻击目标
-        if(cheDis && iInPos && tInPos)//我移动到目标位置 目标也移动到目标位置 开始攻击
+        if(cheDis)//我移动到目标位置 目标也移动到目标位置 开始攻击
         {
             pushCommand(BEGIN_ATTACK, null);
             return;
-        }
-        //else if(!iInPos) {//我没有移动到目标位置
-        //} 
-        else {
-            var tPos = tar.getPos();
-            var dist = tPos[0]-bg.pos()[0];
-            if(dist > 0) {
-                nextMap[0] += 1;
-            } else {
-                nextMap[0] -= 1;
+        } else {
+            //如果没有目标 则 跳出切换目标
+            if(tar == null){
+                pushCommand(FIND_ENEMY, null);
+                return;
             }
+            var bgSpeed = getSpeed();
+            trace("bgSpeed", bgSpeed);
+            if(bgSpeed == null)
+                error = 1;
+            bg.linearvelocity(bgSpeed, 0);
 
-            var hasCol = 0;
-            var colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
-            for(var i = 0; i < len(colObjects); i++) {
-                if(colObjects[i] != this)//防止和自己冲突
-                {
-                    hasCol = 1;
-                    break;
-                }
-            }
-            //有冲突暂时不移动 设定下一个位置为本位置
-            if(hasCol)
-            {
-                nextMap = copy(curMap);
-                //if(len(commandList) == 0)
-                //    pushCommand(MOVE_CMD, null);
-                //接着移动
-                //return;    
-            }
             clearMap();
-            curMap = copy(nextMap);
+            curMap = getSolMap(bg.pos(), sx, sy, offY);
             setMap();
 
-            var newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
-            dist = abs(newPos[0]-bg.pos()[0]);
-            var t = dist*1000/speed;
-            shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
-            bg.addaction(shiftAni);
-            if(dist == 0){
-                clearAnimation();//移动距离为0
-            } else//如果动画停止 则 重新开启移动动画
-            {
-                if(movAni.start == 0)
-                    movAni.enterScene();
-            }
+            if(movAni.start == 0)
+                movAni.enterScene();
 
             //没有新的命令继续 移动
             if(len(commandList) == 0)
                 pushCommand(MOVE_CMD, null);
             
-            inCommand = 1;
-            needTime = t+rand(getParam("randAttTime"));
-            commandTime = 0;
         }
     }
     function finishAttack()
@@ -196,21 +145,17 @@ class Soldier extends MyNode
     function doAttack(diff)
     {
         var ret = checkTarState();
-        if(ret)
-        {
+        if(ret) {
             pushCommand(FIND_ENEMY, null);
             return;
         }
         var cheDis = checkTarDistance();
-        if(cheDis)
-        {
+        if(cheDis) {
             inCommand = 1;
             commandTime = 0;
             needTime = attSpeed+rand(getParam("randAttTime"));//随机攻击时间
             pushCommand(FINISH_ATTACK, null);
-        }
-        else
-        {
+        } else {
             attTime = 0;
             clearAnimation();
             tar = null;
@@ -228,118 +173,32 @@ class Soldier extends MyNode
             inCommand = 0;
             needTime = 0;
         }
-        /*
-        if(len(commandList) == 0 && !inCommand && state == MAP_SOL_FREE)
-        {
-            pushCommand(FIND_ENEMY, null);
-        }
-        */
         if(len(commandList) > 0 && !inCommand)
         {
             var cmd = commandList.pop(0);
             var op = cmd[0];
             var param = cmd[1];
             //trace("cmd", cmd);
-            if(op == FIND_ENEMY)
-            {
+            if(op == FIND_ENEMY) {
                 findEnemy();            
-            }
-            else if(op == MOVE_CMD)
-            {
+            } else if(op == MOVE_CMD) {
                 doMove(diff);
-            }
-            else if(op == ATTACK_CMD)
-            {
+            } else if(op == ATTACK_CMD) {
                 doAttack(diff);
-            }
-            else if(op == DEAD_CMD)
-            {
+            } else if(op == DEAD_CMD) {
                 doDead(diff);    
-            }
-            else if(op == POS_MOVE_CMD)
-            {
-                doPosMove(diff);
-            }
-            else if(op == POSING_CMD)
-            {
-                posMoving(diff);
-            }
-            else if(op == FINISH_ATTACK)
-            {
+            } else if(op == FINISH_ATTACK) {
                 finishAttack();
-            }
-            else if(op == BEGIN_ATTACK)
+            } else if(op == BEGIN_ATTACK)
                 beginAttack();
             else
                 trace("errorCommand", cmd);
         }
     }
-    function doPosMove(diff)
+    //根据朝向方向设定 speed
+    function getSpeed()
     {
-        setMoveDir();
-        clearAnimation();
-        movAni.enterScene();//进入行走状态
-        nextMap = copy(curMap);
-        //clearCommand();
-        pushCommand(POSING_CMD, null);
-    }
-    //持续性命令被中断了
-    function posMoving(diff)
-    {
-        if(len(commandList) > 0)
-            return;
-        shiftAni.stop();
-        if(curMap[0] == tarMovePos[0])
-        {
-            pushCommand(FIND_ENEMY, null);
-            return;
-        }
-        else
-        {
-            var dist = tarMovePos[0]-curMap[0];
-            if(dist > 0)
-            {
-                nextMap[0] += 1;
-            }
-            else
-            {
-                nextMap[0] -= 1;
-            }
-
-            var hasCol = 0;
-            var colObjects = map.roundGridController.checkCol(nextMap[0], nextMap[1], sx, sy, this);
-            for(var i = 0; i < len(colObjects); i++)
-            {
-                if(colObjects[i] != this)//防止和自己冲突
-                {
-                    hasCol = 1;
-                    break;
-                }
-            }
-            //有冲突暂时不移动 设定下一个位置为本位置
-            if(hasCol)
-            {
-                nextMap = copy(curMap);
-                clearAnimation();
-                pushCommand(FIND_ENEMY, null);
-                return;    
-            }
-            clearMap();
-            curMap = copy(nextMap);
-            setMap();
-
-            var newPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
-            dist = abs(newPos[0]-bg.pos()[0]);
-            var t = dist*1000/speed;
-            shiftAni = moveto(t, newPos[0], bg.pos()[1]); 
-            bg.addaction(shiftAni);
-            if(len(commandList) == 0)
-                pushCommand(POSING_CMD, null);
-
-            inCommand = 1;
-            needTime = t;
-            commandTime = 0;
-        }
+        return speed*getDir()*-1;
     }
     function setDeadState()
     {
@@ -462,17 +321,24 @@ class Soldier extends MyNode
         }
         //以变身状态死亡
     }
-    const STA = ["find", "move", "begin_attack", "attack", "dead", "makeUp", "posMove", "posing", "finAttack"];
+    const STA = ["find", "move", "begin_attack", "attack", "dead", "makeUp", "posMove", "posing", "finAttack", "beginAttack"];
     var lastCommand = 0;
     function update(diff)
     {
-        if(getParam("DEBUG") && getParam("testRoundState"))
+        if(getParam("DEBUG") && getParam("debugRoundState") && color == MYCOLOR)
         {
             if(len(commandList) > 0)
             {
-                lastSta.text(STA[lastCommand]);
-                lastCommand = commandList[0][0];
-                staLabel.text(STA[commandList[0][0]]);
+                if(tar != null)
+                {
+                    var myPos = bg.pos();
+                    var tPos = tar.bg.pos();
+                    lastSta.text(STA[lastCommand]+"::myPos::"+str(myPos)+"::tarPos:"+str(tPos)+"::getSpeed::"+str(getSpeed())+"::checkTarDistance:"+str(checkTarDistance()));
+                    lastCommand = commandList[0][0];
+                    staLabel.text(STA[commandList[0][0]]+"::speed::"+str(bg.linearvelocity())+"::dir::"+str(getDir())+"::sp::"+str(speed)+"::tar::"+str(tar)+"::tarState::"+str(tar.state));
+
+                    leftTimeLab.text(str(tar)+"::sta::"+str(tar.state)+":col:"+str(inCollision)+":error:"+str(error));
+                }
             }
             else
                 staLabel.text("无命令");
@@ -484,7 +350,6 @@ class Soldier extends MyNode
     }
     var curMap = [0, 0];
     //目标移动网格
-    var nextMap = [0, 0];
 
     //统一 arrange 和 移动
     function initMap()
@@ -637,6 +502,7 @@ class Soldier extends MyNode
 
     var leftTimeLab;
     var stateWord;
+    //var physicNode;
     function getChangeDirNodeScale()
     {
         return getParam("mapSolScale")*data["solSca"]/100;
@@ -702,7 +568,7 @@ class Soldier extends MyNode
         bg = node();
         init();
 
-        if(getParam("DEBUG") && getParam("testRoundState"))
+        if(getParam("DEBUG") && getParam("debugRoundState") && color == MYCOLOR)
         {
             stateWord = bg.addnode();
             staLabel =  stateWord.addlabel("状态", null, 30).color(0, 0, 0).pos(20, -20);
@@ -710,7 +576,6 @@ class Soldier extends MyNode
             leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
         }
         //有些士兵图片太大了 调整尺寸 调整sx sy
-        //bg.scale(getParam("mapSolScale")*data["solSca"]/100);
 
         var bSize = [0, 0];
         changeDirNode = node();
@@ -736,6 +601,9 @@ class Soldier extends MyNode
             attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
         }
+
+
+
 
         //变身之后特征色消失
         //fea = changeDirNode.addsprite("soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", feaFil);
@@ -785,6 +653,21 @@ class Soldier extends MyNode
         changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
         
     }
+    var inCollision = 0;
+    //一旦冲突则停止移动
+    function onCollision(e, n1, n2, param, normal, tangent)
+    {
+        trace("onCollision", e, n1, n2, param, normal, tangent);
+        if(e == CONTACT_TYPE_POSTSOLVE)
+        {
+            if(n1 == bg || n2 == bg)
+            {
+                inCollision = 1;
+                bg.linearvelocity(0, 0);
+            }
+        }
+    }
+
     function showBackBanner()
     {
         if(health < healthBoundary)
@@ -957,7 +840,6 @@ class Soldier extends MyNode
                 var nPos = n.world2node(x, y);
                 map.touchBegan(n, e, p, nPos[0], nPos[1], points);
             }
-            map.clearMoveSol();
         }
     }
     function touchWorldBegan(n, e, p, x, y, points)
@@ -1143,8 +1025,6 @@ class Soldier extends MyNode
         else if(map.scene.state == MAP_FINISH_SKILL)//&& data.get("isHero") && color == MYCOLOR 点击敌方士兵也出状态
         {
             map.scene.setSkillSoldier(this); 
-            if(color == MYCOLOR)
-                map.setMoveSol(this);
         }
         //给敌方士兵释放魔法
         else if(map.scene.state == MAP_START_SKILL)//对敌方操作
@@ -1189,11 +1069,29 @@ class Soldier extends MyNode
         }
         return 1;
     }
+    function initPhysic()
+    {
+        var pWidth = sx*getParam("MAP_OFFX");
+        var pHeight = sy*getParam("MAP_OFFY");
+        //physicNode = bg.addsprite("gridNew.png").anchor(50, 100).pos(bSize[0]/2, bSize[1]-offY).size(sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY"));
+        //计算一下physicNode 的shape 位置
+        //var leftTop = physicNode.node2world(0, 0);
+        //var rightBottom = physicNode.node2world(phsicNode.size()[0], physicNode.size[1]);
+        var boundBox = [-pWidth/2, -offY-pHeight+getParam("MAP_OFFY")/5, 
+                                                                pWidth/2, -offY-pHeight+getParam("MAP_OFFY")/5, 
+                                                                pWidth/2, -offY-getParam("MAP_OFFY")/5,
+                                                                -pWidth/2, -offY-getParam("MAP_OFFY")/5];
+
+        trace("boundBox", boundBox);
+        map.physics.bindbody(bg, BODY_TYPE_DYNAMIC, 100, 0, 0, boundBox);//, boundBox
+        bg.setevent(EVENT_PHYSICS_CONTACT, onCollision, null);
+    }
     //布局结束 增加士兵的攻击力 防御力 消耗 士兵的药水状态
     function finishArrange()
     {
         initMap();
         state = MAP_SOL_FREE;
+        initPhysic();
         if(nameBanner != null)
         {
             nameBanner.removeSelf();
@@ -1206,24 +1104,7 @@ class Soldier extends MyNode
     function getDir()
     {
         var sca = changeDirNode.scale();
-        return sca[0];
-    }
-    function setMoveDir()
-    {
-        if(tarMovePos != null)
-        {
-            var tpos = getSolPos(tarMovePos[0], tarMovePos[1], sx, sy, offY);
-            //var tpos = tarMovePos;
-            var mpos = bg.pos();
-            var difx = tpos[0] - mpos[0];
-            var oldSca = changeDirNode.scale();
-            oldSca[0] = abs(oldSca[0]);
-            if(difx > 0) {
-                changeDirNode.scale(-oldSca[0], oldSca[0]);
-            } else {
-                changeDirNode.scale(oldSca[0], oldSca[0]);
-            }
-        }
+        return Sign(sca[0]);
     }
     function setDir()
     {
@@ -1263,6 +1144,7 @@ class Soldier extends MyNode
             shadow.pos(bSize[0]/2-shadowOffX, bSize[1]+shadowOffY);
     }
 
+    //寻找最近的敌方士兵进行攻击
     function getTar()
     {
         var rowObjects = map.roundGridController.getRowObjects(curMap[0], curMap[1], sx, sy, this);
@@ -1316,6 +1198,7 @@ class Soldier extends MyNode
     {
         stopNow = 1;
         shiftAni.stop();
+        bg.linearvelocity(0, 0);
     }
     //正在移动过程中 停止之后 再重新开始 查找敌人
     function continueGame()
@@ -1341,10 +1224,10 @@ class Soldier extends MyNode
     */
     function checkTarDistance()
     {
-        return (
-            ((curMap[0]+sx) >= tar.curMap[0] && curMap[0] <= (tar.curMap[0]+tar.sx)) 
-            || (abs(tar.curMap[0]-curMap[0]-sx) <= attRange || abs(curMap[0]-tar.curMap[0]-tar.sx) <= attRange)
-            );
+        var myPos = bg.pos();
+        var tPos = tar.getPos();
+
+        return abs(tPos[0]-myPos[0]) <= (tar.sx+sx)*getParam("MAP_OFFX")/2+attRange*getParam("MAP_OFFX")+getParam("paddingX");
     }
     var aiTime = 0;
     const AI_PERIOD = 5000;
@@ -1368,6 +1251,7 @@ class Soldier extends MyNode
         spinTime = t;//总共眩晕时间
         clearAnimation();
         shiftAni.stop();
+        bg.linearvelocity(0, 0);
     }
 
 
@@ -1408,15 +1292,6 @@ class Soldier extends MyNode
             greenStar = null;
         }
     }
-    function setMoveTar(t)
-    {
-        var myMap = getSolMap(t, sx, sy, offY);
-        tarMovePos = myMap;
-        if(state != MAP_SOL_DEAD && state != MAP_SOL_SAVE)
-        {
-            pushCommand(POS_MOVE_CMD, null);
-        }
-    }
 
     
     function doAppearAni()
@@ -1452,7 +1327,7 @@ class Soldier extends MyNode
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
         shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
 
-        backBanner.pos(bSize[0]/2, data["bloodHeight"]);
+        backBanner.pos(bSize[0]/2, bSize[1]-getBloodHeightOff());
 
         var suffix = "";
         if(sx >= 2)

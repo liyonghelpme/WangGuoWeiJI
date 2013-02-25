@@ -25,6 +25,7 @@ class MapDefense extends MyNode
     //城墙是 编号-2 的 士兵
     var id = getParam("mapDefenseId");
     var offY = 0;
+    var physicNode;
     function MapDefense(m, i, d)
     {
         map = m;
@@ -33,13 +34,23 @@ class MapDefense extends MyNode
             curMap = [0, 0];
         else
             curMap = [getParam("MAP_WIDTH"), 0];
+        
+
+
         //城墙属性类型100
         //data = dict([["category", 100], []]);
         data = getData(SOLDIER, getParam("mapDefenseId"));
         state = MAP_SOL_DEFENSE;
 
-        bg = sprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(d);
+        var defPos = getSolPos(curMap[0], curMap[1], sx, sy, offY);
+        bg = node().size(sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY")).pos(defPos).anchor(50, 100);
         init();
+        if(getParam("debugPhysic"))
+            bg.addsprite("gridNew.png").size(sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY"));
+
+        defPos = getLeftTopPos(curMap[0], curMap[1], sx, sy, offY);
+        bg.addsprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(d[0]-defPos[0], d[1]-defPos[1]);
+        map.physics.bindbody(bg, BODY_TYPE_STATIC, 100, 0, 0);
     }
     //地面爆炸位置
     function getGroundBombPos(att)

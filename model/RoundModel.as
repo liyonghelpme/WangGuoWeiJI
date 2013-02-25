@@ -238,6 +238,12 @@ function getSolPos(mx, my, sx, sy, offY)
     my = my*getParam("MAP_OFFY")+getParam("MAP_OFFY")*sy+getParam("MAP_INITY")+offY;
     return [mx, my];
 }
+function getLeftTopPos(mx, my, sx, sy, offY)
+{
+    mx = mx*getParam("MAP_OFFX")+getParam("MAP_INITX");
+    my = my*getParam("MAP_OFFY")+getParam("MAP_INITY");
+    return [mx, my];
+}
 
 
 function getAllStar()

@@ -1071,8 +1071,8 @@ const ATTACK_CMD = 2;
 //最高优先级指令
 const DEAD_CMD = 3;
 const MAKEUP_CMD = 4;
-const POS_MOVE_CMD = 5;
-const POSING_CMD = 6;
+//const POS_MOVE_CMD = 5;
+//const POSING_CMD = 6;
 const FINISH_ATTACK = 7;
 const BEGIN_ATTACK = 8;
 

@@ -182,8 +182,18 @@ class Map extends MyNode
     }
 
     var gridLayer;
+    var physics;
     function Map(k, sm, s, sc, eq)
     {
+        physics = getphysics();
+        physics.start();
+        physics.scale(30);
+        physics.gravity(0, 0);
+        physics.positioniterations(8);
+        physics.velocityiterations(3);
+        
+
+
         roundGridController = new RoundGridController(this);
         monEquips = eq;
         scene = sc;
@@ -535,7 +545,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
 
     function updateMapGrid()
     {
-        if(getParam("DEBUG"))
+        if(getParam("debugMapGrid"))
         {
             gridLayer.removefromparent();
             gridLayer = bg.addnode();
@@ -1105,7 +1115,6 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
                 //坐标可能从 士兵传来 需要先转化成 世界坐标再计算相对地图坐标位置
                 moveSkillGrid(skillData, po[0], po[1]);
             }
-            clearMoveSol();
         }
         else if(curMovSol == null)
             touchDelegate.tBegan(n, e, p, x, y, points);
@@ -1192,6 +1201,8 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
         else if(curMovSol == null)
             touchDelegate.tEnded(n, e, p, x, y, points);
+        //取消训练功能
+        /*
         else//确定当前士兵移动方向
         {
             po = n.node2world(x, y);
@@ -1200,6 +1211,7 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
             curMovSol.setMoveTar(tarPosMov);
             curMovSol = null;
         }
+        */
     }
 
     //单体技能设定 目标士兵
@@ -1265,17 +1277,5 @@ var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).p
         }
     }
     var curMovSol = null;
-    //设定当前要移动的士兵
-    function setMoveSol(sol)
-    {
-        if(curMovSol == null && scene.kind == CHALLENGE_TRAIN)
-        {
-            curMovSol = sol;
-            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("selTarPos", null), [100, 100, 100], null));
-        }
-    }
-    function clearMoveSol()
-    {
-        curMovSol = null;
-    }
+
 }
