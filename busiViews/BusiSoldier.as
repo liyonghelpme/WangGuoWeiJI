@@ -488,6 +488,7 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
 
                 global.user.updateSoldiers(this);
                 global.httpController.addRequest("soldierC/accReliveHero", dict([["uid", global.user.uid], ["sid", sid], ["leftTime", leftTime], ["cost", json_dumps(cost)]]), null, null);
+                global.user.doCost(cost);
             }
         }
     }

@@ -25,11 +25,13 @@ class SoldierMenu extends MyNode
         temp = bg.addsprite("buildMenu1.png").anchor(0, 0).pos(0, 419).size(800, 61).color(100, 100, 100, 100);
 
 bg.addlabel(str(soldier.healthBoundary), getFont(), 20).anchor(0, 50).pos(76, 454).color(100, 100, 100);
-bg.addlabel(str(soldier.attack), getFont(), 20).anchor(0, 50).pos(206, 453).color(100, 100, 100);
+
+bg.addlabel(str(soldier.attack), getFont(), 20).anchor(0, 50).pos(306, 453).color(100, 100, 100);
         temp = bg.addsprite("dialogSolHealth.png").anchor(0, 0).pos(35, 440).size(33, 27).color(100, 100, 100, 100);
         temp = bg.addsprite("dialogSolDef.png").anchor(0, 0).pos(170, 437).size(28, 31).color(100, 100, 100, 100);
         temp = bg.addsprite("dialogSolAtt.png").anchor(0, 0).pos(277, 438).size(26, 32).color(100, 100, 100, 100);
-bg.addlabel(str(soldier.defense), getFont(), 20).anchor(0, 50).pos(307, 453).color(100, 100, 100);
+bg.addlabel(str(soldier.defense), getFont(), 20).anchor(0, 50).pos(206, 453).color(100, 100, 100);
+
         trace("inTransfer", soldier.inTransfer);
         if(soldier.inTransfer)
 timeLabel = bg.addlabel(getStr("transferLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), getFont(), 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
