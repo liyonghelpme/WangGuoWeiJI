@@ -71,6 +71,7 @@ class Soldier extends MyNode
     {
         if(len(commandList) > 0)
             return;
+        state = MAP_SOL_FREE;
         tar = getTar();
         //trace("findTar", tar, data["name"]);
         if(tar != null) {
@@ -93,6 +94,7 @@ class Soldier extends MyNode
     var error = 0;
     function doMove(diff)
     {
+        state = MAP_SOL_MOVE;
         //命令被中断了
         if(len(commandList) > 0)
             return;
@@ -114,7 +116,6 @@ class Soldier extends MyNode
                 return;
             }
             var bgSpeed = getSpeed();
-            trace("bgSpeed", bgSpeed);
             if(bgSpeed == null)
                 error = 1;
             bg.linearvelocity(bgSpeed, 0);
@@ -149,6 +150,7 @@ class Soldier extends MyNode
             pushCommand(FIND_ENEMY, null);
             return;
         }
+        state = MAP_SOL_ATTACK;
         var cheDis = checkTarDistance();
         if(cheDis) {
             inCommand = 1;
@@ -325,7 +327,7 @@ class Soldier extends MyNode
     var lastCommand = 0;
     function update(diff)
     {
-        if(getParam("DEBUG") && getParam("debugRoundState") && color == MYCOLOR)
+        if(getParam("DEBUG") && getParam("debugRoundState"))
         {
             if(len(commandList) > 0)
             {
@@ -337,7 +339,7 @@ class Soldier extends MyNode
                     lastCommand = commandList[0][0];
                     staLabel.text(STA[commandList[0][0]]+"::speed::"+str(bg.linearvelocity())+"::dir::"+str(getDir())+"::sp::"+str(speed)+"::tar::"+str(tar)+"::tarState::"+str(tar.state));
 
-                    leftTimeLab.text(str(tar)+"::sta::"+str(tar.state)+":col:"+str(inCollision)+":error:"+str(error));
+                    leftTimeLab.text(str(tar)+"::sta::"+str(tar.state)+":col:"+str(inCol)+":error:"+str(error));
                 }
             }
             else
@@ -451,6 +453,7 @@ class Soldier extends MyNode
         //初始化技能列表 等级 冷却时间
         skillList = [];
 
+        speed = data["moveSpeed"];
         kind = data.get("kind");
         
         sx = data.get("sx");
@@ -513,7 +516,7 @@ class Soldier extends MyNode
     }
     function Soldier(m, d, s, md)
     {
-        speed = getParam("soldierSpeed");
+        //speed = getParam("soldierSpeed");
         ai = new SoldierAI(this);
         monsterData = md;
         sid = s;
@@ -568,12 +571,12 @@ class Soldier extends MyNode
         bg = node();
         init();
 
-        if(getParam("DEBUG") && getParam("debugRoundState") && color == MYCOLOR)
+        if(getParam("DEBUG") && getParam("debugRoundState"))
         {
             stateWord = bg.addnode();
-staLabel = stateWord.addlabel("状态", getFont(), 30).color(0, 0, 0).pos(20, -20);
-lastSta = stateWord.addlabel("上个状态", getFont(), 30).color(100, 0, 0).pos(40, -40);
-leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 30).color(0, 100, 100).pos(40, 40);
+staLabel = stateWord.addlabel("状态", getFont(), 15).color(0, 0, 0).pos(20, -20);
+lastSta = stateWord.addlabel("上个状态", getFont(), 15).color(100, 0, 0).pos(40, -40);
+leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 100).pos(40, 40);
         }
         //有些士兵图片太大了 调整尺寸 调整sx sy
 
@@ -653,16 +656,30 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 30).color(0, 100, 10
         changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
         
     }
-    var inCollision = 0;
+    var inCol = 0;
     //一旦冲突则停止移动
     function onCollision(e, n1, n2, param, normal, tangent)
     {
-        trace("onCollision", e, n1, n2, param, normal, tangent);
-        if(e == CONTACT_TYPE_POSTSOLVE)
+        //trace("onCollision", e, n1, n2, param, normal, tangent);
+        inCol = 0;
+        //if(e == CONTACT_TYPE_BEGIN )
         {
-            if(n1 == bg || n2 == bg)
+            var mDir = -getDir();
+            var other;
+            var me = null;
+            if(n1 == bg){
+                me = n1;
+                other = n2;
+                if((n2.pos()[0]-n1.pos()[0])*mDir > 0)//正方向有敌人
+                    inCol = 1;
+            } else if(n2 == bg) {
+                me = n2;
+                other = n1;
+                if((n1.pos()[0]-n2.pos()[0])*mDir > 0)  
+                    inCol = 1;
+            }
+            if(me != null && inCol)
             {
-                inCollision = 1;
                 bg.linearvelocity(0, 0);
             }
         }
@@ -1085,6 +1102,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 30).color(0, 100, 10
         trace("boundBox", boundBox);
         map.physics.bindbody(bg, BODY_TYPE_DYNAMIC, 100, 0, 0, boundBox);//, boundBox
         bg.setevent(EVENT_PHYSICS_CONTACT, onCollision, null);
+        //bg.setsensor(1);
     }
     //布局结束 增加士兵的攻击力 防御力 消耗 士兵的药水状态
     function finishArrange()
