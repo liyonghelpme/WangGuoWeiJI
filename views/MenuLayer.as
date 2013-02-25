@@ -55,7 +55,7 @@ finNum = bg.addlabel(getStr("99+", null), getFont(), 18).anchor(50, 50).pos(96, 
         expBanner = sprite("expBanner.png").anchor(0, 0).pos(123, 432).size(150, 50).visible(0);
         bg.add(expBanner, MENU_EXP_LAYER);
 
-        expWord = ShadowWords(getStr("expToLev", null), "fonts/heiti.ttf", 17, FONT_NORMAL, [100, 100, 100]);
+        expWord = ShadowWords(getStr("expToLev", null), getFont(), 17, FONT_NORMAL, [100, 100, 100]);
         expWord.bg.anchor(50, 50).pos(75, 28);
         expBanner.add(expWord.bg);
 

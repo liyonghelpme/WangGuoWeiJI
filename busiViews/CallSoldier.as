@@ -173,7 +173,7 @@ cryText = bg.addlabel(getStr("crystal", null), getFont(), 23).anchor(0, 50).pos(
             {
                 //var number = scene.objectList[ret[1]][1];
                 var num = scene.objectList[ret[1]][1];
-                callNum = new ShadowWords("X"+str(num), "fonts/heiti.ttf", 25, FONT_NORMAL, [100, 100, 100]);
+                callNum = new ShadowWords("X"+str(num), getFont(), 25, FONT_NORMAL, [100, 100, 100]);
                 callNum.bg.pos(175, 225).anchor(0, 50);
                 addChild(callNum);
                 //第一个正在招募的士兵
