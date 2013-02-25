@@ -1361,5 +1361,8 @@ function getRedStarAni()
 
 function getFont()
 {
-    return getStr(getParam("fontID"), null);
+    var fontName =  getStr("font"+str(getParam("fontID")), null);
+    if(fontName == "null")
+        return null;
+    return fontName;
 }
