@@ -250,7 +250,7 @@ class BattleScene extends MyNode
                 if(checkTip(MAP_KIND_TIP[kind]) == null)
                 {
                     trace("noTip", MAP_KIND_TIP[kind]);
-                    dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", CHALLENGE_TIP]]));//只需要1个tip即可不用其它的
+                    dialogController.addCmd(dict([["cmd", "noTip"],  ["kind", MAP_KIND_TIP[kind]]]));//只需要1个tip即可不用其它的
                 }
             }
             dialogController.addCmd(dict([["cmd", "chooseSol"]]));

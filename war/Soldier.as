@@ -681,6 +681,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
             if(me != null && inCol)
             {
                 bg.linearvelocity(0, 0);
+                movAni.clearAnimation();
             }
         }
     }
