@@ -1358,3 +1358,8 @@ function getRedStarAni()
     ["redStar.plist/redStar0.png", "redStar.plist/redStar1.png", "redStar.plist/redStar5.png", "redStar.plist/redStar6.png", "redStar.plist/redStar7.png", "redStar.plist/redStar8.png", "redStar.plist/redStar9.png", "redStar.plist/redStar10.png"]
     );
 }
+
+function getFont()
+{
+    return getStr(getParam("fontID"), null);
+}

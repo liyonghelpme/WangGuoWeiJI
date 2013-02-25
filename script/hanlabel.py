@@ -48,6 +48,7 @@ def gen(l):
         if kind.__class__.__name__ == 'ID':
             break
         """
+
         kind = kind.name
     #print kind
     #print l
