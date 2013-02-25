@@ -24,17 +24,17 @@ class SoldierMenu extends MyNode
         temp = bg.addsprite("soldierMenu.png").anchor(0, 0).pos(11, 390).size(428, 37).color(100, 100, 100, 100);
         temp = bg.addsprite("buildMenu1.png").anchor(0, 0).pos(0, 419).size(800, 61).color(100, 100, 100, 100);
 
-        bg.addlabel(str(soldier.healthBoundary), "fonts/heiti.ttf", 20).anchor(0, 50).pos(76, 454).color(100, 100, 100);
-        bg.addlabel(str(soldier.attack), "fonts/heiti.ttf", 20).anchor(0, 50).pos(206, 453).color(100, 100, 100);
+bg.addlabel(str(soldier.healthBoundary), getFont(), 20).anchor(0, 50).pos(76, 454).color(100, 100, 100);
+bg.addlabel(str(soldier.attack), getFont(), 20).anchor(0, 50).pos(206, 453).color(100, 100, 100);
         temp = bg.addsprite("dialogSolHealth.png").anchor(0, 0).pos(35, 440).size(33, 27).color(100, 100, 100, 100);
         temp = bg.addsprite("dialogSolDef.png").anchor(0, 0).pos(170, 437).size(28, 31).color(100, 100, 100, 100);
         temp = bg.addsprite("dialogSolAtt.png").anchor(0, 0).pos(277, 438).size(26, 32).color(100, 100, 100, 100);
-        bg.addlabel(str(soldier.defense), "fonts/heiti.ttf", 20).anchor(0, 50).pos(307, 453).color(100, 100, 100);
+bg.addlabel(str(soldier.defense), getFont(), 20).anchor(0, 50).pos(307, 453).color(100, 100, 100);
         trace("inTransfer", soldier.inTransfer);
         if(soldier.inTransfer)
-            timeLabel = bg.addlabel(getStr("transferLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
+timeLabel = bg.addlabel(getStr("transferLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), getFont(), 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
         if(soldier.inDead)
-            timeLabel = bg.addlabel(getStr("reliveLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
+timeLabel = bg.addlabel(getStr("reliveLeftTime", ["[TIME]", getWorkTime(soldier.getLeftTime())]), getFont(), 20).anchor(0, 50).pos(466, 405).color(0, 0, 0);
             
         
         var solOrMon = soldier.data["solOrMon"];
@@ -42,7 +42,7 @@ class SoldierMenu extends MyNode
         {
             var career = getCareerLev(soldier.id); 
             var totalName = getStr(CAREER_TIT[career], null)+soldier.data.get("name");
-            bg.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", totalName]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(20, 405).color(38, 86, 92);
+bg.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", totalName]), getFont(), 20).anchor(0, 50).pos(20, 405).color(38, 86, 92);
 
             var initX = 311;
             var initY = 393;
@@ -60,7 +60,7 @@ class SoldierMenu extends MyNode
         }
         else
         {
-            bg.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", soldier.data["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(20, 405).color(38, 86, 92);
+bg.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", soldier.data["name"]]), getFont(), 20).anchor(0, 50).pos(20, 405).color(38, 86, 92);
         }
 
 

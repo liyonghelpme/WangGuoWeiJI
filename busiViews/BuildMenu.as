@@ -81,7 +81,7 @@ class BuildMenu extends MyNode
             if(setYet == 1)//改变了建筑物状态 所以需要ok
                 buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
             buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
-            buttonNode.addlabel(getStr("chooseBuild", null), "fonts/heiti.ttf", WORD_SZ).pos(W_X, BUT_Y).anchor(0, 50).color(100, 100, 100);
+buttonNode.addlabel(getStr("chooseBuild", null), getFont(), WORD_SZ).pos(W_X, BUT_Y).anchor(0, 50).color(100, 100, 100);
             return;
         }
 
@@ -104,7 +104,7 @@ class BuildMenu extends MyNode
             trace("SolbuildOk", buildOk);
             buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
             buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
-            buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
+buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
         }
         else if(opKind == PLAN_BUILDING)//规划建筑物
         {
@@ -132,7 +132,7 @@ class BuildMenu extends MyNode
                     buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
                 }
 
-                buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
+buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
             }
             else
             {
@@ -141,7 +141,7 @@ class BuildMenu extends MyNode
                 buttonNode.addsprite("buildSwitch0.png").anchor(0, 0).pos(668, 8).size(48, 48).setevent(EVENT_TOUCH, onSwitch);
                 buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
 
-                buttonNode.addlabel(getStr("dragBuild", null), "fonts/heiti.ttf", WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
+buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
             }
         }
     }

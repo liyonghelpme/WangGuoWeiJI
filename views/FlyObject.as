@@ -106,7 +106,7 @@ class FlyObject extends MyNode
                             tar[0], tar[1])), callfunc(pickMe)));
                 if(j == (cut-1))
                     showVal = v-showVal*j;
-                var words = flyObj.addlabel(str(showVal), "fonts/heiti.ttf", 23).pos(FLY_WIDTH, FLY_HEIGHT / 2).anchor(0, 50).color(getParam("FlyObjRed"), getParam("FlyObjGreen"), getParam("FlyObjBlue"));
+var words = flyObj.addlabel(str(showVal), getFont(), 23).pos(FLY_WIDTH, FLY_HEIGHT / 2).anchor(0, 50).color(getParam("FlyObjRed"), getParam("FlyObjGreen"), getParam("FlyObjBlue"));
                 //offY += 50;
                 waitTime += 200;
             }

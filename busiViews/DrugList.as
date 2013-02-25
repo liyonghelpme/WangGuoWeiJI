@@ -148,7 +148,7 @@ class DrugList extends MyNode
 
             var objData;
             objData = getData(kind, id);
-            temp = panel.addlabel(objData.get("des"), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+temp = panel.addlabel(objData.get("des"), getFont(), 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
 
             if(kind == DRUG)
             {
@@ -158,7 +158,7 @@ class DrugList extends MyNode
                 if(num == 0)
                     co = [99, 42, 47];
 
-                panel.addlabel(str(num), "fonts/heiti.ttf", 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
+panel.addlabel(str(num), getFont(), 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
 
                 but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("useIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onUseIt, curNum);
                 but0.bg.pos(631, 35);

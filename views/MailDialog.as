@@ -27,10 +27,10 @@ class MailDialog extends MyNode
         //but0.addlabel(getStr("friGift", null), null, 25).pos(64, 20).anchor(50, 50);
 
         but0 = bg.addsprite("roleNameBut0.png").size(128, 40).anchor(0, 0).pos(400, 18).setevent(EVENT_TOUCH, switchView, 0);
-but0.addlabel(getStr("friendReq", null), "fonts/heiti.ttf", 25).pos(64, 20).anchor(50, 50);
+but0.addlabel(getStr("friendReq", null), getFont(), 25).pos(64, 20).anchor(50, 50);
 
         but0 = bg.addsprite("roleNameBut0.png").size(128, 40).anchor(0, 0).pos(550, 18).setevent(EVENT_TOUCH, switchView, 1);
-but0.addlabel(getStr("moreGame", null), "fonts/heiti.ttf", 25).pos(64, 20).anchor(50, 50);
+but0.addlabel(getStr("moreGame", null), getFont(), 25).pos(64, 20).anchor(50, 50);
 
 
 

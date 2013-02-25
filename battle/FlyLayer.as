@@ -12,7 +12,7 @@ class FlyLayer extends MyNode
         var width;
 
         var jz=bg.addsprite("map_label_big.png").size(150,45).anchor(0,0).pos(615,27).rotate(0);
-        lab = jz.addlabel(getStr("mapAll", null), "fonts/heiti.ttf", 22).anchor(50, 50).pos(75, 22).color(0, 0, 0, 100);
+lab = jz.addlabel(getStr("mapAll", null), getFont(), 22).anchor(50, 50).pos(75, 22).color(0, 0, 0, 100);
         lSize = lab.prepare().size();
         width = max(150, lSize[0]+getParam("labelWidth"));
         jz.size(width, 45);
@@ -21,7 +21,7 @@ class FlyLayer extends MyNode
 
         for(var i=0;i<=5;i++){
             jz = bg.addsprite("map_label_small.png").size(100,30).anchor(0,0).pos(labelPos[i]);
-            lab = jz.addlabel(getStr("mapIsland" + str(i), null), "fonts/heiti.ttf", 15).anchor(50, 50).pos(50, 15).color(0, 0, 0, 100);
+lab = jz.addlabel(getStr("mapIsland" + str(i), null), getFont(), 15).anchor(50, 50).pos(50, 15).color(0, 0, 0, 100);
             lSize = lab.prepare().size();
             width = max(100, lSize[0]+getParam("labelWidth"));
             jz.size(width, 30);

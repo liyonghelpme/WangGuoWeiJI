@@ -31,8 +31,8 @@ class InviteInput extends MyNode
 
 
                             
-        warnText = bg.addlabel(getStr("inputInvite", null), "fonts/heiti.ttf", 15).anchor(0, 50).pos(346, 276).color(43, 25, 9);
-        bg.addlabel(getStr("inviteFriend", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(406, 95).color(100, 100, 100);
+warnText = bg.addlabel(getStr("inputInvite", null), getFont(), 15).anchor(0, 50).pos(346, 276).color(43, 25, 9);
+bg.addlabel(getStr("inviteFriend", null), getFont(), 30).anchor(50, 50).pos(406, 95).color(100, 100, 100);
     }
     function onOk()
     {

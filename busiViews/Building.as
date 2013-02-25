@@ -64,7 +64,7 @@ class Building extends MyNode
 
         if(getParam("debugFarm"))
         {
-            farmState = label("", null, 20).color(0, 0, 0).pos(10, -30);
+farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
             bg.add(farmState);
         }
 

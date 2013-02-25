@@ -29,7 +29,7 @@ class NewChallengeFail extends MyNode
         addChild(but0);
         temp = bg.addsprite("roundFail.png").anchor(50, 50).pos(415, 90).color(100, 100, 100, 100);
         temp = bg.addsprite("roundTip.png").anchor(0, 0).pos(206, 139).size(64, 47).color(100, 100, 100, 100);
-        bg.addlabel(str(param["score"]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(413, 288).color(98, 2, 11);
+bg.addlabel(str(param["score"]), getFont(), 20).anchor(0, 50).pos(413, 288).color(98, 2, 11);
         temp = bg.addsprite("dialogRankCup.png").anchor(0, 0).pos(378, 277).size(31, 26).color(100, 100, 100, 100);
     }
     function onBack()

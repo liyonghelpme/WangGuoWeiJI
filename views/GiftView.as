@@ -21,9 +21,9 @@ class GiftView extends MyNode
     function GiftView(p, s)
     {
         bg = node();
-giftNum = bg.addlabel(getStr("howManyGift", null), "fonts/heiti.ttf", 25).color(100, 100, 100).pos(26, 103);
+giftNum = bg.addlabel(getStr("howManyGift", null), getFont(), 25).color(100, 100, 100).pos(26, 103);
         var but0 = bg.addsprite("greenButton0.png").pos(623, 87).size(148, 53).setevent(EVENT_TOUCH, receiveAll);
-but0.addlabel(getStr("recAll", null), "fonts/heiti.ttf", 25).color(0, 0, 0).anchor(50, 50).pos(74, 26);
+but0.addlabel(getStr("recAll", null), getFont(), 25).color(0, 0, 0).anchor(50, 50).pos(74, 26);
 
         init();
         initData();
@@ -104,10 +104,10 @@ but0.addlabel(getStr("recAll", null), "fonts/heiti.ttf", 25).color(0, 0, 0).anch
         for(var i = rg[0]; i < rg[1]; i++)
         {
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i).size(PANEL_WIDTH, PANEL_HEIGHT);
-panel.addlabel(getStr("friSendGift", ["[NAME]", data[i][0], "[NUM]", str(data[i][2]), "[KIND]", getStr(data[i][1], null)]), "fonts/heiti.ttf", 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
+panel.addlabel(getStr("friSendGift", ["[NAME]", data[i][0], "[NUM]", str(data[i][2]), "[KIND]", getStr(data[i][1], null)]), getFont(), 25).pos(42, 20).anchor(0, 0).color(78, 78, 78);
             panel.addsprite(data[i][1]+".png").pos(556, 13).size(30, 30);
             var but0 = panel.addsprite("greenButton0.png").pos(640, 8).size(119, 42).setevent(EVENT_TOUCH, onReceive, i);
-but0.addlabel(getStr("receive", null), "fonts/heiti.ttf", 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
+but0.addlabel(getStr("receive", null), getFont(), 22).color(0, 0, 0).pos(60, 21).anchor(50, 50);
         }
     }
     function onReceive(n, e, p, x, y, points)
@@ -201,9 +201,9 @@ class MoreView extends MyNode
         for(var i = rg[0]; i < rg[1]; i++)
         {
             var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i).size(PANEL_WIDTH, PANEL_HEIGHT);
-panel.addlabel(data[i][0], "fonts/heiti.ttf", 25).pos(122, 20).anchor(0, 0).color(78, 78, 78);
+panel.addlabel(data[i][0], getFont(), 25).pos(122, 20).anchor(0, 0).color(78, 78, 78);
             var but0 = panel.addsprite("greenButton0.png").pos(636, 30).size(118, 45).setevent(EVENT_TOUCH, onDownload, i);
-but0.addlabel(getStr("download", null), "fonts/heiti.ttf", 22).color(0, 0, 0).pos(59, 22).anchor(50, 50);
+but0.addlabel(getStr("download", null), getFont(), 22).color(0, 0, 0).pos(59, 22).anchor(50, 50);
         }
     }
     function onDownload(n, e, p, x, y, points)

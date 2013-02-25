@@ -19,7 +19,7 @@ class NewChallengeWin extends MyNode
         var sca;
         temp = bg.addsprite("dialogRoundOver.png").anchor(50, 50).pos(405, 206).size(434, 317).color(100, 100, 100, 100);
         temp = bg.addsprite("round"+str(param["star"])+"Star.png").anchor(0, 0).pos(354, 130).size(109, 45).color(100, 100, 100, 100);
-        bg.addlabel(getStr("congrateYouGet", null), "fonts/heiti.ttf", 19).anchor(0, 50).pos(254, 193).color(64, 32, 32);
+bg.addlabel(getStr("congrateYouGet", null), getFont(), 19).anchor(0, 50).pos(254, 193).color(64, 32, 32);
         temp = bg.addsprite("dialogPrincess.png").anchor(0, 0).pos(536, 183).size(97, 157).color(100, 100, 100, 100);
         but0 = new NewButton("roleNameBut0.png", [125, 41], getStr("share", null), null, 20, FONT_NORMAL, [100, 100, 100], onShare, null);
         but0.bg.pos(315, 364);
@@ -31,11 +31,11 @@ class NewChallengeWin extends MyNode
         global.taskModel.showHintArrow(okBut.bg, okBut.bg.prepare().size(), CHALLENGE_WIN_OK, finishNew);
 
         temp = bg.addsprite("roundWin.png").anchor(50, 50).pos(414, 89).color(100, 100, 100, 100);
-        bg.addlabel(str(param["reward"]["silver"]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(301, 229).color(18, 11, 6);
+bg.addlabel(str(param["reward"]["silver"]), getFont(), 20).anchor(0, 50).pos(301, 229).color(18, 11, 6);
         temp = bg.addsprite("silver.png").anchor(0, 0).pos(262, 215).size(30, 30).color(100, 100, 100, 100);
-        bg.addlabel(str(param["reward"]["crystal"]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(301, 262).color(18, 11, 6);
+bg.addlabel(str(param["reward"]["crystal"]), getFont(), 20).anchor(0, 50).pos(301, 262).color(18, 11, 6);
         temp = bg.addsprite("crystal.png").anchor(0, 0).pos(265, 249).size(29, 29).color(100, 100, 100, 100);
-        bg.addlabel(str(param["score"]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(302, 295).color(18, 11, 6);
+bg.addlabel(str(param["score"]), getFont(), 20).anchor(0, 50).pos(302, 295).color(18, 11, 6);
         temp = bg.addsprite("dialogRankCup.png").anchor(0, 0).pos(266, 284).size(31, 26).color(100, 100, 100, 100);
     }
     function finishNew()

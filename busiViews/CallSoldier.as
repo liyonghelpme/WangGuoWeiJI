@@ -37,9 +37,9 @@ class CallSoldier extends MyNode
         temp = bg.addsprite("gold.png").anchor(0, 0).pos(439, 28).size(31, 30).color(100, 100, 100, 100);
         temp = bg.addsprite("crystal.png").anchor(0, 0).pos(586, 30).size(31, 29).color(100, 100, 100, 100);
         temp = bg.addsprite("silver.png").anchor(0, 0).pos(280, 27).size(32, 32).color(100, 100, 100, 100);
-        silverText = bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(318, 43).color(100, 100, 100);
-        goldText = bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(474, 44).color(100, 100, 100);
-        cryText = bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 23).anchor(0, 50).pos(621, 44).color(100, 100, 100);
+silverText = bg.addlabel(getStr("silver", null), getFont(), 23).anchor(0, 50).pos(318, 43).color(100, 100, 100);
+goldText = bg.addlabel(getStr("gold", null), getFont(), 23).anchor(0, 50).pos(474, 44).color(100, 100, 100);
+cryText = bg.addlabel(getStr("crystal", null), getFont(), 23).anchor(0, 50).pos(621, 44).color(100, 100, 100);
         temp = bg.addsprite("titCamp.png").anchor(0, 0).pos(71, 10).color(100, 100, 100, 100);
         temp = bg.addsprite("conTitSol.png", UPDATE_SIZE).anchor(50, 50).pos(514, 112).color(100, 100, 100, 100);
         goods = new SoldierGoods(this);

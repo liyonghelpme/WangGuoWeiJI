@@ -178,9 +178,9 @@ class SoldierGoods extends MyNode
                 if(ret[0])
                 {
                     if(ret[1] == 0)
-                        panel.addlabel(getStr("callingSol", null), "fonts/heiti.ttf", 17).anchor(0, 50).pos(14, 132).color(95, 29, 14);
+panel.addlabel(getStr("callingSol", null), getFont(), 17).anchor(0, 50).pos(14, 132).color(95, 29, 14);
                     else
-                        panel.addlabel(getStr("callInQueue", ["[NUM]", str(ret[1]+1)]), "fonts/heiti.ttf", 17).anchor(0, 50).pos(14, 132).color(43, 25, 9);
+panel.addlabel(getStr("callInQueue", ["[NUM]", str(ret[1] + 1)]), getFont(), 17).anchor(0, 50).pos(14, 132).color(43, 25, 9);
                 }
 
                 if(len(picCost) > 0 && canBuy)//可以购买
@@ -195,10 +195,10 @@ class SoldierGoods extends MyNode
                     }
 
                     temp = panel.addsprite(picName).anchor(50, 50).pos(32, 169).size(30, 30).color(100, 100, 100, 100);
-                    panel.addlabel(str(valNum), "fonts/heiti.ttf", 20).anchor(50, 50).pos(89, 168).color(c);
+panel.addlabel(str(valNum), getFont(), 20).anchor(50, 50).pos(89, 168).color(c);
                 }
 
-                panel.addlabel(sData["name"], "fonts/heiti.ttf", 21).anchor(50, 50).pos(74, 25).color(29, 16, 4);
+panel.addlabel(sData["name"], getFont(), 21).anchor(50, 50).pos(74, 25).color(29, 16, 4);
                 //用户招募第一个士兵 panel 防止箭头被遮挡
                 if(id == getParam("newTaskBuySoldier") && store.inCall == 0 && store.inAcc == 0 && global.taskModel.checkInNewTask())
                 {

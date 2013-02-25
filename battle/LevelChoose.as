@@ -70,13 +70,13 @@ class LevelChoose extends MyNode
         {
             tot = bg.addsprite("totalStar.png").pos(239, 17).size(139, 46);
             tot.addsprite("star.png").pos(33, 22).anchor(50, 50).size(33, 31);
-            nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
+nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
         }
         else
         {
             tot = bg.addsprite("totalStar.png").pos(239, 17).size(170, 46);
             tot.addsprite("star.png").pos(33, 22).anchor(50, 50).size(33, 31);
-            nums = tot.addlabel("0/0", "fonts/heiti.ttf", 25).pos(57, 14);
+nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
         }
 
 
@@ -199,7 +199,7 @@ class LevelChoose extends MyNode
 
 
                 panel.addsprite("lock0.png").pos(26, 28).anchor(50, 50).size(25, 30);
-                panel.addlabel(getStr("condition", null), "fonts/heiti.ttf", 20).pos(48, 21);
+panel.addlabel(getStr("condition", null), getFont(), 20).pos(48, 21);
                 panel.addsprite("star.png").anchor(50, 50).pos(62, 70).size(33, 31);
                 var starLevel = stringLines(getStr("starLevel", ["[STAR]", str(mData.get("needStar")), "[LEV]", str(mData.get("needLevel"))]), 18, 21, [100, 100, 100], FONT_NORMAL);
                 panel.add(starLevel);

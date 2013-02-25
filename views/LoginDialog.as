@@ -41,7 +41,7 @@ class LoginDialog extends MyNode
         bg.addsprite("hook.png").anchor(0, 0).pos(129, 171).size(53, 42);
 
 
-        bg.addlabel(getStr("infoFri", null), "fonts/heiti.ttf", 19).anchor(50, 50).pos(400, 370).color(66, 46, 28);
+bg.addlabel(getStr("infoFri", null), getFont(), 19).anchor(50, 50).pos(400, 370).color(66, 46, 28);
         var but0 = new NewButton("roleNameBut0.png", [190, 60], getStr("share", null), null, 27, FONT_NORMAL, [100, 100, 100], shareGift, null);
         but0.bg.pos(251, 420);
         addChild(but0);
@@ -49,37 +49,37 @@ class LoginDialog extends MyNode
         but0.bg.pos(545, 421);
         addChild(but0);
         bg.addsprite("scroll.png").anchor(0, 0).pos(130, 101).size(541, 67);
-        bg.addlabel(getStr("continLogin", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(395, 139).color(43, 25, 9);
+bg.addlabel(getStr("continLogin", null), getFont(), 20).anchor(50, 50).pos(395, 139).color(43, 25, 9);
         bg.addsprite("smallBack.png").anchor(0, 0).pos(159, 49).size(484, 62);
-        bg.addlabel(getStr("loginReward", null), "fonts/heiti.ttf", 32).anchor(50, 50).pos(402, 82).color(32, 33, 40);
+bg.addlabel(getStr("loginReward", null), getFont(), 32).anchor(50, 50).pos(402, 82).color(32, 33, 40);
 
 
 
         var rew = getLoginReward(now);
         var its = rew.items();
         bg.addsprite(its[0][0]+".png").anchor(50, 50).pos(202, 265).size(60, 58);
-        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(205, 213).color(43, 25, 9);
-        bg.addlabel(str(its[0][1]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(201, 307).color(43, 25, 9);
+bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), getFont(), 20).anchor(50, 50).pos(205, 213).color(43, 25, 9);
+bg.addlabel(str(its[0][1]), getFont(), 18).anchor(50, 50).pos(201, 307).color(43, 25, 9);
         
         now += 1;
         rew = getLoginReward(now);
         its = rew.items();
-        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(334, 213).color(43, 25, 9);
+bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), getFont(), 20).anchor(50, 50).pos(334, 213).color(43, 25, 9);
         bg.addsprite(its[0][0]+".png").anchor(50, 50).pos(334, 265).size(60, 58);
-        bg.addlabel(str(its[0][1]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(334, 307).color(43, 25, 9);
-        bg.addlabel(getStr("today", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(333, 332).color(43, 25, 9);
+bg.addlabel(str(its[0][1]), getFont(), 18).anchor(50, 50).pos(334, 307).color(43, 25, 9);
+bg.addlabel(getStr("today", null), getFont(), 20).anchor(50, 50).pos(333, 332).color(43, 25, 9);
 
 
         now += 1;
         rew = getLoginReward(now);
         its = rew.items();
-        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(466, 213).color(43, 25, 9);
-        bg.addlabel(str(its[0][1]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(467, 307).color(43, 25, 9);
+bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), getFont(), 20).anchor(50, 50).pos(466, 213).color(43, 25, 9);
+bg.addlabel(str(its[0][1]), getFont(), 18).anchor(50, 50).pos(467, 307).color(43, 25, 9);
         bg.addsprite(its[0][0]+".png").anchor(50, 50).pos(467, 262).size(61, 57);
-        bg.addlabel(getStr("tomorrow", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(467, 332).color(43, 25, 9);
+bg.addlabel(getStr("tomorrow", null), getFont(), 20).anchor(50, 50).pos(467, 332).color(43, 25, 9);
 
         now += 1;
-        bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(599, 213).color(43, 25, 9);
+bg.addlabel(getStr("dayN", ["[NUM]", str(now)]), getFont(), 20).anchor(50, 50).pos(599, 213).color(43, 25, 9);
 
         bg.addsprite("rightBalloon.png").anchor(0, 0).pos(698, 26).size(133, 380);
         bg.addsprite("leftBalloon.png").anchor(0, 0).pos(-23, 46).size(150, 335);

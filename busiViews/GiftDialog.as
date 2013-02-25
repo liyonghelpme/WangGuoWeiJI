@@ -157,7 +157,7 @@ class GiftDialog extends MyNode
                 {
                     if(num > 0)
                     {
-                        panel.addlabel(getStr("openEquip", ["[NUM]", str(num), "[KIND]", getStr(kind2Str[map[data[i][1]]], null)]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
+panel.addlabel(getStr("openEquip", ["[NUM]", str(num), "[KIND]", getStr(kind2Str[map[data[i][1]]], null)]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                         temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100);
                     }
                     else
@@ -165,12 +165,12 @@ class GiftDialog extends MyNode
                         but0 = new NewButton("roleNameBut0.png", [121, 39], getStr("buyGift", null), null, 20, FONT_NORMAL, [100, 100, 100], onBuyGift, i);
                         but0.bg.pos(620, 36);
                         panel.add(but0.bg);
-                        panel.addlabel(getStr("noGift", null), "fonts/heiti.ttf", 21).anchor(50, 50).pos(308, 37).color(47, 43, 43);
+panel.addlabel(getStr("noGift", null), getFont(), 21).anchor(50, 50).pos(308, 37).color(47, 43, 43);
                     }
                 }
                 else
                 {
-                    panel.addlabel(getStr("closeGift", ["[NUM]", str(num), "[KIND]", getStr(kind2Str[map[data[i][1]]], null)]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
+panel.addlabel(getStr("closeGift", ["[NUM]", str(num), "[KIND]", getStr(kind2Str[map[data[i][1]]], null)]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                     temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100);
                     temp.scale(100, -100);
                 }
@@ -193,7 +193,7 @@ class GiftDialog extends MyNode
                 objData = getData(map[data[i][0]], id);
                 
                 //装备描述没有名字 药水描述有名字？Potion
-                temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("name")]), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("name")]), getFont(), 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
 
                 if(data[i][0] == EQUIP_ITEM)
                 {
@@ -210,7 +210,7 @@ class GiftDialog extends MyNode
 
                     num = global.user.getGoodsNum(map.get(data[i][0]), id);
 
-                    panel.addlabel(str(num), "fonts/heiti.ttf", 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
+panel.addlabel(str(num), getFont(), 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
                     if(num > 0)
                     {
                         but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("sendIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onSendIt, i);

@@ -71,9 +71,9 @@ class Store extends MyNode
     }
     function initData()
     {
-        cryText = bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(621, 37).color(100, 100, 100);
-        silverText = bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(318, 36).color(100, 100, 100);
-        goldText = bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 19).anchor(0, 0).pos(474, 37).color(100, 100, 100);
+cryText = bg.addlabel(getStr("crystal", null), getFont(), 19).anchor(0, 0).pos(621, 37).color(100, 100, 100);
+silverText = bg.addlabel(getStr("silver", null), getFont(), 19).anchor(0, 0).pos(318, 36).color(100, 100, 100);
+goldText = bg.addlabel(getStr("gold", null), getFont(), 19).anchor(0, 0).pos(474, 37).color(100, 100, 100);
         
         //silverText = bg.addlabel(str(global.user.getValue("silver")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(324, 40).color(100, 100, 100);
         //goldText = bg.addlabel(str(global.user.getValue("gold")), "fonts/heiti.ttf", 18).anchor(0, 50).pos(481, 40).color(100, 100, 100);

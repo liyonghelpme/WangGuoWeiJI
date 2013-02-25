@@ -11,7 +11,7 @@ class SoldierNumBanner extends MyNode
     {
         bg = sprite("build126.png").pos(864+30+30, 800).anchor(50, 100);
         init();
-        solNum = bg.addlabel("50", "fonts/heiti.ttf", 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
+solNum = bg.addlabel("50", getFont(), 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
         bg.setevent(EVENT_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);
         bg.setevent(EVENT_UNTOUCH, touchEnded);

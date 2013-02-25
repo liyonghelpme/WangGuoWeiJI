@@ -378,7 +378,7 @@ class MapBanner extends MyNode
             shadowWord.stop();
             shadowWord.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));
             var w = getStr("dragSol", ["[NAME]", sol.myName]);
-            words = shadowWord.addlabel(w, "fonts/heiti.ttf", 20);
+words = shadowWord.addlabel(w, getFont(), 20);
             var wSize = words.prepare().size();
             var sSize = shadowWord.prepare().size();
             sSize[0] = max(wSize[0]+40, sSize[0]);

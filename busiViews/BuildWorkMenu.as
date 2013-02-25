@@ -75,7 +75,7 @@ class BuildWorkMenu extends MyNode
             //空闲兵营只显示 建筑名称
             if(build.state == PARAMS["buildFree"])
             {
-                cw = label(build.getName(), "fonts/heiti.ttf", 21);
+cw = label(build.getName(), getFont(), 21);
             }
             //工作兵营显示 招募士兵名称 和 剩余时间
             else
@@ -98,7 +98,7 @@ class BuildWorkMenu extends MyNode
         }
         else 
         {
-            cw = label(build.getName(), "fonts/heiti.ttf", 21);
+cw = label(build.getName(), getFont(), 21);
         }
         cw.pos(31, 32).anchor(0, 50);
         banner.add(cw);

@@ -188,7 +188,7 @@ class BusiSoldier extends MyNode
         bg = node(); //.scale(PARAMS["SOL_SHOW_SIZE"]*data["solSca"]/100);
         init();
         if(getParam("debugSoldier"))
-            stateLabel = bg.addlabel("", null, 25).pos(0, -20).color(0, 0, 0);
+stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
 
         changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
 
@@ -268,7 +268,7 @@ class BusiSoldier extends MyNode
         {
             var g = it[i];
             temp.addsprite(g[0]+".png").anchor(0, 50).pos(0, curY).size(30, 30);
-            temp.addlabel("+" + str(g[1]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(35, curY).color(getParam("FlyObjRed"), getParam("FlyObjGreen"), getParam("FlyObjBlue"));
+temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(getParam("FlyObjRed"), getParam("FlyObjGreen"), getParam("FlyObjBlue"));
             curY -= 30;
         }
         temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));

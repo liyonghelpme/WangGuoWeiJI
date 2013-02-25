@@ -22,7 +22,7 @@ class NoTipDialog extends MyNode
         but0.bg.pos(570, 339);
         addChild(but0);
 
-        bg.addlabel(getStr(TIP_WORD[kind], null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(411, 92).color(100, 100, 100);
+bg.addlabel(getStr(TIP_WORD[kind], null), getFont(), 30).anchor(50, 50).pos(411, 92).color(100, 100, 100);
         
         var w = getStr(TIP_CON[kind], null);
         line = maxWidthLine(w, 20, getParam("tipOffY"), [0, 0, 0], getParam("tipWidth"));

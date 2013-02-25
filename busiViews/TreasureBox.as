@@ -36,13 +36,13 @@ class TreasureBox extends MyNode
             temp = headNode.addsprite("friendBlock.png").anchor(50, 50).pos(curX+55/2, curY+55/2).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
             if(i < len(scene.helperList))//显示当前已经有的好友
             { 
-                temp.addlabel(scene.papayaIdName[i][1], "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
+temp.addlabel(scene.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
                 temp.addsprite(avatar_url(scene.papayaIdName[i][0])).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
             }
             else//没有人空位
             {
                 temp.addsprite("unkownFriendHead.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
-                temp.addlabel(getStr("unknown", null), "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
+temp.addlabel(getStr("unknown", null), getFont(), 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
             }
 
             curX += OFFX; 
@@ -76,12 +76,12 @@ class TreasureBox extends MyNode
             temp = headNode.addsprite("friendBlock.png").anchor(50, 50).pos(curX+55/2, curY+55/2).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
             if(i < len(global.user.helperList))//显示当前已经有的好友
             { 
-                temp.addlabel(global.user.papayaIdName[i][1], "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(100, 100, 100);
+temp.addlabel(global.user.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(28, 73).color(100, 100, 100);
                 if(global.user.helperList[i] == -1)
                     temp.addsprite("goldFriend.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
                 else
                     temp.addsprite(avatar_url(global.user.papayaIdName[i][0])).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
-                temp.addlabel(global.user.papayaIdName[i][1], "fonts/heiti.ttf", 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
+temp.addlabel(global.user.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
             }
             else//没有人空位
             {
@@ -253,11 +253,11 @@ class TreasureBox extends MyNode
         temp = bg.addsprite("nonFullWhiteBack.png").anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
         temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
         temp = bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
-        bg.addlabel(getStr("openBox", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(401, 91).color(32, 33, 40);
+bg.addlabel(getStr("openBox", null), getFont(), 30).anchor(50, 50).pos(401, 91).color(32, 33, 40);
         if(kind == BOX_FRIEND)
-            bg.addlabel(getStr("helpFriOpen", ["[NAME]", scene.user["name"]]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(414, 146).color(43, 25, 9);
+bg.addlabel(getStr("helpFriOpen", ["[NAME]", scene.user["name"]]), getFont(), 20).anchor(50, 50).pos(414, 146).color(43, 25, 9);
         else if(kind == BOX_SELF)
-            bg.addlabel(getStr("mistGiftInBox", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(414, 146).color(43, 25, 9);
+bg.addlabel(getStr("mistGiftInBox", null), getFont(), 20).anchor(50, 50).pos(414, 146).color(43, 25, 9);
             
         but0 = new NewButton("roleNameBut1.png", [174, 54], getStr("ok", null), null, 27, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(519, 402);

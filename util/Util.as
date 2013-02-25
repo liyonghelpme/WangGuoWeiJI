@@ -490,14 +490,14 @@ function picNumWord(w, sz, col, needShadow)
 
         if(len(begin[0]) > 0)
         {
-            var l = label(begin[0], "fonts/heiti.ttf", sz).anchor(0, 50).color(col).pos(curX, curY);
+var l = label(begin[0], getFont(), sz).anchor(0, 50).color(col).pos(curX, curY);
             n.add(l);
             var lSize = l.prepare().size();
             curX += lSize[0];
             height = max(height, lSize[1]);
             if(needShadow)
             {
-                var shadow = label(begin[0], "fonts/heiti.ttf", sz).anchor(0, 0).color(0, 0, 0).pos(1, 1);
+var shadow = label(begin[0], getFont(), sz).anchor(0, 0).color(0, 0, 0).pos(1, 1);
                 l.add(shadow, -1);
             }
         }
@@ -535,7 +535,7 @@ function colorLines(w, sz, lineHeight)
                 var b = byte2Hundred(hex2int(part.substr(4, 6)));
                 part = part.substr(6);
                 
-                var l = label(part, "fonts/heiti.ttf", sz).color(r, g, b).pos(curX, curY);
+var l = label(part, getFont(), sz).color(r, g, b).pos(curX, curY);
                 n.add(l);
                 var lSize = l.prepare().size();
                 curX += lSize[0];
@@ -568,7 +568,7 @@ function colorWordsNode(s, si, nc, sc)
             var p = end[i].split("[");
             if(len(p[0]) > 0)
             {
-                var l = label(p[0], "fonts/heiti.ttf", si).color(nc).pos(curX, 0);
+var l = label(p[0], getFont(), si).color(nc).pos(curX, 0);
                 n.add(l);
                 var lSize = l.prepare().size();
                 curX += lSize[0];
@@ -577,7 +577,7 @@ function colorWordsNode(s, si, nc, sc)
 
             if(len(p[1]) > 0)
             {
-                l = label(p[1], "fonts/heiti.ttf", si).color(sc).pos(curX, 0);
+l = label(p[1], getFont(), si).color(sc).pos(curX, 0);
                 n.add(l);
                 lSize = l.prepare().size();
                 curX += lSize[0];
@@ -588,7 +588,7 @@ function colorWordsNode(s, si, nc, sc)
         {
             if(len(end[i]) > 0)
             {
-                l = label(end[i], "fonts/heiti.ttf", si).color(nc).pos(curX, 0);
+l = label(end[i], getFont(), si).color(nc).pos(curX, 0);
                 n.add(l);
                 lSize = l.prepare().size();
                 curX += lSize[0];
@@ -882,7 +882,7 @@ function stringLines(s, sz, lineHeight, color, ft)
     var nSize = [0, 0];
     for(var i = 0; i < len(s); i++)
     {
-        var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, ft).pos(0, lineHeight * i).color(color);
+var lab = n.addlabel(s[i], getFont(), sz, ft).pos(0, lineHeight * i).color(color);
         var lSize = lab.prepare().size();
         nSize[0] = max(lSize[0], nSize[0]);
         nSize[1] += lineHeight;
@@ -898,7 +898,7 @@ function maxWidthLine(s, sz, lineDiffY, color, width)
     var nSize = [0, 0];
     for(var i = 0; i < len(s); i++)
     {
-        var lab = n.addlabel(s[i], "fonts/heiti.ttf", sz, FONT_NORMAL, width, 0, ALIGN_LEFT).pos(0, nSize[1]).color(color);
+var lab = n.addlabel(s[i], getFont(), sz, FONT_NORMAL, width, 0, ALIGN_LEFT).pos(0, nSize[1]).color(color);
         var lSize = lab.prepare().size();
         nSize[0] = max(lSize[0], nSize[0]);
         nSize[1] += lSize[1]+lineDiffY;

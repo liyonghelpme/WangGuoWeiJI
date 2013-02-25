@@ -157,7 +157,7 @@ class GrayWord extends MyNode
                     //之前段落
                     for(var i = 0; i < curLine; i++)
                     {
-var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color([80, 80, 80]);
+var w1 = lab.addlabel(word[i], getFont(), siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color([80, 80, 80]);
                         var wSize = w1.prepare().size();
                         w1.pos(0, curSize[1]);
                         curSize[0] = max(wSize[0], curSize[0]);
@@ -165,7 +165,7 @@ var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, AL
                     }
                     //当前段落位置
                     showWord = line.substr(0, curWordPos);
-var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color(col);
+var w2 = lab.addlabel(showWord, getFont(), siz, FONT_NORMAL, width, 0, ALIGN_LEFT).color(col);
                     w2.pos(0, curSize[1]);
 
                 }

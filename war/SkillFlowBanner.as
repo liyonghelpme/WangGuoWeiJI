@@ -398,7 +398,7 @@ class SkillFlowBanner extends MyNode
             else if(skillKind == HEAL_SKILL || skillKind == MULTI_HEAL_SKILL || skillKind == SAVE_SKILL || skillKind == MAKEUP_SKILL )
                 w = getStr("selOurSol", null);
 
-            words = shadowWord.addlabel(w, "fonts/heiti.ttf", 25);
+words = shadowWord.addlabel(w, getFont(), 25);
             var wSize = words.prepare().size();
             var sSize = shadowWord.prepare().size();
             sSize[0] = max(wSize[0], sSize[0]);
@@ -471,7 +471,7 @@ class SkillFlowBanner extends MyNode
             drugPic.scale(sca);
 
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, getParam("magicOpacity"));
-            panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
+panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), getFont(), 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
 
             ready = drugData[i][3];
@@ -495,7 +495,7 @@ class SkillFlowBanner extends MyNode
             skillPic.scale(sca);
 
             temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
-            panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), "fonts/heiti.ttf", 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
+panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), getFont(), 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
 
             ready = skillList[i][3];

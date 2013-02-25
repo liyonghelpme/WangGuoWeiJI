@@ -491,7 +491,7 @@ class Map extends MyNode
             var p = getGridPos([getParam("MAP_WIDTH")/2, map[1]]);//行中间显示
             if(sol.state == MAP_SOL_DEAD || sol.state == MAP_SOL_SAVE)
                 sol.leftMonNum = 0;
-var w = bg.addlabel(str(sol.leftMonNum), "fonts/heiti.ttf", 40).color(0, 0, 0).pos(p[0] + (getParam("MAP_OFFX") / 2), p[1] + (getParam("MAP_OFFY") / 2)).anchor(50, 50);
+var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] + (getParam("MAP_OFFX") / 2), p[1] + (getParam("MAP_OFFY") / 2)).anchor(50, 50);
             leftNum.append(w);
         }
     }

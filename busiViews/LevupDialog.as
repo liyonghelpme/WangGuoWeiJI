@@ -41,7 +41,7 @@ class LevupDialog extends MyNode
             sca = getSca(temp, [86, 83]);
             temp.scale(sca);
 
-            bg.addlabel(data["name"], "fonts/heiti.ttf", 20).anchor(50, 50).pos(initX, 302).color(43, 25, 9);
+bg.addlabel(data["name"], getFont(), 20).anchor(50, 50).pos(initX, 302).color(43, 25, 9);
 
             initX += OFFX;
         }
@@ -50,8 +50,8 @@ class LevupDialog extends MyNode
         temp.pos(647, 115).anchor(50, 50);
         bg.add(temp);
 
-        bg.addlabel(getStr("levelUpShare", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(410, 350).color(28, 15, 4);
-        bg.addlabel(getStr("levelUp", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(425, 94).color(32, 33, 40);
+bg.addlabel(getStr("levelUpShare", null), getFont(), 20).anchor(50, 50).pos(410, 350).color(28, 15, 4);
+bg.addlabel(getStr("levelUp", null), getFont(), 30).anchor(50, 50).pos(425, 94).color(32, 33, 40);
         but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("share", null), null, 27, FONT_NORMAL, [100, 100, 100], onShare, null);
         but0.bg.pos(299, 402);
         addChild(but0);

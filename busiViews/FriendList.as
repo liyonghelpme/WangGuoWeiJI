@@ -152,26 +152,26 @@ class FriendList extends MyNode
                 
                 if(data[curNum].get("uid") == ADD_NEIBOR_MAX)
                 {
-                    panel.addlabel(getStr("addSeat", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 135).color(43, 25, 9);
+panel.addlabel(getStr("addSeat", null), getFont(), 18).anchor(50, 50).pos(77, 135).color(43, 25, 9);
                     panel.addsprite("addSeat.png").anchor(50, 50).pos(73, 86).size(46, 44).color(100, 100, 100, 100);
                 }
                 else if(data[curNum].get("uid") == EMPTY_SEAT)
                 {
                     panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
                     panel.addsprite("unkownFriendHead.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
-                    panel.addlabel(getStr("addPlayerNeibor", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
+panel.addlabel(getStr("addPlayerNeibor", null), getFont(), 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
                 }
                 else if(data[curNum]["uid"] == INVITE_FRIEND)
                 {
                     panel.addsprite("unkownFriendHead.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
-                    panel.addlabel(getStr("inviteFriend", null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
+panel.addlabel(getStr("inviteFriend", null), getFont(), 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
                 }
                 else if(friendKind == VISIT_NEIBOR || friendKind == VISIT_OTHER)
                 {
                     panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
 
                     panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
-                    panel.addlabel(name, "fonts/heiti.ttf", 20).anchor(50, 50).pos(76, 132).color(43, 25, 9);
+panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(76, 132).color(43, 25, 9);
 
                     if(data[curNum].get("crystal") != null)
                     {
@@ -180,7 +180,7 @@ class FriendList extends MyNode
                     }
 
                     panel.addsprite("levelStar.png").anchor(0, 0).pos(85, 41).size(31, 31).color(100, 100, 100, 100);
-                    panel.addlabel(str(level+1), "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
+panel.addlabel(str(level + 1), getFont(), 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
                 }
 
                 if(curNum == selectNum)

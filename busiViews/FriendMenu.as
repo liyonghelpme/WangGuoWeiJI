@@ -36,9 +36,9 @@ class FriendMenu extends MyNode
         addChild(but0);
         temp = bg.addsprite("recharge.png").anchor(0, 0).pos(441, 431).size(98, 39).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRecharge);
         temp = bg.addsprite("friendReturn.png").anchor(0, 0).pos(7, 360).size(130, 122).color(100, 100, 100, 100).setevent(EVENT_TOUCH, returnHome);
-        goldText = bg.addlabel(getStr("gold", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(592, 450).color(100, 100, 100);
-        silverText = bg.addlabel(getStr("silver", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(347, 451).color(100, 100, 100);
-        crystalText = bg.addlabel(getStr("crystal", null), "fonts/heiti.ttf", 21).anchor(0, 50).pos(197, 450).color(100, 100, 100);
+goldText = bg.addlabel(getStr("gold", null), getFont(), 21).anchor(0, 50).pos(592, 450).color(100, 100, 100);
+silverText = bg.addlabel(getStr("silver", null), getFont(), 21).anchor(0, 50).pos(347, 451).color(100, 100, 100);
+crystalText = bg.addlabel(getStr("crystal", null), getFont(), 21).anchor(0, 50).pos(197, 450).color(100, 100, 100);
 
 
         var friends = global.friendController.getFriends(scene.kind);
@@ -57,11 +57,11 @@ class FriendMenu extends MyNode
 
         
         temp = bg.addsprite(avatar_url(scene.user["id"])).anchor(50, 50).pos(getParam("friendHeadX"), getParam("friendHeadY")).size(55, 55).color(100, 100, 100, 100);
-        bg.addlabel(scene.user["name"], "fonts/heiti.ttf", 21).anchor(0, 50).pos(100, 35).color(100, 100, 100);
+bg.addlabel(scene.user["name"], getFont(), 21).anchor(0, 50).pos(100, 35).color(100, 100, 100);
 
-        bg.addlabel(getStr("friLevel", ["[NUM]", str(scene.user["level"]+1)]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(103, 67).color(0, 0, 0);
+bg.addlabel(getStr("friLevel", ["[NUM]", str(scene.user["level"] + 1)]), getFont(), 23).anchor(0, 50).pos(103, 67).color(0, 0, 0);
         if(scene.kind == VISIT_RANK)
-            bg.addlabel(getStr("friRank", ["[NUM]", str(scene.user["rank"])]), "fonts/heiti.ttf", 23).anchor(0, 50).pos(251, 66).color(0, 0, 0);
+bg.addlabel(getStr("friRank", ["[NUM]", str(scene.user["rank"])]), getFont(), 23).anchor(0, 50).pos(251, 66).color(0, 0, 0);
         //是否gray
         updateRightMenu();
     }

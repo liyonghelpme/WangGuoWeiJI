@@ -108,7 +108,7 @@ class MoreView extends MyNode
             temp = panel.addsprite("gameIcon.png").anchor(50, 50).pos(52, 50).color(100, 100, 100, 100);
             sca = getSca(temp, [72, 71]);
             temp.scale(sca);
-            panel.addlabel(data[i][0], "fonts/heiti.ttf", 20).anchor(0, 50).pos(118, 54).color(54, 51, 51);
+panel.addlabel(data[i][0], getFont(), 20).anchor(0, 50).pos(118, 54).color(54, 51, 51);
             but0 = new NewButton("greenButton0.png", [103, 37], getStr("download", null), null, 20, FONT_NORMAL, [100, 100, 100], onDownload, i);
             but0.bg.pos(700, 52);
             panel.add(but0.bg);

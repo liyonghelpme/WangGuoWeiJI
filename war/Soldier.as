@@ -571,9 +571,9 @@ class Soldier extends MyNode
         if(getParam("DEBUG") && getParam("debugRoundState") && color == MYCOLOR)
         {
             stateWord = bg.addnode();
-            staLabel =  stateWord.addlabel("状态", null, 30).color(0, 0, 0).pos(20, -20);
-            lastSta = stateWord.addlabel("上个状态", null, 30).color(100, 0, 0).pos(40, -40);
-            leftTimeLab = stateWord.addlabel("剩余时间", null, 30).color(0, 100, 100).pos(40, 40);
+staLabel = stateWord.addlabel("状态", getFont(), 30).color(0, 0, 0).pos(20, -20);
+lastSta = stateWord.addlabel("上个状态", getFont(), 30).color(100, 0, 0).pos(40, -40);
+leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 30).color(0, 100, 100).pos(40, 40);
         }
         //有些士兵图片太大了 调整尺寸 调整sx sy
 

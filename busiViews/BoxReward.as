@@ -14,9 +14,9 @@ class BoxReward extends MyNode
         temp = bg.addsprite("nonFullWhiteBack.png").anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
         temp = bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
         temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
-        bg.addlabel(getStr("mysteriousGift", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(408, 93).color(32, 33, 40);
-        bg.addlabel(getStr("nextBoxRich", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(417, 147).color(43, 25, 9);
-        temp = bg.addlabel(getStr("conForGift", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 271, 0, ALIGN_LEFT).anchor(0, 0).pos(212, 200).color(28, 15, 4);
+bg.addlabel(getStr("mysteriousGift", null), getFont(), 30).anchor(50, 50).pos(408, 93).color(32, 33, 40);
+bg.addlabel(getStr("nextBoxRich", null), getFont(), 20).anchor(50, 50).pos(417, 147).color(43, 25, 9);
+temp = bg.addlabel(getStr("conForGift", null), getFont(), 18, FONT_NORMAL, 271, 0, ALIGN_LEFT).anchor(0, 0).pos(212, 200).color(28, 15, 4);
 
 //bg.addlabel(getStr("boxReward", null), "fonts/heiti.ttf", 20).anchor(0, 0).pos(214, 242).color(20, 52, 27);
         var INITX = 214;
@@ -30,16 +30,16 @@ class BoxReward extends MyNode
             var num = rewards[i][2];
 
             if(kind == SILVER || kind == CRYSTAL || kind == GOLD)
-                bg.addlabel(getStr("boxReward0", ["[NUM]", str(num), "[KIND]", getStr(KIND2STR[kind], null)]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
+bg.addlabel(getStr("boxReward0", ["[NUM]", str(num), "[KIND]", getStr(KIND2STR[kind], null)]), getFont(), 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
             else
             {
                 var objData = getData(kind, id);
-                bg.addlabel(getStr("boxReward1", ["[NUM]", str(num), "[KIND]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
+bg.addlabel(getStr("boxReward1", ["[NUM]", str(num), "[KIND]", objData["name"]]), getFont(), 20).anchor(0, 50).pos(INITX, INITY).color(20, 52, 27);
             }
             INITY += OFFY;
         }
 
-        bg.addlabel(getStr("shareWithFriend", null), "fonts/heiti.ttf", 18).anchor(0, 50).pos(211, 330).color(64, 15, 29);
+bg.addlabel(getStr("shareWithFriend", null), getFont(), 18).anchor(0, 50).pos(211, 330).color(64, 15, 29);
         temp = bg.addsprite("boxPrincess.png").anchor(0, 0).pos(527, 180).size(102, 165).color(100, 100, 100, 100);
         but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("share", null), null, 27, FONT_NORMAL, [100, 100, 100], onShare, null);
         but0.bg.pos(299, 402);

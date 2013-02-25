@@ -28,8 +28,8 @@ class TaskFinish extends MyNode
 
         bg.addsprite("taskLeft.png").addaction(sequence(delaytime(WAIT_T+MOVE_T+DELAY_T), fadeout(FADE_T)));
 
-        right.addlabel(words, "fonts/heiti.ttf", 22).pos(getParam("taskOffX"), 33).color(39, 23, 23).anchor(0, 50);
-        right.addlabel(getStr("finishTask", null), "fonts/heiti.ttf", 22).pos(297, 33).color(17, 71, 18).anchor(100, 50);
+right.addlabel(words, getFont(), 22).pos(getParam("taskOffX"), 33).color(39, 23, 23).anchor(0, 50);
+right.addlabel(getStr("finishTask", null), getFont(), 22).pos(297, 33).color(17, 71, 18).anchor(100, 50);
     }
     const FINISH_TIME = MOVE_T+DELAY_T+FADE_T;
     var passTime = 0;

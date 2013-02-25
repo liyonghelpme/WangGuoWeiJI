@@ -57,7 +57,7 @@ class StaticBuild extends FuncBuild
     function StaticBuild(b)
     {
         baseBuild = b;
-solNum = baseBuild.bg.addlabel("50", "fonts/heiti.ttf", 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
+solNum = baseBuild.bg.addlabel("50", getFont(), 25, FONT_BOLD).pos(25, 23).anchor(50, 50).color(0, 0, 0);
     }
     override function whenFree()
     {

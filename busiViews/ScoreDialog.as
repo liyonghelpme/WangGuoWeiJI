@@ -31,9 +31,9 @@ class ScoreDialog extends MyNode
         but0 = new NewButton("roleNameBut1.png", [174, 54], getStr("nextTime", null), null, 27, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(519, 403);
         addChild(but0);
-        bg.addlabel(getStr("scoreSecTitle", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(416, 145).color(43, 25, 9);
-        temp = bg.addlabel(getStr("feedbackHandle", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 252, 0, ALIGN_LEFT).anchor(0, 0).pos(211, 254).color(28, 15, 4);
-        bg.addlabel(getStr("loveGame", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(425, 94).color(32, 33, 40);
+bg.addlabel(getStr("scoreSecTitle", null), getFont(), 20).anchor(50, 50).pos(416, 145).color(43, 25, 9);
+temp = bg.addlabel(getStr("feedbackHandle", null), getFont(), 18, FONT_NORMAL, 252, 0, ALIGN_LEFT).anchor(0, 0).pos(211, 254).color(28, 15, 4);
+bg.addlabel(getStr("loveGame", null), getFont(), 30).anchor(50, 50).pos(425, 94).color(32, 33, 40);
 
 
     }

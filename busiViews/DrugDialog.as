@@ -40,16 +40,16 @@ class DrugDialog extends MyNode
         bg.addsprite("solDefense.png").anchor(0, 0).pos(584, 30).size(25, 28).color(100, 100, 100, 100);
         bg.addsprite("solAttack.png").anchor(0, 0).pos(438, 30).size(23, 28).color(100, 100, 100, 100);
         bg.addsprite("solHealth.png").anchor(0, 0).pos(279, 31).size(29, 25).color(100, 100, 100, 100);
-        attText = bg.addlabel(getStr("attText", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(464, 43).color(100, 100, 100);
-        defText = bg.addlabel(getStr("defText", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(615, 44).color(100, 100, 100);
-        healthText = bg.addlabel(getStr("healthText", null), "fonts/heiti.ttf", 20).anchor(0, 50).pos(315, 43).color(100, 100, 100);
-        nameText = bg.addlabel(soldier.myName, "fonts/heiti.ttf", 22).anchor(50, 50).pos(212, 44).color(28, 15, 4);
+attText = bg.addlabel(getStr("attText", null), getFont(), 20).anchor(0, 50).pos(464, 43).color(100, 100, 100);
+defText = bg.addlabel(getStr("defText", null), getFont(), 20).anchor(0, 50).pos(615, 44).color(100, 100, 100);
+healthText = bg.addlabel(getStr("healthText", null), getFont(), 20).anchor(0, 50).pos(315, 43).color(100, 100, 100);
+nameText = bg.addlabel(soldier.myName, getFont(), 22).anchor(50, 50).pos(212, 44).color(28, 15, 4);
         im = bg.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(soldier.id)])).anchor(50, 50).pos(108, 40).color(100, 100, 100, 100);
         sca = getSca(im, [90, 73]);
         im.scale(sca);
 
         temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
-        temp = bg.addlabel(getStr("drugDes", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
+temp = bg.addlabel(getStr("drugDes", null), getFont(), 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
         if(kind == EQUIP)
             temp.text(getStr("equipDialog", null));
 

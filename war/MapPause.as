@@ -84,13 +84,13 @@ class MapPause extends MyNode
                 leftDef.texture("mapDefenseGreen.png");
 
             //自己名字
-            bg.addlabel(global.user.name, "fonts/heiti.ttf", 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
+bg.addlabel(global.user.name, getFont(), 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
             temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(51, 41).size(68, 63).color(100, 100, 100, 100);
             //自己头像
             temp = bg.addsprite("boss"+str(global.user.getValue("heroId"))+".png").anchor(50, 50).pos(52, 41).color(100, 100, 100, 100).scale(-100, 100);
             sca = getSca(temp, [63, 56]);
             temp.scale(-sca, sca);
-            leftText = bg.addlabel("", "fonts/heiti.ttf", 28).anchor(0, 50).pos(91, 29).color(0, 0, 0);
+leftText = bg.addlabel("", getFont(), 28).anchor(0, 50).pos(91, 29).color(0, 0, 0);
 
             //转向放置
             temp = bg.addsprite("mapNewCastleBanner.png").anchor(50, 50).pos(603, 42).size(247, 60).color(100, 100, 100, 100);
@@ -99,10 +99,10 @@ class MapPause extends MyNode
 
             //怪兽没有名字 采用 怪兽
             if(scene.kind == CHALLENGE_MON)
-                bg.addlabel(getStr("monster", null), "fonts/heiti.ttf", 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
+bg.addlabel(getStr("monster", null), getFont(), 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
             //挑战其它用户名字
             else
-                bg.addlabel(scene.user["name"], "fonts/heiti.ttf", 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
+bg.addlabel(scene.user["name"], getFont(), 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
                 
             temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(750, 41).size(68, 63).color(100, 100, 100, 100);
             //闯关使用关卡怪兽头像
@@ -116,7 +116,7 @@ class MapPause extends MyNode
 
             sca = getSca(temp, [60, 59]);
             temp.scale(sca);
-            rightText = bg.addlabel("", "fonts/heiti.ttf", 26).anchor(100, 50).pos(711, 29).color(0, 0, 0);
+rightText = bg.addlabel("", getFont(), 26).anchor(100, 50).pos(711, 29).color(0, 0, 0);
 
 
             defBlood = [leftDef, rightDef];

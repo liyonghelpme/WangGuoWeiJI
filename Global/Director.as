@@ -34,7 +34,7 @@ class Director
     function Director()
     {
 //        trace("init director");
-        taskHintDebug = label("",  null, 20).color(0, 0, 0).pos(10, 10);
+taskHintDebug = label("", getFont(), 20).color(0, 0, 0).pos(10, 10);
         stack = [];
         disSize = [800, 480];
         v_scale(disSize[0], disSize[1]);
@@ -199,7 +199,7 @@ class Director
         {
             if(fpsLabel != null)
                 fpsLabel.removefromparent();
-            fpsLabel = curScene.bg.addlabel("", null, 30).color(100, 100, 100).pos(10, 10);
+fpsLabel = curScene.bg.addlabel("", getFont(), 30).color(100, 100, 100).pos(10, 10);
         }
     }
     function update(diff)

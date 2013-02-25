@@ -72,7 +72,7 @@ class Goods extends MyNode
             if(data["funcs"] == FARM_BUILD)
             {
                 //普通 魔法农田都显示 数量
-                panel.addlabel(str(getCurBuildNum(objId))+"/"+str(getBuildEnableNum(objId)[0]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+panel.addlabel((str(getCurBuildNum(objId)) + "/") + str(getBuildEnableNum(objId)[0]), getFont(), 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
                 showGain = 0;
             }
             else
@@ -80,7 +80,7 @@ class Goods extends MyNode
                 //总量存在限制 则显示当前拥有的数字 
                 if(ret[2] == 1)
                 {
-                    panel.addlabel(str(getCurBuildNum(objId))+"/"+str(getBuildEnableNum(objId)[0]), "fonts/heiti.ttf", 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
+panel.addlabel((str(getCurBuildNum(objId)) + "/") + str(getBuildEnableNum(objId)[0]), getFont(), 20).anchor(50, 50).pos(121, 134).color(43, 25, 9);
                     showGain = 0;
                 }
             }
@@ -115,14 +115,14 @@ class Goods extends MyNode
         //物品属性
         else
         {
-            panel.addlabel(data.get("name"), "fonts/heiti.ttf", 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
+panel.addlabel(data.get("name"), getFont(), 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
             var picCost = cost.items();
             if(len(picCost) > 0)
             {
                 var c = [100, 100, 100];
                 if(picCost[0][0] == "free")//免费物品只显示免费
                 {
-                    panel.addlabel(getStr("free", null), "fonts/heiti.ttf", 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
+panel.addlabel(getStr("free", null), getFont(), 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
                 else
                 {
@@ -136,7 +136,7 @@ class Goods extends MyNode
                     消耗数值 
                     */
                     var cPic = panel.addsprite(picName).pos(31, 170).anchor(50, 50).size(30, 30);  
-                    var cNum = panel.addlabel(str(valNum), "fonts/heiti.ttf", 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
+var cNum = panel.addlabel(str(valNum), getFont(), 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
             }
 
@@ -166,7 +166,7 @@ class Goods extends MyNode
                     var v = labelGain[0][1];
                     var k = getStr(StoreAttWords[labelGain[0][0]], ["[NUM]", str(v)]);
 
-                    panel.addlabel(k, "fonts/heiti.ttf", 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
+panel.addlabel(k, getFont(), 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
             }
         }

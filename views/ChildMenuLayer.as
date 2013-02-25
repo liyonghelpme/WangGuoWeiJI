@@ -265,7 +265,7 @@ class ChildMenuLayer extends MyNode
                 var w = str(num);
                 if(num >= 99)
                     w = "99+";
-                mailNum = label(w, "fonts/heiti.ttf", 18).anchor(50, 50).pos(103, 32).color(100, 100, 100);
+mailNum = label(w, getFont(), 18).anchor(50, 50).pos(103, 32).color(100, 100, 100);
                 button.add(mailNum, 1, 1);
                 if(num == 0)
                 {

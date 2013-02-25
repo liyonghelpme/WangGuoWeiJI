@@ -167,7 +167,7 @@ class AllSoldier extends MyNode
                 var sca = getSca(solPic, [125, 96]);
                 solPic.scale(sca);
 
-                panel.addlabel(name, "fonts/heiti.ttf", 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
+panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
 
                 var sData = getData(SOLDIER, id);
                 if(sData["solOrMon"] == 0)

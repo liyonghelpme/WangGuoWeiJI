@@ -12,9 +12,9 @@ class SearchDialog extends MyNode
         inputView = v_create(V_INPUT_VIEW, 345, 215, 230, 50);
 
 
-        warnText = bg.addlabel(getStr("inputInvite", null), "fonts/heiti.ttf", 15).anchor(0, 50).pos(346, 276).color(43, 25, 9);
+warnText = bg.addlabel(getStr("inputInvite", null), getFont(), 15).anchor(0, 50).pos(346, 276).color(43, 25, 9);
         bg.addsprite("smallBack.png").anchor(50, 50).pos(415, 138).size(332, 57).color(100, 100, 100, 100);
-        bg.addlabel(getStr("searchPlayer", null), "fonts/heiti.ttf", 27).anchor(50, 50).pos(422, 138).color(32, 33, 40);
+bg.addlabel(getStr("searchPlayer", null), getFont(), 27).anchor(50, 50).pos(422, 138).color(32, 33, 40);
         var but0 = new NewButton("roleNameBut0.png", [138, 49], getStr("ok", null), null, 25, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(302, 367);
         addChild(but0);

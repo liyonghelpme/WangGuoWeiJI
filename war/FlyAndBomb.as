@@ -18,7 +18,7 @@ class FlyAndBomb extends EffectBase
         shiftAni = moveto(0, 0, 0);
         if(getParam("debugAttack"))
         {
-            labelText = bg.addlabel("", null, 20).color(rand(100), 0, 0).scale(-100, 100);
+labelText = bg.addlabel("", getFont(), 20).color(rand(100), 0, 0).scale(-100, 100);
         }
 
         initState();

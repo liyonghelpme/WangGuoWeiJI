@@ -515,14 +515,14 @@ class RankBase extends MyNode
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
 
                 panel.addsprite("dialogRankCup.png").anchor(0, 0).pos(22, 8).size(35, 32).color(100, 100, 100, 100);
-                panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"]+1)] ), "fonts/heiti.ttf", 23).anchor(0, 50).pos(63, 24).color(29, 16, 4);
+panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"] + 1)]), getFont(), 23).anchor(0, 50).pos(63, 24).color(29, 16, 4);
 
                 panel.addsprite("levelStar.png").anchor(50, 50).pos(100, 56).size(31, 31).color(100, 100, 100, 100);
-                panel.addlabel(str(data[diff]["level"]+1) , "fonts/heiti.ttf", 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
+panel.addlabel(str(data[diff]["level"] + 1), getFont(), 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
 
-                panel.addlabel(data[diff]["name"], "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 120).color(43, 25, 9);
+panel.addlabel(data[diff]["name"], getFont(), 18).anchor(50, 50).pos(77, 120).color(43, 25, 9);
 
-                var scoreLabel = panel.addlabel(getStr(Kind2Num[rankKind], ["[NUM]", str(data[diff]["score"])]), "fonts/heiti.ttf", 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
+var scoreLabel = panel.addlabel(getStr(Kind2Num[rankKind], ["[NUM]", str(data[diff]["score"])]), getFont(), 18).anchor(50, 50).pos(77, 142).color(43, 25, 9);
 
                 panel.put(curNum);
                 if(curNum == selectNum)

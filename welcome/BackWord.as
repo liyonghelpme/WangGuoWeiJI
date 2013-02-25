@@ -198,7 +198,7 @@ class BackWord extends MyNode
                     //之前段落
                     for(var i = 0; i < curLine; i++)
                     {
-var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEFT).color(col);
+var w1 = lab.addlabel(word[i], getFont(), siz, font, width, 0, ALIGN_LEFT).color(col);
                         var wSize = w1.prepare().size();
                         w1.pos(0, curSize[1]);
                         curSize[0] = max(wSize[0], curSize[0]);
@@ -206,7 +206,7 @@ var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEF
                     }
                     //当前段落位置
                     showWord = line.substr(0, curWordPos);
-var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEFT).color(col);
+var w2 = lab.addlabel(showWord, getFont(), siz, font, width, 0, ALIGN_LEFT).color(col);
                     w2.pos(0, curSize[1]);
                 }
                 else
@@ -313,7 +313,7 @@ var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LE
                     //之前段落
                     for(var i = 0; i < curLine; i++)
                     {
-var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEFT).color(col);
+var w1 = lab.addlabel(word[i], getFont(), siz, font, width, 0, ALIGN_LEFT).color(col);
                         var wSize = w1.prepare().size();
                         w1.pos(0, curSize[1]);
                         curSize[0] = max(wSize[0], curSize[0]);
@@ -321,7 +321,7 @@ var w1 = lab.addlabel(word[i], "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEF
                     }
                     //当前段落位置
                     showWord = line.substr(0, curWordPos);//19 
-var w2 = lab.addlabel(showWord, "fonts/heiti.ttf", siz, font, width, 0, ALIGN_LEFT).color(col);
+var w2 = lab.addlabel(showWord, getFont(), siz, font, width, 0, ALIGN_LEFT).color(col);
                     w2.pos(0, curSize[1]);
                 }
                 //换行有两个字符 \ 和 n

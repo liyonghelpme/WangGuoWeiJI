@@ -44,7 +44,7 @@ class RequestView extends MyNode
         addChild(but0);
         recAllBut = but0;
 
-        giftNum = bg.addlabel(getStr("howManyGift", null), "fonts/heiti.ttf", 25).anchor(0, 50).pos(25, 115).color(100, 100, 100);
+giftNum = bg.addlabel(getStr("howManyGift", null), getFont(), 25).anchor(0, 50).pos(25, 115).color(100, 100, 100);
         temp = bg.addsprite("friendWhiteBack.png").anchor(0, 0).pos(8, 155).size(785, 315).color(100, 100, 100, 100);
     }
     
@@ -214,7 +214,7 @@ class RequestView extends MyNode
                     panel.add(but0.bg);
                 }
 
-                panel.addlabel(getStr("neiborRequest", ["[NAME]", data[i][1]["name"], "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
+panel.addlabel(getStr("neiborRequest", ["[NAME]", data[i][1]["name"], "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), getFont(), 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
 
             }
             //uid name kind tid level time
@@ -227,12 +227,12 @@ class RequestView extends MyNode
                 var objData = getData(gKind, gId);
                 if(gKind == EQUIP)
                 {
-                    panel.addlabel(getStr("friSendEquip", ["[NAME]", uName, "[ENAME]", objData["name"], "[LEVEL]", str(gLevel), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
+panel.addlabel(getStr("friSendEquip", ["[NAME]", uName, "[ENAME]", objData["name"], "[LEVEL]", str(gLevel), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), getFont(), 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
                 }
                 else
                 {
 
-                    panel.addlabel(getStr("friSendOthers", ["[NAME]", uName, "[ONAME]", objData["name"], "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
+panel.addlabel(getStr("friSendOthers", ["[NAME]", uName, "[ONAME]", objData["name"], "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), getFont(), 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
                 }
 
                 if(!readYet)
@@ -248,7 +248,7 @@ class RequestView extends MyNode
                 if(okKind == PARAMS["MSG_CHALLENGE"])
                 {
                     var robNum = json_loads(data[i][1]["param"]);
-                    panel.addlabel(getStr("robCrystal", ["[NAME]", data[i][1]["name"], "[SIL]", str(robNum["silver"]), "[CRY]", str(robNum["crystal"]), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
+panel.addlabel(getStr("robCrystal", ["[NAME]", data[i][1]["name"], "[SIL]", str(robNum["silver"]), "[CRY]", str(robNum["crystal"]), "[YEAR]", str(now["year"]), "[MON]", str(now["mon"]), "[DAY]", str(now["day"]), "[HOUR]", str(now["hour"]), "[MIN]", str(now["min"])]), getFont(), 20).anchor(0, 50).pos(26, 30).color(54, 51, 51);
                 }
                 if(!readYet)
                 {
@@ -260,7 +260,7 @@ class RequestView extends MyNode
             }
             if(readYet)
             {
-                panel.addlabel(getStr("handled", null), "fonts/heiti.ttf", 20, FONT_ITALIC).anchor(0, 50).pos(691, 31).color(54, 51, 51);
+panel.addlabel(getStr("handled", null), getFont(), 20, FONT_ITALIC).anchor(0, 50).pos(691, 31).color(54, 51, 51);
             }
         }
     }

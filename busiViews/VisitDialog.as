@@ -20,8 +20,8 @@ class VisitDialog extends MyNode
         )));
 
         var tid = global.user.getLoadTip();
-        tipWord = back.addlabel(getStr("tip"+str(tid), null), "fonts/heiti.ttf", 18).anchor(50, 50).pos(233, 324).color(100, 100, 100);
-        back.addlabel(getStr("Flying", null), "fonts/heiti.ttf", 30).anchor(50, 50).pos(232, 31).color(100, 100, 100);
+tipWord = back.addlabel(getStr("tip" + str(tid), null), getFont(), 18).anchor(50, 50).pos(233, 324).color(100, 100, 100);
+back.addlabel(getStr("Flying", null), getFont(), 30).anchor(50, 50).pos(232, 31).color(100, 100, 100);
     }
     function VisitDialog(fc, k)
     {

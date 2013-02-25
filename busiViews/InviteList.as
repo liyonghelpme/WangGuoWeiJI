@@ -136,7 +136,7 @@ class InviteList extends MyNode
                 var papayaId = data[curNum].get("id");
                 var name = data[curNum].get("name");
                 panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
-                panel.addlabel(name, "fonts/heiti.ttf", 16).anchor(50, 50).pos(76, 25).color(28, 15, 4);
+panel.addlabel(name, getFont(), 16).anchor(50, 50).pos(76, 25).color(28, 15, 4);
                 panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
                 if(data[curNum].get("invited", 0) == 0)
                 {
@@ -146,9 +146,9 @@ class InviteList extends MyNode
                 }
                 else
                 {
-                    panel.addlabel(getStr("sendSuc", null), "fonts/heiti.ttf", 15).anchor(0, 50).pos(48, 135).color(28, 15, 4);
+panel.addlabel(getStr("sendSuc", null), getFont(), 15).anchor(0, 50).pos(48, 135).color(28, 15, 4);
                     panel.addsprite("hook.png").anchor(0, 0).pos(14, 120).size(31, 26).color(100, 100, 100, 100);
-                    panel.addlabel(getStr("reward10Sil", null), "fonts/heiti.ttf", 20).anchor(50, 50).pos(74, 180).color(43, 25, 9);
+panel.addlabel(getStr("reward10Sil", null), getFont(), 20).anchor(50, 50).pos(74, 180).color(43, 25, 9);
                 }
             }
         }

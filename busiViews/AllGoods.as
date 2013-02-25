@@ -86,9 +86,9 @@ class AllGoods extends MyNode
 
         temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
         if(kind == EQUIP)
-            temp = bg.addlabel(getStr("equipDialog", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
+temp = bg.addlabel(getStr("equipDialog", null), getFont(), 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
         else if(kind == DRUG)
-            temp = bg.addlabel(getStr("drugDialog", null), "fonts/heiti.ttf", 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
+temp = bg.addlabel(getStr("drugDialog", null), getFont(), 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
 
         but0 = new NewButton("violetBut.png", [113, 42], getStr("buyDrug", null), null, 20, FONT_NORMAL, [100, 100, 100], buyIt, null);
         but0.bg.pos(667, 125);
@@ -190,7 +190,7 @@ class AllGoods extends MyNode
                     co = [99, 42, 47];
             }
             if(kind == DRUG || data[i][0] != EQUIP_KIND)
-                temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("name")]), "fonts/heiti.ttf", 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
+temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("name")]), getFont(), 18, FONT_NORMAL, 467, 0, ALIGN_LEFT).anchor(0, 0).pos(91, 19).color(56, 52, 52);
             
             if(kind == EQUIP)
             {
@@ -204,18 +204,18 @@ class AllGoods extends MyNode
                         if(num > 0)
                         {
                             temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onView, i);
-                            panel.addlabel(getStr("seeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
+panel.addlabel(getStr("seeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                         }
                         else
                         {
-                            panel.addlabel(getStr("noSuchThing", ["[NAME]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
+panel.addlabel(getStr("noSuchThing", ["[NAME]", objData["name"]]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                         }
                     }
                     else
                     {
                         temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onClose, i);
                         temp.scale(100, -100);
-                        panel.addlabel(getStr("closeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), "fonts/heiti.ttf", 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
+panel.addlabel(getStr("closeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                     }
                 }
                 else if(data[i][0] == DETAIL_EQUIP)
@@ -237,7 +237,7 @@ class AllGoods extends MyNode
             }
             else if(kind == DRUG)
             {
-                panel.addlabel(str(num), "fonts/heiti.ttf", 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
+panel.addlabel(str(num), getFont(), 20).anchor(0, 50).pos(63, 52).color(8, 61, 20);
                 if(num > 0)
                 {
                 }

@@ -152,7 +152,7 @@ class GameTwo extends MyNode
         //剩余数量 复制数量
         goodsLeftNum = getParam("GameOneNum");
         sol.beginGame(2);
-        leftNum = bg.addlabel(getStr("leftNum", ["[NUM]", str(goodsLeftNum)]), "fonts/heiti.ttf", 25).anchor(0, 50).pos(622, 455).color(28, 18, 3);
+leftNum = bg.addlabel(getStr("leftNum", ["[NUM]", str(goodsLeftNum)]), getFont(), 25).anchor(0, 50).pos(622, 455).color(28, 18, 3);
     }
     function initPossible()
     {
