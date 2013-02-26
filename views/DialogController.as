@@ -150,11 +150,13 @@ class DialogController extends MyNode
     //清理新手任务状态
     function clearBanner()
     {
+        /*
         trace("bannerStack", len(bannerStack));
         for(var i = 0; i < len(bannerStack); i++) {
             bannerStack[i][0].removeSelf();
         }
         bannerStack = [];
+        */
     }
     override function exitScene()
     {

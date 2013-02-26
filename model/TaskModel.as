@@ -49,6 +49,7 @@ class TaskModel
     }
     //如果需要 通知 则由 经营页面 弹出 提醒 提醒之后才 出现 箭头
     var delayTime = 0;
+    var firstShow = 1;
     //const SLOW_TASK = 3000;
     function update(diff)
     {
@@ -62,8 +63,13 @@ class TaskModel
         if(initYet && !inCommand && global.user.getValue("newTaskStage") < getParam("showFinish") && !getParam("stopNewTask"))
         {
             delayTime += diff;
-            if(delayTime >= getParam("slowTask"))
-            {
+            if(firstShow) {
+                if(delayTime >= getParam("firstWait")){
+                    firstShow = 0;
+                    delayTime = 0;
+                    findAvailableNewTask();
+                }
+            } else if(delayTime >= getParam("slowTask")) {
                 delayTime = 0;
                 findAvailableNewTask();
             }
@@ -161,6 +167,25 @@ class TaskModel
         else if(msid == DO_NEW_TASK)
         {
         }
+    }
+    //delayTime
+    function checkHasNewTask()
+    {
+        var allNew = getCurNewTask();
+        if(getParam("debugNewTask"))
+            trace("findAvailableNewTask", len(allNew));
+        for(var i = 0; i < len(allNew); i++)
+        {
+            //未完成 且 新手任务 没有被领取
+            var ret = checkNewTaskState(allNew[i]);
+            if(getParam("debugNewTask"))
+                trace("alNew", allNew[i], ret);
+            if(ret == TASK_DOING)
+            {
+                return allNew[i];
+            }
+        }
+        return null;
     }
     function findAvailableNewTask()
     {

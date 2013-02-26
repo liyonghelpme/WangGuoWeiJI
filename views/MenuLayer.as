@@ -387,6 +387,11 @@ gloryLevText = bg.addlabel(w, getFont(), 23).anchor(50, 50).pos(169, 461).color(
     {
         silverText.text(str(res.get("silver", 0)));
         goldText.text(str(res.get("gold", 0)));
+
+        var w = str(global.user.rankOrder);
+        if(global.user.rankOrder > 999)
+            w = "999+";
+        gloryLevText.text(w);
     }
     /*
     管理菜单的显示和隐藏

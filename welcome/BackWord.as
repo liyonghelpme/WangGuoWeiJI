@@ -153,13 +153,12 @@ class BackWord extends MyNode
             accTick += 1;
             if(accTick >= tick)
             {
-                //0 1 print
-
                 var pn = "print"+str(curId)+".mp3";
                 curId++;
                 curId %= 2;
-                trace("rand music", pn);
                 global.controller.playSound(pn);
+
+
                 accTick = 0;
                 if(startYet == 0)
                 {
@@ -258,6 +257,10 @@ var w2 = lab.addlabel(showWord, getFont(), siz, font, width, 0, ALIGN_LEFT).colo
         }
         //trace("set", curLine, curPos, curWordPos, totalNum);
     }
+    function delayPlay()
+    {
+        global.controller.playSound("print1.mp3");
+    }
     var curId = 0;
     //打字到固定文字长度结束
     function executePrint()
@@ -277,8 +280,8 @@ var w2 = lab.addlabel(showWord, getFont(), siz, font, width, 0, ALIGN_LEFT).colo
                 var pn = "print"+str(curId)+".mp3";
                 curId++;
                 curId %= 2;
-                trace("rand music", pn);
                 global.controller.playSound(pn);
+
                 if(startYet == 0)
                 {
                     startYet = 1;
