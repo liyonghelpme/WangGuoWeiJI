@@ -89,7 +89,7 @@ class Mine extends FuncBuild
         if(flowBanner == null)
         {
             var bSize = baseBuild.bg.size();
-            flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(bSize[0]/2, -11).anchor(50, 100);
+            flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(bSize[0]/2, -11).anchor(50, 100).setevent(EVENT_TOUCH, whenBusy);
             var fSize = flowBanner.prepare().size();
             var pl = flowBanner.addsprite("crystalBig.png").anchor(50, 50).pos(fSize[0]/2, 20);
             var sca = getSca(pl, [63, 42]);

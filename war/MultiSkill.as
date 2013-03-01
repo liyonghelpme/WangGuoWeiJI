@@ -41,10 +41,34 @@ class MultiSkill extends MyNode
 
 
         bg = sprite().pos(getSkillPos(leftUp[0], leftUp[1], sx, sy, data["offX"], data["offY"])).anchor(0, 0);
-        //var ani = skillAnimate.get(skillId);
         var ani = getSkillAnimate(skillId);
-        cus = new MyAnimate(ani[1], ani[0], bg);
-        trace("multiAnimate", ani[1], ani[0]);
+        //动画分成两段 准备阶段 循环阶段
+        if(ani["stage"] > 0){
+            var tempAni = [];
+            for(var i = 0; i < ani["stage"]; i++)
+                tempAni.append(ani["ani"][i]);
+            trace("tempAni", tempAni, ani["prepareTime"]);
+            cus = new LightAnimate(ani["prepareTime"], tempAni, bg, "", 0, prepareFinish);
+        }else
+            cus = new MyAnimate(ani["time"], ani["ani"], bg);
+        //trace("multiAnimate", ani[1], ani[0]);
+    }
+    //防止当前动作退出场景的时候 就不调用这个回调函数了
+    function prepareFinish()
+    {
+        if(ins == 1)
+        {
+            var ani = getSkillAnimate(skillId);
+            var tempAni = [];
+            for(var i = ani["stage"]; i < len(ani["ani"]); i++)
+            {
+                tempAni.append(ani["ani"][i]);
+            }
+            trace("aniTime", ani["time"], tempAni);
+            cus.exitScene();
+            cus = new MyAnimate(ani["time"], tempAni, bg);
+            cus.enterScene();
+        }
     }
     override function enterScene()
     {

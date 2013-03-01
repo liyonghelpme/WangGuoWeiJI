@@ -32,7 +32,10 @@ class ParamController
         if(rcode != -1)
         {
             con = json_loads(con);
-            skillAnimate = dict(con["data"]);
+            skillAnimateKey = con["key"];
+            skillAnimateData = dict(con["data"]);
+            Keys[SKILL_ANIMATE] = skillAnimateKey;
+            CostData[SKILL_ANIMATE] = skillAnimateData;
         }
     }
     function updateParams()

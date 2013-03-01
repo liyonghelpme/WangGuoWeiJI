@@ -19,14 +19,20 @@ class SpinSkill extends MyNode
 
         var effectTime = sData.get("effectTime")+sData.get("addTime")*skillLevel;
 
-        bg = sprite().pos(tar.getPos()).anchor(50, 100);
-        init();
-        //var ani = skillAnimate.get(skillId);
         var ani = getSkillAnimate(skillId);
+        var tPos = tar.getPos();
+        trace("skillAnimate", ani, tPos, tar.getBloodHeightOff());
+        if(ani["atHead"]) {
+            bg = sprite().pos(tPos[0], tPos[1]+ani["offY"]-tar.getBloodHeightOff()).anchor(50, 100);
+        } else
+            bg = sprite().pos(tPos[0], tPos[1]+ani["offY"]).anchor(50, 100);
+
+        init();
+
 
         attackTime = effectTime;//眩晕时间ms
         
-        cus = new MyAnimate(ani[1], ani[0], bg);
+        cus = new MyAnimate(ani["time"], ani["ani"], bg);
         //目标进入 眩晕状态
         //法术时间结束 则停止眩晕 一直播放眩晕动画
         trace("spinTime", attackTime);

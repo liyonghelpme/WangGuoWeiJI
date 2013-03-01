@@ -847,7 +847,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
                     )
             {
                 bSize = bg.size();
-                chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+                chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]).scale(getParam("mapSolScale"));
                 chooseStar.addaction(repeat(
                 getRedStarAni()
                 ));
@@ -962,7 +962,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         movAni = new SoldierAnimate(getParam("soldierMoveAniTime"), ani[0], ani[2], changeDirNode, fea, feaFil);
         attAni = new SoldierAnimate(attSpeed, ani[1], ani[3], changeDirNode, fea, feaFil);
 
-        transAni = new TransformAnimate(skillAni[1], skillAni[0], changeDirNode, this);
+        transAni = new TransformAnimate(skillAni["time"], skillAni["ani"], changeDirNode, this);
         transAni.enterScene();
         
         backBanner.visible(0);
@@ -1297,7 +1297,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
     function setSkillState()
     {
         var bSize = bg.size();
-        greenStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+        greenStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]).scale(getParam("mapSolScale"));
         greenStar.addaction(repeat(getGreenStarAni()));
 
         bg.add(greenStar, -1);

@@ -31,8 +31,8 @@ class Hero extends MyNode
         full = bg.addsprite("hero"+str(hid)+"Full.png", ARGB_8888).pos(lp);
 
         ani = copy(getSkillAnimate(heroSkill.get(hid)));
-        ani[0] = copy(ani[0]);
-        cus = new LightAnimate(ani[1], ani[0], bg, "", 0, onNormal);//不恢复旧的纹理
+        ani["ani"] = copy(ani["ani"]);
+        cus = new LightAnimate(ani["time"], ani["ani"], bg, "", 0, onNormal);//不恢复旧的纹理
         preloadHeroTexture();
     }
     //显示 全光图片

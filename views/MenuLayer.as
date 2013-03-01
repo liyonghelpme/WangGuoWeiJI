@@ -243,8 +243,9 @@ gloryLevText = bg.addlabel(w, getFont(), 23).anchor(50, 50).pos(169, 461).color(
         if(showChildMenu == 1)
             return;
 
+
         //完成新手任务 没有显示下载图标 且没有下载完成
-        if(global.user.getValue("newTaskStage") >= getParam("showFinish") && downloadIcon == null && global.pictureManager.checkNeedDownload())
+        if(global.taskModel.checkNewTaskFinish() && downloadIcon == null && global.pictureManager.checkNeedDownload())
         {
             trace("update Right Menu add DownloadIcon");
             downloadIcon = new DownloadIcon(this);

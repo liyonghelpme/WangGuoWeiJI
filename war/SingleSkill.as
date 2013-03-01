@@ -15,12 +15,17 @@ class SingleSkill extends MyNode
         skillId = sk;
         skillLevel = l;
 
-        bg = sprite().pos(tar.getPos()).anchor(50, 100);
-        init();
-        //var ani = skillAnimate.get(skillId);
         var ani = getSkillAnimate(skillId);
-        attackTime = ani[1];
-        cus = new MyAnimate(ani[1], ani[0], bg);
+        var tPos = tar.getPos();
+        trace("skillAnimate", ani, tPos, tar.getBloodHeightOff());
+        if(ani["atHead"]) {
+            bg = sprite().pos(tPos[0]+ani["offX"], tPos[1]+ani["offY"]-tar.getBloodHeightOff()).anchor(50, 100);
+        } else
+            bg = sprite().pos(tPos[0]+ani["offX"], tPos[1]+ani["offY"]).anchor(50, 100);
+        init();
+
+        attackTime = ani["time"];
+        cus = new MyAnimate(ani["time"], ani["ani"], bg);
         tar.inSkill = 1;
     }
 

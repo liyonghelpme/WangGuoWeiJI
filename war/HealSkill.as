@@ -21,10 +21,9 @@ class HealSkill extends MyNode
         var tSize = tar.bg.size();
         bg = sprite().pos(tSize[0]/2, tSize[1]).anchor(50, 100);//技能和人物居中对齐
          
-        //var ani = skillAnimate.get(skillId);
         var ani = getSkillAnimate(skillId);
-        attackTime = ani[1];//动画时间
-        cus = new MyAnimate(ani[1], ani[0], bg);
+        attackTime = ani["time"];//动画时间
+        cus = new MyAnimate(ani["time"], ani["ani"], bg);
     }
 
     function update(diff)

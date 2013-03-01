@@ -57,7 +57,9 @@ class HttpController
         {
             trace("request Failed");
             http_request(baseUrl+"reportError", errorHandler, dict([["uid", global.user.uid], ["errorDetail", [req[0], req[2], req[3]]]]), 15000, null);
-            global.director.pushView(new MyWarningDialog(getStr("netError", null), getStr("netErrorCon", null), null), 1, 0);
+            //global.director.pushView(new MyWarningDialog(getStr("netError", null), getStr("netErrorCon", null), null), 1, 0);
+
+            global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("netError", null), [100, 100, 100], null));
         }
         if(handler != null)
             handler(rid, rcode, con, param); 

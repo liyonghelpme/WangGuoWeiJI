@@ -3,7 +3,7 @@ import json
 from helpJson import MyEncoder
 import MySQLdb
 
-sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward', 'mapMonster']
+sqlName = ['building','crystal', 'challengeReward', 'drug', 'equip', 'fallThing', 'gold', 'herb', 'levelExp', 'plant', 'prescription', 'silver', 'soldier', 'soldierAttBase', 'soldierGrade', 'soldierKind', 'soldierLevel', 'soldierTransfer',  'allTasks', 'mapDefense',  'soldierName', 'mapReward', 'levelDefense', 'mineProduction', 'goodsList', 'equipLevel', 'magicStone', 'skills', 'monsterAppear', 'statusPossible', 'loveTreeHeart', 'heroSkill', 'mapBlood', 'fightingCost', 'newParam', 'StoreWords', 'StoreAttWords', 'MoneyGameGoods', 'ExpGameGoods', 'equipSkill', 'levelMaxFallGain', 'RoundMonsterNum', 'RoundMapReward', 'mapMonster', 'skillAnimate']
 con = MySQLdb.connect(host='localhost', user='root', passwd='badperson3', db='Wan2', charset='utf8')
 
 def writeRoundTip():
@@ -38,7 +38,8 @@ def writeRoundTip():
         #print sql
         con.query(sql)
 
-writeRoundTip()
+#由策划来写入tip
+#writeRoundTip()
         
 
 
@@ -100,6 +101,24 @@ def hanData(name, data):
         if i.get('id') != None:
             res.append([i['id'], a])
     #equipId skillId
+    if name == 'skillAnimate':
+        names = []
+        key = []
+        res = []
+
+        for i in f:
+            i = dict(i)
+            i.pop('name')
+            i['ani'] = json.loads(i['ani'])
+
+            it = list(i.items())
+            it = [list(k) for k in it]
+            #it[4][1] = 'build'+str(i['id'])
+            key = [k[0] for k in it]
+            a = [k[1] for k in it]
+            if i.get('id') != None:
+                res.append([i['id'], a])
+
             
 
     if name == 'building':
@@ -749,6 +768,13 @@ eq = con.store_result().fetch_row(0, 1)
 for i in eq:
     equips.append([1, i['id']])
 
+drug = []
+sql = 'select * from drug order by priority asc'
+con.query(sql)
+dr = con.store_result().fetch_row(0, 1)
+for i in dr:
+    drug.append([2, i['id']])
+
 StoreGoods = [
         [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
         [[0, 0], [0, 1], [0, 10], [0, 12], [0, 224], [0, 300]],
@@ -759,6 +785,7 @@ StoreGoods = [
 ]
 StoreGoods[2] = decor
 StoreGoods[3] = equips
+StoreGoods[4] = drug
 print 'var', 'StoreGoods', '=', json.dumps(StoreGoods), ';'
 
 sql = 'select * from loginReward'
@@ -846,6 +873,7 @@ res = con.store_result().fetch_row(0, 1)
 for i in res:
 """
     
+"""
 sql = 'select * from skillAnimate'
 con.query(sql)
 res = con.store_result().fetch_row(0, 1)
@@ -853,6 +881,7 @@ skillAnimate = []
 for i in res:
     skillAnimate.append([i['id'], [json.loads(i['ani']), i['time'], i['plist']]])
 print 'var', 'skillAnimate', '=', 'dict(', json.dumps(skillAnimate), ');'
+"""
 
 con.commit()
 con.close()

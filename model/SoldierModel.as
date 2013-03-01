@@ -131,8 +131,8 @@ function getSkillColdTime(soldierId, skillId, skillLevel)
 
 function getSkillAnimate(id)
 {
-    var ani = skillAnimate.get(id);
-    load_sprite_sheet(ani[2]);
+    var ani = getData(SKILL_ANIMATE, id);
+    load_sprite_sheet(ani["plist"]);
     return ani;
 }
 /*

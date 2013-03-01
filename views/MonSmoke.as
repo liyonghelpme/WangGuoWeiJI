@@ -34,7 +34,7 @@ class MonSmoke extends MyNode
          
         var ani = getSkillAnimate(skillId);
         attackTime = getParam("smokeTime");//动画时间
-        cus = new OneAnimate(getParam("smokeTime"), ani[0], bg, "", 0);
+        cus = new OneAnimate(getParam("smokeTime"), ani["ani"], bg, "", 0);
         
         //怪兽脚底的绿色光环
         var bSize = tar.bg.size();

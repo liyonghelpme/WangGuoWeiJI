@@ -75,7 +75,7 @@ class BusiSoldier extends MyNode
             chooseStar.removefromparent();
             chooseStar = null;
         }
-        chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]);
+        chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]).scale(getParam("SOL_SHOW_SIZE"));
         if(inDead)
             chooseStar.addaction(repeat(
             getRedStarAni()
@@ -933,9 +933,11 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
     var curStatus = NO_STATUS;
     var status = null;
 
+    //mapSolScale 情况下 士兵血条高度 sy*MAP_OFFY
+    //SOL_SHOW_SIZE 情况下 的状态条高度是
     function getBloodHeightOff()
     {
-        return data["sy"]*getParam("MAP_OFFY"); 
+        return data["sy"]*getParam("MAP_OFFY")*getParam("SOL_SHOW_SIZE")/getParam("mapSolScale"); 
     }
     function showCurStatus()
     {

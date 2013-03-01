@@ -894,6 +894,7 @@ class TaskModel
     //新手阶段任务完成
     function checkNewTaskFinish()
     {
+        trace("checkNewTaskFin", global.user.getValue("newTaskStage"), getParam("showFinish"));
         return global.user.getValue("newTaskStage") >= getParam("showFinish");
     }
 }

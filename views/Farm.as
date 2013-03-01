@@ -39,7 +39,7 @@ class Farm extends FuncBuild
     {
         if(flowBanner == null)
         {
-            flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(64, -11).anchor(50, 100);
+            flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(64, -11).anchor(50, 100).setevent(EVENT_TOUCH, whenBusy);
             var pl = flowBanner.addsprite("Wplant"+str(planting.id)+".png").anchor(50, 50).pos(33, 20);
             var sca = strictSca(pl, [52, 31]);
             pl.scale(sca);
