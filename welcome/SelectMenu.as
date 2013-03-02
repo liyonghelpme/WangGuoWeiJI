@@ -14,7 +14,7 @@ class Hero extends MyNode
         var curScene = global.director.curScene;
         var temp = sprite();
         curScene.bg.add(temp, -100);
-        temp.texture(ani[0][0]);
+        temp.texture(ani["ani"][0]);
     }
 
     //var sca;
@@ -32,8 +32,9 @@ class Hero extends MyNode
 
         ani = copy(getSkillAnimate(heroSkill.get(hid)));
         ani["ani"] = copy(ani["ani"]);
+        trace("getHeroSkill", ani);
         cus = new LightAnimate(ani["time"], ani["ani"], bg, "", 0, onNormal);//不恢复旧的纹理
-        preloadHeroTexture();
+        //preloadHeroTexture();
     }
     //显示 全光图片
     //设定空的纹理
@@ -67,8 +68,8 @@ class Hero extends MyNode
             cus.callback = onNormal;
             cus.exitScene();
             var a = copy(ani);
-            a[0] = copy(a[0]);//copy a0 reverse
-            a[0].reverse();
+            a["ani"] = copy(a["ani"]);//copy a0 reverse
+            a["ani"].reverse();
 
             cus.setAni(a, 0);//恢复旧的纹理 设定的大小
             cus.enterScene();

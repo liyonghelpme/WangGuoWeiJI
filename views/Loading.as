@@ -51,6 +51,7 @@ class Loading extends MyNode
     //初始化数据 由主控制 不由 view 控制
     function update(diff)
     {
+        trace("loading", curProcess, hopeProcess);
         /*
         if(initDataYet == 0)
         {
@@ -62,7 +63,9 @@ class Loading extends MyNode
         if(passTime >= speed)
         {
             var coff = passTime / speed;
-            curProcess += coff;
+            //显示进度要小于实际的进度才可以
+            if(curProcess <= hopeProcess)
+                curProcess += min(20, coff); //因为passTime 太长了需要修正最大的增加速度
             curProcess = min(100, curProcess);
             passTime -= speed*coff;
 
@@ -74,7 +77,7 @@ class Loading extends MyNode
                 processNum.anchor(50, 50).pos(oldPos);
                 bg.add(processNum);
             }
-            if(curProcess >= 100 && hopeProcess == 100)
+            if(curProcess >= 100 && hopeProcess >= 100)
             {
                 //global.director.popView();
                 trace("移除当前loadingview popView pushView 不易管理 最好使用 addChild removeSelf 来定向管理");
@@ -83,6 +86,7 @@ class Loading extends MyNode
         }
 
     }
+    //设定加载速度是50
     var hopeProcess = 10;
     function receiveMsg(param)
     {

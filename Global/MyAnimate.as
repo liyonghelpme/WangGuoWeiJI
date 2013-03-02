@@ -78,8 +78,8 @@ class MyAnimate
     }
     function setAni(a)
     {
-        ani = a[0];
-        duration = a[1];
+        ani = a["ani"];
+        duration = a["time"];
         accTime = 0;
         realAni.stop();
         realAni = repeat(animate(duration, ani, ARGB_8888, UPDATE_SIZE));
@@ -118,6 +118,7 @@ class LightAnimate
     var realAni = null;
     function LightAnimate(d, a, b, old, re, cb)
     {
+        trace("LightAnimate", d, a, b, old, re, cb);
         restore = re;
         bg = b;
         oldTexture = old;
@@ -131,8 +132,8 @@ class LightAnimate
     function setAni(a, re)
     {
         restore = re;
-        ani = a[0];
-        duration = a[1];
+        ani = a["ani"];
+        duration = a["time"];
         accTime = 0;
 
         realAni.stop();
@@ -191,8 +192,8 @@ class OneAnimate
     {
         restore = re;
 
-        ani = a[0];
-        duration = a[1];
+        ani = a["ani"];
+        duration = a["time"];
         accTime = 0;
         realAni.stop();
         realAni = animate(duration, ani, ARGB_8888, UPDATE_SIZE);

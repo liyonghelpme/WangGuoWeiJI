@@ -24,7 +24,7 @@ class MapLayer extends MyNode
         island[4] = islandLayer.addsprite("map_island4.png",ARGB_8888, ALPHA_TOUCH).size(519,428).anchor(0,0).pos(994,220).rotate(0);
         island[5] = islandLayer.addsprite("map_island5.png",ARGB_8888, ALPHA_TOUCH).size(524,439).anchor(0,0).pos(550,14).rotate(0);
 
-        global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND, enterNewRound);
+        //global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND, enterNewRound);
 
         var i=0;
         //big small
@@ -79,7 +79,22 @@ class MapLayer extends MyNode
     {
         super.enterScene();
         initLock();
+        global.timer.addTimer(this);
     }
+    var showHintYet = 0;
+    function update(diff)
+    {
+        if(!showHintYet) {
+            showHintYet = 1;
+            global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND, enterNewRound);
+        }
+    }
+    override function exitScene()
+    {
+        global.timer.removeTimer(this);
+        super.exitScene();
+    }
+
     /*
     跳跃动画：
         上升缩放  下降 放大 产生瞬间的 膨胀影子

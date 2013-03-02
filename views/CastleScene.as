@@ -101,6 +101,8 @@ class CastleScene extends MyNode
     function showSceneMask()
     {
     }
+    var curProcess = 50;
+    var receiveInitDataOver = 0;
     function receiveMsg(param)
     {
 //        trace("receiveMsg", param);
@@ -115,20 +117,23 @@ class CastleScene extends MyNode
         }
         else if(msid == INITDATA_OVER)
         {
-            global.msgCenter.sendMsg(LOAD_PROCESS, 70);
+            receiveInitDataOver = 1;
+            //global.msgCenter.sendMsg(LOAD_PROCESS, 70);
             mc.initDataOver();
-            global.msgCenter.sendMsg(LOAD_PROCESS, 85);
+            //global.msgCenter.sendMsg(LOAD_PROCESS, 85);
             ml.initDataOver();
-            global.msgCenter.sendMsg(LOAD_PROCESS, 100);
+            //global.msgCenter.sendMsg(LOAD_PROCESS, 100);
             showSceneMask();
 
             global.controller.playMedia("business.mp3");
+            //global.msgCenter.sendMsg(TASK_START_WORK_NOW, null);//启动任务模块等待时间
+            dialogController.addCmd(dict([["cmd", "startTask"]]));
         }
         //加载新手 页面
         //这里的 不能 100 Loading 页面自删除存在bug
         else if(msid == NEW_USER)
         {
-            //global.msgCenter.sendMsg(LOAD_PROCESS, 99);
+            global.msgCenter.sendMsg(LOAD_PROCESS, 99);
             //删除loading页面
             trace("newUser CastleScene 本身替换了默认场景 导致底部为空 最好采用pushScene方式 来避免");
             //global.director.popView();
@@ -337,6 +342,11 @@ class CastleScene extends MyNode
             hideTime = 0;
             if(!isBuildOrPlan() && !global.taskModel.checkInNewTask())
                 ml.hideMenu(1000);
+        }
+        if(curProcess <= 100 && receiveInitDataOver)
+        {
+            curProcess += 20;
+            global.msgCenter.sendMsg(LOAD_PROCESS, curProcess);
         }
     }
     /*

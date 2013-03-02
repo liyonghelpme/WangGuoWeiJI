@@ -568,6 +568,7 @@ const FINISH_NEW_TASK = 52;
 const INIT_TASK_DATA = 53;//只是初始化任务 数据但是不初始化任务模块
 const FETCH_PARAM_OVER = 54;
 const SWITCH_MUSIC = 55;
+const TASK_START_WORK_NOW = 56;
 
 
 

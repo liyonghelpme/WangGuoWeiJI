@@ -446,7 +446,7 @@ class User
 
     function initData()
     {
-        global.msgCenter.sendMsg(LOAD_PROCESS, 10);
+        global.msgCenter.sendMsg(LOAD_PROCESS, 20);
         global.httpController.addRequest("login", dict([["papayaId", papayaId], ["papayaName", papayaName]]), initDataOver, null);
     }
     function useLocalDB()

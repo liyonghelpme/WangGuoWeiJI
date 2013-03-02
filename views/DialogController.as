@@ -48,6 +48,7 @@ class DialogController extends MyNode
         global.director.curScene.addChildZ(banner, MAX_BUILD_ZORD);
         trace("finishAddBanner");
     }
+    var passTime = 0;
     //统一向上移动
     function update(diff)
     {
@@ -59,6 +60,7 @@ class DialogController extends MyNode
                 bannerStack.pop(0);
         }
 
+        //可以等待timer update 之后再执行命令
         if(len(global.director.stack) == 0) 
         {
             if(len(cmds) > 0)
@@ -144,6 +146,8 @@ class DialogController extends MyNode
                 {
                     global.director.pushView(new ChallengeMsgDialog(curCmd["challengeMsg"]), 1, 0);
                 }
+                else if(curCmd["cmd"] == "startTask")
+                    global.msgCenter.sendMsg(TASK_START_WORK_NOW, null);//启动任务模块等待时间
             }
         }
     }

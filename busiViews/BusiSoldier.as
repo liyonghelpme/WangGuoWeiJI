@@ -952,7 +952,7 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
         var bSize = bg.size();
         var pic;
         var rd;
-        status = bg.addsprite("soldierStatus.png").pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
+        status = bg.addsprite("soldierStatus.png").pos(bSize[0]/2+getParam("statusOffX"), bSize[1]-getBloodHeightOff()+getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
         if(curStatus == EXP_GAME)
         {
             rd = rand(PARAMS["ExpGameNum"]);

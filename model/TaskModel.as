@@ -53,7 +53,7 @@ class TaskModel
     //const SLOW_TASK = 3000;
     function update(diff)
     {
-        if(initYet == 0 && initCycleTask && initNewTask && initSolTask && initDataYet)
+        if(initYet == 0 && initCycleTask && initNewTask && initSolTask && initDataYet && realInitData)
         {
             initYet = 1;
             global.msgCenter.sendMsg(UPDATE_TASK, null);
@@ -78,6 +78,7 @@ class TaskModel
 
     function TaskModel()
     {
+        global.msgCenter.registerCallback(TASK_START_WORK_NOW, this);//经营页面初始化结束
         global.msgCenter.registerCallback(INIT_TASK_DATA, this);//获取任务数据
         global.msgCenter.registerCallback(INITDATA_OVER, this);
         global.msgCenter.registerCallback(DO_NEW_TASK, this);
@@ -96,6 +97,7 @@ class TaskModel
     //完成一个阶段 才能进入下一个阶段
     //当前新手任务的阶段
     var initDataYet = 0;
+    var realInitData = 0;
     function receiveMsg(param)
     {
         var msid = param[0];
@@ -161,11 +163,16 @@ class TaskModel
             trace("init all task", initCycleTask, initSolTask);
 
             //需要初始化数据之后 才可以发送任务
-            initDataYet = 1;
+            //initDataYet = 1;
+            realInitData = 1;
         }
         //获取当前阶段没有完成的新手任务
         else if(msid == DO_NEW_TASK)
         {
+        }
+        else if(msid == TASK_START_WORK_NOW)
+        {
+            initDataYet = 1;
         }
     }
     //delayTime
