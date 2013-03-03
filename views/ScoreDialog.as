@@ -17,6 +17,7 @@ but0.addlabel(getStr("ok", null), getFont(), 25).anchor(50, 50).pos(87, 27);
     {
         closeDialog();
         global.user.setRated();
+        openUrl(getStr("rateUrl", null));
     }
     function closeDialog()
     {

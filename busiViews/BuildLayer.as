@@ -149,10 +149,17 @@ class BuildLayer extends MoveMap
     function hideSoldier(sol)
     {
         var allSol = mapGridController.allSoldiers.values();
-        for(var i = 0; i < len(allSol); i++)
+        var i;
+        for(i = 0; i < len(allSol); i++)
         {
             if(allSol[i] != sol)
                 allSol[i].bg.visible(0);
+        }
+        //建筑也不能点击
+        var allBuildings = mapGridController.allBuildings;
+        for(i = 0; i < len(allBuildings); i++)
+        {
+            allBuildings[i].hideBuilding();
         }
     }
     //显示所有士兵
@@ -162,6 +169,12 @@ class BuildLayer extends MoveMap
         for(var i = 0; i < len(allSol); i++)
         {
             allSol[i].bg.visible(1);
+        }
+
+        var allBuildings = mapGridController.allBuildings;
+        for(i = 0; i < len(allBuildings); i++)
+        {
+            allBuildings[i].showBuilding();
         }
     }
 

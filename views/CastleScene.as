@@ -25,6 +25,8 @@ class CastleScene extends MyNode
         mc = new CastlePage(this, showLoading);
         ml = new MenuLayer(this);
         dialogController = mc.dialogController;
+        //等待加载页面消失之后 去掉锁
+        dialogController.setLock(1);
         
         keepMenuLayer = new MyNode();
         keepMenuLayer.bg = node();
@@ -347,6 +349,9 @@ class CastleScene extends MyNode
         {
             curProcess += 20;
             global.msgCenter.sendMsg(LOAD_PROCESS, curProcess);
+            //加载结束 取消掉锁
+            if(curProcess >= 100)
+                dialogController.setLock(0);
         }
     }
     /*

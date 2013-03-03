@@ -266,6 +266,8 @@ banner.addlabel("50", getFont(), 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color
         
         touchDelegate = new StandardTouchHandler();
         touchDelegate.bg = bg;
+        touchDelegate.scaMax = getParam("businessMaxScale");
+        touchDelegate.scaMin = getParam("businessMinScale");
 
         dialogController = new DialogController(this);
         addChild(dialogController);

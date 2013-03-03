@@ -4,11 +4,17 @@ class DialogController extends MyNode
     var bannerStack = [];
     var cmds = [];
     var scene;
+    var lock = 0;
     function DialogController(sc)
     {
         scene = sc;
         bg = node();
         init();
+    }
+    //设定是否锁住对话框
+    function setLock(l)
+    {
+        lock = l;
     }
     override function enterScene()
     {
@@ -52,6 +58,9 @@ class DialogController extends MyNode
     //统一向上移动
     function update(diff)
     {
+        //加锁对话框控制器
+        if(lock)
+            return;
         var now = time();
         if(len(bannerStack) > 0)
         {

@@ -39,6 +39,7 @@ class User
     var name;
     var invite;
     var challengeState;
+    var challengeInitRange;
 
     function getAllBuildingKinds()
     {
@@ -577,8 +578,15 @@ class User
         db.put("lastColor", lastColor);
         return lastColor;
     }
+    function getChallengeRange()
+    {
+        var temp = challengeInitRange;
+        challengeInitRange += getParam("searchRangeAdd");
+        return temp;
+    }
     function User()
     {
+        challengeInitRange = getParam("initSearchRange");
         papayaId = ppy_userid();
         if(papayaId == null)
             return;

@@ -39,7 +39,8 @@ class NewButton extends MyNode
     }
     function setGray()
     {
-        bg.texture(pc, GRAY); 
+        //bg.texture(pc, GRAY); 
+        bg.texture("grayButton.png");
     }
     function setWhite()
     {

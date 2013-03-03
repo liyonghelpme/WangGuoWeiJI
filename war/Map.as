@@ -183,7 +183,8 @@ class Map extends MyNode
 
     var gridLayer;
     var physics;
-    function Map(k, sm, s, sc, eq)
+    var ground;
+    function initPhysics()
     {
         physics = getphysics();
         physics.start();
@@ -191,8 +192,11 @@ class Map extends MyNode
         physics.gravity(0, 0);
         physics.positioniterations(8);
         physics.velocityiterations(3);
-        
-
+        ground = bg.addnode().pos(0, -10).size(800, 10);
+        physics.bindbody(ground, BODY_TYPE_STATIC, 100, 0, 0);
+    }
+    function Map(k, sm, s, sc, eq)
+    {
 
         roundGridController = new RoundGridController(this);
         monEquips = eq;
@@ -200,6 +204,8 @@ class Map extends MyNode
         kind = k;
         small = sm;
         initView();
+        initPhysics();
+
         gridLayer = bg.addnode();
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);

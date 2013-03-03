@@ -163,6 +163,26 @@ farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
         changeDirNode.setevent(EVENT_MOVE, touchMoved);
         changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
     }
+    var inHide = 0;
+    //重新设定touch事件
+    function hideBuilding()
+    {
+        inHide = 1;
+        bg.visible(0);
+        changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, null);
+        changeDirNode.setevent(EVENT_MOVE, null);
+        changeDirNode.setevent(EVENT_UNTOUCH, null);
+    }
+
+    function showBuilding()
+    {
+        inHide = 0;
+        bg.visible(1);
+        changeDirNode.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
+        changeDirNode.setevent(EVENT_MOVE, touchMoved);
+        changeDirNode.setevent(EVENT_UNTOUCH, touchEnded);
+    }
+
     function setInitPos()
     {
         var disSize = copy(global.director.disSize);

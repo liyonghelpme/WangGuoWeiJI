@@ -261,6 +261,7 @@ class BattleScene extends MyNode
         }
     }
     //评估军队实力 线性评估 平方增长太快了
+    //根据attack+defense / attSpeed * healthBoundary * (attRange+1)
     function evaluePower()
     {
         //新手任务阶段没有积分奖励
@@ -273,7 +274,7 @@ class BattleScene extends MyNode
         for(var i = 0; i < len(allMySol); i++)
         {
             var sData = getData(SOLDIER, allMySol[i]);
-            var rl = sData["level"]+1;
+            var rl = sData["ability"]+1;
             //rl = rl*rl
             myPower += rl;
         }
@@ -281,7 +282,7 @@ class BattleScene extends MyNode
         for(i = 0; i < len(eneSol); i++)
         {
             sData = getData(SOLDIER, eneSol[i]["id"]); 
-            rl = sData["level"]+1;
+            rl = sData["ability"]+1;
             //rl = rl*rl;
             enePower += rl;
         }

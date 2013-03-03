@@ -661,6 +661,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
     function onCollision(e, n1, n2, param, normal, tangent)
     {
         //trace("onCollision", e, n1, n2, param, normal, tangent);
+        //在POSTSOLVE 的如果冲突是在前方则给对方施加一个方向的力防止被我推动 
         inCol = 0;
         //if(e == CONTACT_TYPE_BEGIN )
         {
@@ -676,12 +677,14 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
                 me = n2;
                 other = n1;
                 if((n1.pos()[0]-n2.pos()[0])*mDir > 0)  
-                    inCol = 1;
+                    inCol = 2;
             }
             if(me != null && inCol)
             {
+                //我前方有敌人
                 bg.linearvelocity(0, 0);
                 movAni.clearAnimation();
+                //other.applylinearimpulse(normal, 0, 50, 50);
             }
         }
     }
@@ -1087,6 +1090,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         }
         return 1;
     }
+    var myJoint;
     function initPhysic()
     {
         var pWidth = sx*getParam("MAP_OFFX");
@@ -1103,7 +1107,11 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         trace("boundBox", boundBox);
         map.physics.bindbody(bg, BODY_TYPE_DYNAMIC, 100, 0, 0, boundBox);//, boundBox
         bg.setevent(EVENT_PHYSICS_CONTACT, onCollision, null);
-        //bg.setsensor(1);
+        //角色不能旋转
+        bg.fixedrotation(1);
+
+        //约束角色不能被其它角色推上下移动 
+        myJoint = map.physics.createjoint(JOINT_TYPE_PRISMATIC, bg, map.ground, bg.pos()[0], bg.pos()[1], 100, 0);
     }
     //布局结束 增加士兵的攻击力 防御力 消耗 士兵的药水状态
     function finishArrange()

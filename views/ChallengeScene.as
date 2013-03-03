@@ -155,7 +155,7 @@ class ChallengeScene extends MyNode
             } else if(getParam("debugMonster")) {
                 debugMonster();
             } else
-                global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid]]), getRandChallenge, null);
+                global.httpController.addRequest("challengeC/getRandChallenge", dict([["uid", global.user.uid], ["levelOff", global.user.getChallengeRange()]]), getRandChallenge, null);
         }
         else if(kind == CHALLENGE_REVENGE)
         {

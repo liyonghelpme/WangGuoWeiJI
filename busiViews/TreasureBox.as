@@ -11,7 +11,7 @@ class TreasureBox extends MyNode
         updateState();
         global.director.curScene.dialogController.addBanner(new UpgradeBanner(getStr("helpSuc", null), [100, 100, 100], null));
 
-        global.tashModel.doAllTaskByKey("helpOpenBox", 1);
+        global.taskModel.doAllTaskByKey("helpOpenBox", 1);
     }
     //帮助别人开启宝箱初始化头像
     function initHead()
