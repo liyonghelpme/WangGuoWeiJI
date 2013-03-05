@@ -10,7 +10,6 @@ class StandardTouchHandler
     //var keepDistance;
     var keepMid;
     //var view;
-    var touchEvents = [];
     function StandardTouchHandler()
     {
         //view = v;
@@ -50,16 +49,6 @@ class StandardTouchHandler
     function touchBegan(points)
     {
         lastPos = points;
-        touchEvents = [[points, time()]];
-        if(len(points) >= 2)//-1 0 1
-        {
-            //keepDistance = distance(points[0], points[1]);
-            var difx = points[1][0]-points[0][0];
-            var dify = points[1][1]-points[0][1];
-            keepMid = [points[0][0]+difx/2, points[0][1]+dify/2];
-        }
-        //else
-            //keepDistance = 0;
         return 1;
     }
     function checkMove(difx, dify)
@@ -108,7 +97,7 @@ class StandardTouchHandler
     */
     function fastScale(sca)
     {
-        trace("scale Min Max", scaMin, scaMax);
+        //trace("scale Min Max", scaMin, scaMax);
         var oldScale = bg.scale();
         if(oldScale[0]+sca >= scaMax || oldScale[0]+sca <= scaMin)
             return 0;
@@ -154,23 +143,6 @@ class StandardTouchHandler
     //多加一次运算 效果稳定多了
     function touchMoved(points)
     {
-        var now = time();
-        if(touchEvents[len(touchEvents)-1] != null)
-        {
-            if(now - touchEvents[len(touchEvents)-1][1] > 40)
-            {
-                touchEvents.append([points, now]);
-                if(len(touchEvents) > 2)
-                    touchEvents.pop(0);
-            }
-        }
-        else
-        {
-            touchEvents.append([points, now]);
-            if(len(touchEvents) > 2)
-                touchEvents.pop(0);
-        }
-
         var oldPos = lastPos;
         lastPos = points;
         var difx;
@@ -179,57 +151,40 @@ class StandardTouchHandler
         {
             if(len(oldPos) < 2)
             {
-                //keepDistance = distance(points[0], points[1]);
                 difx = lastPos[1][0]-lastPos[0][0];
                 dify = lastPos[1][1]-lastPos[0][1];
                 keepMid = [lastPos[0][0]+difx/2, lastPos[0][1]+dify/2]; //旧世界的位置
                 return;
             }
-            //var oldDis = keepDistance;
-            //keepDistance = (keepDistance*80+distance(points[0], points[1])*20)/100;
-            //var newDis = keepDistance;
             
+            //得到缩放比例 scaleFactor
             var oldDis = distance(oldPos[0], oldPos[1]); 
             var newDis = distance(points[0], points[1]);
             var sca = newDis-oldDis;
-            //if(abs(sca) < 10)//小于一定距离不缩放
-            //    return;
+            if(abs(sca) <= getParam("minScaOff"))
+                return;
 
-            //var move = midMove(oldPos, points);
-
+            //焦点位置 上次手指中心 对应的图片的位置 
             difx = oldPos[1][0]-oldPos[0][0];
             dify = oldPos[1][1]-oldPos[0][1];
             var midOld = [oldPos[0][0]+difx/2, oldPos[0][1]+dify/2]; //旧世界的位置
-
-            var oldInBg = bg.world2node(midOld[0], midOld[1]);
             
-            /*
-            var midOld = keepMid;
-            var oldInBg = bg.world2node(keepMid[0], keepMid[1]);
-            difx = lastPos[1][0]-lastPos[0][0];
-            dify = lastPos[1][1]-lastPos[0][1];
-            var newMid = [lastPos[0][0]+difx/2, lastPos[0][1]+dify/2]; //新世界的位置
-            keepMid[0] = (keepMid[0]*80+newMid[0]*20)/100;
-            keepMid[1] = (keepMid[1]*80+newMid[1]*20)/100;
-            */
-
+            //如果当前图片的缩放尺寸比世界 小则 缩放中点在世界中心
             var oldScale = bg.scale();
-            /*
-            计算缩放之后需要移动的量
-            可能会有无意义的移动
-            */
+
+            //执行缩放 只缩放不考虑边界问题 
+            //旧的中点在 新的缩放比例下面的 地图中的位置做平移
+            var oldInBg = bg.world2node(midOld[0], midOld[1]);
+            //新的缩放
             sca = fastScale(sca);
+            //焦点在地图中的位置
             var newInBg = bg.node2world(oldInBg[0], oldInBg[1]);
             var move = [midOld[0]-newInBg[0], midOld[1]-newInBg[1]];
-            MoveBack(move[0], move[1]);
-
-            bg.scale(oldScale[0], oldScale[1]);
-            sca = ScaleBack(sca);
-
-            //计算的缩放结果 新缩放下的move 结果修正
-            newInBg = bg.node2world(oldInBg[0], oldInBg[1]);
-            move = [midOld[0]-newInBg[0], midOld[1]-newInBg[1]];
-            MoveBack(move[0], move[1]);
+            trace("need Move", move, midOld, newInBg, oldScale, sca);
+            if(abs(move[0]) > getParam("minMoveOff") || abs(move[1]) > getParam("minMoveOff")) {
+                MoveBack(move[0], move[1]);
+            }
+            adjustMove();
         }
         else if(len(points) >= 1)
         {
@@ -241,30 +196,29 @@ class StandardTouchHandler
             MoveBack(difx, dify);
         }
     }
+    //调整缩放之后的 Move 使Map 在view 中
+    function adjustMove()
+    {
+        var leftTop = bg.node2world(0, 0);
+        var rightBottom = bg.node2world(bg.size()[0], bg.size()[1]);
+        var difX = 0;
+        var difY = 0;
+        if(leftTop[0] > 0) {
+            difX = -leftTop[0];
+        }
+        if(leftTop[1] > 0)
+            difY = -leftTop[1];
+        var disSize = global.director.disSize;
+        if(rightBottom[0] < disSize[0])
+            difX = disSize[0]-rightBottom[0];
+        if(rightBottom[1] < disSize[1])
+            difY = disSize[1]-rightBottom[1];
+        var oldPos = bg.pos();
+        bg.pos(oldPos[0]+difX, oldPos[1]+difY);
+    }
+
     function touchEnded(points)
     {
-        if(len(touchEvents) >= 2)
-        {
-            var t0 = touchEvents[0];
-            var t1 = touchEvents[1];
-
-            var passTime = t1[1]-t0[1];
-            //没有两根手指 放下又抬起
-            if(t1[0][0] != null && t0[0][0] != null)
-            {
-                var diffX = t1[0][0][0]-t0[0][0][0];//第一个touch组的第一个点的x坐标
-                var diffY = t1[0][0][1]-t0[0][0][1];
-                if(diffX*diffX+diffY*diffY >= getParam("minMoveDis"))
-                {
-                    var finishMX = diffX*getParam("touchInertiaTime")/passTime;
-                    var finishMY = diffY*getParam("touchInertiaTime")/passTime;
-                    var expMX = finishMX/6.931;
-                    var expMY = finishMY/6.931;//expout initSpeed
-                    var mv = checkMove(expMX, expMY);
-                    bg.addaction(expout(moveby(getParam("touchInertiaTime"), mv[0], mv[1])));
-                }
-            }
-        }
     }
     
 }
