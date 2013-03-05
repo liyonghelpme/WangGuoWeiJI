@@ -359,7 +359,11 @@ function getRobReward(star, silver, crystal, powerCoff)
     //数值太大了用浮点数计算即可
 
     var TestTime = getclass("com.liyong.testTime.TestTime");
-    return dict([["silver", TestTime.callobj("floor", coff/100.0*silver*rate/100)], ["crystal", TestTime.callobj("floor", coff/100.0*crystal*rate/100)]]);
+    var rewSilver = TestTime.callobj("floor", coff/100.0*silver*rate/100);
+    var rewCrystal = TestTime.callobj("floor", coff/100.0*crystal*rate/100);
+    rewSilver = min(getParam("maxRobSilver"), silver);
+    rewCrystal = min(getParam("maxRobCrystal"), crystal);
+    return dict([["silver", rewSilver], ["crystal", rewCrystal]]);
 }
 
 //修改传入的上下文状态

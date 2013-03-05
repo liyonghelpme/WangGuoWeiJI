@@ -387,7 +387,7 @@ var WORDS = dict([
 ["StoreWord50032", ["复活无等级限制", ""]],
 ["StoreAttWordspeople", ["人口上限+[NUM]", "Population+[NUM]"]],
 ["StoreAttWordscityDefense", ["村庄防御力+[NUM]", "Village Dtf+[NUM]"]],
-["StoreAttWordsattack", ["攻击力+[NUM]", "Attack: [NUM]"]],
+["StoreAttWordsattack", ["攻击力+[NUM]", "Attack+[NUM]"]],
 ["StoreAttWordsdefense", ["防御力+[NUM]", "Defense+[NUM]"]],
 ["StoreAttWordshealth", ["血量+[NUM]", "HP+[NUM]"]],
 ["StoreAttWordsexp", ["经验+[NUM]", "Exp+[NUM]"]],
@@ -697,4 +697,7 @@ var WORDS = dict([
 ["tip11", ["士兵转职能提高自身属性", "You can transfer soldiers to high level"]],
 ["rateUrl", ["http://www.baidu.com", "http://www.baidu.com"]],
 ["rankOrder", ["No. [NUM]", "No.[NUM]"]],
+["StoreAttWordsattackDrug", ["攻击力:[NUM]", "Attack:[NUM]"]],
+["StoreAttWordshealthBoundaryDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
+["StoreAttWordspercentHealthDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
 ]);

@@ -162,10 +162,11 @@ var cNum = panel.addlabel(str(valNum), getFont(), 18).pos(83, 169).anchor(50, 50
             //获取物体的storeWords 如果没有则 按照普通方式处理
             if(showGain == 1)
             {
-                //药品显示技能的属性
+                //药品显示技能的属性 技能属性显示没有+ 符号
                 if(objKind == DRUG)
                 {
                     gain = getGain(SKILL, data["skillId"]);
+                    gain = modifyGain(gain);//改变药品的gain的key 用于storeAttWords 里面正常显示
                 }
                 var w;
                 var labelGain = gain.items();
@@ -173,13 +174,22 @@ var cNum = panel.addlabel(str(valNum), getFont(), 18).pos(83, 169).anchor(50, 50
                 if(len(labelGain) > 0)
                 {
                     var v = labelGain[0][1];
-                    var k = getStr(StoreAttWords[labelGain[0][0]], ["[NUM]", str(v)]);
+                    var k = getStr("StoreAttWords"+labelGain[0][0], ["[NUM]", str(v)]);
 
 panel.addlabel(k, getFont(), 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
             }
         }
         return canBuy;
+    }
+    function modifyGain(gain)
+    {
+        var it = gain.items();
+        for(var i = 0; i < len(it); i++)
+        {
+            it[i][0] = it[i][0]+"Drug";
+        }
+        return dict(it);
     }
     /*
     根据移动的位置 计算需要显示的范围 预先显示额外的上下两行
