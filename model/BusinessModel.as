@@ -80,12 +80,15 @@ function getFallObjValue(id, fallTimes)
     var gain = getGain(FALL_THING, id);
     trace("maxGain, gain ", maxGain, gain, id, fallTimes);
 
-    if(gain.get("silver") != null)
-        gain["silver"] = min(maxGain["maxSilver"], maxGain["initSilver"]+gData["addsilver"]*fallTimes);
-    if(gain.get("crystal") != null)
-        gain["crystal"] = min(maxGain["maxCrystal"], maxGain["initCrystal"]+gData["addcrystal"]*fallTimes);
-    if(gain.get("gold") != null)
-        gain["gold"] = min(maxGain["maxGold"], maxGain["initGold"]+gData["addgold"]*fallTimes);
+    if(gain.get("silver") != null) {
+        gain["silver"] = rand(maxGain["maxSilver"]-maxGain["initSilver"]+1)+maxGain["initSilver"];
+    }
+    if(gain.get("crystal") != null) {
+        gain["crystal"] = rand(maxGain["maxCrystal"]-maxGain["initCrystal"]+1)+maxGain["initCrystal"];
+    }
+    if(gain.get("gold") != null) {
+        gain["gold"] = rand(maxGain["maxGold"]-maxGain["initGold"]+1)+maxGain["initGold"];
+    }
 
     return gain;
 }

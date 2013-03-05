@@ -48,6 +48,7 @@ class Goods extends MyNode
         var data = getData(buildData[0], buildData[1]);
         var needLevel = data.get("level", 0);
         var gain = getGain(buildData[0], buildData[1]);
+        var cw;
 
         /*
         采用字符串替换的方法，这样如果图片不需要ID的话可以直接返回
@@ -61,12 +62,20 @@ class Goods extends MyNode
         var showGain = data.get("showGain", 1);
         var buildPic = panel.addsprite(buildPicName, ARGB_8888).pos(74, 88).anchor(50, 50);
         var ret;
+        var canBuy = 1;
         if(objKind == BUILD)
         {
             ret = checkBuildNum(objId);
+            //建筑物的数量不足
             if(ret[0] == 0)
             {
+                panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
+                cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(getNextBuildNum(objId) + 1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
+                cw.anchor(50, 50).pos(75, 97);
+                panel.add(cw); 
+
                 buildPic.texture(buildPicName, GRAY);
+                canBuy = 0;
             }
             //普通农田显示 数量
             if(data["funcs"] == FARM_BUILD)
@@ -100,13 +109,13 @@ panel.addlabel((str(getCurBuildNum(objId)) + "/") + str(getBuildEnableNum(objId)
         }
         
 
-        var canBuy = 1;
-        if(global.user.getValue("level") < needLevel)
+        //&& canBuy
+        if(global.user.getValue("level") < needLevel )
         {
             buildPic.texture(buildPicName, BLACK);
             panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
             
-            var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
+            cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
             cw.anchor(50, 50).pos(75, 97);
             panel.add(cw); 
 

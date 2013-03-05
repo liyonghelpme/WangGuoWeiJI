@@ -33,7 +33,7 @@ class PlantChoose extends MyNode
         var line;
         var temp;
         var sca;
-        var level = global.user.getValue(level);
+        var level = global.user.getValue("level");
         for(var i = 0; i < len(plantData); i++)
         {
             var planting = getData(PLANT, i);

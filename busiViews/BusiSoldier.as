@@ -117,7 +117,8 @@ class BusiSoldier extends MyNode
 
         //新人物可能初始的size = 0 因此可能有问题
         changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", UPDATE_SIZE);
-        var bSize = changeDirNode.prepare().size();
+        //var bSize = changeDirNode.prepare().size();
+        var bSize = getBgSize();
         if(bSize[0] > 0)
         {
             trace("bSize", bSize);
@@ -174,6 +175,18 @@ class BusiSoldier extends MyNode
     {
         return getParam("SOL_SHOW_SIZE")*data["solSca"]/100;
     }
+    function getBgSize()
+    {
+        var cSize = changeDirNode.prepare().size();
+        /*
+        var cScale = getChangeDirNodeScale();
+        cSize[0] *= cScale+getParam("bOffSca");
+        cSize[1] *= cScale+getParam("bOffSca");
+        cSize[0] /= 100;
+        cSize[1] /= 100;
+        */
+        return cSize;
+    }
     function BusiSoldier(m, d, privateData, s)
     {
         trace("init BusiSoldier", m, d, privateData, s);
@@ -192,7 +205,9 @@ stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
 
         changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
 
-        var bSize = changeDirNode.prepare().size();
+        var chScale = getChangeDirNodeScale();
+        //var bSize = changeDirNode.prepare().size();
+        var bSize = getBgSize();
 
         var oldPos = global.user.getOldPos(sid);
         if(oldPos == null)//默认出现位置 中心
@@ -973,6 +988,10 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
         }
         var sca = getSca(pic, [45, 45]);
         pic.scale(sca);
+    }
+    function checkStatus()
+    {
+        return status != null;
     }
 
     //保证只有5 个士兵有状态

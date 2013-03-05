@@ -78,14 +78,18 @@ class FriendSoldier extends MoveSoldier
 
     function getBloodHeightOff()
     {
-        return data["sy"]*getParam("MAP_OFFY"); 
+        return data["sy"]*getParam("MAP_OFFY")*getParam("SOL_SHOW_SIZE")/getParam("mapSolScale"); 
     }
     function showNegtiveState()
     {
         if(hasCry == 1)
         {
             var bSize = bg.size();
-            negtiveState = bg.addsprite("soldierMorale.png").pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
+            negtiveState = bg.addsprite("soldierMorale.png").pos(bSize[0]/2+getParam("statusOffX"), bSize[1]-getBloodHeightOff()+getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
+
+            negtiveState.setevent(EVENT_TOUCH, touchBegan);
+            negtiveState.setevent(EVENT_MOVE, touchMoved);
+            negtiveState.setevent(EVENT_UNTOUCH, touchEnded);
         }
     }
 

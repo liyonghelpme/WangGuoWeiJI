@@ -197,7 +197,6 @@ nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
             {
                 panel = sprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
 
-
                 panel.addsprite("lock0.png").pos(26, 28).anchor(50, 50).size(25, 30);
 panel.addlabel(getStr("condition", null), getFont(), 20).pos(48, 21);
                 panel.addsprite("star.png").anchor(50, 50).pos(62, 70).size(33, 31);

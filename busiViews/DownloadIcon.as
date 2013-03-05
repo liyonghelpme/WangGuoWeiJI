@@ -31,7 +31,7 @@ class DownloadIcon extends MyNode
     function update(diff)
     {
         var curProgress = global.pictureManager.getCurProgress();
-        var pro = (100-curProgress)*TOTAL_LEN/100+getParam("progressBarBaseOff");
+        var pro = (100-curProgress)*(TOTAL_LEN+getParam("progressBarBaseOff"))/100+getParam("progressBarBaseOff");
         processBar.pos(-pro, 0);
         if(getParam("debugDownload"))
             trace("downloading ", curProgress, pro, processBar.pos());
@@ -39,6 +39,15 @@ class DownloadIcon extends MyNode
         {
             //menu.removeDownloadIcon();
             removeSelf();
+            //没有下载过图片则奖励
+            if(global.user.getValue("downloadYet") == 0)
+            {
+                var gain = dict([["gold", getParam("downloadGold")]]);
+                global.httpController.addRequest("downloadFinish", dict([["uid", global.user.getValue("uid")], ["gain", json_dumps(gain)]]), null, null);
+                global.user.doAdd(gain);
+                global.user.setValue("downloadYet", 1);
+                trace("downloadYet", gain);
+            }
         }
     }
     override function enterScene()

@@ -46,6 +46,8 @@ bg.addlabel(getStr("loveGame", null), getFont(), 30).anchor(50, 50).pos(425, 94)
         closeDialog();
         global.user.setRated();
         global.msgCenter.sendMsg(RATE_GAME, null);
+
+        openUrl(getStr("rateUrl", null));
     }
     function closeDialog()
     {

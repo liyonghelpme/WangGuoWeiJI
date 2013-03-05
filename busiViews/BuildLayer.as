@@ -63,16 +63,23 @@ class BuildLayer extends MoveMap
             var soldiers = mapGridController.allSoldiers.values();
             var rd = rand(len(soldiers));
             var i;
-            for(i = 0; i < len(soldiers); i++)
-                soldiers[i].clearRandomStatus();
-
-            //生成随机奖励金银币状态
-            for(i  = 0; i < len(soldiers) && i < getParam("MaxStatusSolNum"); i++)
-            {
-                var n = (rd+i)%len(soldiers);
-                var so = soldiers[n];
-                so.genNewStatus();
+            var countHas = 0;
+            for(i = 0; i < len(soldiers); i++) {
+                if(soldiers[i].checkStatus())
+                    countHas++;
             }
+            //每次随机刷新一个士兵状态
+            if(countHas < getParam("MaxStatusSolNum")) {
+                for(i = 0; i < len(soldiers); i++) {
+                    var n = (rd+i)%len(soldiers);
+                    var so = soldiers[n];
+                    if(!so.checkStatus()) {
+                        so.genNewStatus();
+                        break;
+                    }
+                }
+            }
+            trace("soldier status", countHas);
         }
     }
     /*

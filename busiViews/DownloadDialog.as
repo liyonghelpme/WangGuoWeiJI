@@ -25,7 +25,7 @@ class DownloadDialog extends MyNode
         but0.bg.pos(519, 403);
         addChild(but0);
 
-bg.addlabel(getStr("downFinReward", ["[NUM]", str(getParam("downReward"))]), getFont(), 20).anchor(50, 50).pos(410, 147).color(43, 25, 9);
+bg.addlabel(getStr("downFinReward", ["[NUM]", str(getParam("downloadGold"))]), getFont(), 20).anchor(50, 50).pos(410, 147).color(43, 25, 9);
 temp = bg.addlabel(getStr("YouNeedDownload", null), getFont(), 18, FONT_NORMAL, 246, 0, ALIGN_LEFT).anchor(0, 0).pos(215, 220).color(28, 15, 4);
 temp = bg.addlabel(getStr("downloadTip", null), getFont(), 16, FONT_NORMAL, 255, 0, ALIGN_LEFT).anchor(0, 0).pos(215, 277).color(39, 38, 38);
 bg.addlabel(getStr("newSolPicDownload", null), getFont(), 30).anchor(50, 50).pos(423, 95).color(32, 33, 40);

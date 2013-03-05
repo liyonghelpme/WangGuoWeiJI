@@ -200,6 +200,7 @@ function getMakeUpTime(sid, skillId, skLevel)
 
 //var aniPool = dict();
 
+//攻击动画8张
 function getSolAnimate(id)
 {
     //var ret = aniPool.get(id);
@@ -207,9 +208,9 @@ function getSolAnimate(id)
     //{
     var ret = [
         ["soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"], 
-        ["soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+".plist/ss"+str(id)+"a6.png"], 
+        ["soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+".plist/ss"+str(id)+"a6.png","soldiera"+str(id)+".plist/ss"+str(id)+"a7.png"], 
         ["soldierfm"+str(id)+".plist/ss"+str(id)+"fm0.png", "soldierfm"+str(id)+".plist/ss"+str(id)+"fm1.png","soldierfm"+str(id)+".plist/ss"+str(id)+"fm2.png","soldierfm"+str(id)+".plist/ss"+str(id)+"fm3.png","soldierfm"+str(id)+".plist/ss"+str(id)+"fm4.png","soldierfm"+str(id)+".plist/ss"+str(id)+"fm5.png","soldierfm"+str(id)+".plist/ss"+str(id)+"fm6.png"], 
-        ["soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", "soldierfa"+str(id)+".plist/ss"+str(id)+"fa1.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa2.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa3.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa4.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa5.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa6.png"] 
+        ["soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", "soldierfa"+str(id)+".plist/ss"+str(id)+"fa1.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa2.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa3.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa4.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa5.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa6.png","soldierfa"+str(id)+".plist/ss"+str(id)+"fa7.png"] 
     ];
      //   aniPool.update(id) = ret;
     //}

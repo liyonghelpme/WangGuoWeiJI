@@ -112,14 +112,19 @@ finNum = bg.addlabel(getStr("99+", null), getFont(), 18).anchor(50, 50).pos(96, 
     var silverText;
     var goldText;
     var gloryText;
+    function setRankOrder()
+    {
+        var w = getStr("rankOrder", ["[NUM]", str(global.user.rankOrder)]);
+        if(global.user.rankOrder > 999)
+            w = getStr("rankOrder", ["[NUM]", "999+"]);
+        return w;
+    }
+
     function initText()
     {
 silverText = bg.addlabel(getStr("1", null), getFont(), 23).anchor(0, 50).pos(333, 461).color(100, 100, 100);
 goldText = bg.addlabel(getStr("2", null), getFont(), 23).anchor(0, 50).pos(588, 461).color(100, 100, 100);
-        var w = str(global.user.rankOrder);
-        if(global.user.rankOrder > 999)
-            w = "999+";
-gloryLevText = bg.addlabel(w, getFont(), 23).anchor(50, 50).pos(169, 461).color(100, 100, 100);
+gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169, 461).color(100, 100, 100);
     }
     //var building = 0;
     /*
@@ -388,11 +393,7 @@ gloryLevText = bg.addlabel(w, getFont(), 23).anchor(50, 50).pos(169, 461).color(
     {
         silverText.text(str(res.get("silver", 0)));
         goldText.text(str(res.get("gold", 0)));
-
-        var w = str(global.user.rankOrder);
-        if(global.user.rankOrder > 999)
-            w = "999+";
-        gloryLevText.text(w);
+        gloryLevText.text(setRankOrder());
     }
     /*
     管理菜单的显示和隐藏

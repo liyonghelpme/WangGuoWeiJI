@@ -141,6 +141,7 @@ class CastlePage extends MyNode
 
     function initDataOver()
     {
+        touchDelegate.setScaleLimit(getParam("businessMinSca"), getParam("businessMaxSca"));
         trace("beginInit castlePage");
         buildLayer.initDataOver();
         solNum.updateSolNum(str(global.user.getSolNum()));
@@ -265,9 +266,10 @@ banner.addlabel("50", getFont(), 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color
 
         
         touchDelegate = new StandardTouchHandler();
+        touchDelegate.scaMax = getParam("businessMaxSca");
+        touchDelegate.scaMin = getParam("businessMinSca");
         touchDelegate.bg = bg;
-        touchDelegate.scaMax = getParam("businessMaxScale");
-        touchDelegate.scaMin = getParam("businessMinScale");
+
 
         dialogController = new DialogController(this);
         addChild(dialogController);

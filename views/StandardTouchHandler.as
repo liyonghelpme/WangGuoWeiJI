@@ -97,11 +97,18 @@ class StandardTouchHandler
             dify = 0;
         bg.pos(oldPos[0]+difx, oldPos[1]+dify);
     }
+    function setScaleLimit(minS, maxS)
+    {
+        scaMin = minS;
+        scaMax = maxS;
+        trace("setScaleLimit", minS, maxS);
+    }
     /*
     需要移动来调整位置 再进行缩放
     */
     function fastScale(sca)
     {
+        trace("scale Min Max", scaMin, scaMax);
         var oldScale = bg.scale();
         if(oldScale[0]+sca >= scaMax || oldScale[0]+sca <= scaMin)
             return 0;
