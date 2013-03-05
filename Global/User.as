@@ -735,6 +735,10 @@ class User
     //建筑物对象实体
     function buyBuilding(build)
     {
+        var curBuild = build;
+        var p = curBuild.getPos();
+
+        sellBuild(build);//先取消建筑物的数据， 计算开销，在写入建筑物的数据
         var cost = getCost(BUILD, build.id);
         doCost(cost);
         var gain = getGain(BUILD, build.id);

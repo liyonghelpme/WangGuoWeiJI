@@ -167,7 +167,7 @@ function getLevelCost(kind, id, level)
             var curNum = getCurLevelBuildNum(id, level);
             //升级建筑物 建筑物的数量不变
             curNum = min(len(build["numCost"][level])-1, curNum);
-
+            //购买建筑物建筑
             var c = build["numCost"][level][curNum];//0 级别
             for(i = 0; i < len(costKey); i++) {
                 v = c.get(costKey[i], 0);

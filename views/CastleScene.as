@@ -288,14 +288,13 @@ class CastleScene extends MyNode
 
         var buildId = curBuild.id;
         trace("curBuild", buildId);
+        global.user.buyBuilding(curBuild);//购买当前建筑的价格 总的建筑中不包含当前建筑
+        trace("finishBuild");
+        //应该在User 扣除 资源之后再finishBuild 写入建筑物数据
         mc.finishBuild();
 
-        global.user.buyBuilding(curBuild);
-        trace("finishBuild");
-
-
         //等待CastlePage finishBuild 来改变建筑状态
-        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["state", curBuild.state], ["color", curBuild.buildColor], ["cost", json_dumps(getCost(BUILD, curBuild.id))]]), null, null);
+        global.httpController.addRequest("buildingC/finishBuild", dict([["uid", global.user.uid], ["bid", curBuild.bid], ["kind", curBuild.id], ["px", p[0]], ["py", p[1]], ["dir", curBuild.dir], ["state", curBuild.state], ["color", curBuild.buildColor], ["cost", json_dumps(cost)]]), null, null);
 
         closeBuild();
         //在关闭 选择菜单之后再显示任务奖励菜单
@@ -357,8 +356,11 @@ class CastleScene extends MyNode
     /*
     开始建造的时候 将菜单释放
     */
+    var tempBuildCost = null;
     function beginBuild(id)
     {
+        //暂时保留当前的建筑物开销， 用于建筑确定时减去值
+        tempBuildCost = getCost(BUILD, id); 
         var building = getData(BUILD, id);
 
         ml.hideMenu();
