@@ -527,7 +527,7 @@ var WORDS = dict([
 ["boxReward1", ["-- [NUM]个[KIND]", "-- [NUM] [KIND]"]],
 ["shareWithFriend", ["赶快与好友分享吧！^_^", "Share with your friends! ^_^"]],
 ["shareOpenBox", ["[NAME]开启了一个神秘宝箱，得到大量礼物，赶快加入王国危机吧！", "[NAME] opened a mysterious treasure chest and gained a plenty of gifts. Come and join Saving Princess!"]],
-["back", ["返 回", "Return"]],
+["back", ["返 回", "Back"]],
 ["inviteRank", ["邀请榜", "Ranking"]],
 ["shareInvite", ["分享邀请码", "Share Code"]],
 ["inputeInviteCode", ["输入邀请码", "Enter Code"]],

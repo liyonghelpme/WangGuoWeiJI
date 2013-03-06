@@ -18,6 +18,8 @@ class ChallengeInfo extends MyNode
         temp = bg.addsprite("challengeInfoBack.png").anchor(0, 0).pos(16, 8).size(319, 172).color(100, 100, 100, 100);
         temp = bg.addsprite("levelUpStar.png").anchor(50, 50).pos(46, 30).size(34, 33).color(100, 100, 100, 100);
 
+bg.addlabel(getStr("Max", null), getFont(), 18).anchor(0, 50).pos(33, 56).color(100, 100, 100);
+
 bg.addlabel(scene.user["name"], getFont(), 24).anchor(0, 50).pos(69, 32).color(100, 100, 100);
 bg.addlabel(getStr("challengeDefense", ["[NUM]", str(scene.user["cityDefense"])]), getFont(), 15).anchor(0, 50).pos(220, 34).color(100, 100, 100);
 
@@ -27,12 +29,14 @@ bg.addlabel(str(-scene.user["failScore"]), getFont(), 20).anchor(0, 50).pos(112,
 
         temp = bg.addsprite("dialogRankCup.png").anchor(0, 0).pos(79, 102).size(25, 22).color(100, 100, 100, 100);
 bg.addlabel(getStr("failCost", null), getFont(), 15).anchor(0, 50).pos(33, 113).color(100, 100, 100);
-bg.addlabel(str(scene.user["silver"]), getFont(), 20).anchor(0, 50).pos(105, 81).color(100, 100, 100);
 
+
+bg.addlabel(str(scene.user["silver"]), getFont(), 20).anchor(0, 50).pos(105, 81).color(100, 100, 100);
         temp = bg.addsprite("silver.png").anchor(0, 0).pos(78, 68).size(25, 25).color(100, 100, 100, 100);
 bg.addlabel(str(scene.user["crystal"]), getFont(), 20).anchor(0, 50).pos(207, 80).color(100, 100, 100);
-
         temp = bg.addsprite("crystal.png").anchor(0, 0).pos(179, 69).size(25, 24).color(100, 100, 100, 100);
+
+
 bg.addlabel(str(scene.user["winScore"]), getFont(), 20).anchor(0, 50).pos(304, 79).color(100, 100, 100);
         temp = bg.addsprite("dialogRankCup.png").anchor(0, 0).pos(278, 69).size(25, 22).color(100, 100, 100, 100);
 
