@@ -18,7 +18,7 @@ class ChallengeInfo extends MyNode
         temp = bg.addsprite("challengeInfoBack.png").anchor(0, 0).pos(16, 8).size(319, 172).color(100, 100, 100, 100);
         temp = bg.addsprite("levelUpStar.png").anchor(50, 50).pos(46, 30).size(34, 33).color(100, 100, 100, 100);
 
-bg.addlabel(getStr("Max", null), getFont(), 18).anchor(0, 50).pos(33, 56).color(100, 100, 100);
+bg.addlabel(getStr("Max", null), getFont(), 18).anchor(0, 50).pos(33, 63).color(100, 100, 100);
 
 bg.addlabel(scene.user["name"], getFont(), 24).anchor(0, 50).pos(69, 32).color(100, 100, 100);
 bg.addlabel(getStr("challengeDefense", ["[NUM]", str(scene.user["cityDefense"])]), getFont(), 15).anchor(0, 50).pos(220, 34).color(100, 100, 100);

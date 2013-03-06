@@ -1128,6 +1128,17 @@ class User
         trace("changeExpLevel", level);//设定用户等级
         setValue("level", level);
         setValue("exp", 0);
+        doLevelUp(0, level);
+    }
+    //向服务器同步等级变更消息
+    function doLevelUp(v, level)
+    {
+        if(!global.taskModel.checkInNewTask())
+            global.msgCenter.sendMsg(LEVEL_UP, null);
+
+        global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()]]), null, null);
+        global.taskModel.doAllTaskByKey("levelUp", level);//升级任务是直接比较数值而不是 累计数值
+        global.msgCenter.sendMsg(UPDATE_EXP, v);
     }
     /*
     改变用户经验 有可能自动升级
@@ -1165,15 +1176,8 @@ class User
 
             if(level != oldLevel)
             {
-                //如果不在经营页面 则 直接增加一些5 6 7 8 9的奖励 
-                //不能计算升级奖励 因为post方法传送的dict存在问题不能正确解析key
-                //不在新手过程中 可以弹出升级对话框 
-                if(!global.taskModel.checkInNewTask())
-                    global.msgCenter.sendMsg(LEVEL_UP, null);
-
-                global.httpController.addRequest("levelUp", dict([["uid", uid], ["exp", v], ["level", level], ["rew", dict()]]), null, null);
+                doLevelUp(v, level);
                 addV = 0;
-                global.taskModel.doAllTaskByKey("levelUp", level);//升级任务是直接比较数值而不是 累计数值
             }
             //增加经验没有升级
         }

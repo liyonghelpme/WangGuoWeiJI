@@ -700,4 +700,5 @@ var WORDS = dict([
 ["StoreAttWordsattackDrug", ["攻击力:[NUM]", "Attack:[NUM]"]],
 ["StoreAttWordshealthBoundaryDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
 ["StoreAttWordspercentHealthDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
+["Max", ["最多", "Max"]],
 ]);

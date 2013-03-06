@@ -390,7 +390,7 @@ var strings = dict([
 ["soldier160", ["石头人", "Stone Giant"]],
 ["soldier170", ["邪灵法师", "Necromancer"]],
 ["soldier180", ["雪人", "SnowMan"]],
-["soldier190", ["骷髅兵", "Skelesoldier"]],
+["soldier190", ["骷髅兵", "Skeleton"]],
 ["soldier400", ["斧战士", "Axe Soldier"]],
 ["soldier401", ["斧战士", "Axe Soldier"]],
 ["soldier402", ["斧战士", "Axe Soldier"]],

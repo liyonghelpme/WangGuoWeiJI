@@ -181,12 +181,12 @@ class CastlePage extends MyNode
             if(getParam("DEBUG") && getParam("debugLogin"))
             {
                 //测试登录奖励
-                global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+                global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["reward", json_dumps(reward)]]), getLoginRewardOver, day);
             }
             else
             {
                 if(global.user.getValue("newTaskStage") >= getParam("showFinish"))
-                    global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["silver", reward.get("silver", 0)], ["crystal", reward.get("crystal", 0)]]), getLoginRewardOver, day);
+                    global.httpController.addRequest("getLoginReward", dict([["uid", global.user.uid], ["reward", json_dumps(reward)]]), getLoginRewardOver, day);
             }
         
             //每周第一次登录 发送登录每天任务完成提示
