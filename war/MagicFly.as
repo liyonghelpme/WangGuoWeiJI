@@ -50,7 +50,7 @@ class MagicFly extends EffectBase
     override function switchState()
     {
         if(state == FLY_NOW)
-            removeSelf();
+            doHarm();
     }
     override function enterScene()
     {

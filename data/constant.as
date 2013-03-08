@@ -678,6 +678,7 @@ const CYCLE_TASK = 1;
 const DAILY_TASK = 2;
 const NEW_TASK = 3;
 const SOL_TASK = 4;//购买士兵任务
+const DECOR_TASK = 5;
 
 
 //邮件信息类型

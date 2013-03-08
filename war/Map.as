@@ -96,6 +96,7 @@ class Map extends MyNode
     function initView()
     {
         bg = sprite("map"+str(kind)+".jpg", ARGB_8888).pos(0, 0);//.pos(getParam("MAP_INITX"), global.director.disSize[1]/2-3*getParam("MAP_OFFY")-getParam("MAP_INITY"));
+        bg.prepare();//准备地图大小
         init(); 
         grid = bg.addnode().pos(getParam("MAP_INITX"), getParam("MAP_INITY")).size(getParam("MAP_WIDTH")/2*getParam("MAP_OFFX"), getParam("MAP_HEIGHT")*getParam("MAP_OFFY")).clipping(1);//.color(100, 100, 100, 100);
         updateShadow();
@@ -213,7 +214,7 @@ class Map extends MyNode
         bg.setevent(EVENT_UNTOUCH, touchEnded);
 
         touchDelegate = new StandardTouchHandler();
-        touchDelegate.bg = bg;
+        touchDelegate.setBg(bg, null);
 
         if(s != null)//闯关 挑战 敌人预先确定 练级 怪兽根据用户士兵生成
             initSoldier(s);

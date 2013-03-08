@@ -46,8 +46,9 @@ class GunSmoke extends EffectBase
     }
     override function switchState()
     {
-        if(state == FLY_NOW)
-            removeSelf();
+        if(state == FLY_NOW) {
+            doHarm();
+        }
     }
     
     override function enterScene()

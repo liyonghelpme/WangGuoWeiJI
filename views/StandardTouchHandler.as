@@ -14,9 +14,17 @@ class StandardTouchHandler
     {
         //view = v;
     }
+    //根据地图尺寸限定最小的缩放比例 
+    //设定bg的时候 需要首先prepare 确保可以得到有效的size
     function setBg(b, boundary)
     {
-        bg = bg;
+        bg = b;
+        bg.prepare();
+        trace("setBg", bg, boundary, global, global.director, global.director.disSize);
+        var disSize = global.director.disSize;
+
+        scaMin = max(scaMin, max(disSize[0]*100/bg.size()[0], disSize[1]*100/bg.size()[1]));
+
         if(boundary == null)
             showBoundary = [0, 0, bg.size()[0], bg.size()[1]];
         else

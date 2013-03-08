@@ -11,7 +11,7 @@ class FlowIsland extends MyNode
         init();
         bg.prepare();
         touchDelegate = new StandardTouchHandler();
-        touchDelegate.bg = bg;
+        touchDelegate.setBg(bg, null);
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
         bg.setevent(EVENT_MOVE, touchMoved);

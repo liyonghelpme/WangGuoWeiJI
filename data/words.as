@@ -1,7 +1,7 @@
 var WORDS = dict([
 ["noTip", ["1.士兵战死，普通装备会掉落，套装不会掉落\n2.普通士兵死亡不可复活，英雄死亡可复活\n3.战斗过程中退出游戏，已派出士兵会死亡", "1.Ordinary equipment will drop once soldier is dead, but a full set won't\n2.Only heroes can revive!\n3.Soldiers will be killed if you quit during battle!"]],
 ["solAtt", ["[NAME]\n生命值:[HEAL]/[BOUNDARY]\n物理攻击力:[PATTACK]\n物理防御力:[PDEFENSE]\n魔法攻击力:[MAGATT]\n魔法防御:[MAGDEF]\n攻击范围:[RANGE]\n攻击速度:[SPEED]\n经验:[EXP]/[NEEDEXP]\n等级:[LEV]", "[NAME]\n生命值:[HEAL]/[BOUNDARY]\n物理攻击力:[PATTACK]\n物理防御力:[PDEFENSE]\n魔法攻击力:[MAGATT]\n魔法防御:[MAGDEF]\n攻击范围:[RANGE]\n攻击速度:[SPEED]\n经验:[EXP]/[NEEDEXP]\n等级:[LEV]"]],
-["welcomeWord", ["    黑暗魔法师索伦降临奇迹大陆，企图带领邪恶大军\n占领整个大陆并抢走觊觎已久的王国公主！", "The dark sorcerer Soren led the army of darkness to conquer the continent and kidnap the Princess!"]],
+["welcomeWord", ["    黑暗魔法师索伦降临奇迹大陆，企图带领邪恶大军\n占领整个大陆并抢走觊觎已久的王国公主！", "The dark sorcerer Soren leading the army of darkness wants to conquer the Kingdom and kidnap the Princess!"]],
 ["selectHero", ["1.点击选择英雄\n2.为英雄取名\n3.[NAME]，召集勇士，救出公主！", "1.Tap to select a hero\n2.Name your hero\n3.[NAME], train troops and save the princess!"]],
 ["trainTipLine", ["1.每行只能放置一个士兵\n2.练级可以使用技能和所有药水(包括回血药水)\n3.士兵练级建议佩戴高级装备\n4.右边数字表示该行剩余怪兽数量", ""]],
 ["heartNum", ["本周获得好友爱心：[WEEKNUM]\n历史累计爱心数量：[ACCNUM]\n[LEV]级爱心树还需要爱心：[LEFTNUM]", ""]],
@@ -117,7 +117,7 @@ var WORDS = dict([
 ["solTooMany", ["士兵超出", ""]],
 ["sorrySol", ["抱歉，奇迹村只能最多容纳138个人口，开启浮岛来容纳更多人口！", "Sorry, village of can only accommodate 138 soldiers. Unlock the floating island for more space!"]],
 ["notOpen", ["尚未开启", "Locked"]],
-["comeSoon", ["即将开启...", "Unlocking"]],
+["comeSoon", ["即将开启...", "Unlock"]],
 ["resNot", ["资源不足", "Lack Resources"]],
 ["myNameIs", ["我是[NAME]", "My name is [NAME]"]],
 ["letFight", ["让我们战斗吧!", ""]],

@@ -202,8 +202,12 @@ class Soldier extends MyNode
     {
         return speed*getDir()*-1;
     }
+    //如果是英雄则回复正常的ID
     function setDeadState()
     {
+        trace("setDeadState", id, checkTransformYet(id));
+        if(checkTransformYet(id))
+            id--; 
         dead = 1;
         inDead = 1;
         health = 0;
@@ -789,6 +793,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         }
 
 
+        trace("acceptHarm", dead, id, backBanner.visible(), health, healthBoundary, add, backBanner.pos());
         //未死亡 显示学条
         if(!dead)
             showBackBanner();
@@ -954,9 +959,11 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
     {
         trace("doTransform", id);
         id++;
+        initData();//调整变身后的英雄数据
         var skillId = heroSkill[id/10*10];
         var skillAni = getSkillAnimate(skillId);
         
+
         var feaFil = FEA_BLUE;
         if(color == ENECOLOR)
             feaFil = FEA_RED;
@@ -968,6 +975,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         transAni = new TransformAnimate(skillAni["time"], skillAni["ani"], changeDirNode, this);
         transAni.enterScene();
         
+
         backBanner.visible(0);
         fea.visible(0);
         shadow.visible(0);
@@ -992,6 +1000,10 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         fea.texture("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil, UPDATE_SIZE);
         shadow.visible(1);
         showBackBanner();
+        var bSize = changeDirNode.prepare().size();
+        trace("changeDirNode Size", bSize);
+        backBanner.pos(bSize[0]/2, bSize[1]-getBloodHeightOff());
+
         fea.visible(1);//重新设定图片和 特征色 
         adjustPicSize();
         transAni = null;
@@ -1349,10 +1361,12 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         var bSize = changeDirNode.prepare().size();
         bg.size(bSize);
         changeDirNode.pos(bSize[0]/2, bSize[1]);
+
+        var shadowOffX = data["shadowOffX"];
         var shadowOffY = data["shadowOffY"];
 
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2, bSize[1]+shadowOffY).anchor(50, 50);
+        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("mapSolScale"));
 
         backBanner.pos(bSize[0]/2, bSize[1]-getBloodHeightOff());
 
@@ -1360,7 +1374,6 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         if(sx >= 2)
             suffix = "1";
         backBanner.texture("mapSolBloodBan"+suffix+".png", UPDATE_SIZE);
-        backBanner.pos(bSize[0]/2, data["bloodHeight"]);
     }
     //map 上增加 bomb
 

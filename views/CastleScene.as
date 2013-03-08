@@ -149,7 +149,6 @@ class CastleScene extends MyNode
             beginBuild(param[1]);
         }
         //退出程序自动关闭音乐
-        /*
         else if(msid == RESUME_GAME)
         {
             global.controller.playMedia("business.mp3");
@@ -158,7 +157,6 @@ class CastleScene extends MyNode
         {
             global.controller.pauseMedia("business.mp3");
         }
-        */
     }
     override function exitScene()
     {
@@ -298,6 +296,8 @@ class CastleScene extends MyNode
 
         closeBuild();
         //在关闭 选择菜单之后再显示任务奖励菜单
+
+        global.taskModel.doOnceTaskByKey("buyDecor", BUILD, id, 1);//购买任意建筑都触发
     }
 
     function cancelBuild()

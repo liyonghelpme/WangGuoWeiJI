@@ -1331,6 +1331,11 @@ function removeNewTaskMask()
         GlobalNewTaskMask = null;
     }
 }
+function checkTransformYet(id) {
+    var data = getData(SOLDIER, id);
+    trace("checkTransformYet", id, data["isHero"], id%10, getParam("MaxSolCareer"));
+    return (data["isHero"] && id%10 == (getParam("MaxSolCareer")+1));
+}
 function checkHeroTransform(id)
 {
     var data = getData(SOLDIER, id);

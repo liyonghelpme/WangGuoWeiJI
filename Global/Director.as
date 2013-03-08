@@ -37,6 +37,7 @@ class Director
 taskHintDebug = label("", getFont(), 20).color(0, 0, 0).pos(10, 10);
         stack = [];
         disSize = [800, 480];
+        trace("disSize", disSize);
         v_scale(disSize[0], disSize[1]);
         sceneStack = new Array();
         curScene = new Scene();

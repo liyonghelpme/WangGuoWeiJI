@@ -1,3 +1,4 @@
+//士兵商店
 class CallSoldier extends MyNode
 {
     var monAni = node(); 

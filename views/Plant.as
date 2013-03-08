@@ -91,7 +91,7 @@ class Plant extends MyNode
         var newState = passTime*3/needTime;
         newState = min(MATURE, max(SOW, newState));
 
-        if((newState == MATURE) && (passTime >= 2*needTime) && acced == 0)
+        if((newState == MATURE) && (passTime >= getParam("rotTime")*needTime) && acced == 0)
         {
             newState = ROT; 
         }

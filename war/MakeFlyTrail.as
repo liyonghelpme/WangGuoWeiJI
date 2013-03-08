@@ -39,7 +39,7 @@ class MakeFlyTrail extends EffectBase
         }
         else if(state == FLY_NOW)
         {
-            removeSelf();
+            doHarm();
         }
         updateTime();
     }

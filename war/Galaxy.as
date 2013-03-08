@@ -44,7 +44,6 @@ class Galaxy extends EffectBase
     {
         if(state == FLY_NOW)
         {
-            removeSelf();
             doHarm();
         }
     }

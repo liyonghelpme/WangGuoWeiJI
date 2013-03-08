@@ -171,7 +171,8 @@ function calHurt(src, tar)
     var missYet = 0;
     if(mr < missRate)
         missYet = 1;
-    return [intHurt-tar.defense, criHit, missYet];//攻击力减去防御力
+    //如果防御大于攻击不能加血啊！
+    return [max(intHurt-tar.defense, 1), criHit, missYet];//攻击力减去防御力
 }
 
 function getMakeUpRate(id)

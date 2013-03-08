@@ -178,9 +178,7 @@ gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169
         var level = global.user.getValue("level");
         var exp = global.user.getValue("exp");
         var needExp = getLevelUpNeedExp(level);
-
         
-        //var lastExpSize = expfiller.prepare().size()[0];
         var nowSize = exp*EXP_LEN/needExp+BASE_LEN;
 
 
@@ -189,8 +187,10 @@ gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169
             expfiller.stop();
             expfiller.addaction(sizeto(500, nowSize, 12));
         }
-        else
+        else {
+            expfiller.stop();
             expfiller.size(nowSize, 12);
+        }
 
         //if(nowSize > lastExpSize)
         //{
@@ -221,7 +221,6 @@ gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169
         
         //背景宽度 图片自身宽度 图片高度
         var sca = getNodeSca(levelLabel, [min(lSize[0], bSize[0]), min(lSize[1], 21)]);
-        //if(level >= 100)
         levelLabel.scale(sca);
     }
     /*

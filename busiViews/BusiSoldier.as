@@ -132,6 +132,11 @@ class BusiSoldier extends MyNode
             movAni.stop();
         }
         movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
+
+        var shadowOffX = data["shadowOffX"];
+        var shadowOffY = data["shadowOffY"];
+        var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
+        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE"));
     }
 
 

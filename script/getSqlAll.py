@@ -740,6 +740,14 @@ for r in res:
 
 print 'var', 'taskSoldier', '=', json.dumps(showId), ';'
 
+sql = 'select * from building where funcs = 2 and  gold = 0 order by level'
+con.query(sql)
+res = con.store_result().fetch_row(0, 1)
+showId = []
+for r in res:
+    showId.append(r['id'])
+print 'var', 'taskDecor', '=', json.dumps(showId), ';'
+
 
 import codecs
 strFile = codecs.open('../data/String.as', 'w', 'utf8')
