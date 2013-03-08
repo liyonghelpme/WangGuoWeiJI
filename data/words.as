@@ -701,4 +701,5 @@ var WORDS = dict([
 ["StoreAttWordshealthBoundaryDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
 ["StoreAttWordspercentHealthDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
 ["Max", ["最多", "Max"]],
+["onceTaskFinished", ["该任务已经完成", "This quest has been completed"]],
 ]);

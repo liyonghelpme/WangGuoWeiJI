@@ -740,13 +740,30 @@ for r in res:
 
 print 'var', 'taskSoldier', '=', json.dumps(showId), ';'
 
-sql = 'select * from building where funcs = 2 and  gold = 0 order by level'
-con.query(sql)
-res = con.store_result().fetch_row(0, 1)
-showId = []
-for r in res:
-    showId.append(r['id'])
-print 'var', 'taskDecor', '=', json.dumps(showId), ';'
+def onceTask():
+    sql = 'select * from building where funcs = 2 and  gold = 0 order by level'
+    con.query(sql)
+    res = con.store_result().fetch_row(0, 1)
+    decorId = []
+    for r in res:
+        decorId.append(r['id'])
+
+    sql = 'select * from equip where gold = 0 order by level'
+    con.query(sql)
+    res = con.store_result().fetch_row(0, 1)
+    equipId = []
+    for r in res:
+        equipId.append(r['id'])
+
+
+    OnceTask = [
+    [0, decorId],
+    [1, equipId],
+    ]
+    #print 'var', 'taskDecor', '=', json.dumps(showId), ';'
+
+    print 'var', 'OnceTask', '=', 'dict(', json.dumps(OnceTask), ');'
+onceTask();
 
 
 import codecs

@@ -673,12 +673,14 @@ const MAKE_EQUIP = 1;
 const MEDICINE = 0;
 const ORE = 1;
 
-const ONCE_TASK = 0;
+
+//const ONCE_TASK = 0;
 const CYCLE_TASK = 1;
 const DAILY_TASK = 2;
 const NEW_TASK = 3;
 const SOL_TASK = 4;//购买士兵任务
-const DECOR_TASK = 5;
+//const DECOR_TASK = 5;
+const ONCE_TASK = 6;
 
 
 //邮件信息类型

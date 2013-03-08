@@ -9,7 +9,13 @@ class TaskModel
     var newUserTask = null;
     var localCycleTask = null;
     var localSolTask = null;
-    var localDecorTask = null;
+
+    //key, container
+    var onceTaskList = dict([
+        [BUILD,  "localDecorTask"],
+    ]);
+    var localOnceTask = null;
+
     function getFinishNum()
     {
         if(initYet)
@@ -21,13 +27,10 @@ class TaskModel
             var newTask = getCurNewTask();
             for(i = 0; i < len(newTask); i++)
             {
-                //ret = checkNewTaskFin(newTask[i]);
                 ret = checkNewTaskState(newTask[i]);
                 if(ret == TASK_CAN_FINISH)
                     count++;
             }
-            //if(len(newTask) > 0)
-            //    return count;
 
             var key = localCycleTask.keys();
             for(i = 0; i < len(key); i++)
@@ -43,6 +46,14 @@ class TaskModel
                 if(ret)
                     count++;
             }
+            key = localOnceTask.keys();
+
+            for(i = 0; i < len(key); i++)
+            {
+                ret = checkOnceTaskFinish(key[i]);
+                if(ret)
+                    count++;
+            }
 
             return count;//循环任务完成   
         }
@@ -54,7 +65,7 @@ class TaskModel
     //const SLOW_TASK = 3000;
     function update(diff)
     {
-        if(initYet == 0 && initCycleTask && initNewTask && initSolTask && initDataYet && realInitData && initDecorTask)
+        if(initYet == 0 && initCycleTask && initNewTask && initSolTask && initDataYet && realInitData && initOnceTask)
         {
             initYet = 1;
             global.msgCenter.sendMsg(UPDATE_TASK, null);
@@ -101,6 +112,8 @@ class TaskModel
     var realInitData = 0;
     function receiveMsg(param)
     {
+        var i;
+        var its;
         var msid = param[0];
         //login 结束之后 立即开始初始化 任务数据
         //完成新手剧情之后就可以进入游戏
@@ -109,12 +122,14 @@ class TaskModel
                 newUserTask = null;
                 localCycleTask = null;
                 localSolTask = null;
-                localDecorTask = null;
+                
+                localOnceTask = null;
             } else {
                 newUserTask = global.user.db.get("newUserTask");
                 localCycleTask = global.user.db.get("localCycleTask");
                 localSolTask = global.user.db.get("localSolTask");
-                localDecorTask = global.user.db.get("localDecorTask");
+
+                localOnceTask = global.user.db.get("localOnceTask");
             }
 
             if(newUserTask == null)
@@ -139,12 +154,12 @@ class TaskModel
                 global.user.db.put("localSolTask", localSolTask);
             }
             checkAvailableSolTask();
-
-            if(localDecorTask == null) {
-                localDecorTask = dict();
-                global.user.db.put("localDecorTask", localDecorTask);
+            
+            if(localOnceTask == null) {
+                localOnceTask = dict();
+                global.user.db.put("localOnceTask", localOnceTask);
             }
-            checkAvailableDecorTask();
+            checkAvailableOnceTask();
 
         } else if(msid == INITDATA_OVER) {
             //初始化新手任务 阶段 和 所有任务 完成状态 ---> 完成则更新阶段
@@ -614,23 +629,23 @@ class TaskModel
         }
         return 0;
     }
-    var initDecorTask = 0;
-    function checkAvailableDecorTask()
-    {
+    var initOnceTask = 0;
+    function checkAvailableOnceTask() {
         var allTask = getAllDataList(TASK);
         var needSyn = [];
         for(var i = 0; i < len(allTask); i++) {
-            if(allTask[i]["kind"] == DECOR_TASK && localDecorTask.get(allTask[i]["id"]) == null) {
+            if(allTask[i]["kind"] == ONCE_TASK && localOnceTask.get(allTask[i]["id"]) == null) {
                 needSyn.append(allTask[i]["id"]);
             }
         }
         if(len(needSyn) > 0) {
-            global.httpController.addRequest("taskC/synTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)]]), synDecorTaskOver, null);
+            global.httpController.addRequest("taskC/synTask", dict([["uid", global.user.uid], ["needSyn", json_dumps(needSyn)]]), synOnceTaskOver, null);
         } else{
-            initDecorTask = 1;
+            initOnceTask = 1;
         }
     }
-    function synDecorTaskOver(rid, rcode, con, param) {
+
+    function synOnceTaskOver(rid, rcode, con, param) {
         if(rcode != 0)
         {
             con = json_loads(con);
@@ -638,10 +653,10 @@ class TaskModel
             //tid, number, stage
             for(var i = 0; i < len(ret); i++)
             {
-                localDecorTask.update(ret[i][0], dict([["tid", ret[i][0]], ["number", ret[i][1]], ["stage", ret[i][2]]]));
+                localOnceTask.update(ret[i][0], dict([["tid", ret[i][0]], ["number", ret[i][1]], ["stage", ret[i][2]]]));
             }
-            global.user.db.put("localDecorTask", localSolTask);
-            initDecorTask = 1;
+            global.user.db.put("localOnceTask", localOnceTask);
+            initOnceTask = 1;
         }
     }
     function checkAvailableSolTask()
@@ -670,13 +685,29 @@ class TaskModel
     任务stage 描述任务进度 CycleTask
     购买完成任务 需要传入 购买士兵的id 
     */
-    function getDecorTask(tid) {
-        return localDecorTask[tid];
+    
+    //如何防止一次性任务的名称污染
+
+    function getOnceTask(tid) {
+        return localOnceTask[tid];
     }
+    function checkOnceTaskFinish(tid) {
+        var taskContainer = localOnceTask; 
+
+        var task = taskContainer[tid];
+        var needNum = getData(TASK, tid)["num"];
+        if(needNum != -1 && task["number"] >= needNum) {
+            return 1;
+        }
+        return 0;
+    }
+
+
     function getSolTask(tid)
     {
         return localSolTask[tid];        
     }
+
     function checkSolTaskFinish(tid)
     {
         var task = localSolTask[tid];
@@ -796,6 +827,14 @@ class TaskModel
     //buy kind ID
     //只要 key 就可以了
     //模仿循环任务
+    function finishOnceTask(tid) {
+        var task = localOnceTask[tid];
+        task["number"] = 0;
+        task["stage"] += 1;
+        task.pop("showYet");
+        global.user.db.put("localOnceTask", localOnceTask);
+        global.msgCenter.sendMsg(UPDATE_TASK, null);
+    }
     function finishSolTask(tid)
     {
         var task = localSolTask[tid];
@@ -832,10 +871,9 @@ class TaskModel
         }
     }
     function doOnceTaskByKey(key, kind, id, num) {
+        trace("doOnceTaskByKey", key, kind, id, num);
         if(global.user.getValue("newTaskStage") >= getParam("showFinish")) {
-            var allPossible;
-            if(kind == BUILD)
-                allPossible = localDecorTask.keys();
+            var allPossible = localOnceTask.keys();
             //增加其它类型
             for(var i = 0; i < len(allPossible); i++)
             {
@@ -850,30 +888,24 @@ class TaskModel
     }
     //初始化 Kind : key -> container -> allTaskList -> TaskDes TaskTitle  需要修正 
     function doOnceTask(tid, kind, id, num) {
-        var taskContainer;
-        var allTaskList;
-        var dbKey;
-        if(kind == BUILD) {
-            dbKey = "localDecorTask";
-            taskContainer = localDecorTask;
-            allTaskList = taskDecor;
-        }
+        var taskContainer = localOnceTask ;
+        var allTaskList = OnceTask[kind];
 
         var task = taskContainer[tid];
         var stage = task["stage"];
         if(stage < len(allTaskList))
         {
-            if(allTaskList[stage] == did)
+            if(allTaskList[stage] == id)
             {
                 task["number"] += num;
-                var ret = checkSolTaskFinish(tid); //一次性购买任务检查是否完成
+                var ret = checkOnceTaskFinish(tid); //一次性购买任务检查是否完成
                 var taskData = getData(TASK, tid);
                 if(ret && task["showYet"] == null && taskData["showTaskFinish"])
                 {
                     task["showYet"] = 1;
                     global.director.curScene.addChild(new TaskFinish(replaceStr(taskData["title"], ["[NUM]", str(getCycleStageNum(tid, task["stage"])) ])), MAX_BUILD_ZORD);
                 }
-                global.user.db.put(dbKey, taskContainer);
+                global.user.db.put("localOnceTask", taskContainer);
                 global.msgCenter.sendMsg(UPDATE_TASK, null);
                 //使用循环任务的接口
                 global.httpController.addRequest("taskC/doCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["num", num]]), null, null);

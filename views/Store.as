@@ -209,6 +209,7 @@ goldText = bg.addlabel(getStr("gold", null), getFont(), 19).anchor(0, 0).pos(474
                 global.httpController.addRequest("goodsC/buyEquip", dict([["uid", global.user.uid], ["eid", newEid], ["equipKind", id]]), null, null);
                 global.user.buySomething(kind, id, newEid);
                 global.taskModel.doAllTaskByKey("buyEquip", 1);
+                global.taskModel.doOnceTaskByKey("buyEquip", EQUIP, id, 1);
             }
             //购买金币 需要消耗木瓜币 有所不同
             else if(kind == GOLD)

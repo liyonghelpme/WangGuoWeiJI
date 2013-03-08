@@ -191,6 +191,18 @@ expNode.addlabel(getStr("needExp", ["[EXP]", str(exp)]), getFont(), 20).anchor(0
             //没有新手任务 则 显示下列任务
             if(len(newTask) == 0)
             {
+                var onceTask = global.taskModel.localOnceTask.keys();
+                for(i = 0; i < len(onceTask); i++)
+                {
+                    tData = global.taskModel.getOnceTask(onceTask[i]);
+                    taskD = getData(TASK, tData["tid"]);
+                    if(global.taskModel.checkOnceTaskFinish(onceTask[i]))
+                        finishTask.append([ONCE_TASK, onceTask[i]]);
+                    else
+                        unFinishTask.append([ONCE_TASK, onceTask[i]]);
+                }
+
+
                 var solTask = global.taskModel.localSolTask.keys(); 
                 for(i = 0; i < len(solTask); i++)
                 {
@@ -303,40 +315,17 @@ expNode.addlabel(getStr("needExp", ["[EXP]", str(exp)]), getFont(), 20).anchor(0
             var stageNum;
             var num;
             var needNum;
+            var stage;
+            var finished;
 
 
-            if(kind == ONCE_TASK)
-            {
-                var key = t[1][0];
-                if(key == "buy")//购买类任务
-                {
-                    but0 = new NewButton("greenButton0.png", [91, 37], getStr("finishTask", null), null, 20, FONT_NORMAL, [100, 100, 100], onFinishTask, i);
-                    but0.bg.pos(429, 34);
-                    panel.add(but0.bg);
-                    var goods = getGoodsKindAndId(t[1][1]);
-                    var gData = getData(goods[0], goods[1]);
-
-                    temp = panel.addsprite("hook.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
-                    if(goods[0] == SOLDIER)
-                    {
-panel.addlabel(getStr("buySolTitle", ["[NAME]", gData["name"]]), getFont(), 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
-panel.addlabel(getStr("buySoldier", null), getFont(), 15).anchor(0, 50).pos(92, 51).color(56, 54, 53);
-                    }
-                    else
-                    {
-panel.addlabel(getStr("buySth", ["[NAME]", gData["name"]]), getFont(), 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
-panel.addlabel(getStr("buyGoods", null), getFont(), 15).anchor(0, 50).pos(92, 51).color(56, 54, 53);
-                    }
-                    reward = getGain(TASK, PARAMS["buyTaskId"]).items();
-                }
-            }
             /*
             print it out 看到才能测试 但是编译一次比较慢 最好 分批次进行测试
             view 测试 
             主逻辑测试
             其他测试
             */
-            else if(kind == CYCLE_TASK)
+            if(kind == CYCLE_TASK)
             {
                 tid = t[1];
                 tData = global.taskModel.getCycleTask(tid);
@@ -372,8 +361,42 @@ panel.addlabel(replaceStr(taskData["des"], ["[NUM]", str(getCycleStageNum(tid, t
                 reward = getCycleReward(tid, tData["stage"]).items(); 
                 trace("cycleReward", reward);
             }
+            else if(kind == ONCE_TASK) {
+                tid = t[1];
+                tData = global.taskModel.getOnceTask(tid);
+                taskData = getData(TASK, tid);
+                stageNum = taskData["num"];
+                num = tData["number"];
+                stage = tData["stage"];
+
+                finished = global.taskModel.checkOnceTaskFinish(tid);
+                if(stage >= len(OnceTask[taskData["onceTaskId"]]))
+                {
+temp = panel.addlabel(getStr("onceTaskFinished", null), getFont(), 18, FONT_NORMAL, 90, 0, ALIGN_LEFT).anchor(0, 0).pos(389, 19).color(56, 54, 53);
+                }
+                else if(finished)//任务可以完成
+                {
+                    but0 = new NewButton("greenButton0.png", [91, 37], getStr("finishTask", null), null, 20, FONT_NORMAL, [100, 100, 100], onFinishTask, i);
+                    but0.bg.pos(429, 34);
+                    panel.add(but0.bg);
+                    temp = panel.addsprite("hook.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
+panel.addlabel(getStr("taskNum", ["[NUM0]", str(stageNum), "[NUM1]", str(stageNum)]), getFont(), 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
+                }
+                else//任务没有完成
+                {
+                    temp = panel.addsprite("taskExpIcon.png").anchor(0, 0).pos(37, 11).size(33, 27).color(100, 100, 100, 100);
+panel.addlabel(getStr("needExp", ["[EXP]", str(taskData["exp"])]), getFont(), 15).anchor(50, 50).pos(54, 53).color(6, 69, 7);
+panel.addlabel(getStr("taskNum", ["[NUM0]", str(num), "[NUM1]", str(stageNum)]), getFont(), 23).anchor(0, 50).pos(382, 22).color(96, 61, 21);
+                }
+                
+panel.addlabel(taskData["title"], getFont(), 23).anchor(0, 50).pos(94, 17).color(0, 0, 0);
+                if(stage < len(OnceTask[taskData["onceTaskId"]]))
+panel.addlabel(replaceStr(taskData["des"], ["[NAME]", getData(taskData["onceTaskId"], OnceTask[taskData["onceTaskId"]][stage])["name"]]), getFont(), 15).anchor(0, 50).pos(92, 51).color(56, 54, 53);
+
+                reward = getGain(TASK, tid).items();
+
             //硬编码 购买士兵任务
-            else if(kind == SOL_TASK)
+            } else if(kind == SOL_TASK)
             {
                 tid = t[1];
                 tData = global.taskModel.getSolTask(tid);
@@ -381,7 +404,7 @@ panel.addlabel(replaceStr(taskData["des"], ["[NUM]", str(getCycleStageNum(tid, t
                 stageNum = taskData["num"];
                 num = tData["number"];
                 //可以完成solTask
-                var stage = tData["stage"];
+                stage = tData["stage"];
                 //购买任务士兵 任务 已经全部完成
                 if(stage >= len(taskSoldier))
                 {
@@ -456,20 +479,7 @@ panel.addlabel(str(reward[r][1]), getFont(), 23).anchor(0, 50).pos(RINIT_X + 22,
         var reward;
         var tid;
         var tData;
-        if(tasks[curNum][0] == ONCE_TASK)
-        {
-            if(tasks[curNum][1][0] == "buy")
-            {
-                reward = getGain(TASK, PARAMS["buyTaskId"]);
-                global.httpController.addRequest("taskC/finishBuyTask", dict([["uid", global.user.uid], ["oid", tasks[curNum][1][1]], ["gain", json_dumps(reward)]]), null, null);
-                global.user.doAdd(reward);
-                global.taskModel.receiveBuyTaskReward(tasks[curNum][1][1]);
-
-                initData();
-                updateTab();
-            }
-        }
-        else if(tasks[curNum][0] == CYCLE_TASK)
+        if(tasks[curNum][0] == CYCLE_TASK)
         {
             tid = tasks[curNum][1];
             tData = global.taskModel.getCycleTask(tid);
@@ -497,6 +507,17 @@ panel.addlabel(str(reward[r][1]), getFont(), 23).anchor(0, 50).pos(RINIT_X + 22,
             global.httpController.addRequest("taskC/finishCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(reward)]]), null, null);
             global.user.doAdd(reward);
             global.taskModel.finishSolTask(tid);
+            initData();
+            updateTab();
+            showTaskMultiReward(reward);
+        }
+        else if(tasks[curNum][0] == ONCE_TASK)
+        {
+            tid = tasks[curNum][1];
+            reward = getGain(TASK, tid);
+            global.httpController.addRequest("taskC/finishCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["gain", json_dumps(reward)]]), null, null);
+            global.user.doAdd(reward);
+            global.taskModel.finishOnceTask(tid);
             initData();
             updateTab();
             showTaskMultiReward(reward);
