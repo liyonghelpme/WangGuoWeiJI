@@ -1,5 +1,7 @@
 class BusiSoldier extends MyNode
 {
+    var groupId = 0;
+
     var monsterData = null;
     var dead = 0;
     var attack;
@@ -131,12 +133,12 @@ class BusiSoldier extends MyNode
         {
             movAni.stop();
         }
-        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
+        movAni = repeat(animate(data["movAniTime"], "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png", UPDATE_SIZE));
 
         var shadowOffX = data["shadowOffX"];
         var shadowOffY = data["shadowOffY"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE"));
+        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE")*data["shadowXScale"]/100, getParam("SOL_SHOW_SIZE"));
     }
 
 
@@ -192,8 +194,9 @@ class BusiSoldier extends MyNode
         */
         return cSize;
     }
-    function BusiSoldier(m, d, privateData, s)
+    function BusiSoldier(m, d, privateData, s, gid)
     {
+        groupId = gid;
         trace("init BusiSoldier", m, d, privateData, s);
         sid = s;
         data = d;
@@ -226,9 +229,9 @@ stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
         var shadowOffX = data["shadowOffX"];
         var shadowOffY = data["shadowOffY"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE"));
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE")*data["shadowXScale"]/100, getParam("SOL_SHOW_SIZE"));
 
-        bg.add(shadow, -1);
+        bg.add(shadow, -2);
         initData(privateData);
 
 
@@ -240,7 +243,7 @@ stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
         if(map != null)
             curMap = map.mapGridController.updateMap(this);
 
-        movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
+        movAni = repeat(animate(data["movAniTime"], "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);
         if(privateData != null)
             myName = privateData.get("name", "");
@@ -778,22 +781,26 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
     //var inspireTime = 0;
     //士兵当前占用的map映射格子 
     var curMap = null;
+    var moveTime = 0;
+    var passTime = 0;
+    //过去时间超过移动时间重新寻找目标
     function doMove()
     {
-        shiftAni.stop();
-        var oldPos = bg.pos();
-        setPos(oldPos);
-        var dist = distance(bg.pos(), tar);
-        if(oldPos[0] == tar[0] && oldPos[1] == tar[1])
-        {
+        if(passTime > moveTime) {
+            shiftAni.stop();
             movAni.stop();
-            //featureMov.stop();
-            state = SOL_FREE;
+            state = SOL_FREE; //立即寻找下一个目标
             return;
+        } else {
+            var oldPos = bg.pos();
+            setPos(oldPos);
+            var dist = distance(bg.pos(), tar);
+            var t = dist*1000/speed;
+            shiftAni = moveto(t, tar[0], tar[1]);
+            bg.addaction(shiftAni);
+            moveTime = t;
+            passTime = 0;
         }
-        var t = dist*1000/speed;
-        shiftAni = moveto(t, tar[0], tar[1]);
-        bg.addaction(shiftAni);
     }
     function getDeadLeftTime()
     {
@@ -810,8 +817,13 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
         chooseStar.removefromparent();
     }
     var stateLabel;
+    //没有轮到本批次 不更新状态
     function update(diff)
     {
+        passTime += diff;
+        if(map != null && map.curUpdateId != groupId && state == SOL_MOVE)//只有士兵在移动状态才会阻塞更新 FREE 状态立即寻找下一个目标
+            return;
+
         if(getParam("debugSoldier"))
             stateLabel.text("inTran"+str(inTransfer)+":inDead"+str(inDead));
         var leftTime;
@@ -869,6 +881,7 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
                 curMap = map.mapGridController.updatePosMap([sx, sy, tar[0], tar[1], this]);
                 changeDirNode.addaction(movAni);
                 setDir();
+                passTime = 0;
                 doMove();
             }
         }

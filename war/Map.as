@@ -740,30 +740,60 @@ var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] 
         }
         return null;
     }
+
+    function cmpSolSize(a, b) {
+        a = a[0];
+        b = b[0];
+
+        var aData = global.user.getSoldierData(a);
+        var aSize = getRealSoldierData(aData["id"]);
+        aSize = max(aSize["sx"], aSize["sy"]);
+
+        var bData = global.user.getSoldierData(b);
+        var bSize = getRealSoldierData(bData["id"]);
+        bSize = max(bSize["sx"], bSize["sy"]);
+
+        return aSize >= bSize;
+    }
+
+    //按照体型大小进行排序 从小到大排放 直到不能放置则暂停
     function randomAllSoldier(data)
     {
+        var i;
         var removed = [];
-        for(var i = 0; i < len(data); i++)
+        var sortedSol = [];
+        //compareTime
+        for(i = 0; i < len(data); i++) {
+            if(data[i][1] == 0) 
+                sortedSol.append([data[i][0], i]);
+        }
+        bubbleSort(sortedSol, cmpSolSize);
+        trace("len soldier size", len(sortedSol));
+
+        
+        for(i = 0; i < len(sortedSol); i++)
         {
-            if(data[i][1] == 0)//未安排的士兵
+            //if(data[i][1] == 0)//未安排的士兵
             {
-                var sid = data[i][0];
+                //var sid = data[i][0];
+                var sid = sortedSol[i][0];
                 var sdata = global.user.getSoldierData(sid);
                 var so = realAddSoldier(sid, sdata["id"], null, MYCOLOR);
 
                 var nPos = getInitPos(so);
-                if(nPos[0] == -1)
+                if(nPos[0] == -1)//没有位置则不再放置
                 {
                     realRemoveSoldier(so);
-                    continue;
+                    break;
                 }
                 so.setPos(nPos);
                 setMap(so);
                 so.putOnMap();//士兵进入地图准备
                 
-                removed.append(i);
+                removed.append(sortedSol[i][1]);
             }
         }
+        trace("testTimes", i);
         return removed;
     }
 
@@ -908,6 +938,7 @@ var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] 
     }
     
     //英雄死亡
+    //金币购买的boss 复活
     function getAllDeadHero()
     {
         var deadSols = [];
@@ -915,7 +946,7 @@ var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] 
         for(var i = 0; i < len(mySoldiers); i++)
         {
             var sol = mySoldiers[i];
-            if(sol.dead == 1 && sol.data["isHero"])
+            if(sol.dead == 1 && sol.data["isBoss"])
             {
                 deadSols.append(sol.sid);
                 deadInstance.append(sol);
@@ -931,7 +962,7 @@ var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] 
         for(var i = 0; i < len(mySoldiers); i++)
         {
             var sol = mySoldiers[i];
-            if(sol.dead == 1 && !sol.data["isHero"])
+            if(sol.dead == 1 && !sol.data["isBoss"])
             {
                 deadSols.append(sol.sid);
                 deadInstance.append(sol);

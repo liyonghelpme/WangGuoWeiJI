@@ -278,7 +278,7 @@ class SelectMenu extends MyNode
                 //构造新的士兵数据初始化士兵
                 //学习英雄技能
                 //id sid name
-                var newSol = new BusiSoldier(null, getData(SOLDIER, curSelHero), null, newHeroId);
+                var newSol = new BusiSoldier(null, getData(SOLDIER, curSelHero), null, newHeroId, 0);
                 newSol.setName(name);
                 global.user.updateSoldiers(newSol);
                 global.user.addNewSkill(newSol.sid, heroSkill.get(newSol.id));

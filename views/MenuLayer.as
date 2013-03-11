@@ -203,7 +203,15 @@ gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169
         var leftExp = needExp-exp;
         if(add > 0)
         {
+            //调整banner宽度 重新居中字体位置
             expWord.setWords(getStr("expToLev", ["[EXP]", str(leftExp), "[LEV]", str(level+2)]));
+            var expSize = [150, 50];
+            var wSize = expWord.bg.size();
+            expBanner.size(max(wSize[0]+20, expSize[0]), 50);
+            expSize = expBanner.size();
+            expWord.bg.pos(expSize[0]/2, 28);
+
+
             expBanner.stop();
             expBanner.visible(1);
             expBanner.addaction(sequence(itintto(100, 100, 100, 100), delaytime(2000), fadeout(1000)));

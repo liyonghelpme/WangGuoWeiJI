@@ -45,7 +45,7 @@ class AllSoldier extends MyNode
             else
             {
                 selled = 0;
-                var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
+                var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0], 0);//privateData sid
                 busiSol.sureToSell();
 
                 showMultiPopBanner(cost);
@@ -217,7 +217,7 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
             act = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
             monAni.addaction(act);
 
-            var busiSol = new BusiSoldier(null, sData, soldier[1], soldier[0]);//privateData sid
+            var busiSol = new BusiSoldier(null, sData, soldier[1], soldier[0], 0);//privateData sid
 
             var healthBoundary = busiSol.healthBoundary;
 
@@ -231,7 +231,7 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
         if(soldier != null)
         {
             var id = soldier[1]["id"];
-            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
+            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0], 0);//privateData sid
             //global.director.pushView(new DetailDialog(busiSol), 1, 0);
         }
     }
@@ -242,7 +242,7 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
         {
             var id = soldier[1]["id"];
             //无法更新非加入场景的对象的数据
-            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
+            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0], 0);//privateData sid
             global.director.pushView(new DrugDialog(busiSol, DRUG), 1, 0);
         }
     }
@@ -251,7 +251,7 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
         if(soldier != null)
         {
             var id = soldier[1]["id"];
-            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0]);//privateData sid
+            var busiSol = new BusiSoldier(null, getData(SOLDIER, id), soldier[1], soldier[0], 0);//privateData sid
             global.director.pushView(new DrugDialog(busiSol, EQUIP), 1, 0);
         }
     }

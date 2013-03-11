@@ -828,7 +828,7 @@ class User
         }
         //闯关结束 提示士兵阵亡
         //普通士兵死亡  英雄留存
-        if(soldier.dead && !soldier.data["isHero"])
+        if(soldier.dead && !soldier.data["isBoss"]) //英雄 boss 都有复活状态 
         {
             //清除士兵身上所有非套装suit == -1
             killSoldier(soldier);

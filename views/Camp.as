@@ -36,7 +36,7 @@ class FastCallback extends MyNode
                 sid = singleSol[0];
                 solId = singleSol[1];
                 newName = singleSol[2];
-                var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid);
+                var newSol = new BusiSoldier(null, getData(SOLDIER, solId), null, sid, 0);
                 newSol.setName(newName);
                 global.user.updateSoldiers(newSol);
                 global.msgCenter.sendMsg(BUYSOL, newSol.sid);

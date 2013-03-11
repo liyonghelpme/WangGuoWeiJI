@@ -229,11 +229,11 @@ class MapBanner extends MyNode
 
             if(showData[i][1] == 0)
             {
-                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png").pos(36, 34).anchor(50, 50);
+                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", ARGB_8888).pos(36, 34).anchor(50, 50);
             }
             else
             {
-                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", GRAY).pos(36, 34).anchor(50, 50);
+                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", GRAY, ARGB_8888).pos(36, 34).anchor(50, 50);
             }
             //使用我方特征色
             /*

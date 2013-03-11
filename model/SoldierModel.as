@@ -270,3 +270,10 @@ function checkTransfer(level, solData)
     }
     return 0;
 }
+
+function getRealSoldierData(id) {
+    if(checkHeroTransform(id)) {
+        id++;
+    }
+    return getData(SOLDIER, id);
+}

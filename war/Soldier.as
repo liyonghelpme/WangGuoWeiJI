@@ -553,12 +553,7 @@ class Soldier extends MyNode
         //1500 ms攻击一次 
         //经营页面回复生命值 60s 一次
 
-        data = getData(SOLDIER, id);
-        //英雄 且 升到顶级 则可以拖动放置之后变身
-        if(checkHeroTransform(id))
-        {
-            data = getData(SOLDIER, id+1);
-        }
+        data = getRealSoldierData(id);
 
         initData();
         shiftAni = moveto(0, 0, 0);
@@ -619,7 +614,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         var shadowOffY = data["shadowOffY"];
         var shadowOffX = data["shadowOffX"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("mapSolScale"));
+        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("mapSolScale")*data["shadowXScale"]/100, getParam("mapSolScale"));
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
 
         var suffix = "";
@@ -1366,7 +1361,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         var shadowOffY = data["shadowOffY"];
 
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("mapSolScale"));
+        shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("mapSolScale")*data["shadowXScale"]/100, getParam("mapSolScale"));
 
         backBanner.pos(bSize[0]/2, bSize[1]-getBloodHeightOff());
 

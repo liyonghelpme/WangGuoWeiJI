@@ -1,5 +1,9 @@
 class BuildLayer extends MoveMap
 {
+    var curGroupId = 0;
+    var curGroupNum = 0;
+    var curUpdateId = 0;
+
     var map;
     function BuildLayer(m)
     {
@@ -47,14 +51,22 @@ class BuildLayer extends MoveMap
         global.msgCenter.registerCallback(SOL_UNLOADTHING, this);
         global.msgCenter.registerCallback(SQUARE_SOL, this);
         global.msgCenter.registerCallback(FETCH_PARAM_OVER, this);
-        global.timer.addTimer(this); 
+        //global.timer.addTimer(this); 
+        solTimer.addTimer(this);
     }
     var passTime = getParam("UpdateStatusTime");
 
     //随机5 个 士兵 出现状态
     //sid 
+    //0   0 1 2 
+    //1   0 1
+
+
     function update(diff)
     {
+        curUpdateId++;
+        curUpdateId %= (curGroupId+1);
+
         passTime += diff;
         if(passTime > getParam("UpdateStatusTime") || getParam("debugStatus"))//测试士兵状态生成
         {
@@ -82,6 +94,13 @@ class BuildLayer extends MoveMap
             trace("soldier status", countHas);
         }
     }
+    function updateCurGroupId() {
+        curGroupNum++;
+        if(curGroupNum >= getParam("eachGroupNum")) {
+            curGroupId++;
+            curGroupNum = 0;
+        }
+    }
     /*
     注册消息类型------> MSG_ID------>对象 ------>参数[]
     */
@@ -95,8 +114,9 @@ class BuildLayer extends MoveMap
             //sid sdata
             var sdata = msg[1];
             var data = getData(SOLDIER, sdata[1].get("id"));
-            var soldier = new BusiSoldier(this, data, sdata[1], sdata[0]);
+            var soldier = new BusiSoldier(this, data, sdata[1], sdata[0], curGroupId);
             addSoldier(soldier);
+            updateCurGroupId();
         }
         else if(msg[0] == SOL_TRANSFER)
         {
@@ -187,7 +207,8 @@ class BuildLayer extends MoveMap
 
     override function exitScene()
     {
-        global.timer.removeTimer(this);
+        solTimer.removeTimer(this);
+        //global.timer.removeTimer(this);
         global.user.storeOldPos(mapGridController.allSoldiers);
 
         global.msgCenter.removeCallback(FETCH_PARAM_OVER, this);
@@ -295,11 +316,11 @@ class BuildLayer extends MoveMap
             var data = getData(SOLDIER, sdata.get("id"));
             if(sdata.get("dead", 0) == 1)//死亡士兵不显示
                 continue;
-            var soldier = new BusiSoldier(this, data, sdata, sid);
+            var soldier = new BusiSoldier(this, data, sdata, sid, curGroupId);
             addChildZ(soldier, MAX_BUILD_ZORD);
-            //global.user.addSoldier(soldier);
-            //mapGridController.allSoldiers.update(soldier.sid, soldier);
             mapGridController.addSoldier(soldier);
+            
+            updateCurGroupId();
         }
         trace("initSoldiers Finish");
     }

@@ -570,7 +570,7 @@ banner.addlabel("50", getFont(), 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color
             if(sid != null)//不是卖出士兵
             {
                 var sdata = global.user.getSoldierData(sid);
-                var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, sdata.get("id")), sdata, sid);
+                var newSol = new BusiSoldier(buildLayer, getData(SOLDIER, sdata.get("id")), sdata, sid, 0);
                 buildLayer.addSoldier(newSol);
                 newSol.setRandomInitPos();
                 newSol.setSmoke();

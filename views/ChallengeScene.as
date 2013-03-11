@@ -47,6 +47,9 @@ class ChallengeScene extends MyNode
     var pictureManager;
     function checkSolPic()
     {
+        finishDownload();
+        return 1;//不用检测下载图片了
+
         var k;
         var downloadList = [];
         //新手任务 阶段 
