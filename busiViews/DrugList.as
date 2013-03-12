@@ -120,7 +120,7 @@ class DrugList extends MyNode
         for(var i = rg[0]; i < rg[1]; i++)
         {
             var curNum = i; 
-            var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i);
+var panel = flowNode.addsprite("dialogMakeDrugBanner.png", ARGB_8888).pos(0, OFFY * i);
 
             if(data[i][0] == EMPTY_PANEL)
                 continue;
@@ -142,7 +142,7 @@ class DrugList extends MyNode
                 id = useData.get("kind");
             }
 
-            temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
             sca = getSca(temp, [68, 56]);
             temp.scale(sca);
 

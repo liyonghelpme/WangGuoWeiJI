@@ -30,7 +30,7 @@ class MoreView extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("moreWhiteBack.png").anchor(0, 0).pos(8, 85).size(785, 384).color(100, 100, 100, 100);
+temp = bg.addsprite("moreWhiteBack.png", ARGB_8888).anchor(0, 0).pos(8, 85).size(785, 384).color(100, 100, 100, 100);
     }
     function MoreView(p, s)
     {
@@ -103,9 +103,9 @@ class MoreView extends MyNode
         for(var i = rg[0]; i < rg[1]; i++)
         {
             var panel = flowNode.addnode().size(PANEL_WIDTH, PANEL_HEIGHT).pos(0, OFFY*i);
-            temp = panel.addsprite("messageSeperate.png").anchor(0, 0).pos(0, 98).size(784, 3).color(100, 100, 100, 100);
+temp = panel.addsprite("messageSeperate.png", ARGB_8888).anchor(0, 0).pos(0, 98).size(784, 3).color(100, 100, 100, 100);
 
-            temp = panel.addsprite("gameIcon.png").anchor(50, 50).pos(52, 50).color(100, 100, 100, 100);
+temp = panel.addsprite("gameIcon.png", ARGB_8888).anchor(50, 50).pos(52, 50).color(100, 100, 100, 100);
             sca = getSca(temp, [72, 71]);
             temp.scale(sca);
 panel.addlabel(data[i][0], getFont(), 20).anchor(0, 50).pos(118, 54).color(54, 51, 51);

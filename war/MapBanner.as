@@ -74,20 +74,20 @@ class MapBanner extends MyNode
         //隐藏右上角的按钮 直到开始挑战时显示
         if(scene.kind == CHALLENGE_FRI)
         {
-            randomBut = sprite("random.png").anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
-            cancelBut = sprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
-            okBut = sprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
+randomBut = sprite("random.png", ARGB_8888).anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
+cancelBut = sprite("mapMenuCancel.png", ARGB_8888).anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
+okBut = sprite("mapMenuOk.png", ARGB_8888).anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
         }
         else
         {
-            temp = bg.addsprite("random.png").anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
+temp = bg.addsprite("random.png", ARGB_8888).anchor(0, 0).pos(701, 35).size(60, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRandom);
             randomBut = temp;
-            temp = bg.addsprite("mapMenuCancel.png").anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
-            okBut = bg.addsprite("mapMenuOk.png").anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
+temp = bg.addsprite("mapMenuCancel.png", ARGB_8888).anchor(0, 0).pos(624, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onCancel);
+okBut = bg.addsprite("mapMenuOk.png", ARGB_8888).anchor(0, 0).pos(546, 35).size(59, 59).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onOk);
         }
 
-        rightArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(760, 440).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, -1);
-        leftArr = bg.addsprite("mapMenuArr.png").anchor(50, 50).pos(40, 440).scale(-100, 100).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, 1);
+rightArr = bg.addsprite("mapMenuArr.png", ARGB_8888).anchor(50, 50).pos(760, 440).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, -1);
+leftArr = bg.addsprite("mapMenuArr.png", ARGB_8888).anchor(50, 50).pos(40, 440).scale(-100, 100).size(56, 56).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onMove, 1);
     }
     function receiveMsg(param)
     {   
@@ -217,9 +217,9 @@ class MapBanner extends MyNode
 
             var panel;
             if(showData[i][1] == 0)
-                panel = flowNode.addsprite("mapUnSel.png").pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
+panel = flowNode.addsprite("mapUnSel.png", ARGB_8888).pos((i * OFFX) + (PANEL_WIDTH / 2), 0).anchor(50, 0);
             else
-                panel = flowNode.addsprite("mapUnSel.png", GRAY).pos(i*OFFX+PANEL_WIDTH/2, 0).anchor(50, 0);
+panel = flowNode.addsprite("mapUnSel.png", GRAY, ARGB_8888).pos((i * OFFX) + (PANEL_WIDTH / 2), 0).anchor(50, 0);
                 
 
             var sdata = global.user.getSoldierData(showData[i][0]);
@@ -229,16 +229,16 @@ class MapBanner extends MyNode
 
             if(showData[i][1] == 0)
             {
-                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", ARGB_8888).pos(36, 34).anchor(50, 50);
+solPic = panel.addsprite(("soldier" + str(sdata.get("id"))) + ".png", ARGB_8888).pos(36, 34).anchor(50, 50);
             }
             else
             {
-                solPic = panel.addsprite("soldier"+str(sdata.get("id"))+".png", GRAY, ARGB_8888).pos(36, 34).anchor(50, 50);
+solPic = panel.addsprite(("soldier" + str(sdata.get("id"))) + ".png", GRAY, ARGB_8888).pos(36, 34).anchor(50, 50);
             }
             //使用我方特征色
             /*
             var feaFil = FEA_BLUE;
-            var fea = solPic.addsprite("soldierfm"+str(sdata["id"])+".plist/ss"+str(sdata["id"])+"fm0.png", feaFil);
+var fea = solPic.addsprite(((("soldierfm" + str(sdata["id"])) + ".plist/ss") + str(sdata["id"])) + "fm0.png", feaFil, ARGB_8888);
             */
 
             var sca = getSca(solPic, [71, 70]);

@@ -10,7 +10,7 @@ class UpgradeBanner extends MyNode
         callback = cb;
         if(col == null)
             col = [100, 100, 100];
-        bg = sprite("storeBlack.png").pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50);
+bg = sprite("storeBlack.png", ARGB_8888).pos(global.director.disSize[0] / 2, global.director.disSize[1] / 2).anchor(50, 50);
         init();
         var word = colorWordsNode(w, getParam("bannerWordSize"), col, [89, 72, 18]);
         word.anchor(50, 50);

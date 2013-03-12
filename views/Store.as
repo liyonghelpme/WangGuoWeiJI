@@ -33,23 +33,23 @@ class Store extends MyNode
 
         bg = node();
         init();
-        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480);
-        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64);
+bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480);
+bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64);
 
 
 
-        bg.addsprite("rightBack.png").anchor(0, 0).pos(254, 79).size(514, 387);
-        bg.addsprite("storeLeft.png").anchor(0, 0).pos(34, 79).size(197, 386);
+bg.addsprite("rightBack.png", ARGB_8888).anchor(0, 0).pos(254, 79).size(514, 387);
+bg.addsprite("storeLeft.png", ARGB_8888).anchor(0, 0).pos(34, 79).size(197, 386);
 
-        var choose = sprite("instructArrow.png").anchor(0, 0).pos(22, 211).size(227, 117);
+var choose = sprite("instructArrow.png", ARGB_8888).anchor(0, 0).pos(22, 211).size(227, 117);
         bg.add(choose, 1);
-        bg.addsprite("moneyBack.png").anchor(0, 0).pos(274, 28).size(450, 33);
-        bg.addsprite("crystal.png").anchor(0, 0).pos(586, 30).size(31, 29);
-        bg.addsprite("gold.png").anchor(0, 0).pos(439, 28).size(31, 30);
-        bg.addsprite("silver.png").anchor(0, 0).pos(280, 27).size(32, 32);
+bg.addsprite("moneyBack.png", ARGB_8888).anchor(0, 0).pos(274, 28).size(450, 33);
+bg.addsprite("crystal.png", ARGB_8888).anchor(0, 0).pos(586, 30).size(31, 29);
+bg.addsprite("gold.png", ARGB_8888).anchor(0, 0).pos(439, 28).size(31, 30);
+bg.addsprite("silver.png", ARGB_8888).anchor(0, 0).pos(280, 27).size(32, 32);
 
 
-        bg.addsprite("storeTit.png").anchor(0, 0).pos(76, 7).size(169, 63);
+bg.addsprite("storeTit.png", ARGB_8888).anchor(0, 0).pos(76, 7).size(169, 63);
 
 
 
@@ -59,7 +59,7 @@ class Store extends MyNode
         tabs = new Choice(this);
         addChild(tabs);
         //board遮挡
-        bg.addsprite("leftBoard.png").anchor(0, 0).pos(29, 74).size(207, 396);
+bg.addsprite("leftBoard.png", ARGB_8888).anchor(0, 0).pos(29, 74).size(207, 396);
 
         var but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);

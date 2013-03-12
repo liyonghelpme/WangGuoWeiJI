@@ -296,22 +296,22 @@ class TaskModel
                 //确认当前存在该命令 显示该命令的 hintArrow
                 if(dir == DOWN)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2+offX, -5+offY).anchor(50, 100).scale(sca);
+hintArrow = pic.addsprite("taskArrow.png", ARGB_8888).pos((bSize[0] / 2) + offX, (-5) + offY).anchor(50, 100).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
                 }
                 else if(dir == LEFT)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]+5+offX, bSize[1]/2+offY).anchor(50, 100).rotate(90).scale(sca);
+hintArrow = pic.addsprite("taskArrow.png", ARGB_8888).pos((bSize[0] + 5) + offX, (bSize[1] / 2) + offY).anchor(50, 100).rotate(90).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, -20, 0), delaytime(300), moveby(500, 20, 0)));
                 }
                 else if(dir == RIGHT)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(-5+offX, bSize[1]/2+offY).anchor(50, 100).rotate(-90).scale(sca);
+hintArrow = pic.addsprite("taskArrow.png", ARGB_8888).pos((-5) + offX, (bSize[1] / 2) + offY).anchor(50, 100).rotate(-90).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, -20, 0), delaytime(300), moveby(500, 20, 0)));
                 }
                 else if(dir == UP)
                 {
-                    hintArrow = pic.addsprite("taskArrow.png").pos(bSize[0]/2+offX, bSize[1]+5+offY).anchor(50, 100).rotate(180).scale(sca);
+hintArrow = pic.addsprite("taskArrow.png", ARGB_8888).pos((bSize[0] / 2) + offX, (bSize[1] + 5) + offY).anchor(50, 100).rotate(180).scale(sca);
                     hintArrow.addaction(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20)));
                 }
                 trace("showNewTaskMask", pic, callbackFunc, commandList);

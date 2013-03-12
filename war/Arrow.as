@@ -30,7 +30,7 @@ class Arrow extends EffectBase
         var eff = getArrowData(sol.id);
         var ani = pureMagicData[eff[0]];
         //.anchor(50, 50) 效果偏移针对 每个技能也是针对每种士兵的
-        bg = sprite("s"+str(id)+"e0.png").pos(p[0]+off[0], p[1]+off[1]).scale(sol.data.get("arrSca")).anchor(50, 100);
+bg = sprite(("s" + str(id)) + "e0.png", ARGB_8888).pos(p[0] + off[0], p[1] + off[1]).scale(sol.data.get("arrSca")).anchor(50, 100);
         init();
         shiftAni = moveto(0, 0, 0);
         initState();

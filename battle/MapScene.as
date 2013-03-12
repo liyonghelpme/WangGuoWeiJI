@@ -6,7 +6,7 @@ class MCloud extends MyNode
     {
         map = m;
         ty = getParam("IslandCloudYBase")+rand(getParam("IslandCloudYDiff"));
-        bg = sprite("bc"+str(rand(8))+".png").pos(-100, ty);
+bg = sprite(("bc" + str(rand(8))) + ".png", ARGB_8888).pos(-100, ty);
         init();
         //bg.addaction(sequence(moveto(50000, 810, ty+rand(10)), callfunc(remove)));
     }
@@ -105,7 +105,7 @@ class MapScene extends MyNode
     var dialogController;
     
     function MapScene(){
-        bg = sprite("map_background0.jpg", ARGB_8888).size(801,481);
+bg = sprite("map_background0.jpg", ARGB_8888).size(801, 481);
         init();
         dialogController = new DialogController(this);
         islandLayer = new MapLayer(this);

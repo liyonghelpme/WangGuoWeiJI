@@ -30,7 +30,7 @@ class MonSmoke extends MyNode
         skillId = sk;
         callback = cb;
 
-        bg = sprite().pos(tar.getPos()).anchor(50, 100);
+bg = sprite("", ARGB_8888).pos(tar.getPos()).anchor(50, 100);
          
         var ani = getSkillAnimate(skillId);
         attackTime = getParam("smokeTime");//动画时间

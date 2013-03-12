@@ -8,7 +8,7 @@ class BoxOnMap extends MyNode
         bg = node().anchor(50, 50).pos(1018, 791);
         init();
         //分离动画和点击顶点
-        var ani = bg.addsprite("box0.png");
+var ani = bg.addsprite("box0.png", ARGB_8888);
         ani.addaction(repeat(animate(getParam("boxOnMapTime"), "box0.png", "box1.png", "box2.png", "box3.png", "box4.png")));
         bg.size(ani.prepare().size());//设定尺寸
 

@@ -68,7 +68,7 @@ class SkillFlowBanner extends MyNode
     }
     /*
     选择士兵 显示 士兵的属性值 左上角
-    temp = bg.addsprite("mapSel.png").anchor(0, 0).pos(12, 403).size(71, 70).color(100, 100, 100, 100);
+temp = bg.addsprite("mapSel.png", ARGB_8888).anchor(0, 0).pos(12, 403).size(71, 70).color(100, 100, 100, 100);
     */
 
     function initView()
@@ -90,7 +90,7 @@ class SkillFlowBanner extends MyNode
         initView();
         initDrug();
         updateSkillPanel(null);
-        shadowWord = bg.addsprite("storeBlack.png").pos(10, 323).visible(0);
+shadowWord = bg.addsprite("storeBlack.png", ARGB_8888).pos(10, 323).visible(0);
         words = null;
 
     }
@@ -184,7 +184,7 @@ class SkillFlowBanner extends MyNode
             {
                 if(shadow == null)
                 {
-                    shadow = sprite("skillShadow.png").anchor(0, 100).pos(0, pSize[1]);
+shadow = sprite("skillShadow.png", ARGB_8888).anchor(0, 100).pos(0, pSize[1]);
                     panel.add(shadow, 1, 1);//tag = 1
                 }
                 sSize = panel.prepare().size();//应该是panel的Size
@@ -458,7 +458,7 @@ words = shadowWord.addlabel(w, getFont(), 25);
         //点击药品
         for(i = 0; i < len(drugData); i++)
         {
-            panel = flowNode.addsprite("mapUnSel.png").pos((i)*OFFX, 0);
+panel = flowNode.addsprite("mapUnSel.png", ARGB_8888).pos(i * OFFX, 0);
             allPanels.append(panel);//对应相应技能位置 面板
 
             var num = global.user.getGoodsNum(DRUG, drugData[i][0]);
@@ -466,11 +466,11 @@ words = shadowWord.addlabel(w, getFont(), 25);
             if(num <= 0)
                 filter = GRAY;
 
-            var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])]), filter).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
+var drugPic = panel.addsprite(replaceStr(KindsPre[DRUG], ["[ID]", str(drugData[i][0])]), filter, ARGB_8888).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
             sca = getSca(drugPic, [getParam("drugScale"), getParam("drugScale")]);
             drugPic.scale(sca);
 
-            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, getParam("magicOpacity"));
+temp = panel.addsprite("skillLevel.png", ARGB_8888).anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, getParam("magicOpacity"));
 panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), getFont(), 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
 
@@ -478,7 +478,7 @@ panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), getFont(), 13
             if(!ready)//技能ID 与众不同
             {
                 pSize = panel.prepare().size();
-                shadow = sprite("skillShadow.png").anchor(0, 100).pos(0, pSize[1]);
+shadow = sprite("skillShadow.png", ARGB_8888).anchor(0, 100).pos(0, pSize[1]);
                 panel.add(shadow, 1, 1);//tag = 1
             }
             panel.put([DRUG, i]);
@@ -486,15 +486,15 @@ panel.addlabel(str(global.user.getGoodsNum(DRUG, drugData[i][0])), getFont(), 13
         
         for(i = 0; i < len(skillList); i++)
         {
-            panel = flowNode.addsprite("mapUnSel.png").pos((i+len(drugData))*OFFX, 0);
+panel = flowNode.addsprite("mapUnSel.png", ARGB_8888).pos((i + len(drugData)) * OFFX, 0);
             allPanels.append(panel);//对应相应技能位置 面板
             id = skillList[i][0];
             
-            var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(id)])).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
+var skillPic = panel.addsprite(replaceStr(KindsPre[SKILL], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(36, 34).color(100, 100, 100, 100);
             sca = getSca(skillPic, [PANEL_WIDTH, PANEL_HEIGHT]);
             skillPic.scale(sca);
 
-            temp = panel.addsprite("skillLevel.png").anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
+temp = panel.addsprite("skillLevel.png", ARGB_8888).anchor(0, 0).pos(17, 54).size(52, 13).color(100, 100, 100, 100);
 panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), getFont(), 13).anchor(50, 50).pos(41, 59).color(100, 100, 100);
 
 
@@ -503,7 +503,7 @@ panel.addlabel(getStr("skillLevel", ["[LEV]", str(skillList[i][1])]), getFont(),
             if(!ready)
             {
                 pSize = panel.prepare().size();
-                shadow = sprite("skillShadow.png").anchor(0, 100).pos(0, pSize[1]).size(PANEL_WIDTH, PANEL_HEIGHT);
+shadow = sprite("skillShadow.png", ARGB_8888).anchor(0, 100).pos(0, pSize[1]).size(PANEL_WIDTH, PANEL_HEIGHT);
                 panel.add(shadow, 1, 1);//tag = 1
             }
 

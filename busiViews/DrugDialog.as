@@ -29,26 +29,26 @@ class DrugDialog extends MyNode
         var line;
         var temp;
         var sca;
-        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
+bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);
         addChild(but0);
-        bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
+bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
 
-        bg.addsprite("moneyBack.png").anchor(0, 0).pos(274, 27).size(450, 33).color(100, 100, 100, 100);
-        bg.addsprite("solDefense.png").anchor(0, 0).pos(584, 30).size(25, 28).color(100, 100, 100, 100);
-        bg.addsprite("solAttack.png").anchor(0, 0).pos(438, 30).size(23, 28).color(100, 100, 100, 100);
-        bg.addsprite("solHealth.png").anchor(0, 0).pos(279, 31).size(29, 25).color(100, 100, 100, 100);
+bg.addsprite("moneyBack.png", ARGB_8888).anchor(0, 0).pos(274, 27).size(450, 33).color(100, 100, 100, 100);
+bg.addsprite("solDefense.png", ARGB_8888).anchor(0, 0).pos(584, 30).size(25, 28).color(100, 100, 100, 100);
+bg.addsprite("solAttack.png", ARGB_8888).anchor(0, 0).pos(438, 30).size(23, 28).color(100, 100, 100, 100);
+bg.addsprite("solHealth.png", ARGB_8888).anchor(0, 0).pos(279, 31).size(29, 25).color(100, 100, 100, 100);
 attText = bg.addlabel(getStr("attText", null), getFont(), 20).anchor(0, 50).pos(464, 43).color(100, 100, 100);
 defText = bg.addlabel(getStr("defText", null), getFont(), 20).anchor(0, 50).pos(615, 44).color(100, 100, 100);
 healthText = bg.addlabel(getStr("healthText", null), getFont(), 20).anchor(0, 50).pos(315, 43).color(100, 100, 100);
 nameText = bg.addlabel(soldier.myName, getFont(), 22).anchor(50, 50).pos(212, 44).color(28, 15, 4);
-        im = bg.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(soldier.id)])).anchor(50, 50).pos(108, 40).color(100, 100, 100, 100);
+im = bg.addsprite(replaceStr(KindsPre[SOLDIER], ["[ID]", str(soldier.id)]), ARGB_8888).anchor(50, 50).pos(108, 40).color(100, 100, 100, 100);
         sca = getSca(im, [90, 73]);
         im.scale(sca);
 
-        temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
+temp = bg.addsprite("dialogMakeDrugBanner.png", ARGB_8888).anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
 temp = bg.addlabel(getStr("drugDes", null), getFont(), 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
         if(kind == EQUIP)
             temp.text(getStr("equipDialog", null));

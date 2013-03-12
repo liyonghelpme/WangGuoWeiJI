@@ -21,7 +21,7 @@ class SaveSkill extends MyNode
         skillId = sk;
         skillLevel = l;
 
-        bg = sprite().pos(tar.getPos()).anchor(50, 100);
+bg = sprite("", ARGB_8888).pos(tar.getPos()).anchor(50, 100);
          
         var ani = getSkillAnimate(skillId);
         attackTime = ani[1];//动画时间

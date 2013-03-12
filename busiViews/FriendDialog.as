@@ -10,9 +10,9 @@ class FriendDialog extends MyNode
         kind = k;
         bg = node();
         init();
-        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
-        bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
+bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
+bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
         var but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeBut, null);
         but0.bg.pos(772, 27);
         addChild(but0);
@@ -29,8 +29,8 @@ class FriendDialog extends MyNode
         but0.bg.pos(650, 43);
         addChild(but0);
 
-        bg.addsprite("dialogFriendTitle.png").anchor(0, 0).pos(65, 10).color(100, 100, 100, 100);
-        showTitle = bg.addsprite("dialogNeibor.png").anchor(50, 50).pos(398, 108).color(100, 100, 100, 100);
+bg.addsprite("dialogFriendTitle.png", ARGB_8888).anchor(0, 0).pos(65, 10).color(100, 100, 100, 100);
+showTitle = bg.addsprite("dialogNeibor.png", ARGB_8888).anchor(50, 50).pos(398, 108).color(100, 100, 100, 100);
         
         views = [new Neibor(this), new OtherPlayer(this)];
 
@@ -77,7 +77,7 @@ class FriendDialog extends MyNode
             {
                 if(showRefresh == null)
                 {
-                    showRefresh = bg.addsprite().addaction(repeat(animate(2000, "feed0.png", "feed1.png","feed2.png","feed3.png","feed4.png","feed5.png","feed6.png","feed7.png"))).anchor(50, 50).pos(402, 239);
+showRefresh = bg.addsprite("", ARGB_8888).addaction(repeat(animate(2000, "feed0.png", "feed1.png", "feed2.png", "feed3.png", "feed4.png", "feed5.png", "feed6.png", "feed7.png"))).anchor(50, 50).pos(402, 239);
                 }
             }
             else

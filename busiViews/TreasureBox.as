@@ -33,15 +33,15 @@ class TreasureBox extends MyNode
                 curX = 0;
             }
 
-            temp = headNode.addsprite("friendBlock.png").anchor(50, 50).pos(curX+55/2, curY+55/2).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
+temp = headNode.addsprite("friendBlock.png", ARGB_8888).anchor(50, 50).pos(curX + (55 / 2), curY + (55 / 2)).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
             if(i < len(scene.helperList))//显示当前已经有的好友
             { 
 temp.addlabel(scene.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
-                temp.addsprite(avatar_url(scene.papayaIdName[i][0])).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
+temp.addsprite(avatar_url(scene.papayaIdName[i][0]), ARGB_8888).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
             }
             else//没有人空位
             {
-                temp.addsprite("unkownFriendHead.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
+temp.addsprite("unkownFriendHead.png", ARGB_8888).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
 temp.addlabel(getStr("unknown", null), getFont(), 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
             }
 
@@ -73,19 +73,19 @@ temp.addlabel(getStr("unknown", null), getFont(), 15).anchor(50, 50).pos(28, 73)
                 curX = 0;
             }
 
-            temp = headNode.addsprite("friendBlock.png").anchor(50, 50).pos(curX+55/2, curY+55/2).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
+temp = headNode.addsprite("friendBlock.png", ARGB_8888).anchor(50, 50).pos(curX + (55 / 2), curY + (55 / 2)).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
             if(i < len(global.user.helperList))//显示当前已经有的好友
             { 
 temp.addlabel(global.user.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(28, 73).color(100, 100, 100);
                 if(global.user.helperList[i] == -1)
-                    temp.addsprite("goldFriend.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
+temp.addsprite("goldFriend.png", ARGB_8888).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
                 else
-                    temp.addsprite(avatar_url(global.user.papayaIdName[i][0])).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
+temp.addsprite(avatar_url(global.user.papayaIdName[i][0]), ARGB_8888).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100);
 temp.addlabel(global.user.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(28, 73).color(0, 0, 0);
             }
             else//没有人空位
             {
-                temp.addsprite("unkownFriendHead.png").anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onSelfOpen);
+temp.addsprite("unkownFriendHead.png", ARGB_8888).anchor(50, 50).pos(28, 28).size(55, 55).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onSelfOpen);
                 but0 = new NewButton("greenButton0.png", [60, 23], getStr("oneGold", ["[NUM]", str(getParam("selfOpenGold")), "[KIND]", "gold.png"]), null, 15, FONT_NORMAL, [0, 0, 0], onSelfOpen, null);
                 but0.bg.pos(29, 71);
                 temp.add(but0.bg);
@@ -248,11 +248,11 @@ temp.addlabel(global.user.papayaIdName[i][1], getFont(), 15).anchor(50, 50).pos(
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(150, 91).size(520, 312).color(100, 100, 100, 100);
-        temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(169, 135).size(481, 252).color(100, 100, 100, 100);
-        temp = bg.addsprite("nonFullWhiteBack.png").anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
-        temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
-        temp = bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(150, 91).size(520, 312).color(100, 100, 100, 100);
+temp = bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(169, 135).size(481, 252).color(100, 100, 100, 100);
+temp = bg.addsprite("nonFullWhiteBack.png", ARGB_8888).anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
+temp = bg.addsprite("smallBack.png", ARGB_8888).anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("scroll.png", ARGB_8888).anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
 bg.addlabel(getStr("openBox", null), getFont(), 30).anchor(50, 50).pos(401, 91).color(32, 33, 40);
         if(kind == BOX_FRIEND)
 bg.addlabel(getStr("helpFriOpen", ["[NAME]", scene.user["name"]]), getFont(), 20).anchor(50, 50).pos(414, 146).color(43, 25, 9);
@@ -270,7 +270,7 @@ bg.addlabel(getStr("mistGiftInBox", null), getFont(), 20).anchor(50, 50).pos(414
         but0.bg.pos(299, 402);
         addChild(but0);
         openBut = but0;
-        temp = bg.addsprite("treasureBox.png").anchor(0, 0).pos(522, 226).size(108, 92).color(100, 100, 100, 100);
+temp = bg.addsprite("treasureBox.png", ARGB_8888).anchor(0, 0).pos(522, 226).size(108, 92).color(100, 100, 100, 100);
 
         updateState();
     }

@@ -44,7 +44,7 @@ class LevelChoose extends MyNode
         bg = node();
         init();
         initData();
-        bg.addsprite("title"+str(big)+".png", ARGB_8888).pos(34, 15);
+bg.addsprite(("title" + str(big)) + ".png", ARGB_8888).pos(34, 15);
         var but0 = new NewButton("map_back0.png", [79, 58], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], goBack, null);
         but0.bg.anchor(50, 50).pos(745, 38);
         bg.add(but0.bg);
@@ -61,21 +61,21 @@ class LevelChoose extends MyNode
         {
             var difx = -((pn-1)*POINT_DIFX+POINT_WIDTH)/2+POINT_DIFX*i;
 
-            var point = pageLayer.addsprite().pos(difx, 0);
+var point = pageLayer.addsprite("", ARGB_8888).pos(difx, 0);
             pageNum.append(point);
         }
         var enable = checkBigEnable(big);
         var tot;
         if(enable)
         {
-            tot = bg.addsprite("totalStar.png").pos(239, 17).size(139, 46);
-            tot.addsprite("star.png").pos(33, 22).anchor(50, 50).size(33, 31);
+tot = bg.addsprite("totalStar.png", ARGB_8888).pos(239, 17).size(139, 46);
+tot.addsprite("star.png", ARGB_8888).pos(33, 22).anchor(50, 50).size(33, 31);
 nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
         }
         else
         {
-            tot = bg.addsprite("totalStar.png").pos(239, 17).size(170, 46);
-            tot.addsprite("star.png").pos(33, 22).anchor(50, 50).size(33, 31);
+tot = bg.addsprite("totalStar.png", ARGB_8888).pos(239, 17).size(170, 46);
+tot.addsprite("star.png", ARGB_8888).pos(33, 22).anchor(50, 50).size(33, 31);
 nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
         }
 
@@ -177,7 +177,7 @@ nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
         var mData = getData(MAP_INFO, big);
 
         var panel;
-        panel = sprite("unlockPanel.png");
+panel = sprite("unlockPanel.png", ARGB_8888);
         var pSize = panel.prepare().size();
 
         for(i = 0; i < len(data); i++)
@@ -195,11 +195,11 @@ nums = tot.addlabel("0/0", getFont(), 25).pos(57, 14);
             //未解锁大关 第一个块
             if(data[i][1] == -1)
             {
-                panel = sprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
+panel = sprite("unlockPanel.png", ARGB_8888).pos(((page * PAGE_WIDTH) + (col * DIFX)) + (pSize[0] / 2), (row * DIFY) + (pSize[1] / 2)).anchor(50, 50);
 
-                panel.addsprite("lock0.png").pos(26, 28).anchor(50, 50).size(25, 30);
+panel.addsprite("lock0.png", ARGB_8888).pos(26, 28).anchor(50, 50).size(25, 30);
 panel.addlabel(getStr("condition", null), getFont(), 20).pos(48, 21);
-                panel.addsprite("star.png").anchor(50, 50).pos(62, 70).size(33, 31);
+panel.addsprite("star.png", ARGB_8888).anchor(50, 50).pos(62, 70).size(33, 31);
                 var starLevel = stringLines(getStr("starLevel", ["[STAR]", str(mData.get("needStar")), "[LEV]", str(mData.get("needLevel"))]), 18, 21, [100, 100, 100], FONT_NORMAL);
                 panel.add(starLevel);
                 starLevel.pos(21, 64);
@@ -208,16 +208,16 @@ panel.addlabel(getStr("condition", null), getFont(), 20).pos(48, 21);
                 var but0 = new NewButton("greenButton0.png", [151, 49], getStr("unlock", ["[gold]", str(mData.get("gold"))]), null, 18, FONT_NORMAL, [100, 100, 100], onUnlock, null);
                 panel.add(but0.bg);
                 but0.bg.anchor(50, 50).pos(80, 147);
-                but0.bg.addsprite("gold.png").pos(17, 24).size(30, 30).anchor(50, 50);
+but0.bg.addsprite("gold.png", ARGB_8888).pos(17, 24).size(30, 30).anchor(50, 50);
             }
             //小关是否开启
             else if(data[i][1] == 1)
             {
                 
-                panel = sprite("bluePanel0.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
+panel = sprite("bluePanel0.png", ARGB_8888).pos(((page * PAGE_WIDTH) + (col * DIFX)) + (pSize[0] / 2), (row * DIFY) + (pSize[1] / 2)).anchor(50, 50);
                 if(data[i][0] > 0)
                 {
-                    mon = panel.addsprite("soldier"+str(mId)+".png", ARGB_8888).pos(79, 84).anchor(50, 50);
+mon = panel.addsprite(("soldier" + str(mId)) + ".png", ARGB_8888).pos(79, 84).anchor(50, 50);
                     sca = getSca(mon, [164, 42]);
                     mon.scale(sca);
                 }
@@ -227,31 +227,31 @@ panel.addlabel(getStr("condition", null), getFont(), 20).pos(48, 21);
                 var sb;
                 if(data[i][0] == 0)
                 {
-                    mon = panel.addsprite("soldier"+str(mId)+".png", ARGB_8888).pos(79, 107).anchor(50, 50);
+mon = panel.addsprite(("soldier" + str(mId)) + ".png", ARGB_8888).pos(79, 107).anchor(50, 50);
                     sca = getSca(mon, [164, 67]);
                     mon.scale(sca);
                 }
                 else if(data[i][0] < 3)
-                    sb = panel.addsprite("starNot.png").pos(79, 150).anchor(50, 50);
+sb = panel.addsprite("starNot.png", ARGB_8888).pos(79, 150).anchor(50, 50);
                 else
-                    sb = panel.addsprite("starFull.png").pos(79, 150).anchor(50, 50);
+sb = panel.addsprite("starFull.png", ARGB_8888).pos(79, 150).anchor(50, 50);
                 if(data[i][0] > 0)
                 {
                     var ix = 28;
                     var dx = 47;
                     for(j = 0; j < data[i][0]; j++)
                     {
-                        sb.addsprite("star.png").pos(ix+j*dx, 29).anchor(50, 50);
+sb.addsprite("star.png", ARGB_8888).pos(ix + (j * dx), 29).anchor(50, 50);
                     }
                     for(; j < 3; j++)
-                        sb.addsprite("star2.png").pos(ix+j*dx, 29).anchor(50, 50);
+sb.addsprite("star2.png", ARGB_8888).pos(ix + (j * dx), 29).anchor(50, 50);
                 }
             }
             //未开通关卡
             else
             {
-                panel = flowNode.addsprite("unlockPanel.png").pos(page*PAGE_WIDTH+col*DIFX+pSize[0]/2, row*DIFY+pSize[1]/2).anchor(50, 50);
-                panel.addsprite("lock0.png").pos(86, 116).anchor(50, 50);
+panel = flowNode.addsprite("unlockPanel.png", ARGB_8888).pos(((page * PAGE_WIDTH) + (col * DIFX)) + (pSize[0] / 2), (row * DIFY) + (pSize[1] / 2)).anchor(50, 50);
+panel.addsprite("lock0.png", ARGB_8888).pos(86, 116).anchor(50, 50);
             }
 
             if(i == 0)

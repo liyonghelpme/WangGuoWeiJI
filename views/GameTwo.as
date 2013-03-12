@@ -26,7 +26,7 @@ class RewardGoods extends MyNode
 
         speed = getParam("GOODS_SPEED")*gData["speed"];
 
-        bg = sprite("goods"+str(k)+".png").anchor(50, 100).scale(getParam("PickFallObjScale"));
+bg = sprite(("goods" + str(k)) + ".png", ARGB_8888).anchor(50, 100).scale(getParam("PickFallObjScale"));
         init();
         var p = rand(getParam("pickRandX"))+getParam("MoneyGameBaseX");//起始位置
         //相对于 0 0 位置

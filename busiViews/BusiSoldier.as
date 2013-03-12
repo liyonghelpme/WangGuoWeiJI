@@ -77,7 +77,7 @@ class BusiSoldier extends MyNode
             chooseStar.removefromparent();
             chooseStar = null;
         }
-        chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]).scale(getParam("SOL_SHOW_SIZE"));
+chooseStar = sprite("", ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).scale(getParam("SOL_SHOW_SIZE"));
         if(inDead)
             chooseStar.addaction(repeat(
             getRedStarAni()
@@ -211,7 +211,7 @@ class BusiSoldier extends MyNode
         if(getParam("debugSoldier"))
 stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
 
-        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
+changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
 
         var chScale = getChangeDirNodeScale();
         //var bSize = changeDirNode.prepare().size();
@@ -229,7 +229,7 @@ stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
         var shadowOffX = data["shadowOffX"];
         var shadowOffY = data["shadowOffY"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE")*data["shadowXScale"]/100, getParam("SOL_SHOW_SIZE"));
+shadow = sprite(("roleShadow" + str(ss)) + ".png", ARGB_8888).pos((bSize[0] / 2) + shadowOffX, bSize[1] + shadowOffY).anchor(50, 50).scale((getParam("SOL_SHOW_SIZE") * data["shadowXScale"]) / 100, getParam("SOL_SHOW_SIZE"));
 
         bg.add(shadow, -2);
         initData(privateData);
@@ -290,7 +290,7 @@ stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
         for(var i = 0; i < len(it); i++)
         {
             var g = it[i];
-            temp.addsprite(g[0]+".png").anchor(0, 50).pos(0, curY).size(30, 30);
+temp.addsprite(g[0] + ".png", ARGB_8888).anchor(0, 50).pos(0, curY).size(30, 30);
 temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(getParam("FlyObjRed"), getParam("FlyObjGreen"), getParam("FlyObjBlue"));
             curY -= 30;
         }
@@ -383,7 +383,7 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
         if(bottom == null)
         {
             var bSize = bg.size();
-            bottom = sprite().pos(bSize[0]/2, bSize[1]).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
+bottom = sprite("", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).size(((sx + sy) * SIZEX) + 20, ((sx + sy) * SIZEY) + 10).color(100, 100, 100, 100);
             bg.add(bottom, -1);
         }
     }
@@ -985,7 +985,7 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
         var bSize = bg.size();
         var pic;
         var rd;
-        status = bg.addsprite("soldierStatus.png").pos(bSize[0]/2+getParam("statusOffX"), bSize[1]-getBloodHeightOff()+getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
+status = bg.addsprite("soldierStatus.png", ARGB_8888).pos((bSize[0] / 2) + getParam("statusOffX"), (bSize[1] - getBloodHeightOff()) + getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
         status.setevent(EVENT_TOUCH, touchBegan);
         status.setevent(EVENT_MOVE, touchMoved);
         status.setevent(EVENT_UNTOUCH, touchEnded);
@@ -993,16 +993,16 @@ temp.addlabel("+" + str(g[1]), getFont(), 25).anchor(0, 50).pos(35, curY).color(
         if(curStatus == EXP_GAME)
         {
             rd = rand(PARAMS["ExpGameNum"]);
-            pic = status.addsprite("drum"+str(rd)+".png").anchor(50, 50).pos(34, 24);
+pic = status.addsprite(("drum" + str(rd)) + ".png", ARGB_8888).anchor(50, 50).pos(34, 24);
         }
         else if(curStatus == PICK_GAME)
         {
             rd = rand(PARAMS["MoneyGameNum"]); 
-            pic = status.addsprite("goods"+str(rd)+".png").anchor(50, 50).pos(34, 24);
+pic = status.addsprite(("goods" + str(rd)) + ".png", ARGB_8888).anchor(50, 50).pos(34, 24);
         }
         else
         {
-            pic = status.addsprite("status"+str(curStatus)+".png").anchor(50, 50).pos(34, 24);
+pic = status.addsprite(("status" + str(curStatus)) + ".png", ARGB_8888).anchor(50, 50).pos(34, 24);
         }
         var sca = getSca(pic, [45, 45]);
         pic.scale(sca);

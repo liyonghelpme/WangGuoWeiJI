@@ -15,7 +15,7 @@ class EarthQuake extends EffectBase
         var earthQuake = getEarthQuake(sol.map.kind, sol.id);
 
         //50 50 出现在敌人脚下
-        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);
+bg = sprite("", ARGB_8888).anchor(50, 50).pos(p[0] + off[0], p[1] + off[1]).scale(sol.data["arrSca"]);
         init();
         shiftAni = moveto(0, 0, 0);
         initState();

@@ -12,7 +12,7 @@ class Hero extends MyNode
     {
         trace("preloading");
         var curScene = global.director.curScene;
-        var temp = sprite();
+var temp = sprite("", ARGB_8888);
         curScene.bg.add(temp, -100);
         temp.texture(ani["ani"][0]);
     }
@@ -25,10 +25,10 @@ class Hero extends MyNode
         var mapPos = HeroPos.get(hid);
         heroSize = HERO_SIZE[hid];
         //取消选择士兵
-        bg = sprite().pos(mapPos).setevent(EVENT_TOUCH, onHero).scale(HeroDir.get(hid)*getParam("SelectHeroShowScale")/100, getParam("SelectHeroShowScale")).anchor(50, 100).size(heroSize);
+bg = sprite("", ARGB_8888).pos(mapPos).setevent(EVENT_TOUCH, onHero).scale((HeroDir.get(hid) * getParam("SelectHeroShowScale")) / 100, getParam("SelectHeroShowScale")).anchor(50, 100).size(heroSize);
         init();
         var lp = HERO_LIGHT_POS[hid];
-        full = bg.addsprite("hero"+str(hid)+"Full.png", ARGB_8888).pos(lp);
+full = bg.addsprite(("hero" + str(hid)) + "Full.png", ARGB_8888).pos(lp);
 
         ani = copy(getSkillAnimate(heroSkill.get(hid)));
         ani["ani"] = copy(ani["ani"]);
@@ -125,7 +125,7 @@ class SelectMenu extends MyNode
         init();
 
         //黑色不需要
-        bg.addsprite("black.png", ARGB_8888).color(0, 0, 0, 50).size(global.director.disSize);
+bg.addsprite("black.png", ARGB_8888).color(0, 0, 0, 50).size(global.director.disSize);
 
         var hero = new Hero(this, 480);
         addChildZ(hero, H0);
@@ -271,7 +271,7 @@ class SelectMenu extends MyNode
             {
                 checkName = 1;
                 curStep++;
-                var b2 = sprite("black.png", ARGB_8888).color(0, 0, 0, 30).size(global.director.disSize);
+var b2 = sprite("black.png", ARGB_8888).color(0, 0, 0, 30).size(global.director.disSize);
                 bg.add(b2, BLACK2);
 
                 //var solId = global.user.getNewSid();
@@ -324,26 +324,26 @@ class SelectMenu extends MyNode
             if(curSelHero != -1)
             {
                 //heroDes = menuNode.addsprite("heroDes"+str(curSelHero)+".png").pos(517, 12); 
-                heroDes = menuNode.addsprite("heroDesBack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
+heroDes = menuNode.addsprite("heroDesBack.png", ARGB_8888).pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
                 //var heroData = getData(SOLDIER, curSelHero);
                 //var heroName = heroDes.addlabel(str(heroData.get("name")), null, 28, FONT_BOLD).pos(22, 15);
-                var heroName = heroDes.addsprite("nHeroDes"+str(curSelHero)+".png").pos(22, 15);
+var heroName = heroDes.addsprite(("nHeroDes" + str(curSelHero)) + ".png", ARGB_8888).pos(22, 15);
                 var desc = stringLines(getStr("heroDes"+str(curSelHero), null), 20, 26, [100, 100, 100], FONT_BOLD);
                 desc.pos(26, 65);
                 heroDes.add(desc);
 
                 //-40
-                sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onSure);
+sureBut = heroDes.addsprite("heroSure0.png", ARGB_8888).anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onSure);
                 //相对于第一个按钮的20的横向偏移
-                backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(sureBut.pos()[0]+sureBut.prepare().size()[0]+20, sureBut.pos()[1]).setevent(EVENT_TOUCH, cancelHero);
+backBut = heroDes.addsprite("heroBack0.png", ARGB_8888).anchor(0, 0).pos((sureBut.pos()[0] + sureBut.prepare().size()[0]) + 20, sureBut.pos()[1]).setevent(EVENT_TOUCH, cancelHero);
             }
         }
         else if(curStep == 1)
         {
-            heroDes = menuNode.addsprite("heroDesBack.png").pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H); 
-            heroDes.addsprite("heroName0.png").pos(22, 19);
-            sureBut = heroDes.addsprite("heroSure0.png").anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onInput);
-            backBut = heroDes.addsprite("heroBack0.png").anchor(0, 0).pos(sureBut.pos()[0]+sureBut.prepare().size()[0]+20, sureBut.pos()[1]).setevent(EVENT_TOUCH, onBack);
+heroDes = menuNode.addsprite("heroDesBack.png", ARGB_8888).pos(BLOCK_X, BLOCK_Y).size(BLOCK_W, BLOCK_H);
+heroDes.addsprite("heroName0.png", ARGB_8888).pos(22, 19);
+sureBut = heroDes.addsprite("heroSure0.png", ARGB_8888).anchor(0, 0).pos(24, 135).setevent(EVENT_TOUCH, onInput);
+backBut = heroDes.addsprite("heroBack0.png", ARGB_8888).anchor(0, 0).pos((sureBut.pos()[0] + sureBut.prepare().size()[0]) + 20, sureBut.pos()[1]).setevent(EVENT_TOUCH, onBack);
             //723 165 - 200 120 = 523 45
             inputView = v_create(V_INPUT_VIEW, BLOCK_X+INPUT_X, BLOCK_Y+INPUT_Y, 233, 50);
             v_root().addview(inputView);
@@ -384,7 +384,7 @@ class SelectMenu extends MyNode
     {
         if(printFinish && inGame == null && checkName)//打字结束 且 检测名字无误 进入游戏
         {
-            inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0]/2, global.director.disSize[1]/2).anchor(50, 50).addaction(repeat(animate(getParam("enterTime"), "in0.png", "in1.png","in2.png","in3.png","in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
+inGame = menuNode.addsprite("in0.png", ARGB_8888).pos(global.director.disSize[0] / 2, global.director.disSize[1] / 2).anchor(50, 50).addaction(repeat(animate(getParam("enterTime"), "in0.png", "in1.png", "in2.png", "in3.png", "in2.png", "in1.png", UPDATE_SIZE, ARGB_8888))).setevent(EVENT_TOUCH, enterGame);
             //新手阶段结束 暂时关闭这个功能
             //测试阶段不完成新手任务
         }

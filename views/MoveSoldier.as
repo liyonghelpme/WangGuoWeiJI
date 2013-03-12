@@ -32,14 +32,14 @@ class MoveSoldier extends MyNode
 
         load_sprite_sheet("soldierm"+str(id)+".plist");
         
-        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 100);
+changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ARGB_8888).anchor(50, 100);
 
         var bSize = changeDirNode.prepare().size();
 
         bg.size(bSize).anchor(50, 100).pos(571, 356);
 
         changeDirNode.pos(bSize[0]/2, bSize[1]);
-        shadow = sprite("roleShadow.png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
+shadow = sprite("roleShadow.png", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).size(data.get("shadowSize"), 32);
 
         changeDirNode.add(shadow, -1);
 

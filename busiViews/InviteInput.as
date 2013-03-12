@@ -16,7 +16,7 @@ class InviteInput extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("systemCompetitionBack.png").anchor(50, 50).pos(412, 227).size(506, 333).color(100, 100, 100, 100);
+temp = bg.addsprite("systemCompetitionBack.png", ARGB_8888).anchor(50, 50).pos(412, 227).size(506, 333).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [40, 39], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(634, 149);
         addChild(but0);
@@ -26,7 +26,7 @@ class InviteInput extends MyNode
         but0 = new NewButton("roleNameBut0.png", [91, 37], getStr("ok", null), null, 17, FONT_NORMAL, [100, 100, 100], onOk, null);
         but0.bg.pos(468, 342);
         addChild(but0);
-        temp = bg.addsprite("searchPeople.png").anchor(0, 0).pos(222, 200).size(87, 91).color(100, 100, 100, 100);
+temp = bg.addsprite("searchPeople.png", ARGB_8888).anchor(0, 0).pos(222, 200).size(87, 91).color(100, 100, 100, 100);
         inputView = v_create(V_INPUT_VIEW, 345, 212, 230, 50);
 
 

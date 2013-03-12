@@ -12,7 +12,7 @@ class InviteIntro extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("systemCompetitionBack.png").anchor(50, 50).pos(412, 227).size(506, 333).color(100, 100, 100, 100);
+temp = bg.addsprite("systemCompetitionBack.png", ARGB_8888).anchor(50, 50).pos(412, 227).size(506, 333).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [40, 39], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(634, 149);
         addChild(but0);

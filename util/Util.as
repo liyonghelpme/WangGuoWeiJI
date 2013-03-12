@@ -503,7 +503,7 @@ var shadow = label(begin[0], getFont(), sz).anchor(0, 0).color(0, 0, 0).pos(1, 1
         }
         if(len(begin) > 1)
         {
-            var s = sprite(begin[1]).size(27, 27).anchor(0, 50).pos(curX, curY);
+var s = sprite(begin[1], ARGB_8888).size(27, 27).anchor(0, 50).pos(curX, curY);
             n.add(s);
             var sSize = s.prepare().size();
             curX += sSize[0];
@@ -940,7 +940,7 @@ function altasWord(c, s)
         else if(s[i] == "%")
             w = "percent";
 
-        var png = sprite(plist+"/"+w+".png").pos(offX, 0);
+var png = sprite(((plist + "/") + w) + ".png", ARGB_8888).pos(offX, 0);
         n.add(png);
         var si = png.prepare().size();
         offX += si[0]
@@ -1122,8 +1122,8 @@ function showFullBack()
 {
     //var tc = showTimeColor();tc, 
     //trace("full", tc);
-    var temp = sprite("dialogLoginBack.png", ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, getParam("loginBackOpacity"));
-    temp.addsprite("dialogLoginStar0.png", ARGB_8888);
+var temp = sprite("dialogLoginBack.png", ARGB_8888).size(global.director.disSize[0], global.director.disSize[1]).color(100, 100, 100, getParam("loginBackOpacity"));
+temp.addsprite("dialogLoginStar0.png", ARGB_8888);
     return temp;
 }
 

@@ -26,23 +26,23 @@ class CallSoldier extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        temp = bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
-        temp = bg.addsprite("moneyBack.png").anchor(0, 0).pos(274, 27).size(450, 33).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+temp = bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
+temp = bg.addsprite("moneyBack.png", ARGB_8888).anchor(0, 0).pos(274, 27).size(450, 33).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);
         addChild(but0);
-        temp = bg.addsprite("rightBack.png").anchor(0, 0).pos(252, 77).size(518, 391).color(100, 100, 100, 100);
-        temp = bg.addsprite("leftBack.png").anchor(0, 0).pos(32, 77).size(201, 390).color(100, 100, 100, 100);
-        temp = bg.addsprite("infoBack.png").anchor(0, 0).pos(31, 246).size(203, 160).color(100, 100, 100, 60);
-        temp = bg.addsprite("gold.png").anchor(0, 0).pos(439, 28).size(31, 30).color(100, 100, 100, 100);
-        temp = bg.addsprite("crystal.png").anchor(0, 0).pos(586, 30).size(31, 29).color(100, 100, 100, 100);
-        temp = bg.addsprite("silver.png").anchor(0, 0).pos(280, 27).size(32, 32).color(100, 100, 100, 100);
+temp = bg.addsprite("rightBack.png", ARGB_8888).anchor(0, 0).pos(252, 77).size(518, 391).color(100, 100, 100, 100);
+temp = bg.addsprite("leftBack.png", ARGB_8888).anchor(0, 0).pos(32, 77).size(201, 390).color(100, 100, 100, 100);
+temp = bg.addsprite("infoBack.png", ARGB_8888).anchor(0, 0).pos(31, 246).size(203, 160).color(100, 100, 100, 60);
+temp = bg.addsprite("gold.png", ARGB_8888).anchor(0, 0).pos(439, 28).size(31, 30).color(100, 100, 100, 100);
+temp = bg.addsprite("crystal.png", ARGB_8888).anchor(0, 0).pos(586, 30).size(31, 29).color(100, 100, 100, 100);
+temp = bg.addsprite("silver.png", ARGB_8888).anchor(0, 0).pos(280, 27).size(32, 32).color(100, 100, 100, 100);
 silverText = bg.addlabel(getStr("silver", null), getFont(), 23).anchor(0, 50).pos(318, 43).color(100, 100, 100);
 goldText = bg.addlabel(getStr("gold", null), getFont(), 23).anchor(0, 50).pos(474, 44).color(100, 100, 100);
 cryText = bg.addlabel(getStr("crystal", null), getFont(), 23).anchor(0, 50).pos(621, 44).color(100, 100, 100);
-        temp = bg.addsprite("titCamp.png").anchor(0, 0).pos(71, 10).color(100, 100, 100, 100);
-        temp = bg.addsprite("conTitSol.png", UPDATE_SIZE).anchor(50, 50).pos(514, 112).color(100, 100, 100, 100);
+temp = bg.addsprite("titCamp.png", ARGB_8888).anchor(0, 0).pos(71, 10).color(100, 100, 100, 100);
+temp = bg.addsprite("conTitSol.png", UPDATE_SIZE, ARGB_8888).anchor(50, 50).pos(514, 112).color(100, 100, 100, 100);
         goods = new SoldierGoods(this);
         addChild(goods);
         //士兵商店第一个士兵
@@ -291,7 +291,7 @@ cryText = bg.addlabel(getStr("crystal", null), getFont(), 23).anchor(0, 50).pos(
             var soldier = getData(SOLDIER, id);
 
             load_sprite_sheet("soldierm"+str(id)+".plist");
-            temp = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 50).pos(132, 162).color(100, 100, 100, 100);
+temp = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ARGB_8888).anchor(50, 50).pos(132, 162).color(100, 100, 100, 100);
             sca = getSca(temp, [184, 154]);
             temp.scale(sca);
             monAni = temp;

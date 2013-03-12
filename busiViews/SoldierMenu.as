@@ -21,15 +21,15 @@ class SoldierMenu extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("soldierMenu.png").anchor(0, 0).pos(11, 390).size(428, 37).color(100, 100, 100, 100);
-        temp = bg.addsprite("buildMenu1.png").anchor(0, 0).pos(0, 419).size(800, 61).color(100, 100, 100, 100);
+temp = bg.addsprite("soldierMenu.png", ARGB_8888).anchor(0, 0).pos(11, 390).size(428, 37).color(100, 100, 100, 100);
+temp = bg.addsprite("buildMenu1.png", ARGB_8888).anchor(0, 0).pos(0, 419).size(800, 61).color(100, 100, 100, 100);
 
 bg.addlabel(str(soldier.healthBoundary), getFont(), 20).anchor(0, 50).pos(76, 454).color(100, 100, 100);
 
 bg.addlabel(str(soldier.attack), getFont(), 20).anchor(0, 50).pos(306, 453).color(100, 100, 100);
-        temp = bg.addsprite("dialogSolHealth.png").anchor(0, 0).pos(35, 440).size(33, 27).color(100, 100, 100, 100);
-        temp = bg.addsprite("dialogSolDef.png").anchor(0, 0).pos(170, 437).size(28, 31).color(100, 100, 100, 100);
-        temp = bg.addsprite("dialogSolAtt.png").anchor(0, 0).pos(277, 438).size(26, 32).color(100, 100, 100, 100);
+temp = bg.addsprite("dialogSolHealth.png", ARGB_8888).anchor(0, 0).pos(35, 440).size(33, 27).color(100, 100, 100, 100);
+temp = bg.addsprite("dialogSolDef.png", ARGB_8888).anchor(0, 0).pos(170, 437).size(28, 31).color(100, 100, 100, 100);
+temp = bg.addsprite("dialogSolAtt.png", ARGB_8888).anchor(0, 0).pos(277, 438).size(26, 32).color(100, 100, 100, 100);
 bg.addlabel(str(soldier.defense), getFont(), 20).anchor(0, 50).pos(206, 453).color(100, 100, 100);
 
         trace("inTransfer", soldier.inTransfer);
@@ -54,9 +54,9 @@ bg.addlabel(getStr("solNameCareer", ["[NAME]", soldier.myName, "[CAREER]", total
                 if(i > career)
                     filter = GRAY;
                 if(i < 3)
-                    bg.addsprite("soldierLev0.png", filter).pos(initX, initY).anchor(0, 0);
+bg.addsprite("soldierLev0.png", filter, ARGB_8888).pos(initX, initY).anchor(0, 0);
                 else
-                    bg.addsprite("soldierLev1.png", filter).pos(initX, initY).anchor(0, 0);
+bg.addsprite("soldierLev1.png", filter, ARGB_8888).pos(initX, initY).anchor(0, 0);
                 initX += 30;
             }
         }

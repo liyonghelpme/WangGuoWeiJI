@@ -9,7 +9,7 @@ class AttackBombEffect extends MyNode
     }
     function genNewParticle()
     {
-        var tx = sprite("explosion0.png");
+var tx = sprite("explosion0.png", ARGB_8888);
         var initDeg = rand(360);
         var P_NUM = getParam("bombNum")+rand(getParam("randBombNum"));
         var offD = 360/getParam("bombNum");

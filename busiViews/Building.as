@@ -109,10 +109,10 @@ farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
         if(funcs == MINE_KIND)
         {
             var mineData = getData(MINE_PRODUCTION, buildLevel);
-            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH, getHue(mineData["color"])).anchor(50, 100).scale(data["buildSca"]);
+changeDirNode = bg.addsprite(("build" + str(id)) + ".png", ARGB_8888, ALPHA_TOUCH, getHue(mineData["color"])).anchor(50, 100).scale(data["buildSca"]);
         }
         else
-            changeDirNode = bg.addsprite("build"+str(id)+".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100).scale(data["buildSca"]);
+changeDirNode = bg.addsprite(("build" + str(id)) + ".png", ARGB_8888, ALPHA_TOUCH).anchor(50, 100).scale(data["buildSca"]);
         
         //非本身颜色的建筑物颜色 根据编号设定颜色
         //1 采用标准特征色
@@ -121,7 +121,7 @@ farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
         {
             var fc = COLOR_INDEX[buildColor];
             fc = getHue(fc);
-            featureColor = changeDirNode.addsprite("build"+str(id)+"_f.png", fc);
+featureColor = changeDirNode.addsprite(("build" + str(id)) + "_f.png", fc, ARGB_8888);
         }
         var offY = data["offY"];
 
@@ -348,10 +348,10 @@ farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
         if(data["hasShadow"])
         {
             if(!data["isoView"]) {
-                shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]);
+shadow = sprite(((("build" + str(id)) + "Shadow") + str(shadowDir)) + ".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0] / 2, bSize[1]);
             } else {
                 var offY = (sy+sx)*SIZEY/2;
-                shadow = sprite("build"+str(id)+"Shadow"+str(shadowDir)+".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0]/2, bSize[1]-offY);
+shadow = sprite(((("build" + str(id)) + "Shadow") + str(shadowDir)) + ".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0] / 2, bSize[1] - offY);
             }
             if(!data["upShadow"])
                 bg.add(shadow, -1);
@@ -502,7 +502,7 @@ farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
             */
             if(bottom == null)
             {
-                bottom = sprite().pos(bSize[0]/2, bSize[1]-(sx+sy)/2*SIZEY).anchor(50, 50).size((sx+sy)*SIZEX+20, (sx+sy)*SIZEY+10).color(100, 100, 100, 100);
+bottom = sprite("", ARGB_8888).pos(bSize[0] / 2, bSize[1] - (((sx + sy) / 2) * SIZEY)).anchor(50, 50).size(((sx + sy) * SIZEX) + 20, ((sx + sy) * SIZEY) + 10).color(100, 100, 100, 100);
                 bg.add(bottom, -1);
             }
             //half transparent + color
@@ -869,14 +869,11 @@ farmState = label("", getFont(), 20).color(0, 0, 0).pos(10, -30);
         var bSize = bg.size();
         lockAni = bg.addnode();
         var HEI = -20;
-        lockAni.addsprite().size(30, 30).pos(29, HEI).anchor(50, 100).addaction(
-            repeat(
-                animate(1000, "feed0.png", "feed1.png", "feed2.png", "feed3.png", "feed4.png", "feed5.png", "feed7.png" )
-            )); 
+lockAni.addsprite("", ARGB_8888).size(30, 30).pos(29, HEI).anchor(50, 100).addaction(repeat(animate(1000, "feed0.png", "feed1.png", "feed2.png", "feed3.png", "feed4.png", "feed5.png", "feed7.png")));
         if(tar == "feeding")
-            lockAni.addsprite("feeding.png").pos(48, HEI).anchor(0, 100);
+lockAni.addsprite("feeding.png", ARGB_8888).pos(48, HEI).anchor(0, 100);
         else if(tar == "harvesting")
-            lockAni.addsprite("harvesting.png").pos(48, HEI).anchor(0, 100);
+lockAni.addsprite("harvesting.png", ARGB_8888).pos(48, HEI).anchor(0, 100);
     }
     function removeLock()
     {

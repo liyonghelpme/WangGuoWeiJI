@@ -89,7 +89,7 @@ class Name extends MyNode
                 if(curNum >= len(data))
                     break;
 
-                var panel = flowNode.addsprite("soldierPanel.png").pos(i*OFFX, j*OFFY).size(PANEL_WIDTH, PANEL_HEIGHT); 
+var panel = flowNode.addsprite("soldierPanel.png", ARGB_8888).pos(i * OFFX, j * OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
 
                 panel.put(curNum);
             }

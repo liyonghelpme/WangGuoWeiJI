@@ -51,7 +51,7 @@ class FriendSoldier extends MoveSoldier
         bg = node();//.scale(showSize);
         init();
 
-        changeDirNode = bg.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
+changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
 
         var bSize = changeDirNode.prepare().size();
 
@@ -59,7 +59,7 @@ class FriendSoldier extends MoveSoldier
         changeDirNode.pos(bSize[0]/2, bSize[1]);
 
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2, bSize[1]).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE")*data["shadowXScale"]/100, getParam("SOL_SHOW_SIZE"));
+shadow = sprite(("roleShadow" + str(ss)) + ".png", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).scale((getParam("SOL_SHOW_SIZE") * data["shadowXScale"]) / 100, getParam("SOL_SHOW_SIZE"));
 
         changeDirNode.add(shadow, -1);
 
@@ -85,7 +85,7 @@ class FriendSoldier extends MoveSoldier
         if(hasCry == 1)
         {
             var bSize = bg.size();
-            negtiveState = bg.addsprite("soldierMorale.png").pos(bSize[0]/2+getParam("statusOffX"), bSize[1]-getBloodHeightOff()+getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
+negtiveState = bg.addsprite("soldierMorale.png", ARGB_8888).pos((bSize[0] / 2) + getParam("statusOffX"), (bSize[1] - getBloodHeightOff()) + getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
 
             negtiveState.setevent(EVENT_TOUCH, touchBegan);
             negtiveState.setevent(EVENT_MOVE, touchMoved);
@@ -130,7 +130,7 @@ class FriendSoldier extends MoveSoldier
             }
 
             var temp = bg.addnode();
-            temp.addsprite("crystal.png").anchor(0, 50).pos(0, -30).size(30, 30);
+temp.addsprite("crystal.png", ARGB_8888).anchor(0, 50).pos(0, -30).size(30, 30);
 temp.addlabel("+" + str(cry), getFont(), 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
             temp.addaction(sequence(moveby(500, 0, -40), fadeout(1000), callfunc(removeTempNode)));
 

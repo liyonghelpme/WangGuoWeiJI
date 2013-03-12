@@ -240,7 +240,7 @@ class ChildMenuLayer extends MyNode
         else
             fn = "dark3.png";
         trace("currentFn", fn);
-        bg=sprite(fn).scale(100,100).size(DARK_WIDTH, height);
+bg = sprite(fn, ARGB_8888).scale(100, 100).size(DARK_WIDTH, height);
         if(index == 0){
             bg.anchor(0, 0).pos(-DARK_WIDTH, offset);
             //bg.anchor(0, 0).pos(0, offset);
@@ -254,13 +254,13 @@ class ChildMenuLayer extends MyNode
         for(var i=0;i<len(funcs);i++){
             var model = buts.get(funcs[i]);
 
-            var button = bg.addsprite(model[0]).scale(100,100).anchor(50,50).pos(DARK_WIDTH/2, OFFY/2+OFFY*i);
+var button = bg.addsprite(model[0], ARGB_8888).scale(100, 100).anchor(50, 50).pos(DARK_WIDTH / 2, (OFFY / 2) + (OFFY * i));
             button.setevent(EVENT_TOUCH, touchOnNow, model[1]);
             if(funcs[i] == "mail")
             {
                 var num = global.mailController.getMailNum();
 
-                mailBox = sprite("mailBoxNum.png").anchor(50, 50).pos(103, 32).size(33, 33).color(100, 100, 100, 100);
+mailBox = sprite("mailBoxNum.png", ARGB_8888).anchor(50, 50).pos(103, 32).size(33, 33).color(100, 100, 100, 100);
                 button.add(mailBox);
                 var w = str(num);
                 if(num >= 99)

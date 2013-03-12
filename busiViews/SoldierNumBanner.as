@@ -9,7 +9,7 @@ class SoldierNumBanner extends MyNode
     }
     function initView()
     {
-        bg = sprite("build126.png").pos(864+30+30, 800).anchor(50, 100);
+bg = sprite("build126.png", ARGB_8888).pos((864 + 30) + 30, 800).anchor(50, 100);
         init();
 solNum = bg.addlabel("50", getFont(), 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
         bg.setevent(EVENT_TOUCH, touchBegan);

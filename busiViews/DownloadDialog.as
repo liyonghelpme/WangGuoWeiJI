@@ -12,12 +12,12 @@ class DownloadDialog extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(150, 93).size(520, 312).color(100, 100, 100, 100);
-        temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(169, 137).size(481, 252).color(100, 100, 100, 100);
-        temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 65).size(418, 57).color(100, 100, 100, 100);
-        temp = bg.addsprite("scoreWhite.png").anchor(0, 0).pos(195, 177).size(384, 176).color(100, 100, 100, 100);
-        temp = bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
-        temp = bg.addsprite("soldier444.png").anchor(0, 0).pos(491, 245).size(175, 131).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(150, 93).size(520, 312).color(100, 100, 100, 100);
+temp = bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(169, 137).size(481, 252).color(100, 100, 100, 100);
+temp = bg.addsprite("smallBack.png", ARGB_8888).anchor(0, 0).pos(201, 65).size(418, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("scoreWhite.png", ARGB_8888).anchor(0, 0).pos(195, 177).size(384, 176).color(100, 100, 100, 100);
+temp = bg.addsprite("scroll.png", ARGB_8888).anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("soldier444.png", ARGB_8888).anchor(0, 0).pos(491, 245).size(175, 131).color(100, 100, 100, 100);
         but0 = new NewButton("roleNameBut0.png", [174, 54], getStr("downloadNow", null), null, 27, FONT_NORMAL, [100, 100, 100], onDownloadNow, null);
         but0.bg.pos(299, 403);
         addChild(but0);

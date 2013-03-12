@@ -157,13 +157,13 @@ class AllSoldier extends MyNode
                 if(curNum >= len(data))
                     break;
 
-                var panel = flowNode.addsprite("soldierPanel.png").pos(j*OFFX+PANEL_WIDTH/2, i*OFFY+PANEL_HEIGHT/2).size(PANEL_WIDTH, PANEL_HEIGHT).anchor(50, 50); 
+var panel = flowNode.addsprite("soldierPanel.png", ARGB_8888).pos((j * OFFX) + (PANEL_WIDTH / 2), (i * OFFY) + (PANEL_HEIGHT / 2)).size(PANEL_WIDTH, PANEL_HEIGHT).anchor(50, 50);
 
                 var id = data[curNum][1].get("id");
                 var name = data[curNum][1].get("name");
                 var level = getCareerLev(id);
 
-                var solPic = panel.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 50).pos(80, 98);
+var solPic = panel.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ARGB_8888).anchor(50, 50).pos(80, 98);
                 var sca = getSca(solPic, [125, 96]);
                 solPic.scale(sca);
 
@@ -180,9 +180,9 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
                         if(k > level)
                             filter = GRAY;
                         if(k < 3)
-                            panel.addsprite("soldierLev0.png", filter).pos(initX, initY);
+panel.addsprite("soldierLev0.png", filter, ARGB_8888).pos(initX, initY);
                         else
-                            panel.addsprite("soldierLev1.png", filter).pos(initX, initY);
+panel.addsprite("soldierLev1.png", filter, ARGB_8888).pos(initX, initY);
                         initX += 27;
                     }
                 }
@@ -207,7 +207,7 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(80, 25).color(28, 15, 4);
         {
             var id = soldier[1]["id"];
             load_sprite_sheet("soldierm"+str(id)+".plist");
-            var monAni = infoNode.addsprite("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png").anchor(50, 50).pos(132, 175);
+var monAni = infoNode.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ARGB_8888).anchor(50, 50).pos(132, 175);
             var sca = getSca(monAni, [158, 137]);
             monAni.scale(sca);
 

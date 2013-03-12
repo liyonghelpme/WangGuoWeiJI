@@ -143,7 +143,7 @@ class FriendList extends MyNode
                 if(curNum >= len(data))
                     break;
 
-                var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY+PAN_OFFY).size(PANEL_WIDTH, PANEL_HEIGHT); 
+var panel = flowNode.addsprite("dialogFriendPanel.png", ARGB_8888).pos(j * OFFX, (i * OFFY) + PAN_OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
                 panel.put(curNum);
 
                 var papayaId = data[curNum].get("id");
@@ -153,24 +153,24 @@ class FriendList extends MyNode
                 if(data[curNum].get("uid") == ADD_NEIBOR_MAX)
                 {
 panel.addlabel(getStr("addSeat", null), getFont(), 18).anchor(50, 50).pos(77, 135).color(43, 25, 9);
-                    panel.addsprite("addSeat.png").anchor(50, 50).pos(73, 86).size(46, 44).color(100, 100, 100, 100);
+panel.addsprite("addSeat.png", ARGB_8888).anchor(50, 50).pos(73, 86).size(46, 44).color(100, 100, 100, 100);
                 }
                 else if(data[curNum].get("uid") == EMPTY_SEAT)
                 {
-                    panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
-                    panel.addsprite("unkownFriendHead.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
+panel.addsprite("friendBlock.png", ARGB_8888).anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
+panel.addsprite("unkownFriendHead.png", ARGB_8888).anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
 panel.addlabel(getStr("addPlayerNeibor", null), getFont(), 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
                 }
                 else if(data[curNum]["uid"] == INVITE_FRIEND)
                 {
-                    panel.addsprite("unkownFriendHead.png").anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
+panel.addsprite("unkownFriendHead.png", ARGB_8888).anchor(0, 0).pos(47, 55).size(55, 55).color(100, 100, 100, 100);
 panel.addlabel(getStr("inviteFriend", null), getFont(), 18).anchor(50, 50).pos(75, 135).color(43, 25, 9);
                 }
                 else if(friendKind == VISIT_NEIBOR || friendKind == VISIT_OTHER)
                 {
-                    panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
+panel.addsprite("friendBlock.png", ARGB_8888).anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
 
-                    panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
+panel.addsprite(avatar_url(papayaId), ARGB_8888).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
 panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(76, 132).color(43, 25, 9);
 
                     if(data[curNum].get("crystal") != null)
@@ -179,7 +179,7 @@ panel.addlabel(name, getFont(), 20).anchor(50, 50).pos(76, 132).color(43, 25, 9)
                         panel.add(temp);
                     }
 
-                    panel.addsprite("levelStar.png").anchor(0, 0).pos(85, 41).size(31, 31).color(100, 100, 100, 100);
+panel.addsprite("levelStar.png", ARGB_8888).anchor(0, 0).pos(85, 41).size(31, 31).color(100, 100, 100, 100);
 panel.addlabel(str(level + 1), getFont(), 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
                 }
 
@@ -290,7 +290,7 @@ panel.addlabel(str(level + 1), getFont(), 15).anchor(50, 50).pos(101, 58).color(
             return;
         }
         shadow = child.addnode();
-        shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 78).size(144, 164).color(100, 100, 100, 100);
+shadow.addsprite("dialogFriendShadow.png", ARGB_8888).anchor(50, 50).pos(73, 78).size(144, 164).color(100, 100, 100, 100);
         if(uid == ADD_NEIBOR_MAX)
         {
             but0 = new NewButton("roleNameBut0.png", [129, 39], getStr("addGoldSeat", ["[KIND]", "gold.png", "[NUM]", str(getParam("addSeatGold"))]), null, 18, FONT_NORMAL, [100, 100, 100], onAddGoldSeat, curNum);
