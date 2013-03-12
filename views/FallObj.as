@@ -35,8 +35,8 @@ class FallObj extends MyNode
         curMap = [rx, ry];
         bg = node().size(100, 100).anchor(50, 80).scale(60);
         init();
-        obj = bg.addsprite("goods"+str(view)+".png").anchor(50,50).size(30,30).pos(50, 50);
-        var shadow = sprite("roleShadow.png").anchor(50, 50).pos(15, 30).size(39, 19);
+obj = bg.addsprite(("goods" + str(view)) + ".png", ARGB_8888).anchor(50, 50).size(30, 30).pos(50, 50);
+var shadow = sprite("roleShadow.png", ARGB_8888).anchor(50, 50).pos(15, 30).size(39, 19);
         obj.add(shadow, -1);
 
 

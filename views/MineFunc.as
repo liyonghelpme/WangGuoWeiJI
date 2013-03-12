@@ -89,9 +89,9 @@ class Mine extends FuncBuild
         if(flowBanner == null)
         {
             var bSize = baseBuild.bg.size();
-            flowBanner = baseBuild.bg.addsprite("flowBanner.png").pos(bSize[0]/2, -11).anchor(50, 100).setevent(EVENT_TOUCH, whenBusy);
+flowBanner = baseBuild.bg.addsprite("flowBanner.png", ARGB_8888).pos(bSize[0] / 2, -11).anchor(50, 100).setevent(EVENT_TOUCH, whenBusy);
             var fSize = flowBanner.prepare().size();
-            var pl = flowBanner.addsprite("crystalBig.png").anchor(50, 50).pos(fSize[0]/2, 20);
+var pl = flowBanner.addsprite("crystalBig.png", ARGB_8888).anchor(50, 50).pos(fSize[0] / 2, 20);
             var sca = getSca(pl, [63, 42]);
             pl.scale(sca);
             flowBanner.addaction(sequence(delaytime(rand(2000)), repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
@@ -152,7 +152,7 @@ class Mine extends FuncBuild
         var temp = baseBuild.bg.addnode();
         var bSize = baseBuild.bg.size();
 
-        var pic = temp.addsprite(it[0][0]+".png").anchor(0, 50).pos(0, -30).size(30, 30);
+var pic = temp.addsprite(it[0][0] + ".png", ARGB_8888).anchor(0, 50).pos(0, -30).size(30, 30);
 var word = temp.addlabel("-" + str(it[0][1]), getFont(), 25).anchor(0, 50).pos(35, -30).color(0, 0, 0);
         var wSize = word.prepare().size();
 

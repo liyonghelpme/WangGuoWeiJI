@@ -138,7 +138,7 @@ class SoldierGoods extends MyNode
                 if(curNum >= len(data))
                     break;
 
-                var panel = flowNode.addsprite("goodPanel.png").pos(j*OFFX+PANEL_WIDTH/2, i*OFFY+PANEL_HEIGHT/2).anchor(50, 50).size(PANEL_WIDTH, PANEL_HEIGHT); 
+var panel = flowNode.addsprite("goodPanel.png", ARGB_8888).pos((j * OFFX) + (PANEL_WIDTH / 2), (i * OFFY) + (PANEL_HEIGHT / 2)).anchor(50, 50).size(PANEL_WIDTH, PANEL_HEIGHT);
 
                 var id = data[curNum];
                 var sData = getData(SOLDIER, id);
@@ -155,8 +155,8 @@ class SoldierGoods extends MyNode
                 var solPic;
                 if(canBuy == 0)
                 {
-                    solPic = panel.addsprite("soldier"+str(id)+".png", BLACK).anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
-                    temp = panel.addsprite("storeShadow.png").anchor(50, 50).pos(71, 93).size(PANEL_WIDTH, PANEL_HEIGHT).color(100, 100, 100, 47);
+solPic = panel.addsprite(("soldier" + str(id)) + ".png", BLACK, ARGB_8888).anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
+temp = panel.addsprite("storeShadow.png", ARGB_8888).anchor(50, 50).pos(71, 93).size(PANEL_WIDTH, PANEL_HEIGHT).color(100, 100, 100, 47);
                     var cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
                     cw.anchor(50, 50).pos(78, 92);
                     panel.add(cw); 
@@ -167,7 +167,7 @@ class SoldierGoods extends MyNode
                     if(sData["needArgb"])
                         col = ARGB_8888;
 
-                    solPic = panel.addsprite("soldier"+str(id)+".png", col).anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
+solPic = panel.addsprite(("soldier" + str(id)) + ".png", col, ARGB_8888).anchor(50, 50).pos(73, 95).color(100, 100, 100, 100);
                     solPic.blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 }
                 
@@ -194,7 +194,7 @@ panel.addlabel(getStr("callInQueue", ["[NUM]", str(ret[1] + 1)]), getFont(), 17)
                         c = [100, 0, 0];
                     }
 
-                    temp = panel.addsprite(picName).anchor(50, 50).pos(32, 169).size(30, 30).color(100, 100, 100, 100);
+temp = panel.addsprite(picName, ARGB_8888).anchor(50, 50).pos(32, 169).size(30, 30).color(100, 100, 100, 100);
 panel.addlabel(str(valNum), getFont(), 20).anchor(50, 50).pos(89, 168).color(c);
                 }
 

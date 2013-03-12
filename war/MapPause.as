@@ -9,8 +9,8 @@ class MidMenu extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("mapMenuContinue.png").anchor(0, 0).pos(312, 203).size(70, 93).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onContinue);
-        temp = bg.addsprite("mapMenuQuit.png").anchor(0, 0).pos(420, 203).size(71, 92).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onQuit);
+temp = bg.addsprite("mapMenuContinue.png", ARGB_8888).anchor(0, 0).pos(312, 203).size(70, 93).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onContinue);
+temp = bg.addsprite("mapMenuQuit.png", ARGB_8888).anchor(0, 0).pos(420, 203).size(71, 92).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onQuit);
     }
 
     function MidMenu(p)
@@ -72,10 +72,10 @@ class MapPause extends MyNode
 
         if(scene.kind != CHALLENGE_TRAIN)
         {
-            temp = bg.addsprite("mapNewCastleBanner.png").anchor(50, 50).pos(197, 42).size(247, 60).color(100, 100, 100, 100);
+temp = bg.addsprite("mapNewCastleBanner.png", ARGB_8888).anchor(50, 50).pos(197, 42).size(247, 60).color(100, 100, 100, 100);
             temp.scale(-100, 100);
-            leftRed = bg.addsprite("mapDefenseRed.png").anchor(0, 0).pos(80, 17).size(237, 24).color(100, 100, 100, 100);
-            leftDef = bg.addsprite("mapDefenseBlue.png").anchor(0, 0).pos(80, 17).size(237, 24).color(100, 100, 100, 100);
+leftRed = bg.addsprite("mapDefenseRed.png", ARGB_8888).anchor(0, 0).pos(80, 17).size(237, 24).color(100, 100, 100, 100);
+leftDef = bg.addsprite("mapDefenseBlue.png", ARGB_8888).anchor(0, 0).pos(80, 17).size(237, 24).color(100, 100, 100, 100);
 
             var mInfo = getData(MAP_INFO, scene.big);
             if(mInfo["blood"] == 0)
@@ -85,17 +85,17 @@ class MapPause extends MyNode
 
             //自己名字
 bg.addlabel(global.user.name, getFont(), 20).anchor(0, 50).pos(94, 58).color(0, 0, 0);
-            temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(51, 41).size(68, 63).color(100, 100, 100, 100);
+temp = bg.addsprite("mapMenuHead.png", ARGB_8888).anchor(50, 50).pos(51, 41).size(68, 63).color(100, 100, 100, 100);
             //自己头像
-            temp = bg.addsprite("boss"+str(global.user.getValue("heroId"))+".png").anchor(50, 50).pos(52, 41).color(100, 100, 100, 100).scale(-100, 100);
+temp = bg.addsprite(("boss" + str(global.user.getValue("heroId"))) + ".png", ARGB_8888).anchor(50, 50).pos(52, 41).color(100, 100, 100, 100).scale(-100, 100);
             sca = getSca(temp, [63, 56]);
             temp.scale(-sca, sca);
 leftText = bg.addlabel("", getFont(), 28).anchor(0, 50).pos(91, 29).color(0, 0, 0);
 
             //转向放置
-            temp = bg.addsprite("mapNewCastleBanner.png").anchor(50, 50).pos(603, 42).size(247, 60).color(100, 100, 100, 100);
-            rightRed = bg.addsprite("mapDefenseRed.png").anchor(0, 0).pos(485, 17).size(237, 24).color(100, 100, 100, 100);
-            rightDef = bg.addsprite("mapDefenseYellow.png").anchor(0, 0).pos(485, 17).size(237, 24).color(100, 100, 100, 100);
+temp = bg.addsprite("mapNewCastleBanner.png", ARGB_8888).anchor(50, 50).pos(603, 42).size(247, 60).color(100, 100, 100, 100);
+rightRed = bg.addsprite("mapDefenseRed.png", ARGB_8888).anchor(0, 0).pos(485, 17).size(237, 24).color(100, 100, 100, 100);
+rightDef = bg.addsprite("mapDefenseYellow.png", ARGB_8888).anchor(0, 0).pos(485, 17).size(237, 24).color(100, 100, 100, 100);
 
             //怪兽没有名字 采用 怪兽
             if(scene.kind == CHALLENGE_MON)
@@ -104,15 +104,15 @@ bg.addlabel(getStr("monster", null), getFont(), 20).anchor(100, 50).pos(711, 58)
             else
 bg.addlabel(scene.user["name"], getFont(), 20).anchor(100, 50).pos(711, 58).color(0, 0, 0);
                 
-            temp = bg.addsprite("mapMenuHead.png").anchor(50, 50).pos(750, 41).size(68, 63).color(100, 100, 100, 100);
+temp = bg.addsprite("mapMenuHead.png", ARGB_8888).anchor(50, 50).pos(750, 41).size(68, 63).color(100, 100, 100, 100);
             //闯关使用关卡怪兽头像
             //挑战使用 对方英雄头像需要修改多处返回对方英雄信息 
             //或者构建一个底层的库用于快速获取服务器返回的用户信息----->uid---->information
             //User Information Manager
             if(scene.kind == CHALLENGE_MON)//怪兽暂时用bossId
-                temp = bg.addsprite("boss"+str(mInfo["bossId"])+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
+temp = bg.addsprite(("boss" + str(mInfo["bossId"])) + ".png", ARGB_8888).anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
             else
-                temp = bg.addsprite("boss"+str(scene.user["heroId"])+".png").anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
+temp = bg.addsprite(("boss" + str(scene.user["heroId"])) + ".png", ARGB_8888).anchor(50, 50).pos(750, 39).color(100, 100, 100, 100);
 
             sca = getSca(temp, [60, 59]);
             temp.scale(sca);
@@ -124,7 +124,7 @@ rightText = bg.addlabel("", getFont(), 26).anchor(100, 50).pos(711, 29).color(0,
             bloodText = [leftText, rightText];
         }
 
-        temp = bg.addsprite("mapMenuPause.png").anchor(0, 0).pos(715, 409).size(58, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onPause);
+temp = bg.addsprite("mapMenuPause.png", ARGB_8888).anchor(0, 0).pos(715, 409).size(58, 58).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onPause);
     }
     function MapPause(s)
     {

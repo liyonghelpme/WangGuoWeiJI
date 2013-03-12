@@ -100,8 +100,8 @@ class Choice extends MyNode
         var t;
         for(var i = 0; i < TabNum; i++)
         {
-            t = sprite("whiteChoice.png").pos(0, i*Height).anchor(0, 50).size(198, 78);
-            t.addsprite(store.pics[i]).pos(99, 40).anchor(50, 50);
+t = sprite("whiteChoice.png", ARGB_8888).pos(0, i * Height).anchor(0, 50).size(198, 78);
+t.addsprite(store.pics[i], ARGB_8888).pos(99, 40).anchor(50, 50);
             tabArray.append([t, i]); 
             flowTab.add(t);
         }

@@ -25,29 +25,62 @@ def walkThrough(cur):
 
             lno = 0
             keep = -1
+            #原来的文本中有多行 汇聚成一行 分析结束之后 变成一条语句
+            #保存新的文本可能 行会减少
+            #状态 Find Line End 寻找行的结束
+            newText = []
+            state = 'Start'
+            cacheLine = ''
             for p in li:
-                if p.find('//') != -1:
-                    pass
-                elif pat1.search(p) != None or pat2.search(p) != None:
-                    data = 'void main(){\n %s }'% (p)
-                    lineRes.append(data)        
-                    print lno
-                    print n
+                if state == 'Start':
+                    if p.find('//') != -1:#注释行 不分析
+                        newText.append(p)
+                        pass
+                    #有addsprite sprite 行
+                    elif pat1.search(p) != None or pat2.search(p) != None:
+                        cacheLine = p
+                        if p.find(';') == -1:
+                            #cacheLine = p
+                            state = 'Find'
+                        else:
+                            data = 'void main(){\n %s }'% (cacheLine)
+                            lineRes.append(data)        
+                            print lno
+                            print n
 
-                    newL = gen(data)
+                            newL = gen(data)
 
-                    li[lno] = newL+'\n'
-                    print 'old',  p
-                    print "new", lno, li[lno]
-                    keep = lno
-                    #files.write(newL+'\n')
-                lno += 1
-            if keep != -1:
-                print li[keep] 
+                            #li[lno] = newL+'\n'
+                            newText.append(newL+'\n')
+                            print 'old',  cacheLine
+                            print "new", lno, newText[-1]
+                            keep = lno
 
-            print 'len', len(li)
+                    else:
+                        newText.append(p)
+                elif state == 'Find':
+                    if p.find(';') == -1:
+                        cacheLine += p
+                    else:
+                        cacheLine += p
+                        state = 'Start'
+                        data = 'void main(){\n %s }'% (cacheLine)
+                        lineRes.append(data)        
+                        print lno
+                        print n
+
+                        newL = gen(data)
+
+                        #li[lno] = newL+'\n'
+                        newText.append(newL+'\n')
+                        print 'old',  cacheLine
+                        print "new", lno, newText[-1]
+                        keep = lno
+
+                    
+            print 'len', len(newText)
             files = open(n, 'w')
-            for l in li:
+            for l in newText:
                 files.write(l)
             files.close()
 

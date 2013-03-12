@@ -39,32 +39,32 @@ class MenuLayer extends MyNode
         bg = node();
         init();
         
-        banner = bg.addsprite("menu_back.png").anchor(0, 0).pos(0, 391).size(800, 89);
+banner = bg.addsprite("menu_back.png", ARGB_8888).anchor(0, 0).pos(0, 391).size(800, 89);
 
-        temp = bg.addsprite("menuFeather.png").anchor(0, 0).pos(107, 367).size(52, 59).color(100, 100, 100, 100);
-        taskbutton = bg.addsprite("task.png").anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
-        taskFin = bg.addsprite("taskFin0.png").anchor(0, 0).pos(83, 402).size(27, 27);
+temp = bg.addsprite("menuFeather.png", ARGB_8888).anchor(0, 0).pos(107, 367).size(52, 59).color(100, 100, 100, 100);
+taskbutton = bg.addsprite("task.png", ARGB_8888).anchor(0, 0).pos(12, 395).size(93, 82).setevent(EVENT_TOUCH, onTask);
+taskFin = bg.addsprite("taskFin0.png", ARGB_8888).anchor(0, 0).pos(83, 402).size(27, 27);
 finNum = bg.addlabel(getStr("99+", null), getFont(), 18).anchor(50, 50).pos(96, 416).color(100, 100, 100);
 
         expfiller = bg.addsprite("exp_filler.png").anchor(0, 0).pos(133, 419);//.size(24, 10);
-        expback = bg.addsprite("level0.png").anchor(0, 0).pos(120, 406).size(33, 36);
+expback = bg.addsprite("level0.png", ARGB_8888).anchor(0, 0).pos(120, 406).size(33, 36);
         
         var expSize = expback.prepare().size();
         levelLabel = expback.addnode().anchor(50, 50).pos(expSize[0]/2, expSize[1]/2);
 
-        expBanner = sprite("expBanner.png").anchor(0, 0).pos(123, 432).size(150, 50).visible(0);
+expBanner = sprite("expBanner.png", ARGB_8888).anchor(0, 0).pos(123, 432).size(150, 50).visible(0);
         bg.add(expBanner, MENU_EXP_LAYER);
 
         expWord = ShadowWords(getStr("expToLev", null), getFont(), 17, FONT_NORMAL, [100, 100, 100]);
         expWord.bg.anchor(50, 50).pos(75, 28);
         expBanner.add(expWord.bg);
 
-        collectionbutton = bg.addsprite("challengeIcon.png").anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, onRank);
+collectionbutton = bg.addsprite("challengeIcon.png", ARGB_8888).anchor(0, 0).pos(229, 445).size(46, 34).setevent(EVENT_TOUCH, onRank);
         //global.taskModel.showHintArrow(collectionbutton, collectionbutton.prepare().size(), CHALLENGE_BUT, onRank);
 
-        rechargebutton = bg.addsprite("recharge.png").anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
+rechargebutton = bg.addsprite("recharge.png", ARGB_8888).anchor(0, 0).pos(439, 444).size(84, 35).setevent(EVENT_TOUCH, openCharge);
 
-        menubutton = bg.addsprite("menu_button.png").anchor(0, 0).pos(685, 380).size(112, 106).setevent(EVENT_TOUCH, onClicked, 0);
+menubutton = bg.addsprite("menu_button.png", ARGB_8888).anchor(0, 0).pos(685, 380).size(112, 106).setevent(EVENT_TOUCH, onClicked, 0);
 
         rightMenu = new CastleRightMenu(this, []);
 

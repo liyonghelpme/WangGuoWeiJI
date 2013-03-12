@@ -26,7 +26,7 @@ class Goods extends MyNode
         init();
         cl = bg.addnode().size(500, HEIGHT).clipping(1).pos(271, 145);
         //title = bg.addsprite().pos(offX/2+offX, 103-129).anchor(50, 50);
-        title = bg.addsprite("buyDrug.png", UPDATE_SIZE).anchor(50, 50).pos(515, 112);
+title = bg.addsprite("buyDrug.png", UPDATE_SIZE, ARGB_8888).anchor(50, 50).pos(515, 112);
 
 
         goodNum = [];
@@ -60,7 +60,7 @@ class Goods extends MyNode
         //显示属性位置 缩放
 
         var showGain = data.get("showGain", 1);
-        var buildPic = panel.addsprite(buildPicName, ARGB_8888).pos(74, 88).anchor(50, 50);
+var buildPic = panel.addsprite(buildPicName, ARGB_8888).pos(74, 88).anchor(50, 50);
         var ret;
         var canBuy = 1;
         if(objKind == BUILD)
@@ -69,7 +69,7 @@ class Goods extends MyNode
             //建筑物的数量不足
             if(ret[0] == 0)
             {
-                panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
+panel.addsprite("storeShadow.png", ARGB_8888).size(151, 191).color(100, 100, 100, 47);
                 cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(getNextBuildNum(objId) + 1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
                 cw.anchor(50, 50).pos(75, 97);
                 panel.add(cw); 
@@ -113,7 +113,7 @@ panel.addlabel((str(getCurBuildNum(objId)) + "/") + str(getBuildEnableNum(objId)
         if(global.user.getValue("level") < needLevel )
         {
             buildPic.texture(buildPicName, BLACK);
-            panel.addsprite("storeShadow.png").size(151, 191).color(100, 100, 100, 47);
+panel.addsprite("storeShadow.png", ARGB_8888).size(151, 191).color(100, 100, 100, 47);
             
             cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
             cw.anchor(50, 50).pos(75, 97);
@@ -144,7 +144,7 @@ panel.addlabel(getStr("free", null), getFont(), 18).pos(83, 169).anchor(50, 50).
                     消耗图片采用 消耗资源的名字
                     消耗数值 
                     */
-                    var cPic = panel.addsprite(picName).pos(31, 170).anchor(50, 50).size(30, 30);  
+var cPic = panel.addsprite(picName, ARGB_8888).pos(31, 170).anchor(50, 50).size(30, 30);
 var cNum = panel.addlabel(str(valNum), getFont(), 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
                 }
             }
@@ -226,7 +226,7 @@ panel.addlabel(k, getFont(), 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
             {
                 posX += offX;
             }
-            var panel = sprite("goodPanel.png").pos(posX, posY).size(149, 188);
+var panel = sprite("goodPanel.png", ARGB_8888).pos(posX, posY).size(149, 188);
             var buildData = store.allGoods[selTab][i];
             var canBuy = initSameElement(buildData, panel);
 
@@ -311,7 +311,7 @@ panel.addlabel(k, getFont(), 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
     function showGreenBut(child)
     {
         shadow = child.addnode();
-        shadow.addsprite("storeShadow.png").anchor(0, 0).pos(0, 0).size(151, 191).color(100, 100, 100, 47);
+shadow.addsprite("storeShadow.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(151, 191).color(100, 100, 100, 47);
         var but0 = new NewButton("greenButton0.png", [128, 39], getStr("sureToBuy", null), null, 20, FONT_NORMAL, [100, 100, 100], onBuy, child.get());
         but0.bg.pos(75, 97);
         shadow.add(but0.bg);

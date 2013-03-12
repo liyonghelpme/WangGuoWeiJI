@@ -776,10 +776,10 @@ const MON_ATTACK = 5;
 const MON_SPEAK = 6;
 
 /*
-temp = bg.addsprite("hero440.png").anchor(50, 100).pos(568, 292).size(174, 109).color(100, 100, 100, 100);
-temp = bg.addsprite("hero480.png").anchor(50, 100).pos(417, 241).size(149, 93).color(100, 100, 100, 100);
-temp = bg.addsprite("hero550.png").anchor(50, 100).pos(390, 401).size(110, 124).color(100, 100, 100, 100);
-temp = bg.addsprite("hero590.png").anchor(50, 100).pos(315, 305).size(198, 127).color(100, 100, 100, 100);
+temp = bg.addsprite("hero440.png", ARGB_8888).anchor(50, 100).pos(568, 292).size(174, 109).color(100, 100, 100, 100);
+temp = bg.addsprite("hero480.png", ARGB_8888).anchor(50, 100).pos(417, 241).size(149, 93).color(100, 100, 100, 100);
+temp = bg.addsprite("hero550.png", ARGB_8888).anchor(50, 100).pos(390, 401).size(110, 124).color(100, 100, 100, 100);
+temp = bg.addsprite("hero590.png", ARGB_8888).anchor(50, 100).pos(315, 305).size(198, 127).color(100, 100, 100, 100);
 */
 const HeroPos = dict([
     [480, [417, 241]],

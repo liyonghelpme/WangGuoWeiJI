@@ -20,21 +20,21 @@ class MailDialog extends MyNode
     var views;
     function MailDialog()
     {
-        bg = sprite("dialogMail.png");
+bg = sprite("dialogMail.png", ARGB_8888);
         init();
         var but0;
         //var but0 = bg.addsprite("roleNameBut0.png").size(128, 40).anchor(0, 0).pos(250, 18).setevent(EVENT_TOUCH, switchView, 0);
         //but0.addlabel(getStr("friGift", null), null, 25).pos(64, 20).anchor(50, 50);
 
-        but0 = bg.addsprite("roleNameBut0.png").size(128, 40).anchor(0, 0).pos(400, 18).setevent(EVENT_TOUCH, switchView, 0);
+but0 = bg.addsprite("roleNameBut0.png", ARGB_8888).size(128, 40).anchor(0, 0).pos(400, 18).setevent(EVENT_TOUCH, switchView, 0);
 but0.addlabel(getStr("friendReq", null), getFont(), 25).pos(64, 20).anchor(50, 50);
 
-        but0 = bg.addsprite("roleNameBut0.png").size(128, 40).anchor(0, 0).pos(550, 18).setevent(EVENT_TOUCH, switchView, 1);
+but0 = bg.addsprite("roleNameBut0.png", ARGB_8888).size(128, 40).anchor(0, 0).pos(550, 18).setevent(EVENT_TOUCH, switchView, 1);
 but0.addlabel(getStr("moreGame", null), getFont(), 25).pos(64, 20).anchor(50, 50);
 
 
 
-        bg.addsprite("closeBut.png").pos(746, 18).setevent(EVENT_TOUCH, closeDialog);
+bg.addsprite("closeBut.png", ARGB_8888).pos(746, 18).setevent(EVENT_TOUCH, closeDialog);
         
         //giftView = new GiftView([7, 154], [786, 310]);
         moreView = new MoreView([7, 85], [786, 385]);

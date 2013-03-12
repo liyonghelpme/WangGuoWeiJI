@@ -21,7 +21,7 @@ class BuildMenu extends MyNode
         {
             inPlan = 1;
         }
-        bg = sprite("buildMenuBack.png").pos(0, global.director.disSize[1]).anchor(0, 100);
+bg = sprite("buildMenuBack.png", ARGB_8888).pos(0, global.director.disSize[1]).anchor(0, 100);
 
 
         buttonNode = null;
@@ -79,8 +79,8 @@ class BuildMenu extends MyNode
         if(building == null)
         {
             if(setYet == 1)//改变了建筑物状态 所以需要ok
-                buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-            buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+buttonNode.addsprite("buildOk0.png", ARGB_8888).anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+buttonNode.addsprite("buildCancel1.png", ARGB_8888).anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
 buttonNode.addlabel(getStr("chooseBuild", null), getFont(), WORD_SZ).pos(W_X, BUT_Y).anchor(0, 50).color(100, 100, 100);
             return;
         }
@@ -102,8 +102,8 @@ buttonNode.addlabel(getStr("chooseBuild", null), getFont(), WORD_SZ).pos(W_X, BU
         if(opKind == PLAN_SOLDIER)//规划士兵
         {
             trace("SolbuildOk", buildOk);
-            buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-            buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+buttonNode.addsprite("buildOk0.png", ARGB_8888).anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+buttonNode.addsprite("buildCancel1.png", ARGB_8888).anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
 buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
         }
         else if(opKind == PLAN_BUILDING)//规划建筑物
@@ -117,19 +117,19 @@ buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50)
                 {
                     if(inPlan)
                     {
-                        buttonNode.addsprite("buildSell0.png").anchor(0, 0).pos(726, 8).size(48, 48).setevent(EVENT_TOUCH, onSell);
+buttonNode.addsprite("buildSell0.png", ARGB_8888).anchor(0, 0).pos(726, 8).size(48, 48).setevent(EVENT_TOUCH, onSell);
                         butNum = 3;
                     }
                 }
                 if(butNum == 3)
                 {
-                    buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-                    buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+buttonNode.addsprite("buildOk0.png", ARGB_8888).anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+buttonNode.addsprite("buildCancel1.png", ARGB_8888).anchor(0, 0).pos(669, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
                 }
                 else
                 {
-                    buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-                    buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+buttonNode.addsprite("buildOk0.png", ARGB_8888).anchor(0, 0).pos(669, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+buttonNode.addsprite("buildCancel1.png", ARGB_8888).anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
                 }
 
 buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
@@ -137,9 +137,9 @@ buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50)
             else
             {
                 trace("buildOk", buildOk);
-                buttonNode.addsprite("buildOk0.png").anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
-                buttonNode.addsprite("buildSwitch0.png").anchor(0, 0).pos(668, 8).size(48, 48).setevent(EVENT_TOUCH, onSwitch);
-                buttonNode.addsprite("buildCancel1.png").anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
+buttonNode.addsprite("buildOk0.png", ARGB_8888).anchor(0, 0).pos(611, 8).size(50, 48).setevent(EVENT_TOUCH, buildOk);
+buttonNode.addsprite("buildSwitch0.png", ARGB_8888).anchor(0, 0).pos(668, 8).size(48, 48).setevent(EVENT_TOUCH, onSwitch);
+buttonNode.addsprite("buildCancel1.png", ARGB_8888).anchor(0, 0).pos(727, 9).size(45, 45).setevent(EVENT_TOUCH, buildCancel);
 
 buttonNode.addlabel(getStr("dragBuild", null), getFont(), WORD_SZ).anchor(0, 50).pos(W_X, BUT_Y).color(100, 100, 100);
             }

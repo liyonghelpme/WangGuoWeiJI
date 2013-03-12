@@ -14,7 +14,7 @@ class GroundBomb extends EffectBase
         var groundBomb = getEffectAni(sol.id);
         var ani = pureMagicData[groundBomb[2]];
 
-        bg = sprite().anchor(50, 100).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);
+bg = sprite(ARGB_8888).anchor(50, 100).pos(p[0] + off[0], p[1] + off[1]).scale(sol.data["arrSca"]);
         init();
         shiftAni = moveto(0, 0, 0);
         initState();

@@ -21,7 +21,7 @@ class NewButton extends MyNode
         {
             bs = pic.prepare().size();//如果没有限定按钮宽度则根据图片生成
         }
-        bg = sprite(pic, ARGB_8888).size(bs).anchor(50, 50);
+bg = sprite(pic, ARGB_8888).size(bs).anchor(50, 50);
         init();
         word = new ShadowWords(w, ty, sz, bo, col);
         word.bg.pos(bs[0]/2, bs[1]/2).anchor(50, 50);

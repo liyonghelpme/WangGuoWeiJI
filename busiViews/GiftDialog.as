@@ -42,14 +42,14 @@ class GiftDialog extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        temp = bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+temp = bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);
         addChild(but0);
-        temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
+temp = bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("giftTitle.png").anchor(50, 50).pos(161, 40).size(174, 73).color(100, 100, 100, 100);
+temp = bg.addsprite("giftTitle.png", ARGB_8888).anchor(50, 50).pos(161, 40).size(174, 73).color(100, 100, 100, 100);
     }
     function onGiftTip()
     {
@@ -123,7 +123,7 @@ class GiftDialog extends MyNode
         var temp;
         for(var i = rg[0]; i < rg[1]; i++)
         {
-            var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i);
+var panel = flowNode.addsprite("dialogMakeDrugBanner.png", ARGB_8888).pos(0, OFFY * i);
             panel.put(i);
             if(data[i][0] == EMPTY_GIFT)
                 continue;
@@ -149,7 +149,7 @@ class GiftDialog extends MyNode
                     minId = min(equipData.keys());
                 else if(data[i][1] == DRUG_ITEM)
                     minId = min(drugData.keys());
-                obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][1])], ["[ID]", str(minId)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][1])], ["[ID]", str(minId)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
                 if(num == 0)
                     data[i][2] = 0;
 
@@ -158,7 +158,7 @@ class GiftDialog extends MyNode
                     if(num > 0)
                     {
 panel.addlabel(getStr("openEquip", ["[NUM]", str(num), "[KIND]", getStr(kind2Str[map[data[i][1]]], null)]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
-                        temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100);
+temp = panel.addsprite("retractArrow.png", ARGB_8888).anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100);
                     }
                     else
                     {
@@ -171,7 +171,7 @@ panel.addlabel(getStr("noGift", null), getFont(), 21).anchor(50, 50).pos(308, 37
                 else
                 {
 panel.addlabel(getStr("closeGift", ["[NUM]", str(num), "[KIND]", getStr(kind2Str[map[data[i][1]]], null)]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
-                    temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100);
+temp = panel.addsprite("retractArrow.png", ARGB_8888).anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100);
                     temp.scale(100, -100);
                 }
 
@@ -197,7 +197,7 @@ temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("nam
 
                 if(data[i][0] == EQUIP_ITEM)
                 {
-                    obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(id)])).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
                     but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("sendIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onSendIt, i);
                     but0.bg.pos(629, 35);
                     panel.add(but0.bg);
@@ -205,7 +205,7 @@ temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("nam
                 //只显示数量非零的物品
                 else
                 {
-                    obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(data[i][1])])).pos(36, 35).anchor(50, 50);
+obj = panel.addsprite(replaceStr(KindsPre[map.get(data[i][0])], ["[ID]", str(data[i][1])]), ARGB_8888).pos(36, 35).anchor(50, 50);
                     objData = getData(map.get(data[i][0]), id);
 
                     num = global.user.getGoodsNum(map.get(data[i][0]), id);

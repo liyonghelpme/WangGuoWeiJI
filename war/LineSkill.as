@@ -109,7 +109,7 @@ class LineSkill extends MyNode
         //soldier anchor 50 100 
         //-50 -50
 
-        bg = sprite().anchor(100, 50).pos(p[0]+offX, p[1]+offY);
+bg = sprite(ARGB_8888).anchor(100, 50).pos(p[0] + offX, p[1] + offY);
 
         init();
         movAct = moveto(0, 0, 0);

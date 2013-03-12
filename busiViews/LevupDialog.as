@@ -11,19 +11,19 @@ class LevupDialog extends MyNode
         var temp;
         var sca;
         bg.add(showFullBack());
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(150, 93).size(520, 312).color(100, 100, 100, 100);
-        temp = bg.addsprite("parchment.png").anchor(0, 0).pos(168, 118).size(493, 298).color(100, 100, 100, 100);
-        temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 65).size(418, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(150, 93).size(520, 312).color(100, 100, 100, 100);
+temp = bg.addsprite("parchment.png", ARGB_8888).anchor(0, 0).pos(168, 118).size(493, 298).color(100, 100, 100, 100);
+temp = bg.addsprite("smallBack.png", ARGB_8888).anchor(0, 0).pos(201, 65).size(418, 57).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("leftBalloon.png").anchor(0, 0).pos(41, 73).size(136, 302).color(100, 100, 100, 100);
-        temp = bg.addsprite("rightBalloon.png").anchor(0, 0).pos(664, 39).size(120, 343).color(100, 100, 100, 100);
+temp = bg.addsprite("leftBalloon.png", ARGB_8888).anchor(0, 0).pos(41, 73).size(136, 302).color(100, 100, 100, 100);
+temp = bg.addsprite("rightBalloon.png", ARGB_8888).anchor(0, 0).pos(664, 39).size(120, 343).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("levelUpGoodsBack.png").anchor(0, 0).pos(437, 174).size(167, 144).color(100, 100, 100, 100);
-        temp = bg.addsprite("unlockGoods.png").anchor(0, 0).pos(424, 165).size(81, 27).color(100, 100, 100, 100);
+temp = bg.addsprite("levelUpGoodsBack.png", ARGB_8888).anchor(0, 0).pos(437, 174).size(167, 144).color(100, 100, 100, 100);
+temp = bg.addsprite("unlockGoods.png", ARGB_8888).anchor(0, 0).pos(424, 165).size(81, 27).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("levelUpGoodsBack.png").anchor(0, 0).pos(224, 175).size(167, 144).color(100, 100, 100, 100);
-        temp = bg.addsprite("unlockGoods.png").anchor(0, 0).pos(211, 166).size(81, 27).color(100, 100, 100, 100);
-        temp = bg.addsprite("levelUpStar.png").anchor(0, 0).pos(589, 53).size(113, 113).color(100, 100, 100, 100);
+temp = bg.addsprite("levelUpGoodsBack.png", ARGB_8888).anchor(0, 0).pos(224, 175).size(167, 144).color(100, 100, 100, 100);
+temp = bg.addsprite("unlockGoods.png", ARGB_8888).anchor(0, 0).pos(211, 166).size(81, 27).color(100, 100, 100, 100);
+temp = bg.addsprite("levelUpStar.png", ARGB_8888).anchor(0, 0).pos(589, 53).size(113, 113).color(100, 100, 100, 100);
 
         var initX = 311; 
         var initY = 243;
@@ -37,7 +37,7 @@ class LevupDialog extends MyNode
             var data = getData(kind, id);
             
             var picName = replaceStr(KindsPre[kind], ["[ID]", str(id)]);
-            temp = bg.addsprite(picName).anchor(50, 50).pos(initX, 243).color(100, 100, 100, 100);
+temp = bg.addsprite(picName, ARGB_8888).anchor(50, 50).pos(initX, 243).color(100, 100, 100, 100);
             sca = getSca(temp, [86, 83]);
             temp.scale(sca);
 

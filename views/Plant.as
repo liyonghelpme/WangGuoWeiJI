@@ -34,7 +34,7 @@ class Plant extends MyNode
         var sy = building.data.get("sy");
         
         var bSize = building.bg.size();
-        bg = sprite("p0.png").anchor(50, 100).pos((sx+sy)/2*SIZEX, (sx+sy)*SIZEY);
+bg = sprite("p0.png", ARGB_8888).anchor(50, 100).pos(((sx + sy) / 2) * SIZEX, (sx + sy) * SIZEY);
         init();
 
         curState = 0;

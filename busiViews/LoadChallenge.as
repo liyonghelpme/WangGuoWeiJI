@@ -28,14 +28,14 @@ class LoadChallenge extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite(backMap[kind]).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        temp = bg.addsprite("loadTip.png").anchor(50, 50).pos(534, 439).size(481, 55).color(100, 100, 100, 100);
+temp = bg.addsprite(backMap[kind], ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+temp = bg.addsprite("loadTip.png", ARGB_8888).anchor(50, 50).pos(534, 439).size(481, 55).color(100, 100, 100, 100);
         tipBack = temp;
 
         var tid = global.user.getLoadTip();
 tipStr = bg.addlabel(getStr("tip" + str(tid), null), getFont(), 21, FONT_NORMAL, 440, 0, ALIGN_CENTER).anchor(50, 50).pos(534, 439).color(100, 100, 100);
-        temp = bg.addsprite("loadingCircle.png").anchor(50, 50).pos(763, 37).size(50, 57).color(100, 100, 100, 100).addaction(repeat(rotateby(2000, 360)));
-        temp = bg.addsprite("loadingWord.png").anchor(0, 0).pos(607, 23).size(129, 29).color(100, 100, 100, 100);
+temp = bg.addsprite("loadingCircle.png", ARGB_8888).anchor(50, 50).pos(763, 37).size(50, 57).color(100, 100, 100, 100).addaction(repeat(rotateby(2000, 360)));
+temp = bg.addsprite("loadingWord.png", ARGB_8888).anchor(0, 0).pos(607, 23).size(129, 29).color(100, 100, 100, 100);
         
         adjustWord();
     }

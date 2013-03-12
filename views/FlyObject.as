@@ -78,7 +78,7 @@ class FlyObject extends MyNode
             //飞起来 等待 一会 接着一起落下
             for(var j = 0; j < cut; j++)
             {
-                var flyObj = bg.addsprite(str(k)+".png").size(FLY_WIDTH, FLY_HEIGHT).anchor(50, 100);
+var flyObj = bg.addsprite(str(k) + ".png", ARGB_8888).size(FLY_WIDTH, FLY_HEIGHT).anchor(50, 100);
                 var tar = TarPos.get(k, defaultPos);
                 var dis = sqrt(distance(coor2, tar));
                 //trace("fly", j, cut);

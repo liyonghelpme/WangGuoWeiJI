@@ -72,19 +72,19 @@ class AllGoods extends MyNode
         var temp;
         var sca;
         var s;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        temp = bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+temp = bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
         but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);
         addChild(but0);
-        temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
+temp = bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("allEquipTitle.png").anchor(50, 50).pos(getParam("equipTitleOffX"), 43).size(185, 60).color(100, 100, 100, 100);
+temp = bg.addsprite("allEquipTitle.png", ARGB_8888).anchor(50, 50).pos(getParam("equipTitleOffX"), 43).size(185, 60).color(100, 100, 100, 100);
         if(kind == DRUG)
             temp.texture("allDrugTitle.png", UPDATE_SIZE);
 
 
-        temp = bg.addsprite("dialogMakeDrugBanner.png").anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
+temp = bg.addsprite("dialogMakeDrugBanner.png", ARGB_8888).anchor(0, 0).pos(46, 90).size(703, 71).color(70, 70, 70, 100);
         if(kind == EQUIP)
 temp = bg.addlabel(getStr("equipDialog", null), getFont(), 18, FONT_NORMAL, 496, 0, ALIGN_LEFT).anchor(0, 0).pos(72, 107).color(100, 100, 100);
         else if(kind == DRUG)
@@ -157,7 +157,7 @@ temp = bg.addlabel(getStr("drugDialog", null), getFont(), 18, FONT_NORMAL, 496, 
         var but0;
         for(var i = rg[0]; i < rg[1]; i++)
         {
-            var panel = flowNode.addsprite("dialogMakeDrugBanner.png").pos(0, OFFY*i);
+var panel = flowNode.addsprite("dialogMakeDrugBanner.png", ARGB_8888).pos(0, OFFY * i);
             panel.put(i);
             var id;
 
@@ -174,7 +174,7 @@ temp = bg.addlabel(getStr("drugDialog", null), getFont(), 18, FONT_NORMAL, 496, 
                 id = ed.get("kind");
             }
 
-            temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
+temp = panel.addsprite(replaceStr(KindsPre[kind], ["[ID]", str(id)]), ARGB_8888).anchor(50, 50).pos(45, 35).color(100, 100, 100, 100);
             sca = getSca(temp, [68, 56]);
             temp.scale(sca);
             
@@ -203,7 +203,7 @@ temp = panel.addlabel(replaceStr(objData.get("des"), ["[NAME]", objData.get("nam
                     {
                         if(num > 0)
                         {
-                            temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onView, i);
+temp = panel.addsprite("retractArrow.png", ARGB_8888).anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onView, i);
 panel.addlabel(getStr("seeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                         }
                         else
@@ -213,7 +213,7 @@ panel.addlabel(getStr("noSuchThing", ["[NAME]", objData["name"]]), getFont(), 20
                     }
                     else
                     {
-                        temp = panel.addsprite("retractArrow.png").anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onClose, i);
+temp = panel.addsprite("retractArrow.png", ARGB_8888).anchor(50, 50).pos(674, 33).size(22, 23).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onClose, i);
                         temp.scale(100, -100);
 panel.addlabel(getStr("closeDetail", ["[NUM]", str(num), "[NAME]", objData["name"]]), getFont(), 20).anchor(0, 50).pos(96, 36).color(0, 0, 0);
                     }

@@ -68,10 +68,10 @@ class Map extends MyNode
         var gp = getGridPos(oldMap);
 
         if(gridRow == null)
-            gridRow = bg.addsprite("occGrid0.png").pos(getParam("MAP_INITX"), gp[1]).size(getParam("MAP_WIDTH")/2*getParam("MAP_OFFX"), getParam("MAP_OFFY")*sol.sy);
+gridRow = bg.addsprite("occGrid0.png", ARGB_8888).pos(getParam("MAP_INITX"), gp[1]).size((getParam("MAP_WIDTH") / 2) * getParam("MAP_OFFX"), getParam("MAP_OFFY") * sol.sy);
         gridRow.pos(getParam("MAP_INITX"), gp[1]);
         if(gridCol == null)
-            gridCol = bg.addsprite("occGrid0.png").pos(gp[0], getParam("MAP_INITY")).size(getParam("MAP_OFFX")*sol.sx, getParam("MAP_OFFY")*getParam("MAP_HEIGHT"));
+gridCol = bg.addsprite("occGrid0.png", ARGB_8888).pos(gp[0], getParam("MAP_INITY")).size(getParam("MAP_OFFX") * sol.sx, getParam("MAP_OFFY") * getParam("MAP_HEIGHT"));
         gridCol.pos(gp[0], getParam("MAP_INITY"));
     }
     var monEquips;
@@ -125,7 +125,7 @@ class Map extends MyNode
             0, 0, 100, 0, 0,
             0, 0, 0, 30, 0
         );
-        gridSp = grid.addsprite("mapGrid.jpg", ARGB_8888, fil).size(getParam("MAP_WIDTH")/2*getParam("MAP_OFFX"), getParam("MAP_HEIGHT")*getParam("MAP_OFFY"));
+gridSp = grid.addsprite("mapGrid.jpg", ARGB_8888, fil).size((getParam("MAP_WIDTH") / 2) * getParam("MAP_OFFX"), getParam("MAP_HEIGHT") * getParam("MAP_OFFY"));
 
         var bSize = bg.size();
          var mData = getData(MAP_INFO, kind);
@@ -136,7 +136,7 @@ class Map extends MyNode
             0, 100, 0, 0, 0,
             0, 0, 100, 0, 0,
             0, 0, 0, getParam("shadowOpacity"), 0);
-            shadow = sprite("map"+str(kind)+"Shadow.png", UPDATE_SIZE, tran, ARGB_8888).pos(0, 0).size(bSize);
+shadow = sprite(("map" + str(kind)) + "Shadow.png", UPDATE_SIZE, tran, ARGB_8888).pos(0, 0).size(bSize);
             bg.add(shadow, 10000);
         }
         if(mData["hasAnimation"])
@@ -173,7 +173,7 @@ class Map extends MyNode
                     var randX = rand(maxLakeBoundary[2]-maxLakeBoundary[0])+maxLakeBoundary[0];
                     var randY = rand(maxLakeBoundary[3]-maxLakeBoundary[1])+maxLakeBoundary[1];
 
-                    var a = sprite().pos(randX, randY);
+var a = sprite(ARGB_8888).pos(randX, randY);
                     a.addaction(sequence(ani[n][0](getParam("bubbleTime")), callfunc(clearBubble)));
                     animateLayer.add(a);
                     bubbles.append(a);
@@ -563,7 +563,7 @@ var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] 
                 var y = k[i]%10000;
 
                 var p = getSolPos(x, y, 1, 1, 0);
-                var sp = gridLayer.addsprite("gridNew.png").size(getParam("MAP_OFFX"), getParam("MAP_OFFY")).pos(p).anchor(50, 100);
+var sp = gridLayer.addsprite("gridNew.png", ARGB_8888).size(getParam("MAP_OFFX"), getParam("MAP_OFFY")).pos(p).anchor(50, 100);
             }
         }
     }
@@ -1085,7 +1085,7 @@ var w = bg.addlabel(str(sol.leftMonNum), getFont(), 40).color(0, 0, 0).pos(p[0] 
             
         if(skillGrid == null)
         {
-            skillGrid = bg.addsprite("occGrid0.png").size(getParam("MAP_OFFX")*sx, getParam("MAP_OFFY")*sy);
+skillGrid = bg.addsprite("occGrid0.png", ARGB_8888).size(getParam("MAP_OFFX") * sx, getParam("MAP_OFFY") * sy);
             //bg.add(grid);
             //grid.clipping(0);
         }

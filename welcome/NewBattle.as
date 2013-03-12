@@ -66,7 +66,7 @@ class SpeakSoldier extends MyNode
         var dir = SOL_DIR.get(id);
         var po = SOL_POS.get(id)[p];
 
-        bg = sprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png").anchor(50, 100).scale(sca*dir, sca).pos(po);
+bg = sprite(((("soldiera" + str(id)) + ".plist/ss") + str(id)) + "a0.png", ARGB_8888).anchor(50, 100).scale(sca * dir, sca).pos(po);
         init();
 
         attAni = animate(1500, "soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", "soldiera"+str(id)+".plist/ss"+str(id)+"a1.png","soldiera"+str(id)+".plist/ss"+str(id)+"a2.png","soldiera"+str(id)+".plist/ss"+str(id)+"a3.png","soldiera"+str(id)+".plist/ss"+str(id)+"a4.png","soldiera"+str(id)+".plist/ss"+str(id)+"a5.png","soldiera"+str(id)+".plist/ss"+str(id)+"a6.png", "soldiera"+str(id)+".plist/ss"+str(id)+"a0.png",  UPDATE_SIZE);
@@ -125,10 +125,10 @@ class NewBattle extends MyNode
         addChild(dialogController);
 
 
-        map = bg.addsprite("battleBegin0.jpg");
+map = bg.addsprite("battleBegin0.jpg", ARGB_8888);
 
-        dia0 = bg.addsprite("dialogBack0.png").pos(98, 85).visible(0);
-        dia1 = bg.addsprite("dialogBack1.png").pos(495, 111).visible(0);
+dia0 = bg.addsprite("dialogBack0.png", ARGB_8888).pos(98, 85).visible(0);
+dia1 = bg.addsprite("dialogBack1.png", ARGB_8888).pos(495, 111).visible(0);
 
         
         /*
@@ -140,7 +140,7 @@ class NewBattle extends MyNode
         }
         for(i = 0; i < len(WORD_POS); i++)
         {
-            var w = sprite(WORD_POS[i][2]).pos(WORD_POS[i][0], WORD_POS[i][1]).visible(0);
+var w = sprite(WORD_POS[i][2], ARGB_8888).pos(WORD_POS[i][0], WORD_POS[i][1]).visible(0);
             bg.add(w, MAX_BUILD_ZORD);
             words.update(i, w);
         }

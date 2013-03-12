@@ -62,10 +62,10 @@ class FriendRightMenu extends MyNode
             trace("model", model);
             if(funcs[i][1] == 0)
             {
-                temp = bg.addsprite(model[0]).pos(curX, curY).anchor(50, 0).setevent(EVENT_TOUCH, model[1]);
+temp = bg.addsprite(model[0], ARGB_8888).pos(curX, curY).anchor(50, 0).setevent(EVENT_TOUCH, model[1]);
             }
             else
-                temp = bg.addsprite(model[0], GRAY).pos(curX, curY).anchor(50, 0).setevent(EVENT_TOUCH, model[2]);
+temp = bg.addsprite(model[0], GRAY, ARGB_8888).pos(curX, curY).anchor(50, 0).setevent(EVENT_TOUCH, model[2]);
 
             var sca = getSca(temp, [PANEL_WIDTH, PANEL_HEIGHT]);
             temp.scale(sca);

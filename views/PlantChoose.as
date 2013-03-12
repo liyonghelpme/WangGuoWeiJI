@@ -12,11 +12,11 @@ class PlantChoose extends MyNode
         bg = node().size(global.director.disSize).setevent(EVENT_TOUCH|EVENT_MOVE|EVENT_UNTOUCH, doNothing);
         init();
 
-        bg.addsprite("plantChoice.png").pos(440, 0);
+bg.addsprite("plantChoice.png", ARGB_8888).pos(440, 0);
         var back = bg.addnode().pos(544, 39).size(219, 437).clipping(1);
         flowNode = back.addnode();
-        bg.addsprite("plantShadow.png", ARGB_8888).pos(544, 39);
-        var pback = bg.addsprite("plantBack.png").pos(442, 43).setevent(EVENT_TOUCH, onBack);
+bg.addsprite("plantShadow.png", ARGB_8888).pos(544, 39);
+var pback = bg.addsprite("plantBack.png", ARGB_8888).pos(442, 43).setevent(EVENT_TOUCH, onBack);
 
         initPlant();
 
@@ -37,24 +37,24 @@ class PlantChoose extends MyNode
         for(var i = 0; i < len(plantData); i++)
         {
             var planting = getData(PLANT, i);
-            var panel = sprite("plantPanel.png").pos(0, i*Height);
+var panel = sprite("plantPanel.png", ARGB_8888).pos(0, i * Height);
 
             var zOrd = 0;
             if(i == 0)
                 zOrd = 3;
             flowNode.add(panel, zOrd);
-            panel.addsprite("Wplant"+str(i)+".png").pos(169, 48).anchor(50, 50);
+panel.addsprite(("Wplant" + str(i)) + ".png", ARGB_8888).pos(169, 48).anchor(50, 50);
 
 panel.addlabel(getWorkTime(planting.get("time")), getFont(), 24).anchor(0, 50).pos(16, 84).color(0, 0, 0);
 panel.addlabel(str(planting.get("exp")), getFont(), 24).anchor(0, 50).pos(47, 20).color(0, 0, 0);
-            temp = panel.addsprite("exp.png").anchor(0, 0).pos(10, 7).size(30, 30).color(100, 100, 100, 100);
+temp = panel.addsprite("exp.png", ARGB_8888).anchor(0, 0).pos(10, 7).size(30, 30).color(100, 100, 100, 100);
 panel.addlabel(str(planting.get("gainsilver")), getFont(), 24).anchor(0, 50).pos(48, 54).color(0, 0, 0);
-            temp = panel.addsprite("silver.png").anchor(0, 0).pos(11, 38).size(30, 30).color(100, 100, 100, 100);
+temp = panel.addsprite("silver.png", ARGB_8888).anchor(0, 0).pos(11, 38).size(30, 30).color(100, 100, 100, 100);
 
             var needLevel = planting.get("level");
             if(needLevel > level)
             {
-                panel.addsprite("dialogRankShadow.png").size(230, 106);
+panel.addsprite("dialogRankShadow.png", ARGB_8888).size(230, 106);
                 var words = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
                 words.anchor(50, 50).pos(115, 53);
                 panel.add(words);

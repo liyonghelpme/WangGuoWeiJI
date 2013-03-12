@@ -17,7 +17,7 @@ class BuildAnimate extends MyNode
 //        trace("building animate", ani);
         if(aniKind != BUILD_ANI_ANI)
         {
-            bg = sprite(ani[0][0], ARGB_8888).pos(ani[1][0], ani[1][1]).anchor(ani[4][0], ani[4][1]);
+bg = sprite(ani[0][0], ARGB_8888).pos(ani[1][0], ani[1][1]).anchor(ani[4][0], ani[4][1]);
         }
         else
             bg = node();

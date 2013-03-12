@@ -43,11 +43,8 @@ class RankBase extends MyNode
                 var sz = bg.size();
                 lock = node();
 
-                lock.addsprite().pos(310, 228).addaction(
-                repeat(
-                    getHeartLoad()
-                )); 
-                lock.addsprite("heartLoading.png").pos(396, 253);
+lock.addsprite(ARGB_8888).pos(310, 228).addaction(repeat(getHeartLoad()));
+lock.addsprite("heartLoading.png", ARGB_8888).pos(396, 253);
                 bg.parent().add(lock, 10);
             }
         }
@@ -510,14 +507,14 @@ class RankBase extends MyNode
                 //但是都是在显示人 数据的内容是类似的
                 //排行的量是一致的
                 var papayaId = data[diff]["id"];
-                var panel = flowNode.addsprite("dialogFriendPanel.png").pos(j*OFFX, i*OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
-                panel.addsprite("friendBlock.png").anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
-                panel.addsprite(avatar_url(papayaId)).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
+var panel = flowNode.addsprite("dialogFriendPanel.png", ARGB_8888).pos(j * OFFX, i * OFFY).size(PANEL_WIDTH, PANEL_HEIGHT);
+panel.addsprite("friendBlock.png", ARGB_8888).anchor(50, 50).pos(74, 82).size(getParam("blockSize"), getParam("blockSize")).color(100, 100, 100, 100);
+panel.addsprite(avatar_url(papayaId), ARGB_8888).anchor(50, 50).pos(74, 82).size(55, 55).color(100, 100, 100, 100);
 
-                panel.addsprite("dialogRankCup.png").anchor(0, 0).pos(22, 8).size(35, 32).color(100, 100, 100, 100);
+panel.addsprite("dialogRankCup.png", ARGB_8888).anchor(0, 0).pos(22, 8).size(35, 32).color(100, 100, 100, 100);
 panel.addlabel(getStr("Num", ["[NUM]", str(data[diff]["rank"] + 1)]), getFont(), 23).anchor(0, 50).pos(63, 24).color(29, 16, 4);
 
-                panel.addsprite("levelStar.png").anchor(50, 50).pos(100, 56).size(31, 31).color(100, 100, 100, 100);
+panel.addsprite("levelStar.png", ARGB_8888).anchor(50, 50).pos(100, 56).size(31, 31).color(100, 100, 100, 100);
 panel.addlabel(str(data[diff]["level"] + 1), getFont(), 15).anchor(50, 50).pos(101, 58).color(0, 0, 0);
 
 panel.addlabel(data[diff]["name"], getFont(), 18).anchor(50, 50).pos(77, 120).color(43, 25, 9);
@@ -626,7 +623,7 @@ var scoreLabel = panel.addlabel(getStr(Kind2Num[rankKind], ["[NUM]", str(data[di
         var but0;
 
         var shadow = child.addnode();
-        shadow.addsprite("dialogFriendShadow.png").anchor(50, 50).pos(73, 79).size(144, 164).color(100, 100, 100, 100);
+shadow.addsprite("dialogFriendShadow.png", ARGB_8888).anchor(50, 50).pos(73, 79).size(144, 164).color(100, 100, 100, 100);
         if(rankKind == CHALLENGE_RANK)
         {
             but0 = new NewButton("violetBut.png", [92, 39], getStr("visit", null), null, 18, FONT_NORMAL, [100, 100, 100], onVisit, curNum);

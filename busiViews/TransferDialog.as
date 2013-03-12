@@ -17,11 +17,11 @@ class TransferDialog extends MyNode
         var sca;
         var curKind = soldier.id;
         var nextKind = curKind+1;
-        temp = bg.addsprite("back.png").anchor(0, 0).pos(150, 91).size(520, 312).color(100, 100, 100, 100);
-        temp = bg.addsprite("loginBack.png").anchor(0, 0).pos(167, 133).size(485, 256).color(100, 100, 100, 100);
-        temp = bg.addsprite("scoreWhite.png").anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
-        temp = bg.addsprite("scroll.png").anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
-        temp = bg.addsprite("smallBack.png").anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(150, 91).size(520, 312).color(100, 100, 100, 100);
+temp = bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(167, 133).size(485, 256).color(100, 100, 100, 100);
+temp = bg.addsprite("scoreWhite.png", ARGB_8888).anchor(0, 0).pos(184, 175).size(314, 182).color(100, 100, 100, 100);
+temp = bg.addsprite("scroll.png", ARGB_8888).anchor(0, 0).pos(223, 114).size(374, 57).color(100, 100, 100, 100);
+temp = bg.addsprite("smallBack.png", ARGB_8888).anchor(0, 0).pos(201, 63).size(418, 57).color(100, 100, 100, 100);
         var curData = getData(SOLDIER, curKind);
         var newData = getData(SOLDIER, nextKind);
 
@@ -62,13 +62,13 @@ bg.addlabel(getStr("inTransferNoWar", null), getFont(), 20).anchor(50, 50).pos(4
         but0.bg.pos(519, 402);
         addChild(but0);
 
-        temp = bg.addsprite("soldier"+str(curKind)+".png", ARGB_8888).anchor(50, 50).pos(253, 255).color(100, 100, 100, 100);
+temp = bg.addsprite(("soldier" + str(curKind)) + ".png", ARGB_8888).anchor(50, 50).pos(253, 255).color(100, 100, 100, 100);
         sca = getSca(temp, [125, 122]);
         temp.scale(sca);
-        temp = bg.addsprite("soldier"+str(curKind+1)+".png", ARGB_8888).anchor(50, 50).pos(427, 255).color(100, 100, 100, 100);
+temp = bg.addsprite(("soldier" + str(curKind + 1)) + ".png", ARGB_8888).anchor(50, 50).pos(427, 255).color(100, 100, 100, 100);
         sca = getSca(temp, [125, 122]);
         temp.scale(sca);
-        temp = bg.addsprite("taskArrow.png").anchor(50, 50).pos(341, 261).size(40, 34).color(100, 100, 100, 100).rotate(-90);
+temp = bg.addsprite("taskArrow.png", ARGB_8888).anchor(50, 50).pos(341, 261).size(40, 34).color(100, 100, 100, 100).rotate(-90);
     }
     function onTransfer()
     {

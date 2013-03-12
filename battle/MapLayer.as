@@ -17,12 +17,12 @@ class MapLayer extends MyNode
         islandLayer = bg.addnode();
 
         island = new Array(6);
-        island[0] = islandLayer.addsprite("map_island0.png",ARGB_8888, ALPHA_TOUCH).size(175,144).anchor(0,0).pos(512,402).rotate(0);
-        island[1] = islandLayer.addsprite("map_island1.png",ARGB_8888, ALPHA_TOUCH).size(431,390).anchor(0,0).pos(130,298).rotate(0);
-        island[2] = islandLayer.addsprite("map_island2.png",ARGB_8888, ALPHA_TOUCH).size(485,355).anchor(0,0).pos(336,594).rotate(0);
-        island[3] = islandLayer.addsprite("map_island3.png",ARGB_8888, ALPHA_TOUCH).size(548,439).anchor(0,0).pos(772,422).rotate(0);
-        island[4] = islandLayer.addsprite("map_island4.png",ARGB_8888, ALPHA_TOUCH).size(519,428).anchor(0,0).pos(994,220).rotate(0);
-        island[5] = islandLayer.addsprite("map_island5.png",ARGB_8888, ALPHA_TOUCH).size(524,439).anchor(0,0).pos(550,14).rotate(0);
+island[0] = islandLayer.addsprite("map_island0.png", ARGB_8888, ALPHA_TOUCH).size(175, 144).anchor(0, 0).pos(512, 402).rotate(0);
+island[1] = islandLayer.addsprite("map_island1.png", ARGB_8888, ALPHA_TOUCH).size(431, 390).anchor(0, 0).pos(130, 298).rotate(0);
+island[2] = islandLayer.addsprite("map_island2.png", ARGB_8888, ALPHA_TOUCH).size(485, 355).anchor(0, 0).pos(336, 594).rotate(0);
+island[3] = islandLayer.addsprite("map_island3.png", ARGB_8888, ALPHA_TOUCH).size(548, 439).anchor(0, 0).pos(772, 422).rotate(0);
+island[4] = islandLayer.addsprite("map_island4.png", ARGB_8888, ALPHA_TOUCH).size(519, 428).anchor(0, 0).pos(994, 220).rotate(0);
+island[5] = islandLayer.addsprite("map_island5.png", ARGB_8888, ALPHA_TOUCH).size(524, 439).anchor(0, 0).pos(550, 14).rotate(0);
 
         //global.taskModel.showHintArrow(island[1], island[1].prepare().size(), FOREST_ISLAND, enterNewRound);
 
@@ -58,7 +58,7 @@ class MapLayer extends MyNode
             {
                 island[i].color(40,40,40,100);
                 var size=island[i].size();
-                var lock = sprite("map_island_lock.png").anchor(50,50).pos(LockPos[i][0], LockPos[i][1]).scale(200);
+var lock = sprite("map_island_lock.png", ARGB_8888).anchor(50, 50).pos(LockPos[i][0], LockPos[i][1]).scale(200);
                 island[i].add(lock, LOCK_Z, LOCK_TAG);
                 if(inSmall && curSmall == i)
                     lock.visible(0);

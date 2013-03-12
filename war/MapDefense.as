@@ -46,10 +46,10 @@ class MapDefense extends MyNode
         bg = node().size(sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY")).pos(defPos).anchor(50, 100);
         init();
         if(getParam("debugPhysic"))
-            bg.addsprite("gridNew.png").size(sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY"));
+bg.addsprite("gridNew.png", ARGB_8888).size(sx * getParam("MAP_OFFX"), sy * getParam("MAP_OFFY"));
 
         defPos = getLeftTopPos(curMap[0], curMap[1], sx, sy, offY);
-        bg.addsprite("map"+str(m.kind)+"Def"+str(i)+".png", ARGB_8888).pos(d[0]-defPos[0], d[1]-defPos[1]);
+bg.addsprite(((("map" + str(m.kind)) + "Def") + str(i)) + ".png", ARGB_8888).pos(d[0] - defPos[0], d[1] - defPos[1]);
         map.physics.bindbody(bg, BODY_TYPE_STATIC, 100, 0, 0);
     }
     //地面爆炸位置

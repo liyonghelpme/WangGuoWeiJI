@@ -28,18 +28,18 @@ class RankDialog extends MyNode
     {
         bg = node();
         init();
-        bg.addsprite("back.png").anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
-        bg.addsprite("diaBack.png").anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
+bg.addsprite("back.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(800, 480).color(100, 100, 100, 100);
+bg.addsprite("diaBack.png", ARGB_8888).anchor(0, 0).pos(38, 10).size(705, 64).color(100, 100, 100, 100);
         var but0 = new NewButton("closeBut.png", [41, 41], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], closeDialog, null);
         but0.bg.pos(772, 27);
         addChild(but0);
-        bg.addsprite("loginBack.png").anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
-        blueArrow = sprite("blueArrow.png").anchor(50, 50).pos(745, 403).size(32, 70).color(100, 100, 100, 100);
+bg.addsprite("loginBack.png", ARGB_8888).anchor(0, 0).pos(30, 79).size(739, 386).color(100, 100, 100, 100);
+blueArrow = sprite("blueArrow.png", ARGB_8888).anchor(50, 50).pos(745, 403).size(32, 70).color(100, 100, 100, 100);
         bg.add(blueArrow, 1);
         but0 = new NewButton(RANK_BUT[kind], [113, 42], getStr("randChallenge", null), null, 20, FONT_NORMAL, [100, 100, 100], onRankInfo, null);
         but0.bg.pos(645, 43);
         addChild(but0);
-        newRankTitle = bg.addsprite("newRankTitle.png").anchor(50, 50).pos(169, 43).size(174, 61).color(100, 100, 100, 100);
+newRankTitle = bg.addsprite("newRankTitle.png", ARGB_8888).anchor(50, 50).pos(169, 43).size(174, 61).color(100, 100, 100, 100);
     }
     function finishCallback()
     {

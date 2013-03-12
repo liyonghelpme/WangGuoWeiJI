@@ -29,7 +29,7 @@ class MoveMap extends MyNode
     function MoveMap(sc)
     {
         scene = sc;
-        bg = sprite("map5.jpg");
+bg = sprite("map5.jpg", ARGB_8888);
         init();
 
         gridLayer = bg.addnode();
@@ -37,8 +37,8 @@ class MoveMap extends MyNode
         touchDelegate.bg = bg;
 
         var defense = mapInfo.get(5);
-        bg.addsprite("map5Def0.png", ARGB_8888).pos(defense[0]);
-        bg.addsprite("map5Def1.png", ARGB_8888).pos(defense[1]);
+bg.addsprite("map5Def0.png", ARGB_8888).pos(defense[0]);
+bg.addsprite("map5Def1.png", ARGB_8888).pos(defense[1]);
 
 
         bg.setevent(EVENT_TOUCH|EVENT_MULTI_TOUCH, touchBegan);
@@ -76,7 +76,7 @@ class MoveMap extends MyNode
                 y = k[i]%10000;
                 p = setBuildMap([1, 1, x, y]);
 
-                sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+sp = gridLayer.addsprite("red2.png", ARGB_8888).size(SIZEX, SIZEY).pos(p).anchor(50, 100);
             }
 
             k = staticObstacle.keys();
@@ -86,7 +86,7 @@ class MoveMap extends MyNode
                 y = k[i]%10000;
                 p = setBuildMap([1, 1, x, y]);
 
-                sp = gridLayer.addsprite("red2.png").size(SIZEX, SIZEY).pos(p).anchor(50, 100);
+sp = gridLayer.addsprite("red2.png", ARGB_8888).size(SIZEX, SIZEY).pos(p).anchor(50, 100);
             }
         }
     }

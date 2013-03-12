@@ -8,7 +8,7 @@ class GunSmoke extends EffectBase
         var p = sol.getPos();
         var off = getEffectOff(sol, tar);
 
-        bg = sprite("s"+str(sol.id)+"e0.png").anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);
+bg = sprite(("s" + str(sol.id)) + "e0.png", ARGB_8888).anchor(50, 50).pos(p[0] + off[0], p[1] + off[1]).scale(sol.data["arrSca"]);
         init();
         shiftAni = moveto(0, 0, 0);
         initState();

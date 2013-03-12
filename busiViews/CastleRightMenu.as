@@ -53,7 +53,7 @@ class CastleRightMenu extends MyNode
             var model = buts[funcs[i]];
             var temp;
             trace("model", model);
-            temp = bg.addsprite(model[0]).pos(curX, curY).anchor(50, 0).setevent(EVENT_TOUCH, model[1]);
+temp = bg.addsprite(model[0], ARGB_8888).pos(curX, curY).anchor(50, 0).setevent(EVENT_TOUCH, model[1]);
             var sca = getSca(temp, [PANEL_WIDTH, PANEL_HEIGHT]);
             temp.scale(sca);
             curY += OFFY;

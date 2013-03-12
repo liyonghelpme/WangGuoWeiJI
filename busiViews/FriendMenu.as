@@ -30,12 +30,12 @@ class FriendMenu extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("friendInfoBottom.png").anchor(0, 0).pos(0, 418).size(800, 65).color(100, 100, 100, 100);
+temp = bg.addsprite("friendInfoBottom.png", ARGB_8888).anchor(0, 0).pos(0, 418).size(800, 65).color(100, 100, 100, 100);
         but0 = new NewButton("friendFriend.png", [100, 78], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onFriend, null);
         but0.bg.pos(742, 434);
         addChild(but0);
-        temp = bg.addsprite("recharge.png").anchor(0, 0).pos(441, 431).size(98, 39).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRecharge);
-        temp = bg.addsprite("friendReturn.png").anchor(0, 0).pos(7, 360).size(130, 122).color(100, 100, 100, 100).setevent(EVENT_TOUCH, returnHome);
+temp = bg.addsprite("recharge.png", ARGB_8888).anchor(0, 0).pos(441, 431).size(98, 39).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onRecharge);
+temp = bg.addsprite("friendReturn.png", ARGB_8888).anchor(0, 0).pos(7, 360).size(130, 122).color(100, 100, 100, 100).setevent(EVENT_TOUCH, returnHome);
 goldText = bg.addlabel(getStr("gold", null), getFont(), 21).anchor(0, 50).pos(592, 450).color(100, 100, 100);
 silverText = bg.addlabel(getStr("silver", null), getFont(), 21).anchor(0, 50).pos(347, 451).color(100, 100, 100);
 crystalText = bg.addlabel(getStr("crystal", null), getFont(), 21).anchor(0, 50).pos(197, 450).color(100, 100, 100);
@@ -45,18 +45,18 @@ crystalText = bg.addlabel(getStr("crystal", null), getFont(), 21).anchor(0, 50).
         trace("FriendMenu", scene.curNum, len(friends));
         if(scene.curNum == -1 || scene.curNum >= (len(friends)-1) )
         {
-            temp = bg.addsprite("friendNextBut.png", GRAY).anchor(0, 0).pos(637, -1).size(142, 93).color(100, 100, 100, 100);
+temp = bg.addsprite("friendNextBut.png", GRAY, ARGB_8888).anchor(0, 0).pos(637, -1).size(142, 93).color(100, 100, 100, 100);
         }
         else
         {
-            temp = bg.addsprite("friendNextBut.png").anchor(0, 0).pos(637, -1).size(142, 93).color(100, 100, 100, 100).setevent(EVENT_TOUCH, visitNext);
+temp = bg.addsprite("friendNextBut.png", ARGB_8888).anchor(0, 0).pos(637, -1).size(142, 93).color(100, 100, 100, 100).setevent(EVENT_TOUCH, visitNext);
         }
-        temp = bg.addsprite("friendNext.png").anchor(0, 0).pos(671, 46).size(73, 23).color(100, 100, 100, 100);
+temp = bg.addsprite("friendNext.png", ARGB_8888).anchor(0, 0).pos(671, 46).size(73, 23).color(100, 100, 100, 100);
 
-        temp = bg.addsprite("friendInfo.png").anchor(0, 0).pos(15, 13).size(440, 79).color(100, 100, 100, 100);
+temp = bg.addsprite("friendInfo.png", ARGB_8888).anchor(0, 0).pos(15, 13).size(440, 79).color(100, 100, 100, 100);
 
         
-        temp = bg.addsprite(avatar_url(scene.user["id"])).anchor(50, 50).pos(getParam("friendHeadX"), getParam("friendHeadY")).size(55, 55).color(100, 100, 100, 100);
+temp = bg.addsprite(avatar_url(scene.user["id"]), ARGB_8888).anchor(50, 50).pos(getParam("friendHeadX"), getParam("friendHeadY")).size(55, 55).color(100, 100, 100, 100);
 bg.addlabel(scene.user["name"], getFont(), 21).anchor(0, 50).pos(100, 35).color(100, 100, 100);
 
 bg.addlabel(getStr("friLevel", ["[NUM]", str(scene.user["level"] + 1)]), getFont(), 23).anchor(0, 50).pos(103, 67).color(0, 0, 0);

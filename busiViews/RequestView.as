@@ -45,7 +45,7 @@ class RequestView extends MyNode
         recAllBut = but0;
 
 giftNum = bg.addlabel(getStr("howManyGift", null), getFont(), 25).anchor(0, 50).pos(25, 115).color(100, 100, 100);
-        temp = bg.addsprite("friendWhiteBack.png").anchor(0, 0).pos(8, 155).size(785, 315).color(100, 100, 100, 100);
+temp = bg.addsprite("friendWhiteBack.png", ARGB_8888).anchor(0, 0).pos(8, 155).size(785, 315).color(100, 100, 100, 100);
     }
     
     function RequestView(p, s)
@@ -199,7 +199,7 @@ giftNum = bg.addlabel(getStr("howManyGift", null), getFont(), 25).anchor(0, 50).
         for(var i = rg[0]; i < rg[1]; i++)
         {
             var panel = flowNode.addnode().size(PANEL_WIDTH, PANEL_HEIGHT).pos(0, OFFY*i);
-            panel.addsprite("messageSeperate.png").pos(-1, 60);
+panel.addsprite("messageSeperate.png", ARGB_8888).pos(-1, 60);
             now = TestTime.callobj("getTime", data[i][1]["time"]);
             var readYet = data[i][2];
             if(data[i][0] == NEIBOR_REQ)

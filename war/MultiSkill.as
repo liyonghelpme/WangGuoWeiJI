@@ -40,7 +40,7 @@ class MultiSkill extends MyNode
         skillRange = [sx*getParam("MAP_OFFX"), sy*getParam("MAP_OFFY")];
 
 
-        bg = sprite().pos(getSkillPos(leftUp[0], leftUp[1], sx, sy, data["offX"], data["offY"])).anchor(0, 0);
+bg = sprite(ARGB_8888).pos(getSkillPos(leftUp[0], leftUp[1], sx, sy, data["offX"], data["offY"])).anchor(0, 0);
         var ani = getSkillAnimate(skillId);
         //动画分成两段 准备阶段 循环阶段
         if(ani["stage"] > 0){

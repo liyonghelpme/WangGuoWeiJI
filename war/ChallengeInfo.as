@@ -15,8 +15,8 @@ class ChallengeInfo extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("challengeInfoBack.png").anchor(0, 0).pos(16, 8).size(319, 172).color(100, 100, 100, 100);
-        temp = bg.addsprite("levelUpStar.png").anchor(50, 50).pos(46, 30).size(34, 33).color(100, 100, 100, 100);
+temp = bg.addsprite("challengeInfoBack.png", ARGB_8888).anchor(0, 0).pos(16, 8).size(319, 172).color(100, 100, 100, 100);
+temp = bg.addsprite("levelUpStar.png", ARGB_8888).anchor(50, 50).pos(46, 30).size(34, 33).color(100, 100, 100, 100);
 
 bg.addlabel(getStr("Max", null), getFont(), 18).anchor(0, 50).pos(33, 63).color(100, 100, 100);
 
@@ -27,18 +27,18 @@ bg.addlabel(str(scene.user["level"]), getFont(), 13).anchor(50, 50).pos(46, 32).
 
 bg.addlabel(str(-scene.user["failScore"]), getFont(), 20).anchor(0, 50).pos(112, 112).color(94, 7, 5);
 
-        temp = bg.addsprite("dialogRankCup.png").anchor(0, 0).pos(79, 102).size(25, 22).color(100, 100, 100, 100);
+temp = bg.addsprite("dialogRankCup.png", ARGB_8888).anchor(0, 0).pos(79, 102).size(25, 22).color(100, 100, 100, 100);
 bg.addlabel(getStr("failCost", null), getFont(), 15).anchor(0, 50).pos(33, 113).color(100, 100, 100);
 
 
 bg.addlabel(str(scene.user["silver"]), getFont(), 20).anchor(0, 50).pos(105, 81).color(100, 100, 100);
-        temp = bg.addsprite("silver.png").anchor(0, 0).pos(78, 68).size(25, 25).color(100, 100, 100, 100);
+temp = bg.addsprite("silver.png", ARGB_8888).anchor(0, 0).pos(78, 68).size(25, 25).color(100, 100, 100, 100);
 bg.addlabel(str(scene.user["crystal"]), getFont(), 20).anchor(0, 50).pos(207, 80).color(100, 100, 100);
-        temp = bg.addsprite("crystal.png").anchor(0, 0).pos(179, 69).size(25, 24).color(100, 100, 100, 100);
+temp = bg.addsprite("crystal.png", ARGB_8888).anchor(0, 0).pos(179, 69).size(25, 24).color(100, 100, 100, 100);
 
 
 bg.addlabel(str(scene.user["winScore"]), getFont(), 20).anchor(0, 50).pos(304, 79).color(100, 100, 100);
-        temp = bg.addsprite("dialogRankCup.png").anchor(0, 0).pos(278, 69).size(25, 22).color(100, 100, 100, 100);
+temp = bg.addsprite("dialogRankCup.png", ARGB_8888).anchor(0, 0).pos(278, 69).size(25, 22).color(100, 100, 100, 100);
 
 bg.addlabel(getStr("challengeReward", null), getFont(), 15).anchor(0, 50).pos(33, 80).color(100, 100, 100);
 

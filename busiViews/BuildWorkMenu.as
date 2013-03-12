@@ -108,7 +108,7 @@ cw = label(build.getName(), getFont(), 21);
         build = b;
         bg = node();
         init();
-        banner = bg.addsprite("buildMenu1.png").pos(0, global.director.disSize[1]).anchor(0, 100);
+banner = bg.addsprite("buildMenu1.png", ARGB_8888).pos(0, global.director.disSize[1]).anchor(0, 100);
         //建筑信息
         updateView();
 

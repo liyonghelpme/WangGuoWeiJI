@@ -13,7 +13,7 @@ generator = c_generator.CGenerator()
 def gen(l):
     #lno += 1
     #print lno
-    #print l
+    print "genData", l
     t = parser.parse(l)
     kind = t.ext[0].body.block_items[0]
     oldKind = kind
@@ -30,25 +30,31 @@ def gen(l):
             if kind.name.__class__.__name__ == 'StructRef':
                 #print kind.name.field.name
                 if kind.name.field.name == 'addsprite':
-                    print 'arguments', kind.args.exprs
                     hasArgb = False
-                    for e in kind.args.exprs:
-                        if e.__class__.__name__ == 'ID':
-                            if e.name.find('RGB') != -1:
-                                hasArgb = True
-                                break
+                    if kind.args != None:
+                        print 'arguments', kind.args.exprs
+                        for e in kind.args.exprs:
+                            if e.__class__.__name__ == 'ID':
+                                if e.name.find('RGB') != -1:
+                                    hasArgb = True
+                                    break
+                    else:
+                        kind.args = ExprList([])
 
                     if not hasArgb:
                         kind.args.exprs.append(ID('ARGB_8888'))
             elif kind.name.__class__.__name__  == 'ID':
                 if kind.name.name == 'sprite':
-                    print 'arguments', kind.args.exprs
                     hasArgb = False
-                    for e in kind.args.exprs:
-                        if e.__class__.__name__ == 'ID':
-                            if e.name.find('RGB') != -1:
-                                hasArgb = True
-                                break
+                    if kind.args != None:
+                        print 'arguments', kind.args.exprs
+                        for e in kind.args.exprs:
+                            if e.__class__.__name__ == 'ID':
+                                if e.name.find('RGB') != -1:
+                                    hasArgb = True
+                                    break
+                    else:
+                        kind.args = ExprList([])
                     if not hasArgb:
                         kind.args.exprs.append(ID('ARGB_8888'))
         elif kind.__class__.__name__ == 'Assignment':

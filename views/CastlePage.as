@@ -9,7 +9,7 @@ class Cloud extends MyNode
     {
         map = m;
         var y = rand(300);
-        bg = sprite("cloud"+str(k)+".png", ARGB_8888).pos(-700, y);
+bg = sprite(("cloud" + str(k)) + ".png", ARGB_8888).pos(-700, y);
         init();
         if(k == 2 || k == 5)
             bg.addaction(sequence(
@@ -37,31 +37,13 @@ class Water extends MyNode
 
         bg = node();
         var left = bg.addnode().pos(610, 362);
-        var l0 = left.addsprite().pos(42, 21).addaction(repeat(animate(
-            2000, 
-            ["rl0_.plist/rl0_1.png", "rl0_.plist/rl0_2.png", "rl0_.plist/rl0_3.png", "rl0_.plist/rl0_4.png", "rl0_.plist/rl0_5.png", "rl0_.plist/rl0_6.png", "rl0_.plist/rl0_7.png"]
-            )));
+var l0 = left.addsprite(ARGB_8888).pos(42, 21).addaction(repeat(animate(2000, ["rl0_.plist/rl0_1.png", "rl0_.plist/rl0_2.png", "rl0_.plist/rl0_3.png", "rl0_.plist/rl0_4.png", "rl0_.plist/rl0_5.png", "rl0_.plist/rl0_6.png", "rl0_.plist/rl0_7.png"])));
 
-        var l1 = left.addsprite().pos(338, 75).addaction(repeat(animate(
-            2000,
-            
-["rl1_.plist/rl1_1.png", "rl1_.plist/rl1_2.png", "rl1_.plist/rl1_3.png", "rl1_.plist/rl1_4.png", "rl1_.plist/rl1_5.png", "rl1_.plist/rl1_6.png", "rl1_.plist/rl1_7.png"]
-            )));
+var l1 = left.addsprite(ARGB_8888).pos(338, 75).addaction(repeat(animate(2000, ["rl1_.plist/rl1_1.png", "rl1_.plist/rl1_2.png", "rl1_.plist/rl1_3.png", "rl1_.plist/rl1_4.png", "rl1_.plist/rl1_5.png", "rl1_.plist/rl1_6.png", "rl1_.plist/rl1_7.png"])));
 
-        var l2 = left.addsprite().pos(297, 315).addaction(repeat(animate(
-            2000,
-            
-["rl2_.plist/rl2_1.png", "rl2_.plist/rl2_2.png", "rl2_.plist/rl2_3.png", "rl2_.plist/rl2_4.png", "rl2_.plist/rl2_5.png", "rl2_.plist/rl2_6.png", "rl2_.plist/rl2_7.png"]
-            )));
-        var l3 = left.addsprite().pos(372, 406).addaction(repeat(animate(
-            2000,
-            
-["rl3_.plist/rl3_1.png", "rl3_.plist/rl3_2.png", "rl3_.plist/rl3_3.png", "rl3_.plist/rl3_4.png", "rl3_.plist/rl3_5.png", "rl3_.plist/rl3_6.png", "rl3_.plist/rl3_7.png"]
-            )));
-        var l4 = left.addsprite().pos(358, 628).addaction(repeat(animate(
-            2000,
-["rl4_.plist/rl4_1.png", "rl4_.plist/rl4_2.png", "rl4_.plist/rl4_3.png", "rl4_.plist/rl4_4.png", "rl4_.plist/rl4_5.png", "rl4_.plist/rl4_6.png", "rl4_.plist/rl4_7.png"]
-            )));
+var l2 = left.addsprite(ARGB_8888).pos(297, 315).addaction(repeat(animate(2000, ["rl2_.plist/rl2_1.png", "rl2_.plist/rl2_2.png", "rl2_.plist/rl2_3.png", "rl2_.plist/rl2_4.png", "rl2_.plist/rl2_5.png", "rl2_.plist/rl2_6.png", "rl2_.plist/rl2_7.png"])));
+var l3 = left.addsprite(ARGB_8888).pos(372, 406).addaction(repeat(animate(2000, ["rl3_.plist/rl3_1.png", "rl3_.plist/rl3_2.png", "rl3_.plist/rl3_3.png", "rl3_.plist/rl3_4.png", "rl3_.plist/rl3_5.png", "rl3_.plist/rl3_6.png", "rl3_.plist/rl3_7.png"])));
+var l4 = left.addsprite(ARGB_8888).pos(358, 628).addaction(repeat(animate(2000, ["rl4_.plist/rl4_1.png", "rl4_.plist/rl4_2.png", "rl4_.plist/rl4_3.png", "rl4_.plist/rl4_4.png", "rl4_.plist/rl4_5.png", "rl4_.plist/rl4_6.png", "rl4_.plist/rl4_7.png"])));
         load_sprite_sheet("rr0_.plist");
         load_sprite_sheet("rr1_.plist");
         load_sprite_sheet("rr2_.plist");
@@ -74,24 +56,10 @@ class Water extends MyNode
         [346, 685]
         ];
         var right = bg.addnode().pos(1825, 363);
-        var r0 = right.addsprite().pos(rPos[0]).addaction(repeat(animate(
-            2000,
-["rr0_.plist/rr0_1.png", "rr0_.plist/rr0_2.png", "rr0_.plist/rr0_3.png", "rr0_.plist/rr0_4.png", "rr0_.plist/rr0_5.png", "rr0_.plist/rr0_6.png", "rr0_.plist/rr0_7.png"]
-        )));
-        var r1 = right.addsprite().pos(rPos[1]).addaction(repeat(animate(
-            2000,
-
-["rr1_.plist/rr1_1.png", "rr1_.plist/rr1_2.png", "rr1_.plist/rr1_3.png", "rr1_.plist/rr1_4.png", "rr1_.plist/rr1_5.png", "rr1_.plist/rr1_6.png", "rr1_.plist/rr1_7.png"]
-        )));
-        var r2 = right.addsprite().pos(rPos[2]).addaction(repeat(animate(
-            2000,
-["rr2_.plist/rr2_1.png", "rr2_.plist/rr2_2.png", "rr2_.plist/rr2_3.png", "rr2_.plist/rr2_4.png", "rr2_.plist/rr2_5.png", "rr2_.plist/rr2_6.png", "rr2_.plist/rr2_7.png"]
-        )));
-        var r3 = right.addsprite().pos(rPos[3]).addaction(repeat(animate(
-            2000,
-
-["rr3_.plist/rr3_1.png", "rr3_.plist/rr3_2.png", "rr3_.plist/rr3_3.png", "rr3_.plist/rr3_4.png", "rr3_.plist/rr3_5.png", "rr3_.plist/rr3_6.png", "rr3_.plist/rr3_7.png"]
-        )));
+var r0 = right.addsprite(ARGB_8888).pos(rPos[0]).addaction(repeat(animate(2000, ["rr0_.plist/rr0_1.png", "rr0_.plist/rr0_2.png", "rr0_.plist/rr0_3.png", "rr0_.plist/rr0_4.png", "rr0_.plist/rr0_5.png", "rr0_.plist/rr0_6.png", "rr0_.plist/rr0_7.png"])));
+var r1 = right.addsprite(ARGB_8888).pos(rPos[1]).addaction(repeat(animate(2000, ["rr1_.plist/rr1_1.png", "rr1_.plist/rr1_2.png", "rr1_.plist/rr1_3.png", "rr1_.plist/rr1_4.png", "rr1_.plist/rr1_5.png", "rr1_.plist/rr1_6.png", "rr1_.plist/rr1_7.png"])));
+var r2 = right.addsprite(ARGB_8888).pos(rPos[2]).addaction(repeat(animate(2000, ["rr2_.plist/rr2_1.png", "rr2_.plist/rr2_2.png", "rr2_.plist/rr2_3.png", "rr2_.plist/rr2_4.png", "rr2_.plist/rr2_5.png", "rr2_.plist/rr2_6.png", "rr2_.plist/rr2_7.png"])));
+var r3 = right.addsprite(ARGB_8888).pos(rPos[3]).addaction(repeat(animate(2000, ["rr3_.plist/rr3_1.png", "rr3_.plist/rr3_2.png", "rr3_.plist/rr3_3.png", "rr3_.plist/rr3_4.png", "rr3_.plist/rr3_5.png", "rr3_.plist/rr3_6.png", "rr3_.plist/rr3_7.png"])));
     }
 }
 class Sky extends MyNode
@@ -100,9 +68,9 @@ class Sky extends MyNode
     {
         bg = node();
         init();
-        bg.addsprite("sky0.png", RGB_565).pos(0, 0);
-        bg.addsprite("sky1.png", RGB_565).pos(1000, 0);
-        bg.addsprite("sky2.png", RGB_565).pos(2000, 0);
+bg.addsprite("sky0.png", RGB_565).pos(0, 0);
+bg.addsprite("sky1.png", RGB_565).pos(1000, 0);
+bg.addsprite("sky2.png", RGB_565).pos(2000, 0);
         
     }
 }
@@ -226,16 +194,16 @@ class CastlePage extends MyNode
         addChildZ(sky, -2);
 
 
-        var flow0 = bg.addsprite("flow0.png").pos(0, 48).setevent(EVENT_TOUCH, goFlow, 0);
-        var banner = flow0.addsprite("build126.png").pos(262, 44).anchor(50, 100);
+var flow0 = bg.addsprite("flow0.png", ARGB_8888).pos(0, 48).setevent(EVENT_TOUCH, goFlow, 0);
+var banner = flow0.addsprite("build126.png", ARGB_8888).pos(262, 44).anchor(50, 100);
 
 banner.addlabel("50", getFont(), 22, FONT_BOLD).pos(30, 11).anchor(50, 50).color(0, 0, 0);
 
-        bg.addsprite("flow1.png").pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0))).setevent(EVENT_TOUCH, visitNeibor);
+bg.addsprite("flow1.png", ARGB_8888).pos(1650, 25).addaction(repeat(moveby(5000, 80, 0), moveby(5000, -80, 0))).setevent(EVENT_TOUCH, visitNeibor);
 
-        bg.addsprite("flow2.png").anchor(50, 100).pos(2431, 222).setevent(EVENT_TOUCH, onCryIsland, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
+bg.addsprite("flow2.png", ARGB_8888).anchor(50, 100).pos(2431, 222).setevent(EVENT_TOUCH, onCryIsland, 1).addaction(repeat(moveby(9000, 100, 0), moveby(9000, -100, 0)));
 
-        bg.addsprite("mapInIcon.png").pos(1473, 309).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20))).setevent(EVENT_TOUCH, onMap);
+bg.addsprite("mapInIcon.png", ARGB_8888).pos(1473, 309).anchor(50, 100).addaction(repeat(moveby(500, 0, -20), moveby(500, 0, 20))).setevent(EVENT_TOUCH, onMap);
 
 
         farm = new FarmLand(this);

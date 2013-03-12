@@ -66,7 +66,7 @@ class DeadOver extends MyNode
 
         //横向调整 血液位置
         /*
-        var blood = sprite("blood0.png").anchor(50, 50).pos(cs[0]/2, cs[1]);
+var blood = sprite("blood0.png", ARGB_8888).anchor(50, 50).pos(cs[0] / 2, cs[1]);
         soldier.bg.add(blood, -1);
         blood.addaction( 
             sequence(

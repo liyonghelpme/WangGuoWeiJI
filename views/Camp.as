@@ -101,7 +101,7 @@ class CampWorkNode extends MyNode
         if(len(func.baseBuild.readyList) > 0 && flowBanner == null)
         {
             var bSize = func.baseBuild.bg.size();
-            flowBanner = func.baseBuild.bg.addsprite("callFlow.png").pos(bSize[0]/2, -5).anchor(50, 100).setevent(EVENT_TOUCH, doHarvest);
+flowBanner = func.baseBuild.bg.addsprite("callFlow.png", ARGB_8888).pos(bSize[0] / 2, -5).anchor(50, 100).setevent(EVENT_TOUCH, doHarvest);
             flowBanner.addaction(sequence(repeat(moveby(500, 0, -20), delaytime(300), moveby(500, 0, 20))));
         }
         //购买士兵 信号移动到士兵所在位置

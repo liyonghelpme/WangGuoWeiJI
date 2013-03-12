@@ -13,7 +13,7 @@ class FlyAndBomb extends EffectBase
 
         var flyAni = getEffectAni(sol.id);
         var ani = pureMagicData[flyAni[1]];
-        bg = sprite().anchor(50, 50).pos(p[0]+off[0], p[1]+off[1]).scale(sol.data["arrSca"]);
+bg = sprite(ARGB_8888).anchor(50, 50).pos(p[0] + off[0], p[1] + off[1]).scale(sol.data["arrSca"]);
         init();
         shiftAni = moveto(0, 0, 0);
         if(getParam("debugAttack"))

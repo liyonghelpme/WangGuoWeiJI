@@ -17,10 +17,10 @@ class DownloadIcon extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("downloadBack.png").anchor(0, 0).pos(42, 20).size(117, 37).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onDownload);
+temp = bg.addsprite("downloadBack.png", ARGB_8888).anchor(0, 0).pos(42, 20).size(117, 37).color(100, 100, 100, 100).setevent(EVENT_TOUCH, onDownload);
         var cl = bg.addnode().size(117, 37).pos(41, 28).clipping(1);
-        processBar = cl.addsprite("downloadProcessBar.png").anchor(0, 0).pos(0, 0).size(109, 21).color(100, 100, 100, 100);
-        temp = bg.addsprite("downloadIcon.png").anchor(0, 0).pos(12, 10).size(56, 55).color(100, 100, 100, 100);
+processBar = cl.addsprite("downloadProcessBar.png", ARGB_8888).anchor(0, 0).pos(0, 0).size(109, 21).color(100, 100, 100, 100);
+temp = bg.addsprite("downloadIcon.png", ARGB_8888).anchor(0, 0).pos(12, 10).size(56, 55).color(100, 100, 100, 100);
         this.update(0);//立即更新进度
     }
     function onDownload()

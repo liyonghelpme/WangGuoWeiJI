@@ -588,14 +588,14 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
             //if(data["needArgb"])
             //    fil = ARGB_8888;
 
-            changeDirNode = bg.addsprite("soldiera"+str(id)+".plist/ss"+str(id)+"a0.png", fil, ALPHA_TOUCH).anchor(50, 100).scale(getChangeDirNodeScale());
+changeDirNode = bg.addsprite(((("soldiera" + str(id)) + ".plist/ss") + str(id)) + "a0.png", fil, ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
             changeDirNode.prepare();
             bSize = changeDirNode.size();
 
             bg.size(bSize).anchor(50, 100).pos(102, 186);
             changeDirNode.pos(bSize[0]/2, bSize[1]);
 
-            fea = sprite("soldierfa"+str(id)+".plist/ss"+str(id)+"fa0.png", feaFil);
+fea = sprite(((("soldierfa" + str(id)) + ".plist/ss") + str(id)) + "fa0.png", feaFil, ARGB_8888);
 
             var ani = getSolAnimate(id);
             movAni = new SoldierAnimate(1500, ani[0], ani[2], changeDirNode, fea, feaFil);
@@ -614,7 +614,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         var shadowOffY = data["shadowOffY"];
         var shadowOffX = data["shadowOffX"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
-        shadow = sprite("roleShadow"+str(ss)+".png").pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("mapSolScale")*data["shadowXScale"]/100, getParam("mapSolScale"));
+shadow = sprite(("roleShadow" + str(ss)) + ".png", ARGB_8888).pos((bSize[0] / 2) + shadowOffX, bSize[1] + shadowOffY).anchor(50, 50).scale((getParam("mapSolScale") * data["shadowXScale"]) / 100, getParam("mapSolScale"));
         bg.add(shadow, -1);//攻击图片大小变化 导致 shadow的位置突然变化 这是为什么？
 
         var suffix = "";
@@ -625,22 +625,22 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         var chSca = getChangeDirNodeScale();
         var hDiff = bg.size()[1]*(100-chSca)/100;//data["bloodHeight"]+hDiff
 
-        backBanner = bg.addsprite("mapSolBloodBan"+suffix+".png").pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).scale(getParam("mapBloodScale"));
+backBanner = bg.addsprite(("mapSolBloodBan" + suffix) + ".png", ARGB_8888).pos(bSize[0] / 2, bSize[1] - getBloodHeightOff()).anchor(50, 100).scale(getParam("mapBloodScale"));
         if(!getParam("debugBlood"))
             backBanner.visible(0);
 
         var mInfo = getData(MAP_INFO, map.kind);
 
-        redBlood = backBanner.addsprite("mapSolBloodRed"+suffix+".png").pos(2, 2);
+redBlood = backBanner.addsprite(("mapSolBloodRed" + suffix) + ".png", ARGB_8888).pos(2, 2);
         if(color == MYCOLOR)
         {
             if(mInfo["blood"] == 0)
-                greenBlood = backBanner.addsprite("mapSolBloodBlue"+suffix+".png").pos(2, 2);
+greenBlood = backBanner.addsprite(("mapSolBloodBlue" + suffix) + ".png", ARGB_8888).pos(2, 2);
             else if(mInfo["blood"] == 1)
-                greenBlood = backBanner.addsprite("mapSolBloodGreen"+suffix+".png").pos(2, 2);
+greenBlood = backBanner.addsprite(("mapSolBloodGreen" + suffix) + ".png", ARGB_8888).pos(2, 2);
         }
         else
-            greenBlood = backBanner.addsprite("mapSolBloodYellow"+suffix+".png").pos(2, 2);
+greenBlood = backBanner.addsprite(("mapSolBloodYellow" + suffix) + ".png", ARGB_8888).pos(2, 2);
 
         bloodTotalLen = greenBlood.prepare().size()[0];
         bloodHeight = greenBlood.prepare().size()[1];
@@ -743,7 +743,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
         var missYet = hurt[2];
         if(missYet)
         {
-            bWord = sprite("miss.png");
+bWord = sprite("miss.png", ARGB_8888);
             bg.add(bWord);
             bWord.pos(bSize[0]/2, bSize[1]-getBloodHeightOff()).anchor(50, 100).addaction(sequence(moveby(getParam("hurtNumFlyTime"), 0, getParam("hurtNumFlyDistance")), fadeout(getParam("hurtNumFadeTime")), callfunc(removeTempNode)));
             return;
@@ -850,7 +850,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
                     )
             {
                 bSize = bg.size();
-                chooseStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]).scale(getParam("mapSolScale"));
+chooseStar = sprite(ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).scale(getParam("mapSolScale"));
                 chooseStar.addaction(repeat(
                 getRedStarAni()
                 ));
@@ -1312,7 +1312,7 @@ leftTimeLab = stateWord.addlabel("剩余时间", getFont(), 15).color(0, 100, 10
     function setSkillState()
     {
         var bSize = bg.size();
-        greenStar = sprite().anchor(50, 50).pos(bSize[0]/2, bSize[1]).scale(getParam("mapSolScale"));
+greenStar = sprite(ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).scale(getParam("mapSolScale"));
         greenStar.addaction(repeat(getGreenStarAni()));
 
         bg.add(greenStar, -1);
