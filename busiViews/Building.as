@@ -733,7 +733,7 @@ bottom = sprite("", ARGB_8888).pos(bSize[0] / 2, bSize[1] - (((sx + sy) / 2) * S
         /*
         工作中的农田显示
         */
-        else if(state == PARAMS["buildWork"])
+        else if(state == PARAMS["buildWork"] && accMove < 20) //工作中 移动量 小于20 才可以收获 或者 开启 对话框
         {
             if(showMenuYet == 0)
             {

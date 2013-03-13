@@ -875,9 +875,12 @@ var sp = gridLayer.addsprite("gridNew.png", ARGB_8888).size(getParam("MAP_OFFX")
                             rewardEquip.append(newEquip);
                         }
                     }
+
+
                 }
                 global.director.pushView(new RoundWin(this, dict([["deadSols", deadInstance], ["star", star], ["reward", reward], ["rewardEquip", rewardEquip]])), 1, 0);
-                //累计用户的星星数量比较星星总数
+
+                //累计用户的星星数量比较星星总数 第一次闯过该关卡 得到用户当前总的星星数量根据类型来变更 任务数据
                 global.taskModel.doAllTaskByKey("roundStar", getAllStar());
             }
             else

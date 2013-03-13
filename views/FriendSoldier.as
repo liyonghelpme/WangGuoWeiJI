@@ -51,7 +51,8 @@ class FriendSoldier extends MoveSoldier
         bg = node();//.scale(showSize);
         init();
 
-changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
+changeDirNode = bg.addsprite("soldierm" + str(id) + ".plist/ss" + str(id) + "m0.png", ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
+        trace("initChangeDirNode");
 
         var bSize = changeDirNode.prepare().size();
 
@@ -60,6 +61,7 @@ changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) 
 
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
 shadow = sprite(("roleShadow" + str(ss)) + ".png", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).scale((getParam("SOL_SHOW_SIZE") * data["shadowXScale"]) / 100, getParam("SOL_SHOW_SIZE"));
+        trace("initShadow")
 
         changeDirNode.add(shadow, -1);
 

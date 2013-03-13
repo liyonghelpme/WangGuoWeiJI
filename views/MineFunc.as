@@ -145,7 +145,7 @@ var pl = flowBanner.addsprite("crystalBig.png", ARGB_8888).anchor(50, 50).pos(fS
         global.user.doCost(cost);
         baseBuild.buildLevel += 1;
         var mineData = getData(MINE_PRODUCTION, baseBuild.buildLevel);
-        baseBuild.changeDirNode.texture("build"+str(baseBuild.id)+".png", getHue(mineData["color"]));
+        baseBuild.changeDirNode.texture("build"+str(baseBuild.id)+".png", getHue(mineData["color"]), ARGB_8888);
 
         global.user.updateBuilding(baseBuild);
         var it = cost.items();

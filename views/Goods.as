@@ -63,19 +63,16 @@ title = bg.addsprite("buyDrug.png", UPDATE_SIZE, ARGB_8888).anchor(50, 50).pos(5
 var buildPic = panel.addsprite(buildPicName, ARGB_8888).pos(74, 88).anchor(50, 50);
         var ret;
         var canBuy = 1;
+        var showShadow = 0;
         if(objKind == BUILD)
         {
             ret = checkBuildNum(objId);
             //建筑物的数量不足
             if(ret[0] == 0)
             {
-panel.addsprite("storeShadow.png", ARGB_8888).size(151, 191).color(100, 100, 100, 47);
-                cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(getNextBuildNum(objId) + 1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
-                cw.anchor(50, 50).pos(75, 97);
-                panel.add(cw); 
-
                 buildPic.texture(buildPicName, GRAY);
                 canBuy = 0;
+                showShadow = 1;
             }
             //普通农田显示 数量
             if(data["funcs"] == FARM_BUILD)
@@ -110,31 +107,19 @@ panel.addlabel((str(getCurBuildNum(objId)) + "/") + str(getBuildEnableNum(objId)
         
 
         //&& canBuy
-        if(global.user.getValue("level") < needLevel )
-        {
+        if(global.user.getValue("level") < needLevel ) {
             buildPic.texture(buildPicName, BLACK);
-panel.addsprite("storeShadow.png", ARGB_8888).size(151, 191).color(100, 100, 100, 47);
-            
-            cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
-            cw.anchor(50, 50).pos(75, 97);
-            panel.add(cw); 
-
             canBuy = 0;
-        }
-        //物品属性
-        else
-        {
+            showShadow = 2;
+        } else {
 panel.addlabel(data.get("name"), getFont(), 20).pos(78, 25).anchor(50, 50).color(29, 16, 4);
             var picCost = cost.items();
-            if(len(picCost) > 0)
-            {
+            if(len(picCost) > 0) {
                 var c = [100, 100, 100];
                 if(picCost[0][0] == "free")//免费物品只显示免费
                 {
 panel.addlabel(getStr("free", null), getFont(), 18).pos(83, 169).anchor(50, 50).color(c[0], c[1], c[2]);
-                }
-                else
-                {
+                } else {
                     var picName = picCost[0][0]+".png";
                     var valNum = picCost[0][1];
                     var buyable = global.user.checkCost(cost);
@@ -180,6 +165,19 @@ panel.addlabel(k, getFont(), 18).pos(78, 136).anchor(50, 50).color(43, 25, 9);
                 }
             }
         }
+        trace("showShadow", showShadow);
+        if(showShadow == 1) {
+            panel.addsprite("storeShadow.png", ARGB_8888).size(151, 191).color(100, 100, 100, 47);
+            cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(getNextBuildNum(objId) + 1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
+            cw.anchor(50, 50).pos(75, 97);
+            panel.add(cw); 
+        } else if(showShadow == 2) {
+            panel.addsprite("storeShadow.png", ARGB_8888).size(151, 191).color(100, 100, 100, 47);
+            cw = colorWordsNode(getStr("levelNot", ["[LEVEL]", str(needLevel+1)]), 20, [100, 100, 100], [getParam("notRed"), getParam("notGreen"), getParam("notBlue")]);
+            cw.anchor(50, 50).pos(75, 97);
+            panel.add(cw); 
+        }
+
         return canBuy;
     }
     function modifyGain(gain)

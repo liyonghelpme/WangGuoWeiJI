@@ -87,7 +87,7 @@ chooseStar = sprite("", ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).sc
         else
             chooseStar.addaction(repeat(getGreenStarAni()));
             
-        bg.add(chooseStar, -1);
+        bg.add(chooseStar, -getParam("starZ"));
     }
     function initDeadState()
     {
@@ -118,7 +118,7 @@ chooseStar = sprite("", ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).sc
         load_sprite_sheet("soldierm"+str(id)+".plist");
 
         //新人物可能初始的size = 0 因此可能有问题
-        changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", UPDATE_SIZE);
+        changeDirNode.texture("soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", UPDATE_SIZE, ARGB_8888, ALPHA_TOUCH);
         //var bSize = changeDirNode.prepare().size();
         var bSize = getBgSize();
         if(bSize[0] > 0)
@@ -211,7 +211,7 @@ chooseStar = sprite("", ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).sc
         if(getParam("debugSoldier"))
 stateLabel = bg.addlabel("", getFont(), 25).pos(0, -20).color(0, 0, 0);
 
-changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) + "m0.png", ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
+changeDirNode = bg.addsprite("soldierm" + str(id) + ".plist/ss" + str(id) + "m0.png", ALPHA_TOUCH, ARGB_8888).anchor(50, 100).scale(getChangeDirNodeScale());
 
         var chScale = getChangeDirNodeScale();
         //var bSize = changeDirNode.prepare().size();
@@ -231,7 +231,7 @@ changeDirNode = bg.addsprite(((("soldierm" + str(id)) + ".plist/ss") + str(id)) 
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
 shadow = sprite(("roleShadow" + str(ss)) + ".png", ARGB_8888).pos((bSize[0] / 2) + shadowOffX, bSize[1] + shadowOffY).anchor(50, 50).scale((getParam("SOL_SHOW_SIZE") * data["shadowXScale"]) / 100, getParam("SOL_SHOW_SIZE"));
 
-        bg.add(shadow, -2);
+        bg.add(shadow, -getParam("shadowZ"));
         initData(privateData);
 
 

@@ -31,6 +31,7 @@ function getEarthQuake(mapKind, id)
 function getEffectAni(id)
 {
     var ani = magicAnimate.get(id);
+    trace("getEffectAni", id, ani);
     for(var i = 0; i < len(ani); i++)
         if(ani[i] != -1)
             load_sprite_sheet("s"+str(ani[i])+"e.plist");

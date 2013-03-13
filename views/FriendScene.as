@@ -59,8 +59,8 @@ class MovLayer extends MoveMap
         var val = sol.values();
         //访问好友有水晶可拿
         //好友拥有的水晶数量
-        trace("randSoldier cry", scene.crystal);
-        for(var i = 0; i < len(val); i++)
+        trace("randSoldier cry", scene.crystal, len(val));
+        for(var i = 0; i < len(val) && i < getParam("friendSolMax"); i++)
         {
             var hasCry = 0;
             if(scene.crystal != null && i < scene.crystal)
@@ -68,6 +68,7 @@ class MovLayer extends MoveMap
                 hasCry = 1;
             }
             var s = new FriendSoldier(val[i], this, hasCry, key[i]);
+            trace("init FriendSoldier");
             addChild(s);
             mapGridController.addSoldier(s);
         }

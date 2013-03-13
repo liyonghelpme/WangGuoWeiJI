@@ -969,10 +969,15 @@ hintArrow = pic.addsprite("taskArrow.png", ARGB_8888).pos((bSize[0] / 2) + offX,
             var task = localCycleTask[tid];
             var taskData = getData(TASK, tid);
             //升级任务 需要直接比较数值而不是累加数值
-            if(taskData["compareData"])
+            var realNum = 0;
+            //得到星星数量是比较数值 
+            if(taskData["compareNum"]) {
+                realNum = num - task["number"];
                 task["number"] = num;
-            else
+            } else {
+                realNum = num;
                 task["number"] += num;
+            }
             var ret = checkCycleFinish(tid);
             trace("cycleTask", task, ret);
 
@@ -985,7 +990,7 @@ hintArrow = pic.addsprite("taskArrow.png", ARGB_8888).pos((bSize[0] / 2) + offX,
 
             global.user.db.put("localCycleTask", localCycleTask);
             global.msgCenter.sendMsg(UPDATE_TASK, null);
-            global.httpController.addRequest("taskC/doCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["num", num]]), null, null);
+            global.httpController.addRequest("taskC/doCycleTask", dict([["uid", global.user.uid], ["tid", tid], ["num", realNum]]), null, null);
         }
     }
     function checkCycleState(tid)

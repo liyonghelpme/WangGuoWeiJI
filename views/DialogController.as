@@ -133,7 +133,8 @@ class DialogController extends MyNode
                 }
                 else if(curCmd["cmd"] == "download")
                 {
-                    global.director.pushView(new DownloadDialog(), 1, 0);
+                    if(getParam("enableDownload"))
+                        global.director.pushView(new DownloadDialog(), 1, 0);
                 }
                 else if(curCmd["cmd"] == "newTaskDialog")
                 {

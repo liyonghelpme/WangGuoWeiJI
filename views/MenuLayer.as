@@ -260,8 +260,10 @@ gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169
         if(global.taskModel.checkNewTaskFinish() && downloadIcon == null && global.pictureManager.checkNeedDownload())
         {
             trace("update Right Menu add DownloadIcon");
-            downloadIcon = new DownloadIcon(this);
-            addChild(downloadIcon);
+            if(getParam("enableDownload")) {
+                downloadIcon = new DownloadIcon(this);
+                addChild(downloadIcon);
+            }
         }
 
         var rated = global.user.db.get("rated");
@@ -387,14 +389,6 @@ gloryLevText = bg.addlabel(setRankOrder(), getFont(), 23).anchor(50, 50).pos(169
         updateValue(global.user.resource);
         updateExp(0);
         trace("show Download Icon", global.user.getValue("newTaskStage"));
-        /*
-        if(global.user.getValue("newTaskStage") >= getParam("showFinish"))
-        {
-            trace("initDataOver add Download");
-            downloadIcon = new DownloadIcon(this);
-            addChild(downloadIcon);
-        }
-        */
     }
     function updateValue(res)
     {
