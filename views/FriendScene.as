@@ -73,6 +73,7 @@ class MovLayer extends MoveMap
             mapGridController.addSoldier(s);
         }
     }
+
     function initBuildings()
     {
         printD(["initBuildings", scene.buildings]);
@@ -81,9 +82,12 @@ class MovLayer extends MoveMap
             var pdata = scene.buildings[i];
             var b = new Building(this, getData(BUILD, pdata["id"]), pdata);
             b.setBid(FRIEND_MINE);
-            b.setPos([pdata.get("px"), pdata.get("py")]);
-            addChild(b);
 
+            addChild(b);
+            //调节一下zord
+            b.setPos([pdata.get("px"), pdata.get("py")]);
+
+            //更新map
             mapGridController.allBuildings.append(b);
             mapGridController.updateMap(b);
         }

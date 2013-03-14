@@ -139,6 +139,8 @@ chooseStar = sprite("", ARGB_8888).anchor(50, 50).pos(bSize[0] / 2, bSize[1]).sc
         var shadowOffY = data["shadowOffY"];
         var ss = SOL_SHADOW_SIZE.get(data["shadowWidth"], 3);
         shadow.texture("roleShadow"+str(ss)+".png", UPDATE_SIZE).pos(bSize[0]/2+shadowOffX, bSize[1]+shadowOffY).anchor(50, 50).scale(getParam("SOL_SHOW_SIZE")*data["shadowXScale"]/100, getParam("SOL_SHOW_SIZE"));
+
+        showCurStatus();
     }
 
 
@@ -824,8 +826,12 @@ bottom = sprite("", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).size((
         if(map != null && map.curUpdateId != groupId && state == SOL_MOVE)//只有士兵在移动状态才会阻塞更新 FREE 状态立即寻找下一个目标
             return;
 
-        if(getParam("debugSoldier"))
-            stateLabel.text("inTran"+str(inTransfer)+":inDead"+str(inDead));
+        if(getParam("debugSoldier")) {
+            var sPos = [0, 0];
+            if(status != null)
+                sPos = status.pos();
+            stateLabel.text("inTran"+str(inTransfer)+":inDead"+str(inDead)+"status"+str(sPos));
+        }
         var leftTime;
         if(inTransfer)
         {
@@ -976,8 +982,7 @@ bottom = sprite("", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).size((
     {
         if(curStatus == NO_STATUS)
             return;
-        if(status != null)
-        {
+        if(status != null) {
             status.removefromparent();
             status = null;
         }
@@ -985,6 +990,7 @@ bottom = sprite("", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).size((
         var bSize = bg.size();
         var pic;
         var rd;
+        trace("status Size", bSize, getBloodHeightOff());
 status = bg.addsprite("soldierStatus.png", ARGB_8888).pos((bSize[0] / 2) + getParam("statusOffX"), (bSize[1] - getBloodHeightOff()) + getParam("statusOffY")).anchor(50, 100).scale(getParam("SOL_SHOW_SIZE"));
         status.setevent(EVENT_TOUCH, touchBegan);
         status.setevent(EVENT_MOVE, touchMoved);

@@ -156,8 +156,8 @@ var buildAnimate = dict([
     [1, [
     ["mb.plist/mb0.png", "mb.plist/mb1.png", "mb.plist/mb2.png", "mb.plist/mb3.png", "mb.plist/mb4.png", "mb.plist/mb5.png", "mb.plist/mb6.png", "mb.plist/mb7.png"]
     , [62, 49], 2000, 0, [50, 100], "mb.plist"]],
-    [140, [["f0.png"], [87, 37], 2000, 1, [50, 50]]],
-    [141, [["f1.png"], [87, 37], 2000, 1, [50, 50]]],
+    [140, [["f0.png"], [109, 76], 2000, 1, [50, 50]]],
+    [141, [["f1.png"], [109, 76], 2000, 1, [50, 50]]],
     [202, [
 ["god.plist/god0.png", "god.plist/god1.png", "god.plist/god2.png", "god.plist/god3.png", "god.plist/god4.png", "god.plist/god5.png", "god.plist/god6.png", "god.plist/god7.png", "god.plist/god8.png"]
     , [101, 0], 2000, 0, [50, 50], "god.plist"]],

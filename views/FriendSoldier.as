@@ -63,7 +63,7 @@ changeDirNode = bg.addsprite("soldierm" + str(id) + ".plist/ss" + str(id) + "m0.
 shadow = sprite(("roleShadow" + str(ss)) + ".png", ARGB_8888).pos(bSize[0] / 2, bSize[1]).anchor(50, 50).scale((getParam("SOL_SHOW_SIZE") * data["shadowXScale"]) / 100, getParam("SOL_SHOW_SIZE"));
         trace("initShadow")
 
-        changeDirNode.add(shadow, -1);
+        bg.add(shadow, -getParam("shadowZ"));
 
         movAni = repeat(animate(1500, "soldierm"+str(id)+".plist/ss"+str(id)+"m0.png", "soldierm"+str(id)+".plist/ss"+str(id)+"m1.png","soldierm"+str(id)+".plist/ss"+str(id)+"m2.png","soldierm"+str(id)+".plist/ss"+str(id)+"m3.png","soldierm"+str(id)+".plist/ss"+str(id)+"m4.png","soldierm"+str(id)+".plist/ss"+str(id)+"m5.png","soldierm"+str(id)+".plist/ss"+str(id)+"m6.png"));
         shiftAni = moveto(0, 0, 0);

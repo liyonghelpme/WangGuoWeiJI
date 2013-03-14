@@ -224,15 +224,7 @@ panel.addlabel(getStr("closeDetail", ["[NUM]", str(num), "[NAME]", objData["name
                     but0 = new NewButton("roleNameBut1.png", [74, 37], getStr("sell", null), null, 18, FONT_NORMAL, [100, 100, 100], onSell, i);
                     but0.bg.pos(654, 35);
                     panel.add(but0.bg);
-                     
-                    var equipOwner = ed.get("owner");
-                    if(equipOwner != -1)
-                    {
-                        //左侧按钮
-                        but0 = new NewButton("roleNameBut0.png", [72, 36], getStr("unloadIt", null), null, 18, FONT_NORMAL, [100, 100, 100], onUnload, i);
-                        but0.bg.pos(573, 36);
-                        panel.add(but0.bg);
-                    }
+
                 }
             }
             else if(kind == DRUG)

@@ -411,7 +411,8 @@ shadow = sprite(((("build" + str(id)) + "Shadow") + str(shadowDir)) + ".png", AR
         if(getParam("debugFarm"))
         {
             var map = getPosMap(sx, sy, p[0], p[1]);
-            farmState.text("State:"+str(state)+"Pos:"+str(map[2])+","+str(map[3])+"Color:"+str(buildColor)+":activeScore"+str(global.user.challengeState["activeScore"])+":protectTime:"+str(global.user.challengeState["protectTime"]));
+            farmState.text("zord"+str(zOrd));
+            //farmState.text("State:"+str(state)+"Pos:"+str(map[2])+","+str(map[3])+"Color:"+str(buildColor)+":activeScore"+str(global.user.challengeState["activeScore"])+":protectTime:"+str(global.user.challengeState["protectTime"]));
         }
     }
 
