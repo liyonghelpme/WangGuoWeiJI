@@ -702,4 +702,5 @@ var WORDS = dict([
 ["StoreAttWordspercentHealthDrug", ["血量:[NUM]%", "HP:[NUM]%"]],
 ["Max", ["最多", "Max"]],
 ["onceTaskFinished", ["该任务已经完成", "This quest has been completed"]],
+["notOpenMap", ["[LEV]等级开启右侧地图！", "Upgrade to Lv. [LEV] to open the new Map! "]],
 ]);

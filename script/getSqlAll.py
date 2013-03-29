@@ -780,7 +780,7 @@ strFile.write(strCon)
 strFile.close()
 
 decor = []
-sql = 'select * from building where funcs = 2 order by level asc'
+sql = 'select * from building where funcs = 2 and deleted = 0 order by level asc'
 con.query(sql)
 dec = con.store_result().fetch_row(0, 1)
 for i in dec:
@@ -799,6 +799,9 @@ con.query(sql)
 dr = con.store_result().fetch_row(0, 1)
 for i in dr:
     drug.append([2, i['id']])
+
+#decor = []
+#sql = 'select * from building where funcs=2 and deleted = 0 order by level'
 
 StoreGoods = [
         [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],

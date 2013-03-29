@@ -7,8 +7,7 @@ class BuildLayer extends MoveMap
     var map;
     function BuildLayer(m)
     {
-        moveZone = [[getParam("TrainZoneX"), getParam("TrainZoneY"), getParam("TrainZoneWidth"), getParam("TrainZoneHeight") ]];   
-        buildZone = [[getParam("FullZoneX"), getParam("FullZoneY"), getParam("FullZoneWidth"), getParam("FullZoneHeight")]];
+        updateZone();
         map = m;
         bg = node();
         init();
@@ -16,6 +15,15 @@ class BuildLayer extends MoveMap
         staticObstacle = obstacleBlock;
         mapGridController = new MapGridController(this);
         gridLayer = bg.addnode();
+    }
+    function updateZone() {
+        if(global.user.getValue("level") < getParam("openMapLevel")) {
+            moveZone = [[getParam("TrainZoneX"), getParam("TrainZoneY"), MapSize[0][2]-getParam("TrainZoneX"), MapSize[0][3]-getParam("TrainZoneY")]];
+            buildZone = [[getParam("FullZoneX"), getParam("FullZoneY"), MapSize[0][2]- getParam("FullZoneX"), MapSize[0][3]-getParam("FullZoneY") ]];
+        } else {
+            moveZone = [[getParam("TrainZoneX"), getParam("TrainZoneY"), getParam("TrainZoneWidth"), getParam("TrainZoneHeight") ]];   
+            buildZone = [[getParam("FullZoneX"), getParam("FullZoneY"), getParam("FullZoneWidth"), getParam("FullZoneHeight")]];
+        }
     }
     var Planing = 0;
 

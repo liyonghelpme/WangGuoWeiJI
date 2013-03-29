@@ -66,13 +66,13 @@ class StandardTouchHandler
         bg.pos(oldPos[0]+difx, oldPos[1]+dify);
         var leftTop = bg.world2node(0, 0);
         var rightBottom = bg.world2node(global.director.disSize[0], global.director.disSize[1]);
-        if(leftTop[0] < 0 && difx > 0)
+        if(leftTop[0] < showBoundary[0] && difx > 0)
             difx = 0;
-        if(leftTop[1] < 0 && dify > 0)
+        if(leftTop[1] < showBoundary[1] && dify > 0)
             dify = 0;
-        if(rightBottom[0] > bg.size()[0] && difx < 0)
+        if(rightBottom[0] > showBoundary[2] && difx < 0)
             difx = 0;
-        if(rightBottom[1] > bg.size()[1] && dify < 0)
+        if(rightBottom[1] > showBoundary[3] && dify < 0)
             dify = 0;
         bg.pos(oldPos);
         return [difx, dify];
@@ -84,13 +84,13 @@ class StandardTouchHandler
         bg.pos(oldPos[0]+difx, oldPos[1]+dify);
         var leftTop = bg.world2node(0, 0);
         var rightBottom = bg.world2node(global.director.disSize[0], global.director.disSize[1]);
-        if(leftTop[0] < 0 && difx > 0)
+        if(leftTop[0] < showBoundary[0] && difx > 0)
             difx = 0;
-        if(leftTop[1] < 0 && dify > 0)
+        if(leftTop[1] < showBoundary[1] && dify > 0)
             dify = 0;
-        if(rightBottom[0] > bg.size()[0] && difx < 0)
+        if(rightBottom[0] > showBoundary[2] && difx < 0)
             difx = 0;
-        if(rightBottom[1] > bg.size()[1] && dify < 0)
+        if(rightBottom[1] > showBoundary[3] && dify < 0)
             dify = 0;
         bg.pos(oldPos[0]+difx, oldPos[1]+dify);
     }
@@ -121,6 +121,7 @@ class StandardTouchHandler
         bg.pos(oldPos);
         bg.scale(oldSca);
     }
+    //屏幕坐标 到地图坐标的范围转化问题
     function ScaleBack(sca)
     {
         var oldScale = bg.scale();
@@ -134,13 +135,13 @@ class StandardTouchHandler
         var leftTop = bg.world2node(0, 0);
         var rightBottom = bg.world2node(global.director.disSize[0], global.director.disSize[1]);
 
-        if(leftTop[0] < 0 && sca < 0)  
+        if(leftTop[0] < showBoundary[0] && sca < 0)  
             sca = 0;
-        if(leftTop[1] < 0 && sca < 0)
+        if(leftTop[1] < showBoundary[1] && sca < 0)
             sca = 0;
-        if(rightBottom[0] > bg.size()[0] && sca < 0)
+        if(rightBottom[0] > showBoundary[2] && sca < 0)
             sca = 0;
-        if(rightBottom[1] > bg.size()[1] && sca < 0)
+        if(rightBottom[1] > showBoundary[3] && sca < 0)
             sca = 0;
         bg.scale(oldScale[0]+sca, oldScale[1]+sca);
         return sca;
@@ -207,8 +208,8 @@ class StandardTouchHandler
     //调整缩放之后的 Move 使Map 在view 中
     function adjustMove()
     {
-        var leftTop = bg.node2world(0, 0);
-        var rightBottom = bg.node2world(bg.size()[0], bg.size()[1]);
+        var leftTop = bg.node2world(showBoundary[0], showBoundary[1]);
+        var rightBottom = bg.node2world(showBoundary[2], showBoundary[3]);
         var difX = 0;
         var difY = 0;
         if(leftTop[0] > 0) {

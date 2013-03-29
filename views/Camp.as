@@ -206,9 +206,8 @@ class Camp extends FuncBuild
             global.user.updateBuilding(baseBuild);
 
             workNode.startCallback();
-            if(global.taskModel.checkInNewTask())
-            {
-                global.user.changeExpLevel(2);
+            if(global.taskModel.checkInNewTask()) {
+                global.user.changeExpLevel(3);
                 global.taskModel.doAllTaskByKey("call", 1);//完成完整的招募士兵任务
                 global.httpController.addRequest("logC/finishNewStage", dict([["uid", global.user.uid], ["stage", 2]]), null, null);
             }

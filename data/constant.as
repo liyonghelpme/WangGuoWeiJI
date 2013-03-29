@@ -1101,3 +1101,9 @@ const SOL_SHADOW_SIZE = dict([[1, 1], [2, 2], [3, 3]]);
 
 //好友的水晶矿编号
 const FRIEND_MINE = -1;
+
+
+const MapSize = [
+[10, 10, 2194, 1110],
+[10, 10, 2990, 1110]
+];

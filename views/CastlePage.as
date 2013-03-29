@@ -89,6 +89,7 @@ class CastlePage extends MyNode
     var dialogController;
     var solNum;
     var box = null;//登录发现有宝箱  产生新的宝箱 宝箱已经被开启 
+    var openMap = null;
 
     function getLoginRewardOver(rid, rcode, con, param)
     {
@@ -118,6 +119,7 @@ class CastlePage extends MyNode
         检测是否今天第一次登录 以及连续登录次数
         传递奖励数据给后台
         */
+        showOpenMapArrow();
 
 
         //新手阶段 没有登录奖励
@@ -183,6 +185,7 @@ class CastlePage extends MyNode
     }
     
     
+
     function CastlePage(s, showLoading)
     {
         scene = s;
@@ -232,9 +235,10 @@ bg.addsprite("mapInIcon.png", ARGB_8888).pos(1473, 309).anchor(50, 100).addactio
         fallGoods = new FallGoods(this, buildLayer);
         addChild(fallGoods);
 
-        
         touchDelegate = new StandardTouchHandler();
-        touchDelegate.setBg(bg, null);
+        //showOpenMapArrow();
+
+
         touchDelegate.scaMax = getParam("businessMaxSca");
         touchDelegate.scaMin = getParam("businessMinSca");
 
@@ -521,6 +525,23 @@ bg.addsprite("mapInIcon.png", ARGB_8888).pos(1473, 309).anchor(50, 100).addactio
 
         //如果当前新手任务状态 是 NOW_IN_BUSI 则完成 阶段1的闯关任务
     }
+    function showOpenMapArrow() {
+        if(global.user.getValue("level") < getParam("openMapLevel")) {
+            openMap = new OpenMapBanner(this);
+            addChild(openMap);
+            touchDelegate.setBg(bg, MapSize[0]);
+        } else
+            touchDelegate.setBg(bg, MapSize[1]);
+        buildLayer.updateZone();
+    }
+    function removeOpenMapArrow() {
+        if(openMap != null) {
+            openMap.removeSelf();
+            openMap = null;
+        }
+        touchDelegate.setBg(bg, MapSize[1]);
+        buildLayer.updateZone();
+    }
 
     //购买士兵 只是增加士兵数量
     //购买士兵 添加一个新的士兵
@@ -548,6 +569,9 @@ bg.addsprite("mapInIcon.png", ARGB_8888).pos(1473, 309).anchor(50, 100).addactio
         else if(msg[0] == LEVEL_UP)
         {
             dialogController.addCmd(dict([["cmd", "levup"], ["castlePage", this]]));
+            if(global.user.getValue("level") == getParam("openMapLevel")) {
+                removeOpenMapArrow();
+            }
         }
         else if(msg[0] == FINISH_NAME)
         {

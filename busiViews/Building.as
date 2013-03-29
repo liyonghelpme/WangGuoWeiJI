@@ -125,14 +125,19 @@ featureColor = changeDirNode.addsprite(("build" + str(id)) + "_f.png", fc, ARGB_
         }
         var offY = data["offY"];
 
+        var oY = 0;
         var bSize = changeDirNode.prepare().size();
+        if(data["isoView"]) {
+            oY = (sy+sx)*SIZEY/2;
+        }
 
         //新建筑需要确定初始化位置 
         //如果建筑物是平底的 则 高度需要补偿 否则高度正常
         //当前屏幕中心位置对应的一个空地比较合适
-        bg.size(bSize[0], bSize[1]+offY).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
+        bg.size(bSize[0], bSize[1]+offY+oY).anchor(50, 100).pos(ZoneCenter[kind][0], ZoneCenter[kind][1]);
 
         changeDirNode.pos(bSize[0]/2, bSize[1]);
+
 
         dir = privateData.get("dir", 0);
         setState(privateData.get("state", PARAMS["buildMove"]));
@@ -351,7 +356,7 @@ featureColor = changeDirNode.addsprite(("build" + str(id)) + "_f.png", fc, ARGB_
 shadow = sprite(((("build" + str(id)) + "Shadow") + str(shadowDir)) + ".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0] / 2, bSize[1]);
             } else {
                 var offY = (sy+sx)*SIZEY/2;
-shadow = sprite(((("build" + str(id)) + "Shadow") + str(shadowDir)) + ".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0] / 2, bSize[1] - offY);
+shadow = sprite(((("build" + str(id)) + "Shadow") + str(shadowDir)) + ".png", ARGB_8888).color(100, 100, 100, 30).anchor(50, 100).pos(bSize[0] / 2, bSize[1]-offY);
             }
             if(!data["upShadow"])
                 bg.add(shadow, -1);
