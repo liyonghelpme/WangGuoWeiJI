@@ -48,13 +48,8 @@ newRankTitle = bg.addsprite("newRankTitle.png", ARGB_8888).anchor(50, 50).pos(16
     var sureToChallenge = 0;
     function onRankInfo()
     {
-        sureToChallenge = gotoRandChallenge(sureToChallenge, finishCallback);
-        if(sureToChallenge == 0)
-        {
-            global.director.popView();
-            var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
-            global.director.pushScene(cs);
-        }
+        global.director.popView();
+        global.director.pushScene(new MapScene());
     }
     function RankDialog(k)
     {

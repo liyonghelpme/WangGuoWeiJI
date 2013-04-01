@@ -2,7 +2,8 @@ class FlyLayer extends MyNode
 {
     var labelPos = [[302,237],[91,117],[350,413],[616,328],[667,115],[222,25]];
     var scene;
-    var retBut;
+    //var retBut;
+    var returnLayer;
     function FlyLayer(s){
         scene = s;
         bg = node();
@@ -28,10 +29,15 @@ lab = jz.addlabel(getStr("mapIsland" + str(i), null), getFont(), 15).anchor(50, 
             lab.pos(width/2, 15);
         }
 
+        /*
         var but0 = new NewButton("returnRoom.png", [72, 47], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onBack, null);
         but0.bg.anchor(50, 50).pos(75, 431);
         bg.add(but0.bg);
         retBut = but0;
+        */
+
+        returnLayer = new MapReturnLayer(this);
+        addChild(returnLayer);
     }
     override function enterScene()
     {

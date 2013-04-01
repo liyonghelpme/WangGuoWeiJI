@@ -93,12 +93,7 @@ menubutton = bg.addsprite("menu_button.png", ARGB_8888).anchor(0, 0).pos(685, 38
     }
     function onRank()
     {
-        sureToChallenge = gotoRandChallenge(sureToChallenge, finishCallback);
-        if(sureToChallenge == 0)
-        {
-            var cs = new ChallengeScene(null, null, null, null, CHALLENGE_OTHER, null);
-            global.director.pushScene(cs);
-        }
+        global.director.pushScene(new MapScene());
     }
     /*
     显示商店充值页面

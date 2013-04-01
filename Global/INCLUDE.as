@@ -128,6 +128,7 @@ import welcome.WelcomeDialog;
 
 import welcome.GrayWord;
 
+import battle.MapReturnLayer; 
 import battle.MapScene;
 import battle.FlyLayer;
 import battle.MapLayer;

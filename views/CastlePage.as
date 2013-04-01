@@ -37,7 +37,7 @@ class Water extends MyNode
 
         bg = node();
         var left = bg.addnode().pos(610, 362);
-var l0 = left.addsprite("", ARGB_8888).pos(42, 21).addaction(repeat(animate(2000, ["rl0_.plist/rl0_1.png", "rl0_.plist/rl0_2.png", "rl0_.plist/rl0_3.png", "rl0_.plist/rl0_4.png", "rl0_.plist/rl0_5.png", "rl0_.plist/rl0_6.png", "rl0_.plist/rl0_7.png"])));
+//var l0 = left.addsprite("", ARGB_8888).pos(42, 21).addaction(repeat(animate(2000, ["rl0_.plist/rl0_1.png", "rl0_.plist/rl0_2.png", "rl0_.plist/rl0_3.png", "rl0_.plist/rl0_4.png", "rl0_.plist/rl0_5.png", "rl0_.plist/rl0_6.png", "rl0_.plist/rl0_7.png"])));
 
 var l1 = left.addsprite("", ARGB_8888).pos(338, 75).addaction(repeat(animate(2000, ["rl1_.plist/rl1_1.png", "rl1_.plist/rl1_2.png", "rl1_.plist/rl1_3.png", "rl1_.plist/rl1_4.png", "rl1_.plist/rl1_5.png", "rl1_.plist/rl1_6.png", "rl1_.plist/rl1_7.png"])));
 
