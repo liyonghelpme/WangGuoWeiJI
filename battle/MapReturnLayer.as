@@ -14,7 +14,7 @@ class MapReturnLayer extends MyNode
         var line;
         var temp;
         var sca;
-        temp = bg.addsprite("black.png").anchor(0, 0).pos(-11, 422).size(822, 79).color(100, 100, 100, 70);
+        temp = bg.addsprite("black.png").anchor(0, 0).pos(-11, 422).size(822, 79).color(100, 100, 100, getParam("bannerOpacity"));
         but0 = new NewButton("mapReturn.png", [48, 40], getStr("", null), null, 18, FONT_NORMAL, [100, 100, 100], onBack, null);
         but0.bg.pos(52, 453);
         addChild(but0);
